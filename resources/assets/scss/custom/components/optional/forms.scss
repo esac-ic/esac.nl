@@ -1,0 +1,139 @@
+// 
+// 
+// forms.scss
+//
+//
+
+
+// Bootstrap overrides
+//
+// General overrides for default form styles
+
+.form-group label{
+  color: $gray-800;
+  font-size: 0.875em;
+}
+
+.form-group small{
+  color: $body-color;
+}
+
+.form-check-label{
+  font-size: 0.75rem;
+  color: $body-color;
+}
+
+.form-check{
+  margin-bottom: 1rem;
+}
+
+.form-control-lg{
+  font-size: 1rem;
+}
+
+.form-control, .form-control-lg{
+  padding-left: 0.75rem;
+}
+
+.custom-select{
+  -webkit-appearance: none;
+  -moz-appearance: none;
+}
+
+.input-group-lg{
+  .input-group-prepend{
+    > .input-group-text{
+      padding: 0 1rem;
+    }
+  }
+}
+
+// Custom form controls
+//
+// Add these classes to Bootstrap's custom form controls to change their appearance
+
+.custom-control{
+  margin-bottom: .5rem;
+}
+
+.custom-control-input ~ .custom-control-indicator{
+  transition: box-shadow .2s ease;
+}
+
+.custom-checkbox-switch{
+  padding-left: 0;
+  label{
+    display: flex;
+    &:before{
+      top: 0;
+      position: relative;
+      border-radius: $spacer !important;
+      width: $spacer*2;
+      height: $spacer;
+      transition: background-color .2s ease;
+      display: inline-block;
+      margin-right: $spacer/2;
+    }
+    &:after{
+      content: '';
+      transition: left .2s ease;
+      position: absolute;
+      transform: scale(0.7);
+      height: $spacer;
+      width: $spacer;
+      border-radius: 50%;
+      left: 0;
+      top: 0;
+      background: $white;
+    }
+  }
+  input:checked{
+    + label{
+      background-image: none !important;
+      &:after{
+        left: $spacer;
+      }
+    }
+  }
+}
+
+.custom-control.btn{
+  vertical-align: middle;
+  .custom-control-indicator{
+    position: relative;
+    width: auto;
+    height: auto;
+    padding: 0;
+    background: none;
+    top: 0;
+    border: none;
+  }
+}
+
+label.text-small{
+  font-size: $small-font-size;
+}
+
+// Additional styles
+//
+//
+
+.form-control-dark{
+  background: $gray-800;
+  border-color: $gray-800;
+  color: #fff;
+  &:active,&:focus{
+    background: $gray-800;
+    border-color: $gray-700;
+    color: #fff;
+  }
+}
+
+.form-control-borderless{
+  border: none;
+  &:hover,&:active,&:focus{
+    border: none;
+    outline: none;
+    box-shadow: none;
+  }
+}

@@ -1,0 +1,56 @@
+// 
+// 
+// components.scss
+//
+//
+
+
+// Required Components
+//
+// These partials are essential for theme styling
+
+@import "components/required/background-images";
+@import "components/required/buttons";
+@import "components/required/card";
+@import "components/required/color";
+@import "components/required/footer";
+@import "components/required/lists";
+@import "components/required/media";
+@import "components/required/navbar";
+@import "components/required/spacing";
+@import "components/required/type";
+@import "components/required/utilities";
+
+// Optional Components
+//
+// These partials can be included and excluded as required
+
+@import "components/optional/accordion";
+@import "components/optional/article";
+@import "components/optional/avatar";
+@import "components/optional/badge";
+@import "components/optional/blog";
+@import "components/optional/breadcrumb";
+@import "components/optional/case-study";
+@import "components/optional/divider";
+@import "components/optional/dropdown";
+@import "components/optional/feature-list";
+@import "components/optional/flickity";
+@import "components/optional/forms";
+@import "components/optional/image-gallery";
+@import "components/optional/list-group";
+@import "components/optional/logo";
+@import "components/optional/modal";
+@import "components/optional/nav";
+@import "components/optional/pricing";
+@import "components/optional/prism";
+@import "components/optional/progress";
+@import "components/optional/section-fullwidth-split";
+@import "components/optional/steps";
+@import "components/optional/sticky";
+@import "components/optional/thumbnail";
+@import "components/optional/tables";
+@import "components/optional/titles";
+@import "components/optional/video";
+@import "components/optional/wizard";
+@import "components/optional/zoom";

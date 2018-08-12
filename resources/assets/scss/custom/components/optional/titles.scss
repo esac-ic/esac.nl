@@ -1,0 +1,59 @@
+// 
+// 
+// titles.scss
+//
+//
+
+
+.section-intro{
+  margin-bottom: $spacer;
+}
+
+@include media-breakpoint-up(sm) {
+  .section-intro{
+    margin-bottom: $spacer*2;
+  }
+}
+
+.row.align-items-center{
+  .section-intro{
+    margin-bottom: 0;
+  }
+}
+
+@include media-breakpoint-down(sm) {
+  .row.align-items-center{
+    .section-intro{
+      margin-bottom: $spacer;
+    }
+  }
+}
+
+.section-outro{
+  margin-top: $spacer;
+}
+
+@include media-breakpoint-up(sm) {
+  .section-outro{
+    margin-top: $spacer*2;
+  } 
+}
+
+.title-decorative{
+  font-size: 0.875rem;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: $gray-500;
+  margin-bottom: $spacer/2;
+  display: block;
+  font-weight: 500;
+  &:last-child{
+    margin-bottom: 0;
+  }
+}
+
+@include media-breakpoint-up(sm) {
+  .title-decorative{
+    margin-bottom: $spacer;
+  }
+}

@@ -1,0 +1,18 @@
+// 
+// 
+// media.scss
+//
+//
+
+
+// Bootstrap overrides
+//
+// General overrides for default media styles
+
+@include media-breakpoint-down(sm) {
+  [class*='col']{
+    > .media:only-child{
+      margin-bottom: $spacer;
+    }
+  }
+}

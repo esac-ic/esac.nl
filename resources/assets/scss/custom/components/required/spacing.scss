@@ -1,0 +1,119 @@
+// 
+// 
+// spacing.scss
+//
+//
+
+
+// Bootstrap overrides
+//
+// Override default Bootstrap spacing
+
+@include media-breakpoint-up(lg) {
+  .container-fluid{
+    padding-left: $spacer*2;
+    padding-right: $spacer*2;
+  }
+}
+
+// Section padding
+//
+// Basic rules to give the <section> tags padding
+
+section{
+  padding: $spacer*2 0;
+}
+
+@include media-breakpoint-up(sm) {
+  section{
+    padding: $spacer*3 0;
+  }  
+}
+
+.space-0{
+  padding: 0;
+}
+
+.space-xxs{
+  padding-top: $spacer/2;
+  padding-bottom: $spacer/2;
+}
+
+.space-xs{
+  padding-top: $spacer;
+  padding-bottom: $spacer;
+}
+
+.space-sm{
+  padding-top: $spacer*2;
+  padding-bottom: $spacer*2;
+}
+
+@include media-breakpoint-up(lg) {
+  .space-lg{
+    padding-top: $spacer*5;
+    padding-bottom: $spacer*5;
+  }
+  .space-xlg{
+    padding-top: $spacer*7;
+    padding-bottom: $spacer*7;
+  }
+}
+
+@include media-breakpoint-down(lg) {
+  .space-lg{
+    padding-top: $spacer*2;
+    padding-bottom: $spacer*2;
+  }
+  .space-xlg{
+    padding-top: $spacer*3;
+    padding-bottom: $spacer*3;
+  }
+}
+
+@include media-breakpoint-down(lg) {
+  .main-container > section.space-xlg:first-child{
+    padding-top: $spacer* 5;
+  }
+}
+
+section:not([class*='bg-']) + section:not([class*='bg-']){
+  border-top: $hr-border-width solid $hr-border-color;
+}
+
+section.bg-dark+section.bg-dark{
+  border-top: $hr-border-width solid $gray-800;
+}
+
+// Spacing Utilities
+//
+// Adjustments to default Bootstrap spacing utilities for tighter mobile spacing
+
+@include media-breakpoint-down(xs) {
+  .mb-5{
+    margin-bottom: 1.5rem !important;
+  }
+}
+
+section + section.flush-with-above{
+  border-top: none !important;
+  padding-top: 0;
+}
+
+// Margins
+//
+// Extension of Bootstrap m- classes
+
+[class*='mt--'],[class*='mb--']{
+  position: relative;
+  z-index: 2;
+}
+
+@include media-breakpoint-up(lg) {
+.mt--8{
+  margin-top: -8rem;
+}
+.mb--8{
+  margin-bottom: -8rem;
+}  
+}

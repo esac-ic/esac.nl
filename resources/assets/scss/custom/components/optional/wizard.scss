@@ -1,0 +1,155 @@
+// 
+// 
+// wizard.scss
+//
+//
+
+.wizard{
+    .step-anchor{
+        position: relative;
+        z-index: 1;
+        margin-bottom: $spacer;
+        .step-circle{
+            color: $white !important;
+            position: relative;
+            transition: none;
+            &:before{
+                content: '';
+                display: block;
+                position: absolute;
+                border: 2px solid theme-color("primary");
+                width: 130%;
+                height: 130%;
+                border-radius: 50%;
+                left: -15%;
+                top: -15%;
+                opacity: 0;
+                transition: opacity .35s ease, transform .35s ease;
+                z-index: -1;
+                background: $body-bg;
+                transform: scale(1.25);
+            }
+        }
+        > li{
+            position: relative;
+            &:after,&:before{
+                content: '';
+                position: absolute;
+                left: 0;
+                top: 50%;
+                height: 2px;
+                background: $gray-400;
+                width: 50%;
+                z-index: -2;
+                transition: background-color .35s ease;
+            }
+            &:after{
+                left: 50%;
+            }
+            &:first-child{
+                &:before{
+                    display: none;
+                }
+            }
+            &:last-child{
+                &:after{
+                    display: none;
+                }
+            }
+            &.active, &.done{
+                .step-circle{
+                    background-color: theme-color("primary");
+                }
+            }
+            &.active{
+                &:after, &:before{
+                    background: theme-color("primary");
+                }
+                .step-circle{
+                    &:before{
+                        opacity: 1;
+                        transform: scale(1);
+                    }
+                }
+            }
+            &.done{
+                &:after, &:before{
+                    background: theme-color("primary");
+                }
+            }
+            &:not(.done){
+                cursor: default;
+                a{
+                    cursor: default;
+                }
+            }
+        }
+    }
+    .step-content{
+        display: none;
+    }
+    .sw-toolbar{
+        margin-top: $spacer;
+        padding: 0;
+    }
+    .tab-content:not([style]){
+        opacity: 0;
+    }
+}
+
+.card{
+    .sw-theme-default{
+        > .step-anchor{
+            .step-circle{
+                &:before{
+                    background: $white;
+                }
+            }
+        }
+    }
+}
+
+@include media-breakpoint-down(md) {
+  .wizard{
+    .step-anchor.flex-md-column{
+        padding: 0 12px;
+    }
+  }
+}
+
+@include media-breakpoint-up(md) {
+  .wizard{
+    .step-anchor.flex-md-column{
+        > li{
+            text-align: center;
+            > a{
+                display: inline-block;
+            }
+            &:before{
+                display: none;
+            }
+            &:after{
+                position: relative;
+                top: 0;
+                width: 2px;
+                height: 50px;
+                display: block;
+                margin-bottom: -7px;
+            }
+            &:last-child{
+                &:after{
+                    display: none;
+                }
+            }
+        }
+    }
+  }
+}
+
+@include media-breakpoint-up(md) {
+  .sw-theme-default{
+    > .step-anchor{
+        margin-bottom: $spacer*2;
+    }
+  }
+}

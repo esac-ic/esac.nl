@@ -1,0 +1,67 @@
+// 
+// 
+// pricing.scss
+//
+//
+
+
+.card.pricing{
+  text-align: center;
+  .display-3, .h6{
+    margin: $spacer 0;
+  }
+  .card-body{
+    height: 100%;
+  }
+  ul{
+    margin-bottom: $spacer;
+  }
+}
+
+@include media-breakpoint-down(xs) {
+  .card.pricing{
+    .display-3, .h6{
+      margin: $spacer/2 0;
+    }
+  }
+}
+
+.table.pricing{
+  margin-bottom: $spacer;
+  background: $white;
+  th,tr,td{
+    font-weight: $font-weight-normal;
+  }
+  thead{
+    th{
+      text-align: center;
+      border-bottom-width: 1px;
+    }
+  }
+  tbody{
+    th{
+      text-align: right;
+    }
+    td{
+      text-align: center;
+    }
+    > tr:first-child{
+      background: $body-bg;
+      th{
+        vertical-align: middle;
+      }
+      td{
+        padding: $spacer;
+      }
+    }
+    .display-4{
+      margin-bottom: 0;
+    }
+  }
+}
+
+@include media-breakpoint-up(md) {
+  .table.pricing{
+    display: table;
+  }
+}

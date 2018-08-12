@@ -1,0 +1,105 @@
+// 
+// 
+// color.scss
+//
+//
+
+
+// Text on different colored backgrounds
+//
+// Adjusts how text should appear in elements where .bg-dark, .bg-image is used
+
+.bg-dark, .text-light, .bg-gray, .text-white{
+  h1,h2,h3,h4,h5,h6,.h1,.h2,.h3,.h4,.h5,.h6,.display-1,.display-2,.display-3,.display-4,{
+    color: #fff;
+  }
+}
+
+.bg-dark,.bg-gray{
+  color: $gray-400;
+  .title-decorative{
+    color: $gray-700;
+  }
+  .text-muted{
+    color: $gray-700 !important;
+  }
+}
+
+.bg-gray{
+  background: $gray-800;
+  .text-muted{
+    color: $gray-600 !important;
+  }
+}
+
+.bg-secondary{
+  background: $gray-200 !important;
+}
+
+.text-light{
+  .text-muted{
+    color: rgba(255,255,255,.75) !important;
+  }
+}
+
+.text-light{
+  .title-decorative{
+    color: #fff;
+  }
+  a{
+    color: $gray-500;
+    transition: color .2s ease;
+    &:hover{
+      color: $white;
+    }
+  }
+}
+
+a.text-white{
+  font-weight: $font-weight-bold;
+  transition: opacity .2s ease;
+  &:hover{
+    opacity: .75;
+  }
+}
+
+.text-body{
+  color: $body-color !important;
+}
+
+// Forms
+
+.bg-dark{
+  .form-group{
+    label{
+      color: #fff;
+    }
+    small{
+      color: $gray-600;
+    }
+  }
+}
+
+.text-white{
+  .form-group{
+    small{
+      color: #fff;
+    }
+  }
+}
+
+// Gradient Background
+
+.bg-gradient{
+  background: linear-gradient(135deg, $purple 0%,$blue 100%);
+}
+
+// Text color utility classes
+//
+// Create text utility classes for all items in the Bootstrap $colors list
+
+@each $current-color in $colors{
+  $key: nth($current-color,1);
+  $value: nth($current-color,2);
+  .text-#{$key}{ color: $value !important; }
+}

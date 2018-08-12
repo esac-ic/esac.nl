@@ -1,0 +1,61 @@
+// 
+// 
+// avatar.scss
+//
+// A set of shortcut classes for <img> element to make them round and size them appropirately for a range of avatar and media uses
+
+.avatar{
+  border-radius: 50%;
+  width: $spacer*3;
+  height: $spacer*3;
+  &.avatar-xs{
+    width: $spacer*1.5;
+    height: $spacer*1.5;
+  }
+  &.avatar-sm{
+    width: $spacer*2;
+    height: $spacer*2;
+  }
+  &.avatar-lg{
+    width: $spacer*5;
+    height: $spacer*5;
+  }
+  &.avatar-xlg{
+    width: $spacer*8;
+    height: $spacer*8;
+  }
+  &.avatar-square{
+    border-radius: $border-radius/2;
+  }
+}
+
+.media{
+  > .avatar:first-child{
+    margin-right: $spacer;
+    &.avatar-xs, &.avatar-sm{
+      margin-right: $spacer/2;
+    }
+  }
+}
+
+.avatar + .avatar{
+  margin-left: $spacer/2;
+}
+
+.avatar + .badge{
+  position: relative;
+  margin-left: -.75rem;
+}
+
+.avatar-lg+.avatar-lg{
+  margin-left: $spacer*2;
+}
+
+@include media-breakpoint-down(sm) {
+  .avatar{
+    &.avatar-xlg{
+      width: $spacer*5;
+      height: $spacer*5;
+    }
+  }
+}

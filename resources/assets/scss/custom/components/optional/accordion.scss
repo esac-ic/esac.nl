@@ -1,0 +1,70 @@
+// 
+// 
+// accordion.scss
+//
+//
+
+
+// Markup:
+//
+// .accordion > .accordion-item > [data-toggle="collapse"], .collapse
+
+.accordion{
+  // Ensure accordions are spaced away from adjacent siblings
+  &:not(:first-child){
+    margin-top: $spacer*2;
+  }
+  &:not(:last-child){
+    margin-bottom: $spacer;
+  }
+}
+
+.accordion-item{
+  > [data-toggle="collapse"]{
+    transition: margin .35s ease, opacity .35s ease;
+    cursor: pointer;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    > *{
+      margin-bottom: 0;
+    }
+    &:hover{
+      text-decoration: none;
+    }
+    i{
+      transition: transform .35s ease;
+    }
+    // Rotate arrow icon when item is open
+    &[aria-expanded="true"]{
+      i{
+        transform: rotate(90deg);
+      }
+      margin-bottom: $spacer/2;
+    }
+    // Fade accordion title when not active or hovered
+    &[aria-expanded="false"]{
+      opacity: .5;
+      &:hover{
+        opacity: 1;
+      }
+    }
+  }
+  // Add border to separate items
+  &:not(:first-child){
+    border-top: $hr-border-width solid $hr-border-color;
+  }
+  padding: $spacer/2 0;
+}
+
+// Color considerations:
+//
+// When accordions are used on dark backgrounds
+
+.bg-dark{
+  .accordion-item{
+    &:not(:first-child){
+      border-top: $hr-border-width solid $gray-800;
+    }
+  }
+}

@@ -1,0 +1,96 @@
+// 
+// 
+// navbar.scss
+//
+//
+
+
+// Bootstrap overrides
+//
+// General overrides for default styles
+
+.nav-link{
+  transition: color .35s ease;
+  &:focus{
+    outline: none;
+  }
+}
+
+.container > .navbar{
+  padding-left: 0;
+  padding-right: 0;
+}
+
+.navbar .row{
+  width: 100%;
+}
+
+.navbar.bg-dark{
+  .navbar-nav{
+    .nav-item{
+      > a:not(.nav-link){
+        font-weight: $font-weight-bold;
+        color: #fff;
+      }
+    }
+  }
+}
+
+.navbar-dark{
+  .nav-item{
+    > *{
+      color: #fff;
+    }
+    > a:not(.nav-link){
+      font-weight: $font-weight-bold;
+    }
+  }
+}
+
+.navbar-nav.nav-fill{
+  flex-grow: 1;
+}
+
+// Navbar additions
+//
+// 
+
+.navbar-dark{
+  .navbar-toggler{
+    i{
+      color: #fff;
+    }
+  }
+}
+
+// Give inline forms some space below on sm and down
+@include media-breakpoint-down(sm) {
+  .navbar .form-inline{
+    &:not(:last-child){
+      margin-bottom: $spacer/2;
+    }
+  }
+}
+
+// Navbar positioning
+//
+// 
+
+.nav-container{
+  .position-absolute, .position-fixed{
+    z-index: $zindex-sticky;
+    width: 100%;
+    top: 0;
+  }
+}
+
+@include media-breakpoint-down(lg) {
+  .nav-container{
+    .position-absolute{
+      position: relative !important;
+      &.navbar-dark{
+        background: theme-color("dark");
+      }
+    }
+  }
+}

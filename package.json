@@ -1,0 +1,33 @@
+{
+  "private": true,
+  "scripts": {
+    "dev": "cross-env NODE_ENV=development webpack --progress --hide-modules --config=node_modules/laravel-mix/setup/webpack.config.js",
+    "watch": "cross-env NODE_ENV=development webpack --watch --progress --hide-modules --config=node_modules/laravel-mix/setup/webpack.config.js",
+    "hot": "cross-env NODE_ENV=development webpack-dev-server --inline --hot --config=node_modules/laravel-mix/setup/webpack.config.js",
+    "production": "cross-env NODE_ENV=production webpack --progress --hide-modules --config=node_modules/laravel-mix/setup/webpack.config.js"
+  },
+  "devDependencies": {
+    "axios": "^0.18",
+    "bootstrap": "^4.1.1",
+    "browser-sync": "^2.24.4",
+    "browser-sync-webpack-plugin": "^2.2.2",
+    "cross-env": "^5.1.6",
+    "datatables.net": "^1.10.16",
+    "datatables.net-bs4": "^1.10.16",
+    "datatables.net-responsive-bs4": "^2.2.1",
+    "jquery": "^3.2",
+    "laravel-mix": "^2.0",
+    "lodash": "^4.17.10",
+    "moment": "^2.22.1",
+    "photoswipe": "^4.1.2",
+    "popper.js": "^1.14.3",
+    "summernote": "^0.8.10",
+    "tempusdominus-bootstrap-4": "^5.0.0-alpha18"
+  },
+  "dependencies": {
+    "vue": "^2.5.16",
+    "vue-paginate": "^3.6.0",
+    "vuejs-datepicker": "^0.9.29",
+    "vuex": "^3.0.1"
+  }
+}

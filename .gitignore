@@ -1,0 +1,14 @@
+/node_modules
+/bower_components
+/storage/*.key
+/vendor
+/.idea
+.env
+/.vagrant
+_ide_helper.php
+.phpstorm.meta.php
+public/storage
+/public/js
+/public/css
+/public/img
+/public/mix-manifest.json

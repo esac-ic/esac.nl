@@ -1,0 +1,84 @@
+// 
+// 
+// list-group.scss
+//
+//
+
+
+// Bootstrap overrides
+//
+// General overrides for default card styles
+
+.list-group-item{
+  border: 1px solid $gray-200;
+}
+
+// List comments
+//
+// 
+
+.list-group-comments{
+  .media{
+    + .media{
+      padding: $spacer/2 0 $spacer/2 $spacer;
+    }
+  }
+}
+
+@include media-breakpoint-up(md) {
+.list-group-comments{
+  .media{
+    &:first-child:not(:last-child){
+      margin-bottom: $spacer;
+    }
+    + .media{
+      margin-left: 3.75rem;
+      border-left: 4px solid $gray-200;
+      &:last-child{
+        margin-bottom: $spacer/2;
+      }
+    } 
+  }
+}
+}
+
+@include media-breakpoint-down(sm) {
+  .list-group-comments{
+    .media{
+      &:nth-child(2){
+        margin-top: $spacer/2;
+      }
+    }
+  }
+}
+
+a.list-group-item{
+  &.disabled{
+    opacity: .5;
+  }
+}
+
+// Additional classes
+//
+// 
+
+.list-group-lg{
+  .list-group-item{
+    padding: 1rem 1.25rem;  
+  }
+}
+
+.list-group-item-action.active{
+  h6, .text-muted{
+    color: $white !important;
+  }
+}
+
+@include media-breakpoint-down(md) {
+  .list-group-chat{
+    border-radius: $border-radius $border-radius 0 0;
+    overflow-x: scroll;
+    flex-direction: row;
+    border-bottom: $border-width solid $border-color;
+  }
+}

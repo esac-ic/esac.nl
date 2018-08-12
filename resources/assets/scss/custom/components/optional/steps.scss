@@ -1,0 +1,54 @@
+// 
+// 
+// steps.scss
+//
+// Custom component used for indicating parts of a process eg 'Step 1', 'Step 2' etc.
+
+$step-circle-diameter: $spacer*2;
+
+.step-circle{
+  display: inline-block;
+  width: $step-circle-diameter;
+  height: $step-circle-diameter;
+  line-height: $step-circle-diameter;
+  border-radius: 50%;
+  background: $gray-400;
+  color: #fff;
+  text-align: center;
+  font-size: $h3-font-size;
+  transition: background-color .35s ease;
+  &.active{
+    background: theme-color("primary");
+  }
+  &.step-circle-sm{
+    width: $step-circle-diameter/1.333333333333;
+    height: $step-circle-diameter/1.333333333333;
+    line-height: $step-circle-diameter/1.333333333333;
+    font-size: 1rem;
+    font-weight: $font-weight-bold;
+  }
+  &.step-circle-lg{
+    width: $step-circle-diameter*2;
+    height: $step-circle-diameter*2;
+    line-height: $step-circle-diameter*2;
+  }
+}
+
+.active{
+  .step-circle{
+    background: theme-color("primary");
+  }
+}
+
+// Hover effect if a step is being used inside a tab
+
+[data-toggle="tab"].card{
+  .step-circle{
+    transition: background-color .35s ease, transform .2s ease;
+  }
+  &:hover{
+    .step-circle{
+      transform: scale(0.9);
+    }
+  }
+}

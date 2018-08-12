@@ -1,0 +1,46 @@
+// 
+// 
+// case-study.scss
+//
+//
+
+
+.case-study{
+  display: block;
+  transition: transform .2s ease;
+  img:not(.bg-image){
+    max-height: $spacer*2;
+    margin-bottom: $spacer*2;
+  }
+  .h2{
+    max-width: 640px;
+  }
+  .bg-image{
+    transition: opacity .2s ease;
+  }
+  &:hover{
+    transform: scale(1.01);
+    .bg-image{
+      opacity: .3;
+    }
+  }
+  > .card{
+    margin-bottom: 0;
+  }
+}
+
+@include media-breakpoint-up(md) {
+  .case-study{
+    .card-body{
+      padding-bottom: $spacer*8;
+    }
+  }
+}
+
+@include media-breakpoint-down(sm) {
+  .case-study{
+    img:not(.bg-image){
+      margin-bottom: $spacer;
+    }
+  }
+}

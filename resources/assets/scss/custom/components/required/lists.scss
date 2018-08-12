@@ -1,0 +1,82 @@
+// 
+// 
+// lists.scss
+//
+//
+
+
+// Bootstrap overrides
+//
+// General overrides for default list styles
+
+ul:last-child,dl:last-child,ol:last-child{
+  margin-bottom: 0;
+}
+
+.list-inline{
+  > .list-inline-item{
+    &:not(:last-child){
+      margin-right: $spacer/2;
+    }
+  }
+  &.list-inline-large{
+    > .list-inline-item{
+      &:not(:last-child){
+        margin-right: $spacer*2;
+      }
+    }
+  }
+}
+
+@include media-breakpoint-down(sm) {
+  .list-inline{
+    &.list-inline-large{
+      > .list-inline-item{
+        &:not(:last-child){
+          margin-right: $spacer;
+        }
+      }
+    }
+  }
+}
+
+// List spacing
+//
+// Adjust the spacing between each <li> item
+
+.list-spacing-sm{
+  > li:not(:last-child){
+    margin-bottom: $spacer/2;
+  }
+}
+
+.list-inline{
+  &.list-spacing-sm{
+    > .list-inline-item{
+      margin-bottom: 0;
+      margin-right: $spacer/6;
+    }
+  }
+}
+
+// Additional List classes
+//
+//
+
+.list-links{
+  > li > a{
+    color: $headings-color;
+    transition: opacity .2s ease;
+    &:not(:hover){
+      opacity: .5;
+    }
+  }
+}
+
+.bg-dark{
+  .list-links{
+    > li > a{
+      color: #fff;
+    }
+  }
+}

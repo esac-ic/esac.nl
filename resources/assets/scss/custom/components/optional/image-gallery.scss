@@ -1,0 +1,40 @@
+// 
+// 
+// image-gallery.scss
+//
+//
+
+
+// Gallery Triplet
+//
+// An arrangemnent of three photos, 1 portrait, 2 landscape placed on a .row
+
+
+.image-gallery{
+  column-gap: 6px;
+  column-count: 2;
+  > *{
+    display: block;
+    margin-bottom: 6px;
+  }
+  img{
+    max-width: 100%;
+  }
+  &.image-gallery-lg{
+    column-gap: 12px;
+    > *{
+      margin-bottom: 12px;
+    }
+  }
+  @for $i from 3 through 10{
+    &[data-columns="#{$i}"]{
+      column-count: $i;
+    }
+  }
+}
+
+article{
+  .image-gallery{
+    margin: $spacer*3 0;
+  }
+}

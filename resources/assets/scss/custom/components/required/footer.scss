@@ -1,0 +1,52 @@
+// 
+// 
+// footer.scss
+//
+//
+
+
+.footer-long{
+  font-size: .875rem;
+  padding: $spacer*3 0 $spacer*5 0;
+  .h5{
+    margin-bottom: $spacer*2;
+  }
+}
+
+@include media-breakpoint-down(md) {
+  .footer-long{
+    padding: $spacer*2 0;
+  }
+}
+
+@include media-breakpoint-down(xs) {
+  .footer-long{
+    .h5{
+      margin-top: $spacer;
+      margin-bottom: $spacer;
+    }
+  }
+}
+
+.footer-short{
+  padding-bottom: $spacer;
+  hr{
+    margin: 0;
+  }
+  nav{
+    padding-top: $spacer;
+    margin-bottom: $spacer/2;
+  }
+  small{
+    color: $gray-500;
+  }
+  .list-inline-item{
+    a{
+      color: $gray-500;
+      transition: color .2s ease;
+      &:hover{
+        color: $body-color;
+      }
+    }
+  }
+}

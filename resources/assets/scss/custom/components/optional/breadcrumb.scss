@@ -1,0 +1,59 @@
+// 
+// 
+// breadcrumb.scss
+//
+//
+
+
+// Bootstrap Overrides
+//
+// General overrides for default card styles
+
+.breadcrumb{
+  font-size: .875em;
+  &:last-child{
+    margin-bottom: 0;
+  }
+}
+
+.breadcrumb-item{
+  + .breadcrumb-item{
+    &:before{
+      content: '>';
+      font-weight: 600;
+      font-size: 11px;
+      transform: scaleX(0.7);
+      bottom: 1px;
+      position: relative;
+    }
+  }
+}
+
+nav[aria-label="breadcrumb"]{
+  &.position-absolute{
+    width: 100%;
+    z-index: 2;
+    a{
+      color: #fff;
+    }
+  }
+}
+
+.bg-dark .breadcrumb-item, .text-light .breadcrumb-item, .text-white .breadcrumb-item{
+  a{
+    color: #fff;
+    font-weight: $font-weight-bold;
+    &:hover{
+      opacity: .75;
+    }
+  }
+  + .breadcrumb-item{
+    &:before{
+      color: #fff;
+    }
+  }
+}
+
+.text-white .breadcrumb-item{
+  color: rgba(255,255,255,.75);
+}

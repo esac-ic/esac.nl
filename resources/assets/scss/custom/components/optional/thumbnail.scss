@@ -1,0 +1,20 @@
+// 
+// 
+// thumbnail.scss
+//
+// A set of shortcut classes for restricting the height of images to thumbnail appropriate sizes
+
+
+.thumbnail{
+  display: inline-block;
+  text-align: center;
+  border-radius: $border-radius/2;
+  width: $spacer*3;
+  &.thumbnail-sm{
+    width: $spacer*2;
+  }
+  + span{
+    display: inline-block;
+    margin-left: $spacer/2;
+  }
+}

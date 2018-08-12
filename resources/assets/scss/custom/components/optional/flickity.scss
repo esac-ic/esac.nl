@@ -1,0 +1,94 @@
+// 
+// 
+// flickity.scss
+//
+//
+
+
+@import "../plugins/flickity";
+
+// Flickity overrides
+
+.carousel-cell[class*='col']{
+  padding: 0 $spacer/2;
+  >*{
+    transition: opacity .35s ease, transform .35s ease;
+  }
+  &:not(.is-selected){
+    >*{
+      opacity: .2;
+    }
+  }
+}
+
+.bg-dark{
+  .flickity-page-dots .dot{
+    background: $gray-600;
+  }
+}
+
+.flickity-prev-next-button{
+  border-radius: $border-radius;
+  height: $spacer*2;
+  width: $spacer*2;
+  svg{
+    display: none;
+  }
+  &:after{
+    color: $headings-color;
+    display: inline-block;
+    width: 0;
+    height: 0;
+    vertical-align: 0.2125em;
+    content: "";
+    border-top: 0.25em solid;
+    border-right: 0.25em solid transparent;
+    border-bottom: 0;
+    border-left: 0.25em solid transparent;
+    border-radius: 2px;
+    transform: rotate(90deg) scale(1.5);
+  }
+  &.next{
+    &:after{
+      transform: rotate(-90deg) scale(1.5);
+    }
+  }
+}
+
+.main-carousel{
+  > .carousel-cell{
+    height: 0;
+    display: none;
+  }
+}
+
+.overflow-visible{
+  z-index: 0;
+  .flickity-viewport{
+    overflow: visible;
+  }
+  .carousel-cell[class*='col']{
+    &:not(.is-selected){
+      >*{
+        opacity: .05;
+        pointer-events: none;
+        transform: scale(0.9);
+      }
+    }
+  }
+}
+
+.bg-dark{
+  .carousel-cell{
+    .card{
+      border-color: theme-color("dark");
+      background-color: $gray-900;
+      .card-img-top{
+        background-color: $gray-900;
+      }
+      .card-footer, .card-body, .card-header{
+        background: $body-bg;
+      }
+    }
+  }
+}

@@ -1,0 +1,79 @@
+// 
+// 
+// dropdown.scss
+//
+//
+
+
+// Bootstrap overrides
+//
+// General overrides for default dropdown styles
+
+.dropdown-menu{
+  box-shadow: 0px 0px 0px rgba(0,0,0,0);
+  transition: box-shadow .35s ease 5s;
+  &.show{
+    box-shadow: 0px 5px 10px rgba(0,0,0,0.1);
+  }
+}
+
+.dropdown-item{
+  transition: background-color .2s ease, color .2s ease;
+  &.active, &:active{
+    > *, > .text-muted{
+      color: #fff !important;
+    }
+  }
+}
+
+.dropdown{
+  h1,h2,h3,h4,h5,.h1,.h2,.h3,.h4,.h5,.h6{
+    color: $headings-color;
+  }
+  .text-muted{
+    color: $gray-600 !important;
+  }
+  .title-decorative{
+    color: $gray-500;
+    margin: 0;
+    font-size: .75rem;
+    letter-spacing: .75px;
+  }
+}
+
+
+// Fix for dropdowns inside fixed navbars
+.navbar .dropdown-menu{
+  position: absolute !important;
+}
+
+// Dropdown additions
+//
+//
+
+.dropdown-menu-sm{
+  padding: .25rem 0;
+  .dropdown-item, .dropdown-header{
+    padding: .25rem 1rem;
+  }
+  .dropdown-divider{
+    margin: .5rem 0;
+  }
+}
+
+.dropdown-toggle-no-arrow{
+  &:after{
+    display: none !important;
+  }
+}
+
+@keyframes showDropdown{
+  0%{ opacity: 0; transform: translateY(5px); }
+  100%{ opacity: 1; transform: translateY(0); }
+}
+
+.navbar .dropdown-menu{
+  &.show{
+    animation: showDropdown .35s ease forwards;
+  }
+}

@@ -1,0 +1,72 @@
+// 
+// 
+// feature-list.scss
+//
+// Use on a <ul> when listing multiple facets of a feature
+
+.feature-list{
+  @extend .list-unstyled;
+  margin-bottom: 0;
+  > li{
+    margin-bottom: $spacer*2;
+  }
+  &.feature-list-sm{
+    > li{
+      margin-bottom: $spacer;
+    }
+  }
+  &:not(:last-child){
+    &:not(.row){
+      margin-bottom: $spacer;
+    }
+  }
+  >li[class*='col']{
+    display: flex;
+    flex-direction: column;
+    .card{
+      flex-grow: 1;
+    }
+  }
+}
+
+@include media-breakpoint-up(sm) {
+  .feature-list{
+    &.feature-list-lg{
+      > li{
+        margin-bottom: $spacer*3;
+      }
+    }
+  }
+}
+
+@include media-breakpoint-up(lg) {
+  .feature-list{
+    &.feature-list-xlg{
+      > li{
+        margin-bottom: $spacer*5;
+        &:last-child{
+          margin-bottom: 0;
+        }
+      }
+    }
+  }
+}
+
+@include media-breakpoint-down(sm) {
+  .feature-list{
+    > li{
+      margin-bottom: $spacer;
+      .img-fluid{
+        margin-bottom: $spacer;
+      }
+    }
+  }
+}
+
+.feature-list{
+  > li{
+    > .card:only-child{
+      margin-bottom: 0;
+    }
+  }
+}

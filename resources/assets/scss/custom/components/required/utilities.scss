@@ -1,0 +1,107 @@
+// 
+// 
+// utilities.scss
+//
+//
+
+
+// Opacity
+//
+// Control an element's opacity using the class .opacity-# element with value of 0 - 100
+
+.opacity-0{
+  opacity: 0;
+}
+
+@for $i from 1 through 9 {
+    $opacity: ($i / 10);
+    .opacity-#{($i*10)}{
+      opacity: $opacity;
+    }
+}
+
+// Height
+//
+// Control an elements min-height in vh units using the class .height-# with a value of 0 - 90
+
+[class*='height-']{
+  display: flex;
+  > .container{
+    align-self: center;
+  }
+}
+
+@for $i from 1 through 10 {
+    $height: ($i * 10);
+    .height-#{$height}{
+      min-height: #{$height}vh;
+    }
+}
+
+.height-0{
+  height: 0;
+}
+
+// Position
+//
+// Temporary until Bootstrap add position utilities as per documentation (http://getbootstrap.com/docs/4.0/utilities/position/)
+
+.position-absolute{
+  position: absolute !important;
+}
+
+.position-relative{
+  position: relative;
+  z-index: 1;
+}
+
+.position-static{
+  position: static;
+}
+
+.position-fixed{
+  position: fixed !important;
+  &.sticky{
+    top:0;
+  }
+  &.sticky-bottom{
+    position: absolute !important;
+    bottom: 0;
+    top: auto !important;
+  }
+}
+
+// Blend Modes
+//
+//
+
+.blend-mode-overlay{ mix-blend-mode: overlay; }
+
+// Box Shadows
+//
+//
+
+.box-shadow{
+  box-shadow: 0px 10px 20px rgba(0,0,0,0.1);
+}
+
+img[src*='png'].box-shadow,img[src*='svg'].box-shadow{
+  filter: drop-shadow(0px 10px 20px rgba(0,0,0,0.1));
+  box-shadow: none;
+}
+
+// Overflow
+//
+//
+
+.overflow-hidden{
+  overflow: hidden;
+}
+
+.overflow-visible{
+  overflow: visible;
+}
+
+.overflow-auto{
+  overflow: auto;
+}

@@ -1,0 +1,64 @@
+// 
+// 
+// nav.scss
+//
+//
+
+// Bootstrap overrides
+//
+// General overrides for default nav styles
+
+.nav-tabs{
+  .nav-item{
+    .nav-link{
+      padding: $spacer/2;
+      transition: color .35s ease, border-color .35s ease;
+      border-bottom: 2px solid rgba(255,255,255,0);
+      &:not(.active){
+        color: $gray-500;
+        &:hover{
+          color: $gray-800;
+        }
+      }
+      &.active{
+        border-color: theme-color("primary");
+      }
+    }
+  }
+}
+
+section{
+  > .tab-content{
+    padding: $spacer*2 0;
+  }
+}
+
+@include media-breakpoint-down(sm) {
+  section{
+    > .tab-content{
+      padding: $spacer 0;
+    }
+  }  
+}
+
+nav.flex-md-column{
+  .nav-link{
+    padding: .25rem 0;
+    color: $body-color;
+    transition: opacity .2s ease;
+    &:not(.active):hover{
+      opacity: .5;
+    }
+    &.active{
+      color: theme-color("primary");
+    }
+  }
+}
+
+@include media-breakpoint-down(md) {
+  nav.flex-md-column{
+    .nav-link{
+      padding-right: $spacer/2;
+    }
+  }
+}

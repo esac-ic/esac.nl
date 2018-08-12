@@ -1,0 +1,22 @@
+// 
+// 
+// sticky.scss
+//
+// Custom component used for making elements sticky on scroll
+
+[data-sticky]{
+  transition: padding-top .35s ease;
+}
+
+.main-container [data-sticky].position-fixed{
+  padding-top: $spacer;
+}
+
+.nav-container{
+  [data-sticky="top"].position-absolute{
+    transition: background-color .35s ease;
+    &.position-fixed{
+      background: theme-color("dark");
+    }
+  }
+}

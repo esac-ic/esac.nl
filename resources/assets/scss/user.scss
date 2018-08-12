@@ -1,0 +1,78 @@
+// 
+// 
+// user.scss
+//
+// Place your own custom CSS or SCSS rules below this line, these rules will override any Bootstrap and theme variables.
+
+.dt-bootstrap4 {
+	padding: 0;
+}
+
+.custom-file-input {
+  cursor: pointer;
+}
+
+.card-date {
+  right: ($spacer * .7);
+  top: ($spacer * .7)
+}
+
+#scrollNav {
+	transition: background 0.2s;
+}
+
+.intro-container {
+	margin-top: -70px !important;
+	.card {
+		border-bottom: 2px solid $esac-yellow;
+	}
+}
+
+.wrap-break-word {
+	word-wrap: break-word;
+}
+
+[data-toggle="collapse"] .fa:before {
+	content: "\f139";
+}
+
+[data-toggle="collapse"].collapsed .fa:before {
+	content: "\f13a";
+}
+
+@include media-breakpoint-up(lg) { 
+	.h-lg-100 {
+		height: 100%;
+	}
+}
+
+.fixed-left {
+	position: fixed;
+	left: 0;
+}
+
+.font-size-100 {
+	font-size: 100%;
+}
+
+.column-count-lg-3 {
+	column-count: 1;
+	column-gap: $spacer * 3;
+}
+
+@include media-breakpoint-up(lg) { 
+	.column-count-lg-3 {
+		column-count: 3;
+		column-gap: $spacer * 3;
+	}
+}
+
+.word-wrap-break-word {
+	word-wrap: break-word;
+}
+
+@include media-breakpoint-up(sm) {
+	.word-wrap-break-word {
+		word-wrap: initial;
+	}
+}
