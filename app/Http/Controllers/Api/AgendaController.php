@@ -29,7 +29,9 @@ class AgendaController extends Controller
         }
         if($request->has('startDate')){
             $startDate = Carbon::createFromFormat('d-m-Y', $request->get('startDate'))->setTime(0, 0, 0);
-            $agendaItemQeury->where("startDate",'>=',$startDate);
+            $agendaItemQeury
+                ->where("startDate",'>=',$startDate)
+                ->orWhere("endDate",'>=',$startDate);
         }
         if($request->has('endDate')){
             $endDate = Carbon::createFromFormat('d-m-Y', $request->get('endDate'))->setTime(0, 0, 0);
