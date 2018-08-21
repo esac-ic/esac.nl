@@ -125,4 +125,8 @@ class User extends Authenticatable
         return $this->street . " " . $this->houseNumber;
     }
 
+    public function applicationResponses(){
+        return $this->hasMany(ApplicationResponse::class,'user_id');
+    }
+
 }
