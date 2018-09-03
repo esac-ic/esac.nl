@@ -27,13 +27,8 @@ Route::get('beheer/home','ManageController@index');
 
 //extra user routes
 Route::get('users/old_members','UserController@indexOldMembers');
-Route::get('users/pending_members','PendingUserController@indexPendingMembers');
 Route::get('users/exportUsers','UserController@exportUsers');
 Route::patch('users/{user}/removeAsActiveMember', 'UserController@removeAsActiveMember');
-Route::patch('users/{user}/removeAsPendingMember', 'PendingUserController@removeAsPendingMember');
-Route::patch('users/{user}/approveAsPendingMember', 'PendingUserController@approveAsPendingMember');
-
-
 
 //user certification routes
 Route::get('users/{user}/addCertificate','UserCertificateController@addCertificate');
@@ -53,8 +48,7 @@ Route::resource('applicationForms', 'ApplicationFormController');
 Route::resource('newsItems', 'NewsItemController');
 Route::resource('frontEndReplacement', 'FrontEndReplacementController');
 Route::resource('mailList', 'MailListController');
-Route::post('/lidworden', 'PendingUserController@storePendingUser');
-Route::resource('books', 'LibraryController');
+
 
 //inschrijf routes
 Route::get('forms/{agendaItem}', array('as' => 'editSchedule', 'uses' => 'InschrijfController@showPersonalRegistrationForm'));
@@ -72,13 +66,17 @@ Route::resource('forms', 'InschrijfController');
 Route::delete('/mailList/{mailistid}/member/{memberid}','MailListController@deleteMeberOfMailList');
 Route::post('/mailList/{mailistid}/member','MailListController@addMember');
 
+//photo routes
+Route::post('PhotoAlbum/{albumId}/upload', ['as'=>'addPhoto','uses'=>'photoController@addPhotoToAlbum']);
+
 //front-end routes
+Route::get('/PhotoAlbum/{albumId}','PhotoController@getPhotoAlbum');
 Route::get('/zekeringen','frontEndController@zekeringen');
-Route::get('/bibliotheek','frontEndController@library');
 Route::get('/agenda','frontEndController@agenda');
 Route::get('/agenda/{agendaItem}','frontEndController@agendaDetailView');
-Route::get('/lidworden','frontEndController@publicSubscribe');
 Route::get('/home','frontEndController@home');
 Route::get('/nieuws','frontEndController@news');
 Route::get('/ledenlijst','frontEndController@memberList');
-Route::get('/{menuItem}','frontEndController@showPage');
+Route::get('/{menuItem}', function () {
+    return redirect(strtolower($menuItem), 301, 'frontEndController@showPage');
+});
