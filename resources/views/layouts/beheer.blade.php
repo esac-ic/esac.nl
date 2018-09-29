@@ -33,13 +33,15 @@
                             </a>
                         </li>
                     @else
-                        @if(\Illuminate\Support\Facades\Auth::user()->hasRole(Config::get('constants.Administrator')))
+                        @if(\Illuminate\Support\Facades\Auth::user()->hasRole(Config::get('constants.Administrator'),Config::get('constants.Certificate_administrator')))
                             <li class="nav-item">
                                 <a href="{{ url('users') }}" class="nav-link">
                                 {{trans("menu.leden")}} <span class="ion-ios-arrow-forward align-middle ml-1"></span>
                                 </a>
                             </li>
-                            <li class="nav-item">
+                        @endif
+                        @if(\Illuminate\Support\Facades\Auth::user()->hasRole(Config::get('constants.Administrator')))
+                        <li class="nav-item">
                                 <a href="{{ url('users/old_members') }}" class="nav-link">
                                 {{trans("user.old_members")}} <span class="ion-ios-arrow-forward align-middle ml-1"></span>
                                 </a>
@@ -74,6 +76,13 @@
                                 </a>
                             </li>
                         @endif
+                        @if(\Illuminate\Support\Facades\Auth::user()->hasRole(Config::get('constants.Administrator'),Config::get('constants.Certificate_administrator')))
+                            <li class="nav-item">
+                                <a href="{{ url('certificates') }}" class="nav-link">
+                                {{trans("menu.certificate")}} <span class="ion-ios-arrow-forward align-middle ml-1"></span>
+                                </a>
+                            </li>
+                            @endif
                         @if(\Illuminate\Support\Facades\Auth::user()->hasRole(Config::get('constants.Administrator')))
                             <li class="nav-item">
                                 <a href="{{ url('rols') }}" class="nav-link">
@@ -83,11 +92,6 @@
                             <li class="nav-item">
                                 <a href="{{ url('books') }}" class="nav-link">
                                 {{trans("menu.books")}} <span class="ion-ios-arrow-forward align-middle ml-1"></span>
-                                </a>
-                            </li>
-                            <li class="nav-item">
-                                <a href="{{ url('certificates') }}" class="nav-link">
-                                {{trans("menu.certificate")}} <span class="ion-ios-arrow-forward align-middle ml-1"></span>
                                 </a>
                             </li>
                             <li class="nav-item">
@@ -102,7 +106,7 @@
                             </li>
                             <li class="nav-item">
                                 <a href="{{ url('mailList') }}" class="nav-link">
-                                {{trans("Maillist.menuname")}} <span class="ion-ios-arrow-forward align-middle ml-1"></span>
+                                {{trans("MailList.menuname")}} <span class="ion-ios-arrow-forward align-middle ml-1"></span>
                                 </a>
                             </li>
                         @endif

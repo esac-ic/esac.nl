@@ -20,7 +20,7 @@ class UserCertificateController extends Controller
     public function __construct(RepositorieFactory $repositoryFactory)
     {
         $this->middleware('auth');
-        $this->middleware('authorize:'. Config::get('constants.Administrator'));
+        $this->middleware('authorize:'.\Config::get('constants.Administrator') .',' . \Config::get('constants.Certificate_administrator'));
         $this->_userRepository = $repositoryFactory->getRepositorie(RepositorieFactory::$USERREPOKEY);
         $this->_certificateRepository = $repositoryFactory->getRepositorie(RepositorieFactory::$CERTIFICATEREPOKEY);
     }

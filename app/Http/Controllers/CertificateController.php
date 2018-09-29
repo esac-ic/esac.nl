@@ -14,7 +14,7 @@ class CertificateController extends Controller
     {
         $this->_certificateRepository = $repositorieFactory->getRepositorie(RepositorieFactory::$CERTIFICATEREPOKEY);
         $this->middleware('auth');
-        $this->middleware('authorize:'.\Config::get('constants.Administrator'));
+        $this->middleware('authorize:'.\Config::get('constants.Administrator') .',' . \Config::get('constants.Certificate_administrator'));
     }
 
     /**

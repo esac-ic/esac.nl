@@ -28,7 +28,7 @@ class UserController extends Controller
     {
         $this->middleware('auth');
         //in the update en edit methode we check if the user is editing his own page or he is a administrator
-        $this->middleware('authorize:'. Config::get('constants.Administrator'))->except(['edit','update','show']);
+        $this->middleware('authorize:'.\Config::get('constants.Administrator') .',' . \Config::get('constants.Certificate_administrator'))->except(['edit','update','show']);
         $this->_userRepository = $repositoryFactory->getRepositorie(RepositorieFactory::$USERREPOKEY);
     }
 
@@ -73,7 +73,7 @@ class UserController extends Controller
     }
 
     public function show(Request $request, User $user){
-        if(Auth::user()->id != $user->id && !Auth::user()->hasRole(Config::get('constants.Administrator'))){
+        if(Auth::user()->id != $user->id && !Auth::user()->hasRole(Config::get('constants.Administrator'),Config::get('constants.Certificate_administrator'))){
             abort(403, trans('validation.Unauthorized'));
         }
         return view('beheer.user.show', compact('user'));
