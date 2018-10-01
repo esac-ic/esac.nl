@@ -13,6 +13,7 @@ class PhotoSeeder extends Seeder
     {
         $photo = new \App\Photo();
         $photo->link = "www.google.com";
+        $photo->thumbnail()->associate(null);
         $photo->photo_album()->associate(1);
         $photo->user()->associate(1);
         $photo->save();

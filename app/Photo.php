@@ -10,7 +10,14 @@ class Photo extends Model
     public $incrementing = true;
     protected $fillable = [
         'link',
+        'thumbnail',
+        'width',
+        'height'
     ];
+
+    public function thumbnail(){
+        return $this->hasOne(Photo::class);
+    }
 
     public function photo_album(){
         return $this->belongsTo(PhotoAlbum::class);
@@ -19,5 +26,4 @@ class Photo extends Model
     public function user(){
         return $this->belongsTo(User::class, 'createdBy');
     }
-
 }

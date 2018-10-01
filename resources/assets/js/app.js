@@ -1,3 +1,9 @@
+var items = [];
+
+for(var photo in photos){
+    items.push({src: photos[photo][0], w: photos[photo][1], h: photos[photo][2] });
+}
+
 var summernoteSettings = {
     height: 300,
     toolbar: [
@@ -15,6 +21,16 @@ var summernoteSettings = {
 }
 
 // Cookie utils
+
+function openGallery(index){
+    var pswpElement = document.querySelectorAll('.pswp')[0];
+    var options ={
+        index: parseInt(index)
+    };  
+    
+    var gallery = new PhotoSwipe( pswpElement, PhotoSwipeUI_Default, items, options);
+    gallery.init();
+}
 
 // creates a cookie
 function createCookie(name, value, days) {
