@@ -27,6 +27,7 @@ mix.copyDirectory("resources/assets/img","public/img")
    .copyDirectory("node_modules/summernote/dist/font","public/css/vendor/font");
 
 mix.copy("resources/assets/js/app.js","public/js")
+   .copy("resources/assets/js/photoAlbum.js","public/js")
    .copy("node_modules/jquery/dist/jquery.js", "public/js/vendor")
    .copy("node_modules/summernote/dist/summernote-bs4.js", "public/js/vendor/summernote.js")
    .copy("node_modules/summernote/dist/summernote-bs4.css", "public/css/vendor/summernote.css")

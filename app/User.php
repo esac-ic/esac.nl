@@ -103,6 +103,14 @@ class User extends Authenticatable
         return $name;
     }
 
+    public function isOldMember(){
+        return $this->lid_af !== null;
+    }
+
+    public function isPendingMember(){
+        return $this->pending_user !== null;
+    }
+
     public function isActiveMember(){
         return $this->lid_af === null;
     }

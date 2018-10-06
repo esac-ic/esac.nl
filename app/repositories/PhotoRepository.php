@@ -59,7 +59,7 @@ class PhotoRepository implements IRepository
 
     public function saveToAWS($filepath, $file){
         $s3 = \Storage::disk('s3');
-        $s3->put($filepath, $file, 'public');
+        $s3->put($filepath, file_get_contents($file), 'public');
         return $filepath;
     }
 }

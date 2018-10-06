@@ -1,4 +1,7 @@
 <head>
+@javascript('photos', $photos)
+@javascript('photoAlbum', $photoAlbum)
+
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/photoswipe/4.1.2/photoswipe.min.css">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/photoswipe/4.1.2/default-skin/default-skin.css">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/photoswipe/4.1.2/photoswipe.min.js"></script>
@@ -6,7 +9,7 @@
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script> 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/pica/4.1.1/pica.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/pica/4.1.1/pica.min.js"></script>
-@javascript('photos', $photos);
+<script src="../js/photoalbum.js"></script>
 </head>
 @extends('layouts.app')
 
@@ -73,24 +76,15 @@
         <div class="card-body">
             <div >
                 @foreach ($thumbnails as $id=>$thumbnail)
-                    <img class="col-*-* px-1" src="{!! $thumbnail !!}" onclick="openGallery('{{ $loop->index }}');">
+                    <img id="thumbnail" class="col-*-* px-1" src="{!! $thumbnail !!}" onclick="openGallery('{{ $loop->index }}');">
                 @endforeach
             </div>
             
             <div class="mt-2">
                 <h5>Foto's toevoegen </h5>
                 <div class="mt-1">
-                    <form action="{{$photoAlbum->id}}/upload" method="POST" enctype="multipart/form-data">
-                    {{ csrf_field() }}
-                    <div class="row cancel">  
-                        <div class="col-md-4">
-                            <input required type="file" class="form-control" name="images[]" placeholder="address" multiple>        
-                        </div>
-
-                        <div class="col-md-4">
-                            <button type="submit" class="btn btn-success">Toevoegen</button>
-                        </div>
-                    </div>
+                        <input type="file" id="file-select" name="photos[]" multiple/>
+                        <button id='submit' onclick="uploadPhoto()">Toevoegen</button>
                 </div>
             </div>
         </div>   

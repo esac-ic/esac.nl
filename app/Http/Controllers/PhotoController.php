@@ -69,25 +69,18 @@ class PhotoController extends Controller
     public function addPhotoToAlbum(Request $request, $ablumId){
         //get title from given album
         PhotoAlbum:$photoAlbum = $this->_PhotoAlbumRepository->find($ablumId);
-
-        if($files=$request->file('images')){
-            foreach($files as $file){
-                //fix saving without encoding.
-                try{
-                    $fileExtension=$file->getClientOriginalExtension();
-                    if($fileExtension == "png"||"jpeg"||"jpg"||"gif"||"svg"){  
-                        $photo = Image::make($file);
-                        $photo->encode('png', 50);
-
-                        $thumbnail = Image::make($file)->resize(100,100);    
-                        $thumbnail->encode('png', 50);
-                        $this->savePhoto($photo, $photoAlbum, $thumbnail);
-                    }
-                }catch(NotReadableException $e){
-                    //TODO: handle exception properly
-                    echo("maatwerk");
+        $photos = $request->photos;
+        $thumbnails = $request->thumbnails;
+        if($photos !=null && $thumbnails  !=null){
+            for ($i = 0; $i < count($photos); $i++) {
+                $photo = $photos[$i];
+                $thumbnail = $thumbnails[$i];
+                $fileExtension = $photos[$i]->getClientOriginalExtension();
+                if($fileExtension == "png"||"jpeg"||"jpg"||"gif"||"svg"){  
+                    $this->savePhoto($photo, $photoAlbum, $thumbnail);
                 }
             }
+                                
         }
         return redirect()->route('PhotoAlbum', ['albumId' => $ablumId]);
     }
