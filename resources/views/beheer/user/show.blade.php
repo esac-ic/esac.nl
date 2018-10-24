@@ -32,7 +32,7 @@
                     <span title="{{trans("menu.edit")}}" class="ion-edit" aria-hidden="true"></span>
                     {{trans("menu.edit")}}
                 </a>
-                @if(\Illuminate\Support\Facades\Auth::user()->hasRole(Config::get('constants.Administrator')))
+                @if(\Illuminate\Support\Facades\Auth::user()->hasRole(Config::get('constants.Administrator'),Config::get('constants.Certificate_administrator')))
                     <a href="{{url('/users/'.$user->id . '/addCertificate' )}}" class="btn btn-primary">
                         <span title="{{trans("user.addCertificate")}}" class="ion-plus" aria-hidden="true"></span>
                         {{trans("user.addCertificate")}}
@@ -77,6 +77,7 @@
                     <a class="nav-link" id="tab3" data-toggle="tab" href="#certifications" role="tab" aria-controls="security" aria-selected="false">{{trans('certificate.certificates') }}</a>
                 </li>
             </ul>
+            @if(\Illuminate\Support\Facades\Auth::user()->hasRole(Config::get('constants.Administrator')))
             <div class="tab-content space-sm">
                 <div class="tab-pane fade show active" id="tab1-content" role="tabpanel" aria-labelledby="tab1-content">
                     <table class="table table-striped" style="width:100%">
@@ -217,6 +218,7 @@
                         @endif
                     </table>
                 </div>
+                @endif
                 <div class="tab-pane fade" id="certifications" role="tabpanel" aria-labelledby="tab3-content">
                     <table class="table table-striped" style="width:100%">
                         <thead>
