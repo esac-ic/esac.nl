@@ -41,7 +41,6 @@
                             {{ csrf_field() }}
                         </form>
                     </li>
-                    <hr class="my-3">
                     @if (Auth::guest())
                         <li class="nav-item">
                             <a href="{{ url('/login') }}" class="nav-link">
@@ -49,7 +48,9 @@
                             </a>
                         </li>
                     @else
-                        @if(\Illuminate\Support\Facades\Auth::user()->hasRole(Config::get('constants.Administrator'),Config::get('constants.Certificate_administrator')))
+                        @if(\Illuminate\Support\Facades\Auth::user()->hasRole(Config::get('constants.Administrator'),Config::get('constants.Activity_administrator'),Config::get('constants.Content_administrator'),Config::get('constants.Certificate_administrator')))
+                            <hr class="my-3">
+
                             <li class="nav-item active">
                                 <span class="nav-link">
                                     {{ trans('menu.beheer') }}
@@ -60,6 +61,8 @@
                                 Dashboard <span class="ion-ios-arrow-forward align-middle ml-1"></span>
                                 </a>
                             </li>
+                        @endif
+                        @if(\Illuminate\Support\Facades\Auth::user()->hasRole(Config::get('constants.Administrator'),Config::get('constants.Certificate_administrator')))
                             <li class="nav-item">
                                 <a href="{{ url('users') }}" class="nav-link">
                                 {{trans("menu.leden")}} <span class="ion-ios-arrow-forward align-middle ml-1"></span>
