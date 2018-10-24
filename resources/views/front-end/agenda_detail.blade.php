@@ -17,7 +17,7 @@
                                     <span class="ion-person-stalker"></span> {{count($agendaItem->getApplicationFormResponses)}}
                                 @endif
                             </div>
-                            <civ class="col-auto">
+                            <div class="col-auto">
                                 @if($agendaItem->application_form_id != null)
                                     @if(Auth::guest())
                                         {{trans('front-end/agenda.loginNeeded')}}
@@ -30,7 +30,7 @@
                                     @endif
                                 @endif
                             </div>
-                        </civ>
+                        </div>
                     </div>
                 </div>
             </div>

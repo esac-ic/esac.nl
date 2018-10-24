@@ -8,6 +8,7 @@ use App\ApplicationFormRow;
 use App\ApplicationResponse;
 use App\ApplicationResponseRow;
 use App\User;
+use App\Notifications\AgendaSubscribed;
 use Illuminate\Http\Request;
 use App\CustomClasses\MenuSingleton;
 use App\repositories\RepositorieFactory;
@@ -114,6 +115,9 @@ class InschrijfController extends Controller
     public function savePersonalRegistrationForm(Request $request,AgendaItem $agendaItem)
     {
         $this->_InschrijvenRepository->store($agendaItem,$request,Auth::user()->id);
+        $user = Auth::user();
+        $user->notify(new AgendaSubscribed($agendaItem));
+
         return redirect('agenda/'. $agendaItem->id);
     }
 
