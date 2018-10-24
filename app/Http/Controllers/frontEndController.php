@@ -11,6 +11,7 @@ use App\Zekering;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Redirect;
+use Illuminate\Support\Str;
 use App\NewsItem;
 use App\User;
 use App\Book;
@@ -84,7 +85,7 @@ class frontEndController extends Controller
     }
     
     public function news(){
-        $newsItems = NewsItem::orderBy('id', 'desc')->paginate(5);
+        $newsItems = NewsItem::orderBy('id', 'desc')->paginate(9);
         $curPageName = trans('front-end/news.title');
         $menuItem = $this->_MenuItemRepository->findby('urlName',MenuItem::NEWSURL);
         $content = $menuItem->content->text();
