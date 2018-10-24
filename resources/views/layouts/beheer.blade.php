@@ -23,9 +23,25 @@
 
               <div class="collapse navbar-collapse align-self-start" id="navbarDashboard">
                 <ul class="navbar-nav mr-auto mt-2 mt-lg-0 flex-lg-column">
-                    <li class="nav-item">
-                        <a class="nav-link active" href="{{ url('beheer/home') }}">Dashboard</a>
+                    <li class="nav-item active">
+                        <span class="nav-link">
+                            {{ trans('menu.user') }}
+                        </span>
                     </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url('/users/'. Auth::user()->id) . '?back=false'}}">
+                            {{ trans('menu.account_overview') }} <span class="ion-ios-arrow-forward align-middle ml-1"></span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url('/logout') }}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+                            Logout <span class="ion-ios-arrow-forward align-middle ml-1"></span>
+                        </a>
+                        <form id="logout-form" action="{{ url('/logout') }}" method="POST" style="display: none;">
+                            {{ csrf_field() }}
+                        </form>
+                    </li>
+                    <hr class="my-3">
                     @if (Auth::guest())
                         <li class="nav-item">
                             <a href="{{ url('/login') }}" class="nav-link">
@@ -34,6 +50,16 @@
                         </li>
                     @else
                         @if(\Illuminate\Support\Facades\Auth::user()->hasRole(Config::get('constants.Administrator')))
+                            <li class="nav-item active">
+                                <span class="nav-link">
+                                    {{ trans('menu.beheer') }}
+                                </span>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="{{ url('beheer/home') }}">
+                                Dashboard <span class="ion-ios-arrow-forward align-middle ml-1"></span>
+                                </a>
+                            </li>
                             <li class="nav-item">
                                 <a href="{{ url('users') }}" class="nav-link">
                                 {{trans("menu.leden")}} <span class="ion-ios-arrow-forward align-middle ml-1"></span>

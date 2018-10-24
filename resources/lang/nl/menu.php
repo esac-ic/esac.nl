@@ -31,6 +31,8 @@ return [
     "nl" => "Nederlands",
     "submit" => "Submit",
     'confirmDelete' => 'Weet u zeker dat u het wil verwijderen?',
-    'action' => 'Actie'
+    'action' => 'Actie',
+    "account_overview" => "Account overzicht",
+    "user" => "Gebruiker"
 
 ];

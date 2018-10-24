@@ -116,7 +116,7 @@
                 {{ Auth::user()->firstname }}
               </a>
               <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-                <a class="dropdown-item" href="{{ url('/users/'. Auth::user()->id) . '?back=false'}}">Account overzicht</a>
+                <a class="dropdown-item" href="{{ url('/users/'. Auth::user()->id) . '?back=false'}}">{{ trans('menu.account_overview') }}</a>
                 <a class="dropdown-item" href="{{ url('/logout') }}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">Logout</a>
                 <form id="logout-form" action="{{ url('/logout') }}" method="POST" style="display: none;">
                     {{ csrf_field() }}
