@@ -69,6 +69,7 @@ return [
     "pending_member_since" => "Pending user since",
     "privacy_policy" => "Accept the Privacy Policy",
     "privacy_and_incasso" => "Privacy Policy and Automatic Collection",
-    "termsconditions" => "Accept the Terms and Conditions"
+    "termsconditions" => "Accept the Terms and Conditions",
+    'registrations' => 'Registrations'
 
 ];

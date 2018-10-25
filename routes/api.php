@@ -26,3 +26,5 @@ Route::get('/zekeringen', 'Api\ZekeringController@getZekeringen');
 Route::post('/zekeringen', 'Api\ZekeringController@storeZekering');
 Route::post('/subzekering','Api\ZekeringController@storeSubZekering');
 Route::delete('/zekeringen/{id}', 'Api\ZekeringController@destroy');
+
+Route::get('/user/registrations','Api\RegistrationController@registrationsByUser');

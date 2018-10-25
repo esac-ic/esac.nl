@@ -8,5 +8,6 @@ return [
     "applicationFormDetail" => "Show entered information",
     "applicationFormDetailTitle" => "Details application form",
     "applicationRowName" => 'Field name',
-    "applicationRowValue" => "Filled value"
+    "applicationRowValue" => "Filled value",
+    "deleteRegistrationConfurm" => 'Are you sure you want do remove your registration for this event?'
 ];

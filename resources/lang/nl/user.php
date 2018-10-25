@@ -69,6 +69,7 @@ return [
     "pending_member_since" => "Lid in afwachting sinds",
     "privacy_policy" => "Akkoord met de Privacy Policy",
     "privacy_and_incasso" => "Privacy Policy en Incasso Machtiging",
-    "termsconditions" => "Akkoord met de Terms and Conditions"
+    "termsconditions" => "Akkoord met de Terms and Conditions",
+    'registrations' => 'Inschrijvingen'
 
 ];
