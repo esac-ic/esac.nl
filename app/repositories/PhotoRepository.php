@@ -52,6 +52,11 @@ class PhotoRepository implements IRepository
         return Photo::query()->orderBy('id', 'desc')->get();
     }
 
+    public function getFirstPhoto($id){
+        $m =Photo::with('photo_album')->where('photo_album_id',$id)->first();
+        return $m;
+    }
+
     public function retrieveFromAWS($filepath){
         $s3 = \Storage::disk('s3');
         return $s3->url($filepath);

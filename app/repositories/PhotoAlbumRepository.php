@@ -20,6 +20,7 @@ class PhotoAlbumRepository implements IRepository
     {
         $album = new PhotoAlbum();
         $album->title = $data["title"];
+        $album->description = $data["description"];
         $album->user()->associate(Auth::user()->id);
         $album->save();
         return $album;

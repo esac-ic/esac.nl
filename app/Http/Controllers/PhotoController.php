@@ -5,8 +5,6 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\repositories\PhotoAlbumRepository;
 use App\repositories\RepositorieFactory;
-use Intervention\Image\ImageManagerStatic as Image;
-use Intervention\Image\Exception;
 
 class PhotoController extends Controller
 {
@@ -61,8 +59,10 @@ class PhotoController extends Controller
         }
     }
 
-    public function addAlbum(Request $request, $title){
-        PhotoAlbum:$photoAlbum = $this->_PhotoAlbumRepository->create(["album" => $title]);
+    public function addAlbum(Request $request){
+        $title = $request->title;
+        $description = $request->description;
+        PhotoAlbum:$photoAlbum = $this->_PhotoAlbumRepository->create(["title" => $title, "description"=> $description]);
         $this->addPhotoToAlbum($request, $photoAlbum->id);
     }  
 
@@ -79,8 +79,7 @@ class PhotoController extends Controller
                 if($fileExtension == "png"||"jpeg"||"jpg"||"gif"||"svg"){  
                     $this->savePhoto($photo, $photoAlbum, $thumbnail);
                 }
-            }
-                                
+            }                        
         }
         return redirect()->route('PhotoAlbum', ['albumId' => $ablumId]);
     }
@@ -93,8 +92,8 @@ class PhotoController extends Controller
         $thumbnailPath = 'photos/' . $albumtitle .'/' . $thumbnailFileName ;
         $photoPath = 'photos/' . $albumtitle .'/' . $imageFileName; 
 
-        $photoLink = $this->_PhotoRepository->saveToAWS($photoPath,$image->__toString());
-        $thumbnailLink = $this->_PhotoRepository->saveToAWS($thumbnailPath,$thumbnail->__toString());
+        $photoLink = $this->_PhotoRepository->saveToAWS($photoPath,$image);
+        $thumbnailLink = $this->_PhotoRepository->saveToAWS($thumbnailPath,$thumbnail);
         if($photoLink != null && $thumbnailLink != null){
             $this->_PhotoRepository->update($photo->id,["link" => $photoLink, "thumbnail" => $thumbnailLink]);
             return $photo->id;

@@ -74,7 +74,7 @@
 
     <div class="card">
         <div class="card-body">
-            <div >
+            <div class="row d-flex align-items-stretch align-items-center">
                 @foreach ($thumbnails as $id=>$thumbnail)
                     <img id="thumbnail" class="col-*-* px-1" src="{!! $thumbnail !!}" onclick="openGallery('{{ $loop->index }}');">
                 @endforeach
@@ -82,14 +82,43 @@
             
             <div class="mt-2">
                 <h5>Foto's toevoegen </h5>
-                <div class="mt-1">
-                        <input type="file" id="file-select" name="photos[]" multiple/>
-                        <button id='submit' onclick="uploadPhoto()">Toevoegen</button>
-                </div>
+                <label class="input-group-btn">
+                    <span class="btn btn-primary">
+                        Browse&hellip; <input style="display: none;" class="form-control" type="file" id="file-select" name="photos[]" multiple required/>
+                    </span>
+                </label>
+                <input id="filesSelected" type="text" class="form-control" readonly>
+                <button class="btn btn-primary" id='submit' onclick="uploadPhoto()">Toevoegen</button>
             </div>
         </div>   
     </div>
 </div>
+<style>
+#thumbnail {
+    width: auto;
+    height: auto;
+    padding-bottom: 1%;
+    min-width:33.33%;
+    max-width: 33.33%;
+    max-height: 300px;
+}
+</style>
+<script>
+$(document).on('change', ':file', function() {
+    var input = $(this),
+        numFiles = input.get(0).files ? input.get(0).files.length : 1,
+        label = input.val().replace(/\\/g, '/').replace(/.*\//, '');
+    input.trigger('fileselect', [numFiles, label]);
+  });
+
+  // We can watch for our custom `fileselect` event like this
+  $(document).ready( function() {
+      $(':file').on('fileselect', function(event, numFiles, label) {
+
+        var input = $('#filesSelected').val(numFiles + " files selected");
+      });
+  });
+</script>
 @endsection
 
 
