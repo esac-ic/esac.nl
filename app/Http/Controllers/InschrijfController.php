@@ -38,7 +38,13 @@ class InschrijfController extends Controller
     public function __construct(MenuSingleton $menuSingleton, RepositorieFactory $repositorieFactory)
     {
         $this->middleware('auth');
-        $this->middleware('authorize:'.\Config::get('constants.Content_administrator') .',' . \Config::get('constants.Activity_administrator'))->except(['showPersonalRegistrationForm','savePersonalRegistrationForm']);
+        $this->middleware('authorize:'.\Config::get('constants.Content_administrator') .',' . \Config::get('constants.Activity_administrator'))
+            ->except([
+                'showPersonalRegistrationForm',
+                'savePersonalRegistrationForm',
+                'destroy',
+                'showApplicationFormInformation',
+            ]);
 
         $this->_menu = $menuSingleton;
         $this->_MenuItemRepository = $repositorieFactory->getRepositorie(RepositorieFactory::$MENUREPOKEY);
@@ -147,6 +153,12 @@ class InschrijfController extends Controller
     }
 
     public function showApplicationFormInformation(User $user, AgendaItem $agendaItem){
+        if(!Auth::user()->hasRole(\Config::get('constants.Activity_administrator'))){
+            if(Auth::user()->id != $user->id){
+                abort(401);
+            }
+        }
+
         $applicationDataRows = $this->_InschrijvenRepository->getApplicationInformation($agendaItem->id,$user->id);
         $agendaId = $agendaItem->id;
 
@@ -161,6 +173,12 @@ class InschrijfController extends Controller
      */
     public function destroy($Agenda_id, $applicationResponseId)
     {
+        $applicationReponse = ApplicationResponse::find($applicationResponseId);
+        if(!Auth::user()->hasRole(\Config::get('constants.Activity_administrator'))){
+            if(Auth::user()->id != $applicationReponse->user_id){
+                abort(401);
+            }
+        }
         $this->_InschrijvenRepository->delete($applicationResponseId);
         return redirect('forms/users/'.$Agenda_id);
     }

@@ -23,4 +23,7 @@ class ApplicationResponse extends Model
     public function getApplicationResponseUser(){
         return $this->hasOne('App\User','id','user_id');
     }
+    public function agendaItem(){
+        return $this->belongsTo(AgendaItem::class,'agenda_id');
+    }
 }

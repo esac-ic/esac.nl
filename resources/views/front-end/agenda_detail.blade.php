@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
 @section('content')
-    <div class="container intro-container">
+    <div class="container intro-container pb-3">
         <div class="row d-flex align-items-stretch">
             <div class="col-lg-4 d-flex flex-wrap">
                 <div class="card w-100">
@@ -17,7 +17,7 @@
                                     <span class="ion-person-stalker"></span> {{count($agendaItem->getApplicationFormResponses)}}
                                 @endif
                             </div>
-                            <civ class="col-auto">
+                            <div class="col-auto">
                                 @if($agendaItem->application_form_id != null)
                                     @if(Auth::guest())
                                         {{trans('front-end/agenda.loginNeeded')}}
@@ -30,7 +30,7 @@
                                     @endif
                                 @endif
                             </div>
-                        </civ>
+                        </div>
                     </div>
                 </div>
             </div>

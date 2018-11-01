@@ -9,5 +9,7 @@
 return [
     "Administrator" => 1,
     "Content_administrator" => 2,
-    "Activity_administrator" => 3
+    "Activity_administrator" => 3,
+    "Certificate_administrator" => 4
+
 ];

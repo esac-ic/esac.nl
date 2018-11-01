@@ -11,6 +11,7 @@ use App\Zekering;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Redirect;
+use Illuminate\Support\Str;
 use App\NewsItem;
 use App\User;
 
@@ -74,12 +75,29 @@ class frontEndController extends Controller
     }
 
     public function news(){
-        $newsItems = NewsItem::orderBy('id', 'desc')->paginate(5);
+        $newsItems = NewsItem::orderBy('id', 'desc')->paginate(9);
         $curPageName = trans('front-end/news.title');
         $menuItem = $this->_MenuItemRepository->findby('urlName',MenuItem::NEWSURL);
         $content = $menuItem->content->text();
 
         return view("front-end.news", compact('curPageName','content','newsItems'));
+    }
+
+    public function newsDetailView(Request $request, NewsItem $newsItem){
+        $curPageName = $newsItem->newsItemTitle->text();
+        $menuItem = $this->_MenuItemRepository->findby('urlName',MenuItem::NEWSURL);
+        $content = $menuItem->content->text();
+
+        return view("front-end.news_detail", compact('newsItem','users','curPageName'));
+    }
+
+    public function library(){
+        $books = $this->_bookRepository->all(array("id","title","year","type","country"));
+        $curPageName = trans('front-end/library.title');
+        $menuItem = $this->_MenuItemRepository->findby('urlName',MenuItem::LIBRARYURL);
+        $content = $menuItem->content->text();
+
+        return view("front-end.library", compact('curPageName','content','books'));
     }
   
     public function memberlist(){

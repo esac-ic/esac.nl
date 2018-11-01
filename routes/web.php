@@ -80,6 +80,7 @@ Route::get('/agenda','frontEndController@agenda');
 Route::get('/agenda/{agendaItem}','frontEndController@agendaDetailView');
 Route::get('/home','frontEndController@home');
 Route::get('/nieuws','frontEndController@news');
+Route::get('/nieuws/{newsItem}','frontEndController@newsDetailView');
 Route::get('/ledenlijst','frontEndController@memberList');
 Route::get('/{menuItem}', function () {
     return redirect(strtolower($menuItem), 301, 'frontEndController@showPage');

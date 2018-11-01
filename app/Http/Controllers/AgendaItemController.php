@@ -164,7 +164,7 @@ class AgendaItemController extends Controller
             ))->save("../storage/app/public/" . $agendaItem->image_url);
         }
 
-        \Session::flash("message",trans('AgendaItems.added'));
+        \Session::flash("message",trans('AgendaItems.edited'));
         return redirect('/agendaItems');
     }
 

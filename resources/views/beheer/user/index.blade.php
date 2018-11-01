@@ -19,6 +19,7 @@
             <h1>{{trans("user.user")}}</h1>
         </div>
 
+        @if(\Illuminate\Support\Facades\Auth::user()->hasRole(Config::get('constants.Administrator')))
         <div class="col-md-6">
             <div class="btn-group mt-2 float-md-right" role="group" aria-label="Actions">
                 <a href="{{url('users/create')}}" class="btn btn-primary">
@@ -31,6 +32,7 @@
                 </a>
             </div>
         </div>
+        @endif
     </div>
     <table id="users" class="table table-striped dt-responsive nowrap" style="width:100%">
         <thead>

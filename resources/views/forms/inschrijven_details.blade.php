@@ -12,7 +12,7 @@
 
         <div class="col-md-6">
             <div class="btn-group mt-2 float-md-right" role="group" aria-label="Actions">
-                <a href="{{url('/forms/users/' . $agendaId)}}" class="btn btn-primary">
+                <a href="{{url()->previous()}}" class="btn btn-primary">
                     <em class="ion-android-arrow-back"></em> {{trans("menu.back")}}
                 </a>
             </div>

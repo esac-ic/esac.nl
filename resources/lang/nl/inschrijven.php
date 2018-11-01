@@ -8,5 +8,6 @@ return [
     "applicationFormDetail" => "Bekijk ingevulde informatie",
     "applicationFormDetailTitle" => "Gegevens inschrijf formulier",
     "applicationRowName" => 'Veld naam',
-    "applicationRowValue" => "Ingevulde waarde"
+    "applicationRowValue" => "Ingevulde waarde",
+    "deleteRegistrationConfurm" => 'Weet je zeker dat je je wil uitschrijven voor dit event?'
 ];

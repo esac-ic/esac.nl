@@ -24,5 +24,9 @@ class RolTableSeeder extends Seeder
         $text->save();
         $rol  = new \App\Rol(['name' => $text->id]);
         $rol->save();
+        $text = new \App\Text(['NL_text' => 'Certificaat beheerder', 'EN_text' => 'Certificate administrator']);
+        $text->save();
+        $rol  = new \App\Rol(['name' => $text->id]);
+        $rol->save();
     }
 }

@@ -4,6 +4,10 @@
 {{trans('user.info') . $user->getName()}}
 @endsection
 
+@push('styles')
+    <link rel="stylesheet" type="text/css" href="{{mix("css/vendor/datatables.css")}}">
+@endpush
+
 @section('content')
     @if(Session::has('message'))
         <div class="alert alert-success alert-dismissible fade show" role="alert">
@@ -32,7 +36,7 @@
                     <span title="{{trans("menu.edit")}}" class="ion-edit" aria-hidden="true"></span>
                     {{trans("menu.edit")}}
                 </a>
-                @if(\Illuminate\Support\Facades\Auth::user()->hasRole(Config::get('constants.Administrator')))
+                @if(\Illuminate\Support\Facades\Auth::user()->hasRole(Config::get('constants.Administrator'),Config::get('constants.Certificate_administrator')))
                     <a href="{{url('/users/'.$user->id . '/addCertificate' )}}" class="btn btn-primary">
                         <span title="{{trans("user.addCertificate")}}" class="ion-plus" aria-hidden="true"></span>
                         {{trans("user.addCertificate")}}
@@ -76,7 +80,11 @@
                 <li class="nav-item">
                     <a class="nav-link" id="tab3" data-toggle="tab" href="#certifications" role="tab" aria-controls="security" aria-selected="false">{{trans('certificate.certificates') }}</a>
                 </li>
+                <li class="nav-item">
+                    <a class="nav-link" id="tab3" data-toggle="tab" href="#registrations" role="tab" aria-controls="security" aria-selected="false">{{trans('user.registrations') }}</a>
+                </li>
             </ul>
+            @if(\Illuminate\Support\Facades\Auth::user()->hasRole(Config::get('constants.Administrator')))
             <div class="tab-content space-sm">
                 <div class="tab-pane fade show active" id="tab1-content" role="tabpanel" aria-labelledby="tab1-content">
                     <table class="table table-striped" style="width:100%">
@@ -217,6 +225,7 @@
                         @endif
                     </table>
                 </div>
+                @endif
                 <div class="tab-pane fade" id="certifications" role="tabpanel" aria-labelledby="tab3-content">
                     <table class="table table-striped" style="width:100%">
                         <thead>
@@ -266,7 +275,64 @@
                         </tbody>
                     </table>
                 </div>
+                <div class="tab-pane fade" id="registrations" role="tabpanel" aria-labelledby="registrations">
+                    <table class="table table-striped" style="width:100%" id="registrations_table">
+                        <thead>
+                        <tr>
+                            <td>
+                                <strong>{{trans('user.name')}}</strong>
+                            </td>
+                            <td>
+                                <strong>{{trans('AgendaItems.startDate')}}</strong>
+                            </td>
+                            <td>
+                                <strong>{{trans('menu.action')}}</strong>
+                            </td>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        </tbody>
+                    </table>
+                </div>
             </div>
         </div>
     </div>
 @endsection
+
+@push('scripts')
+    <script src="{{mix("js/vendor/datatables.js")}}" type="text/javascript"></script>
+    <script>
+        $('#registrations_table').DataTable({
+            "order": [[ 1, "asc" ]],
+            "ajax": {
+                'url' : '{{url('api/user/registrations?user_id=' . \Illuminate\Support\Facades\Auth::user()->id)}}',
+                "dataSrc": ""
+            },
+            "columns": [
+                { "data": "name" },
+                { "data": "startDate"},
+                { "data": "actions"},
+            ]
+        });
+        $(document).on('click','#delete_button',function(){
+            if(confirm("{{trans('inschrijven.deleteRegistrationConfurm')}}")){
+                var url = $(this).attr('data-url');
+                $.ajax({
+                    url: url,
+                    beforeSend: function(request) {
+                        request.setRequestHeader("X-CSRF-TOKEN", $('meta[name="csrf-token"]').attr('content'));
+                    },
+                    method: 'DELETE',
+                    contentType: 'application/json',
+                    success: function(result) {
+                        window.location.reload();
+                    },
+                    error: function(request,msg,error) {
+                        window.location.reload();
+                    }
+                });
+            }
+
+        });
+    </script>
+@endpush
