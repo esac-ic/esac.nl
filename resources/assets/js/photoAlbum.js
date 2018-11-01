@@ -13,7 +13,10 @@ function openGallery(index) {
     gallery.init();
 }
 
-function addAlbum(formData) {
+function addAlbum(thumbnailResults, photoResults) {
+    var formData = new FormData();    
+    formData.append("title", albumName);
+    formData.append("description", albumDescription); 
     var type = "POST";
     formData.append("_token", window.Laravel.csrfToken);
 
@@ -32,25 +35,36 @@ function addAlbum(formData) {
     });
 }
 
-function addPhotoToAlbum(formData){
-    var url = photoAlbum.id;
-    var type = "POST";
-    formData.append("_token", window.Laravel.csrfToken);
-
-    $.ajax({
-        url: url,
-        data: formData,
-        type: type,
-        contentType: false,
-        processData: false,
-        success: function (result) {
-            location.reload();
-        },
-        error: function (request, error) {
-            console.log(arguments);
-            alert(" Can't do because: " + error);
+function addPhotoToAlbum(thumbnailResults, photoResult){
+    var count;
+    for(var i=0; i < thumbnailsResults.length; i+5){
+        var formData = new FormData();    
+        for(j=i; j < i+5; j++){
+            formData.append('thumbnails[]',thumbnailResults[j]);
+            formData.append('photos[]', thumbnailResults[j]);
         }
-    });
+        var url = photoAlbum.id;
+        var type = "POST";
+        formData.append("_token", window.Laravel.csrfToken);
+
+        $.ajax({
+            url: url,
+            data: formData,
+            type: type,
+            contentType: false,
+            processData: false,
+            success: function (result) {
+                count+=5;
+                if(count == thumbnailResults.lenght){
+                    location.reload();
+                }
+            },
+            error: function (request, error) {
+                console.log(arguments);
+                alert(" Can't do because: " + error);
+            }
+        });
+    }  
 }
 
 function ChangebuttonState(text){
@@ -71,22 +85,13 @@ function uploadPhoto() {
     var thumbnails = resizeImages(files);
     var photos = downscalePhoto(files);
     
-    var formData = new FormData();
-    formData.append("title", albumName);
-    formData.append("description", albumDescription);     
-    Promise.all(thumbnails).then(function(results){
-        for (var thumbnail in results) {
-            formData.append("thumbnails[]", results[thumbnail]);
-        }
+    Promise.all(thumbnails).then(function(thumbnailResults){
         Promise.all(photos).then(function(photosResults){
-            for (var photo in photosResults) {
-                formData.append("photos[]", photosResults[photo]);
-            }
             ChangebuttonState('Sending photos...')
             if (!albumName && !albumDescription) { // upload photo without album
-                addPhotoToAlbum(formData);
+                addPhotoToAlbum(thumbnailResults, photosResults, albumName, description);
             } else{
-                addAlbum(formData);
+                addAlbum(thumbnailResults, photosResults);
             }
         });
 

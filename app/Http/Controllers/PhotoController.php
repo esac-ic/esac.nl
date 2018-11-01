@@ -64,6 +64,7 @@ class PhotoController extends Controller
         $description = $request->description;
         PhotoAlbum:$photoAlbum = $this->_PhotoAlbumRepository->create(["title" => $title, "description"=> $description]);
         $this->addPhotoToAlbum($request, $photoAlbum->id);
+        return $photoAlbum->id;
     }  
 
     public function addPhotoToAlbum(Request $request, $ablumId){
