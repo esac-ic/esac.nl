@@ -20,7 +20,7 @@ class StorageController extends Controller
     {
         $path = $request->file('image')->store('image_uploads', 'public');
 
-        return '/' . $path;
+        return '/storage/' . $path;
     }
 
     public function deleteImage(Request $request)
