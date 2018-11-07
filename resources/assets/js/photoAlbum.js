@@ -1,5 +1,6 @@
 var items = [];
-
+var count = 0;
+var currentPhotoAlbum = photoAlbum.id;
 for (var photo in photos) {
     items.push({ src: photos[photo][0], w: photos[photo][1], h: photos[photo][2] });
 }
@@ -13,10 +14,29 @@ function openGallery(index) {
     gallery.init();
 }
 
-function addAlbum(thumbnailResults, photoResults) {
+//button spinner
+function ChangebuttonState(text){
+    var button = $('button#submit');
+    var loadingText = '<i class="fa fa-circle-o-notch fa-spin"></i> ' + text;
+    if (button.html() !== loadingText) {
+        button.data('original-text', button.html());
+        button.html(loadingText);
+        button.attr("disabled", true);
+    }
+}
+
+function addAlbum(thumbnailResults, photoResults, albumName, albumDescription) {
     var formData = new FormData();    
     formData.append("title", albumName);
-    formData.append("description", albumDescription); 
+    formData.append("description", albumDescription);
+    if(thumbnailResults.length< 5){
+        index= thumbnailResults.length
+    } else index = 5;
+    for(i; i < index; i++){
+        formData.append('thumbnails[]',thumbnailResults[i]);
+        formData.append('photos[]', photoResults[i]);
+    }
+    
     var type = "POST";
     formData.append("_token", window.Laravel.csrfToken);
 
@@ -26,7 +46,10 @@ function addAlbum(thumbnailResults, photoResults) {
         contentType: false,
         processData: false,
         success: function (result) {
-            location.reload();
+            currentPhotoAlbum = "photoalbums/" + result;
+            if(thumbnailResults.length> 5){
+                addPhotoToAlbum(thumbnailResults, photoResults, index);
+            }
         },
         error: function (request, error) {
             console.log(arguments);
@@ -35,17 +58,22 @@ function addAlbum(thumbnailResults, photoResults) {
     });
 }
 
-function addPhotoToAlbum(thumbnailResults, photoResult){
-    var count;
-    for(var i=0; i < thumbnailsResults.length; i+5){
-        var formData = new FormData();    
-        for(j=i; j < i+5; j++){
-            formData.append('thumbnails[]',thumbnailResults[j]);
-            formData.append('photos[]', thumbnailResults[j]);
-        }
-        var url = photoAlbum.id;
-        var type = "POST";
-        formData.append("_token", window.Laravel.csrfToken);
+function addPhotoToAlbum(thumbnailResults, photoResults, index){
+    var i = index;
+    var j = 0;
+    if((thumbnailResults.length - index) <= 5){
+        j = (thumbnailResults.length - index);
+    } else{
+        j = 5;
+    }
+    var formData = new FormData();    
+    for(i; i < index+j; i++){
+        formData.append('thumbnails[]',thumbnailResults[i]);
+        formData.append('photos[]', photoResults[i]);
+    }
+    var url = currentPhotoAlbum;
+    var type = "POST";
+    formData.append("_token", window.Laravel.csrfToken);
 
         $.ajax({
             url: url,
@@ -55,26 +83,18 @@ function addPhotoToAlbum(thumbnailResults, photoResult){
             processData: false,
             success: function (result) {
                 count+=5;
-                if(count == thumbnailResults.lenght){
+                if(count >= thumbnailResults.length){
                     location.reload();
+                } else{
+                    addPhotoToAlbum(thumbnailResults, photoResults, i);
                 }
             },
             error: function (request, error) {
                 console.log(arguments);
                 alert(" Can't do because: " + error);
             }
-        });
-    }  
-}
-
-function ChangebuttonState(text){
-    var button = $('button#submit');
-    var loadingText = '<i class="fa fa-circle-o-notch fa-spin"></i> ' + text;
-    if (button.html() !== loadingText) {
-        button.data('original-text', button.html());
-        button.html(loadingText);
-        button.attr("disabled", true);
-    }
+    });
+    
 }
 
 function uploadPhoto() {
@@ -89,9 +109,9 @@ function uploadPhoto() {
         Promise.all(photos).then(function(photosResults){
             ChangebuttonState('Sending photos...')
             if (!albumName && !albumDescription) { // upload photo without album
-                addPhotoToAlbum(thumbnailResults, photosResults, albumName, description);
+                addPhotoToAlbum(thumbnailResults, photosResults, 0);
             } else{
-                addAlbum(thumbnailResults, photosResults);
+                addAlbum(thumbnailResults, photosResults, albumName, albumDescription);
             }
         });
 
