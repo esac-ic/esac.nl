@@ -76,7 +76,7 @@ Route::post('/mailList/{mailistid}/member','MailListController@addMember');
 Route::get('/zekeringen','frontEndController@zekeringen');
 Route::get('/bibliotheek','frontEndController@library');
 Route::get('/agenda','frontEndController@agenda');
-Route::get('/agenda/{agendaItem}','frontEndController@agendaDetailView');
+Route::get('/agenda/{agendaItem}','frontEndController@agendaDetailView')->name('agenda.detail');
 Route::get('/lidworden','frontEndController@publicSubscribe');
 Route::get('/home','frontEndController@home');
 Route::get('/nieuws','frontEndController@news');
