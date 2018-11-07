@@ -2,21 +2,23 @@
 
 namespace App\Notifications;
 
+use App\AgendaItem;
 use Illuminate\Bus\Queueable;
 use Illuminate\Notifications\Notification;
-use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 
 class AgendaSubscribed extends Notification
 {
     use Queueable;
 
+    private $agendaItem;
+
     /**
      * Create a new notification instance.
      *
-     * @return void
+     * @param AgendaItem $agendaItem
      */
-    public function __construct($agendaItem)
+    public function __construct(AgendaItem $agendaItem)
     {
         $this->agendaItem = $agendaItem;
     }
@@ -40,7 +42,7 @@ class AgendaSubscribed extends Notification
      */
     public function toMail($notifiable)
     {
-        $url = url('/agenda/'.$this->agendaItem->id);
+        $url = route('agenda.detail', $this->agendaItem);
         $title = $this->agendaItem->agendaItemTitle->text();
 
         return (new MailMessage)
