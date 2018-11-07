@@ -26,8 +26,7 @@ mix.styles([
 mix.copyDirectory("resources/assets/img","public/img")
    .copyDirectory("node_modules/summernote/dist/font","public/css/vendor/font");
 
-mix.copy("resources/assets/js/app.js","public/js")
-   .copy("node_modules/jquery/dist/jquery.js", "public/js/vendor")
+mix.copy("node_modules/jquery/dist/jquery.js", "public/js/vendor")
    .copy("node_modules/summernote/dist/summernote-bs4.js", "public/js/vendor/summernote.js")
    .copy("node_modules/summernote/dist/summernote-bs4.css", "public/css/vendor/summernote.css")
    .copy("node_modules/popper.js/dist/umd/popper.js", "public/js/vendor")
@@ -35,6 +34,8 @@ mix.copy("resources/assets/js/app.js","public/js")
    .copy("node_modules/tempusdominus-bootstrap-4/build/js/tempusdominus-bootstrap-4.js", "public/js/vendor/tempusdominus.js")
    .copy("node_modules/bootstrap/dist/js/bootstrap.js", "public/js/vendor");
 
+// App js
+mix.js('resources/assets/js/app.js', 'public/js');
 
 //vuejs components
 mix.js('resources/assets/vue/agenda.js','public/js');

@@ -1,4 +1,6 @@
-var summernoteSettings = {
+require('./bootstrap');
+
+window.summernoteSettings = {
     height: 300,
     toolbar: [
         ['style', ['style']],
@@ -11,7 +13,42 @@ var summernoteSettings = {
         ['view', ['fullscreen', 'codeview']],
         ['help', ['help']],
         ['myotherbutton', ['emailsDropDown']],
-    ]
+    ],
+    callbacks: {
+        onImageUpload: function (files) {
+            uploadFile(files[0], this);
+        },
+        onMediaDelete: function ($target, editor) {
+            deleteFile($target)
+        }
+    }
+};
+
+function uploadFile (file, summernote) {
+    data = new FormData();
+    data.append('image', file);
+
+    axios
+        .post('/images/upload', data)
+        .then(response => {
+            $(summernote).summernote('insertImage', response.data);
+        });
+}
+
+function deleteFile ($target) {
+    if ($target.is('img')) {
+        let path = $target.attr('src');
+
+        if (path.startsWith('data:image')) {
+            // This is a base64 image, so no need to remove it from storage.
+            return;
+        }
+
+        axios
+            .delete('/images/delete', {params: {
+                    path: path,
+                }});
+    }
 }
 
 // Cookie utils

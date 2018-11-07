@@ -55,6 +55,8 @@ Route::resource('frontEndReplacement', 'FrontEndReplacementController');
 Route::resource('mailList', 'MailListController');
 Route::post('/lidworden', 'PendingUserController@storePendingUser');
 Route::resource('books', 'LibraryController');
+Route::post('images/upload', 'StorageController@uploadImage');
+Route::delete('images/delete', 'StorageController@deleteImage');
 
 //inschrijf routes
 Route::get('forms/{agendaItem}', array('as' => 'editSchedule', 'uses' => 'InschrijfController@showPersonalRegistrationForm'));
