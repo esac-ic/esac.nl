@@ -32,7 +32,7 @@ function addAlbum(thumbnailResults, photoResults, albumName, albumDescription) {
     if(thumbnailResults.length< 5){
         index= thumbnailResults.length
     } else index = 5;
-    for(i; i < index; i++){
+    for(var i=0; i < index; i++){
         formData.append('thumbnails[]',thumbnailResults[i]);
         formData.append('photos[]', photoResults[i]);
     }
@@ -49,6 +49,8 @@ function addAlbum(thumbnailResults, photoResults, albumName, albumDescription) {
             currentPhotoAlbum = "photoalbums/" + result;
             if(thumbnailResults.length> 5){
                 addPhotoToAlbum(thumbnailResults, photoResults, index);
+            } else{
+                location.reload();
             }
         },
         error: function (request, error) {
@@ -100,22 +102,36 @@ function addPhotoToAlbum(thumbnailResults, photoResults, index){
 function uploadPhoto() {
     ChangebuttonState("Processing photos...")
     var files = document.getElementById('file-select').files;
-    var albumName = $("input#inputTitle").val();
-    var albumDescription = $("input#inputDescription").val();
-    var thumbnails = resizeImages(files);
-    var photos = downscalePhoto(files);
-    
-    Promise.all(thumbnails).then(function(thumbnailResults){
-        Promise.all(photos).then(function(photosResults){
-            ChangebuttonState('Sending photos...')
-            if (!albumName && !albumDescription) { // upload photo without album
-                addPhotoToAlbum(thumbnailResults, photosResults, 0);
-            } else{
-                addAlbum(thumbnailResults, photosResults, albumName, albumDescription);
-            }
-        });
+    if(files.length != 0){
+        var albumName = $("input#inputTitle").val();
+        var albumDescription = $("input#inputDescription").val();
+        var thumbnails = resizeImages(files);
+        var photos = downscalePhoto(files);
+        
+        Promise.all(thumbnails).then(function(thumbnailResults){
+            Promise.all(photos).then(function(photosResults){
+                ChangebuttonState('Sending photos...')
+                if (albumName == undefined && albumDescription  == undefined) { // upload photo without album
+                    addPhotoToAlbum(thumbnailResults, photosResults, 0);
+                } else{
+                    if(albumName != '' && albumDescription  != ''){
+                        addAlbum(thumbnailResults, photosResults, albumName, albumDescription);
+                    } else{
+                        var button = $('button#submit');
+                        button.html("Toevoegen");
+                        button.attr("disabled", false);
+                        alert("Voeg een album naam en beschrijving toe");
+                    } 
+                }
+            });
 
-    });
+        });
+    } else{
+        var button = $('button#submit');
+        button.html("Toevoegen");
+        button.attr("disabled", false);
+        alert("Selecteer een aantal foto's om toe te voegen."); 
+    }
 }
 
 function downscalePhoto(photos) {
