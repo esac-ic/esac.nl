@@ -71,8 +71,13 @@
     <div class="card">
         <div class="card-body">
             <div class="row d-flex align-items-stretch align-items-center">
+
                 @foreach ($thumbnails as $id=>$thumbnail)
-                    <img id="thumbnail" class="col-*-* px-1" src="{!! $thumbnail !!}" onclick="openGallery('{{ $loop->index }}');">
+                    @if ($loop->index % 3 == 0) 
+                        </div>
+                        <div class="row d-flex align-items-stretch align-items-center">     
+                    @endif
+                    <img class="col-sm p-1" src="{!! $thumbnail !!}" onclick="openGallery('{{ $loop->index }}');">
                 @endforeach
             </div>
             
@@ -89,16 +94,6 @@
         </div>   
     </div>
 </div>
-<style>
-#thumbnail {
-    width: auto;
-    height: auto;
-    padding-bottom: 1%;
-    min-width:33.33%;
-    max-width: 33.33%;
-    max-height: 300px;
-}
-</style>
 @push('scripts')
     <script src="https://cdnjs.cloudflare.com/ajax/libs/photoswipe/4.1.2/photoswipe.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/photoswipe/4.1.2/photoswipe-ui-default.min.js"></script>
