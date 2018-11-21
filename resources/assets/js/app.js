@@ -54,7 +54,7 @@ function deleteFile ($target) {
 // Cookie utils
 
 // creates a cookie
-function createCookie(name, value, days) {
+window.createCookie = function (name, value, days) {
     var expires;
     if (days) {
         var date = new Date();
@@ -65,10 +65,10 @@ function createCookie(name, value, days) {
         expires = "";
     }
     document.cookie = name + "=" + value + expires + "; path=/";
-}
+};
 
 //retrives a cookie
-function getCookie(c_name) {
+window.getCookie = function (c_name) {
     if (document.cookie.length > 0) {
         c_start = document.cookie.indexOf(c_name + "=");
         if (c_start != -1) {
@@ -81,4 +81,4 @@ function getCookie(c_name) {
         }
     }
     return "";
-}
+};
