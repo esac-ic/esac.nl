@@ -23,7 +23,7 @@
                         <div class="card-body">
                             <a href="photoalbums/{!! $album['photoalbum']->id !!}">
                                 <h4 class="card-title">{!! $album['photoalbum']->title !!}</h4>
-                                <p class="card-text text-body">{!! $album['photoalbum']->description !!}</p>
+                                <p class="card-text text-body">{!! nl2br($album['photoalbum']->description) !!}</p>
                             </a>
                         </div>
                         <div class="card-footer bg-white p-3">
@@ -40,7 +40,7 @@
                     <input class="form-control" id="inputTitle" type="text" name="title" placeholder="Album naam" required/>
                 </div>
                 <div class="form-group"> 
-                    <input class="form-control" id="inputDescription" type="" name="description" placeholder="Album beschrijving" required/>
+                    <textarea class="form-control" id="textareaDescription" type="" name="description" placeholder="Album beschrijving" required></textarea> 
                 </div>
                 <div class="form-group"> 
                     <label class="input-group-btn">

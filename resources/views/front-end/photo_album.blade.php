@@ -14,7 +14,7 @@
     <div class="card">
         <div class="card-body">
             <h2 class="card-title">{{$photoAlbum->title}}</h2>
-            {{$photoAlbum->description}}
+            <p id="albumDesciption"> {!! nl2br($photoAlbum->description) !!} </p>
         </div>
     </div>
 </div>

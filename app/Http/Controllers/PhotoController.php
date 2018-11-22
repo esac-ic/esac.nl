@@ -20,6 +20,7 @@ class PhotoController extends Controller
     public function index($id)
     {
         PhotoAlbum:$photoAlbum = $this->_PhotoAlbumRepository->find($id);
+        $photoAlbum->description = str_replace("\r\n","<br>", $photoAlbum->description);
         $thumbnails = $this->getThumbnails($id);
         $photos = $this->getPhotos($id); 
         $curPageName = $photoAlbum->title . " - Eindhovense Studenten Alpen Club";

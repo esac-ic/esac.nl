@@ -25,6 +25,7 @@ class PhotoAlbumController extends Controller
             $album = [];
             Photo:$photo = $this->_PhotoRepository->getFirstPhoto($photoalbum->id);
             if($photo){
+                $photoalbum->description = str_replace('\n','<br>', $photoalbum->description);
                 $album["photoalbum"] = $photoalbum;
                 $album["thumbnail"] = $this->_PhotoRepository->retrieveFromAWS($photo->thumbnail);
                 array_push($albumsToFrontEnd, $album);
