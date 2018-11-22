@@ -1,8 +1,14 @@
 var items = [];
 var count = 0;
-var currentPhotoAlbum = photoAlbum.id;
-for (var photo in photos) {
-    items.push({ src: photos[photo][0], w: photos[photo][1], h: photos[photo][2] });
+try {
+    var currentPhotoAlbum = photoAlbum.id;
+    for (var photo in photos) {
+        items.push({ src: photos[photo][0], w: photos[photo][1], h: photos[photo][2] });
+    }
+    $("p#albumDesciption").text($("p#albumDesciption").text().replace(/\n/g, "<br>"));
+}
+catch(err) {
+    $("p#albumDesciption").text($("p#albumDesciption").text().replace(/\n/g, "<br>"));
 }
 
 function openGallery(index) {
