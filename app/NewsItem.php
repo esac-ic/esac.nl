@@ -11,8 +11,8 @@ class NewsItem extends Model
     protected $fillable = [
         'title',
         'text',
-        'createdBy',
         'image_url',
+        'author'
     ];
 
     public function newsItemText(){
@@ -24,10 +24,6 @@ class NewsItem extends Model
         return $this->hasOne('App\Text', 'id', 'title');
     }
 
-    public function getCreatedBy()
-    {
-        return $this->hasOne('App\User', 'id', 'createdBy');
-    }
     public function getImageUrl(){
         if($this->image_url != ""){
             return \Storage::disk('public')->url($this->image_url);

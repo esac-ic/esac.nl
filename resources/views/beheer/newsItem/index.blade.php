@@ -42,7 +42,7 @@
         @foreach ($newsItems as $newsItem)
             <tr>
                 <td>{{$newsItem->newsItemTitle->text()}}</td>
-                <td>{{$newsItem->getCreatedBy->getName()}}</td>
+                <td>{{$newsItem->author}}</td>
                 <td>{{\Carbon\Carbon::parse($newsItem->created_at)->format('d-m-Y h:i')}}</td>
                 <td>
                     <a href="{{url('/newsItems/' . $newsItem->id . '/edit')}}"><span title="{{trans('NewsItem.edit')}}" class="ion-edit" aria-hidden="true"></span></a>
