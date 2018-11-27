@@ -120,7 +120,7 @@
         }
 
         function getUrl(){
-            let params = "";
+            let params = "limit=10000000";
             let datePicker = $('#startDate');
             if(datePicker.val() != ""){
                 params += "&startDate=" + datePicker.val();
