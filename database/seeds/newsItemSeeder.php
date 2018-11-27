@@ -19,7 +19,7 @@ class newsItemSeeder extends Seeder
         $newsItem = new \App\NewsItem();
         $newsItem->title = $title->id;
         $newsItem->text = $text->id;
-        $newsItem->createdBy = 1;
+        $newsItem->author = "Piet jansen";
         $newsItem->save();
 
         $title = new \App\Text(['NL_text' => 'Korting monk!', 'EN_text' => 'Discount Monk!']);
@@ -30,7 +30,7 @@ class newsItemSeeder extends Seeder
         $newsItem = new \App\NewsItem();
         $newsItem->title = $title->id;
         $newsItem->text = $text->id;
-        $newsItem->createdBy = 1;
+        $newsItem->author = "Klaas jansen";
         $newsItem->save();
     }
 }

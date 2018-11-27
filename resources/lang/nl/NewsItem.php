@@ -26,4 +26,5 @@ return [
     "placeDate"     => "Geplaats op",
     "defaultInfo"   => "Standaard informatie",
     "newsImage" => "Afbeelding",
+    "author" => "Auteur",
 ];

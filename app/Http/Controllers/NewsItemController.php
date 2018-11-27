@@ -24,7 +24,7 @@ class NewsItemController extends Controller
 
     //gives the  news item views
     public function index(){
-        $newsItems = $this->_newsItemRepository->all(array("id","title","created_at","createdBy"));
+        $newsItems = $this->_newsItemRepository->all(array("id","title","created_at","author"));
         return view('beheer.newsItem.index', compact('newsItems'));
     }
 
@@ -40,7 +40,7 @@ class NewsItemController extends Controller
     //store  news item
     public function store(Request $request){
         $this->validateInput($request);
-        $newsItem = $this->_newsItemRepository ->create($request->all());
+        $newsItem = $this->_newsItemRepository->create($request->all());
 
         //save image
         if($request->hasFile('thumbnail')){

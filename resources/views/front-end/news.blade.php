@@ -28,7 +28,14 @@
                         </a>
                     </div>
                     <div class="card-footer bg-white p-3">
-                        <a class="btn btn-outline-primary" href="/nieuws/{{$newsItem->id}}">{{trans('front-end/news.read_more')}}</a>
+                        <div class="row justify-content-between align-items-center">
+                            <div class="col-auto text-muted">
+                                <span class="ion-person"></span> {{$newsItem->author}}
+                            </div>
+                            <div v-show="agenda.canRegister" class="col-auto">
+                                <a class="btn btn-outline-primary" href="/nieuws/{{$newsItem->id}}">{{trans('front-end/news.read_more')}}</a>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
