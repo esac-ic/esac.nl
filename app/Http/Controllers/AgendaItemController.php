@@ -36,9 +36,7 @@ class AgendaItemController extends Controller
      */
     public function index()
     {
-        $agendaItems = $this->_agendaItemRepository->all(array('title','startdate','endDate','id','application_form_id'));
-
-        return view('beheer.agendaItem.index',compact('agendaItems'));
+        return view('beheer.agendaItem.index');
     }
 
     /**
