@@ -305,7 +305,7 @@
         $('#registrations_table').DataTable({
             "order": [[ 1, "asc" ]],
             "ajax": {
-                'url' : '{{url('api/user/registrations?user_id=' . \Illuminate\Support\Facades\Auth::user()->id)}}',
+                'url' : '{{url('api/user/registrations?user_id=' . $user->id)}}',
                 "dataSrc": ""
             },
             "columns": [
