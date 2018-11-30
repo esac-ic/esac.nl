@@ -84,7 +84,7 @@
                     <a class="nav-link" id="tab3" data-toggle="tab" href="#registrations" role="tab" aria-controls="security" aria-selected="false">{{trans('user.registrations') }}</a>
                 </li>
             </ul>
-            @if(\Illuminate\Support\Facades\Auth::user()->hasRole(Config::get('constants.Administrator')))
+            @if(\Illuminate\Support\Facades\Auth::user()->hasRole(Config::get('constants.Administrator')) || \Illuminate\Support\Facades\Auth::user()->id === $user->id)
             <div class="tab-content space-sm">
                 <div class="tab-pane fade show active" id="tab1-content" role="tabpanel" aria-labelledby="tab1-content">
                     <table class="table table-striped" style="width:100%">
@@ -305,7 +305,7 @@
         $('#registrations_table').DataTable({
             "order": [[ 1, "asc" ]],
             "ajax": {
-                'url' : '{{url('api/user/registrations?user_id=' . \Illuminate\Support\Facades\Auth::user()->id)}}',
+                'url' : '{{url('api/user/registrations?user_id=' . $user->id)}}',
                 "dataSrc": ""
             },
             "columns": [

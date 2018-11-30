@@ -33,6 +33,6 @@ return [
     'confirmDelete' => 'Weet u zeker dat u het wil verwijderen?',
     'action' => 'Actie',
     "account_overview" => "Account overzicht",
-    "user" => "Gebruiker"
-
+    "user" => "Gebruiker",
+    "become_member" => "Word lid"
 ];

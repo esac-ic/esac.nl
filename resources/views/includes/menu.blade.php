@@ -126,7 +126,7 @@
         @endif
         @if (Auth::guest())
         <li class="nav-item d-flex align-items-center">
-            <a class="btn btn-info text-dark" href="/lidworden">Word lid</a>
+            <a class="btn btn-info text-dark" href="/lidworden">{{ trans('menu.become_member') }}</a>
         </li>
         @endif
     </ul>
