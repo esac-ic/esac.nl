@@ -22,7 +22,7 @@ class PhotoController extends Controller
         PhotoAlbum:$photoAlbum = $this->_PhotoAlbumRepository->find($id);
         $photoAlbum->description = str_replace("\r\n","<br>", $photoAlbum->description);
         $photos = $this->getPhotos($id); 
-        $curPageName = $photoAlbum->title . " - Eindhovense Studenten Alpen Club";
+        $curPageName = $photoAlbum->title;
         return view('front-end.photo_album', compact('curPageName', 'photoAlbum', 'photos'));
     }
 
