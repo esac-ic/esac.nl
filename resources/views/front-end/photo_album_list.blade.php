@@ -14,26 +14,29 @@
     </div>
     <div class="container">
         <div class="row d-flex align-items-stretch align-items-center">
-            @foreach ($albumsToFrontEnd as $id=>$album)
+            @foreach ($photoAlbums as $album)
                 <div class="col-sm-4 d-flex flex-wrap">
                     <div class="card w-100 position-relative">
-                        <a href="photoalbums/{!! $album['photoalbum']->id !!}">
-                            <img class="card-img-top" src="{!! $album['thumbnail'] !!}" alt="Card image cap">
+                        <a href="photoalbums/{!! $album->id !!}">
+                            <img class="card-img-top" src="{!! $album->thumbnail !!}" alt="Card image cap">
                         </a>
                         <div class="card-body">
-                            <a href="photoalbums/{!! $album['photoalbum']->id !!}">
-                                <h4 class="card-title">{!! $album['photoalbum']->title !!}</h4>
-                                <p class="card-text text-body">{!! nl2br($album['photoalbum']->description) !!}</p>
+                            <a href="photoalbums/{!! $album->id !!}">
+                                <h4 class="card-title">{!! $album->title !!}</h4>
+                                <p class="card-text text-body">{!! nl2br($album->description) !!}</p>
                             </a>
                         </div>
                         <div class="card-footer bg-white p-3">
-                            <a class="btn btn-outline-primary" href="photoalbums/{!! $album['photoalbum']->id !!}">Zie meer</a>
+                            <a class="btn btn-outline-primary" href="photoalbums/{!! $album->id !!}">Zie meer</a>
                         </div>
                     </div>
                 </div>
             @endforeach
-        </div>
+        </div>           
+    </div>
+    {{ $photoAlbums->links('front-end.pagination') }}
 
+    <div class="container">
         <div class="mt-2 mt-auto">
             <h5>Album toevoegen </h5>
                 <div class="form-group">
@@ -52,7 +55,7 @@
                 </div>
                     <button class="btn btn-primary" id='submit' onclick="uploadPhoto()">Toevoegen</button>
             </div>
-        </div>             
+        </div>  
     </div>
 @endsection
 

@@ -21,40 +21,17 @@ class PhotoController extends Controller
     {
         PhotoAlbum:$photoAlbum = $this->_PhotoAlbumRepository->find($id);
         $photoAlbum->description = str_replace("\r\n","<br>", $photoAlbum->description);
-        $thumbnails = $this->getThumbnails($id);
         $photos = $this->getPhotos($id); 
         $curPageName = $photoAlbum->title . " - Eindhovense Studenten Alpen Club";
-        return view('front-end.photo_album', compact('curPageName', 'photoAlbum', 'thumbnails', 'photos'));
+        return view('front-end.photo_album', compact('curPageName', 'photoAlbum', 'photos'));
     }
 
     //List of photos.
     public function getPhotos($id){
         PhotoAlbum:$photoAlbum = $this->_PhotoAlbumRepository->find($id);
         if($photoAlbum != null){
-            $photos=[];
             $photosObjects = $this->_PhotoAlbumRepository->getThumbnails($photoAlbum->id);
-            foreach($photosObjects as $value){
-                $link = $this->_PhotoRepository->retrieveFromAWS($value->link);
-                $demensions = getimagesize($link);
-                $photo = array($link, $demensions[0], $demensions[1]);
-                array_push($photos, $photo);
-            }
-            return $photos;
-        } else{
-            abort(404);
-        }
-    }
-
-    public function getThumbnails($id){
-        //Check if given photoalbum exists
-        PhotoAlbum:$photoAlbum = $this->_PhotoAlbumRepository->find($id);
-        if($photoAlbum != null){
-            $photos=[];
-            $photosObjects = $this->_PhotoAlbumRepository->getThumbnails($photoAlbum->id);
-            foreach($photosObjects as $value){
-                $photos[$value->id] = $this->_PhotoRepository->retrieveFromAWS($value->thumbnail);;
-            }
-            return $photos;
+            return $photosObjects;
         } else{
             abort(404);
         }
@@ -81,17 +58,17 @@ class PhotoController extends Controller
                 $thumbnail = $thumbnails[$i];
                 $fileExtension = $photos[$i]->getClientOriginalExtension();
                 if($fileExtension == "png"||"jpeg"||"jpg"||"gif"||"svg"){  
-                    $this->savePhoto($photo, $photoAlbum, $thumbnail);
+                    $this->savePhoto($photo, $photoAlbum, $thumbnail, $fileExtension);
                 }
             }                        
         }
         return redirect()->route('PhotoAlbum', ['albumId' => $ablumId]);
     }
 
-    public function savePhoto($image, $photoAlbum, $thumbnail){
+    public function savePhoto($image, $photoAlbum, $thumbnail, $fileExtension){
         Photo:$photo = $this->_PhotoRepository->create(["album" => $photoAlbum]);
-        $imageFileName = $photo->id . '.png';
-        $thumbnailFileName = $photo->id .'_thumbnail' . '.png';
+        $imageFileName = $photo->id . '.' . $fileExtension;
+        $thumbnailFileName = $photo->id .'_thumbnail' . '.' . $fileExtension;
         $albumtitle = str_replace(' ', '_',$photo->photo_album->title);
         $thumbnailPath = 'photos/' . $albumtitle .'/' . $thumbnailFileName ;
         $photoPath = 'photos/' . $albumtitle .'/' . $imageFileName; 
@@ -99,7 +76,15 @@ class PhotoController extends Controller
         $photoLink = $this->_PhotoRepository->saveToAWS($photoPath,$image);
         $thumbnailLink = $this->_PhotoRepository->saveToAWS($thumbnailPath,$thumbnail);
         if($photoLink != null && $thumbnailLink != null){
-            $this->_PhotoRepository->update($photo->id,["link" => $photoLink, "thumbnail" => $thumbnailLink]);
+            $photoLink = $this->_PhotoRepository->getAWSLink($photoLink);
+            $thumbnailLink = $this->_PhotoRepository->getAWSLink($thumbnailLink);
+            $Photodemensions = getimagesize($photoLink);
+            $this->_PhotoRepository->update($photo->id,["link" => $photoLink, "thumbnail" => $thumbnailLink, "width" => $Photodemensions[0], "height" => $Photodemensions[1] ]);
+            
+            //Photoalbum thumbnail link
+            if($photoAlbum->thumbnail == null){
+                $this->_PhotoAlbumRepository->update($photoAlbum->id, ["thumbnail" => $thumbnailLink]);
+            }
             return $photo->id;
         }
     }

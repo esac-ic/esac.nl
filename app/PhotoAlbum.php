@@ -10,9 +10,10 @@ class PhotoAlbum extends Model
     public $incrementing = true;
     protected $fillable = [
         'title',
-        'description'
+        'description',
+        'thumbnail'
     ];
-    
+
     public function photos(){
         return $this->hasMany(Photo::class);
     }

@@ -72,15 +72,16 @@
         <div class="card-body">
             <div class="row d-flex align-items-stretch align-items-center">
 
-                @foreach ($thumbnails as $id=>$thumbnail)
+                @foreach ($photos as $id=>$photo)
                     @if ($loop->index % 3 == 0) 
                         </div>
                         <div class="row d-flex align-items-stretch align-items-center">     
                     @endif
-                    <img class="col-sm p-1" src="{!! $thumbnail !!}" onclick="openGallery('{{ $loop->index }}');">
+                    <img class="col-sm p-1" src="{!! $photo->thumbnail !!}" onclick="openGallery('{{ $loop->index }}');">
                 @endforeach
             </div>
-            
+            {{ $photos->links('front-end.pagination') }}
+
             <div class="mt-2">
                 <h5>Foto's toevoegen </h5>
                 <label class="input-group-btn">

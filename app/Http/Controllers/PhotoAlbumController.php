@@ -19,20 +19,11 @@ class PhotoAlbumController extends Controller
 
     public function index()
     {
-        $albumsToFrontEnd = [];
         $photoAlbums = $this->_PhotoAlbumRepository->all();
         foreach($photoAlbums as $photoalbum){
-            $album = [];
-            Photo:$photo = $this->_PhotoRepository->getFirstPhoto($photoalbum->id);
-            if($photo){
-                $photoalbum->description = str_replace('\n','<br>', $photoalbum->description);
-                $album["photoalbum"] = $photoalbum;
-                $album["thumbnail"] = $this->_PhotoRepository->retrieveFromAWS($photo->thumbnail);
-                array_push($albumsToFrontEnd, $album);
-            }
+              $photoalbum->description = str_replace("\r\n","<br>", $photoalbum->description);
         }
-
         $curPageName = trans('PhotoAlbums.photoalbums');
-        return view('front-end.photo_album_list', compact('curPageName', 'albumsToFrontEnd'));
+        return view('front-end.photo_album_list', compact('curPageName', 'photoAlbums'));
     }
 }

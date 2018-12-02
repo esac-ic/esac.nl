@@ -17,6 +17,8 @@ class CreatePhotoTable extends Migration
             $table->increments('id');
             $table->string('link')->nullable();
             $table->string('thumbnail')->nullable();
+            $table->Integer("width")->default(100);
+            $table->Integer("height")->default(100);
             $table->Integer('photo_album_id')->unsigned();
             $table->integer('createdBy')->unsigned();
             $table->timestamps();

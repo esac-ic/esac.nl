@@ -28,7 +28,10 @@ class PhotoAlbumRepository implements IRepository
 
     public function update($id, array $data)
     {
-        // TODO: Implement update() method.
+        $album = $this->find($id);
+        $album->update($data);
+        $album->save();
+        return $album;    
     }
 
     public function delete($id)
@@ -48,10 +51,10 @@ class PhotoAlbumRepository implements IRepository
 
     public function all($columns = array('*'))
     {
-        return PhotoAlbum::query()->orderBy('id', 'desc')->get();
+        return PhotoAlbum::query()->orderBy('id', 'desc')->paginate(9);
     }
 
     public function getThumbnails($id){
-        return Photo::with('photo_album')->where('photo_album_id',$id)->get();    
+        return Photo::with('photo_album')->where('photo_album_id',$id)->paginate(15);    
     }
 }
