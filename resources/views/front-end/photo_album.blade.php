@@ -71,13 +71,8 @@
     <div class="card">
         <div class="card-body">
             <div class="row d-flex align-items-stretch align-items-center">
-
                 @foreach ($photos as $id=>$photo)
-                    @if ($loop->index % 3 == 0) 
-                        </div>
-                        <div class="row d-flex align-items-stretch align-items-center">     
-                    @endif
-                    <img class="col-sm p-1" src="{!! $photo->thumbnail !!}" onclick="openGallery('{{ $loop->index }}');">
+                    <img class="col-sm-4 p-1" src="{!! $photo->thumbnail !!}" onclick="openGallery('{{ $loop->index }}');">
                 @endforeach
             </div>
             {{ $photos->links('front-end.pagination') }}
