@@ -56,7 +56,7 @@ class PhotoController extends Controller
             for ($i = 0; $i < count($photos); $i++) {
                 $photo = $photos[$i];
                 $thumbnail = $thumbnails[$i];
-                $fileExtension = $photos[$i]->getClientOriginalExtension();
+                $fileExtension = $photos[$i]->clientExtension();
                 if($fileExtension == "png"||"jpeg"||"jpg"||"gif"||"svg"){  
                     $this->savePhoto($photo, $photoAlbum, $thumbnail, $fileExtension);
                 }
