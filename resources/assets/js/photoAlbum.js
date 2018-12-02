@@ -2,8 +2,8 @@ var items = [];
 var count = 0;
 try {
     var currentPhotoAlbum = photoAlbum.id;
-    for (var photo in photos) {
-        items.push({ src: photos[photo][0], w: photos[photo][1], h: photos[photo][2] });
+    for (var photo in photos.data) {
+        items.push({ src: photos.data[photo].link, w: photos.data[photo].width, h: photos.data[photo].height });
     }
     $("p#albumDesciption").text($("p#albumDesciption").text().replace(/\n/g, "<br>"));
 }
@@ -23,7 +23,7 @@ function openGallery(index) {
 //button spinner
 function ChangebuttonState(text){
     var button = $('button#submit');
-    var loadingText = '<i class="fa fa-circle-o-notch fa-spin"></i> ' + text;
+    var loadingText = '<i class="icon ion-refreshing"></i> ' + text;
     if (button.html() !== loadingText) {
         button.data('original-text', button.html());
         button.html(loadingText);
@@ -110,7 +110,7 @@ function uploadPhoto() {
     var files = document.getElementById('file-select').files;
     if(files.length != 0){
         var albumName = $("input#inputTitle").val();
-        var albumDescription = $("input#inputDescription").val();
+        var albumDescription = $("textarea#textareaDescription").val();
         var thumbnails = resizeImages(files);
         var photos = downscalePhoto(files);
         
@@ -171,22 +171,41 @@ function resizeImages(photos) {
             img.onload = function () {
                 var canvas = document.createElement("canvas");
                 var context = canvas.getContext("2d");
-                var imageratio = img.height / img.width;
                 canvas.width = 354;
-                canvas.height = canvas.width * imageratio;
-                context.drawImage(img,
-                    0,
-                    0,
-                    img.width,
-                    img.height,
-                    0,
-                    0,
-                    canvas.width,
-                    canvas.height
-                );
+                canvas.height = 354;
+                var startpointX;
+                var startpointY;
+                if(img.width > img.height){
+                    startpointX = (img.width / 4)
+                    startpointY = (img.height / 8);
+                    context.drawImage(img,
+                        startpointX,
+                        startpointY,
+                        (img.width/2),
+                        (img.width/2),
+                        0,
+                        0,
+                        canvas.width,
+                        canvas.height
+                    );
+                } else {
+                    startpointX = (img.width / 8)
+                    startpointY = (img.height / 4);  
+                    context.drawImage(img,
+                        startpointX,
+                        startpointY,
+                        (img.height/2),
+                        (img.height/2),
+                        0,
+                        0,
+                        canvas.width,
+                        canvas.height
+                    );
+                }
+
                 canvas.toBlob(function (blob) {
                     resolve(blob);
-                }, 'image/jpeg', 0.8);
+                }, 'image/jpeg', 0.9    );
             }
         }));
     }
