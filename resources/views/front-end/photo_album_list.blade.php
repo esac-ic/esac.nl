@@ -1,5 +1,5 @@
 @push('styles')
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+
 @endpush
 @extends('layouts.app')
 
@@ -7,6 +7,7 @@
     <div class="container intro-container">
         <div class="card">
             <div class="card-body">
+                <button type="button" class="btn btn-outline-primary float-right" data-toggle="modal" data-target="#AddAlbumModal">Album Toevoegen</button>
                 <h2 class="card-title">Foto albums der Esac</h2>
                 Hier zijn fotos van klimweekenden, zomertochtjes en borrels te vinden!
             </div>
@@ -36,26 +37,37 @@
     </div>
     {{ $photoAlbums->links('front-end.pagination') }}
 
-    <div class="container">
-        <div class="mt-2 mt-auto">
-            <h5>Album toevoegen </h5>
-                <div class="form-group">
-                    <input class="form-control" id="inputTitle" type="text" name="title" placeholder="Album naam" required/>
+    <div id="AddAlbumModal" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Album Toevoegen</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                    </button>
                 </div>
-                <div class="form-group"> 
-                    <textarea class="form-control" id="textareaDescription" type="" name="description" placeholder="Album beschrijving" required></textarea> 
+                <div class="modal-body">
+                    <div class="form-group">
+                        <input class="form-control" id="inputTitle" type="text" name="title" placeholder="Album naam" required/>
+                    </div>
+                    <div class="form-group"> 
+                        <textarea class="form-control" id="textareaDescription" type="" name="description" placeholder="Album beschrijving" required></textarea> 
+                    </div>
+                    <div class="form-group"> 
+                        <label class="input-group-btn">
+                            <span class="btn btn-primary">
+                                Browse&hellip; <input style="display: none;" class="form-control" type="file" id="file-select" name="photos[]" multiple required/>
+                            </span>
+                        </label>
+                        <input id="filesSelected" type="text" class="form-control" readonly>
+                    </div>
+                    <div class="modal-footer">
+                        <button class="btn btn-primary" id='submit' onclick="uploadPhoto()">Toevoegen</button>
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    </div>
                 </div>
-                <div class="form-group"> 
-                    <label class="input-group-btn">
-                        <span class="btn btn-primary">
-                            Browse&hellip; <input style="display: none;" class="form-control" type="file" id="file-select" name="photos[]" multiple required/>
-                        </span>
-                    </label>
-                    <input id="filesSelected" type="text" class="form-control" readonly>
-                </div>
-                    <button class="btn btn-primary" id='submit' onclick="uploadPhoto()">Toevoegen</button>
             </div>
-        </div>  
+        </div>
     </div>
 @endsection
 
