@@ -36,6 +36,8 @@ mix.copy("resources/assets/js/app.js","public/js")
    .copy("node_modules/tempusdominus-bootstrap-4/build/js/tempusdominus-bootstrap-4.js", "public/js/vendor/tempusdominus.js")
    .copy("node_modules/bootstrap/dist/js/bootstrap.js", "public/js/vendor");
 
+// App js
+mix.js('resources/assets/js/app.js', 'public/js');
 
 //vuejs components
 mix.js('resources/assets/vue/agenda.js','public/js');

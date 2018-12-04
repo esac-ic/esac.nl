@@ -32,5 +32,6 @@ return [
     "submit" => "Submit",
     'confirmDelete' => 'Are you sure you want to delete this?',
     "acccount_overview" => "Account overview",
-    "user" => "User"
+    "user" => "User",
+    "become_member" => "Become a member"
 ];

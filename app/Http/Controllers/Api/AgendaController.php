@@ -49,6 +49,7 @@ class AgendaController extends Controller
                 "thumbnail" => $agendaItem->getImageUrl(),
                 "startDate" => \Carbon\Carbon::parse($agendaItem->startDate)->format('d M'),
                 "endDate" => $agendaItem->endDate,
+                "full_startDate" => $agendaItem->startDate,
                 "category" => $agendaItem->agendaItemCategory->categorieName->text(),
                 "text" => $agendaItem->agendaItemShortDescription->text(),
                 "formId" => $agendaItem->getApplicationForm,

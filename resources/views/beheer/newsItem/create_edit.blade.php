@@ -33,6 +33,10 @@
                 {!! Form::label('name', trans('NewsItem.titleEn')) !!}
                 {!! Form::text('EN_title', ($newsItem != null) ? $newsItem->newsItemTitle->EN_text : "", ['class' => 'form-control','required' => 'required']) !!}
             </div>
+            <div class="form-group">
+                {!! Form::label('author', trans('NewsItem.author')) !!}
+                {!! Form::text('author', ($newsItem != null) ? $newsItem->author : "", ['class' => 'form-control','required' => 'required']) !!}
+            </div>
 
             <span>{{trans("NewsItem.newsImage")}}</span>
             <div class="form-group mt-2">

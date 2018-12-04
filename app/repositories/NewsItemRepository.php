@@ -30,10 +30,9 @@ class NewsItemRepository implements IRepository
         $title = $this->_textRepository->create(['NL_text' => $data['NL_title'], 'EN_text' => $data['EN_title']]);
         $text = $this->_textRepository->create($data);
 
-        $newsItem = new NewsItem();
+        $newsItem = new NewsItem($data);
         $newsItem->title = $title->id;
         $newsItem->text = $text->id;
-        $newsItem->createdBy = \Auth::user()->id;
         $newsItem->save();
 
         return $newsItem;
@@ -42,6 +41,7 @@ class NewsItemRepository implements IRepository
     public function update($id, array $data)
     {
         $newsItem = $this->find($id);
+        $newsItem->update($data);
 
         //update text
         $this->_textRepository->update($newsItem->title,['NL_text' => $data['NL_title'], 'EN_text' => $data['EN_title']]);

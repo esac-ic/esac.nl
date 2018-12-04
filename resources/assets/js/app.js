@@ -1,4 +1,6 @@
-var summernoteSettings = {
+require('./bootstrap');
+
+window.summernoteSettings = {
     height: 300,
     toolbar: [
         ['style', ['style']],
@@ -11,13 +13,48 @@ var summernoteSettings = {
         ['view', ['fullscreen', 'codeview']],
         ['help', ['help']],
         ['myotherbutton', ['emailsDropDown']],
-    ]
+    ],
+    callbacks: {
+        onImageUpload: function (files) {
+            uploadFile(files[0], this);
+        },
+        onMediaDelete: function ($target, editor) {
+            deleteFile($target)
+        }
+    }
+};
+
+function uploadFile (file, summernote) {
+    data = new FormData();
+    data.append('image', file);
+
+    axios
+        .post('/images/upload', data)
+        .then(response => {
+            $(summernote).summernote('insertImage', response.data);
+        });
+}
+
+function deleteFile ($target) {
+    if ($target.is('img')) {
+        let path = $target.attr('src');
+
+        if (path.startsWith('data:image')) {
+            // This is a base64 image, so no need to remove it from storage.
+            return;
+        }
+
+        axios
+            .delete('/images/delete', {params: {
+                    path: path,
+                }});
+    }
 }
 
 // Cookie utils
 
 // creates a cookie
-function createCookie(name, value, days) {
+window.createCookie = function (name, value, days) {
     var expires;
     if (days) {
         var date = new Date();
@@ -28,10 +65,10 @@ function createCookie(name, value, days) {
         expires = "";
     }
     document.cookie = name + "=" + value + expires + "; path=/";
-}
+};
 
 //retrives a cookie
-function getCookie(c_name) {
+window.getCookie = function (c_name) {
     if (document.cookie.length > 0) {
         c_start = document.cookie.indexOf(c_name + "=");
         if (c_start != -1) {
@@ -44,4 +81,4 @@ function getCookie(c_name) {
         }
     }
     return "";
-}
+};

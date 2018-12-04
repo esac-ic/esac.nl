@@ -84,7 +84,7 @@
                 </div>
                 <div class="form-group col-md-4">
                     {!! Form::label('country', trans('user.country')) !!}
-                    {!! Form::select('country', trans("countries"), '', ['class' => 'form-control','required' => 'required']) !!}
+                    {!! Form::select('country', trans("countries"), 'NL', ['class' => 'form-control','required' => 'required']) !!}
                 </div>
             </div>
             <div class="form-row">

@@ -24,11 +24,18 @@
                     <div class="card-body">
                         <a href="/nieuws/{{ $newsItem->id }}">
                             <h4 class="card-title">{{$newsItem->newsItemTitle->text()}}</h4>
-                            <p class="card-text text-body">{{ str_limit($newsItem->newsItemText->text(), $limit = 150, $end = '...') }}</p>
+                            <p class="card-text text-body">{{ strip_tags(str_limit($newsItem->newsItemText->text(), $limit = 150, $end = '...')) }}</p>
                         </a>
                     </div>
                     <div class="card-footer bg-white p-3">
-                        <a class="btn btn-outline-primary" href="/nieuws/{{$newsItem->id}}">{{trans('front-end/news.read_more')}}</a>
+                        <div class="row justify-content-between align-items-center">
+                            <div class="col-auto text-muted">
+                                <span class="ion-person"></span> {{$newsItem->author}}
+                            </div>
+                            <div class="col-auto">
+                                <a class="btn btn-outline-primary" href="/nieuws/{{$newsItem->id}}">{{trans('front-end/news.read_more')}}</a>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>

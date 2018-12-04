@@ -26,4 +26,5 @@ return [
     "placeDate"     => "Placed at",
     "defaultInfo"   => "General information",
     "newsImage" => "Image",
+    "author" => "Author",
 ];

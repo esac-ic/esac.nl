@@ -42,7 +42,7 @@
                 </tr>
                 <tr>
                     <td>{{trans('NewsItem.createdBy')}}</td>
-                    <td>{{$newsItem->getCreatedBy->getName()}}</td>
+                    <td>{{$newsItem->author}}</td>
                 </tr>
                 @if($newsItem->image_url != "")
                     <tr>
