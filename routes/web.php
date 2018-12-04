@@ -27,7 +27,7 @@ Route::get('beheer/home','ManageController@index');
 
 //extra user routes
 Route::get('users/old_members','UserController@indexOldMembers');
-Route::get('users/pending_members','PendingUserController@indexPendingMembers');
+Route::get('users/pending_members','PendingUserController@indexPendingMembers'); 
 Route::get('users/exportUsers','UserController@exportUsers');
 Route::patch('users/{user}/removeAsActiveMember', 'UserController@removeAsActiveMember');
 Route::patch('users/{user}/removeAsPendingMember', 'PendingUserController@removeAsPendingMember');
@@ -92,6 +92,4 @@ Route::get('/home','frontEndController@home');
 Route::get('/nieuws','frontEndController@news');
 Route::get('/nieuws/{newsItem}','frontEndController@newsDetailView');
 Route::get('/ledenlijst','frontEndController@memberList');
-Route::get('/{menuItem}', function () {
-    return redirect(strtolower($menuItem), 301, 'frontEndController@showPage');
-});
+Route::get('/{menuItem}','frontEndController@showPage'); 

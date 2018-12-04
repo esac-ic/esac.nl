@@ -23,6 +23,7 @@ class DatabaseSeeder extends Seeder
         $this->call(zekeringenSeeder::class);
         $this->call(ApplicationResponseSeeder::class);
         $this->call(frontendreplacementSeeder::class);
+        $this->call(BooksTableSeeder::class); 
         $this->call(PhotoAlbumSeeder::class);
         $this->call(PhotoSeeder::class);
 

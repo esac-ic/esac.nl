@@ -112,7 +112,7 @@ class User extends Authenticatable
     }
 
     public function isActiveMember(){
-        return $this->lid_af === null;
+        return ($this->lid_af === null && $this->pending_user === null); 
     }
 
     public function removeAsActiveMember(){
@@ -125,6 +125,14 @@ class User extends Authenticatable
 
     public function applicationResponses(){
         return $this->hasMany(ApplicationResponse::class,'user_id');
+    }
+
+    public function approveAsPendingMember(){
+        $this->pending_user = null;
+        $this->save();
+    }
+    public function removeAsPendingMember(){
+        $this->delete();
     }
 
 }

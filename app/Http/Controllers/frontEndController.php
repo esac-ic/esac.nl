@@ -14,6 +14,7 @@ use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Str;
 use App\NewsItem;
 use App\User;
+use App\Book;
 
 class frontEndController extends Controller
 {
@@ -32,6 +33,7 @@ class frontEndController extends Controller
         $this->_inschrijvenRepository = $repositorieFactory->getRepositorie(RepositorieFactory::$INSCHRIJVENREPOKEY);
         $this->_agendaRepository = $repositorieFactory->getRepositorie(RepositorieFactory::$AGENDAITEMREPOKEY);
         $this->_userRepository = $repositorieFactory->getRepositorie(RepositorieFactory::$USERREPOKEY);
+        $this->_bookRepository = $repositorieFactory->getRepositorie(RepositorieFactory::$BOOKREPOKEY);
     }
 
     public function agenda(){
@@ -74,6 +76,13 @@ class frontEndController extends Controller
         return view("front-end.zekeringen", compact('curPageName','content'));
     }
 
+    public function publicSubscribe(){
+        $menuItem = $this->_MenuItemRepository->findby('urlName',MenuItem::SUBSCRIBEURL);
+        $content = $menuItem->content->text();
+        $curPageName = trans('front-end/subscribe.title');
+        return view("front-end.subscribe", compact('curPageName','content'));
+    }
+
     public function news(){
         $newsItems = NewsItem::orderBy('id', 'desc')->paginate(9);
         $curPageName = trans('front-end/news.title');
@@ -82,7 +91,7 @@ class frontEndController extends Controller
 
         return view("front-end.news", compact('curPageName','content','newsItems'));
     }
-
+    
     public function newsDetailView(Request $request, NewsItem $newsItem){
         $curPageName = $newsItem->newsItemTitle->text();
         $menuItem = $this->_MenuItemRepository->findby('urlName',MenuItem::NEWSURL);
