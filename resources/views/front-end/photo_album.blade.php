@@ -13,7 +13,7 @@
 <div class="container intro-container">
     <div class="card">
         <div class="card-body">
-            <button type="button" class="btn btn-outline-primary float-right" data-toggle="modal" data-target="#AddPhotoModal">Foto's Toevoegen</button>
+            <button type="button" class="btn btn-outline-primary float-right" data-toggle="modal" data-target="#AddPhotoModal">{{trans('front-end/photo.addPhoto')}}</button>
             <h2 class="card-title">{{$photoAlbum->title}}</h2>
             <p id="albumDesciption"> {!! nl2br($photoAlbum->description) !!} </p>
         </div>
@@ -73,7 +73,7 @@
         <div class="card-body">
             <div class="row d-flex align-items-stretch align-items-center">
                 @foreach ($photos as $id=>$photo)
-                    <img class="col-sm-4 p-1" src="{!! $photo->thumbnail !!}" onclick="openGallery('{{ $loop->index }}');">
+                    <img class="col-lg-4 p-1" src="{!! $photo->thumbnail !!}" onclick="openGallery('{{ $loop->index }}');">
                 @endforeach
             </div>
             {{ $photos->links('front-end.pagination') }}
@@ -84,7 +84,7 @@
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title">Foto's Toevoegen</h5>
+                    <h5 class="modal-title">{{trans('front-end/photo.addPhoto')}}</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                     </button>
@@ -93,14 +93,14 @@
                     <div class="form-group"> 
                         <label class="input-group-btn">
                             <span class="btn btn-primary">
-                                Browse&hellip; <input style="display: none;" class="form-control" type="file" id="file-select" name="photos[]" multiple required/>
+                            {{trans('front-end/photo.browse')}}&hellip; <input style="display: none;" class="form-control" type="file" id="file-select" name="photos[]" multiple required/>
                             </span>
                         </label>
                         <input id="filesSelected" type="text" class="form-control" readonly>
                     </div>
                     <div class="modal-footer">
-                        <button class="btn btn-primary" id='submit' onclick="uploadPhoto()">Toevoegen</button>
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        <button class="btn btn-primary" id='submit' onclick="uploadPhoto()">{{trans('front-end/photo.add')}}</button>
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">{{trans('front-end/photo.close')}}</button>
                     </div>
                 </div>
             </div>

@@ -7,7 +7,7 @@
     <div class="container intro-container">
         <div class="card">
             <div class="card-body">
-                <button type="button" class="btn btn-outline-primary float-right" data-toggle="modal" data-target="#AddAlbumModal">Album Toevoegen</button>
+                <button type="button" class="btn btn-outline-primary float-right" data-toggle="modal" data-target="#AddAlbumModal">{{trans('front-end/photo.addAlbum')}}</button>
                 <h2 class="card-title">Foto albums der Esac</h2>
                 Hier zijn fotos van klimweekenden, zomertochtjes en borrels te vinden!
             </div>
@@ -28,7 +28,7 @@
                             </a>
                         </div>
                         <div class="card-footer bg-white p-3">
-                            <a class="btn btn-outline-primary" href="photoalbums/{!! $album->id !!}">Zie meer</a>
+                            <a class="btn btn-outline-primary" href="photoalbums/{!! $album->id !!}">{{trans('front-end/photo.show')}}</a>
                         </div>
                     </div>
                 </div>
@@ -41,29 +41,29 @@
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title">Album Toevoegen</h5>
+                    <h5 class="modal-title">{{trans('front-end/photo.addAlbum')}}</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
                 <div class="modal-body">
                     <div class="form-group">
-                        <input class="form-control" id="inputTitle" type="text" name="title" placeholder="Album naam" required/>
+                        <input class="form-control" id="inputTitle" type="text" name="title" placeholder="{{trans('front-end/photo.title')}}" required/>
                     </div>
                     <div class="form-group"> 
-                        <textarea class="form-control" id="textareaDescription" type="" name="description" placeholder="Album beschrijving" required></textarea> 
+                        <textarea class="form-control" id="textareaDescription" type="" name="description" placeholder="{{trans('front-end/photo.description')}}" required></textarea> 
                     </div>
                     <div class="form-group"> 
                         <label class="input-group-btn">
                             <span class="btn btn-primary">
-                                Browse&hellip; <input style="display: none;" class="form-control" type="file" id="file-select" name="photos[]" multiple required/>
+                            {{trans('front-end/photo.browse')}}&hellip; <input style="display: none;" class="form-control" type="file" id="file-select" name="photos[]" multiple required/>
                             </span>
                         </label>
                         <input id="filesSelected" type="text" class="form-control" readonly>
                     </div>
                     <div class="modal-footer">
-                        <button class="btn btn-primary" id='submit' onclick="uploadPhoto()">Toevoegen</button>
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        <button class="btn btn-primary" id='submit' onclick="uploadPhoto()">{{trans('front-end/photo.add')}}</button>
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">{{trans('front-end/photo.close')}}</button>
                     </div>
                 </div>
             </div>
