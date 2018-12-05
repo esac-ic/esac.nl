@@ -29,7 +29,7 @@ return [
 
     //defauls values
     "new"           => "Nieuw evenement",
-    "edit"          => "Wijzig aevenement",
+    "edit"          => "Wijzig evenement",
     "show"          => "Laat evenement zien",
     "add"           => "Een evenement toevoegen",
     "added"         => "Evenement toegevoegd",
