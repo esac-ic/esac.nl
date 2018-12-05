@@ -1,6 +1,7 @@
 <?php
 
 return [
+    "pagetitle"=> "Foto albums",
     "addAlbum" => "Nieuw foto album toevoegen",
     "addPhoto" => "Nieuwe foto's toevoegen",
     "title" => "Album titel",

@@ -23,7 +23,7 @@ class PhotoAlbumController extends Controller
         foreach($photoAlbums as $photoalbum){
               $photoalbum->description = str_replace("\r\n","<br>", $photoalbum->description);
         }
-        $curPageName = trans('PhotoAlbums.photoalbums');
+        $curPageName = trans('front-end/photo.pagetitle');
         return view('front-end.photo_album_list', compact('curPageName', 'photoAlbums'));
     }
 }
