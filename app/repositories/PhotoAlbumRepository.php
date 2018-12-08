@@ -53,7 +53,7 @@ class PhotoAlbumRepository implements IRepository
 
     public function all($columns = array('*'))
     {
-        return PhotoAlbum::query()->orderBy('id', 'desc')->paginate(9);
+        return PhotoAlbum::query()->orderBy('date', 'desc')->paginate(9);
     }
 
     public function getThumbnails($id){
