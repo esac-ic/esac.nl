@@ -117,7 +117,7 @@
     <script src="../js/photoswipe.min.js"></script>
     <script src="../js/photoswipe-ui-default.min.js"></script>
     <script src="../js/load-image.all.min.js"></script>
-    <script src="../js/photoalbum.js"></script>
+    <script src="../js/photoAlbum.js"></script>
     <script>
     $(document).on('change', ':file', function() {
         var input = $(this),

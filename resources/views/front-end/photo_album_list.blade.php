@@ -86,7 +86,7 @@
 @push('scripts')
     <script src="{{mix("js/vendor/moment.js")}}" type="text/javascript"></script>
     <script src="{{mix("js/vendor/tempusdominus.js")}}" type="text/javascript"></script>
-    <script src="../js/photoalbum.js"></script>
+    <script src="../js/photoAlbum.js"></script>
     <script src="../js/load-image.all.min.js"></script>
     <script>
     $(document).on('change', ':file', function() {
