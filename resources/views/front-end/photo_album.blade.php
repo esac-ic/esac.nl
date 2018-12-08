@@ -72,7 +72,7 @@
         <div class="card-body">
             <div class="row d-flex align-items-stretch align-items-center">
                 @foreach ($photos as $id=>$photo)
-                    <img class="col-lg-4 p-1" src="{!! $photo->thumbnail !!}" onclick="openGallery('{{ $loop->index }}');">
+                    <img class="col-md-4 col-sm-6 p-1" src="{!! $photo->thumbnail !!}" onclick="openGallery('{{ $loop->index }}');">
                 @endforeach
             </div>
             {{ $photos->links('front-end.pagination') }}
