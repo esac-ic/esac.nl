@@ -70,7 +70,7 @@
 
     <div class="card">
         <div class="card-body">
-            <div class="row">
+            <div class="row no-gutters">
                 @foreach ($photos as $id=>$photo)
                     <div class="col-md-4 col-sm-6 p-1">
                         <img style="width:100%;height:auto;" src="{!! $photo->thumbnail !!}" onclick="openGallery('{{ $loop->index }}');">
