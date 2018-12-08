@@ -21,6 +21,7 @@
                         <a href="photoalbums/{!! $album->id !!}">
                             <img class="card-img-top" src="{!! $album->thumbnail !!}" alt="Card image cap">
                         </a>
+                        <span class="card-date position-absolute bg-light py-1 px-3 rounded">{{\Carbon\Carbon::parse($album->date)->format('d M Y')}}</span>
                         <div class="card-body">
                             <a href="photoalbums/{!! $album->id !!}">
                                 <h4 class="card-title">{!! $album->title !!}</h4>
@@ -53,6 +54,17 @@
                     <div class="form-group"> 
                         <textarea class="form-control" id="textareaDescription" type="" name="description" placeholder="{{trans('front-end/photo.description')}}" required></textarea> 
                     </div>
+                    <div class=form-group>
+                        {{trans('front-end/photo.date')}}
+                        <div class="input-group date" id="CaptureDateBox" data-target-input="nearest">
+                            <input type="text" class="form-control datetimepicker-input" id="CaptureDate" name="Date" data-target="#CaptureDateBox" value='{{date("j-m-Y")}}' required="">
+                            <div class="input-group-append" data-target="#CaptureDateBox" data-toggle="datetimepicker">
+                                <div class="input-group-text">
+                                    <i class="ion-calendar"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                     <div class="form-group"> 
                         <label class="input-group-btn">
                             <span class="btn btn-primary">
@@ -72,6 +84,8 @@
 @endsection
 
 @push('scripts')
+    <script src="{{mix("js/vendor/moment.js")}}" type="text/javascript"></script>
+    <script src="{{mix("js/vendor/tempusdominus.js")}}" type="text/javascript"></script>
     <script src="../js/photoalbum.js"></script>
     <script src="../js/load-image.all.min.js"></script>
     <script>
@@ -88,6 +102,22 @@
 
             var input = $('#filesSelected').val(numFiles + " files selected");
         });
+    });
+
+    $('#CaptureDateBox').datetimepicker({
+        locale: 'nl',
+        format: "DD-MM-YYYY",
+        icons: {
+            time: 'ion-clock',
+            date: 'ion-calendar',
+            up: 'ion-android-arrow-up',
+            down: 'ion-android-arrow-down',
+            previous: 'ion-chevron-left',
+            next: 'ion-chevron-right',
+            today: 'ion-calendar',
+            clear: 'ion-trash-a',
+            close: 'ion-close'
+        }
     });
     </script>
 @endpush

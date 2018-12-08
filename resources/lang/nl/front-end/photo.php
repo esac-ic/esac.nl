@@ -6,6 +6,7 @@ return [
     "addPhoto" => "Nieuwe foto's toevoegen",
     "title" => "Album titel",
     "description" => "Album beschrijving",
+    "date" => "Datum van opname",
     "browse" => "Bladeren",
     "add" => "Toevoegen",
     "close" => "Sluiten",

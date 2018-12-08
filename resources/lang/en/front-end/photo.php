@@ -6,6 +6,7 @@ return [
     "addPhoto" => "Add new photo's",
     "title" => "Album title",
     "description" => "Album description",
+    "date" => "Date of capture",
     "browse" => "Browse",
     "add" => "Add",
     "close" => "Close",

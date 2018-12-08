@@ -11,6 +11,7 @@ namespace App\repositories;
 
 use App\PhotoAlbum;
 use App\Photo;
+use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
 
 class PhotoAlbumRepository implements IRepository
@@ -21,6 +22,7 @@ class PhotoAlbumRepository implements IRepository
         $album = new PhotoAlbum();
         $album->title = $data["title"];
         $album->description = $data["description"];
+        $album->date = Carbon::parse($data["date"]);
         $album->user()->associate(Auth::user()->id);
         $album->save();
         return $album;

@@ -40,8 +40,9 @@ class PhotoController extends Controller
     public function addAlbum(Request $request){
         $title = $request->title;
         $description = $request->description;
-        if($title!= null && $description !=null){
-            PhotoAlbum:$photoAlbum = $this->_PhotoAlbumRepository->create(["title" => $title, "description"=> $description]);
+        $date = $request->captureDate;
+        if($title!= null && $description !=null && $date != null){
+            PhotoAlbum:$photoAlbum = $this->_PhotoAlbumRepository->create(["title" => $title, "description"=> $description, "date" => $date]);
             $this->addPhotoToAlbum($request, $photoAlbum->id);
             return $photoAlbum->id;
         } 

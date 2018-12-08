@@ -31,10 +31,11 @@ function ChangebuttonState(text){
     }
 }
 
-function addAlbum(thumbnailResults, photoResults, albumName, albumDescription) {
+function addAlbum(thumbnailResults, photoResults, albumName, albumDescription, captureDate) {
     var formData = new FormData();    
     formData.append("title", albumName);
     formData.append("description", albumDescription);
+    formData.append("captureDate", captureDate);
     if(thumbnailResults.length< 5){
         index= thumbnailResults.length
     } else index = 5;
@@ -111,8 +112,9 @@ function uploadPhoto() {
     if(files.length != 0){
         var albumName = $("input#inputTitle").val();
         var albumDescription = $("textarea#textareaDescription").val();
-        var thumbnails = resizeImages(files);
-        var photos = downscalePhoto(files);
+        var captureDate = $("input#CaptureDate").val();
+        var thumbnails = processThumbnails(files);
+        var photos = processPhotos(files);
         
         Promise.all(thumbnails).then(function(thumbnailResults){
             Promise.all(photos).then(function(photosResults){
@@ -121,7 +123,7 @@ function uploadPhoto() {
                     addPhotoToAlbum(thumbnailResults, photosResults, 0);
                 } else{
                     if(albumName != '' && albumDescription  != ''){
-                        addAlbum(thumbnailResults, photosResults, albumName, albumDescription);
+                        addAlbum(thumbnailResults, photosResults, albumName, albumDescription, captureDate);
                     } else{
                         var button = $('button#submit');
                         button.html("Toevoegen");
@@ -140,26 +142,29 @@ function uploadPhoto() {
     }
 }
 
-function downscalePhoto(photos) {
+function processPhotos(photos) {
     var promises = [];
     for (var i = 0; i < photos.length; i++) {
         promises.push(new Promise(function (resolve, reject) {
-            var reader = new FileReader();
-            reader.onload = function (e) { img.src = e.target.result }
-            reader.readAsDataURL(photos[i]);
-    
-            var img = new Image();
-            img.onload = function () {
-                downScaleImage(img, 0.5).toBlob(function (blob) {
-                    resolve(blob);
-                }, 'image/jpeg');
-            }
+            loadImage(photos[i], 
+                function(canvas){ 
+                    canvas = downScaleCanvas(canvas, 0.5);
+                    canvas.toBlob(function (blob) {
+                            resolve(blob);
+                        }, 'image/jpeg', 0.9    
+                    ); 
+                },    
+                {
+                    canvas: true,
+                    orientation: true
+                }
+            );
         }));
     }
     return promises;
 }
 
-function resizeImages(photos) {
+function processThumbnails(photos) {
     var promises = [];
     for (var i = 0; i < photos.length; i++) {
         promises.push(new Promise(function (resolve, reject) {
@@ -173,74 +178,17 @@ function resizeImages(photos) {
                 {
                 maxWidth: 354,
                 maxHeight: 354,
-                minWidth: 100,
-                minHeight: 100,
+                minWidth: 354,
+                minHeight: 354,
+                crop: true,
                 canvas: true,
                 orientation: true
                 }
             );
-
-
-            /*var reader = new FileReader();
-            reader.onload = function (e) { img.src = e.target.result }
-            reader.readAsDataURL(photos[i]);
-    
-            var img = new Image();
-            img.onload = function () {
-                var canvas = document.createElement("canvas");
-                var context = canvas.getContext("2d");
-                canvas.width = 354;
-                canvas.height = 354;
-                var startpointX;
-                var startpointY;
-                if(img.width > img.height){
-                    startpointX = (img.width / 4)
-                    startpointY = (img.height / 8);
-                    context.drawImage(img,
-                        startpointX,
-                        startpointY,
-                        (img.width/2),
-                        (img.width/2),
-                        0,
-                        0,
-                        canvas.width,
-                        canvas.height
-                    );
-                } else {
-                    startpointX = (img.width / 8)
-                    startpointY = (img.height / 4);  
-                    context.drawImage(img,
-                        startpointX,
-                        startpointY,
-                        (img.height/2),
-                        (img.height/2),
-                        0,
-                        0,
-                        canvas.width,
-                        canvas.height
-                    );
-                }
-
-                canvas.toBlob(function (blob) {
-                    resolve(blob);
-                }, 'image/jpeg', 0.9    ); 
-            }*/
         }));
     }
     return promises;
 }
-
-function downScaleImage(img, scale) {
-    var imgCV = document.createElement('canvas');
-    imgCV.width = img.width;
-    imgCV.height = img.height;
-    var imgCtx = imgCV.getContext('2d');
-    imgCtx.drawImage(img, 0, 0);
-    return downScaleCanvas(imgCV, scale);
-}
-
-// scales the canvas by (float) scale < 1
-// returns a new canvas containing the scaled image.
 function downScaleCanvas(cv, scale) {
     if (!(scale < 1) || !(scale > 0)) throw ('scale must be a positive number <1 ');
     var sqScale = scale * scale; // square scale = area of source pixel within target
