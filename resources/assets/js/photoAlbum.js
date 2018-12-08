@@ -163,7 +163,25 @@ function resizeImages(photos) {
     var promises = [];
     for (var i = 0; i < photos.length; i++) {
         promises.push(new Promise(function (resolve, reject) {
-            var reader = new FileReader();
+            loadImage(photos[i], 
+                function(canvas){ 
+                    canvas.toBlob(function (blob) {
+                            resolve(blob);
+                        }, 'image/jpeg', 0.9    
+                    ); 
+                },    
+                {
+                maxWidth: 354,
+                maxHeight: 354,
+                minWidth: 100,
+                minHeight: 100,
+                canvas: true,
+                orientation: true
+                }
+            );
+
+
+            /*var reader = new FileReader();
             reader.onload = function (e) { img.src = e.target.result }
             reader.readAsDataURL(photos[i]);
     
@@ -205,8 +223,8 @@ function resizeImages(photos) {
 
                 canvas.toBlob(function (blob) {
                     resolve(blob);
-                }, 'image/jpeg', 0.9    );
-            }
+                }, 'image/jpeg', 0.9    ); 
+            }*/
         }));
     }
     return promises;

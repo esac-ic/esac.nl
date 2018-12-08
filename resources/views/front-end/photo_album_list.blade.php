@@ -73,6 +73,7 @@
 
 @push('scripts')
     <script src="../js/photoalbum.js"></script>
+    <script src="../js/load-image.all.min.js"></script>
     <script>
     $(document).on('change', ':file', function() {
         var input = $(this),

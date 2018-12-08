@@ -115,8 +115,9 @@
 }
 </style>
 @push('scripts')
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/photoswipe/4.1.2/photoswipe.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/photoswipe/4.1.2/photoswipe-ui-default.min.js"></script>
+    <script src="../js/photoswipe.min.js"></script>
+    <script src="../js/photoswipe-ui-default.min.js"></script>
+    <script src="../js/load-image.all.min.js"></script>
     <script src="../js/photoalbum.js"></script>
     <script>
     $(document).on('change', ':file', function() {
