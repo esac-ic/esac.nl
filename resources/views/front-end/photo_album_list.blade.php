@@ -13,30 +13,32 @@
             </div>
         </div>
     </div>
-    <div class="container">
-        <div class="row d-flex align-items-stretch align-items-center">
-            @foreach ($photoAlbums as $album)
-                <div class="col-lg-4 col-md-6 d-flex flex-wrap">
-                    <div class="card w-100 position-relative">
-                        <a href="photoalbums/{!! $album->id !!}">
-                            <img class="card-img-top" src="{!! $album->thumbnail !!}" alt="Card image cap">
-                        </a>
-                        <span class="card-date position-absolute bg-light py-1 px-3 rounded">{{\Carbon\Carbon::parse($album->date)->format('d M Y')}}</span>
-                        <div class="card-body">
+    <section class="py-3">
+        <div class="container">
+            <div class="row d-flex align-items-stretch align-items-center">
+                @foreach ($photoAlbums as $album)
+                    <div class="col-lg-4 col-md-6 d-flex flex-wrap">
+                        <div class="card w-100 position-relative">
                             <a href="photoalbums/{!! $album->id !!}">
-                                <h4 class="card-title">{!! $album->title !!}</h4>
-                                <p class="card-text text-body">{!! nl2br($album->description) !!}</p>
+                                <img class="card-img-top" src="{!! $album->thumbnail !!}" alt="Card image cap">
                             </a>
-                        </div>
-                        <div class="card-footer bg-white p-3">
-                            <a class="btn btn-outline-primary" href="photoalbums/{!! $album->id !!}">{{trans('front-end/photo.show')}}</a>
+                            <span class="card-date position-absolute bg-light py-1 px-3 rounded">{{\Carbon\Carbon::parse($album->date)->format('d M Y')}}</span>
+                            <div class="card-body">
+                                <a href="photoalbums/{!! $album->id !!}">
+                                    <h4 class="card-title">{!! $album->title !!}</h4>
+                                    <p class="card-text text-body">{!! nl2br($album->description) !!}</p>
+                                </a>
+                            </div>
+                            <div class="card-footer bg-white p-3">
+                                <a class="btn btn-outline-primary" href="photoalbums/{!! $album->id !!}">{{trans('front-end/photo.show')}}</a>
+                            </div>
                         </div>
                     </div>
-                </div>
-            @endforeach
-        </div>           
-    </div>
-    {{ $photoAlbums->links('front-end.pagination') }}
+                @endforeach
+            </div>           
+        </div>
+        {{ $photoAlbums->links('front-end.pagination') }}
+    </section>
 
     <div id="AddAlbumModal" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
         <div class="modal-dialog" role="document">
