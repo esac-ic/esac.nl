@@ -74,7 +74,7 @@
                 <div class="row no-gutters">
                     @foreach ($photos as $id=>$photo)
                         <div class="col-md-4 col-sm-6 p-1">
-                            <img style="width:100%;height:auto;" src="{!! $photo->thumbnail !!}" onclick="openGallery('{{ $loop->index }}');">
+                            <img class="w-100" src="{!! $photo->thumbnail !!}" onclick="openGallery('{{ $loop->index }}');">
                         </div>
                     @endforeach
                 </div>
@@ -111,13 +111,6 @@
     </div>
 </div>
 
-<style>
-#btnOpenAddModal{
-    position: absolute;
-    top: 1.5rem;
-    right: 1.5rem;
-}
-</style>
 @push('scripts')
     <script src="../js/photoswipe.min.js"></script>
     <script src="../js/photoswipe-ui-default.min.js"></script>
