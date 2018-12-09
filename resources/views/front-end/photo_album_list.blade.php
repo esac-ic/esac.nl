@@ -8,8 +8,8 @@
         <div class="card">
             <div class="card-body">
                 <button type="button" class="btn btn-outline-primary float-right" data-toggle="modal" data-target="#AddAlbumModal">{{trans('front-end/photo.addAlbum')}}</button>
-                <h2 class="card-title">Foto albums der Esac</h2>
-                Hier zijn fotos van klimweekenden, zomertochtjes en borrels te vinden!
+                <h2 class="card-title">{{ $curPageName }}</h2>
+                {!! $content !!}
             </div>
         </div>
     </div>
