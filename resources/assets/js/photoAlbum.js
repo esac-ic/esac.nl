@@ -107,39 +107,29 @@ function addPhotoToAlbum(thumbnailResults, photoResults, index){
 }
 
 function uploadPhoto() {
-    ChangebuttonState("Processing photos...")
     var files = document.getElementById('file-select').files;
-    if(files.length != 0){
-        var albumName = $("input#inputTitle").val();
-        var albumDescription = $("textarea#textareaDescription").val();
-        var captureDate = $("input#CaptureDate").val();
-        var thumbnails = processThumbnails(files);
-        var photos = processPhotos(files);
-        
-        Promise.all(thumbnails).then(function(thumbnailResults){
-            Promise.all(photos).then(function(photosResults){
-                ChangebuttonState('Sending photos...')
-                if (albumName == undefined && albumDescription  == undefined) { // upload photo without album
-                    addPhotoToAlbum(thumbnailResults, photosResults, 0);
-                } else{
-                    if(albumName != '' && albumDescription  != ''){
-                        addAlbum(thumbnailResults, photosResults, albumName, albumDescription, captureDate);
-                    } else{
-                        var button = $('button#submit');
-                        button.html("Toevoegen");
-                        button.attr("disabled", false);
-                        alert("Voeg een album naam en beschrijving toe");
-                    } 
-                }
-            });
+    var albumName = $("input#inputTitle").val();
+    var albumDescription = $("textarea#textareaDescription").val();
+    var captureDate = $("input#CaptureDate").val();
 
-        });
-    } else{
-        var button = $('button#submit');
-        button.html("Toevoegen");
-        button.attr("disabled", false);
-        alert("Selecteer een aantal foto's om toe te voegen."); 
-    }
+    if(files.length != 0 && albumName != '' && albumDescription  != ''){
+        if(albumName.length < 250 && albumDescription.length < 250){
+            ChangebuttonState("Processing photos...")
+            var thumbnails = processThumbnails(files);
+            var photos = processPhotos(files);
+            
+            Promise.all(thumbnails).then(function(thumbnailResults){
+                Promise.all(photos).then(function(photosResults){
+                    ChangebuttonState('Sending photos...')
+                    if (albumName == undefined && albumDescription  == undefined) { // upload photo without album
+                        addPhotoToAlbum(thumbnailResults, photosResults, 0);
+                    } else{
+                        addAlbum(thumbnailResults, photosResults, albumName, albumDescription, captureDate); 
+                    }
+                });
+            });
+        } alert("De titel en de beschrijving zijn te lang, hou het onder 256 tekens."); 
+    } alert("Selecteer een aantal foto's om toe te voegen.");  
 }
 
 function processPhotos(photos) {
