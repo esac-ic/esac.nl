@@ -42,9 +42,13 @@ class PhotoController extends Controller
         $description = $request->description;
         $date = $request->captureDate;
         if($title!= null && $description !=null && $date != null){
-            PhotoAlbum:$photoAlbum = $this->_PhotoAlbumRepository->create(["title" => $title, "description"=> $description, "date" => $date]);
-            $this->addPhotoToAlbum($request, $photoAlbum->id);
-            return $photoAlbum->id;
+            if(strlen($title) < 256 && strlen($description) < 256 ){
+                PhotoAlbum:$photoAlbum = $this->_PhotoAlbumRepository->create(["title" => $title, "description"=> $description, "date" => $date]);
+                $this->addPhotoToAlbum($request, $photoAlbum->id);
+                return $photoAlbum->id;
+            } else{
+                redirect()->back()->withErrors(["error" => trans('front-end/photo.inputToLong')]);
+            }
         } 
     }  
 

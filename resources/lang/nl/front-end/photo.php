@@ -10,5 +10,6 @@ return [
     "browse" => "Bladeren",
     "add" => "Toevoegen",
     "close" => "Sluiten",
-    "show" => "Zie meer"
+    "show" => "Zie meer",
+    "inputToLong" => "De titel en de beschrijving zijn te lang, hou het onder 256 tekens."
 ];

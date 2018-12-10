@@ -10,5 +10,6 @@ return [
     "browse" => "Browse",
     "add" => "Add",
     "close" => "Close",
-    "show"=> "Show more"
+    "show"=> "Show more",
+    "inputToLong" => "The title and description are too long. please keep it below 256 characters"
 ];

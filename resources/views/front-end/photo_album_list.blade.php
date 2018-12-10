@@ -76,6 +76,16 @@
                         <input id="filesSelected" type="text" class="form-control" readonly>
                     </div>
                     <div class="modal-footer">
+                        @if($errors->any())
+                            @push('scripts')
+                                <script type="text/javascript">
+                                    $(window).on('load',function(){
+                                        $('#AddAlbumModal').modal('show');
+                                    });
+                                </script>
+                            @endpush
+                            <p class="text-danger">{{$errors->first()}}</p>
+                        @endif
                         <button class="btn btn-primary" id='submit' onclick="uploadPhoto()">{{trans('front-end/photo.add')}}</button>
                         <button type="button" class="btn btn-secondary" data-dismiss="modal">{{trans('front-end/photo.close')}}</button>
                     </div>
