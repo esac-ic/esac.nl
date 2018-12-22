@@ -82,10 +82,10 @@
                         <a href="https://www.klimwinkel.nl"><img class="img-fluid" src="{{mix('img/klimwinkel.png')}}"></a>
                     </div>
                     <div class="col-6 col-lg-3">
-                        <a href="http://www.awin1.com/awclick.php?gid=321466&mid=8522&awinaffid=362489&linkid=2031800&clickref="><img class="img-fluid" src="{{mix('img/bever.png')}}"></a>
+                        <a href="https://www.awin1.com/awclick.php?gid=321466&mid=8522&awinaffid=362489&linkid=2031800&clickref="><img class="img-fluid" src="{{mix('img/bever.png')}}"></a>
                     </div>
                     <div class="col-6 col-lg-3">
-                        <a href="http://www.awin1.com/awclick.php?gid=317127&mid=8305&awinaffid=362489&linkid=1020095&clickref="><img class="img-fluid" src="{{mix('img/decathlon.png')}}"></a>
+                        <a href="https://www.awin1.com/awclick.php?gid=317127&mid=8305&awinaffid=362489&linkid=1020095&clickref="><img class="img-fluid" src="{{mix('img/decathlon.png')}}"></a>
                     </div>
                 </div>
             </div>
