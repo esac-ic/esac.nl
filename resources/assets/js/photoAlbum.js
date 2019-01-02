@@ -111,24 +111,28 @@ function uploadPhoto() {
     var albumName = $("input#inputTitle").val();
     var albumDescription = $("textarea#textareaDescription").val();
     var captureDate = $("input#CaptureDate").val();
+    var justPhoto = (albumName === undefined || albumDescription === undefined);
+
+    if(!justPhoto && (albumName.length >= 250 || albumDescription.length >= 250)) {
+        alert("The album name and description have to consist of less than 250 characters.");
+        return;
+    }
 
     if(files.length != 0 && albumName != '' && albumDescription  != ''){
-        if(albumName.length < 250 && albumDescription.length < 250){
-            ChangebuttonState("Processing photos...")
-            var thumbnails = processThumbnails(files);
-            var photos = processPhotos(files);
-            
-            Promise.all(thumbnails).then(function(thumbnailResults){
-                Promise.all(photos).then(function(photosResults){
-                    ChangebuttonState('Sending photos...')
-                    if (albumName == undefined && albumDescription  == undefined) { // upload photo without album
-                        addPhotoToAlbum(thumbnailResults, photosResults, 0);
-                    } else{
-                        addAlbum(thumbnailResults, photosResults, albumName, albumDescription, captureDate); 
-                    }
-                });
+        ChangebuttonState("Processing photos...");
+        var thumbnails = processThumbnails(files);
+        var photos = processPhotos(files);
+
+        Promise.all(thumbnails).then(function(thumbnailResults){
+            Promise.all(photos).then(function(photosResults){
+                ChangebuttonState('Sending photos...')
+                if (justPhoto) { // upload photo without album
+                    addPhotoToAlbum(thumbnailResults, photosResults, 0);
+                } else{
+                    addAlbum(thumbnailResults, photosResults, albumName, albumDescription, captureDate);
+                }
             });
-        }
+        });
     }
 }
 
