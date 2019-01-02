@@ -128,9 +128,8 @@ function uploadPhoto() {
                     }
                 });
             });
-        } else alert("De titel en de beschrijving zijn te lang, hou het onder 256 tekens."); 
-    } else alert("Selecteer een aantal foto's om toe te voegen."); 
-
+        }
+    }
 }
 
 function processPhotos(photos) {

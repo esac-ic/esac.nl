@@ -50,45 +50,47 @@
                     </button>
                 </div>
                 <div class="modal-body">
-                    <div class="form-group">
-                        <input class="form-control" id="inputTitle" type="text" name="title" placeholder="{{trans('front-end/photo.title')}}" required/>
-                    </div>
-                    <div class="form-group"> 
-                        <textarea class="form-control" id="textareaDescription" type="" name="description" placeholder="{{trans('front-end/photo.description')}}" required></textarea> 
-                    </div>
-                    <div class=form-group>
-                        {{trans('front-end/photo.date')}}
-                        <div class="input-group date" id="CaptureDateBox" data-target-input="nearest">
-                            <input type="text" class="form-control datetimepicker-input" id="CaptureDate" name="Date" data-target="#CaptureDateBox" value='{{date("j-m-Y")}}' required="">
-                            <div class="input-group-append" data-target="#CaptureDateBox" data-toggle="datetimepicker">
-                                <div class="input-group-text">
-                                    <i class="ion-calendar"></i>
+                    <form>
+                        <div class="form-group">
+                            <input class="form-control" id="inputTitle" type="text" name="title" placeholder="{{trans('front-end/photo.title')}}" required/>
+                        </div>
+                        <div class="form-group"> 
+                            <textarea class="form-control" id="textareaDescription" type="" name="description" placeholder="{{trans('front-end/photo.description')}}" required></textarea> 
+                        </div>
+                        <div class=form-group>
+                            {{trans('front-end/photo.date')}}
+                            <div class="input-group date" id="CaptureDateBox" data-target-input="nearest">
+                                <input type="text" class="form-control datetimepicker-input" id="CaptureDate" name="Date" data-target="#CaptureDateBox" value='{{date("j-m-Y")}}' required/>
+                                <div class="input-group-append" data-target="#CaptureDateBox" data-toggle="datetimepicker">
+                                    <div class="input-group-text">
+                                        <i class="ion-calendar"></i>
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
-                    <div class="form-group"> 
-                        <label class="input-group-btn">
-                            <span class="btn btn-primary">
-                            {{trans('front-end/photo.browse')}}&hellip; <input style="display: none;" class="form-control" type="file" id="file-select" name="photos[]" multiple required/>
-                            </span>
-                        </label>
-                        <input id="filesSelected" type="text" class="form-control" readonly>
-                    </div>
-                    <div class="modal-footer">
-                        @if($errors->any())
-                            @push('scripts')
-                                <script type="text/javascript">
-                                    $(window).on('load',function(){
-                                        $('#AddAlbumModal').modal('show');
-                                    });
-                                </script>
-                            @endpush
-                            <p class="text-danger">{{$errors->first()}}</p>
-                        @endif
-                        <button class="btn btn-primary" id='submit' onclick="uploadPhoto()">{{trans('front-end/photo.add')}}</button>
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal">{{trans('front-end/photo.close')}}</button>
-                    </div>
+                        <div class="form-group"> 
+                            <label class="input-group-btn">
+                                <span class="btn btn-primary">
+                                {{trans('front-end/photo.browse')}}&hellip; <input style="display: none;" class="form-control" type="file" id="file-select" name="photos[]" multiple required/>
+                                </span>
+                            </label>
+                            <input id="filesSelected" type="text" class="form-control" readonly>
+                        </div>
+                        <div class="modal-footer">
+                            @if($errors->any())
+                                @push('scripts')
+                                    <script type="text/javascript">
+                                        $(window).on('load',function(){
+                                            $('#AddAlbumModal').modal('show');
+                                        });
+                                    </script>
+                                @endpush
+                                <p class="text-danger">{{$errors->first()}}</p>
+                            @endif
+                            <button class="btn btn-primary" id='submit' onclick="uploadPhoto()">{{trans('front-end/photo.add')}}</button>
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">{{trans('front-end/photo.close')}}</button>
+                        </div>
+                    </form>
                 </div>
             </div>
         </div>

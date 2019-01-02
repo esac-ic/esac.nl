@@ -94,18 +94,20 @@
                 </button>
             </div>
             <div class="modal-body">
-                <div class="form-group"> 
-                    <label class="input-group-btn">
-                        <span class="btn btn-primary">
-                        {{trans('front-end/photo.browse')}}&hellip; <input style="display: none;" class="form-control" type="file" id="file-select" name="photos[]" multiple required/>
-                        </span>
-                    </label>
-                    <input id="filesSelected" type="text" class="form-control" readonly>
-                </div>
-                <div class="modal-footer">
-                    <button class="btn btn-primary" id='submit' onclick="uploadPhoto()">{{trans('front-end/photo.add')}}</button>
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">{{trans('front-end/photo.close')}}</button>
-                </div>
+                <form>
+                    <div class="form-group"> 
+                        <label class="input-group-btn">
+                            <span class="btn btn-primary">
+                            {{trans('front-end/photo.browse')}}&hellip; <input style="display: none;" class="form-control" type="file" id="file-select" name="photos[]" multiple required/>
+                            </span>
+                        </label>
+                        <input id="filesSelected" type="text" class="form-control" readonly>
+                    </div>  
+                    <div class="modal-footer">
+                        <button class="btn btn-primary" id='submit' onclick="uploadPhoto()">{{trans('front-end/photo.add')}}</button>
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">{{trans('front-end/photo.close')}}</button>
+                    </div>
+                </form>
             </div>
         </div>
     </div>
