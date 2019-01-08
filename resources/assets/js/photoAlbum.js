@@ -65,20 +65,20 @@ function processPhotos(){
                         location.reload();
                     } else{
                         updateProgressBar();
-                        fileIndex++;
-                        processPhotos();
-                    }     
+                    }    
                 });
+                fileIndex++;
+                processPhotos();
             } else{
                 addAlbum(thumbnail, photo, albumName, albumDescription, captureDate, fileIndex).then(function(index){
                     if(index >= (files.length -1)){
                         location.reload();
                     } else{
                         updateProgressBar();
+                        fileIndex++;
+                        processPhotos();
                     }
                 });
-                fileIndex++;
-                processPhotos();
             }     
         }) 
     });

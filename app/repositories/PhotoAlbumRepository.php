@@ -57,6 +57,6 @@ class PhotoAlbumRepository implements IRepository
     }
 
     public function getThumbnails($id){
-        return Photo::with('photo_album')->where('photo_album_id',$id)->paginate(15);    
+        return Photo::with('photo_album')->where('photo_album_id',$id)->paginate(60);    
     }
 }
