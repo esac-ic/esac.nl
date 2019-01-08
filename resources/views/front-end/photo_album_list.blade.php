@@ -50,7 +50,6 @@
                     </button>
                 </div>
                 <div class="modal-body">
-                    <form>
                         <div class="form-group">
                             <input class="form-control" id="inputTitle" type="text" name="title" placeholder="{{trans('front-end/photo.title')}}" required/>
                         </div>
@@ -76,6 +75,10 @@
                             </label>
                             <input id="filesSelected" type="text" class="form-control" readonly>
                         </div>
+                        <div id="progress" style="visibility:hidden" class="progress">       
+                            <div id="progressBar" class="progress-bar" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 0%;"></div>
+                            <small id="progressText" class="justify-content-center d-flex position-absolute w-100">0% complete</small>
+                        </div>
                         <div class="modal-footer">
                             @if($errors->any())
                                 @push('scripts')
@@ -87,10 +90,9 @@
                                 @endpush
                                 <p class="text-danger">{{$errors->first()}}</p>
                             @endif
-                            <button class="btn btn-primary" id='submit' onclick="uploadPhoto()">{{trans('front-end/photo.add')}}</button>
+                            <button class="btn btn-primary" id='submit' onclick="uploadPhotos()">{{trans('front-end/photo.add')}}</button>
                             <button type="button" class="btn btn-secondary" data-dismiss="modal">{{trans('front-end/photo.close')}}</button>
                         </div>
-                    </form>
                 </div>
             </div>
         </div>
