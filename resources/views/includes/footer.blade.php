@@ -1,5 +1,19 @@
 <footer class="bg-gray text-light footer-long py-5">
+
     <div class="container">
+    <style>
+      .icon {
+        display: inline-block;
+        border-radius: 60px;
+        font-size: 30px;
+        width: 45px;
+        height: 45px;
+        text-align: center;
+      }
+      .icon:hover{
+        opacity: 0.75;
+      }
+    </style>
         <div class="row">
             <div class="col-12 col-md-3">
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 510.24 259" class="logo logo-esac" fill="white">
@@ -15,13 +29,17 @@
                     © 2018 ESAC
                     <br>Eindhovense Studenten
                     <br>Alpen Club
-                </p>
-                <p class="text-muted mt-4">
+                    <br><br>
                     T: +31 6 11806356
                     <br>M: bestuur@esac.nl
                     <br>B: NL75 RABO 0117 0524 85
                     <br>KvK: 40236076
                 </p>
+                <div class="row">
+                  <div class="p-1"><a style="background: #3B5998; color: white;" href="https://www.facebook.com/esac040" class="icon ion-social-facebook"></a></div>
+                  <div class="p-1"><a style="background: #2C6A93; color: white;" href="https://www.instagram.com/esac040" class="icon ion-social-instagram"></a></div>
+                  <div class="p-1"><a style="background: #C31A1E; color: white;" href="https://www.youtube.com/channel/UCn6jb9BA10f-rbvinYCYlxA/" class="icon ion-social-youtube"></a></div>
+                </div>
             </div>
             <div class="col-12 col-md-9">
                 <span class="h5">Dé studenten klim- en bergsportvereniging van Eindhoven.</span>
