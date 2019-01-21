@@ -1,5 +1,6 @@
 @javascript('photos', $photos)
 @javascript('photoAlbum', $photoAlbum)
+<meta name="csrf-token" content="{{ csrf_token() }}">
 
 @push('styles')
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/photoswipe/4.1.2/photoswipe.min.css">

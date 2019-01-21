@@ -102,7 +102,7 @@ function downscalePhoto(file) {
             function(canvas){ 
                 canvas.toBlob(function (blob) {
                         resolve({photo: blob, file: file});
-                    }, 'image/jpeg', 0.2    
+                    }, 'image/jpeg', 0.8    
                 ); 
             },    
             {
@@ -122,7 +122,7 @@ function resizeThumbnail(file) {
             function(canvas){ 
                 canvas.toBlob(function (blob) {
                         resolve({thumbnail: blob, file: file});
-                    }, 'image/jpeg', 0.9    
+                    }, 'image/jpeg', 1.0    
                 ); 
             },    
             {
@@ -236,4 +236,3 @@ function updateProgressBar(){
         progressText.innerHTML = numberOfPhotosProgressed  + " Photos uploaded";
     }
 }
-
