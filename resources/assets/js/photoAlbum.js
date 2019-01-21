@@ -102,7 +102,7 @@ function downscalePhoto(file) {
             function(canvas){ 
                 canvas.toBlob(function (blob) {
                         resolve({photo: blob, file: file});
-                    }, 'image/jpeg', 0.8    
+                    }, 'image/jpeg', 0.5        
                 ); 
             },    
             {
