@@ -1,4 +1,3 @@
-
 var PhotoSwipeItems = []; // Contains the photos used by photoswipe.
 
 try {
@@ -6,9 +5,11 @@ try {
     for (var photo in photos.data) {
         PhotoSwipeItems.push({ src: photos.data[photo].link, w: photos.data[photo].width, h: photos.data[photo].height });
     }
-    $("p#albumDesciption").text($("p#albumDesciption").text().replace(/\n/g, "<br>"));
 }
 catch(err) {
+
+}
+finally{
     $("p#albumDesciption").text($("p#albumDesciption").text().replace(/\n/g, "<br>"));
 }
 

@@ -15,7 +15,7 @@
         <div class="card-body">
             <button type="button" class="btn btn-outline-primary float-right" data-toggle="modal" data-target="#AddPhotoModal">{{trans('front-end/photo.addPhoto')}}</button>
             <h2 class="card-title">{{$photoAlbum->title}}</h2>
-            <p id="albumDesciption"> {!! nl2br($photoAlbum->description) !!} </p>
+            <p id="albumDescription"> {!! nl2br($photoAlbum->description) !!} </p>
         </div>
     </div>
 </div>
