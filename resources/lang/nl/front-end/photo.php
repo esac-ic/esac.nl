@@ -2,8 +2,8 @@
 
 return [
     "pagetitle"=> "Foto albums",
-    "addAlbum" => "Nieuw foto album toevoegen",
-    "addPhoto" => "Nieuwe foto's toevoegen",
+    "addAlbum" => "Nieuw album",
+    "addPhoto" => "Nieuwe foto's",
     "title" => "Album titel",
     "description" => "Album beschrijving",
     "date" => "Datum van opname",

@@ -2,8 +2,8 @@
 
 return [
     "pagetitle"=> "Photo albums",
-    "addAlbum" => "Add new photo album",
-    "addPhoto" => "Add new photo's",
+    "addAlbum" => "New album",
+    "addPhoto" => "new photo's",
     "title" => "Album title",
     "description" => "Album description",
     "date" => "Date of capture",
