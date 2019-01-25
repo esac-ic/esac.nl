@@ -110,6 +110,21 @@ class MenuItemTableSeeder extends Seeder
         $menuItem->content_id = $content->id;
         $menuItem->save();
 
+        //photos
+        $text = new \App\Text(['NL_text' => 'Fotos', 'EN_text' => 'Photos']);
+        $text->save();
+        $content = new \App\Text(['NL_text' => 'Fotos content', 'EN_text' => 'Photos content']);
+        $content->save();
+        $menuItem = new \App\MenuItem();
+        $menuItem->name= $text->id;
+        $menuItem->urlName =\App\MenuItem::PHOTOURL;
+        $menuItem->login = true;
+        $menuItem->deletable = false;
+        $menuItem->editable = true;
+        $menuItem->menuItem = true;
+        $menuItem->content_id = $content->id;
+        $menuItem->save();
+
 //        //Gallery
 //        $text = new \App\Text(['NL_text' => 'Foto albums', 'EN_text' => 'Galleries']);
 //        $text->save();

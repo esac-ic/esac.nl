@@ -9,7 +9,7 @@
     </div>
 </div>
 
-<section class="pt-3">
+<section class="py-3">
     <div class="container">
         <div class="row d-flex align-items-stretch align-items-center">
             @foreach($newsItems as $newsItem)

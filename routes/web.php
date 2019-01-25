@@ -27,7 +27,7 @@ Route::get('beheer/home','ManageController@index');
 
 //extra user routes
 Route::get('users/old_members','UserController@indexOldMembers');
-Route::get('users/pending_members','PendingUserController@indexPendingMembers');
+Route::get('users/pending_members','PendingUserController@indexPendingMembers'); 
 Route::get('users/exportUsers','UserController@exportUsers');
 Route::patch('users/{user}/removeAsActiveMember', 'UserController@removeAsActiveMember');
 Route::patch('users/{user}/removeAsPendingMember', 'PendingUserController@removeAsPendingMember');
@@ -74,7 +74,15 @@ Route::resource('forms', 'InschrijfController');
 Route::delete('/mailList/{mailistid}/member/{memberid}','MailListController@deleteMeberOfMailList');
 Route::post('/mailList/{mailistid}/member','MailListController@addMember');
 
+//photo routes
+Route::post('/photoalbums/{albumId}', 'PhotoController@addPhotoToAlbum');
+Route::post('/photoalbums','PhotoController@addAlbum');
+
 //front-end routes
+Route::get('/photoalbums/{albumId}','PhotoController@index')->name('PhotoAlbum');
+Route::get('/photo/{id}','PhotoController@getPhotos')->name('getPhotos');
+Route::get('/photoalbums','PhotoAlbumController@index')->name('PhotoAlbums');
+Route::get('/photo/{id}','PhotoController@getPhotos')->name('getPhotos');
 Route::get('/zekeringen','frontEndController@zekeringen');
 Route::get('/bibliotheek','frontEndController@library');
 Route::get('/agenda','frontEndController@agenda');
@@ -84,4 +92,4 @@ Route::get('/home','frontEndController@home');
 Route::get('/nieuws','frontEndController@news');
 Route::get('/nieuws/{newsItem}','frontEndController@newsDetailView');
 Route::get('/ledenlijst','frontEndController@memberList');
-Route::get('/{menuItem}','frontEndController@showPage');
+Route::get('/{menuItem}','frontEndController@showPage'); 

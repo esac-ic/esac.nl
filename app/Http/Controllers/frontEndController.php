@@ -80,10 +80,9 @@ class frontEndController extends Controller
         $menuItem = $this->_MenuItemRepository->findby('urlName',MenuItem::SUBSCRIBEURL);
         $content = $menuItem->content->text();
         $curPageName = trans('front-end/subscribe.title');
-
         return view("front-end.subscribe", compact('curPageName','content'));
     }
-    
+
     public function news(){
         $newsItems = NewsItem::orderBy('id', 'desc')->paginate(9);
         $curPageName = trans('front-end/news.title');
@@ -92,7 +91,7 @@ class frontEndController extends Controller
 
         return view("front-end.news", compact('curPageName','content','newsItems'));
     }
-
+    
     public function newsDetailView(Request $request, NewsItem $newsItem){
         $curPageName = $newsItem->newsItemTitle->text();
         $menuItem = $this->_MenuItemRepository->findby('urlName',MenuItem::NEWSURL);

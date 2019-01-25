@@ -62,6 +62,14 @@ class User extends Authenticatable
             ->withTimestamps()->withTrashed();
     }
 
+    public function photos(){
+        return $this->hasMany(Photo::class);
+    }
+
+    public function albums(){
+        return $this->hasMany(PhotoAlbum::class);
+    }
+
     public function hasRole(...$rols){
         foreach ($rols as $rol){
             if($this->roles->contains($rol)){
@@ -95,10 +103,6 @@ class User extends Authenticatable
         return $name;
     }
 
-    public function isActiveMember(){
-        return ($this->lid_af === null && $this->pending_user === null);
-    }
-
     public function isOldMember(){
         return $this->lid_af !== null;
     }
@@ -107,26 +111,28 @@ class User extends Authenticatable
         return $this->pending_user !== null;
     }
 
+    public function isActiveMember(){
+        return ($this->lid_af === null && $this->pending_user === null); 
+    }
+
     public function removeAsActiveMember(){
         $this->lid_af = Carbon::now();
         $this->save();
     }
-
-    public function approveAsPendingMember(){
-        $this->pending_user = null;
-        $this->save();
-    }
-
-    public function removeAsPendingMember(){
-        $this->delete();
-    }
-
     public function getAdress() {
         return $this->street . " " . $this->houseNumber;
     }
 
     public function applicationResponses(){
         return $this->hasMany(ApplicationResponse::class,'user_id');
+    }
+
+    public function approveAsPendingMember(){
+        $this->pending_user = null;
+        $this->save();
+    }
+    public function removeAsPendingMember(){
+        $this->delete();
     }
 
 }

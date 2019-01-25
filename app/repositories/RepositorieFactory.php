@@ -27,8 +27,10 @@ class RepositorieFactory{
     public static $APPLICATIONFORMROWREPOKEY = "ApplicationFormRow";
     public static $ZEKERINGENREPOKEY = "Zekeringen";
     public static $INSCHRIJVENREPOKEY = "InschrijvenRepository";
-    public static $BOOKREPOKEY = "BookRepository";
+    public static $BOOKREPOKEY = "BookRepository"; 
     public static $FEITEMREPOKEY = "FrontEndControllerRepository";
+    public static $PHOTOALBUMREPOKEY = "PhotoAlbum";
+    public static $PHOTOREPOKEY = "Photo";
 
 
     public function __construct() {
@@ -49,7 +51,9 @@ class RepositorieFactory{
             RepositorieFactory::$ZEKERINGENREPOKEY  => new ZekeringenRepository(),
             RepositorieFactory::$INSCHRIJVENREPOKEY => new InschrijvenRepository(),
             RepositorieFactory::$FEITEMREPOKEY => new FrontEndControllerRepository(),
-            RepositorieFactory::$BOOKREPOKEY => new BookRepository($textRepository),
+            RepositorieFactory::$BOOKREPOKEY => new BookRepository($textRepository), 
+            RepositorieFactory::$PHOTOALBUMREPOKEY => new PhotoAlbumRepository(),
+            RepositorieFactory::$PHOTOREPOKEY => new PhotoRepository(),
         ];
     }
 

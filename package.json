@@ -8,8 +8,9 @@
   },
   "devDependencies": {
     "axios": "^0.18",
+    "blueimp-load-image": "2.20.1",
     "bootstrap": "^4.1.1",
-    "browser-sync": "^2.24.4",
+    "browser-sync": "^2.26.3",
     "browser-sync-webpack-plugin": "^2.2.2",
     "cross-env": "^5.1.6",
     "datatables.net": "^1.10.16",
