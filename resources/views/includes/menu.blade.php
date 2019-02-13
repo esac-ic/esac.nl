@@ -22,24 +22,22 @@
     <ul class="navbar-nav">
         @php($menu = app()->make(\App\CustomClasses\MenuSingleton::MENUSINGLETON))
         @foreach($menu->getMenuItems() as $menuItem)
-            @if($menuItem->show())
             @if(count($menu->getSubMenuItem($menuItem->id)) > 0)
-            {{--has submenu items so it wil be a dropdown menu--}}
-            <li class="nav-item dropdown">
-              <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                {{$menuItem->text->text()}}
-              </a>
-              <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-                @foreach($menu->getSubMenuItem($menuItem->id) as $subItem)
-                    <a class="dropdown-item" href="{{url('/'. $subItem->urlName)}}">{{$subItem->text->text()}}</a>
-                @endforeach
-              </div>
-            </li>
+                {{--has submenu items so it wil be a dropdown menu--}}
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        {{$menuItem->text->text()}}
+                    </a>
+                    <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                        @foreach($menu->getSubMenuItem($menuItem->id) as $subItem)
+                            <a class="dropdown-item" href="{{url('/'. $subItem->urlName)}}">{{$subItem->text->text()}}</a>
+                        @endforeach
+                    </div>
+                </li>
             @else
-            <li class="nav-item">
-                <a class="nav-link" href="{{url('/'. $menuItem->urlName)}}">{{$menuItem->text->text()}}</a>
-            </li>
-            @endif
+                <li class="nav-item">
+                    <a class="nav-link" href="{{url('/'. $menuItem->urlName)}}">{{$menuItem->text->text()}}</a>
+                </li>
             @endif
         @endforeach
     </ul>

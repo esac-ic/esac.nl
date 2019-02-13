@@ -60,16 +60,6 @@ class MenuItem extends Model
         return 'pages.' . $this->urlName . ((App::isLocale('en') === true) ? '_en' : '_nl');
     }
 
-    public function show(){
-        if($this->login){
-            if(Auth::guest()){
-                return false;
-            }
-        }
-
-        return true;
-    }
-
     public function sortMeunuList($menuList){
         $newList = array();
         //get a menu item which is not after one
