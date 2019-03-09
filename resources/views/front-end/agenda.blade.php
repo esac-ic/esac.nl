@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
 @section('content')
-    {{--In this div is the agenda mounteed by vue--}}
+    {{--In this div is the agenda mounted by vue--}}
     <div id="agenda">
     </div>
 @endsection
