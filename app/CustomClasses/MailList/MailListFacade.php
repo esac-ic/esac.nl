@@ -6,32 +6,34 @@
  * Time: 18:59
  */
 
-namespace App\CustomClasses;
+namespace App\CustomClasses\MailList;
 
 
 use App\MailList;
 use App\User;
 use Bogardo\Mailgun\Facades\Mailgun;
 
-class MailgunFacade
+class MailListFacade
 {
     private $_mailListParser;
+    private $_mailManHandler;
 
-    public function __construct(MailListParser $mailListParser)
+    public function __construct(MailListParser $mailListParser,MailMan $mailMan)
     {
         $this->_mailListParser = $mailListParser;
+        $this->_mailManHandler = $mailMan;
     }
 
     public function getAllMailLists(){
         $mailLists = array();
-        foreach(Mailgun::api()->get("lists/pages")->http_response_body->items as $mailList){
-            array_push($mailLists,$this->_mailListParser->parseMailGunMailList($mailList));
+        $response = $this->_mailManHandler->get('/lists');
+        foreach($response->entries as $mailList){
+            array_push($mailLists,$this->_mailListParser->parseMailManMailList($mailList));
         }
         return $mailLists;
     }
 
     public function getMailList($id){
-        //https://api.mailgun.net/v3/lists/leden@esac.nl/members/pages?page=next&address=gerbenopdenkamp%40hotmail.com&limit=100
         $mailList = $this->_mailListParser->parseMailGunMailList(Mailgun::api()->get('lists/' . $id)->http_response_body->list);
         $urlQuery = [];
         for($i=0; $i <= $mailList->members_count; $i += 100){

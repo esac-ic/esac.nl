@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\CustomClasses\MailgunFacade;
+use App\CustomClasses\MailList\MailListFacade;
 use App\MailList;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Config;
@@ -17,7 +17,7 @@ class MailListController extends Controller
      *
      * @return void
      */
-    public function __construct(MailgunFacade $mailgunFacade)
+    public function __construct(MailListFacade $mailgunFacade)
     {
         $this->_mailgunFacade =  $mailgunFacade;
         $this->middleware('auth');

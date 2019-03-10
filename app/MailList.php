@@ -6,8 +6,6 @@ use Illuminate\Database\Eloquent\Model;
 
 class MailList extends Model
 {
-    public $emailDomain;
-
     protected $fillable = [
         'acces_level',
         'address',
@@ -17,8 +15,8 @@ class MailList extends Model
         'created_at',
     ];
 
+    public $id;
     public $acces_level;
-    public $address;
     public $created_at;
     public $description;
     public $members_count;

@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Certificate;
-use App\CustomClasses\MailgunFacade;
+use App\CustomClasses\MailListFacade;
 use App\repositories\RepositorieFactory as RepositorieFactory;
 use App\Rol;
 use App\User;
@@ -97,7 +97,7 @@ class UserController extends Controller
     }
 
     //update user
-    public function update(Request $request,User $user, MailgunFacade $mailgunFacade){
+    public function update(Request $request, User $user, MailListFacade $mailgunFacade){
         if(!Auth::user()->hasRole(Config::get('constants.Administrator'))){
             if(Auth::user()->id != $user->id || $request->has('kind_of_member')){
                 abort(403, trans('validation.Unauthorized'));
@@ -123,7 +123,7 @@ class UserController extends Controller
         }
     }
 
-    public function removeAsActiveMember(Request $request, User $user,MailgunFacade $mailgunFacade){
+    public function removeAsActiveMember(Request $request, User $user, MailListFacade $mailgunFacade){
         $user->removeAsActiveMember();
         $mailgunFacade->deleteUserFormAllMailList($user);
 

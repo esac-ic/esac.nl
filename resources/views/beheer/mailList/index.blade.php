@@ -33,7 +33,6 @@
         <tr>
             <th>{{trans('MailList.name')}}</th>
             <th>{{trans('MailList.address')}}</th>
-            <th>{{trans('MailList.acces_level')}}</th>
             <th>{{trans('MailList.members_count')}}</th>
             <th>Beheer</th>
         </tr>
@@ -44,7 +43,6 @@
             <tr >
                 <td>{{$mailingList->name}}</td>
                 <td>{{$mailingList->address}}</td>
-                <td>{{$mailingList->acces_level}}</td>
                 <td>{{$mailingList->members_count}}</td>
                 <td>
                     <a href="{{url('/mailList/' . $mailingList->address . '/edit')}}"><span title="{{trans('MailList.edit')}}" class="ion-edit" aria-hidden="true"></span></a>

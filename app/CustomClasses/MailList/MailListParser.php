@@ -6,10 +6,9 @@
  * Time: 19:14
  */
 
-namespace App\CustomClasses;
+namespace App\CustomClasses\MailList;
 
 
-use App\MailList;
 use App\MailListMember;
 
 /**
@@ -19,6 +18,22 @@ use App\MailListMember;
  */
 class MailListParser
 {
+
+    /**
+     * Parses the json mailList object from the mailman api to MailList object
+     * @param $object
+     * @return MailList
+     */
+    public function parseMailManMailList($object){
+        $mailList = new MailList();
+        $mailList
+            ->setId($object->list_id)
+            ->setAddress($object->fqdn_listname)
+            ->setMembersCount($object->member_count)
+            ->setName($object->display_name);
+
+        return $mailList;
+    }
 
     /**
      * Parses the json mailList object from the mailgunapi to MailList object
