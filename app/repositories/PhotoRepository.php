@@ -58,13 +58,12 @@ class PhotoRepository implements IRepository
     }
 
     public function getAWSLink($filepath){
-        $s3 = \Storage::disk('s3');
-        return $s3->url($filepath);
+        return "https://f002.backblazeb2.com/file/ESAC-Photos/" . $filepath;
     }
 
     public function saveToAWS($filepath, $file){
-        $s3 = \Storage::disk('s3');
-        $s3->put($filepath, file_get_contents($file), 'public');
+        $b2 = \Storage::disk('b2');
+        $b2->put($filepath, file_get_contents($file));
         return $filepath;
     }
 }

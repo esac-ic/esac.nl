@@ -165,6 +165,7 @@ return [
         Collective\Html\HtmlServiceProvider::class,
         Barryvdh\LaravelIdeHelper\IdeHelperServiceProvider::class,
         Laravel\Tinker\TinkerServiceProvider::class,
+        Gliterd\BackblazeB2\BackblazeB2ServiceProvider::class,
 
         /*
          * Package Service Providers...
