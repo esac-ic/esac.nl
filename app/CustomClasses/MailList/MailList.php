@@ -11,11 +11,11 @@ namespace App\CustomClasses\MailList;
 
 class MailList
 {
-    public $id;
-    public $address;
-    public $members_count;
-    public $name;
-    public $members = array();
+    private $id;
+    private $address;
+    private $members_count;
+    private $name;
+    private $members = array();
 
     /**
      * @return mixed
@@ -98,12 +98,12 @@ class MailList
     }
 
     /**
-     * @param array $members
+     * @param MailListMember $members
      * @return MailList
      */
-    public function setMembers(array $members): MailList
+    public function addMember(MailListMember $member): MailList
     {
-        $this->members = $members;
+        array_push($this->members,$member);
         return $this;
     }
 }

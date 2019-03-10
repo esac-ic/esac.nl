@@ -41,12 +41,12 @@
 
         @foreach ($mailLists as $mailingList)
             <tr >
-                <td>{{$mailingList->name}}</td>
-                <td>{{$mailingList->address}}</td>
-                <td>{{$mailingList->members_count}}</td>
+                <td>{{$mailingList->getName()}}</td>
+                <td>{{$mailingList->getAddress()}}</td>
+                <td>{{$mailingList->getMembersCount()}}</td>
                 <td>
-                    <a href="{{url('/mailList/' . $mailingList->address . '/edit')}}"><span title="{{trans('MailList.edit')}}" class="ion-edit" aria-hidden="true"></span></a>
-                    <a href="{{url('/mailList/'. $mailingList->address)}}"><span title="{{trans("MailList.show")}}" class="ion-eye" aria-hidden="true"></span></a>
+                    <a href="{{url('/mailList/' . $mailingList->getAddress() . '/edit')}}"><span title="{{trans('MailList.edit')}}" class="ion-edit" aria-hidden="true"></span></a>
+                    <a href="{{url('/mailList/'. $mailingList->getAddress())}}"><span title="{{trans("MailList.show")}}" class="ion-eye" aria-hidden="true"></span></a>
                 </td>
             </tr>
         @endforeach

@@ -34,20 +34,12 @@ class MailListFacade
     }
 
     public function getMailList($id){
-        $mailList = $this->_mailListParser->parseMailGunMailList(Mailgun::api()->get('lists/' . $id)->http_response_body->list);
-        $urlQuery = [];
-        for($i=0; $i <= $mailList->members_count; $i += 100){
-            $lastMember = "";
-            foreach (Mailgun::api()->get('lists/' . $id  .'/members/pages',$urlQuery)->http_response_body->items as $member){
-                $member = $this->_mailListParser->parseMailGunMember($member);
-                $mailList->addMember($member);
-                $lastMember = $member->address;
-            }
-            $urlQuery = [
-              'page' => 'next',
-              'address' => $lastMember,
-              'limit' => 100
-            ];
+        $mailList = $this->_mailListParser->parseMailManMailList($this->_mailManHandler->get('/lists/' . $id));
+        $members = $this->_mailManHandler->get('/lists/' . $id . '/roster/member');
+
+        foreach ($members->entries as $member){
+            $parsedMember = $this->_mailListParser->parseMailManMember($member);
+            $mailList->addMember($parsedMember);
         }
 
         return $mailList;
@@ -99,10 +91,10 @@ class MailListFacade
     public function updateUserEmailFormAllMailList($user, $oldEmail, $newEmail){
         foreach ($this->getAllMailLists() as $mailList){
             $mailList = $this->getMailList($mailList->address);
-            foreach ($mailList->members as $member){
+            foreach ($mailList->getMembers() as $member){
                 if($oldEmail === $member->address){
-                    $this->deleteMemberFromMailList($mailList->address,$member->address);
-                    $this->addMember($mailList->address,$newEmail,$user->getName());
+                    $this->deleteMemberFromMailList($mailList->getAddress(),$member->address);
+                    $this->addMember($mailList->getAddress(),$newEmail,$user->getName());
                 }
             }
 

@@ -8,9 +8,6 @@
 
 namespace App\CustomClasses\MailList;
 
-
-use App\MailListMember;
-
 /**
  * Class contains function to parse object to MailList object
  * Class MailListParser
@@ -35,6 +32,15 @@ class MailListParser
         return $mailList;
     }
 
+    public function parseMailManMember($object){
+        $member = new MailListMember();
+        $member
+            ->setAddress($object->email)
+            ->setName($object->display_name);
+
+        return $member;
+    }
+
     /**
      * Parses the json mailList object from the mailgunapi to MailList object
      * @param $object
@@ -50,14 +56,5 @@ class MailListParser
         $mailList->name = $object->name;
 
         return $mailList;
-    }
-
-    public function parseMailGunMember($object){
-        $member = new MailListMember();
-        $member->address = $object->address;
-        $member->name = $object->name;
-        $member->subscribed = $object->address;
-
-        return $member;
     }
 }
