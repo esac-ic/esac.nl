@@ -70,6 +70,7 @@ class MenuItem extends Model
         return true;
     }
 
+
     public function sortMeunuList($menuList){
         $newList = array();
         //get a menu item which is not after one

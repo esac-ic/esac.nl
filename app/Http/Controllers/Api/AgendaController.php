@@ -54,6 +54,7 @@ class AgendaController extends Controller
                 "text" => $agendaItem->agendaItemShortDescription->text(),
                 "formId" => $agendaItem->getApplicationForm,
                 "canRegister" => $agendaItem->canRegister(),
+                "application_form_id" => $agendaItem->application_form_id,
                 "amountOfPeopleRegisterd" => count($agendaItem->getApplicationFormResponses)
                 ]);
         }
