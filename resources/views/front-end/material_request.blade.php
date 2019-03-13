@@ -21,6 +21,8 @@
 				<div class="form-group col-md-5">
 					{|| Form::label('materialtype', trans('material.type')) ||}
 					{|| Form::text('materialtype', '', ['class' => 'form-control', 'required' => 'required']) ||}
+					{|| Form::submit(trans('front-end/material.submit'), ['class'=> 'btn btn-primary']) ||}
+					{|| Form::close() ||}
 				</div>
 			</div>
 		</div>

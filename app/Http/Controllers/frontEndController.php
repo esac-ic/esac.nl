@@ -150,4 +150,8 @@ class frontEndController extends Controller
         $content = $menuItem->content->text();
         return view('front-end.templade', compact('content','curPageName'));
     }
+
+    public function material(){
+	return view("front-end.material");
+    }
 }

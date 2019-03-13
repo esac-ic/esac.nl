@@ -93,3 +93,4 @@ Route::get('/nieuws','frontEndController@news');
 Route::get('/nieuws/{newsItem}','frontEndController@newsDetailView');
 Route::get('/ledenlijst','frontEndController@memberList');
 Route::get('/{menuItem}','frontEndController@showPage'); 
+Route::get('/materiaalhuren', 'frontEndController@material');
