@@ -123,7 +123,7 @@ function resizeThumbnail(file) {
             function(canvas){ 
                 canvas.toBlob(function (blob) {
                         resolve({thumbnail: blob, file: file});
-                    }, 'image/jpeg', 1.0    
+                    }, 'image/jpeg', 0.5    
                 ); 
             },    
             {
