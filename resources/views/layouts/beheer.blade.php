@@ -30,12 +30,12 @@
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="{{ url('/users/'. Auth::user()->id) . '?back=false'}}">
-                            {{ trans('menu.account_overview') }} <span class="ion-ios-arrow-forward align-middle ml-1"></span>
+                            {{ trans('menu.account_overview') }}
                         </a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="{{ url('/logout') }}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
-                            Logout <span class="ion-ios-arrow-forward align-middle ml-1"></span>
+                            Logout
                         </a>
                         <form id="logout-form" action="{{ url('/logout') }}" method="POST" style="display: none;">
                             {{ csrf_field() }}
@@ -58,84 +58,59 @@
                             </li>
                             <li class="nav-item">
                                 <a class="nav-link" href="{{ url('beheer/home') }}">
-                                Dashboard <span class="ion-ios-arrow-forward align-middle ml-1"></span>
+                                Dashboard
                                 </a>
                             </li>
                         @endif
                         @if(\Illuminate\Support\Facades\Auth::user()->hasRole(Config::get('constants.Administrator'),Config::get('constants.Certificate_administrator')))
-                            <li class="nav-item">
-                                <a href="{{ url('users') }}" class="nav-link">
-                                {{trans("menu.leden")}} <span class="ion-ios-arrow-forward align-middle ml-1"></span>
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    {{trans("menu.leden")}}
                                 </a>
-                            </li>
-                        @endif
-                        @if(\Illuminate\Support\Facades\Auth::user()->hasRole(Config::get('constants.Administrator')))
-                        <li class="nav-item">
-                                <a href="{{ url('users/old_members') }}" class="nav-link">
-                                {{trans("user.old_members")}} <span class="ion-ios-arrow-forward align-middle ml-1"></span>
-                                </a>
-                            </li>
-                            <li class="nav-item">
-                                <a href="{{ url('users/pending_members') }}" class="nav-link">
-                                {{trans("user.pending_members")}} <span class="ion-ios-arrow-forward align-middle ml-1"></span>
-                                </a>
-                            </li>
-                        @endif
-                        @if(\Illuminate\Support\Facades\Auth::user()->hasRole(Config::get('constants.Content_administrator')))
-                            <li class="nav-item">
-                                <a href="{{ url('pages') }}" class="nav-link">
-                                {{trans("menu.paginaBeheer")}} <span class="ion-ios-arrow-forward align-middle ml-1"></span>
-                                </a>
+                                <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                                    <a class="dropdown-item" href="{{ url('users') }}">{{trans("user.current_members")}}</a>
+                                    @if(\Illuminate\Support\Facades\Auth::user()->hasRole(Config::get('constants.Administrator')))
+                                        <a class="dropdown-item" href="{{ url('users/old_members') }}">{{trans("user.old_members")}}</a>
+                                        <a class="dropdown-item" href="{{ url('users/pending_members') }}">{{trans("user.pending_members")}}</a>
+                                        <a class="dropdown-item" href="{{ url('rols') }}">{{trans("menu.rols")}}</a>
+                                    @endif
+                                    <a class="dropdown-item" href="{{ url('certificates') }}">{{trans("menu.certificate")}}</a>
+                                </div>
                             </li>
                         @endif
                         @if(\Illuminate\Support\Facades\Auth::user()->hasRole(Config::get('constants.Content_administrator'),Config::get('constants.Activity_administrator')))
-                             <li class="nav-item">
-                                <a href="{{ url('newsItems') }}" class="nav-link">
-                                {{trans("menu.newsItems")}} <span class="ion-ios-arrow-forward align-middle ml-1"></span>
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    {{trans("menu.activities")}}
                                 </a>
-                            </li>
-                            <li class="nav-item">
-                                <a href="{{ url('agendaItems') }}" class="nav-link">
-                                {{trans("menu.agendaItems")}} <span class="ion-ios-arrow-forward align-middle ml-1"></span>
-                                </a>
-                            </li>
-                            <li class="nav-item">
-                                <a href="{{ url('applicationForms') }}" class="nav-link">
-                                    {{trans("menu.applicationForms")}} <span class="ion-ios-arrow-forward align-middle ml-1"></span>
-                                </a>
+                                <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                                    <a class="dropdown-item" href="{{ url('agendaItems') }}">{{trans("menu.agendaItems")}}</a>
+                                    <a class="dropdown-item" href="{{ url('applicationForms') }}">{{trans("menu.applicationForms")}}</a>
+                                    @if(\Illuminate\Support\Facades\Auth::user()->hasRole(Config::get('constants.Administrator')))
+                                        <a class="dropdown-item" href="{{ url('agendaItemCategories') }}">{{trans("menu.agendaItemCategories")}}</a>
+                                    @endif
+                                </div>
                             </li>
                         @endif
-                        @if(\Illuminate\Support\Facades\Auth::user()->hasRole(Config::get('constants.Administrator'),Config::get('constants.Certificate_administrator')))
-                            <li class="nav-item">
-                                <a href="{{ url('certificates') }}" class="nav-link">
-                                {{trans("menu.certificate")}} <span class="ion-ios-arrow-forward align-middle ml-1"></span>
+                        @if(\Illuminate\Support\Facades\Auth::user()->hasRole(Config::get('constants.Content_administrator')))
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    {{trans("menu.content")}}
                                 </a>
+                                <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                                    <a class="dropdown-item" href="{{ url('pages') }}">{{trans("menu.paginaBeheer")}}</a>
+                                    <a class="dropdown-item" href="{{ url('newsItems') }}">{{trans("menu.newsItems")}}</a>
+                                    @if(\Illuminate\Support\Facades\Auth::user()->hasRole(Config::get('constants.Administrator')))
+                                        <a class="dropdown-item" href="{{ url('frontEndReplacement') }}">{{trans("frontEndReplacement.menuname")}}</a>
+                                        <a class="dropdown-item" href="{{ url('books') }}">{{trans("menu.books")}}</a>
+                                    @endif
+                                </div>
                             </li>
-                            @endif
+                        @endif
                         @if(\Illuminate\Support\Facades\Auth::user()->hasRole(Config::get('constants.Administrator')))
                             <li class="nav-item">
-                                <a href="{{ url('rols') }}" class="nav-link">
-                                {{trans("menu.rols")}} <span class="ion-ios-arrow-forward align-middle ml-1"></span>
-                                </a>
-                            </li>
-                            <li class="nav-item">
-                                <a href="{{ url('books') }}" class="nav-link">
-                                {{trans("menu.books")}} <span class="ion-ios-arrow-forward align-middle ml-1"></span>
-                                </a>
-                            </li>
-                            <li class="nav-item">
-                                <a href="{{ url('agendaItemCategories') }}" class="nav-link">
-                                {{trans("menu.agendaItemCategories")}} <span class="ion-ios-arrow-forward align-middle ml-1"></span>
-                                </a>
-                            </li>
-                            <li class="nav-item">
-                                <a href="{{ url('frontEndReplacement') }}" class="nav-link">
-                                {{trans("frontEndReplacement.menuname")}} <span class="ion-ios-arrow-forward align-middle ml-1"></span>
-                                </a>
-                            </li>
-                            <li class="nav-item">
                                 <a href="{{ url('mailList') }}" class="nav-link">
-                                {{trans("MailList.menuname")}} <span class="ion-ios-arrow-forward align-middle ml-1"></span>
+                                {{trans("MailList.menuname")}}
                                 </a>
                             </li>
                         @endif

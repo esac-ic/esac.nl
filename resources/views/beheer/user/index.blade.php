@@ -16,7 +16,7 @@
 
     <div class="row mb-3">
         <div class="col-md-6">
-            <h1>{{trans("user.user")}}</h1>
+            <h1>{{trans("user.current_members")}}</h1>
         </div>
 
         @if(\Illuminate\Support\Facades\Auth::user()->hasRole(Config::get('constants.Administrator')))
