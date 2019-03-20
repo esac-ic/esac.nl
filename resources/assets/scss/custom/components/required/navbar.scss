@@ -76,7 +76,7 @@
 //
 // 
 
-.nav-container{
+.navbar-container{
   .position-absolute, .position-fixed{
     z-index: $zindex-sticky;
     width: 100%;
@@ -85,7 +85,7 @@
 }
 
 @include media-breakpoint-down(lg) {
-  .nav-container{
+  .navbar-container{
     .position-absolute{
       position: relative !important;
       &.navbar-dark{

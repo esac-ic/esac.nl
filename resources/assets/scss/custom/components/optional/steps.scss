@@ -11,12 +11,14 @@ $step-circle-diameter: $spacer*2;
   width: $step-circle-diameter;
   height: $step-circle-diameter;
   line-height: $step-circle-diameter;
-  border-radius: 50%;
+  border-radius: 50% !important;
   background: $gray-400;
   color: #fff;
   text-align: center;
   font-size: $h3-font-size;
   transition: background-color .35s ease;
+  padding: 0 !important;
+  border-bottom: none !important;
   &.active{
     background: theme-color("primary");
   }

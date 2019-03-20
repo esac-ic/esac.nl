@@ -27,6 +27,12 @@
   }
 }
 
+.bg-gradient{
+  .flickity-page-dots .dot{
+    background: $white;
+  }
+}
+
 .flickity-prev-next-button{
   border-radius: $border-radius;
   height: $spacer*2;
