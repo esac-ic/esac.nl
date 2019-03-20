@@ -43,7 +43,7 @@ function uploadPhotos() {
             albumDescription = albumDescriptionInput.value;
             captureDate = captureDateInput.value;
             var justPhoto = (albumName === undefined || albumDescription === undefined);
-    
+
             //check if albumname, description is not empty and not exceed 250 characters.
             if(!justPhoto && (albumName.length >= 250 || albumDescription.length >= 250)) {
                 alert("The album name and description have to consist of less than 250 characters.");
@@ -58,7 +58,7 @@ function uploadPhotos() {
         numberOfPhotos = files.length;
         updateProgressBar(); //show progressbar
         processPhotos(); //start processing photos
-    } else alert("Selecteer een aantal foto's om toe te voegen."); 
+    } else alert("Selecteer een aantal foto's om toe te voegen.");
 }
 
 
@@ -66,15 +66,15 @@ var fileIndex = 0; //fileIndex of the files array, needs to be global because it
 //recusrive function the process photos.
 function processPhotos(){
     ChangebuttonState("Uploading photos...");
-    resizeThumbnail(files[fileIndex]).then(function({thumbnail, file}){
-        downscalePhoto(file).then(function({photo, file}){
+    resizeThumbnail(files[fileIndex]).then(function(thumbnail, file){
+        downscalePhoto(file).then(function(photo, file){
             if (currentPhotoAlbum != undefined) { //if currentAlbum is undefined then it means that we are adding an album.
                 addPhotoToAlbum(thumbnail, photo, fileIndex).then(function(index){
                     if(index >= (files.length -1)){ //if returned index equals files length then last photo has uploaded. refresh page
                         location.reload();
                     } else{
                         updateProgressBar();
-                    }    
+                    }
                 });
                 fileIndex++; //increase Fileindex for next recurse
                 processPhotos();
@@ -88,10 +88,10 @@ function processPhotos(){
                         processPhotos();
                     }
                 });
-            }     
-        }) 
+            }
+        });
     });
-    
+
 }
 
 
@@ -99,13 +99,13 @@ function processPhotos(){
 //file: Photo to downscale
 function downscalePhoto(file) {
     return new Promise(function (resolve, reject) {
-        loadImage(file, 
-            function(canvas){ 
+        loadImage(file,
+            function(canvas){
                 canvas.toBlob(function (blob) {
                         resolve({photo: blob, file: file});
-                    }, 'image/jpeg', 0.5        
-                ); 
-            },    
+                    }, 'image/jpeg', 0.5
+                );
+            },
             {
                 canvas: true,
                 orientation: true,
@@ -119,13 +119,13 @@ function downscalePhoto(file) {
 //file: Photo to resize
 function resizeThumbnail(file) {
     return new Promise(function (resolve, reject) {
-        loadImage(file, 
-            function(canvas){ 
+        loadImage(file,
+            function(canvas){
                 canvas.toBlob(function (blob) {
                         resolve({thumbnail: blob, file: file});
-                    }, 'image/jpeg', 1.0    
-                ); 
-            },    
+                    }, 'image/jpeg', 1.0
+                );
+            },
             {
             maxWidth: 354,
             maxHeight: 354,
@@ -136,7 +136,7 @@ function resizeThumbnail(file) {
             orientation: true
             }
         );
-    });   
+    });
 }
 
 //Api Post request to backend to add one album.
@@ -147,9 +147,9 @@ function resizeThumbnail(file) {
 //captureDate: Capture date of the photos
 //fileIndex: fileIndex of current photo (This is given to ensure to reload after last photo)
 function addAlbum(thumbnail, photo, albumName, albumDescription, captureDate, fileIndex) {
-    return new Promise(function (resolve, reject) {     
+    return new Promise(function (resolve, reject) {
         var type = "POST";
-        var formData = new FormData();    
+        var formData = new FormData();
         formData.append("title", albumName);
         formData.append("description", albumDescription);
         formData.append("captureDate", captureDate);
@@ -178,16 +178,16 @@ function addAlbum(thumbnail, photo, albumName, albumDescription, captureDate, fi
 //thumbnail: thumbnail of photo that will be uploaded
 //photo: photo that will be uploaded
 //fileIndex: fileIndex of current photo (This is given to ensure to reload after last photo)
-function addPhotoToAlbum(thumbnail, photo, fileIndex){  
-    return new Promise(function (resolve, reject) {     
+function addPhotoToAlbum(thumbnail, photo, fileIndex){
+    return new Promise(function (resolve, reject) {
         var formData = new FormData();
         formData.append('thumbnails[]',thumbnail);
         formData.append('photos[]', photo);
-            
+
         var url = currentPhotoAlbum;
         var type = "POST";
         formData.append("_token", window.Laravel.csrfToken);
-    
+
         $.ajax({
             url: window.location.origin + "/photoalbums" + "/" + url,
             data: formData,
@@ -202,10 +202,10 @@ function addPhotoToAlbum(thumbnail, photo, fileIndex){
                 alert(" Can't do because: " + error);
             }
         });
-    }); 
+    });
 }
 
-//Function to change state and text of the submit button. 
+//Function to change state and text of the submit button.
 function ChangebuttonState(text){
     var button = $('button#submit');
     var loadingText = '<i class="icon ion-refreshing"></i> ' + text;
@@ -227,7 +227,7 @@ function updateProgressBar(){
     if(numberOfPhotosProgressed == -1){
         //show progressbar if number of PhotosProgressed is zero
         var progress = document.getElementById("progress");
-        progress.style.visibility = "visible"; 
+        progress.style.visibility = "visible";
         numberOfPhotosProgressed++;
     } else{
         //Increase the progessbar and change the label
