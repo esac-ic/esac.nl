@@ -19,6 +19,6 @@ class ManageController extends Controller
             abort(403, trans('validation.Unauthorized'));
         }
 
-        return view('beheer/home', compact('menu'));
+        return view('beheer/home');
     }
 }
