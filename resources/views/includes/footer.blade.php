@@ -22,11 +22,11 @@
                     <br>B: NL75 RABO 0117 0524 85
                     <br>KvK: 40236076
                 </p>
-                <h4>
+                <p class="font-size-180">
                   <span class="p-1"><a href="https://www.facebook.com/esac040" class="ion-social-facebook"></a></span>
                   <span class="p-1"><a href="https://www.instagram.com/esac040" class="ion-social-instagram"></a></span>
                   <span class="p-1"><a href="https://www.youtube.com/channel/UCn6jb9BA10f-rbvinYCYlxA/" class="ion-social-youtube"></a></span>
-                </h4>
+                </p>
             </div>
             <div class="col-12 col-md-9">
                 <span class="h5">Dé studenten klim- en bergsportvereniging van Eindhoven.</span>
