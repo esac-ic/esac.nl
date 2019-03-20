@@ -6,7 +6,6 @@ use App\AgendaItem;
 use App\repositories\RepositorieFactory;
 use Folklore\Image\Facades\Image;
 use Illuminate\Http\Request;
-use Imagine\Image\Box;
 
 class AgendaItemController extends Controller
 {
@@ -86,10 +85,8 @@ class AgendaItemController extends Controller
             $agendaItem->save();
 
             //resize image
-            Image::make("../storage/app/public/" . $agendaItem->image_url,array(
-                'width' => 400,
-                'height' => 200
-            ))->save("../storage/app/public/" . $agendaItem->image_url);
+            $img_path = "../storage/app/public/" . $agendaItem->image_url;
+            Image::make($img_path)->crop(400, 300)->save($img_path);
         }
 
         \Session::flash("message",trans('AgendaItems.added'));
@@ -156,10 +153,8 @@ class AgendaItemController extends Controller
             $agendaItem->save();
 
             //resize image
-            Image::make("../storage/app/public/" . $agendaItem->image_url,array(
-                'width' => 400,
-                'height' => 200
-            ))->save("../storage/app/public/" . $agendaItem->image_url);
+            $img_path = "../storage/app/public/" . $agendaItem->image_url;
+            Image::make($img_path)->crop(400, 300)->save($img_path);
         }
 
         \Session::flash("message",trans('AgendaItems.edited'));
@@ -190,6 +185,7 @@ class AgendaItemController extends Controller
             'applicationForm' => 'required|numeric|min:0',
             'endDate' => 'required|date',
             'startDate' => 'required|date',
+            'thumbnail' => 'required'
         ]);
     }
 }
