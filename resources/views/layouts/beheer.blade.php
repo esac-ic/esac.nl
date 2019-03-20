@@ -161,8 +161,19 @@
     $('#users').DataTable();
     
     $(document).ready(function() {
-        $('#content_nl').summernote(summernoteSettings);
-        $('#content_en').summernote(summernoteSettings);
+        let $contentNl = $('#content_nl');
+        let $contentEn = $('#content_en');
+
+        $contentNl.summernote(summernoteSettings).next().on('focusout', ".note-codable", function() {
+            if ($contentNl.summernote('codeview.isActivated')) {
+                $contentNl.summernote('codeview.deactivate');
+            }
+        });
+        $contentEn.summernote(summernoteSettings).next().on('focusout', ".note-codable", function() {
+            if ($contentEn.summernote('codeview.isActivated')) {
+                $contentEn.summernote('codeview.deactivate');
+            }
+        });
     });
 </script>
 @endpush
