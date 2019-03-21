@@ -6,7 +6,7 @@
     <div class="container intro-container">
         <div class="card">
             <div class="card-body">
-                <button type="button" class="btn btn-outline-primary float-right" data-toggle="modal" data-target="#AddAlbumModal"> {{trans('front-end/photo.addAlbum')}}<div class="float-right pl-1 icon ion-android-add"></div></button>
+                <button type="button" class="btn btn-outline-primary float-right" data-toggle="modal" data-target="#AddAlbumModal">{{trans('front-end/photo.addAlbum')}} <span class="ion-android-add"></span></button>
                 <h2 class="card-title">{{ $curPageName }}</h2>
                 {!! $content !!}
             </div>
