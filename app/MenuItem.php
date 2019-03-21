@@ -53,7 +53,7 @@ class MenuItem extends Model
     }
 
     public function getSubMenuItems($id){
-        return MenuItem::query()->where('parent_id', '=', $id)->get();
+        return MenuItem::query()->where('parent_id', '=', $id)->where('menuItem','=',true)->get();
     }
 
     public function getPageName(){
