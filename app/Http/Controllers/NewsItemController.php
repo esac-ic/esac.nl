@@ -6,6 +6,8 @@ use App\NewsItem;
 use App\repositories\RepositorieFactory;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Config;
+use Intervention\Image\ImageManagerStatic as Image;
+
 
 class NewsItemController extends Controller
 {
@@ -44,10 +46,22 @@ class NewsItemController extends Controller
 
         //save image
         if($request->hasFile('thumbnail')){
-            $name  = $newsItem->id . '-thumbnail.' . $request->thumbnail->extension();
-            $request->file('thumbnail')->storeAs('newsItems', $name,'public');
-            $newsItem->image_url = 'newsItems/' .  $name;
+            //larger header image for detail view
+            $name_header = $newsItem->id . '-header.' . $request->thumbnail->extension();
+            $request->file('thumbnail')->storeAs('newsItems', $name_header,'public');
+            $newsItem->image_url = 'newsItems/' .  $name_header;
+
+            //smaller thumbnail image for list view
+            $name_thumbnail = $newsItem->id . '-header.' . $request->thumbnail->extension();
+            $request->file('thumbnail')->storeAs('newsItems', $name_thumbnail,'public');
+            $newsItem->thumbnail_url = 'newsItems/' .  $name_header;
             $newsItem->save();
+
+            //resize both images
+            $header_path = "../storage/app/public/" . $newsItem->image_url;
+            Image::make($header_path)->fit(1200, 500)->save($header_path);
+            $thumb_path = "../storage/app/public/" . $newsItem->thumbnail_url;
+            Image::make($thumb_path)->fit(400, 300)->save($thumb_path);
         }
 
         \Session::flash("message",trans('NewsItem.added'));
@@ -74,10 +88,22 @@ class NewsItemController extends Controller
 
         //save image
         if($request->hasFile('thumbnail')){
-            $name  = $newsItem->id . '-thumbnail.' . $request->thumbnail->extension();
-            $request->file('thumbnail')->storeAs('newsItems', $name,'public');
-            $newsItem->image_url = 'newsItems/' .  $name;
+            //larger header image for detail view
+            $name_header = $newsItem->id . '-header.' . $request->thumbnail->extension();
+            $request->file('thumbnail')->storeAs('newsItems', $name_header,'public');
+            $newsItem->image_url = 'newsItems/' .  $name_header;
+
+            //smaller thumbnail image for list view
+            $name_thumbnail = $newsItem->id . '-thumbnail.' . $request->thumbnail->extension();
+            $request->file('thumbnail')->storeAs('newsItems', $name_thumbnail,'public');
+            $newsItem->thumbnail_url = 'newsItems/' .  $name_thumbnail;
             $newsItem->save();
+
+            //resize both images
+            $header_path = "../storage/app/public/" . $newsItem->image_url;
+            Image::make($header_path)->fit(1200, 500)->save($header_path);
+            $thumb_path = "../storage/app/public/" . $newsItem->thumbnail_url;
+            Image::make($thumb_path)->fit(400, 300)->save($thumb_path);
         }
 
         \Session::flash("message",trans('NewsItem.edited'));

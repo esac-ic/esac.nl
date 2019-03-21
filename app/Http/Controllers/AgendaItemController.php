@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use App\AgendaItem;
 use App\repositories\RepositorieFactory;
-use Folklore\Image\Facades\Image;
+use Intervention\Image\ImageManagerStatic as Image;
 use Illuminate\Http\Request;
 
 class AgendaItemController extends Controller
@@ -86,7 +86,7 @@ class AgendaItemController extends Controller
 
             //resize image
             $img_path = "../storage/app/public/" . $agendaItem->image_url;
-            Image::make($img_path)->crop(400, 300)->save($img_path);
+            Image::make($img_path)->fit(400, 300)->save($img_path);
         }
 
         \Session::flash("message",trans('AgendaItems.added'));
@@ -154,7 +154,7 @@ class AgendaItemController extends Controller
 
             //resize image
             $img_path = "../storage/app/public/" . $agendaItem->image_url;
-            Image::make($img_path)->crop(400, 300)->save($img_path);
+            Image::make($img_path)->fit(400, 300)->save($img_path);
         }
 
         \Session::flash("message",trans('AgendaItems.edited'));
