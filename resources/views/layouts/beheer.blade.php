@@ -164,12 +164,14 @@
         let $contentNl = $('#content_nl');
         let $contentEn = $('#content_en');
 
-        $contentNl.summernote(summernoteSettings).next().on('focusout', ".note-codable", function() {
+        // Initialise summernote textfields & add event to close the code view when focus is lost. This prevents
+        // content from being lost, as it is not saved when code view is active.
+        $contentNl.summernote(summernoteSettings).on('summernote.blur.codeview', function() {
             if ($contentNl.summernote('codeview.isActivated')) {
                 $contentNl.summernote('codeview.deactivate');
             }
         });
-        $contentEn.summernote(summernoteSettings).next().on('focusout', ".note-codable", function() {
+        $contentEn.summernote(summernoteSettings).on('summernote.blur.codeview', function() {
             if ($contentEn.summernote('codeview.isActivated')) {
                 $contentEn.summernote('codeview.deactivate');
             }
