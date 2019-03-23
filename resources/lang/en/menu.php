@@ -33,5 +33,7 @@ return [
     'confirmDelete' => 'Are you sure you want to delete this?',
     "acccount_overview" => "Account overview",
     "user" => "User",
-    "become_member" => "Become a member"
+    "become_member" => "Become a member",
+    "activities" => "Activities",
+    "content" => "Content"
 ];
