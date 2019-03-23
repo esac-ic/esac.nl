@@ -30,6 +30,10 @@ class MailMan
         return $this->call("POST",$url,$body);
     }
 
+    public function delete(string $url){
+        return $this->call("DELETE",$url);
+    }
+
     private function call(string $method,string $url,array $body = []){
         $response = $this->_client->request($method,$this->_baseUrl . $url,[
             "form_params" => $body,

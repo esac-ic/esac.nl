@@ -66,8 +66,8 @@ class MailListFacade
         Mailgun::api()->delete("lists/" . $id);
     }
 
-    public function deleteMemberFromMailList($mailListId,$memberId){
-        Mailgun::api()->delete("lists/" . $mailListId . "/members/". $memberId);
+    public function deleteMemberFromMailList($mailListId,$memberEmail){
+        $this->_mailManHandler->delete("/lists/" . $mailListId ."/member/". $memberEmail);
     }
 
     public function addMember($mailListId, $email,$name){

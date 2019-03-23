@@ -71,7 +71,7 @@
                         <td>{{$member->getAddress()}}</td>
                         <td>{{$member->getName()}}</td>
                         <td>
-                            <a href="#" id="deleteMemebr" data-mailList-id="{{$mailList->getAddress()}}" data-member-id="{{$member->getAddress()}}"><em class="ion-trash-a"></em></a>
+                            <a href="#" id="deleteMemebr" data-mailList-id="{{$mailList->getId()}}" data-member-email="{{$member->getAddress()}}"><em class="ion-trash-a"></em></a>
                         </td>
                     </tr>
                 @endforeach
@@ -109,9 +109,9 @@
            if(confirm('{{trans('menu.confirmDelete')}}')){
                //delete user from maillist
                var mailListId = $(this).attr('data-mailList-id');
-               var memberId = $(this).attr('data-member-id');
+               var memberEmail = $(this).attr('data-member-email');
                $.ajax({
-                   url: '/mailList/' + mailListId + '/member/' + memberId,
+                   url: '/mailList/' + mailListId + '/member/' + memberEmail,
                    data : {
                        _token : window.Laravel.csrfToken
                    },
