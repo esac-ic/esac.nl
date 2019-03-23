@@ -43,8 +43,7 @@ class MailListController extends Controller
 
     //store maillist
     public function store(Request $request){
-        $mailist = new MailList($request->all());
-        $this->_mailListFacade->storeMailList($mailist);
+        $this->_mailListFacade->storeMailList($request->all());
 
         Session::flash("message",trans('MailList.added'));
         return redirect('/mailList');
