@@ -71,10 +71,14 @@ class MailListFacade
     }
 
     public function addMember($mailListId, $email,$name){
-        Mailgun::api()->post('lists/' . $mailListId .'/members', [
-            'address' => $email,
-            'name' => $name
-        ] );
+        $this->_mailManHandler->post("/members",[
+            "list_id" => $mailListId,
+            "subscriber" => $email,
+            "display_name" => $name,
+            "pre_verified" => true,
+            "pre_confirmed" => true,
+            "pre_approved" => true,
+        ]);
     }
 
     public function deleteUserFormAllMailList($user){

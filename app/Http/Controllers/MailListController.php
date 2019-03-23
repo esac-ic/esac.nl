@@ -12,6 +12,7 @@ class MailListController extends Controller
 {
 
     private $_mailgunFacade;
+
     /**
      * Create a new controller instance.
      *

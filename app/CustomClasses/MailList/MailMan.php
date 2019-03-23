@@ -22,8 +22,12 @@ class MailMan
         $this->_client = new Client();
     }
 
-    public function get($url){
+    public function get(string $url){
         return $this->call("GET",$url);
+    }
+
+    public function post(string $url,array $body){
+        return $this->call("POST",$url,$body);
     }
 
     private function call(string $method,string $url,array $body = []){
