@@ -27,7 +27,7 @@ class RemoveCreatedByFieldFromNewsItemsTable extends Migration
     public function down()
     {
         Schema::table('news_items',function(Blueprint $table){
-            $table->unsignedInteger('createdBy')->nulabble();
+            $table->unsignedInteger('createdBy')->nullable();
 
             $table->foreign('createdBy')
                 ->references('id')
