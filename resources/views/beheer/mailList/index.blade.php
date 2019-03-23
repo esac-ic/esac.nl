@@ -45,7 +45,6 @@
                 <td>{{$mailingList->getAddress()}}</td>
                 <td>{{$mailingList->getMembersCount()}}</td>
                 <td>
-                    <a href="{{url('/mailList/' . $mailingList->getAddress() . '/edit')}}"><span title="{{trans('MailList.edit')}}" class="ion-edit" aria-hidden="true"></span></a>
                     <a href="{{url('/mailList/'. $mailingList->getAddress())}}"><span title="{{trans("MailList.show")}}" class="ion-eye" aria-hidden="true"></span></a>
                 </td>
             </tr>

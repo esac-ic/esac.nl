@@ -50,14 +50,6 @@ class MailListFacade
             'fqdn_listname' => $data['address'] . env("MAIL_MAN_DOMAIN"),
         ]);
     }
-    public function updateMailList($id,MailList $mailList){
-        Mailgun::api()->put("lists/" . $id, [
-            'address'      => $mailList->address,
-            'name'         => $mailList->name,
-            'description'  => $mailList->description,
-            'access_level' => $mailList->acces_level
-        ]);
-    }
 
     public function deleteMailList($id){
         Mailgun::api()->delete("lists/" . $id);

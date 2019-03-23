@@ -55,24 +55,6 @@ class MailListController extends Controller
 
     }
 
-    //show edit screen
-    public function edit(Request $request, $mailList){
-        $fields = ['title' => trans('MailList.edit'),
-            'method' => 'PATCH',
-            'url' => '/mailList/' . $mailList,];
-        $mailList = $this->_mailListFacade->getMailList($mailList);
-        return view('beheer.mailList.create_edit', compact('fields','mailList'));
-    }
-
-    //update maillist
-    public function update(Request $request){
-        $mailist = new MailList($request->all());
-        $this->_mailListFacade->updateMailList($request['id'],$mailist);
-
-        Session::flash("message",trans('MailList.edited'));
-        return redirect('/mailList');
-    }
-
     public function destroy(Request $request, $mailList){
         $this->_mailListFacade->deleteMailList($mailList);
 
