@@ -8,11 +8,6 @@
 
 namespace App\CustomClasses\MailList;
 
-
-use App\MailList;
-use App\User;
-use Bogardo\Mailgun\Facades\Mailgun;
-
 class MailListFacade
 {
     private $_mailListParser;
@@ -37,9 +32,11 @@ class MailListFacade
         $mailList = $this->_mailListParser->parseMailManMailList($this->_mailManHandler->get('/lists/' . $id));
         $members = $this->_mailManHandler->get('/lists/' . $id . '/roster/member');
 
-        foreach ($members->entries as $member){
-            $parsedMember = $this->_mailListParser->parseMailManMember($member);
-            $mailList->addMember($parsedMember);
+        if(property_exists($members,"entries")){
+            foreach ($members->entries as $member){
+                $parsedMember = $this->_mailListParser->parseMailManMember($member);
+                $mailList->addMember($parsedMember);
+            }
         }
 
         return $mailList;
@@ -52,7 +49,7 @@ class MailListFacade
     }
 
     public function deleteMailList($id){
-        Mailgun::api()->delete("lists/" . $id);
+        $this->_mailManHandler->delete("/lists/" . $id);
     }
 
     public function deleteMemberFromMailList($mailListId,$memberEmail){
@@ -86,11 +83,11 @@ class MailListFacade
 
     public function updateUserEmailFormAllMailList($user, $oldEmail, $newEmail){
         foreach ($this->getAllMailLists() as $mailList){
-            $mailList = $this->getMailList($mailList->address);
+            $mailList = $this->getMailList($mailList->getAddress());
             foreach ($mailList->getMembers() as $member){
-                if($oldEmail === $member->address){
-                    $this->deleteMemberFromMailList($mailList->getAddress(),$member->address);
-                    $this->addMember($mailList->getAddress(),$newEmail,$user->getName());
+                if($oldEmail === $member->getAddress()){
+                    $this->deleteMemberFromMailList($mailList->getId(),$member->getAddress());
+                    $this->addMember($mailList->getId(),$newEmail,$user->getName());
                 }
             }
 

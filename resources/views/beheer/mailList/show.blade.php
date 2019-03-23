@@ -21,8 +21,8 @@
                 <a href="{{url('/mailList/')}}" class="btn btn-primary">
                     <em class="ion-android-arrow-back"></em>  {{trans("menu.back")}}
                 </a>
-                {{ Form::open(array('url' => 'mailList/' . $mailList->getAddress(), 'method' => 'delete')) }}
-                <button type="submit" class="btn btn-danger btn-primary"><em class="ion-trash-a"></em> {{trans('menu.delete')}}</button>
+                {{ Form::open(array('url' => 'mailList/' . $mailList->getId(), 'method' => 'delete')) }}
+                    <button type="submit" class="btn btn-danger btn-primary"><em class="ion-trash-a"></em> {{trans('menu.delete')}}</button>
                 {{ Form::close() }}
             </div>
         </div>

@@ -11,7 +11,6 @@
         "barryvdh/laravel-ide-helper": "^2.4",
         "maatwebsite/excel": "~2.1.0",
         "folklore/image": "0.2.*",
-        "bogardo/mailgun": "^5.0",
         "php-http/guzzle6-adapter": "^1.1",
         "laravel/tinker": "^1.0",
         "league/flysystem-aws-s3-v3": "~1.0",
