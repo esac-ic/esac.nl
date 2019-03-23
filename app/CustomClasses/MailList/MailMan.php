@@ -32,7 +32,7 @@ class MailMan
 
     private function call(string $method,string $url,array $body = []){
         $response = $this->_client->request($method,$this->_baseUrl . $url,[
-            "json" => $body,
+            "form_params" => $body,
             "auth" => [
                 env('MAIL_MAN_USERNAME'),
                 env('MAIL_MAN_PASSWORD')
