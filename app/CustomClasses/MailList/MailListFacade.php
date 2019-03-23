@@ -75,7 +75,7 @@ class MailListFacade
             try {
                 //we used try to delete the user from the mail list wihout checken if he is in the list because
                 //that take to much time
-                $this->deleteMemberFromMailList($mailList->address,$user->email);
+                $this->deleteMemberFromMailList($mailList->getId(),$user->email);
             } catch (\Exception $e){
             }
         }

@@ -21,7 +21,7 @@ class MailListParser
      * @param $object
      * @return MailList
      */
-    public function parseMailManMailList($object){
+    public function parseMailManMailList($object) : MailList{
         $mailList = new MailList();
         $mailList
             ->setId($object->list_id)
@@ -32,29 +32,16 @@ class MailListParser
         return $mailList;
     }
 
-    public function parseMailManMember($object){
+    /**
+     * @param $object
+     * @return MailListMember
+     */
+    public function parseMailManMember($object) : MailListMember{
         $member = new MailListMember();
         $member
             ->setAddress($object->email)
             ->setName($object->display_name);
 
         return $member;
-    }
-
-    /**
-     * Parses the json mailList object from the mailgunapi to MailList object
-     * @param $object
-     * @return MailList
-     */
-    public function parseMailGunMailList($object){
-        $mailList = new MailList();
-        $mailList->acces_level = $object->access_level;
-        $mailList->address = $object->address;
-        $mailList->created_at = $object->created_at;
-        $mailList->description = $object->description;
-        $mailList->members_count = $object->members_count;
-        $mailList->name = $object->name;
-
-        return $mailList;
     }
 }
