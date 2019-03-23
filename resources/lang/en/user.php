@@ -59,6 +59,7 @@ return [
     "removeAsPendingMember" => "Remove as pending",
     "old_members"   => "Old members",
     "active_members" => "Active members",
+    "current_members"   => "Current members",
     "export_users"  => "Export members",
     "members"   => "Members",
     "personal" => 'Personal',
