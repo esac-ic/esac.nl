@@ -6,7 +6,7 @@
         <span>{{trans("AgendaItems.tumpnailImage")}}</span>
         <div class="form-group mt-2">
             <div class="custom-file">
-              <input type="file" class="custom-file-input" id="thumbnail" name="thumbnail">
+              <input type="file" class="custom-file-input" id="thumbnail" name="thumbnail" required="required">
               <label class="custom-file-label" for="customFile">Choose file</label>
             </div>
         </div>

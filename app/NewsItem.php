@@ -12,6 +12,7 @@ class NewsItem extends Model
         'title',
         'text',
         'image_url',
+        'thumbnail_url',
         'author'
     ];
 
@@ -27,6 +28,14 @@ class NewsItem extends Model
     public function getImageUrl(){
         if($this->image_url != ""){
             return \Storage::disk('public')->url($this->image_url);
+        } else {
+            return "/img/header-3.jpg";
+        }
+    }
+
+    public function getThumbnailUrl(){
+        if($this->thumbnail_url != ""){
+            return \Storage::disk('public')->url($this->thumbnail_url);
         } else {
             return "/img/header-3.jpg";
         }

@@ -15,9 +15,9 @@
             @foreach($newsItems as $newsItem)
             <div class="col-lg-4 col-md-6 d-flex flex-wrap">
                 <div class="card w-100 position-relative">
-                    @if($newsItem->image_url != "")
+                    @if($newsItem->thumbnail_url != "")
                     <a href="/nieuws/{{ $newsItem->id }}">
-                        <img class="card-img-top" src="{{$newsItem->getImageUrl()}}" alt="Card image cap">
+                        <img class="card-img-top" src="{{$newsItem->getThumbnailUrl()}}" alt="Card image cap">
                     </a>
                     @endif
                     <span class="card-date position-absolute bg-light py-1 px-3 rounded">{{\Carbon\Carbon::parse($newsItem->created_at)->format('d M')}}</span>
