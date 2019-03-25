@@ -34,7 +34,7 @@ class NewsItem extends Model
     }
 
     public function getThumbnailUrl(){
-        if($this->image_url != ""){
+        if($this->thumbnail_url != ""){
             return \Storage::disk('public')->url($this->thumbnail_url);
         } else {
             return "/img/header-3.jpg";

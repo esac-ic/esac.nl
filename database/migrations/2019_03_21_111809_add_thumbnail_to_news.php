@@ -26,7 +26,7 @@ class AddThumbnailToNews extends Migration
     public function down()
     {
         Schema::table('news_items',function(Blueprint $table){
-            $table->dropColumn('thumbnail_url')->nullable();
+            $table->dropColumn('thumbnail_url');
         });
     }
 }
