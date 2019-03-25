@@ -13,7 +13,7 @@
 <div class="container intro-container">
     <div class="card">
         <div class="card-body">
-            <button type="button" class="btn btn-outline-primary float-right" data-toggle="modal" data-target="#AddPhotoModal">{{trans('front-end/photo.addPhoto')}}<div class="float-right pl-1 icon ion-android-add"></div></button>
+            <button type="button" class="btn btn-outline-primary float-right" data-toggle="modal" data-target="#AddPhotoModal">{{trans('front-end/photo.addPhoto')}} <span class="ion-android-add"></span></button>
             <h2 class="card-title">{{$photoAlbum->title}}</h2>
             <p id="albumDescription"> {!! nl2br($photoAlbum->description) !!} </p>
         </div>
