@@ -93,3 +93,7 @@
 .font-size-180 {
 	font-size: 180%;
 }
+
+.btn-codeview > * {
+	pointer-events: none;
+}

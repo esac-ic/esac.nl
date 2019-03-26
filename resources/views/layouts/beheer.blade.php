@@ -161,21 +161,42 @@
     $('#users').DataTable();
     
     $(document).ready(function() {
+        let $lastClick;
         let $contentNl = $('#content_nl');
         let $contentEn = $('#content_en');
 
+        // Keep track of the last clicked element.
+        $(document).mousedown(function(e) {
+            $lastClick = $(e.target);
+        });
+
+        // when '$lastClick == null' on blur, we know it was not caused by a click, but maybe by pressing the tab key
+        $(document).mouseup(function() {
+            $lastClick = null;
+        });
+
+        /**
+         * Handle a summernote blur event by deactivating the codeview and triggering the originally clicked element.
+         * This element has to be triggered manually as summernote will focus the textfield when codeview is deactivated
+         *
+         * @param e The blur event
+         */
+        function handleSNBlur (e) {
+            let $sn = $(e.target);
+
+            if ($sn.summernote('codeview.isActivated')) {
+                $sn.summernote('codeview.deactivate');
+
+                if ($lastClick != null && !$lastClick.hasClass('btn-codeview')) {
+                    $lastClick.trigger('click');
+                }
+            }
+        }
+
         // Initialise summernote textfields & add event to close the code view when focus is lost. This prevents
         // content from being lost, as it is not saved when code view is active.
-        $contentNl.summernote(summernoteSettings).on('summernote.blur.codeview', function() {
-            if ($contentNl.summernote('codeview.isActivated')) {
-                $contentNl.summernote('codeview.deactivate');
-            }
-        });
-        $contentEn.summernote(summernoteSettings).on('summernote.blur.codeview', function() {
-            if ($contentEn.summernote('codeview.isActivated')) {
-                $contentEn.summernote('codeview.deactivate');
-            }
-        });
+        $contentNl.summernote(summernoteSettings).on('summernote.blur.codeview', handleSNBlur);
+        $contentEn.summernote(summernoteSettings).on('summernote.blur.codeview', handleSNBlur);
     });
 </script>
 @endpush
