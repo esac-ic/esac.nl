@@ -18,7 +18,11 @@ class ICalController extends Controller
         date_default_timezone_set($tz);
 
         // Create new calendar
-        $vCalendar = new \Eluceo\iCal\Component\Calendar('//Eindhovense Studenten Alpen Club//Agenda//NL');
+        $vCalendar = new \Eluceo\iCal\Component\Calendar('ESAC Agenda');
+        $vCalendar
+            ->setName('ESAC Agenda - esac.nl')
+            ->setDescription("ESAC Agenda - esac.nl")
+            ->setCalendarColor('yellow');
 
         // Create timezone rule object for Daylight Saving Time
         $vTimezoneRuleDst = new \Eluceo\iCal\Component\TimezoneRule(\Eluceo\iCal\Component\TimezoneRule::TYPE_DAYLIGHT);
@@ -56,8 +60,10 @@ class ICalController extends Controller
                 ->setDtStart(new \DateTime($agenda_item->startDate))
                 ->setDtEnd(new \DateTime($agenda_item->endDate))
                 ->setSummary($agenda_item->agendaItemTitle->text())
-                ->setDescription(strip_tags($agenda_item->agendaItemText->text()));
-                // TODO: meer info in beschrijving toevoegen zoals inschrijf url of meer info url?
+                ->setDescription(
+                    html_entity_decode(strip_tags($agenda_item->agendaItemText->text())) .
+                    "\r\n\r\n----------\r\n" .
+                    "Meer informatie: " . url('/agenda/' . $agenda_item->id));
             $vCalendar->addComponent($vEvent);
         }
 
