@@ -4,19 +4,10 @@ namespace App\Http\Controllers;
 
 use App\AgendaItem;
 use Illuminate\Http\Request;
-use App\repositories\AgendaItemRepository;
-use App\repositories\RepositorieFactory;
 use Illuminate\Support\Facades\App;
 
 class ICalController extends Controller
 {
-    private $_agendaRepository;
-
-    public function __construct(RepositorieFactory $repositorieFactory)
-    {
-        $this->_agendaRepository = $repositorieFactory->getRepositorie(RepositorieFactory::$AGENDAITEMREPOKEY);
-    }
-
     public function getAgendaItemsICalObject()
     {
         $agenda_items = AgendaItem::all();
