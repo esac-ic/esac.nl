@@ -185,7 +185,6 @@ class AgendaItemController extends Controller
             'applicationForm' => 'required|numeric|min:0',
             'endDate' => 'required|date',
             'startDate' => 'required|date',
-            'thumbnail' => 'required'
         ]);
     }
 }
