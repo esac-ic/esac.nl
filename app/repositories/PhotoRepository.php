@@ -57,11 +57,11 @@ class PhotoRepository implements IRepository
         return $m;
     }
 
-    public function getAWSLink($filepath){
-        return "https://f002.backblazeb2.com/file/" . env("B2_BUCKETNAME") . "/" . $filepath;
+    public function getFileLink($filepath){
+        return env("B2_STORAGE_URL") . "/" . $filepath;
     }
 
-    public function saveToAWS($filepath, $file){
+    public function saveToCloud($filepath, $file){
         $b2 = \Storage::disk('b2');
         $b2->put($filepath, file_get_contents($file));
         return $filepath;

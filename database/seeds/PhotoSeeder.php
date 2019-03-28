@@ -12,8 +12,8 @@ class PhotoSeeder extends Seeder
     public function run()
     {
         $photo = new \App\Photo();
-        $photo->link = "https://esac-ic.s3.eu-central-1.amazonaws.com/photos/WEBI_3099/7.jpeg";
-        $photo->thumbnail = "https://esac-ic.s3.eu-central-1.amazonaws.com/photos/WEBI_3099/7_thumbnail.jpeg";
+        $photo->link = "https://f002.backblazeb2.com/file/ESAC-Photos/photos/Seeder_photos/234.jpeg";
+        $photo->thumbnail = "https://f002.backblazeb2.com/file/ESAC-Photos/photos/Seeder_photos/234_thumbnail.jpeg";
         $photo->width=100;
         $photo->height=100;
         $photo->photo_album()->associate(1);
@@ -21,8 +21,8 @@ class PhotoSeeder extends Seeder
         $photo->save();
 
         $photo = new \App\Photo();
-        $photo->link = "https://esac-ic.s3.eu-central-1.amazonaws.com/photos/WEBI_3099/8.jpeg";
-        $photo->thumbnail = "https://esac-ic.s3.eu-central-1.amazonaws.com/photos/WEBI_3099/8_thumbnail.jpeg";
+        $photo->link = "https://f002.backblazeb2.com/file/ESAC-Photos/photos/Seeder_photos/235.jpeg";
+        $photo->thumbnail = "https://f002.backblazeb2.com/file/ESAC-Photos/photos/Seeder_photos/235_thumbnail.jpeg";
         $photo->width=100;
         $photo->height=100;
         $photo->photo_album()->associate(1);
@@ -30,8 +30,8 @@ class PhotoSeeder extends Seeder
         $photo->save();
 
         $photo = new \App\Photo();
-        $photo->link = "https://esac-ic.s3.eu-central-1.amazonaws.com/photos/WEBI_3099/9.jpeg";
-        $photo->thumbnail = "https://esac-ic.s3.eu-central-1.amazonaws.com/photos/WEBI_3099/9_thumbnail.jpeg";
+        $photo->link = "https://f002.backblazeb2.com/file/ESAC-Photos/photos/Seeder_photos/236.jpeg";
+        $photo->thumbnail = "https://f002.backblazeb2.com/file/ESAC-Photos/photos/Seeder_photos/236_thumbnail.jpeg";
         $photo->width=100;
         $photo->height=100;
         $photo->photo_album()->associate(1);
@@ -39,8 +39,8 @@ class PhotoSeeder extends Seeder
         $photo->save();
 
         $photo = new \App\Photo();
-        $photo->link = "https://esac-ic.s3.eu-central-1.amazonaws.com/photos/WEBI_3099/10.jpeg";
-        $photo->thumbnail = "https://esac-ic.s3.eu-central-1.amazonaws.com/photos/WEBI_3099/10_thumbnail.jpeg";
+        $photo->link = "https://f002.backblazeb2.com/file/ESAC-Photos/photos/Seeder_photos/237.jpeg";
+        $photo->thumbnail = "https://f002.backblazeb2.com/file/ESAC-Photos/photos/Seeder_photos/237_thumbnail.jpeg";
         $photo->width=100;
         $photo->height=100;
         $photo->photo_album()->associate(1);
@@ -48,8 +48,8 @@ class PhotoSeeder extends Seeder
         $photo->save();
 
         $photo = new \App\Photo();
-        $photo->link = "https://esac-ic.s3.eu-central-1.amazonaws.com/photos/WEBI_3099/11.jpeg";
-        $photo->thumbnail = "https://esac-ic.s3.eu-central-1.amazonaws.com/photos/WEBI_3099/11_thumbnail.jpeg";
+        $photo->link = "https://f002.backblazeb2.com/file/ESAC-Photos/photos/Seeder_photos/238.jpeg";
+        $photo->thumbnail = "https://f002.backblazeb2.com/file/ESAC-Photos/photos/Seeder_photos/238_thumbnail.jpeg";
         $photo->width=100;
         $photo->height=100;
         $photo->photo_album()->associate(1);
@@ -57,8 +57,8 @@ class PhotoSeeder extends Seeder
         $photo->save();
 
         $photo = new \App\Photo();
-        $photo->link = "https://esac-ic.s3.eu-central-1.amazonaws.com/photos/WEBI_3099/12.jpeg";
-        $photo->thumbnail = "https://esac-ic.s3.eu-central-1.amazonaws.com/photos/WEBI_3099/12_thumbnail.jpeg";
+        $photo->link = "https://f002.backblazeb2.com/file/ESAC-Photos/photos/Seeder_photos/239.jpeg";
+        $photo->thumbnail = "https://f002.backblazeb2.com/file/ESAC-Photos/photos/Seeder_photos/239_thumbnail.jpeg";
         $photo->width=100;
         $photo->height=100;
         $photo->photo_album()->associate(1);
