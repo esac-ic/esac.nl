@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class RemoveCreatedByFieldFromNewsItemsTable extends Migration
+class AddThumbnailToNews extends Migration
 {
     /**
      * Run the migrations.
@@ -14,8 +14,7 @@ class RemoveCreatedByFieldFromNewsItemsTable extends Migration
     public function up()
     {
         Schema::table('news_items',function(Blueprint $table){
-            $table->dropForeign(['createdBy']);
-            $table->dropColumn('createdBy');
+            $table->string('thumbnail_url')->nullable();
         });
     }
 
@@ -27,11 +26,7 @@ class RemoveCreatedByFieldFromNewsItemsTable extends Migration
     public function down()
     {
         Schema::table('news_items',function(Blueprint $table){
-            $table->unsignedInteger('createdBy')->nullable();
-
-            $table->foreign('createdBy')
-                ->references('id')
-                ->on('users');
+            $table->dropColumn('thumbnail_url');
         });
     }
 }

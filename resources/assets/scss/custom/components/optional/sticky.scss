@@ -12,7 +12,7 @@
   padding-top: $spacer;
 }
 
-.nav-container{
+.navbar-container{
   [data-sticky="top"].position-absolute{
     transition: background-color .35s ease;
     &.position-fixed{

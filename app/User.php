@@ -5,6 +5,7 @@ namespace App;
 use Carbon\Carbon;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Support\Facades\Auth;
 
 class User extends Authenticatable
 {
@@ -118,6 +119,12 @@ class User extends Authenticatable
     public function removeAsActiveMember(){
         $this->lid_af = Carbon::now();
         $this->save();
+
+        $this->roles()->detach();
+
+        if(Auth::user()->id === $this->id){
+            Auth::logout();
+        }
     }
     public function getAdress() {
         return $this->street . " " . $this->houseNumber;

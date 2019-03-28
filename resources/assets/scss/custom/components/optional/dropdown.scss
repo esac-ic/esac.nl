@@ -77,3 +77,23 @@
     animation: showDropdown .35s ease forwards;
   }
 }
+
+@include media-breakpoint-up(md){
+  .dropdown-menu{
+    span.dropdown-item{
+      cursor: pointer;
+      &[aria-expanded="true"]{
+        color: $white;
+        background: theme-color(primary);
+      }
+      + .dropdown-menu{
+        top: -$spacer*2 !important;
+        left: 100% !important;
+        &.dropdown-menu-right{
+          left: auto !important;
+          right: 100% !important;
+        }
+      }
+    }
+  }
+}

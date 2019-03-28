@@ -42,6 +42,10 @@
 
 .input-group-lg{
   .input-group-prepend{
+    > .btn{
+      padding-top: 0;
+      padding-bottom: 0;
+    }
     > .input-group-text{
       padding: 0 1rem;
     }
@@ -54,44 +58,38 @@
 
 .custom-control{
   margin-bottom: .5rem;
+  &.custom-checkbox{
+    .custom-control-label{
+      &:before{
+        top: .125rem;
+      }
+      &:after{
+        top: 0.125rem;
+      }
+    }
+  }
 }
 
 .custom-control-input ~ .custom-control-indicator{
   transition: box-shadow .2s ease;
 }
 
-.custom-checkbox-switch{
-  padding-left: 0;
-  label{
-    display: flex;
+.custom-control.custom-switch{
+  .custom-control-label{
     &:before{
       top: 0;
-      position: relative;
-      border-radius: $spacer !important;
-      width: $spacer*2;
       height: $spacer;
-      transition: background-color .2s ease;
-      display: inline-block;
-      margin-right: $spacer/2;
     }
     &:after{
-      content: '';
-      transition: left .2s ease;
-      position: absolute;
-      transform: scale(0.7);
-      height: $spacer;
-      width: $spacer;
-      border-radius: 50%;
-      left: 0;
-      top: 0;
-      background: $white;
+      background: $gray-300;
+      top: .25rem;
+      transform: translateX(2px);
     }
   }
-  input:checked{
-    + label{
-      background-image: none !important;
+  .custom-control-input:checked{
+    ~ .custom-control-label{
       &:after{
-        left: $spacer;
+        transform: translateX(1.65rem);
       }
     }
   }

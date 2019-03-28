@@ -65,7 +65,7 @@ class PaginaBeheerController extends Controller
             'method' => 'PATCH',
             'url' => '/pages/' . $page->id,];
         $pages = $this->_menuRepository->all();
-        return view('beheer.menu.create_edit', compact(['page', 'fields','pages','pageContent']));
+        return view('beheer.menu.create_edit', compact(['page', 'fields','pages']));
     }
 
     //update page

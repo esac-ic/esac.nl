@@ -33,8 +33,6 @@ Route::patch('users/{user}/removeAsActiveMember', 'UserController@removeAsActive
 Route::patch('users/{user}/removeAsPendingMember', 'PendingUserController@removeAsPendingMember');
 Route::patch('users/{user}/approveAsPendingMember', 'PendingUserController@approveAsPendingMember');
 
-
-
 //user certification routes
 Route::get('users/{user}/addCertificate','UserCertificateController@addCertificate');
 Route::get('users/{user}/addCertificate/{certificate}','UserCertificateController@editUserCertificate');
@@ -92,4 +90,5 @@ Route::get('/home','frontEndController@home');
 Route::get('/nieuws','frontEndController@news');
 Route::get('/nieuws/{newsItem}','frontEndController@newsDetailView');
 Route::get('/ledenlijst','frontEndController@memberList');
-Route::get('/{menuItem}','frontEndController@showPage'); 
+Route::get("/ical", "ICalController@getAgendaItemsICalObject");
+Route::get('/{menuItem}','frontEndController@showPage');

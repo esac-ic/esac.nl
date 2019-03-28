@@ -85,4 +85,8 @@ tbody{
 
 tr.table-divider{
   height: $spacer/2;
+  pointer-events: none;
+  th, td{
+    padding: 0 !important;
+  }
 }
