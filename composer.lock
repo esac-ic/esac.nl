@@ -4,20 +4,20 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "15a1002a009ad9aa8f78dec661f03ed0",
+    "content-hash": "87349c9ec5eb534754de1ffba3868774",
     "packages": [
         {
             "name": "aws/aws-sdk-php",
-            "version": "3.90.10",
+            "version": "3.90.12",
             "source": {
                 "type": "git",
                 "url": "https://github.com/aws/aws-sdk-php.git",
-                "reference": "59ffa2a23553dfc4ed5a4f609377bd1881370ad6"
+                "reference": "a628927d3a350fbda308eadea88d9d4845aa1c44"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/aws/aws-sdk-php/zipball/59ffa2a23553dfc4ed5a4f609377bd1881370ad6",
-                "reference": "59ffa2a23553dfc4ed5a4f609377bd1881370ad6",
+                "url": "https://api.github.com/repos/aws/aws-sdk-php/zipball/a628927d3a350fbda308eadea88d9d4845aa1c44",
+                "reference": "a628927d3a350fbda308eadea88d9d4845aa1c44",
                 "shasum": ""
             },
             "require": {
@@ -86,7 +86,7 @@
                 "s3",
                 "sdk"
             ],
-            "time": "2019-03-26T18:29:19+00:00"
+            "time": "2019-03-28T18:10:49+00:00"
         },
         {
             "name": "barryvdh/laravel-ide-helper",

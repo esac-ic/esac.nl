@@ -17,7 +17,7 @@
         "intervention/image": "^2.4",
         "spatie/laravel-blade-javascript": "^2.2",
         "doctrine/dbal": "^2.8",
-        "gliterd/laravel-backblaze-b2": "^1.2"
+        "gliterd/laravel-backblaze-b2": "^1.2",
         "eluceo/ical": "^0.15.0"
     },
     "require-dev": {
