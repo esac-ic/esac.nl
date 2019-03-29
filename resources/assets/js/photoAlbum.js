@@ -66,8 +66,8 @@ var fileIndex = 0; //fileIndex of the files array, needs to be global because it
 //recusrive function the process photos.
 function processPhotos(){
     ChangebuttonState("Uploading photos...");
-    resizeThumbnail(files[fileIndex]).then(function(thumbnail, file){
-        downscalePhoto(file).then(function(photo, file){
+    resizeThumbnail(files[fileIndex]).then(function({thumbnail, file}){
+        downscalePhoto(file).then(function({photo, file}){
             if (currentPhotoAlbum != undefined) { //if currentAlbum is undefined then it means that we are adding an album.
                 addPhotoToAlbum(thumbnail, photo, fileIndex).then(function(index){
                     if(index >= (files.length -1)){ //if returned index equals files length then last photo has uploaded. refresh page
