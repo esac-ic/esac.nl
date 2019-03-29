@@ -9,7 +9,7 @@
 //
 // Adjusts how text should appear in elements where .bg-dark, .bg-image is used
 
-.bg-dark, .text-light, .bg-gray, .text-white{
+.bg-dark, .text-light, .bg-gray, .text-white, .bg-gradient{
   h1,h2,h3,h4,h5,h6,.h1,.h2,.h3,.h4,.h5,.h6,.display-1,.display-2,.display-3,.display-4,{
     color: #fff;
   }
@@ -23,6 +23,10 @@
   .text-muted{
     color: $gray-700 !important;
   }
+}
+
+.bg-gradient{
+  color: $white;
 }
 
 .bg-gray{

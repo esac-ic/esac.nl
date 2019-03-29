@@ -170,7 +170,6 @@ return [
         /*
          * Package Service Providers...
          */
-        Folklore\Image\ImageServiceProvider::class,
         //
 
         /*
@@ -232,7 +231,6 @@ return [
         'View' => Illuminate\Support\Facades\View::class,
         'Form' => Collective\Html\FormFacade::class,
         'Html' => Collective\Html\HtmlFacade::class,
-        'Image' => Folklore\Image\Facades\Image::class,
         'Excel' => Maatwebsite\Excel\Facades\Excel::class,
         'Mailgun' => Bogardo\Mailgun\Facades\Mailgun::class,
         ],

@@ -264,10 +264,10 @@
                                 </td>
                                 <td>
                                     <a href="{{url('/users/' . $user->id . '/addCertificate/' . $certificate->id)}}"><span title="{{trans('certificate.editUserCertificate')}}" class="ion-edit" aria-hidden="true"></span></a>
-                                    <a href="{{url('/users/' . $user->id . '/addCertificate/' . $certificate->id)}}" onclick="event.preventDefault(); document.getElementById('delete-usercertificate').submit();">
+                                    <a href="{{url('/users/' . $user->id . '/addCertificate/' . $certificate->id)}}" onclick="event.preventDefault(); document.getElementById('delete-usercertificate-{{$certificate->id}}').submit();">
                                         <span title="{{trans('certificate.deleteUserCertificate')}}" class="ion-trash-a" aria-hidden="true"></span>
                                     </a>
-                                    {{ Form::open(array('url' => '/users/' . $user->id . '/addCertificate/' . $certificate->id, 'method' => 'delete', "id"   => "delete-usercertificate")) }}
+                                    {{ Form::open(array('url' => '/users/' . $user->id . '/addCertificate/' . $certificate->id, 'method' => 'delete', "id"   => "delete-usercertificate-$certificate->id")) }}
                                     {{ Form::close() }}
                                 </td>
                             </tr>

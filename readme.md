@@ -23,6 +23,7 @@ The following libaries and framework are used:
 ## Setting up steps
 Create an .env file from .env.example, with your local values for 
 DB\_HOST, DB\_PORT, DB\_DATABASE, DB\_USERNAME and DB\_PASSWORD
+**Note**: When running your local environment on a certain port, let's say 3000, modify your `APP_URL` in the file to reflect that port, else the api's won't work
 
 ### setup local environment
 you need the following programs to run the code on your local environment:
