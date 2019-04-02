@@ -4,12 +4,12 @@
 {{trans("auth.login")}}
 @endsection
 
-@component('includes.menu')
-    @slot('navClass', 'bg-dark position-fixed')
-    @slot('navId', '')
-@endcomponent
-
 @section('main')
+    @component('includes.menu')
+        @slot('navClass', 'bg-dark position-fixed')
+        @slot('navId', '')
+    @endcomponent
+
 <section>
     <div class="container">
         <div class="row justify-content-center">
