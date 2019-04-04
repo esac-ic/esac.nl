@@ -11,6 +11,8 @@ namespace App\repositories;
 
 use App\Photo;
 use Illuminate\Support\Facades\Auth;
+use obregonco\B2\Client;
+use obregonco\B2\Bucket;
 
 class PhotoRepository implements IRepository
 {
@@ -62,8 +64,17 @@ class PhotoRepository implements IRepository
     }
 
     public function saveToCloud($filepath, $file){
-        $b2 = \Storage::disk('b2');
-        $b2->put($filepath, file_get_contents($file));
+        $client = new Client(env('B2_ACCOUNT_KEY_ID'), [
+            'applicationKey' => env('B2_APPLICATION_KEY'),
+            'version' => '2',
+        ]);
+        
+        $file = $client->upload([
+            'BucketName' => env('B2_BUCKETNAME'),
+            'FileName' => $filepath,
+            'Body' => file_get_contents($file)
+        ]);
+
         return $filepath;
     }
 }
