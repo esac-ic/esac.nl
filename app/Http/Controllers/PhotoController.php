@@ -62,10 +62,10 @@ class PhotoController extends Controller
                 $photo = $photos[$i];
                 $thumbnail = $thumbnails[$i];
                 $fileExtension = $photos[$i]->clientExtension();
-                if($fileExtension == "png"||"jpeg"||"jpg"||"gif"||"svg"){  
+                if($fileExtension == "png"||"jpeg"||"jpg"||"gif"||"svg"){
                     $this->savePhoto($photo, $photoAlbum, $thumbnail, $fileExtension);
                 }
-            }                        
+            }
         }
         return redirect()->route('PhotoAlbum', ['albumId' => $ablumId]);
     }
@@ -76,10 +76,11 @@ class PhotoController extends Controller
         $thumbnailFileName = $photo->id .'_thumbnail' . '.' . $fileExtension;
         $albumtitle = str_replace(' ', '_',$photo->photo_album->title);
         $thumbnailPath = 'photos/' . $albumtitle .'/' . $thumbnailFileName ;
-        $photoPath = 'photos/' . $albumtitle .'/' . $imageFileName; 
+        $photoPath = 'photos/' . $albumtitle .'/' . $imageFileName;
 
-        $photoLink = $this->_PhotoRepository->saveToCloud($photoPath,$image);
-        $thumbnailLink = $this->_PhotoRepository->saveToCloud($thumbnailPath,$thumbnail);
+        $client = $this->_PhotoRepository->getClient();
+        $photoLink = $this->_PhotoRepository->saveToCloud($photoPath, $image, $client);
+        $thumbnailLink = $this->_PhotoRepository->saveToCloud($thumbnailPath, $thumbnail, $client);
         if($photoLink != null && $thumbnailLink != null){
             $photoLink = $this->_PhotoRepository->getFileLink($photoLink);
             $thumbnailLink = $this->_PhotoRepository->getFileLink($thumbnailLink);
