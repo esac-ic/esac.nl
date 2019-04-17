@@ -17,7 +17,7 @@
         "spatie/laravel-blade-javascript": "^2.2",
         "doctrine/dbal": "^2.8",
         "eluceo/ical": "^0.15.0",
-        "obregonco/backblaze-b2": "^1.0"
+        "esac/backblaze-b2": "^1.0"
     },
     "require-dev": {
         "fzaninotto/faker": "~1.4",

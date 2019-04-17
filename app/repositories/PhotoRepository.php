@@ -11,8 +11,8 @@ namespace App\repositories;
 
 use App\Photo;
 use Illuminate\Support\Facades\Auth;
-use obregonco\B2\Client;
-use obregonco\B2\Bucket;
+use esac\B2\Client;
+use esac\B2\Bucket;
 
 class PhotoRepository implements IRepository
 {
