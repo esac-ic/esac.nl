@@ -113,6 +113,11 @@
                                 {{trans("MailList.menuname")}}
                                 </a>
                             </li>
+                            <li class="nav-item">
+                                <a href="{{ url('beheer/settings') }}" class="nav-link">
+                                {{trans("settings.settings")}}
+                                </a>
+                            </li>
                         @endif
                     @endif
                 </ul>

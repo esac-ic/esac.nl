@@ -92,3 +92,8 @@ Route::get('/nieuws/{newsItem}','frontEndController@newsDetailView');
 Route::get('/ledenlijst','frontEndController@memberList');
 Route::get("/ical", "ICalController@getAgendaItemsICalObject");
 Route::get('/{menuItem}','frontEndController@showPage');
+
+//setting routes
+Route::get('/beheer/settings','SettingsController@index');
+Route::put('/beheer/settings','SettingsController@update');
+Route::get('/beheer/settings/edit','SettingsController@edit');
