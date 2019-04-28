@@ -152,6 +152,9 @@ class frontEndController extends Controller
     }
 
     public function material(){
-	return view("front-end.material");
+        $menuItem = $this->_MenuItemRepository->findby('urlName',MenuItem::SUBSCRIBEURL);
+        $content = $menuItem->content->text();
+        $curPageName = trans('front-end/material.title');
+        return view("front-end.material_request", compact('curPageName','content'));
     }
 }
