@@ -7,5 +7,6 @@
  */
 
 return [
-    "type"          => "Soort materiaal"
+    "type"          => "Soort materiaal",
+    "title"	    => "Materiaal huren"
 ];

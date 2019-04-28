@@ -7,5 +7,6 @@
  */
 
 return [
-    "type"          => "Type of material"
+    "type"          => "Type of material",
+    "title"         => "Rent material"
 ];
