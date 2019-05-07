@@ -32,14 +32,11 @@
                 <span class="h5">Dé studenten klim- en bergsportvereniging van Eindhoven.</span>
                 <h6>Ondersteund door</h6>
                 <div class="row">
-                    <div class="col-4 col-lg-3">
+                    <div class="col-6 col-lg-3">
                         <a href="https://venusp.tue.nl/sci-cgi/index.opl"><img class="img-fluid" src="{{mix('img/ssc.png')}}"></a>
                     </div>
-                    <div class="col-4 col-lg-3">
+                    <div class="col-6 col-lg-3">
                         <a href="https://www.neoliet.nl"><img class="img-fluid" src="{{mix('img/neoliet.png')}}"></a>
-                    </div>
-                    <div class="col-4 col-lg-3">
-                        <a href="https://www.awin1.com/awclick.php?gid=355812&mid=11143&awinaffid=362489&linkid=2326714&clickref="><img class="img-fluid" src="{{asset('img/hunkemoller.png')}}" title="Hunkemoller NL homepage"></a>
                     </div>
                 </div>
                 <div class="row mt-4">
@@ -51,6 +48,9 @@
                     </div>
                     <div class="col-6 col-lg-3">
                         <a href="https://www.awin1.com/awclick.php?gid=317127&mid=8305&awinaffid=362489&linkid=1020095&clickref="><img class="img-fluid" src="{{mix('img/decathlon.png')}}"></a>
+                    </div>
+                    <div class="col-6 col-lg-3">
+                        <a href="https://www.awin1.com/awclick.php?gid=355812&mid=11143&awinaffid=362489&linkid=2326714&clickref="><img class="img-fluid" src="{{mix('img/hunkemoller.jpg')}}" title="Hunkemoller NL homepage"></a>
                     </div>
                 </div>
             </div>
