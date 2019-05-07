@@ -7,6 +7,6 @@ return [
     'value' => 'Value',
     'flashUpdateSetting' => 'Settings updated',
 
-    \App\Setting::SETTING_BLOCKED_EMAIL_DOMAINS => 'Blokked email domains',
+    \App\Setting::SETTING_BLOCKED_EMAIL_DOMAINS => 'Blocked email domains',
 
 ];
