@@ -10,7 +10,7 @@
             <h3>{{trans('settings.edit')}}</h3>
         </div>
         <div class="card-body">
-            {{Form::open(array('url'=>'/settings','method'=> 'PUT','files' => 'true'))}}
+            {{Form::open(array('url'=>'/beheer/settings','method'=> 'PUT','files' => 'true'))}}
             @foreach($settings as $setting)
                 <div class="form-group">
                     {{ Form::label('setting['. $setting->name . ']', trans('settings.' . $setting->name)) }}

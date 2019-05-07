@@ -6,7 +6,7 @@ use App\Setting;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Input;
-use Symfony\Component\HttpFoundation\Session\Session;
+use Illuminate\Support\Facades\Session;
 
 class SettingsController extends Controller
 {
@@ -63,7 +63,7 @@ class SettingsController extends Controller
             $setting->save();
         }
 
-        session()->flash(trans('settings.flashUpdateSetting'));
+        Session::flash("message",trans('settings.flashUpdateSetting'));
         return redirect('/beheer/settings');
     }
 
