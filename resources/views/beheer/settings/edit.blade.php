@@ -25,7 +25,7 @@
                             <div class="form-group row">
                                 <div class="col-lg-offset-4 col-lg-4 pull-right">
                                     {{Form::submit(trans('menu.save'), array('class' => 'btn btn-primary'))}}
-                                    <a href="{{url('/settings')}}" class="btn btn-danger">{{trans('Menu.cancel')}}</a>
+                                    <a href="{{url('/beheer/settings')}}" class="btn btn-danger">{{trans('Menu.cancel')}}</a>
                                 </div>
                             </div>
                         {{Form::close()}}
