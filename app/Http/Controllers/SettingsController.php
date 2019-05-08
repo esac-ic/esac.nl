@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Input;
 use Illuminate\Support\Facades\Session;
+use Symfony\Component\HttpFoundation\Session\Session as SymfonySession;
 
 class SettingsController extends Controller
 {
@@ -69,7 +70,7 @@ class SettingsController extends Controller
 
     public function setLanguage(){
         $language = Input::get('language','nl');
-        $session = new Session();
+        $session = new SymfonySession();
         $session->set($this->_LANGSESSIONNAME,$language);
         return "";
     }
