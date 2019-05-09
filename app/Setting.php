@@ -8,9 +8,11 @@ class Setting extends Model
 {
     //setting names
     const SETTING_BLOCKED_EMAIL_DOMAINS = 'SETTING_BLOCKED_EMAIL_DOMAINS';
+    const SETTING_KILLSWITCH = 'SETTING_KILLSWITCH';
 
     //setting types
     const TYPE_STRING = 'TYPE_STRING';
+    const TYPE_BOOLEAN = 'TYPE_BOOLEAN';
 
     const SINGELTONNAME = 'setting';
 
