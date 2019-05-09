@@ -9,6 +9,11 @@ use App\CustomClasses\MenuSingleton;
 
 class CheckKillswitch
 {
+    protected $excludedRoutes = [
+        'beheer/*',
+        'login',
+    ];
+
     /**
      * Handle an incoming request.
      *
@@ -16,11 +21,6 @@ class CheckKillswitch
      * @param  \Closure  $next
      * @return mixed
      */
-
-    protected $excludedRoutes = [
-        'beheer/*',
-        'login',
-    ];
 
     public function handle($request, Closure $next)
     {
