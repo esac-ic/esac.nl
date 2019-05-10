@@ -6,7 +6,8 @@ mix.scripts([
         "node_modules/datatables.net/js/jquery.dataTables.js",
         "node_modules/datatables.net-bs4/js/dataTables.bootstrap4.js",
         "node_modules/datatables.net-responsive/js/dataTables.responsive.js",
-        "node_modules/datatables.net-responsive-bs4/js/responsive.bootstrap4.js"
+        "node_modules/datatables.net-responsive-bs4/js/responsive.bootstrap4.js",
+        "resources/assets/js/datatables.js"
         ], "public/js/vendor/datatables.js")
    .scripts([
         "node_modules/moment/moment.js",
