@@ -1,4 +1,4 @@
-//Extention to correctly fitler date in d-m-Y format
+//Extension to correctly order date in d-m-Y format
 jQuery.extend( jQuery.fn.dataTableExt.oSort, {
     "de_datetime-asc": function ( a, b ) {
         var x, y;
