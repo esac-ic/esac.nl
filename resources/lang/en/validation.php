@@ -17,6 +17,7 @@ return [
     "required" => "Field :attribute is required",
     "date" => "Invalid birth date",
     "error" => "Error",
+    'bannedEmailDomain' => "School emails aren't allowed as an email",
     'attributes' => [
         'privacy_policy' => 'Privacy Policy',
         'termsconditions' => 'Terms and Conditions',
