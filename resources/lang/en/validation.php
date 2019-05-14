@@ -17,7 +17,7 @@ return [
     "required" => "Field :attribute is required",
     "date" => "Invalid birth date",
     "error" => "Error",
-    'bannedEmailDomain' => "School emails aren't allowed as an email",
+    'bannedEmailDomain' => "Email addresses of educational institutions (student.tue.nl) are not allowed to prevent you from receiving our emails when you graduate",
     'attributes' => [
         'privacy_policy' => 'Privacy Policy',
         'termsconditions' => 'Terms and Conditions',

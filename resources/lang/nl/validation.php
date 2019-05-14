@@ -17,7 +17,7 @@ return [
     "required" => "Veld :attribute moet ingevuld zijn",
     "date" => "Geen geldige geboortedatum",
     "error" => "Error",
-    'bannedEmailDomain' => "School email adressen zijn niet toegestaan",
+    'bannedEmailDomain' => "Email adressen van onderwijsinstellingen (student.tue.nl) zijn niet toegestaan om te voorkomen dat je onze mails niet meer ontvangt wanneer je afstudeert",
     'attributes' => [
         'privacy_policy' => 'Privacy Policy',
         'termsconditions' => 'Terms and Conditions',
