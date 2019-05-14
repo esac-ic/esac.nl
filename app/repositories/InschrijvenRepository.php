@@ -111,7 +111,9 @@ class InschrijvenRepository implements IRepository
 //            Adding the signup id in the fields
             $user["_signupId"] = $response->id;
             $certificates = "";
-            $user['certificate_names'] = $user->getCertificationsAbbreviations();
+            if(true === $agendaitem->climbing_activity) {
+                $user['certificate_names'] = $user->getCertificationsAbbreviations();
+            }
             array_push($userdata["userdata"],$user);
 
         }
