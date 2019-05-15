@@ -4,10 +4,13 @@ php:
   - 7.2
 
 before_script:
+  - composer self-update
   - composer install --no-interaction
   - cp .env.example .env
-
-scripts:
   - php artisan key:generate
   - php artisan config:clear
+  - npm install npm@latest -g
+  - npm install
+
+scripts:
   - vendor/bin/phpunit
