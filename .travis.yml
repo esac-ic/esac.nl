@@ -12,9 +12,9 @@ before_script:
   - php artisan config:clear
   - npm install npm@latest -g
   - npm install
-  - npm run prod
 
-scripts:
+script:
+  - npm run prod
   - vendor/bin/phpunit -c phpunit.xml
 
 after_failure:
