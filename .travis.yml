@@ -4,7 +4,7 @@ php:
   - 7.2
 
 before_script:
-  - composer install --no-intercation
+  - composer install --no-interaction
 
 scripts:
   - php artisan key:generate
