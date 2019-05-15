@@ -51,9 +51,8 @@ class CreateNewsItemTest extends TestCase
         ];
         $response = $this->post($this->url, $body);
         $response->assertStatus(302);
-        echo($response->getContent());
         $newsItem = NewsItem::all()->last();
 
-        $this->assertNotNull($newsItem);
+        $this->assertEquals($body['NL_text'],$newsItem->newsItemText->text());
     }
 }
