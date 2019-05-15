@@ -16,8 +16,8 @@ before_script:
 
 script:
   - npm run prod
+  - npm run prod
   - vendor/bin/phpunit -c phpunit.xml
 
 after_failure:
   - cat storage/logs/laravel.log
-  - ls public/img
