@@ -4,6 +4,7 @@ namespace Tests\Feature;
 
 use App\Rol;
 use App\User;
+use App\Text;
 use App\AgendaItem;
 use App\AgendaItemCategorie;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
@@ -52,7 +53,14 @@ class AgendaFilterTest extends TestCase
         $agendaItem->save();
 
         $response = $this->get($this->url . $agendaItemCategory->id);
+        $json = json_decode($response->getContent());
 
-        $this->assertEquals(json_decode($response->getContent())->{"agendaItemCount"}, 1);
+        $this->assertEquals($json->{"agendaItemCount"}, 1);
+        $this->assertEquals($json->{"agendaItems"}[0]->{"category"}, $agendaItemCategory->categorieName->text());
+        $this->assertEquals($json->{"agendaItems"}[0]->{"title"}, $agendaItem->agendaItemTitle->text());
+
+        $response = $this->get($this->url . ($agendaItemCategory->id + 1));
+        $json = json_decode($response->getContent());
+        $this->assertEquals($json->{"agendaItemCount"}, 0);
     }
 }
