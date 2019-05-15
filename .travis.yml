@@ -5,7 +5,9 @@ php:
 
 before_script:
   - composer install --no-interaction
+  - cp .env.example .env
 
 scripts:
   - php artisan key:generate
+  - php artisan config:clear
   - vendor/bin/phpunit
