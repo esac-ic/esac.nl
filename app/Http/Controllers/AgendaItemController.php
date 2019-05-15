@@ -185,6 +185,7 @@ class AgendaItemController extends Controller
             'applicationForm' => 'required|numeric|min:0',
             'endDate' => 'required|date',
             'startDate' => 'required|date',
+            'thumbnail' => 'size:20480' //max file size of 20 mb
         ]);
     }
 }

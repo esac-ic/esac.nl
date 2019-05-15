@@ -35,6 +35,7 @@ mix.copy("node_modules/jquery/dist/jquery.js", "public/js/vendor")
    .copy("node_modules/tempusdominus-bootstrap-4/build/js/tempusdominus-bootstrap-4.js", "public/js/vendor/tempusdominus.js")
    .copy("node_modules/bootstrap/dist/js/bootstrap.js", "public/js/vendor")
    .copy("resources/assets/js/photoAlbum.js","public/js")
+   .copy("resources/assets/js/utils/fileHandler.js","public/js")
    .copy("node_modules/photoswipe/dist/photoswipe.min.js","public/js")
    .copy("node_modules/photoswipe/dist/photoswipe-ui-default.min.js","public/js")
    .copy("node_modules/blueimp-load-image/js/load-image.all.min.js","public/js");

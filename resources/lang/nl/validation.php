@@ -18,6 +18,7 @@ return [
     "date" => "Geen geldige geboortedatum",
     "error" => "Error",
     'bannedEmailDomain' => "Email adressen van onderwijsinstellingen (student.tue.nl) zijn niet toegestaan om te voorkomen dat je onze mails niet meer ontvangt na je afstuderen",
+    'fileToLarge' => 'Bestanden is te groot. Bestanden mogen maximaal 20mb zijn',
     'attributes' => [
         'privacy_policy' => 'Privacy Policy',
         'termsconditions' => 'Terms and Conditions',
