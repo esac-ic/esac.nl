@@ -16,6 +16,11 @@ class AgendaItem extends Model
         'endDate',
         'image_url',
         'category',
+        'climbing_activity'
+    ];
+
+    protected $casts = [
+        'climbing_activity' => 'boolean'
     ];
 
     public function getApplicationForm(){
