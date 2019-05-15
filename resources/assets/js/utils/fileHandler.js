@@ -20,6 +20,6 @@ function validateFileSize() {
     }
     else {
         file = input.files[0];
-        return file.size < 20480; //file needs to be smaller dan 20 mb
+        return file.size < 20971520; //file needs to be smaller dan 20 mb
     }
 };

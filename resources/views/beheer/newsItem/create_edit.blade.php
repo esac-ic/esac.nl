@@ -19,7 +19,7 @@
         </ul>
     @endif
 
-    {!! Form::open(['method' => $fields['method'], 'url' => $fields['url'],'enctype' => 'multipart/form-data'])  !!}
+    {!! Form::open(['method' => $fields['method'], 'url' => $fields['url'], 'id' => 'news-item-form','enctype' => 'multipart/form-data'])  !!}
     <div class="card">
         <div class="card-header">
             <h3>{{$fields['title']}}</h3>
@@ -64,11 +64,19 @@
 @endsection
 
 @push('scripts')
+    <script src="{{mix("js/fileHandler.js")}}" type="text/javascript"></script>
     <script type="text/javascript">
         $('.custom-file-input').on('change', function() { 
            let fileName = $(this).val().split('\\').pop(); 
            $(this).next('.custom-file-label').addClass("selected").html(fileName); 
         });
+
+        $('#news-item-form').on('submit', function(event){
+            if(false === validateFileSize()){
+                alert('{{ trans('validation.fileToLarge') }}');
+                return false;
+            }
+        })
     </script>
 
     <script type="text/javascript">
