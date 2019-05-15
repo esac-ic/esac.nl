@@ -48,11 +48,14 @@ class CreateNewsItemTest extends TestCase
             'EN_title' => 'test news',
             'NL_text' => 'test nieuws',
             'EN_text' => 'test news',
+            'author' => 'Gebruiker1'
         ];
         $response = $this->post($this->url, $body);
         $response->assertStatus(302);
         $newsItem = NewsItem::all()->last();
 
         $this->assertEquals($body['NL_text'],$newsItem->newsItemText->text());
+        $this->assertEquals($body['NL_title'],$newsItem->newsItemTitle->text());
+        $this->assertEquals($body['author'],$newsItem->author);
     }
 }
