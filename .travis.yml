@@ -1,0 +1,11 @@
+language: php
+php:
+  - 7.3
+  - 7.2
+
+before_script:
+  - composer install --no-intercation
+
+scripts:
+  - php artisan key:generate
+  - vendor/bin/phpunit
