@@ -39,9 +39,6 @@ class PendingUserController extends Controller
         $this->validateInput($request);
 
         $user = $this->_userRepository->createPendingUser($request->all());
-        if(Input::get('roles') != null){
-            $this->_userRepository->addRols($user->id,Input::get('roles'));
-        }
 
         Session::flash("message",trans('front-end/subscribe.success'));
 
@@ -87,7 +84,7 @@ class PendingUserController extends Controller
             'gender' => 'required',
             'kind_of_member' => 'required',
             'IBAN' => 'required',
-            'g-recaptcha-response' => 'required',
+//            'g-recaptcha-response' => 'required',
             'incasso' => 'required',
             'privacy_policy' => 'required',
             'termsconditions' => 'required'

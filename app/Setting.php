@@ -9,6 +9,7 @@ class Setting extends Model
     //setting names
     const SETTING_BLOCKED_EMAIL_DOMAINS = 'SETTING_BLOCKED_EMAIL_DOMAINS';
     const SETTING_KILLSWITCH = 'SETTING_KILLSWITCH';
+    const SETTING_SHOW_INTRO_OPTION = 'SETTING_SHOW_INTRO_OPTION';
 
     //setting types
     const TYPE_STRING = 'TYPE_STRING';

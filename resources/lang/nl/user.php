@@ -71,6 +71,27 @@ return [
     "privacy_policy" => "Akkoord met de Privacy Policy",
     "privacy_and_incasso" => "Privacy Policy en Incasso Machtiging",
     "termsconditions" => "Akkoord met de Terms and Conditions",
-    'registrations' => 'Inschrijvingen'
+    'registrations' => 'Inschrijvingen',
+
+    'introPackageOptions' => 'Intro pakket opties',
+    'introPackage' => 'Intro pakket',
+    'tshirt' => 'Esac T-shirt',
+    'topropCourse' => 'Toprope cursus',
+    'introWeekend' => 'Intro weekend',
+
+    'shirtSizes' => [
+        '' => 'Geen shirt',
+        's' => 'S',
+        'm' => 'M',
+        'l' => 'L',
+        'xl' => 'XL',
+    ],
+
+    'weekendDates' => [
+        '' => 'Geen klimweekend',
+        '2019-09-06' => '06-09-2019',
+        '2019-09-26' => '26-09-2019',
+    ]
+
 
 ];

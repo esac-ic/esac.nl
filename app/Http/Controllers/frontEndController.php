@@ -7,6 +7,7 @@ use App\CustomClasses\MenuSingleton;
 use App\MenuItem;
 use App\repositories\AgendaItemRepository;
 use App\repositories\RepositorieFactory;
+use App\Setting;
 use App\Zekering;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\App;
@@ -80,7 +81,8 @@ class frontEndController extends Controller
         $menuItem = $this->_MenuItemRepository->findby('urlName',MenuItem::SUBSCRIBEURL);
         $content = $menuItem->content->text();
         $curPageName = trans('front-end/subscribe.title');
-        return view("front-end.subscribe", compact('curPageName','content'));
+        $showIntroPackageForm = app(Setting::SINGELTONNAME)->getsetting(Setting::SETTING_SHOW_INTRO_OPTION);
+        return view("front-end.subscribe", compact('curPageName','content', 'showIntroPackageForm'));
     }
 
     public function news(){
