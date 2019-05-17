@@ -1,69 +1,69 @@
 {
-    "name": "laravel/laravel",
-    "description": "The Laravel Framework.",
-    "keywords": ["framework", "laravel"],
-    "license": "MIT",
+    "name": "esac-ic/esac.nl",
     "type": "project",
+    "description": "Website for the Eindhoven Student Alpine Club (esac.nl)",
+    "keywords": [
+        "framework",
+        "laravel"
+    ],
+    "license": "MIT",
     "require": {
-        "php": "7.*",
-        "laravel/framework": "5.5.*",
-        "laravelcollective/html": "~5.4",
+        "php": "^7.1",
         "barryvdh/laravel-ide-helper": "^2.4",
-        "maatwebsite/excel": "~2.1.0",
         "bogardo/mailgun": "^5.0",
-        "php-http/guzzle6-adapter": "^1.1",
-        "laravel/tinker": "^1.0",
-        "league/flysystem-aws-s3-v3": "~1.0",
+        "doctrine/dbal": "^2.9",
+        "eluceo/ical": "^0.15",
         "intervention/image": "^2.4",
-        "spatie/laravel-blade-javascript": "^2.2",
-        "doctrine/dbal": "^2.8",
-        "eluceo/ical": "^0.15.0"
+        "laravel/framework": "5.8.*",
+        "laravel/tinker": "^1.0",
+        "laravelcollective/html": "~5.8",
+        "maatwebsite/excel": "~2.1.0",
+        "spatie/laravel-blade-javascript": "^2.3",
+        "php-http/guzzle6-adapter": "^1.1"
     },
     "require-dev": {
+        "mockery/mockery": "^1.0",
+        "phpunit/phpunit": "^7.0",
         "fzaninotto/faker": "~1.4",
-        "mockery/mockery": "0.9.*",
-        "phpunit/phpunit": "~6.0",
-        "symfony/css-selector": "3.1.*",
-        "symfony/dom-crawler": "3.1.*",
-        "filp/whoops": "^2.1",
         "barryvdh/laravel-debugbar": "^3.1"
     },
-    "autoload": {
-        "classmap": [
-            "database/"
-        ],
-        "psr-4": {
-            "App\\": "app/"
+    "config": {
+        "optimize-autoloader": true,
+        "preferred-install": "dist",
+        "sort-packages": true
+    },
+    "extra": {
+        "laravel": {
+            "dont-discover": []
         }
     },
-    "autoload-dev": {
+    "autoload": {
+        "psr-4": {
+            "App\\": "app/"
+        },
         "classmap": [
+            "database/seeds",
+            "database/factories",
             "tests/TestCase.php"
         ]
     },
+    "autoload-dev": {
+        "psr-4": {
+            "Tests\\": "tests/"
+        }
+    },
+    "minimum-stability": "dev",
+    "prefer-stable": true,
     "scripts": {
-        "post-root-package-install": [
-            "php -r \"file_exists('.env') || copy('.env.example', '.env');\""
-        ],
-        "post-create-project-cmd": [
-            "php artisan key:generate"
-        ],
-        "post-install-cmd": [
-            "Illuminate\\Foundation\\ComposerScripts::postInstall",
-            "php artisan optimize"
-        ],
-        "post-update-cmd": [
-            "Illuminate\\Foundation\\ComposerScripts::postUpdate",
-            "php artisan ide-helper:generate",
-            "php artisan ide-helper:meta",
-            "php artisan optimize"
-        ],
         "post-autoload-dump": [
             "Illuminate\\Foundation\\ComposerScripts::postAutoloadDump",
-            "@php artisan package:discover"
+            "@php artisan package:discover --ansi"
+        ],
+        "post-root-package-install": [
+            "@php -r \"file_exists('.env') || copy('.env.example', '.env');\""
+        ],
+        "post-create-project-cmd": [
+            "@php artisan key:generate --ansi"
         ]
-    },
-    "config": {
-        "preferred-install": "dist"
     }
 }

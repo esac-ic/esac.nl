@@ -30,7 +30,7 @@ class AddContentToMenuTable extends Migration
     public function down()
     {
         Schema::table('menu_items',function(Blueprint $table){
-            $table->dropForeign(['content_id']);
+            $table->dropForeignSilently(['content_id']);
         });
     }
 }
