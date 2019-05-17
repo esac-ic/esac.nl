@@ -3,6 +3,7 @@ sudo: required
 php:
   - 7.3
   - 7.2
+chrome: stable
 
 before_script:
   - composer self-update
@@ -11,7 +12,6 @@ before_script:
   - php artisan key:generate
   - php artisan storage:link
   - php artisan config:clear
-  - php artisan dusk:chrome-driver
   - npm install npm@latest -g
   - npm install
 
