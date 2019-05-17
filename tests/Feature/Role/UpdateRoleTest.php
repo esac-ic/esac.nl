@@ -90,7 +90,7 @@ class UpdateRoleTest extends TestCase
         $errors = session('errors');
         $this->count(2,$errors);
 
-        $this->assertEquals($errors->get('NL_text')[0],"Veld n l text moet ingevuld zijn");
-        $this->assertEquals($errors->get('EN_text')[0],"Veld e n text moet ingevuld zijn");
+        $this->assertEquals("Veld n l text moet ingevuld zijn", $errors->get('NL_text')[0]);
+        $this->assertEquals("Veld e n text moet ingevuld zijn", $errors->get('EN_text')[0]);
     }
 }
