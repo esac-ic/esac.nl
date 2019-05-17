@@ -6,6 +6,7 @@ use App\repositories\RepositorieFactory as RepositorieFactory;
 use App\Rol;
 use App\Rules\EmailDomainValidator;
 use App\User;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Input;
@@ -84,7 +85,7 @@ class PendingUserController extends Controller
             'gender' => 'required',
             'kind_of_member' => 'required',
             'IBAN' => 'required',
-//            'g-recaptcha-response' => 'required',
+            'g-recaptcha-response' => 'required',
             'incasso' => 'required',
             'privacy_policy' => 'required',
             'termsconditions' => 'required'
