@@ -78,6 +78,7 @@ return [
     'tshirt' => 'Esac T-shirt',
     'topropCourse' => 'Toprope cursus',
     'introWeekend' => 'Intro weekend',
+    'registrationInfo' => 'Registratie info',
 
     'shirtSizes' => [
         '' => 'Geen shirt',
@@ -92,6 +93,4 @@ return [
         '2019-09-06' => '06-09-2019',
         '2019-09-26' => '26-09-2019',
     ]
-
-
 ];

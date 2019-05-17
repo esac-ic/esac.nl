@@ -38,6 +38,17 @@ class UserRepository implements IRepository {
         $data['password'] = ($data['password'] != "")? bcrypt($data['password']) :$user->password;
 
         $user->update($data);
+
+        $userRegistration = $user->registrationInfo;
+
+        if(null !== $userRegistration) {
+            $userRegistration->intro_package = array_key_exists('intro_package', $data);
+            $userRegistration->toprope_course = array_key_exists('toprope_course', $data);
+            $userRegistration->shirt_size = $data['shirt_size'];
+            $userRegistration->intro_weekend_date = $data['intro_weekend_date'];
+            $userRegistration->save();
+        }
+
         return $user;
     }
 

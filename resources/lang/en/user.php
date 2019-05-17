@@ -71,6 +71,27 @@ return [
     "privacy_policy" => "Accept the Privacy Policy",
     "privacy_and_incasso" => "Privacy Policy and Automatic Collection",
     "termsconditions" => "Accept the Terms and Conditions",
-    'registrations' => 'Registrations'
+    'registrations' => 'Registrations',
+
+    'introPackageOptions' => 'Intro package options',
+    'introPackage' => 'Intro pakket',
+    'tshirt' => 'Esac shirt',
+    'topropCourse' => 'Toprope course',
+    'introWeekend' => 'Intro weekend',
+    'registrationInfo' => 'Registration info',
+
+    'shirtSizes' => [
+        '' => 'No shirt',
+        's' => 'S',
+        'm' => 'M',
+        'l' => 'L',
+        'xl' => 'XL',
+    ],
+
+    'weekendDates' => [
+        '' => 'Geen klimweekend',
+        '2019-09-06' => '06-09-2019',
+        '2019-09-26' => '26-09-2019',
+    ]
 
 ];
