@@ -22,12 +22,9 @@ class CreateAgendaItemTest extends TestCase
     private $url = 'agendaItems';
     private $agendaItem;
 
-    /**
-     * @var
-     */
     private $user;
 
-    protected function setUp()
+    protected function setUp() : void
     {
         parent::setUp();
         $this->user = $user = factory(User::class)->create();
