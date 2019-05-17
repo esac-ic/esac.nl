@@ -22,11 +22,8 @@ class DatabaseSeeder extends Seeder
         $this->call(newsItemSeeder::class);
         $this->call(zekeringenSeeder::class);
         $this->call(ApplicationResponseSeeder::class);
-        $this->call(frontendreplacementSeeder::class);
         $this->call(BooksTableSeeder::class); 
         $this->call(PhotoAlbumSeeder::class);
         $this->call(PhotoSeeder::class);
-
-        //        if you get a reflection error after adding a seeder run "composer dump-autoload"
     }
 }
