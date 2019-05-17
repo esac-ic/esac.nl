@@ -43,14 +43,16 @@
         },
         "classmap": [
             "database/seeds",
-            "database/factories",
-            "tests/TestCase.php"
+            "database/factories"
         ]
     },
     "autoload-dev": {
         "psr-4": {
             "Tests\\": "tests/"
-        }
+        },
+        "classmap": [
+            "tests/TestCase.php"
+        ]
     },
     "minimum-stability": "dev",
     "prefer-stable": true,
