@@ -24,7 +24,7 @@ class CreatePageTest extends TestCase
      */
     private $user;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
         $this->user = $user = factory(User::class)->create();
@@ -41,7 +41,7 @@ class CreatePageTest extends TestCase
         session()->start();
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         Artisan::call('migrate:reset');
         parent::tearDown();
@@ -68,6 +68,7 @@ class CreatePageTest extends TestCase
 
         // After creation the user should be redirect to /pages.
         $response->assertStatus(302);
+        $response->assertSessionHasNoErrors();
         $response->assertRedirect('/pages');
 
         // Check whether a new page has been added to DB, other test will make sure content is actually correct.
@@ -124,7 +125,8 @@ class CreatePageTest extends TestCase
             '_token'  => csrf_token(),
         ];
 
-        $this->post($this->url, $body);
+        $response = $this->post($this->url, $body);
+        $response->assertSessionHasNoErrors();
 
         // Check whether the newly added page has the correct content.
         $menuItem = MenuItem::all()->last();
@@ -155,7 +157,8 @@ class CreatePageTest extends TestCase
             '_token'  => csrf_token(),
         ];
 
-        $this->post($this->url, $body);
+        $response = $this->post($this->url, $body);
+        $response->assertSessionHasNoErrors();
 
         // Check whether the newly added page has the correct content.
         $menuItem = MenuItem::all()->last();
@@ -186,28 +189,23 @@ class CreatePageTest extends TestCase
             '_token'  => csrf_token(),
         ];
 
-        $this->post($this->url, $body);
+        $response = $this->post($this->url, $body);
 
         // Check whether the newly added page has the correct content.
         $menuItem = MenuItem::all()->last();
 
-        $this->assertFalse($menuItem->login);
+        $response->assertSessionHasNoErrors();
+        $this->assertFalse((bool)$menuItem->login);
 
-        $body['login'] = false;
-        $this->post($this->url, $body);
-
-        // Check whether the newly added page has the correct content.
-        $menuItem = MenuItem::all()->last();
-
-        $this->assertFalse($menuItem->login);
-
+        $body['urlName'] = 'test2';
         $body['login'] = true;
-        $this->post($this->url, $body);
+        $response = $this->post($this->url, $body);
 
         // Check whether the newly added page has the correct content.
         $menuItem = MenuItem::all()->last();
 
-        $this->assertTrue($menuItem->login);
+        $response->assertSessionHasNoErrors();
+        $this->assertTrue((bool)$menuItem->login);
     }
 
     /**
