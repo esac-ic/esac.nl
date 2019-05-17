@@ -2,24 +2,25 @@
 
 namespace Tests\Feature;
 
-use App\ApplicationResponse;
-use App\ApplicationResponseRow;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
-use App\NewsItem;
-use App\Rol;
-use App\User;
 use Artisan;
 use Carbon\Carbon;
 use TestCase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use App\Rol;
+use App\User;
+use App\Text;
+use App\AgendaItem;
+use App\AgendaItemCategorie;
+use App\ApplicationForm;
 
-class RemoveNewsItemTest extends TestCase
+class DeleteAgendaItemTest extends TestCase
 {
     use DatabaseMigrations;
 
-    private $url = 'newsItems';
-    private $newsItem;
+    private $url = 'agendaItems';
+    private $agendaItem;
 
     protected function setUp()
     {
@@ -41,13 +42,13 @@ class RemoveNewsItemTest extends TestCase
         parent::tearDown();
     }
     /** @test */
-    public function DeleteNewsItem(){
-        $newsItem = factory(NewsItem::class)->create();
+    public function DeleteAgendaItem(){
+        $agendaItem = factory(AgendaItem::class)->create();
 
-        $response = $this->delete($this->url . '/' . $newsItem->id);
+        $response = $this->delete($this->url . '/' . $agendaItem->id);
 
         $response->assertStatus(302);
 
-        $this->assertNull(NewsItem::find($newsItem->id));
+        $this->assertNull(AgendaItem::find($agendaItem->id));
     }
 }
