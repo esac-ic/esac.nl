@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Certificate;
 use App\CustomClasses\MailgunFacade;
+use App\Exports\UsersExport;
 use App\repositories\RepositorieFactory as RepositorieFactory;
 use App\Rol;
 use App\Rules\EmailDomainValidator;
@@ -131,22 +132,8 @@ class UserController extends Controller
         return redirect('/users/'. $user->id);
     }
 
-    public function exportUsers(){
-        $activeUsers = $this->_userRepository->getCurrentUsers();
-        $exportData = [];
-        foreach ($activeUsers as $user){
-            $data = $user->toArray();
-            $data['certificates'] = $user->getCertificationsAbbreviations();
-            array_push($exportData,$data);
-        }
-        // Generate and return the spreadsheet
-        Excel::create(trans('user.members'), function($excel) use ($exportData){
-            // Build the spreadsheet, passing in the payments array
-            $excel->sheet(trans('user.active_members'), function($sheet) use ($exportData) {
-
-                $sheet->fromArray($exportData,null,'A1');
-            });
-        })->download('xls');
+    public function exportUsers(UsersExport $usersExport){
+        return Excel::download($usersExport, trans('user.members') . '.xlsx');
     }
 
     private function validateInput(Request $request){
