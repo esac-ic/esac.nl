@@ -95,6 +95,8 @@ class PaginaBeheerController extends Controller
             'EN_text' => 'required',
             'content_nl' => 'required',
             'content_en' => 'required',
+            'parentItem' => 'required',
+            'afterItem' => 'required',
         ]);
     }
 }
