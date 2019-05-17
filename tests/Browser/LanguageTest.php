@@ -22,8 +22,7 @@ class LanguageTest extends DuskTestCase
                     ->click('#selected_lang')
                     ->click('#other_lang')
                     ->visit('/home')
-                    ->assertSee('Welcome')
-                    ->pause(20000);
+                    ->assertSee('Welcome');
         });
     }
 }
