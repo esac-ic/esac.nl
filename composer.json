@@ -14,12 +14,13 @@
         "doctrine/dbal": "^2.9",
         "eluceo/ical": "^0.15",
         "intervention/image": "^2.4",
+        "laravel/dusk": "^5.1",
         "laravel/framework": "5.8.*",
         "laravel/tinker": "^1.0",
         "laravelcollective/html": "~5.8",
         "maatwebsite/excel": "~2.1.0",
-        "spatie/laravel-blade-javascript": "^2.3",
-        "php-http/guzzle6-adapter": "^1.1"
+        "php-http/guzzle6-adapter": "^1.1",
+        "spatie/laravel-blade-javascript": "^2.3"
     },
     "require-dev": {
         "mockery/mockery": "^1.0",
