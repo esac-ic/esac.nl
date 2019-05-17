@@ -52,7 +52,7 @@
                 </div>
                 <div class="form-group col-md-6">
                     {!! Form::label('password', trans('user.password')) !!}
-                    {!! Form::password('password', $fields['method'] === "POST" ? array('class'=>'form-control','required' => 'required', 'minlength' => 6): array('class'=>'form-control')) !!}
+                    {!! Form::password('password', $fields['method'] === "POST" ? array('class'=>'form-control','required' => 'required', 'minlength' => 8): array('class'=>'form-control')) !!}
                 </div>
             </div>
             <div class="form-row">

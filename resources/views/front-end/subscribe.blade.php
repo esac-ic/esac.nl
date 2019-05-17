@@ -60,7 +60,7 @@
                 </div>
                 <div class="form-group col-md-6">
                     {!! Form::label('password', trans('user.password')) !!}
-                    {!! Form::password('password',  ['class' => 'form-control','required' => 'required', 'minlength' => 6]) !!}
+                    {!! Form::password('password',  ['class' => 'form-control','required' => 'required', 'minlength' => 8]) !!}
                 </div>
             </div>
             <div class="form-row">

@@ -21,13 +21,13 @@ class RegisterNewMemberTest extends TestCase
      */
     private $user;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
         session()->start();
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         Artisan::call('migrate:reset');
         parent::tearDown();

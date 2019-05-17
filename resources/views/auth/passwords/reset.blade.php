@@ -31,7 +31,7 @@
                                 <input type="hidden" name="token" value="{{ $token }}">
                                 <div class="form-group {{ $errors->has('email') ? ' has-error' : '' }}">
                                     <label for="email">{{trans("auth.email")}}</label>
-                                    <input class="form-control form-control-lg" id="email" type="email" name="email" placeholder="{{trans("auth.email")}}" value="{{ $email or old('email') }}" required autofocus>
+                                    <input class="form-control form-control-lg" id="email" type="email" name="email" placeholder="{{trans("auth.email")}}" value="{{ $email ?? old('email') }}" required autofocus>
                                     @if ($errors->has('email'))
                                     <span class="help-block">
                                     <strong>{{ $errors->first('email') }}</strong>
