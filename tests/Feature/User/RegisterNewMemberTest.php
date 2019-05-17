@@ -87,6 +87,7 @@ class RegisterNewMemberTest extends TestCase
         $this->assertEquals('member', $user->kind_of_member);
         $this->assertEquals($body['IBAN'], $user->IBAN);
         $this->assertEquals($body['incasso'], $user->incasso);
+        $this->assertNotNull($user->pending_user);
     }
 
     /** @test */
