@@ -1,3 +1,11 @@
+<p align="center"><img width="20%" src="https://i.imgur.com/M2nZitU.png"></p>
+<p align="center">
+<a href="https://travis-ci.org/esac-ic/esac.nl"><img src="https://travis-ci.org/esac-ic/esac.nl.svg?branch=master" alt="Build Status"></a>
+<a href="https://codecov.io/gh/esac-ic/esac.nl">
+  <img src="https://codecov.io/gh/esac-ic/esac.nl/branch/master/graph/badge.svg" />
+</a>
+</p>
+
 ## Framework/libaries
 
 The following libaries and framework are used:
