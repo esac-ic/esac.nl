@@ -2,6 +2,7 @@
 
 namespace App\Models\User;
 
+use App\User;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
@@ -26,4 +27,8 @@ class UserRegistrationInfo extends Model
         'toprope_course' => 'boolean',
         'intro_package' => 'boolean',
     ];
+
+    public function user(){
+        return $this->belongsTo(User::class);
+    }
 }

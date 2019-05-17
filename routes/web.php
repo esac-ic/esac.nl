@@ -29,6 +29,7 @@ Route::get('beheer/home','ManageController@index');
 Route::get('users/old_members','UserController@indexOldMembers');
 Route::get('users/pending_members','PendingUserController@indexPendingMembers'); 
 Route::get('users/exportUsers','UserController@exportUsers');
+Route::get('users/exportRegistrationInfo', 'PendingUserController@getRegistrationExportData')->name('export-registration-info');
 Route::patch('users/{user}/removeAsActiveMember', 'UserController@removeAsActiveMember');
 Route::patch('users/{user}/removeAsPendingMember', 'PendingUserController@removeAsPendingMember');
 Route::patch('users/{user}/approveAsPendingMember', 'PendingUserController@approveAsPendingMember');

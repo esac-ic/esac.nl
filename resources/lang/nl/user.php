@@ -72,6 +72,7 @@ return [
     "privacy_and_incasso" => "Privacy Policy en Incasso Machtiging",
     "termsconditions" => "Akkoord met de Terms and Conditions",
     'registrations' => 'Inschrijvingen',
+    'exportRegistrationInfo' => 'Export intro pakket info',
 
     'introPackageOptions' => 'Intro pakket opties',
     'introPackage' => 'Intro pakket',
