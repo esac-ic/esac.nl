@@ -14,14 +14,14 @@ use TestCase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
-class CreateNewsItemTest extends TestCase
+class RemoveNewsItemTest extends TestCase
 {
     use DatabaseMigrations;
 
     private $url = 'newsItems';
     private $newsItem;
 
-    protected function setUp(): void
+    protected function setUp()
     {
         parent::setUp();
         $this->user = $user = factory(User::class)->create();
@@ -35,27 +35,19 @@ class CreateNewsItemTest extends TestCase
         session()->start();
     }
 
-    protected function tearDown(): void
+    protected function tearDown()
     {
         Artisan::call('migrate:reset');
         parent::tearDown();
     }
     /** @test */
     public function CreateNewsItem(){
-        $body = [
-            '_token' => csrf_token(),
-            'NL_title' => 'test nieuws',
-            'EN_title' => 'test news',
-            'NL_text' => 'test nieuws',
-            'EN_text' => 'test news',
-            'author' => 'Gebruiker1'
-        ];
-        $response = $this->post($this->url, $body);
-        $response->assertStatus(302);
-        $newsItem = NewsItem::all()->last();
+        $newsItem = factory(NewsItem::class)->create();
 
-        $this->assertEquals($body['NL_text'],$newsItem->newsItemText->text());
-        $this->assertEquals($body['NL_title'],$newsItem->newsItemTitle->text());
-        $this->assertEquals($body['author'],$newsItem->author);
+        $response = $this->delete($this->url . '/' . $newsItem->id);
+
+        $response->assertStatus(302);
+
+        $this->assertNull(NewsItem::find($newsItem->id));
     }
 }
