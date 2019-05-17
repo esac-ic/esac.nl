@@ -11,7 +11,7 @@ before_script:
   - php artisan key:generate
   - php artisan storage:link
   - php artisan config:clear
-  - php artisan dusk:install
+  - php artisan dusk:chrome-driver
   - npm install npm@latest -g
   - npm install
 
