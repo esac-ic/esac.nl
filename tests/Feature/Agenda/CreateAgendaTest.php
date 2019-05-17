@@ -38,7 +38,7 @@ class CreateAgendaItemTest extends TestCase
         session()->start();
     }
 
-    protected function tearDown()
+    protected function tearDown()  : void
     {
         Artisan::call('migrate:reset');
         parent::tearDown();
