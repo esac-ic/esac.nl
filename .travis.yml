@@ -9,7 +9,7 @@ addons:
   chrome: stable
 
 before_install:
-  - cp .env.testing .env
+  - cp .env.example .env
   - composer self-update
   - composer validate
 
