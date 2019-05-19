@@ -1,23 +1,30 @@
 language: php
 sudo: required
+
 php:
   - 7.3
   - 7.2
-chrome: stable
 
-before_script:
+addons:
+  chrome: stable
+
+before_install:
   - cp .env.example .env
   - composer self-update
-  - composer install --no-interaction
-  - php artisan key:generate
-  - php artisan storage:link
-  - php artisan config:clear
+  - composer validate
+
+install:
+  - composer install --no-interaction --prefer-dist --no-suggest
   - npm install npm@latest -g
   - npm install
 
+before_script:
+  - php artisan key:generate
+  - php artisan storage:link
+  - npm run prod
+  - npm run prod
+
 script:
-  - npm run prod
-  - npm run prod
   - vendor/bin/phpunit -c phpunit.xml --coverage-clover=coverage.xml
 
 after_failure:
