@@ -93,7 +93,6 @@ class PendingUserController extends Controller
             'emergencycountry' => 'required',
             'birthDay' => 'required|date',
             'gender' => 'required',
-            'kind_of_member' => 'required',
             'IBAN' => 'required',
             'g-recaptcha-response' => 'required',
             'incasso' => 'required',

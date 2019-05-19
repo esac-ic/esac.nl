@@ -50,7 +50,6 @@ Route::resource('agendaItems', 'AgendaItemController');
 Route::resource('agendaItemCategories', 'AgendaItemCategorieController');
 Route::resource('applicationForms', 'ApplicationFormController');
 Route::resource('newsItems', 'NewsItemController');
-Route::resource('frontEndReplacement', 'FrontEndReplacementController');
 Route::resource('mailList', 'MailListController');
 Route::post('/lidworden', 'PendingUserController@storePendingUser');
 Route::resource('books', 'LibraryController');

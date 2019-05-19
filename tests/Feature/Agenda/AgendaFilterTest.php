@@ -18,14 +18,14 @@ class AgendaFilterTest extends TestCase
     /**
      * @var string
      */
-    private $url = 'api/agenda?category=';
+    private $url = 'api/agenda';
 
     /**
      * @var
      */
     private $user;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
         $this->user = $user = factory(User::class)->create();
@@ -39,9 +39,9 @@ class AgendaFilterTest extends TestCase
         session()->start();
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
-        Artisan::call('migrate:reset');
+        Artisan::call('migrate:refresh');
         parent::tearDown();
     }
 
@@ -52,15 +52,22 @@ class AgendaFilterTest extends TestCase
         $agendaItem->category = $agendaItemCategory->id;
         $agendaItem->save();
 
-        $response = $this->get($this->url . $agendaItemCategory->id);
+        factory(AgendaItem::class)->create();
+        factory(AgendaItem::class)->create();
+
+        $response = $this->get($this->url . "?category=" . $agendaItemCategory->id);
         $json = json_decode($response->getContent());
 
         $this->assertEquals($json->{"agendaItemCount"}, 1);
         $this->assertEquals($json->{"agendaItems"}[0]->{"category"}, $agendaItemCategory->categorieName->text());
         $this->assertEquals($json->{"agendaItems"}[0]->{"title"}, $agendaItem->agendaItemTitle->text());
 
-        $response = $this->get($this->url . ($agendaItemCategory->id + 1));
+        $response = $this->get($this->url . "?category=" . ($agendaItemCategory->id + 1));
         $json = json_decode($response->getContent());
         $this->assertEquals($json->{"agendaItemCount"}, 0);
+
+        $response = $this->get($this->url);
+        $json = json_decode($response->getContent());
+        $this->assertEquals($json->{"agendaItemCount"}, 3);
     }
 }

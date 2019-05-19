@@ -7,6 +7,7 @@ use App\ApplicationResponseRow;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use App\NewsItem;
 use App\Rol;
+use App\Text;
 use App\User;
 use Artisan;
 use Carbon\Carbon;
@@ -14,7 +15,7 @@ use TestCase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
-class CreateNewsItemTest extends TestCase
+class UpdateNewsItemTest extends TestCase
 {
     use DatabaseMigrations;
 
@@ -41,7 +42,8 @@ class CreateNewsItemTest extends TestCase
         parent::tearDown();
     }
     /** @test */
-    public function CreateNewsItem(){
+    public function UpdateNewsItem(){
+        $newsItem = factory(NewsItem::class)->create();
         $body = [
             '_token' => csrf_token(),
             'NL_title' => 'test nieuws',
@@ -50,9 +52,12 @@ class CreateNewsItemTest extends TestCase
             'EN_text' => 'test news',
             'author' => 'Gebruiker1'
         ];
-        $response = $this->post($this->url, $body);
+
+        $response = $this->patch($this->url . "/" . $newsItem->id, $body);
+
         $response->assertStatus(302);
-        $newsItem = NewsItem::all()->last();
+
+        $newsItem = $newsItem->refresh();
 
         $this->assertEquals($body['NL_text'],$newsItem->newsItemText->text());
         $this->assertEquals($body['NL_title'],$newsItem->newsItemTitle->text());

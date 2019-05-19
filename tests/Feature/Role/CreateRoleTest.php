@@ -22,7 +22,7 @@ class CreateRoleTest extends TestCase
      */
     private $user;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
         $this->user = $user = factory(User::class)->create();
@@ -36,7 +36,7 @@ class CreateRoleTest extends TestCase
         session()->start();
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         Artisan::call('migrate:reset');
         parent::tearDown();
@@ -87,7 +87,7 @@ class CreateRoleTest extends TestCase
         $errors = session('errors');
         $this->count(2,$errors);
 
-        $this->assertEquals($errors->get('NL_text')[0],"Veld n l text moet ingevuld zijn");
-        $this->assertEquals($errors->get('EN_text')[0],"Veld e n text moet ingevuld zijn");
+        $this->assertEquals("Veld n l text moet ingevuld zijn", $errors->get('NL_text')[0]);
+        $this->assertEquals("Veld e n text moet ingevuld zijn", $errors->get('EN_text')[0]);
     }
 }
