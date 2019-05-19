@@ -9,7 +9,7 @@ addons:
   chrome: stable
 
 before_install:
-  - cp .env.example .env
+  - cp .env.testing .env
   - composer self-update
   - composer validate
 
@@ -21,8 +21,11 @@ install:
 before_script:
   - php artisan key:generate
   - php artisan storage:link
+  - php artisan dusk:chrome-driver
   - npm run prod
   - npm run prod
+  - google-chrome-stable --headless --disable-gpu --remote-debugging-port=9222 http://localhost &
+  - php artisan serve &
 
 script:
   - vendor/bin/phpunit -c phpunit.xml --coverage-clover=coverage.xml
