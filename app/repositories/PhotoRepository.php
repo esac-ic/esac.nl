@@ -54,25 +54,24 @@ class PhotoRepository implements IRepository
         return Photo::query()->orderBy('id', 'desc')->get();
     }
 
-    public function getClient(){
-        $client = new Client(env('B2_ACCOUNT_KEY_ID'), [
-            'applicationKey' => env('B2_APPLICATION_KEY'),
-            'version' => '2',
-        ]);
-
-        return $client;
-    }
-
     public function getFirstPhoto($id){
         $m =Photo::with('photo_album')->where('photo_album_id',$id)->first();
         return $m;
     }
 
     public function getFileLink($filepath){
+        debug(env('B2_STORAGE_URL'), $filepath);
         return env("B2_STORAGE_URL") . "/" . $filepath;
     }
 
-    public function saveToCloud($filepath, $file, $client){
+    public function saveToCloud($filepath, $file){
+        debug(env('B2_APPLICATION_KEY'), $filepath);
+
+        $client = new Client(env('B2_ACCOUNT_KEY_ID'), [
+            'applicationKey' => env('B2_APPLICATION_KEY'),
+            'version' => '2',
+        ]);
+
         $client->upload([
             'BucketName' => env('B2_BUCKETNAME'),
             'FileName' => $filepath,

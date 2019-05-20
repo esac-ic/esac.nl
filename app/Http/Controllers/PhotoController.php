@@ -78,9 +78,8 @@ class PhotoController extends Controller
         $thumbnailPath = 'photos/' . $albumtitle .'/' . $thumbnailFileName ;
         $photoPath = 'photos/' . $albumtitle .'/' . $imageFileName;
 
-        $client = $this->_PhotoRepository->getClient();
-        $photoLink = $this->_PhotoRepository->saveToCloud($photoPath, $image, $client);
-        $thumbnailLink = $this->_PhotoRepository->saveToCloud($thumbnailPath, $thumbnail, $client);
+        $photoLink = $this->_PhotoRepository->saveToCloud($photoPath, $image);
+        $thumbnailLink = $this->_PhotoRepository->saveToCloud($thumbnailPath, $thumbnail);
         if($photoLink != null && $thumbnailLink != null){
             $photoLink = $this->_PhotoRepository->getFileLink($photoLink);
             $thumbnailLink = $this->_PhotoRepository->getFileLink($thumbnailLink);
