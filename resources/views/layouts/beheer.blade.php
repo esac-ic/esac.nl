@@ -101,7 +101,6 @@
                                     <a class="dropdown-item" href="{{ url('pages') }}">{{trans("menu.paginaBeheer")}}</a>
                                     <a class="dropdown-item" href="{{ url('newsItems') }}">{{trans("menu.newsItems")}}</a>
                                     @if(\Illuminate\Support\Facades\Auth::user()->hasRole(Config::get('constants.Administrator')))
-                                        <a class="dropdown-item" href="{{ url('frontEndReplacement') }}">{{trans("frontEndReplacement.menuname")}}</a>
                                         <a class="dropdown-item" href="{{ url('books') }}">{{trans("menu.books")}}</a>
                                     @endif
                                 </div>
@@ -111,6 +110,11 @@
                             <li class="nav-item">
                                 <a href="{{ url('mailList') }}" class="nav-link">
                                 {{trans("MailList.menuname")}}
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="{{ url('beheer/settings') }}" class="nav-link">
+                                {{trans("settings.settings")}}
                                 </a>
                             </li>
                         @endif

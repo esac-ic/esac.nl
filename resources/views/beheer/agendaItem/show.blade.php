@@ -57,6 +57,10 @@
                     <td>{{$agendaItem->agendaItemCategory->categorieName->text()}}</td>
                 </tr>
                 <tr>
+                    <td>{{trans('AgendaItems.climbingActivity')}}</td>
+                    <td>{{$agendaItem->climbing_activity ? trans('menu.yes') : trans('menu.no')}}</td>
+                </tr>
+                <tr>
                     <td>{{trans('AgendaItems.createdBy')}}</td>
                     <td>{{$agendaItem->getCreatedBy->getName()}}</td>
                 </tr>

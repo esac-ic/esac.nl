@@ -49,7 +49,6 @@ Route::resource('agendaItems', 'AgendaItemController');
 Route::resource('agendaItemCategories', 'AgendaItemCategorieController');
 Route::resource('applicationForms', 'ApplicationFormController');
 Route::resource('newsItems', 'NewsItemController');
-Route::resource('frontEndReplacement', 'FrontEndReplacementController');
 Route::resource('mailList', 'MailListController');
 Route::post('/lidworden', 'PendingUserController@storePendingUser');
 Route::resource('books', 'LibraryController');
@@ -92,3 +91,8 @@ Route::get('/nieuws/{newsItem}','frontEndController@newsDetailView');
 Route::get('/ledenlijst','frontEndController@memberList');
 Route::get("/ical", "ICalController@getAgendaItemsICalObject");
 Route::get('/{menuItem}','frontEndController@showPage');
+
+//setting routes
+Route::get('/beheer/settings','SettingsController@index');
+Route::put('/beheer/settings','SettingsController@update');
+Route::get('/beheer/settings/edit','SettingsController@edit');

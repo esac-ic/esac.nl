@@ -1,7 +1,7 @@
 @extends('layouts.beheer')
 
 @section('title')
-{{trans("AgendaItems.agendaItems")}}
+    {{trans("AgendaItems.agendaItems")}}
 @endsection
 
 @section('content')
@@ -32,7 +32,9 @@
             <div class="form-group">
                 {!! Form::label('startDate', trans('AgendaItems.startDate')) !!}
                 <div class="input-group date" id="startDateBox" data-target-input="nearest">
-                    <input type='text' class="form-control datetimepicker-input" id="startDate" name="startDate" data-target="#startDateBox" value="{{\Carbon\Carbon::now()->addHours(1)->format('d-m-Y')}}" required/>
+                    <input type='text' class="form-control datetimepicker-input" id="startDate" name="startDate"
+                           data-target="#startDateBox" value="{{\Carbon\Carbon::now()->addHours(1)->format('d-m-Y')}}"
+                           required/>
                     <div class="input-group-append" data-target="#startDateBox" data-toggle="datetimepicker">
                         <div class="input-group-text"><i class="ion-calendar"></i></div>
                     </div>
@@ -81,22 +83,32 @@
         });
 
         let agendaTable = $('#agenda-items').DataTable({
-            "order": [[ 1, "asc" ]],
+            "order": [[1, "asc"]],
             "ajax": {
-                'url' : getUrl(),
+                'url': getUrl(),
                 "dataSrc": "agendaItems"
             },
+            columnDefs: [
+                {type: 'de_datetime', targets: 1},
+                {type: 'de_datetime', targets: 2},
+            ],
             "columns": [
-                { "data": "title" },
-                { "data": function(data){
+                {"data": "title"},
+                {
+                    "data": function (data) {
                         return formatDate(data.full_startDate);
-                    }},
-                { "data": function(data){
-                    return formatDate(data.endDate);
-                    }},
-                { "data": function(data){
-                    return getAgendaItemActions(data);
-                }},
+                    }
+                },
+                {
+                    "data": function (data) {
+                        return formatDate(data.endDate);
+                    }
+                },
+                {
+                    "data": function (data) {
+                        return getAgendaItemActions(data);
+                    }
+                },
             ]
         });
 
@@ -104,25 +116,25 @@
             agendaTable.ajax.url(getUrl()).load();
         });
 
-        function formatDate(date){
+        function formatDate(date) {
             date = moment(date);
             return date.format("DD-MM-YYYY HH:mm")
         }
 
-        function getAgendaItemActions(data){
+        function getAgendaItemActions(data) {
             let actions = "";
             actions += '<a href="{{url('agendaItems')}}/' + data.id + '/edit"><span title="{{trans('AgendaItems.edit')}}" class="ion-edit" aria-hidden="true"></span></a>';
             actions += '<a href="{{url('agendaItems')}}/' + data.id + '"><span title="{{trans('AgendaItems.show')}}" class="ion-eye" aria-hidden="true"></span></a>';
-            if(data.application_form_id != null){
+            if (data.application_form_id != null) {
                 actions += '<a href="{{url('/forms/users')}}/' + data.id + '"><span title="{{trans("AgendaItems.showsignups")}}" class="ion-android-list" aria-hidden="true"></span></a>';
             }
             return actions;
         }
 
-        function getUrl(){
+        function getUrl() {
             let params = "limit=10000000";
             let datePicker = $('#startDate');
-            if(datePicker.val() != ""){
+            if (datePicker.val() != "") {
                 params += "&startDate=" + datePicker.val();
             }
 
