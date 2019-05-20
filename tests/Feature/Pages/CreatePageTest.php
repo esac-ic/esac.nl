@@ -148,7 +148,6 @@ class CreatePageTest extends TestCase
         $body = [
             'urlName' => 'test',
             'itemType' => 'standAlone',
-            'parentItem' => false,
             'afterItem' => 'home',
             'NL_text' => 'Test titel',
             'EN_text' => 'Test title',
@@ -209,6 +208,42 @@ class CreatePageTest extends TestCase
     }
 
     /**
+     * @test whether the login required field gets set correctly.
+     */
+    public function create_page_no_afterItem_correct()
+    {
+        $body = [
+            'urlName' => 'test',
+            'itemType' => 'subItem',
+            'parentItem' => 0,
+            'afterItem' => -1,
+            'NL_text' => 'Test titel',
+            'EN_text' => 'Test title',
+            'content_nl' => 'Hele leuke test inhoud.',
+            'content_en' => 'Very cool test content.',
+            '_token'  => csrf_token(),
+        ];
+
+        $response = $this->post($this->url, $body);
+
+        // Check whether the newly added page has the correct content.
+        $menuItem = MenuItem::all()->last();
+
+        $response->assertSessionHasNoErrors();
+        $this->assertNull($menuItem->after);
+
+        $body['urlName'] = 'test2';
+        $body['login'] = true;
+        $response = $this->post($this->url, $body);
+
+        // Check whether the newly added page has the correct content.
+        $menuItem = MenuItem::all()->last();
+
+        $response->assertSessionHasNoErrors();
+        $this->assertTrue((bool)$menuItem->login);
+    }
+
+    /**
      * @test whether a redirect is returned and the session contains errors for each of the required fields when
      * fields are missing in the body.
      */
@@ -227,12 +262,41 @@ class CreatePageTest extends TestCase
         $response->assertSessionHasErrors([
             'urlName',
             'itemType',
-            'parentItem',
             'afterItem',
             'NL_text',
             'EN_text',
             'content_nl',
             'content_en',
+        ]);
+
+        // No pages should be created.
+        $this->assertTrue(MenuItem::count() == 0);
+    }
+
+    /**
+     * @test whether a redirect is returned and the session contains error for parentItem when itemType is subItem.
+     */
+    public function empty_body_meaningful_error_subitem()
+    {
+        $body = [
+            'urlName' => 'test',
+            'itemType' => 'subItem',
+            'afterItem' => 'home',
+            'NL_text' => 'Test titel',
+            'EN_text' => 'Test title',
+            'content_nl' => 'Hele leuke test inhoud.',
+            'content_en' => 'Very cool test content.',
+            '_token'  => csrf_token(),
+        ];
+
+        $response = $this->post($this->url, $body);
+
+        // Must be redirected.
+        $response->assertStatus(302);
+
+        // Session must contain an error for each of the missing fields.
+        $response->assertSessionHasErrors([
+            'parentItem',
         ]);
 
         // No pages should be created.

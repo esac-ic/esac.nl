@@ -87,16 +87,21 @@ class PaginaBeheerController extends Controller
         return redirect('/pages');
     }
 
-    private function validateData(Request $reqeust){
-        $this->validate($reqeust,[
+    private function validateData(Request $request){
+        $this->validate($request,[
             'urlName' => 'required|max:255|unique:menu_items',
             'itemType' => 'required',
             'NL_text' => 'required',
             'EN_text' => 'required',
             'content_nl' => 'required',
             'content_en' => 'required',
-            'parentItem' => 'required',
             'afterItem' => 'required',
         ]);
+
+        if ($request->get('itemType') === 'subItem') {
+            $this->validate($request, [
+                'parentItem' => 'required',
+            ]);
+        }
     }
 }
