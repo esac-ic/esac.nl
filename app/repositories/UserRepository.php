@@ -45,7 +45,13 @@ class UserRepository implements IRepository {
             $userRegistration->intro_package = array_key_exists('intro_package', $data);
             $userRegistration->toprope_course = array_key_exists('toprope_course', $data);
             $userRegistration->shirt_size = $data['shirt_size'];
-            $userRegistration->intro_weekend_date = $data['intro_weekend_date'];
+
+            if($data['intro_weekend_date'] !== "") {
+                $userRegistration->intro_weekend_date = $data['intro_weekend_date'];
+            } else {
+                $userRegistration->intro_weekend_date = null;
+            }
+
             $userRegistration->save();
         }
 
@@ -121,10 +127,13 @@ class UserRepository implements IRepository {
         $user->save();
 
         $saveIntroOptions = app(Setting::SINGELTONNAME)->getsetting(Setting::SETTING_SHOW_INTRO_OPTION);
-        if(true === $saveIntroOptions) {
+        if($saveIntroOptions) {
             //file user registration info
             $userRegistrationInfo = new UserRegistrationInfo($data);
             $userRegistrationInfo->user_id = $user->id;
+            if($data['intro_weekend_date'] == "") {
+                $userRegistrationInfo->intro_weekend_date = null;
+            }
             $userRegistrationInfo->save();
         }
 

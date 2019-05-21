@@ -102,5 +102,13 @@ class UsersTableSeeder extends Seeder
         $user->remark = "Ik ben een test gebruiker";
         $user->pending_user = Carbon\Carbon::now();
         $user->save();
+
+        $userRegistrationInfo = new \App\Models\User\UserRegistrationInfo();
+        $userRegistrationInfo->intro_package = true;
+        $userRegistrationInfo->shirt_size = "s";
+        $userRegistrationInfo->toprope_course = true;
+        $userRegistrationInfo->intro_weekend_date = null;
+        $userRegistrationInfo->user_id = $user->id;
+        $userRegistrationInfo->save();
     }
 }

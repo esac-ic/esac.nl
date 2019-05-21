@@ -217,7 +217,7 @@
                     </div>
                     <div class="form-group col-md-6">
                         {!! Form::label('intro_weekend_date', trans('user.introWeekend')) !!}
-                        {!! Form::select('intro_weekend_date',trans('user.weekendDates'), $registrationInfo->intro_weekend_date->format('Y-m-d'), ['class' => 'form-control']) !!}
+                        {!! Form::select('intro_weekend_date',trans('user.weekendDates'), $registrationInfo->intro_weekend_date != null ? $registrationInfo->intro_weekend_date->format('Y-m-d') : null, ['class' => 'form-control']) !!}
                     </div>
                 </div>
             </div>
