@@ -28,10 +28,9 @@ class UserRegistrationInfoExport implements FromCollection, WithTitle, WithHeadi
                 'name' => $user->getName(),
                 'email' => $user->email,
                 'phone' => $user->phonenumber,
-                'introPackage' => $registration->intro_package ? trans('menu.yes') : trans('menu.no'),
-                'topropCourse' => $registration->toprope_course ? trans('menu.yes') : trans('menu.no'),
+                'introPackage' => trans('user.packageTypes')[$registration->package_type],
                 'shirt' => trans('user.shirtSizes')[$registration->shirt_size],
-                'weekendDate' => $registration->intro_weekend_date != "" ? $registration->intro_weekend_date->format('d-m-Y') : ""
+                'weekendDate' => trans('user.weekendDates')[$registration->intro_weekend]
             ];
         }
 
@@ -57,7 +56,6 @@ class UserRegistrationInfoExport implements FromCollection, WithTitle, WithHeadi
             trans('user.email'),
             trans('user.phonenumber'),
             trans('user.introPackage'),
-            trans('user.topropCourse'),
             trans('user.tshirt'),
             trans('user.introWeekend'),
         ];

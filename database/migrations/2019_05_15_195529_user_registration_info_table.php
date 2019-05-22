@@ -16,10 +16,9 @@ class UserRegistrationInfoTable extends Migration
         Schema::create('user_registration_info', function(Blueprint $table){
             $table->increments('id');
             $table->unsignedInteger('user_id');
-            $table->boolean('intro_package')->default(false);
-            $table->boolean('toprope_course')->default(false);
-            $table->string('shirt_size')->nullable();
-            $table->date('intro_weekend_date')->nullable();
+            $table->string('package_type');
+            $table->string('shirt_size');
+            $table->string('intro_weekend');
 
             $table->foreign('user_id')
                 ->references('id')

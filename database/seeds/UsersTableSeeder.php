@@ -104,10 +104,9 @@ class UsersTableSeeder extends Seeder
         $user->save();
 
         $userRegistrationInfo = new \App\Models\User\UserRegistrationInfo();
-        $userRegistrationInfo->intro_package = true;
+        $userRegistrationInfo->package_type = "standard";
         $userRegistrationInfo->shirt_size = "s";
-        $userRegistrationInfo->toprope_course = true;
-        $userRegistrationInfo->intro_weekend_date = null;
+        $userRegistrationInfo->intro_weekend = "intro1";
         $userRegistrationInfo->user_id = $user->id;
         $userRegistrationInfo->save();
     }

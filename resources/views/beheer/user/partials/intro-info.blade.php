@@ -1,11 +1,7 @@
 <table class="table table-striped" style="width:100%">
     <tr>
         <td>{{ trans('user.introPackage') }}</td>
-        <td>{{ $user->registrationInfo->intro_package ? trans('menu.yes') : trans('menu.no') }}</td>
-    </tr>
-    <tr>
-        <td>{{ trans('user.topropCourse') }}</td>
-        <td>{{ $user->registrationInfo->toprope_course ? trans('menu.yes') : trans('menu.no') }}</td>
+        <td>{{ trans('user.packageTypes')[$user->registrationInfo->package_type] }}</td>
     </tr>
     <tr>
         <td>{{ trans('user.tshirt') }}</td>
@@ -13,6 +9,6 @@
     </tr>
     <tr>
         <td>{{ trans('user.introWeekend') }}</td>
-        <td>{{ $user->registrationInfo->intro_weekend_date != null ? $user->registrationInfo->intro_weekend_date->format('d-m-Y') : ""  }}</td>
+        <td>{{ trans('user.weekendDates')[$user->registrationInfo->intro_weekend] }}</td>
     </tr>
 </table>

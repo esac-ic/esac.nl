@@ -4,13 +4,9 @@
     </div>
     <div class="card-body">
         <div class="form-row">
-            <div class="form-group col-md-6">
-                {!! Form::label('intro_package', trans('user.introPackage')) !!}
-                {!! Form::checkbox('intro_package',1, false, ['class' => 'form-control']) !!}
-            </div>
-            <div class="form-group col-md-6">
-                {!! Form::label('toprope_course', trans('user.topropCourse')) !!}
-                {!! Form::checkbox('toprope_course',1, false, ['class' => 'form-control']) !!}
+            <div class="form-group col-md-12">
+                {!! Form::label('package_type', trans('user.introPackage')) !!}
+                {!! Form::select('package_type',trans('user.packageTypes'), null, ['class' => 'form-control']) !!}
             </div>
         </div>
         <div class="form-row">

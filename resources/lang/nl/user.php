@@ -76,13 +76,17 @@ return [
 
     'introPackageOptions' => 'Intro pakket opties',
     'introPackage' => 'Intro pakket',
-    'tshirt' => 'Esac T-shirt',
+    'tshirt' => 'ESAC Intro shirt',
     'topropCourse' => 'Toprope cursus',
     'introWeekend' => 'Intro weekend',
     'registrationInfo' => 'Registratie info',
 
+    'packageTypes' => [
+        'standard' => 'Standaard introductie packet (€ 110)',
+        'noToprope' => 'Introductie paket zonder cursus (€ 90)',
+    ],
+
     'shirtSizes' => [
-        '' => 'Geen shirt',
         's' => 'S',
         'm' => 'M',
         'l' => 'L',
@@ -90,8 +94,8 @@ return [
     ],
 
     'weekendDates' => [
-        '' => 'Geen klimweekend',
-        '2019-09-06' => '06-09-2019',
-        '2019-09-26' => '26-09-2019',
+        'intro1' => 'Intro 1 Avalonia - 28 en 29 sept.',
+        'intro2' => 'Intro 2 Hotton - 12 en 13 okt.',
+        'intro3' => 'Intro 3 Sy - 19 en 20 okt.',
     ]
 ];
