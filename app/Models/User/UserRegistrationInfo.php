@@ -13,19 +13,9 @@ class UserRegistrationInfo extends Model
     protected $table = 'user_registration_info';
 
     protected $fillable = [
-        'intro_package',
+        'package_type',
         'shirt_size',
-        'toprope_course',
-        'intro_weekend_date',
-    ];
-
-    protected $dates = [
-        'intro_weekend_date'
-    ];
-
-    protected $casts = [
-        'toprope_course' => 'boolean',
-        'intro_package' => 'boolean',
+        'intro_weekend',
     ];
 
     public function user(){

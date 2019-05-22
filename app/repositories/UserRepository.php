@@ -42,15 +42,9 @@ class UserRepository implements IRepository {
         $userRegistration = $user->registrationInfo;
 
         if(null !== $userRegistration) {
-            $userRegistration->intro_package = array_key_exists('intro_package', $data);
-            $userRegistration->toprope_course = array_key_exists('toprope_course', $data);
+            $userRegistration->package_type = $data['package_type'];
             $userRegistration->shirt_size = $data['shirt_size'];
-
-            if($data['intro_weekend_date'] !== "") {
-                $userRegistration->intro_weekend_date = $data['intro_weekend_date'];
-            } else {
-                $userRegistration->intro_weekend_date = null;
-            }
+            $userRegistration->intro_weekend = $data['intro_weekend'];
 
             $userRegistration->save();
         }
@@ -131,9 +125,6 @@ class UserRepository implements IRepository {
             //file user registration info
             $userRegistrationInfo = new UserRegistrationInfo($data);
             $userRegistrationInfo->user_id = $user->id;
-            if($data['intro_weekend_date'] == "") {
-                $userRegistrationInfo->intro_weekend_date = null;
-            }
             $userRegistrationInfo->save();
         }
 
