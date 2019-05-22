@@ -42,7 +42,7 @@
 
 @push('scripts')
     <script>
-        var APP_URL = "{{env('APP_URL')}}";
+        var APP_URL = "{{url('/')}}";
         var DESCRIPTION = "{!! $content !!}";
     </script>
     <script src="{{mix('js/agenda.js')}}"></script>

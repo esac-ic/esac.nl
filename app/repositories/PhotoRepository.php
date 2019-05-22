@@ -60,20 +60,17 @@ class PhotoRepository implements IRepository
     }
 
     public function getFileLink($filepath){
-        debug(env('B2_STORAGE_URL'), $filepath);
-        return env("B2_STORAGE_URL") . "/" . $filepath;
+        return config('custom.b2_storage_url') . "/" . $filepath;
     }
 
     public function saveToCloud($filepath, $file){
-        debug(env('B2_APPLICATION_KEY'), $filepath);
-
-        $client = new Client(env('B2_ACCOUNT_KEY_ID'), [
-            'applicationKey' => env('B2_APPLICATION_KEY'),
+        $client = new Client(config('custom.b2_account_key_id'), [
+            'applicationKey' => config('custom.b2_application_key'),
             'version' => '2',
         ]);
 
         $client->upload([
-            'BucketName' => env('B2_BUCKETNAME'),
+            'BucketName' => config('custom.b2_bucketname'),
             'FileName' => $filepath,
             'Body' => file_get_contents($file)
         ]);
