@@ -80,6 +80,8 @@ return [
     'topropCourse' => 'Toprope cursus',
     'introWeekend' => 'Intro weekend',
     'registrationInfo' => 'Registratie info',
+    'packagePlaceholder' => 'Geen intro pakket...',
+
 
     'packageTypes' => [
         'standard' => 'Standaard introductie packet (€ 110)',

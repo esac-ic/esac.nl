@@ -6,7 +6,7 @@
         <div class="form-row">
             <div class="form-group col-md-12">
                 {!! Form::label('package_type', trans('user.introPackage')) !!}
-                {!! Form::select('package_type',trans('user.packageTypes'), 'standard', ['class' => 'form-control']) !!}
+                {!! Form::select('package_type',trans('user.packageTypes'), null, ['placeholder' => trans('user.packagePlaceholder'), 'class' => 'form-control']) !!}
             </div>
         </div>
         <div class="form-row">

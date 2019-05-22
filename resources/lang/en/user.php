@@ -79,6 +79,8 @@ return [
     'topropCourse' => 'Toprope course',
     'introWeekend' => 'Intro weekend',
     'registrationInfo' => 'Registration info',
+    'packagePlaceholder' => 'No introduction package...',
+
 
     'packageTypes' => [
         'standard' => 'Standard introduction package (€ 110)',
