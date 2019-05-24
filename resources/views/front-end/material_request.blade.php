@@ -41,8 +41,14 @@
         <div class="card-body">
             <div class="form-row">
                 <div class="form-group col-md-5">
-                    {!! Form::label('itemtype', trans('front-end/material.type')) !!}
-                    {!! Form::text('itemtypeTest', '', ['class' => 'form-control','required' => 'required']) !!}                    
+                    {!! Form::label('name', trans('front-end/user.name')) !!}
+                    {!! Form::text('name', '', ['class' => 'form-control','required' => 'required']) !!}                    
+                </div>
+            </div>
+	    <div class="form-row">
+                <div class="form-group col-md-5">
+                    {!! Form::label('itemType', trans('front-end/material.type')) !!}
+                    {!! Form::text('itemType', '', ['class' => 'form-control','required' => 'required']) !!}                    
                 </div>
             </div>
             <div class="form-row">
@@ -57,8 +63,8 @@
 		</div>
                 <div class="form-group col-md-6">
                     {!! Form::label('rentEnd', trans('front-end/material.rentEnd')) !!}
-                    <div class="input-group date" id="birthDayBox" data-target-input="nearest">
-                        <input type='text' class="form-control datetimepicker-input" id="birthDay" name="birthDay" data-target="#birthDayBox" value="" required="required">
+                    <div class="input-group date" id="rentEnd" data-target-input="nearest">
+                        <input type='text' class="form-control datetimepicker-input" id="rentEnd" name="rentEnd" data-target="#rentEndBox" value="" required="required">
                         <div class="input-group-append" data-target="#birthDayBox" data-toggle="datetimepicker">
                             <div class="input-group-text"><i class="ion-calendar"></i></div>
                         </div>

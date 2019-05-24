@@ -1,0 +1,14 @@
+[
+    {
+        "level": "SEVERE",
+        "message": "http:\/\/localhost\/api\/setLanguage?language=en - Failed to load resource: the server responded with a status of 401 (Unauthorized)",
+        "source": "network",
+        "timestamp": 1558128334961
+    },
+    {
+        "level": "SEVERE",
+        "message": "http:\/\/localhost\/api\/setLanguage?language=en - Failed to load resource: the server responded with a status of 401 (Unauthorized)",
+        "source": "network",
+        "timestamp": 1558128336810
+    }
+]

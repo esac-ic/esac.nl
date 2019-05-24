@@ -78,6 +78,9 @@ Route::post('/mailList/{mailistid}/member','MailListController@addMember');
 Route::post('/photoalbums/{albumId}', 'PhotoController@addPhotoToAlbum');
 Route::post('/photoalbums','PhotoController@addAlbum');
 
+//material notification route
+Route::post('/huren', 'MaterialController@toMail');
+
 //front-end routes
 Route::get('/photoalbums/{albumId}','PhotoController@index')->name('PhotoAlbum');
 Route::get('/photo/{id}','PhotoController@getPhotos')->name('getPhotos');
