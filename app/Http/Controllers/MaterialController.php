@@ -22,5 +22,7 @@ class MaterialController extends Controller
     {
 	    \Mail::to('ttcommandeur@gmail.com')->send(new MaterialNotification($request->input()));
 
+	    return redirect('home');
+
     }
  }
