@@ -65,7 +65,7 @@ class PaginaBeheerController extends Controller
             'method' => 'PATCH',
             'url' => '/pages/' . $page->id,];
         $pages = $this->_menuRepository->all();
-        return view('beheer.menu.create_edit', compact(['page', 'fields','pages','pageContent']));
+        return view('beheer.menu.create_edit', compact(['page', 'fields','pages']));
     }
 
     //update page
@@ -87,14 +87,21 @@ class PaginaBeheerController extends Controller
         return redirect('/pages');
     }
 
-    private function validateData(Request $reqeust){
-        $this->validate($reqeust,[
+    private function validateData(Request $request){
+        $this->validate($request,[
             'urlName' => 'required|max:255|unique:menu_items',
             'itemType' => 'required',
             'NL_text' => 'required',
             'EN_text' => 'required',
             'content_nl' => 'required',
             'content_en' => 'required',
+            'afterItem' => 'required',
         ]);
+
+        if ($request->get('itemType') === 'subItem') {
+            $this->validate($request, [
+                'parentItem' => 'required',
+            ]);
+        }
     }
 }

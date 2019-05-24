@@ -25,6 +25,7 @@ return [
     "category"  =>  "Category",
     "applicationForm" => "Application form",
     "noapplicationForm" => "No application form",
+    'climbingActivity' => "Climbing activity",
 
 
     //defauls values

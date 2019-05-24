@@ -6,6 +6,7 @@ use App\Certificate;
 use App\CustomClasses\MailgunFacade;
 use App\repositories\RepositorieFactory as RepositorieFactory;
 use App\Rol;
+use App\Rules\EmailDomainValidator;
 use App\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -150,7 +151,13 @@ class UserController extends Controller
 
     private function validateInput(Request $request){
         $this->validate($request,[
-            'email' => 'required|email|max:255|unique:users',
+            'email' => [
+                'required',
+                'email',
+                'max:255',
+                'unique:users',
+                new EmailDomainValidator()
+            ],
             'firstname' => 'required',
             'lastname' => 'required',
             'street' => 'required',

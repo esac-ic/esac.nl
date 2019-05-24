@@ -59,6 +59,7 @@ return [
     "removeAsPendingMember" => "Verwijderen als in afwachting",
     "old_members"   => "Oud leden",
     "active_members" => "Actieve leden",
+    "current_members"   => "Huidige leden",
     "export_users"  => "Exporteer gebruikers",
     "members"   => "Leden",
     "personal" => 'Persoonlijk',

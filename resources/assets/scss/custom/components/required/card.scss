@@ -13,6 +13,15 @@
   margin-bottom: $spacer;
 }
 
+a.card{
+  color: $body-color;
+  &[data-toggle="tab"]{
+    &:hover{
+      transform: none !important;
+    }
+  }
+}
+
 .card.row{
   margin-left: 0;
   margin-right: 0;
@@ -34,7 +43,7 @@
   }
 }
 
-.bg-dark{
+.bg-dark, .bg-gradient{
   .card{
     &:not(.bg-dark){
       color: $body-color;
@@ -209,7 +218,7 @@ a.card{
     background-color: transparent;
     border-color: transparent; 
     &:hover{
-      background-color: $gray-200;
+      background-color: darken($gray-100,2%);
     }
   }
 }

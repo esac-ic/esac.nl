@@ -5,6 +5,9 @@
                 <div class="col-sm-8 d-flex flex-wrap">
                     <div class="card w-100">
                         <div class="card-body">
+                        <button type="button" class="btn btn-outline-primary float-right" data-toggle="modal" data-target="#ExportModal">
+                            <span class="ion-android-download"></span> Exporteren
+                        </button>
                         <h2 class="card-title">Activiteiten</h2>
                          <p class="card-text" v-html="description"></p>
                         </div>

@@ -1,0 +1,42 @@
+language: php
+sudo: required
+
+php:
+  - 7.3
+  - 7.2
+
+services:
+  - mysql
+
+addons:
+  chrome: stable
+
+before_install:
+  - cp .env.example .env
+  - composer self-update
+  - composer validate
+  - mysql -e 'CREATE DATABASE esac;'
+
+install:
+  - composer install --no-interaction --prefer-dist --no-suggest
+  - npm install npm@latest -g
+  - npm install
+
+before_script:
+  - php artisan key:generate
+  - php artisan storage:link
+  - php artisan dusk:chrome-driver
+  - php artisan migrate
+  - php artisan db:seed
+  - npm run prod
+  - npm run prod
+  - php artisan serve &
+
+script:
+  - vendor/bin/phpunit -c phpunit.xml --coverage-clover=coverage.xml
+
+after_failure:
+  - cat storage/logs/laravel.log
+
+after_success:
+  - bash <(curl -s https://codecov.io/bash)

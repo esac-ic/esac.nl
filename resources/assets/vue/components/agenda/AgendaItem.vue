@@ -1,5 +1,5 @@
 <template>
-    <div class="col-sm-4 d-flex flex-wrap">
+    <div class="col-lg-4 col-md-6 d-flex flex-wrap">
         <div class="card w-100 position-relative">
             <a :href="makeAgendaDetailUrl()">
                 <img class="card-img-top" :src="agenda.thumbnail" alt="Card image cap">

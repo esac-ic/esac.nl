@@ -97,7 +97,7 @@ class frontEndController extends Controller
         $menuItem = $this->_MenuItemRepository->findby('urlName',MenuItem::NEWSURL);
         $content = $menuItem->content->text();
 
-        return view("front-end.news_detail", compact('newsItem','users','curPageName'));
+        return view("front-end.news_detail", compact('newsItem','curPageName'));
     }
 
     public function library(){

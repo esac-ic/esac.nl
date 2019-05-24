@@ -33,7 +33,7 @@
             <h3>{{trans('menuItems.menuItem')}} {{$page->text->text()}}</h3>
         </div>
         <div class="card-body">
-            <table id="users" class="table table-striped collection table-condensed table-bordered table-hover">
+            <table class="table table-striped" style="width:100%">
                 <tr>
                     <td>{{trans('menuItems.name')}}</td>
                     <td>{{$page->text->text() }}</td>

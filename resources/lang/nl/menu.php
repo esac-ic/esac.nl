@@ -34,5 +34,7 @@ return [
     'action' => 'Actie',
     "account_overview" => "Account overzicht",
     "user" => "Gebruiker",
-    "become_member" => "Word lid"
+    "become_member" => "Word lid",
+    "activities" => "Activiteiten",
+    "content" => "Content"
 ];

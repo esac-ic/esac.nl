@@ -6,17 +6,18 @@
  * Time: 19:29
  */
 return [
-    "unique"        => "De :attribute  is al in gebruik",
+    "unique" => "De :attribute  is al in gebruik",
     "Unauthorized" => "U hebt geen rechten voor deze pagina",
     "PageNotFound" => "De pagina is niet gevonden",
     "min" => [
-        "numeric"   => ":attribute moet minimaal :min zijn"
+        "numeric" => ":attribute moet minimaal :min zijn"
     ],
     "oldUserLogin" => "Oud leden kunnen niet inloggen",
     "pendingUserLogin" => "Leden in afwachting kunnen niet inloggen",
     "required" => "Veld :attribute moet ingevuld zijn",
     "date" => "Geen geldige geboortedatum",
     "error" => "Error",
+    'bannedEmailDomain' => "Email adressen van onderwijsinstellingen (student.tue.nl) zijn niet toegestaan om te voorkomen dat je onze mails niet meer ontvangt na je afstuderen",
     'attributes' => [
         'privacy_policy' => 'Privacy Policy',
         'termsconditions' => 'Terms and Conditions',
@@ -29,5 +30,5 @@ return [
         'g-recaptcha-response' => [
             "required" => "'Ik ben geen robot' validatie moet ingevuld zijn",
         ]
-]
+    ]
 ];

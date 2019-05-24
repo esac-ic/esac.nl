@@ -21,8 +21,7 @@ class Language
      */
     public function handle($request, Closure $next)
     {
-        $session = new Session();
-        $language = $session->get($this->_LANGSESSIONNAME,'nl');
+        $language = $request->session()->get($this->_LANGSESSIONNAME,'nl');
         if(array_key_exists($language,$this->_LANGLOOKUP)){
             \App::setLocale($this->_LANGLOOKUP[$language]);
         }

@@ -25,6 +25,7 @@ return [
     "category"  =>  "Categorie",
     "applicationForm" => "Inschrijf formulier",
     "noapplicationForm" => "Geen inschrijf formulier",
+    'climbingActivity' => "Klim activiteit",
 
 
     //defauls values

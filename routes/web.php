@@ -33,8 +33,6 @@ Route::patch('users/{user}/removeAsActiveMember', 'UserController@removeAsActive
 Route::patch('users/{user}/removeAsPendingMember', 'PendingUserController@removeAsPendingMember');
 Route::patch('users/{user}/approveAsPendingMember', 'PendingUserController@approveAsPendingMember');
 
-
-
 //user certification routes
 Route::get('users/{user}/addCertificate','UserCertificateController@addCertificate');
 Route::get('users/{user}/addCertificate/{certificate}','UserCertificateController@editUserCertificate');
@@ -51,7 +49,6 @@ Route::resource('agendaItems', 'AgendaItemController');
 Route::resource('agendaItemCategories', 'AgendaItemCategorieController');
 Route::resource('applicationForms', 'ApplicationFormController');
 Route::resource('newsItems', 'NewsItemController');
-Route::resource('frontEndReplacement', 'FrontEndReplacementController');
 Route::resource('mailList', 'MailListController');
 Route::post('/lidworden', 'PendingUserController@storePendingUser');
 Route::resource('books', 'LibraryController');
@@ -96,4 +93,10 @@ Route::get('/nieuws','frontEndController@news');
 Route::get('/nieuws/{newsItem}','frontEndController@newsDetailView');
 Route::get('/ledenlijst','frontEndController@memberList');
 Route::get('/materiaalhuren', 'frontEndController@material');
-Route::get('/{menuItem}','frontEndController@showPage'); 
+Route::get("/ical", "ICalController@getAgendaItemsICalObject");
+Route::get('/{menuItem}','frontEndController@showPage');
+
+//setting routes
+Route::get('/beheer/settings','SettingsController@index');
+Route::put('/beheer/settings','SettingsController@update');
+Route::get('/beheer/settings/edit','SettingsController@edit');
