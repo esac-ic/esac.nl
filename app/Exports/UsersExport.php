@@ -5,10 +5,11 @@ namespace App\Exports;
 use App\repositories\UserRepository;
 use Illuminate\Support\Collection;
 use Maatwebsite\Excel\Concerns\FromCollection;
+use Maatwebsite\Excel\Concerns\ShouldAutoSize;
 use Maatwebsite\Excel\Concerns\WithHeadings;
 use Maatwebsite\Excel\Concerns\WithTitle;
 
-class UsersExport implements FromCollection, WithTitle, WithHeadings
+class UsersExport implements FromCollection, WithTitle, WithHeadings, ShouldAutoSize
 {
     private $userRepository;
 
@@ -22,9 +23,10 @@ class UsersExport implements FromCollection, WithTitle, WithHeadings
     */
     public function collection()
     {
-        $activeUsers = $this->userRepository->getCurrentUsers();
+        $activeUsers = $this->userRepository->getCurrentUsers(['*'],['certificates']);
         $exportData = [];
         foreach ($activeUsers as $user){
+            $user->makeHidden(['created_at', 'updated_at', 'lid_af', 'pending_user']);
             $data = $user->toArray();
             $data['certificates'] = $user->getCertificationsAbbreviations();
             array_push($exportData,$data);
@@ -56,20 +58,23 @@ class UsersExport implements FromCollection, WithTitle, WithHeadings
             trans('user.housenumber'),
             trans('user.city'),
             trans('user.zipcode'),
+            trans('user.country'),
             trans('user.phonenumber'),
             trans('user.phonenumber_alt'),
-            trans('user.emergencyNumber'),
-            trans('user.emergencyHouseNumber'),
-            trans('user.emergencystreet'),
-            trans('user.emergencycity'),
-            trans('user.emergencyzipcode'),
-            trans('user.emergencycountry'),
+            trans('user.emNumber'),
+            trans('user.emHouseNumber'),
+            trans('user.emstreet'),
+            trans('user.emcity'),
+            trans('user.emzipcode'),
+            trans('user.emcountry'),
             trans('user.birthDay'),
             trans('user.gender'),
             trans('user.kind_of_member'),
             trans('user.IBAN'),
             trans('user.BIC'),
+            trans('user.incasso'),
             trans('user.remark'),
+            trans('user.certificates')
         ];
     }
 }

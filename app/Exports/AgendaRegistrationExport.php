@@ -5,6 +5,7 @@ namespace App\Exports;
 use App\AgendaItem;
 use App\repositories\InschrijvenRepository;
 use Maatwebsite\Excel\Concerns\FromCollection;
+use Maatwebsite\Excel\Concerns\ShouldAutoSize;
 use Maatwebsite\Excel\Concerns\WithHeadings;
 use Maatwebsite\Excel\Concerns\WithTitle;
 
@@ -12,7 +13,7 @@ use Maatwebsite\Excel\Concerns\WithTitle;
  * Class AgendaRegistrationExport
  * @package App\Exports
  */
-class AgendaRegistrationExport implements FromCollection, WithTitle, WithHeadings
+class AgendaRegistrationExport implements FromCollection, WithTitle, WithHeadings, ShouldAutoSize
 {
     /**
      * @var InschrijvenRepository

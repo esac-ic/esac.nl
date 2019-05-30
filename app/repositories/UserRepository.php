@@ -74,8 +74,11 @@ class UserRepository implements IRepository {
          return User::all($columns);
     }
 
-    public function getCurrentUsers($columns = array('*')){
-        return User::where([['lid_af',null],['pending_user',null]])->get($columns);
+    public function getCurrentUsers($columns = array('*'), array $with = []){
+        return User::query()
+            ->with($with)
+            ->where([['lid_af',null],['pending_user',null]])
+            ->get($columns);
     }
 
     public function getOldUsers($columns = array('*')){

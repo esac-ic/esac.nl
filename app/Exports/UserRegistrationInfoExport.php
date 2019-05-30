@@ -6,10 +6,11 @@ use App\Models\User\UserRegistrationInfo;
 use Carbon\Carbon;
 use Illuminate\Support\Collection;
 use Maatwebsite\Excel\Concerns\FromCollection;
+use Maatwebsite\Excel\Concerns\ShouldAutoSize;
 use Maatwebsite\Excel\Concerns\WithHeadings;
 use Maatwebsite\Excel\Concerns\WithTitle;
 
-class UserRegistrationInfoExport implements FromCollection, WithTitle, WithHeadings
+class UserRegistrationInfoExport implements FromCollection, WithTitle, WithHeadings, ShouldAutoSize
 {
     /**
     * @return \Illuminate\Support\Collection
@@ -28,9 +29,9 @@ class UserRegistrationInfoExport implements FromCollection, WithTitle, WithHeadi
                 'name' => $user->getName(),
                 'email' => $user->email,
                 'phone' => $user->phonenumber,
-                'introPackage' => trans('user.packageTypes')[$registration->package_type],
-                'shirt' => trans('user.shirtSizes')[$registration->shirt_size],
-                'weekendDate' => trans('user.weekendDates')[$registration->intro_weekend]
+                'introPackage' => trans('user.packageTypes.' . $registration->package_type),
+                'shirt' => trans('user.shirtSizes.' . $registration->shirt_size),
+                'weekendDate' => trans('user.weekendDates.' . $registration->intro_weekend)
             ];
         }
 

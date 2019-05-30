@@ -38,7 +38,7 @@ class UserController extends Controller
 
     //gives the user views
     public function index(){
-        $users = $this->_userRepository->getCurrentUsers(array('id','firstname','lastname','email','preposition','kind_of_member'));
+        $users = $this->_userRepository->getCurrentUsers(array('id','firstname','lastname','email','preposition','kind_of_member'), ['roles']);
         $roles = Rol::all();
 
         return view('beheer.user.index', compact('users','roles'));
