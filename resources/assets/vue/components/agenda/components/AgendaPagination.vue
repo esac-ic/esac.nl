@@ -22,7 +22,7 @@
 
 <script>
     import { mapGetters, mapActions } from 'vuex';
-    import {AGENDA_ITEMS_ON_PAGE} from '../../constants';
+    import {AGENDA_ITEMS_ON_PAGE} from '../constants';
 
     export default {
         name: "AgendaPagination",

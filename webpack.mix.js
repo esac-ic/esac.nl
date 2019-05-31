@@ -43,8 +43,8 @@ mix.copy("node_modules/jquery/dist/jquery.js", "public/js/vendor")
 mix.js('resources/assets/js/app.js', 'public/js');
 
 //vuejs components
-mix.js('resources/assets/vue/agenda.js','public/js');
-mix.js('resources/assets/vue/zekeringen.js','public/js');
+mix.js('resources/assets/vue/components/agenda/index.js','public/js/agenda.js');
+mix.js('resources/assets/vue/components/zekeringen/index.js','public/js/zekeringen.js');
 
 //cache busting (all copied files need to be added here)
 mix.version([

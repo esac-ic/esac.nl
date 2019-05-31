@@ -32,10 +32,10 @@
 </template>
 
 <script>
-    import zekeringApi from '../../api/zekering';
+    import zekeringApi from '../api/zekering';
     import subZekering from './SubZekering';
-    import EventBus from '../../event-bus';
-    import * as constants from "../../constants";
+    import EventBus from '../event-bus';
+    import * as constants from "../constants";
 
     export default {
         name: "Zekering",

@@ -1,6 +1,6 @@
 import Vue from 'vue';
 
-import Agenda from './components/agenda/Agenda';
+import Agenda from './components/Agenda';
 import store from './store'
 
 

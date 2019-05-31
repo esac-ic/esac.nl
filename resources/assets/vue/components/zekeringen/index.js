@@ -1,6 +1,6 @@
 import Vue from 'vue';
 
-import Zekeringen from './components/zekeringen/Zekeringen';
+import Zekeringen from './components/Zekeringen';
 import VuePaginate from 'vue-paginate'
 
 Vue.use(VuePaginate);
