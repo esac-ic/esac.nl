@@ -41,7 +41,6 @@
 
 @push('scripts')
     <script>
-        var APP_URL = "{{env('APP_URL')}}";
         var DESCRIPTION = "{!! $content !!}";
     </script>
 @endpush

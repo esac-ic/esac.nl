@@ -20,8 +20,8 @@ class UserController extends Controller
         $users = User::query()
             ->where(function (Builder $query) use ($request) {
                 $term = $request->get('term', '');
-                $query->where('firstname', $term)
-                    ->orWhere('lastname', $term);
+                $query->where('firstname', 'like' , "%$term%")
+                    ->orWhere('lastname', 'like' , "%$term%");
             })
             ->selectRaw("CONCAT(firstname, ' ', lastname) as text")
             ->get();

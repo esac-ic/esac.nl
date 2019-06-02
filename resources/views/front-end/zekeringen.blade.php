@@ -48,7 +48,6 @@ TODO: voeg toe moet gewoon plusje worden
 
 @push('scripts')
     <script>
-        var APP_URL = "{{env('APP_URL')}}";
         var LOGDIN = "{{Auth::guest() ? "0" : "1"}}";
         var ADMIN = "{{!Auth::guest() && Auth::getUser()->hasRole(\Config::get('constants.Activity_administrator')) ? "1" : "0"}}"
     </script>
