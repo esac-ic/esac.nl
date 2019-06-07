@@ -53,7 +53,9 @@
         ],
         methods: {
             deleteZekering(){
-                zekeringApi.deleteZekering(this.zekering.id);
+                zekeringApi.deleteZekering(this.zekering.id, this.zekeringDeleted);
+            },
+            zekeringDeleted(response) {
                 EventBus.$emit(constants.EVENT_RELOAD_ZEKERINGEN);
             },
             togleForm(){
