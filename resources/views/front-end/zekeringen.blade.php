@@ -43,16 +43,12 @@ TODO: voeg toe moet gewoon plusje worden
             </div>
         </div>
     </div>
-    {{--The zekeringen list will be mounted  to this div by vue--}}
-    <div id="zekeringen">
-    </div>
+    <zekeringen></zekeringen>
 @endsection
 
 @push('scripts')
     <script>
-        var APP_URL = "{{env('APP_URL')}}";
         var LOGDIN = "{{Auth::guest() ? "0" : "1"}}";
         var ADMIN = "{{!Auth::guest() && Auth::getUser()->hasRole(\Config::get('constants.Activity_administrator')) ? "1" : "0"}}"
     </script>
-    <script src="{{mix('js/zekeringen.js')}}"></script>
 @endpush

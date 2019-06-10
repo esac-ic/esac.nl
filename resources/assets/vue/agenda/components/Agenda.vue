@@ -11,7 +11,7 @@
                         <h2 class="card-title">Activiteiten</h2>
                          <p class="card-text" v-html="description"></p>
                         </div>
-                    </div>     
+                    </div>
                 </div>
                 <div class="col-sm-4 d-flex flex-wrap">
                     <div class="card w-100">

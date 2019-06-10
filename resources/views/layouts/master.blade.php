@@ -31,12 +31,17 @@
 
     </head>
     <body>
-        @yield('main')
+        <div id="app">
+            @yield('main')
+        </div>
 
         <script src="{{mix("/js/vendor/jquery.js")}}" type="text/javascript"></script>
         <script src="{{mix("/js/vendor/popper.js")}}" type="text/javascript"></script>
         <script src="{{mix("/js/vendor/bootstrap.js")}}" type="text/javascript"></script>
         @stack('scripts')
+        <script>
+            var APP_URL = "{{env('APP_URL')}}";
+        </script>
         <script src="{{mix("/js/app.js")}}" type="text/javascript"></script>
         <script type="text/javascript">
             const COOKIE_NAME = "lang";
