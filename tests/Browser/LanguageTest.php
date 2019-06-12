@@ -15,7 +15,7 @@ class LanguageTest extends DuskTestCase
      */
     public function test_translation()
     {
-        //for now commeted out because dusk has a bug with chrome versie 75 see https://github.com/laravel/dusk/issues/651
+        // for now commeted out because dusk has a bug with chromedriver version 75 see https://github.com/laravel/dusk/issues/651
 //        $this->browse(function (Browser $browser) {
 //            $browser->maximize()
 //                    ->visit('/home')
