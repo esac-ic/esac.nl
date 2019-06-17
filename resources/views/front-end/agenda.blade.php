@@ -1,6 +1,8 @@
 @extends('layouts.app')
 
 @section('content')
+<div id="app">
+
     {{--In this div is the agenda mounted by vue--}}
     <agenda></agenda>
 
@@ -37,6 +39,7 @@
             </div>
         </div>
     </div>
+</div>
 @endsection
 
 @push('scripts')
