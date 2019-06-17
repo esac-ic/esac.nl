@@ -31,9 +31,7 @@
 
     </head>
     <body>
-        <div id="app">
-            @yield('main')
-        </div>
+        @yield('main')
 
         <script src="{{mix("/js/vendor/jquery.js")}}" type="text/javascript"></script>
         <script src="{{mix("/js/vendor/popper.js")}}" type="text/javascript"></script>

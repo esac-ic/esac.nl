@@ -10,6 +10,7 @@ TODO: voeg toe moet gewoon plusje worden
 @extends('layouts.app')
 
 @section('content')
+<div id="app">
     <div class="container intro-container">
         <div class="row d-flex align-items-stretch">
             <div class="col-sm-8 d-flex flex-wrap">
@@ -44,6 +45,7 @@ TODO: voeg toe moet gewoon plusje worden
         </div>
     </div>
     <zekeringen></zekeringen>
+</div>
 @endsection
 
 @push('scripts')
