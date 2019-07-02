@@ -1,0 +1,1 @@
+Vue.component('application-form', require('./components/ApplicationForm').default);

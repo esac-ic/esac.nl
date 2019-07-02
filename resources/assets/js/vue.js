@@ -7,6 +7,7 @@ Vue.use(VuePaginate);
 //load components
 require('../vue/agenda/agenda');
 require('../vue/zekeringen/zekeringen');
+require('../vue/applicationForm/applicationForm');
 
 Vue.component('auto-complete-field', require('../vue/components/AutoCompleteField').default);
 
