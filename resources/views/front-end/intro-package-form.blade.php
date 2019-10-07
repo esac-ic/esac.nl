@@ -9,7 +9,7 @@
                 {!! Form::select('package_type',trans('user.packageTypes'), null, ['placeholder' => trans('user.packagePlaceholder'), 'class' => 'form-control']) !!}
             </div>
         </div>
-        <div class="form-row">
+        <div class="form-row" id="intro-form-options" style="display: none">
             <div class="form-group col-md-6">
                 {!! Form::label('shirt_size', trans('user.tshirt')) !!}
                 {!! Form::select('shirt_size',trans('user.shirtSizes'), 's', ['class' => 'form-control']) !!}
@@ -21,3 +21,15 @@
         </div>
     </div>
 </div>
+
+@push('scripts')
+    <script>
+        $('#package_type').on('change', function(){
+            if($(this).val() === "") {
+                $('#intro-form-options').hide();
+            } else {
+                $('#intro-form-options').show();
+            }
+        });
+    </script>
+@endpush

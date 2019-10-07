@@ -125,10 +125,12 @@ class UserRepository implements IRepository {
 
         $saveIntroOptions = app(Setting::SINGELTONNAME)->getsetting(Setting::SETTING_SHOW_INTRO_OPTION);
         if($saveIntroOptions) {
-            //file user registration info
-            $userRegistrationInfo = new UserRegistrationInfo($data);
-            $userRegistrationInfo->user_id = $user->id;
-            $userRegistrationInfo->save();
+            if($data['package_type'] !== "") {
+                //file user registration info
+                $userRegistrationInfo = new UserRegistrationInfo($data);
+                $userRegistrationInfo->user_id = $user->id;
+                $userRegistrationInfo->save();
+            }
         }
 
         return $user;
