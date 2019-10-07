@@ -35,9 +35,13 @@
             </div>
             <div class="form-group">
                 {!! Form::label('author', trans('NewsItem.author')) !!}
-                {!! Form::text('author', ($newsItem != null) ? $newsItem->author : "", ['class' => 'form-control','required' => 'required']) !!}
+                <auto-complete-field
+                        name="author"
+                        url="{{ route('user.autoComplete') }}"
+                        placeholder="{{ trans('NewsItem.author') }}"
+                        value="{{ ($newsItem != null) ? $newsItem->author : "" }}">
+                </auto-complete-field>
             </div>
-
             <span>{{trans("NewsItem.newsImage")}}</span>
             <div class="form-group mt-2">
                 <div class="custom-file">

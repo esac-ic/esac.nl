@@ -19,10 +19,10 @@
 </template>
 
 <script>
-    import zekeringApi from '../../api/zekering';
+    import zekeringApi from '../api/zekering';
     import Zekering from './Zekering';
-    import EventBus from '../../event-bus';
-    import * as constants from "../../constants";
+    import EventBus from '../event-bus';
+    import * as constants from "../constants";
 
     export default {
         name: "Zekeringen",

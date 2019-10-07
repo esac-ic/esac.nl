@@ -14,8 +14,11 @@ export default {
                 cb([]);
             });
     },
-    deleteZekering(id){
-        axios.delete(constants.BASE_URL + "/zekeringen/" + id);
+    deleteZekering(id, cb){
+        axios.delete(constants.BASE_URL + "/zekeringen/" + id)
+            .then(response => {
+                cb(response);
+            });
     },
     addSubZekering(zekering,parent_id,cb) {
         axios.post(constants.BASE_URL + "/subzekering",{

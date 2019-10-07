@@ -46,7 +46,7 @@
             </div>
             <div class="form-group col-md-6">
                 {!! Form::label('climbing_activity', trans('AgendaItems.climbingActivity')) !!}
-                {!! Form::checkbox('climbing_activity',($agendaItem != null) ? $agendaItem->climbing_activity : true, 1, ['class' => 'form-control']) !!}
+                {!! Form::checkbox('climbing_activity', 1, ($agendaItem != null) ? $agendaItem->climbing_activity : true, ['class' => 'form-control']) !!}
             </div>
         </div>
     </div>
