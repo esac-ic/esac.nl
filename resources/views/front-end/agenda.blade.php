@@ -1,9 +1,10 @@
 @extends('layouts.app')
 
 @section('content')
+<div id="app">
+
     {{--In this div is the agenda mounted by vue--}}
-    <div id="agenda">
-    </div>
+    <agenda></agenda>
 
     <div id="ExportModal" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
         <div class="modal-dialog" role="document">
@@ -38,12 +39,11 @@
             </div>
         </div>
     </div>
+</div>
 @endsection
 
 @push('scripts')
     <script>
-        var APP_URL = "{{url('/')}}";
         var DESCRIPTION = "{!! $content !!}";
     </script>
-    <script src="{{mix('js/agenda.js')}}"></script>
 @endpush

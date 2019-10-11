@@ -1,4 +1,5 @@
 require('./bootstrap');
+require('./vue');
 
 window.summernoteSettings = {
     height: 300,
