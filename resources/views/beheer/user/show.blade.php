@@ -25,13 +25,18 @@
         <div class="col-md-6">
             <div class="btn-group mt-2 float-md-right" role="group" aria-label="Actions">
             @if($user->isPendingMember() and \Illuminate\Support\Facades\Auth::user()->hasRole(Config::get('constants.Administrator')))
-                        {{ Form::open(array('url' => '/users/'.$user->id . '/approveAsPendingMember', 'method' => 'patch')) }}
-                        <button type="submit" class="btn btn-success"><em class="ion-checkmark"></em> {{trans("user.approveAsPendingMember")}}</button>
-                        {{ Form::close() }}
-                        {{ Form::open(array('url' => '/users/'.$user->id . '/removeAsPendingMember', 'method' => 'patch')) }}
-                        <button type="submit" class="btn btn-danger"><em class="ion-trash-a"></em> {{trans("user.removeAsPendingMember")}}</button>
-                        {{ Form::close() }}
+                {{ Form::open(array('url' => '/users/'.$user->id . '/approveAsPendingMember', 'method' => 'patch')) }}
+                <button type="submit" class="btn btn-success"><em class="ion-checkmark"></em> {{trans("user.approveAsPendingMember")}}</button>
+                {{ Form::close() }}
+                {{ Form::open(array('url' => '/users/'.$user->id . '/removeAsPendingMember', 'method' => 'patch')) }}
+                <button type="submit" class="btn btn-danger"><em class="ion-trash-a"></em> {{trans("user.removeAsPendingMember")}}</button>
+                {{ Form::close() }}
             @else
+                @if($user->isOldMember() and \Illuminate\Support\Facades\Auth::user()->hasRole(Config::get('constants.Administrator')))
+                    {{ Form::open(array('url' => '/users/'.$user->id . '/makeActiveMember', 'method' => 'patch')) }}
+                        <button type="submit" class="btn btn-success"><em class="ion-plus"></em> {{trans("user.makeActiveMember")}}</button>
+                    {{ Form::close() }}
+                @endif
                 <a href="{{url('/users/'.$user->id . '/edit' )}}" class="btn btn-primary">
                     <span title="{{trans("menu.edit")}}" class="ion-edit" aria-hidden="true"></span>
                     {{trans("menu.edit")}}

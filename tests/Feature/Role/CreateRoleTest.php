@@ -22,7 +22,7 @@ class CreateRoleTest extends TestCase
      */
     private $user;
 
-    protected function setUp() : void
+    protected function setUp(): void
     {
         parent::setUp();
         $this->user = $user = factory(User::class)->create();
@@ -36,7 +36,7 @@ class CreateRoleTest extends TestCase
         session()->start();
     }
 
-    protected function tearDown() : void
+    protected function tearDown(): void
     {
         Artisan::call('migrate:reset');
         parent::tearDown();

@@ -14,7 +14,7 @@ class RemoveCreatedByFieldFromNewsItemsTable extends Migration
     public function up()
     {
         Schema::table('news_items',function(Blueprint $table){
-            $table->dropForeign(['createdBy']);
+            $table->dropForeignSilently(['createdBy']);
             $table->dropColumn('createdBy');
         });
     }

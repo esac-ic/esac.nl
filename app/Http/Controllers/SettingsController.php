@@ -20,7 +20,7 @@ class SettingsController extends Controller
      */
     public function __construct()
     {
-        $this->middleware('auth');
+        $this->middleware('auth')->except('setLanguage');;
         $this->middleware('authorize:' . Config::get('constants.Administrator'))
             ->except('setLanguage');
     }

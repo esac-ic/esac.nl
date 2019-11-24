@@ -22,7 +22,7 @@ class UpdateNewsItemTest extends TestCase
     private $url = 'newsItems';
     private $newsItem;
 
-    protected function setUp() : void
+    protected function setUp(): void
     {
         parent::setUp();
         $this->user = $user = factory(User::class)->create();
@@ -36,7 +36,7 @@ class UpdateNewsItemTest extends TestCase
         session()->start();
     }
 
-    protected function tearDown() : void
+    protected function tearDown(): void
     {
         Artisan::call('migrate:reset');
         parent::tearDown();

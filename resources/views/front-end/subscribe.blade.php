@@ -60,7 +60,7 @@
                 </div>
                 <div class="form-group col-md-6">
                     {!! Form::label('password', trans('user.password')) !!}
-                    {!! Form::password('password',  ['class' => 'form-control','required' => 'required', 'minlength' => 6]) !!}
+                    {!! Form::password('password',  ['class' => 'form-control','required' => 'required', 'minlength' => 8]) !!}
                 </div>
             </div>
             <div class="form-row">
@@ -235,7 +235,7 @@
                     {!! Form::checkbox("termsconditions",true,'',["class" => "form-check-input", "id" => "termsconditions"]) !!}
                     {!! Form::label("termsconditions", trans("user.termsconditions"), ["class" => "form-check-label"]) !!}
                 </div>
-                <div class="g-recaptcha" data-sitekey="{{env('GOOGLE_RECAPTCHA_KEY')}}"></div>
+                <div class="g-recaptcha" data-sitekey="{{config('custom.google_recaptcha_key')}}"></div>
             </div>
         </div>
     </div>

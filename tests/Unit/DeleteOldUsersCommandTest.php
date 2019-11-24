@@ -14,14 +14,14 @@ class DeleteOldUsersCommandTest extends TestCase
 {
     use DatabaseMigrations;
 
-    protected function setUp() : void
+    protected function setUp(): void
     {
         parent::setUp();
         Artisan::call('db:seed');
 
     }
 
-    protected function tearDown() : void
+    protected function tearDown(): void
     {
         Artisan::call('migrate:reset');
         parent::tearDown();
@@ -67,7 +67,6 @@ class DeleteOldUsersCommandTest extends TestCase
         $user->save();
 
         Artisan::call("remove:oldUsers");
-
 
         $user = User::find($id);
         $this->assertNotEquals(null,$user);

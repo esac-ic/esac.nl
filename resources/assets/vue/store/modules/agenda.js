@@ -1,5 +1,5 @@
 import * as TYPES from '../mutation-types';
-import agendaApi from '../../api/agenda';
+import agendaApi from '../../agenda/api/agenda';
 // initial state
 const state = {
     categories: [],

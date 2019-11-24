@@ -16,7 +16,7 @@ class PhotoAlbumSeeder extends Seeder
         $photoAlbum->title = "WEBI 2099";
         $photoAlbum->description = "Webi 2099 is nog niet geweest maar eh hier zijn de fotos";
         $photoAlbum->date = Carbon::create('2000', '01', '01');
-        $photoAlbum->thumbnail = "https://esac-ic.s3.eu-central-1.amazonaws.com/photos/WEBI_2099/47_thumbnail.png";
+        $photoAlbum->thumbnail = "https://f002.backblazeb2.com/file/ESAC-Photos/photos/Seeder_photos/234_thumbnail.jpeg";
         $photoAlbum->user()->associate(1);
         $photoAlbum->save();  
     }
