@@ -31,9 +31,11 @@ class PhotoAlbumRepository implements IRepository
     public function update($id, array $data)
     {
         $album = $this->find($id);
-        $album->update($data);
+        $album->title = $data["title"];
+        $album->description = $data["description"];
+        $album->date = Carbon::parse($data["date"]);
         $album->save();
-        return $album;    
+        return $album;
     }
 
     public function delete($id)
