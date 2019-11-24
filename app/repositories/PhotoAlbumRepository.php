@@ -38,6 +38,14 @@ class PhotoAlbumRepository implements IRepository
         return $album;
     }
 
+    public function updateThumbnail($id, array $data)
+    {
+        $album = $this->find($id);
+        $album->thumbnail = $data["thumbnail"];
+        $album->save();
+        return $album;
+    }
+
     public function delete($id)
     {
         PhotoAlbum::destroy($id);

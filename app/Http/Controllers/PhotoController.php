@@ -88,7 +88,7 @@ class PhotoController extends Controller
             
             //Photoalbum thumbnail link
             if($photoAlbum->thumbnail == null){
-                $this->_PhotoAlbumRepository->update($photoAlbum->id, ["thumbnail" => $thumbnailLink]);
+                $this->_PhotoAlbumRepository->updateThumbnail($photoAlbum->id, ["thumbnail" => $thumbnailLink]);
             }
             return $photo->id;
         }
