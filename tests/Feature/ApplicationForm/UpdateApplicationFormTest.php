@@ -53,6 +53,7 @@ class UpdateApplicationFormTest extends TestCase
         Artisan::call('migrate:refresh');
         parent::tearDown();
     }
+
     /** @test */
     public function update_application_form_as_content_administrator(): void
     {

@@ -83,6 +83,38 @@ class CreateApplicationFormTest extends TestCase
     }
 
     /** @test */
+    public function create_application_form_as_activity_administrator(): void
+    {
+        $this->user->roles()->sync([Config::get('constants.Activity_administrator')]);
+        $body = [
+            'nl_name' => 'test nl name',
+            'en_name' => 'test en name',
+            'rows' => [
+                [
+                    'nl_name' => 'Vraag 1',
+                    'en_name' => 'Question 1',
+                    'type' => ApplicationFormRow::FORM_TYPE_NUMBER,
+                ],
+                [
+                    'nl_name' => 'Vraag 2',
+                    'en_name' => 'Question 2',
+                    'type' => ApplicationFormRow::FORM_TYPE_CHECK_BOX,
+                    'required' => true
+                ]
+            ]
+        ];
+
+        $response = $this->post(self::URL, $body);
+
+        $response->assertStatus(302);
+
+        $applicationForm = ApplicationForm::all()->last();
+
+        $this->assertNotNull($applicationForm);
+        $this->assertApplicationForm($applicationForm, $body);
+    }
+
+    /** @test */
     public function create_application_form_as_administrator_should_return_403(): void
     {
         $this->user->roles()->sync([Config::get('constants.Administrator')]);

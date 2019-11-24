@@ -137,10 +137,14 @@ class ApplicationFormController extends Controller
      * Remove the specified resource from storage.
      *
      * @param int $id
-     * @return \Illuminate\Http\Response
+     * @param ApplicationFormRepository $applicationFormRepository
+     * @return RedirectResponse
      */
-    public function destroy($id)
+    public function destroy(int $id, ApplicationFormRepository $applicationFormRepository): RedirectResponse
     {
-        //
+        $applicationFormRepository->delete($id);
+
+        Session::flash("message",trans('ApplicationForm.edited'));
+        return redirect()->route('beheer.applicationForms.index');
     }
 }

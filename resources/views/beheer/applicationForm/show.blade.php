@@ -12,13 +12,13 @@
 
         <div class="col-md-6">
             <div class="btn-group mt-2 float-md-right" role="group" aria-label="Actions">
-                <a href="{{url('/applicationForms/'.$applicationForm->id . '/edit' )}}" class="btn btn-primary">
+                <a href="{{route('beheer.applicationForms.edit', $applicationForm->id)}}" class="btn btn-primary">
                     <em class="ion-edit"></em> {{trans("menu.edit")}}
                 </a>
-                <a href="{{url('/applicationForms/')}}" class="btn btn-block btn-primary">
+                <a href="{{route('beheer.applicationForms.index')}}" class="btn btn-block btn-primary">
                     <em class="ion-android-arrow-back"></em> {{trans("menu.back")}}
                 </a>
-                {{ Form::open(array('url' => 'applicationForms/' . $applicationForm->id, 'method' => 'delete')) }}
+                {{ Form::open(array('url' => route('beheer.applicationForms.destroy', $applicationForm->id), 'method' => 'delete')) }}
                 <button type="submit" class="btn btn-danger"><em class="ion-trash-a"></em> {{trans('menu.delete')}}</button>
                 {{ Form::close() }}
             </div>

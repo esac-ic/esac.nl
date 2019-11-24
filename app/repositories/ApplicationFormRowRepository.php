@@ -71,7 +71,7 @@ class ApplicationFormRowRepository
         $applicationFormRow = $this->find($id);
         if($applicationFormRow != null){
             $applicationFormRow->delete();
-            $this->_textRepository->delete($applicationFormRow->name);
+            $this->textRepository->delete($applicationFormRow->name);
         }
     }
 

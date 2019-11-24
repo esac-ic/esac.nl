@@ -4,6 +4,7 @@ namespace Tests\Feature;
 
 use App\ApplicationResponse;
 use App\ApplicationResponseRow;
+use Config;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use App\NewsItem;
 use App\Rol;
@@ -25,11 +26,8 @@ class CreateNewsItemTest extends TestCase
     {
         parent::setUp();
         $this->user = $user = factory(User::class)->create();
-        $role = factory(Rol::class)->create([
-            'id' => 3
-        ]);
 
-        $user->roles()->attach($role->id);
+        $user->roles()->attach(Config::get('constants.Activity_administrator'));
         $this->be($user);
 
         session()->start();

@@ -2,26 +2,17 @@
 
 namespace Tests\Feature;
 
+
 use App\Models\ApplicationForm\ApplicationForm;
-use App\Rol;
 use App\User;
 use Artisan;
 use Config;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use TestCase;
 
-/**
- * Class ApplicationFormIndexTest
- * @package Tests\Feature
- */
-class ApplicationFormIndexTest extends TestCase
+class DeleteApplicationFormTest extends TestCase
 {
     use DatabaseMigrations;
-
-    /**
-     * @var ApplicationForm
-     */
-    private $applicationForm;
 
     /**
      * @var User
@@ -29,9 +20,14 @@ class ApplicationFormIndexTest extends TestCase
     private $user;
 
     /**
+     * @var ApplicationForm
+     */
+    private $applicationForm;
+
+    /**
      * @var string
      */
-    const URL = 'beheer/applicationForms';
+    private $url = 'beheer/applicationForms';
 
     /**
      * @return void
@@ -39,12 +35,12 @@ class ApplicationFormIndexTest extends TestCase
     protected function setUp(): void
     {
         parent::setUp();
+        $this->applicationForm = factory(ApplicationForm::class)->create();
         $this->user = $user = factory(User::class)->create();
+        $this->url .= "/" . $this->applicationForm->id;
 
         $user->roles()->attach(Config::get('constants.Content_administrator'));
         $this->be($user);
-
-        $this->applicationForm = factory(ApplicationForm::class)->create();
 
         session()->start();
     }
@@ -59,50 +55,45 @@ class ApplicationFormIndexTest extends TestCase
     }
 
     /** @test */
-    public function a_content_administrator_can_view_the_page(): void
+    public function delete_application_form_as_content_administrator(): void
     {
-        $response = $this->get(self::URL);
+        $response = $this->delete($this->url);
 
-        $response->assertStatus(200);
+        $response->assertStatus(302);
+
+        $this->assertNull(ApplicationForm::find($this->applicationForm->id));
     }
 
     /** @test */
-    public function an_activity_administrator_can_view_the_page(): void
+    public function delete_application_form_as_activity_administrator(): void
     {
         $this->user->roles()->sync([Config::get('constants.Activity_administrator')]);
 
-        $response = $this->get(self::URL);
+        $response = $this->delete($this->url);
 
-        $response->assertStatus(200);
+        $response->assertStatus(302);
+
+        $this->assertNull(ApplicationForm::find($this->applicationForm->id));
     }
 
     /** @test */
-    public function an_administrator_can_not_view_the_page(): void
+    public function delete_application_form_as_administrator_should_return_403(): void
     {
         $this->user->roles()->sync([Config::get('constants.Administrator')]);
 
-        $response = $this->get(self::URL);
+        $response = $this->delete($this->url);
 
         $response->assertStatus(403);
     }
 
     /** @test */
-    public function a_certificate_administrator_can_not_view_the_page(): void
+    public function delete_application_form_as_certificate_administrator_should_return_403(): void
     {
         $this->user->roles()->sync([Config::get('constants.Certificate_administrator')]);
 
-        $response = $this->get(self::URL);
+        $response = $this->delete($this->url);
 
         $response->assertStatus(403);
-    }
 
-    /** @test */
-    public function an_user_without_views_can_not_view_the_page(): void
-    {
-        $this->user->roles()->sync([Config::get('constants.Certificate_administrator')]);
-
-        $response = $this->get(self::URL);
-
-        $response->assertStatus(403);
     }
 }

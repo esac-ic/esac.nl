@@ -74,10 +74,10 @@ class ApplicationFormRepository implements IRepository
     {
         $applicationForm = $this->find($id);
         foreach ($applicationForm->applicationFormRows as $row){
-            $this->_applicationFormRowRepository->delete($row->id);
+            $this->applicationFormRowRepository->delete($row->id);
         }
         $applicationForm->delete();
-        $this->_textRepository->delete($applicationForm->name);
+        $this->textRepository->delete($applicationForm->name);
     }
 
     public function find($id, $columns = array('*'))
