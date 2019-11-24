@@ -46,6 +46,10 @@
                     <td>{{trans('book.type')}}</td>
                     <td>{{ $book->type }}</td>
                 </tr>
+                <tr>
+                    <td>{{trans('book.code')}}</td>
+                    <td>{{ $book->code }}</td>
+                </tr>
             </table>
         </div>
     </div>

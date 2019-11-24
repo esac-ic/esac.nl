@@ -30,17 +30,21 @@
                 {!! Form::text('title', ($book != null) ? $book->title : "", ['class' => 'form-control','required' => 'required']) !!}
             </div>
             <div class="form-row">
-                <div class="form-group col-md-4">
+                <div class="form-group col-md-3">
                     {!! Form::label('year', trans('book.year')) !!}
                     {!! Form::number('year', ($book != null) ? $book->year : "", ['class' => 'form-control','required' => 'required']) !!}
                 </div>
-                <div class="form-group col-md-4">
+                <div class="form-group col-md-3">
                     {!! Form::label('country', trans('book.country')) !!}
                     {!! Form::text('country', ($book != null) ? $book->country : "", ['class' => 'form-control','required' => 'required']) !!}
                 </div>
-                <div class="form-group col-md-4">
+                <div class="form-group col-md-3">
                     {!! Form::label('type', trans('book.type')) !!}
                     {!! Form::text('type', ($book != null) ? $book->type : "", ['class' => 'form-control','required' => 'required']) !!}
+                </div>
+                <div class="form-group col-md-3">
+                    {!! Form::label('code', trans('book.code')) !!}
+                    {!! Form::text('code', ($book != null) ? $book->code : "", ['class' => 'form-control','required' => 'required']) !!}
                 </div>
             </div>
         </div>

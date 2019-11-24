@@ -101,7 +101,7 @@ class frontEndController extends Controller
     }
 
     public function library(){
-        $books = $this->_bookRepository->all(array("id","title","year","type","country"));
+        $books = $this->_bookRepository->all(array("id","title","year","type","country","code"));
         $curPageName = trans('front-end/library.title');
         $menuItem = $this->_MenuItemRepository->findby('urlName',MenuItem::LIBRARYURL);
         $content = $menuItem->content->text();

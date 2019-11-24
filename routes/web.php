@@ -39,6 +39,7 @@ Route::get('users/old_members','UserController@indexOldMembers');
 Route::get('users/pending_members','PendingUserController@indexPendingMembers'); 
 Route::get('users/exportUsers','UserController@exportUsers');
 Route::patch('users/{user}/removeAsActiveMember', 'UserController@removeAsActiveMember');
+Route::patch('users/{user}/makeActiveMember', 'UserController@makeActiveMember');
 Route::patch('users/{user}/removeAsPendingMember', 'PendingUserController@removeAsPendingMember');
 Route::patch('users/{user}/approveAsPendingMember', 'PendingUserController@approveAsPendingMember');
 

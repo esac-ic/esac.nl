@@ -131,6 +131,12 @@ class UserController extends Controller
         return redirect('/users/'. $user->id);
     }
 
+    public function makeActiveMember(Request $request, User $user){
+        $user->makeActiveMember();
+
+        return redirect('/users/'. $user->id);
+    }
+
     public function exportUsers(){
         $activeUsers = $this->_userRepository->getCurrentUsers();
         $exportData = [];
