@@ -26,7 +26,7 @@ class LibraryController extends Controller
 
     //gives the book views
     public function index(){
-        $books = $this->_bookRepository->all(array('title','id','type'));
+        $books = $this->_bookRepository->all(array('title','id','type','code','year','country'));
         return view('beheer.book.index', compact('books'));
     }
 
@@ -84,7 +84,8 @@ class LibraryController extends Controller
             'title' => 'required',
             'year' => 'integer',
             'type' => 'required',
-            'country' => 'required'
+            'country' => 'required',
+            'code' => 'required',
         ]);
     }
 }
