@@ -14,7 +14,7 @@ class AddCodeToLibrary extends Migration
     public function up()
     {
         Schema::table('books', function (Blueprint $table) {
-            $table->string('code');
+            $table->string('code')->default('');
         });
     }
 
