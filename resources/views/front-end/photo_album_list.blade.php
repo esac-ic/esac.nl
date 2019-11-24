@@ -49,6 +49,7 @@
                     </button>
                 </div>
                 <div class="modal-body">
+                <form id="AddAlbumForm" onsubmit="event.preventDefault(); uploadPhotos()">
                     <div class="form-group">
                         <input class="form-control" id="inputTitle" type="text" name="title" placeholder="{{trans('front-end/photo.title')}}" required/>
                     </div>
@@ -89,8 +90,9 @@
                             @endpush
                             <p class="text-danger">{{$errors->first()}}</p>
                         @endif
-                        <button class="btn btn-primary" id='submit' onclick="uploadPhotos()">{{trans('front-end/photo.add')}}</button>
+                        <button class="btn btn-primary" type="submit" id='submit'>{{trans('front-end/photo.add')}}</button>
                         <button type="button" class="btn btn-secondary" data-dismiss="modal">{{trans('front-end/photo.close')}}</button>
+                        <form>
                     </div>
                 </div>
             </div>
