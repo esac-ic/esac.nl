@@ -36,5 +36,7 @@ return [
     "user" => "Gebruiker",
     "become_member" => "Word lid",
     "activities" => "Activiteiten",
-    "content" => "Content"
+    "content" => "Content",
+    "intro" => "Intro",
+    "introPackages" => "Intro pakketten",
 ];
