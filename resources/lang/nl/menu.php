@@ -38,4 +38,6 @@ return [
     "become_member" => "Word lid",
     "activities" => "Activiteiten",
     "content" => "Content",
+    "intro" => "Intro",
+    "introPackages" => "Intro pakketten",
 ];
