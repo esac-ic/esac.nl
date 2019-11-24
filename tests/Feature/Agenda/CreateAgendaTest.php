@@ -75,7 +75,7 @@ class CreateAgendaItemTest extends TestCase
 
     public function CreateAgendaWithIncorrectRole(){
         //Login as User with incorrect role
-        $this->user->roles()->attach($this->role->id);
+        $this->user->roles()->detach();
 
         $agendaItemCategory = factory(AgendaItemCategorie::class)->create();
         $body = [
@@ -93,5 +93,27 @@ class CreateAgendaItemTest extends TestCase
             'startDate' => Carbon::now()->addDays(1),
         ];
         $response->assertStatus(403);
+
+    }
+
+    public function CreateAgendaWithEmptyFields(){
+        $this->user->roles()->attach($this->role->id);
+
+        $agendaItemCategory = factory(AgendaItemCategorie::class)->create();
+        $body = [
+            '_token' => csrf_token(),
+            'NL_title' => '',
+            'EN_title' => '',
+            'NL_text' => 'test agenda',
+            'EN_text' => 'test agenda',
+            'NL_shortDescription' => 'test agenda',
+            'EN_shortDescription' => 'test agenda',
+            'category' => $agendaItemCategory->id,
+            'applicationForm' => factory(ApplicationForm::class)->create()->id,
+            'subscription_endDate' => Carbon::now()->addDays(2),
+            'endDate' =>  Carbon::now()->addDays(3),
+            'startDate' => Carbon::now()->addDays(1),
+        ];
+        $response->assertStatus(500);
     }
 }
