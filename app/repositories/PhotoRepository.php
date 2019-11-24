@@ -12,7 +12,6 @@ namespace App\repositories;
 use App\Photo;
 use Illuminate\Support\Facades\Auth;
 use esac\B2\Client;
-use esac\B2\Http\Client as HttpClient;
 use esac\B2\Bucket;
 
 class PhotoRepository implements IRepository
@@ -65,13 +64,10 @@ class PhotoRepository implements IRepository
     }
 
     public function saveToCloud($filepath, $file){
-        $guzzleClient = new HttpClient([
-            'verify' => false
-        ]);
         $client = new Client(config('custom.b2_account_key_id'), [
             'applicationKey' => config('custom.b2_application_key'),
             'version' => '2',
-        ], ['client' => $guzzleClient]);
+        ]);
 
         $client->upload([
             'BucketName' => config('custom.b2_bucketname'),
