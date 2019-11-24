@@ -83,7 +83,7 @@
             }
         },
         mounted(){
-            if(undefined === this.rows){
+            if(undefined === this.rows || this.rows.length === 0){
                 this.addRow();
             } else {
                 this.applicationRows = JSON.parse(JSON.stringify(this.rows));
