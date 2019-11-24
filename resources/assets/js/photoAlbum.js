@@ -2,8 +2,8 @@ var PhotoSwipeItems = []; // Contains the photos used by photoswipe.
 
 try {
     var currentPhotoAlbum = photoAlbum.id;
-    for (var photo in photos.data) {
-        PhotoSwipeItems.push({ src: photos.data[photo].link, w: photos.data[photo].width, h: photos.data[photo].height });
+    for (var photo in photos) {
+        PhotoSwipeItems.push({ src: photos[photo].link, w: photos[photo].width, h: photos[photo].height });
     }
 }
 catch(err) {
