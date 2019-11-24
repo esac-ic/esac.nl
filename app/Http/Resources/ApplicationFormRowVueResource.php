@@ -17,16 +17,17 @@ class ApplicationFormRowVueResource extends JsonResource
     /**
      * Transform the resource into an array.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param \Illuminate\Http\Request $request
      * @return array
      */
     public function toArray($request)
     {
         return [
-            'nameNl' => $this->applicationFormRowName->NL_text,
-            'nameEn' => $this->applicationFormRowName->EN_text,
-            'type' => $this->type,
+            'nameNL'   => $this->applicationFormRowName->NL_text,
+            'nameEN'   => $this->applicationFormRowName->EN_text,
+            'type'     => $this->type,
             'required' => $this->required,
+            'id'       => $this->id,
         ];
     }
 }

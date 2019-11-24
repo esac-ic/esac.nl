@@ -102,8 +102,8 @@ class ApplicationFormController extends Controller
     {
         $fields = [
             'title' => trans('ApplicationForm.add'),
-            'method' => 'POST',
-            'url' => route('beheer.applicationForms.store')
+            'method' => 'PUT',
+            'url' => route('beheer.applicationForms.update', $applicationForm->id)
         ];
 
         return view('beheer.applicationForm.create_edit')
@@ -117,13 +117,20 @@ class ApplicationFormController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param \Illuminate\Http\Request $request
-     * @param int $id
-     * @return \Illuminate\Http\Response
+     * @param ApplicationFormStoreRequest $request
+     * @param ApplicationForm $applicationForm
+     * @param ApplicationFormRepository $applicationFormRepository
+     * @return void
      */
-    public function update(Request $request, $id)
-    {
-        //
+    public function update(
+        ApplicationFormStoreRequest $request,
+        int $id,
+        ApplicationFormRepository $applicationFormRepository
+    ): RedirectResponse {
+        $applicationFormRepository->update($id, $request->all());
+
+        Session::flash("message",trans('ApplicationForm.edited'));
+        return redirect()->route('beheer.applicationForms.index');
     }
 
     /**

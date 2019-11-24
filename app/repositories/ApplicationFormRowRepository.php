@@ -19,7 +19,7 @@ class ApplicationFormRowRepository
     /**
      * @var TextRepository
      */
-    private $_textRepository;
+    private $textRepository;
 
     /**
      * ApplicationFormRowRepository constructor.
@@ -27,19 +27,38 @@ class ApplicationFormRowRepository
      */
     public function __construct(TextRepository $textRepository)
     {
-        $this->_textRepository = $textRepository;
+        $this->textRepository = $textRepository;
     }
 
     /**
      * @param int $formId
      * @param array $data
      */
-    public function create(int $formId, array $data): void
+    public function create(int $formId, array $data): ApplicationFormRow
     {
-        $text = $this->_textRepository->create(['NL_text' => $data['nl_name'], 'EN_text' => $data['en_name']]);
+        $text = $this->textRepository->create(['NL_text' => $data['nl_name'], 'EN_text' => $data['en_name']]);
         $row = new ApplicationFormRow($data);
         $row->name = $text->id;
         $row->application_form_id = $formId;
+        $row->required = array_key_exists('required', $data);
+        $row->save();
+
+        return $row;
+    }
+
+    /**
+     * @param int $id
+     * @param array $data
+     */
+    public function update(int $id, array $data): void
+    {
+        $row = $this->find($id);
+        $this->textRepository->update($row->name, [
+            'NL_text' => $data['nl_name'],
+            'EN_text' => $data['en_name']
+        ]);
+
+        $row->type = $data['type'];
         $row->required = array_key_exists('required', $data);
         $row->save();
     }

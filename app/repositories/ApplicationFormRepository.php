@@ -3,6 +3,7 @@
 namespace App\repositories;
 
 use App\Models\ApplicationForm\ApplicationForm;
+use App\Models\ApplicationForm\ApplicationFormRow;
 
 class ApplicationFormRepository implements IRepository
 {
@@ -42,17 +43,29 @@ class ApplicationFormRepository implements IRepository
     public function update($id, array $data)
     {
         $applicationForm = $this->find($id);
-        $this->_textRepository->update($applicationForm->name, $data);
+        $this->textRepository->update($applicationForm->name, [
+            'NL_text' => $data['nl_name'],
+            'EN_text' => $data['en_name']
+        ]);
 
-        foreach ($applicationForm->applicationFormRows as $row){
-            $this->_applicationFormRowRepository->delete($row->id);
-        }
+        $applicationFormRowIds = [];
 
-        for ($i =0; $i <= $data['amount_of_formrows']; $i++){
-            if(array_key_exists("NL_text_row_" . $i,$data)){
-                $this->_applicationFormRowRepository->create($applicationForm->id,$data['row_type_'. $i],$data['NL_text_row_'. $i],$data['EN_text_row_'. $i],array_key_exists('row_required_'. $i,$data));
+        if(array_key_exists('rows', $data) === true) {
+            foreach ($data['rows'] as $rowData) {
+                if(array_key_exists('id', $rowData) === true) {
+                    $this->applicationFormRowRepository->update($rowData['id'], $rowData);
+                    $applicationFormRowIds[] = $rowData['id'];
+                } else {
+                    $applicationFormRow = $this->applicationFormRowRepository->create($applicationForm->id, $rowData);
+                    $applicationFormRowIds[] = $applicationFormRow->id;
+                }
             }
         }
+
+        ApplicationFormRow::query()
+            ->where('application_form_id', $applicationForm->id)
+            ->whereNotIn('id', $applicationFormRowIds)
+            ->delete();
 
         return $applicationForm;
     }

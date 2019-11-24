@@ -46,10 +46,11 @@
                 <div class="row">
                     <div class="col-md-5">
                         <div class="form-group">
-                            <input type="checkbox" :model="row.required" :name="'rows[' + index + '][required]'"> Verplicht
+                            <input type="checkbox" v-model="row.required" :name="'rows[' + index + '][required]'"> Verplicht
                         </div>
                     </div>
                 </div>
+                <input type="hidden" v-if="row.id !== undefined" v-model="row.id" :name="'rows[' + index + '][id]'">
             </div>
         </div>
     </div>
@@ -73,7 +74,8 @@
                     'nameNl' : "",
                     'nameEn' : "",
                     'type' : "",
-                    'required' : false
+                    'required' : false,
+                    'id' : undefined
                 });
             },
             deleteRow(index){
@@ -84,7 +86,7 @@
             if(undefined === this.rows){
                 this.addRow();
             } else {
-                this.applicationRows = this.rows;
+                this.applicationRows = JSON.parse(JSON.stringify(this.rows));
             }
         }
     }
