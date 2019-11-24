@@ -32,7 +32,10 @@
         <thead>
         <tr>
             <th>{{trans('book.title')}}</th>
+            <th>{{trans('book.year')}}</th>
+            <th>{{trans('book.country')}}</th>
             <th>{{trans('book.type')}}</th>
+            <th>{{trans('book.code')}}</th>
             <th>{{trans('menu.beheer')}}</th>
         </tr>
         </thead>
@@ -41,7 +44,10 @@
         @foreach ($books as $book)
             <tr >
                 <td>{{$book->title}}</td>
+                <td>{{$book->year}}</td>
+                <td>{{$book->country}}</td>
                 <td>{{$book->type}}</td>
+                <td>{{$book->code}}</td>
                 <td>
                     <a href="{{url('/books/' . $book->id . '/edit')}}"><span title="{{trans('book.edit')}}" class="ion-edit" aria-hidden="true"></span></a>
                     <a href="{{url('/books/'. $book->id)}}"><span title="{{trans("book.show")}}" class="ion-eye" aria-hidden="true"></span></a>

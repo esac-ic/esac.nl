@@ -5,6 +5,7 @@ return [
     "year" => "Uitgave",
     "type" => "Soort",
     "country" => "Land",
+    "code" => "Code",
     "new"           => "Nieuw boek",
     "edit"          => "Wijzig boek",
     "show"          => "Laat boek zien",
