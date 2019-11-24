@@ -36,7 +36,7 @@
                 <th>{{trans('ApplicationForm.rowRequired')}}</td>
                 </thead>
                 <tbody>
-                @foreach($applicationForm->getApplicationFormRows as $row)
+                @foreach($applicationForm->applicationFormRows as $row)
                     <tr>
                         <td>{{$row->applicationFormRowName->text()}}</td>
                         <td>{{$row->type}}</td>

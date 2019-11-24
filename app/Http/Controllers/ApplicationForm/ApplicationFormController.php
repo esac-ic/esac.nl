@@ -2,13 +2,28 @@
 
 namespace App\Http\Controllers\ApplicationForm;
 
+use App\Http\Requests\ApplicationFormStoreRequest;
 use App\Models\ApplicationForm\ApplicationForm;
+use App\repositories\ApplicationFormRepository;
+use App\repositories\RepositorieFactory;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\View\View;
+use Session;
 
 class ApplicationFormController extends Controller
 {
+    /**
+     * Create a new controller instance.
+     *
+     * @return void
+     */
+    public function __construct()
+    {
+        $this->middleware('authorize:'.\Config::get('constants.Content_administrator') .',' . \Config::get('constants.Activity_administrator'));
+    }
+
     /**
      * Display a listing of the resource.
      *
@@ -36,7 +51,7 @@ class ApplicationFormController extends Controller
         $fields = [
             'title' => trans('ApplicationForm.add'),
             'method' => 'POST',
-            'url' => '/applicationForms'
+            'url' => route('beheer.applicationForms.store')
         ];
 
         return view('beheer.applicationForm.create_edit')
@@ -49,12 +64,16 @@ class ApplicationFormController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param \Illuminate\Http\Request $request
-     * @return \Illuminate\Http\Response
+     * @param ApplicationFormStoreRequest $request
+     * @param ApplicationFormRepository $applicationFormRepository
+     * @return void
      */
-    public function store(Request $request)
+    public function store(ApplicationFormStoreRequest $request, ApplicationFormRepository $applicationFormRepository): RedirectResponse
     {
-        //
+        $applicationFormRepository->create($request->all());
+
+        Session::flash("message",trans('ApplicationForm.added'));
+        return redirect()->route('beheer.applicationForms.index');
     }
 
     /**

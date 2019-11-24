@@ -31,7 +31,7 @@ class ApplicationForm extends Model
     /**
      * @return mixed
      */
-    public function getApplicationFormRows(){
+    public function applicationFormRows(){
         return $this->hasMany(ApplicationFormRow::class,'application_form_id')->withTrashed();
     }
 }

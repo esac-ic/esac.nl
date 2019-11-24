@@ -8,30 +8,45 @@
 
 namespace App\repositories;
 
+use App\Models\ApplicationForm\ApplicationFormRow;
 
-use App\ApplicationFormRow;
-
+/**
+ * Class ApplicationFormRowRepository
+ * @package App\repositories
+ */
 class ApplicationFormRowRepository
 {
+    /**
+     * @var TextRepository
+     */
     private $_textRepository;
 
+    /**
+     * ApplicationFormRowRepository constructor.
+     * @param TextRepository $textRepository
+     */
     public function __construct(TextRepository $textRepository)
     {
         $this->_textRepository = $textRepository;
     }
 
-    public function create($formid, $type,$nameNL, $nameEN, $required)
+    /**
+     * @param int $formId
+     * @param array $data
+     */
+    public function create(int $formId, array $data): void
     {
-        $text = $this->_textRepository->create(['NL_text' => $nameNL, 'EN_text' => $nameEN]);
-        $row = new ApplicationFormRow();
-        $row->type = $type;
+        $text = $this->_textRepository->create(['NL_text' => $data['nl_name'], 'EN_text' => $data['en_name']]);
+        $row = new ApplicationFormRow($data);
         $row->name = $text->id;
-        $row->application_form_id = $formid;
-        $row->required = $required;
+        $row->application_form_id = $formId;
+        $row->required = array_key_exists('required', $data);
         $row->save();
-        return $row;
     }
 
+    /**
+     * @param $id
+     */
     public function delete($id)
     {
         $applicationFormRow = $this->find($id);
@@ -41,20 +56,40 @@ class ApplicationFormRowRepository
         }
     }
 
+    /**
+     * @param $id
+     * @param array $columns
+     * @return mixed
+     */
     public function find($id, $columns = array('*'))
     {
         return $this->findBy('id', $id, $columns)->first();
     }
 
+    /**
+     * @param $field
+     * @param $value
+     * @param array $columns
+     * @return mixed
+     */
     public function findBy($field, $value, $columns = array('*'))
     {
         return ApplicationFormRow::where($field, '=',$value)->get($columns);
     }
 
+    /**
+     * @param array $columns
+     * @return ApplicationFormRow[]|\Illuminate\Database\Eloquent\Collection
+     */
     public function all($columns = array('*'))
     {
         return ApplicationFormRow::all($columns);
     }
+
+    /**
+     * @param $application_form_id
+     * @return mixed
+     */
     public function getRows($application_form_id) {
         return $this->findBy('application_form_id', $application_form_id, $columns = array('*'));
 

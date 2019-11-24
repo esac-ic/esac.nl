@@ -23,8 +23,6 @@ class RepositorieFactory{
     public static $AGENDAITEMREPOKEY = "AgendaItem";
     public static $NEWSITEMREPOKEY = "NewsItem";
     public static $AGENDAITEMRECATEGORYPOKEY = "AgendaItemCategory";
-    public static $APPLICATIONFORMREPOKEY = "ApplicationForm";
-    public static $APPLICATIONFORMROWREPOKEY = "ApplicationFormRow";
     public static $ZEKERINGENREPOKEY = "Zekeringen";
     public static $INSCHRIJVENREPOKEY = "InschrijvenRepository";
     public static $BOOKREPOKEY = "BookRepository";
@@ -34,7 +32,6 @@ class RepositorieFactory{
 
     public function __construct() {
         $textRepository = new TextRepository();
-        $applicationFormRowRepository = new ApplicationFormRowRepository($textRepository);
 
         $this->_repositoryList = [
             RepositorieFactory::$USERREPOKEY    => new \App\repositories\UserRepository(),
@@ -44,8 +41,6 @@ class RepositorieFactory{
             RepositorieFactory::$CERTIFICATEREPOKEY    => new CertificateRepository($textRepository),
             RepositorieFactory::$AGENDAITEMREPOKEY  => new AgendaItemRepository($textRepository),
             RepositorieFactory::$AGENDAITEMRECATEGORYPOKEY => new AgendaItemCategorieRepository($textRepository),
-            RepositorieFactory::$APPLICATIONFORMREPOKEY  => new ApplicationFormRepository($textRepository,$applicationFormRowRepository),
-            RepositorieFactory::$APPLICATIONFORMROWREPOKEY  => $applicationFormRowRepository,
             RepositorieFactory::$NEWSITEMREPOKEY  => new NewsItemRepository($textRepository),
             RepositorieFactory::$ZEKERINGENREPOKEY  => new ZekeringenRepository(),
             RepositorieFactory::$INSCHRIJVENREPOKEY => new InschrijvenRepository(),

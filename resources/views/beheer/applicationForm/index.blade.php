@@ -40,8 +40,8 @@
                 <tr >
                     <td>{{$applicationForm->applicationFormName->text()}}</td>
                     <td>
-                        <a href="{{url('/applicationForms/' . $applicationForm->id . '/edit')}}"><span title="{{trans('ApplicationForm.edit')}}" class="ion-edit" aria-hidden="true"></span></a>
-                        <a href="{{url('/applicationForms/'. $applicationForm->id)}}"><span title="{{trans("ApplicationForm.show")}}" class="ion-eye" aria-hidden="true"></span></a>
+                        <a href="{{route('beheer.applicationForms.edit', $applicationForm->id)}}"><span title="{{trans('ApplicationForm.edit')}}" class="ion-edit" aria-hidden="true"></span></a>
+                        <a href="{{route('beheer.applicationForms.show', $applicationForm->id)}}"><span title="{{trans("ApplicationForm.show")}}" class="ion-eye" aria-hidden="true"></span></a>
                     </td>
                 </tr>
             @endforeach

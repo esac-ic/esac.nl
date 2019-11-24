@@ -23,7 +23,7 @@ Route::get('import/users','ImportController@importUsers');
 
 
 //Admin routes
-Route::group(['as' => 'beheer.', 'prefix' => 'beheer/'], function(){
+Route::group(['as' => 'beheer.', 'prefix' => 'beheer/', 'middleware' => 'auth'], function(){
     Route::get('home','ManageController@index');
     Route::resource('applicationForms', 'ApplicationForm\ApplicationFormController');
 

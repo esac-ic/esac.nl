@@ -1,43 +1,38 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: Niekh
- * Date: 11-4-2017
- * Time: 22:09
- */
 
 namespace App\repositories;
 
-
-use App\ApplicationForm;
-use App\ApplicationResponse;
+use App\Models\ApplicationForm\ApplicationForm;
 
 class ApplicationFormRepository implements IRepository
 {
-
-    private $_textRepository;
-    private $_applicationFormRowRepository;
+    private $textRepository;
+    private $applicationFormRowRepository;
 
     /**
      * AplicationFormRepository constructor.
+     * @param TextRepository $textRepository
+     * @param ApplicationFormRowRepository $applicationFormRowRepository
      */
     public function __construct(TextRepository $textRepository, ApplicationFormRowRepository $applicationFormRowRepository)
     {
-        $this->_textRepository = $textRepository;
-        $this->_applicationFormRowRepository = $applicationFormRowRepository;
+        $this->textRepository = $textRepository;
+        $this->applicationFormRowRepository = $applicationFormRowRepository;
     }
-
 
     public function create(array $data)
     {
-        $text = $this->_textRepository->create($data);
+        $text = $this->textRepository->create([
+            'NL_text' => $data['nl_name'],
+            'EN_text' => $data['en_name']
+        ]);
 
         $applicationForm = new ApplicationForm(["name" => $text->id]);
         $applicationForm->save();
 
-        for ($i =0; $i <= $data['amount_of_formrows']; $i++){
-            if(array_key_exists("NL_text_row_" . $i,$data)){
-                $this->_applicationFormRowRepository->create($applicationForm->id,$data['row_type_'. $i],$data['NL_text_row_'. $i],$data['EN_text_row_'. $i],array_key_exists('row_required_'. $i,$data));
+        if(array_key_exists('rows', $data) === true) {
+            foreach ($data['rows'] as $rowData) {
+                $this->applicationFormRowRepository->create($applicationForm->id, $rowData);
             }
         }
 
@@ -49,7 +44,7 @@ class ApplicationFormRepository implements IRepository
         $applicationForm = $this->find($id);
         $this->_textRepository->update($applicationForm->name, $data);
 
-        foreach ($applicationForm->getApplicationFormRows as $row){
+        foreach ($applicationForm->applicationFormRows as $row){
             $this->_applicationFormRowRepository->delete($row->id);
         }
 
@@ -65,7 +60,7 @@ class ApplicationFormRepository implements IRepository
     public function delete($id)
     {
         $applicationForm = $this->find($id);
-        foreach ($applicationForm->getApplicationFormRows as $row){
+        foreach ($applicationForm->applicationFormRows as $row){
             $this->_applicationFormRowRepository->delete($row->id);
         }
         $applicationForm->delete();
