@@ -50,7 +50,5 @@
     <script src='https://www.google.com/recaptcha/api.js'></script>
 
     <script src="{{mix('js/materiaal.js')}}"></script>
-    <script>
-        $("input[type='number']").inputSpinner();
-    </script>
+    <script src="https://unpkg.com/ionicons@4.5.10-0/dist/ionicons.js"></script>
 @endpush

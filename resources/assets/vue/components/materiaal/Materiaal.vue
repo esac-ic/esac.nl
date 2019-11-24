@@ -5,10 +5,10 @@
                 <div class="col-md-6">
     <!--               Toggle Zomer/Winter lijst         -->
                     <span v-if="summer">
-                        <button v-on:click="summer = !summer">Ga naar winter</button>
+                        <button v-on:click="summer = !summer"><h2>Ga naar winter</h2></button>
                     </span>
                     <span v-show="!summer">
-                        <button v-on:click="summer = !summer">Ga naar zomer</button>
+                        <button v-on:click="summer = !summer"><h2>Ga naar zomer</h2></button>
                     </span>
 
 
@@ -16,14 +16,8 @@
                     <span v-show="summer">
 
                         <ul>
-                            <li v-for="place in summerplaces" v-on:click="updateSelection(place)" class="mat-list list-group-item">
-                                {{place.number}}
-                                <InputSpinner
-                                        max={10}
-                                        min={2}
-                                        step={2}
-                                        colorMax={"#f04048"}
-                                        colorMin={"#40c5f4"} />
+                            <li v-for="place in summerplaces" v-on:click="" class="mat-list list-group-item">
+                                {{place.number}} <input type="number" v-model="place.amount" value="0" min="0" max="100"/>
                             </li>
                         </ul>
 
@@ -31,9 +25,8 @@
 
                     <span v-show="!summer">
                         <ul>
-                            <li v-for="place in winterplaces" v-on:click="updateSelection(place)" class="mat-list list-group-item">
-                                {{place.number}}
-                                <input type="number" value="0" min="0" max="10"/>
+                            <li v-for="place in winterplaces" v-on:click="" class="mat-list list-group-item">
+                                {{place.number}} <input type="number" v-model="place.amount" value="0" min="0" max="100"/>
                             </li>
                         </ul>
                     </span>
@@ -44,8 +37,8 @@
     <!--                Datum selectie deel   -->
                     <h1>
                         <ul>
-                            <li v-for="place in selectedplaces">
-                                {{place.number}}
+                            <li v-for="place in summerplaces" v-if="place.amount > 0">
+                                {{place.number}} {{place.amount}}
                             </li>
                         </ul>
                     </h1>
@@ -107,7 +100,19 @@
     }
 </script>
 <style>
-
+    button {
+        border: none;
+    }
+    .plus{
+        background: none;
+        color: inherit;
+        border: none;
+        padding: 0;
+        font: inherit;
+        cursor: pointer;
+        outline: inherit;
+        align: right;
+    }
     .list-group-item {
         display: block;
         text-decoration: none;
