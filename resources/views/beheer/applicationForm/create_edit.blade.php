@@ -40,7 +40,7 @@
                     </div>
                 </div>
             </div>
-            <application-form></application-form>
+            <application-form :rows="{{ json_encode($rows) }}"></application-form>
 
             <div class="my-4">
                 {!! Form::submit(trans('menu.save'), ['class'=> 'btn btn-primary'] ) !!}

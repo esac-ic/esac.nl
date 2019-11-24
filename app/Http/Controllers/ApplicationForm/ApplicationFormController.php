@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\ApplicationForm;
 
 use App\Http\Requests\ApplicationFormStoreRequest;
+use App\Http\Resources\ApplicationFormRowVueResource;
 use App\Models\ApplicationForm\ApplicationForm;
 use App\repositories\ApplicationFormRepository;
 use App\repositories\RepositorieFactory;
@@ -57,7 +58,8 @@ class ApplicationFormController extends Controller
         return view('beheer.applicationForm.create_edit')
             ->with([
                 'fields'=> $fields,
-                'applicationForm' => null
+                'applicationForm' => null,
+                'rows' => [],
             ]);
     }
 
@@ -79,23 +81,37 @@ class ApplicationFormController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param int $id
-     * @return \Illuminate\Http\Response
+     * @param ApplicationForm $applicationForm
+     * @return View
      */
-    public function show($id)
+    public function show(ApplicationForm $applicationForm): View
     {
-        //
+        return view('beheer.applicationForm.show')
+            ->with([
+                'applicationForm' => $applicationForm,
+            ]);
     }
 
     /**
      * Show the form for editing the specified resource.
      *
-     * @param int $id
-     * @return \Illuminate\Http\Response
+     * @param ApplicationForm $applicationForm
+     * @return void
      */
-    public function edit($id)
+    public function edit(ApplicationForm $applicationForm): View
     {
-        //
+        $fields = [
+            'title' => trans('ApplicationForm.add'),
+            'method' => 'POST',
+            'url' => route('beheer.applicationForms.store')
+        ];
+
+        return view('beheer.applicationForm.create_edit')
+            ->with([
+                'fields' => $fields,
+                'applicationForm' => $applicationForm,
+                'rows' => ApplicationFormRowVueResource::collection($applicationForm->applicationFormRows),
+            ]);
     }
 
     /**
