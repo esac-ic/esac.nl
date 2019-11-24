@@ -2,6 +2,7 @@
 
 namespace App\Models\ApplicationForm;;
 
+use App\AgendaItem;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
@@ -18,7 +19,7 @@ class ApplicationResponse extends Model
      * retrieves the custom rows from the table
      */
     public function getApplicationFormResponseRows(){
-        return $this->hasMany('App\ApplicationResponseRow','application_response_id')->withTrashed();
+        return $this->hasMany(ApplicationResponseRow::class,'application_response_id')->withTrashed();
     }
     public function getApplicationResponseUser(){
         return $this->hasOne('App\User','id','user_id');

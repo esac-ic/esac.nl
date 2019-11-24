@@ -5,6 +5,7 @@ namespace Tests\Feature;
 use App\User;
 use App\Rol;
 use Carbon\Carbon;
+use Config;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Support\Facades\Artisan;
 use TestCase;
@@ -22,11 +23,8 @@ class MakeUserActiveTest extends TestCase
     {
         parent::setUp();
         $this->admin = $admin = factory(User::class)->create();
-        $role = factory(Rol::class)->create([
-            'id' => 1
-        ]);
 
-        $admin->roles()->attach($role->id);
+        $admin->roles()->attach(Config::get('constants.Administrator'));
         $this->be($admin);
 
         $this->user = $user = factory(User::class)->create();
