@@ -14,14 +14,14 @@ class DeleteOldUsersCommandTest extends TestCase
 {
     use DatabaseMigrations;
 
-    protected function setUp()
+    protected function setUp() : void
     {
         parent::setUp();
         Artisan::call('db:seed');
 
     }
 
-    protected function tearDown()
+    protected function tearDown() : void
     {
         Artisan::call('migrate:reset');
         parent::tearDown();

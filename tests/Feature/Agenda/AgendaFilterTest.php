@@ -25,7 +25,7 @@ class AgendaFilterTest extends TestCase
      */
     private $user;
 
-    protected function setUp()
+    protected function setUp() : void
     {
         parent::setUp();
         $this->user = $user = factory(User::class)->create();
@@ -39,7 +39,7 @@ class AgendaFilterTest extends TestCase
         session()->start();
     }
 
-    protected function tearDown()
+    protected function tearDown() : void
     {
         Artisan::call('migrate:reset');
         parent::tearDown();
