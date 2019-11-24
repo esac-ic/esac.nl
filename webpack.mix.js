@@ -45,6 +45,7 @@ mix.js('resources/assets/js/app.js', 'public/js');
 //vuejs components
 mix.js('resources/assets/vue/agenda.js','public/js');
 mix.js('resources/assets/vue/zekeringen.js','public/js');
+mix.js('resources/assets/vue/materiaal.js', 'public/js');
 
 //cache busting (all copied files need to be added here)
 mix.version([

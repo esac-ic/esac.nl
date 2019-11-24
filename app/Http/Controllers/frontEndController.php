@@ -155,6 +155,6 @@ class frontEndController extends Controller
         $menuItem = $this->_MenuItemRepository->findby('urlName',MenuItem::SUBSCRIBEURL);
         $content = $menuItem->content->text();
         $curPageName = trans('front-end/material.title');
-        return view("front-end.material_request", compact('curPageName','content'));
+        return view("front-end.newmaterial_request", compact('curPageName','content'));
     }
 }
