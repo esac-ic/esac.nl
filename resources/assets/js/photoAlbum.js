@@ -2,8 +2,8 @@ var PhotoSwipeItems = []; // Contains the photos used by photoswipe.
 
 try {
     var currentPhotoAlbum = photoAlbum.id;
-    for (var photo in photos.data) {
-        PhotoSwipeItems.push({ src: photos.data[photo].link, w: photos.data[photo].width, h: photos.data[photo].height });
+    for (var photo in photos) {
+        PhotoSwipeItems.push({ src: photos[photo].link, w: photos[photo].width, h: photos[photo].height });
     }
 }
 catch(err) {
@@ -66,8 +66,8 @@ var fileIndex = 0; //fileIndex of the files array, needs to be global because it
 //recusrive function the process photos.
 function processPhotos(){
     ChangebuttonState("Uploading photos...");
-    resizeThumbnail(files[fileIndex]).then(function(thumbnail, file){
-        downscalePhoto(file).then(function(photo, file){
+    resizeThumbnail(files[fileIndex]).then(function({thumbnail, file}){
+        downscalePhoto(file).then(function({photo, file}){
             if (currentPhotoAlbum != undefined) { //if currentAlbum is undefined then it means that we are adding an album.
                 addPhotoToAlbum(thumbnail, photo, fileIndex).then(function(index){
                     if(index >= (files.length -1)){ //if returned index equals files length then last photo has uploaded. refresh page
@@ -123,7 +123,7 @@ function resizeThumbnail(file) {
             function(canvas){
                 canvas.toBlob(function (blob) {
                         resolve({thumbnail: blob, file: file});
-                    }, 'image/jpeg', 1.0
+                    }, 'image/jpeg', 0.5
                 );
             },
             {
