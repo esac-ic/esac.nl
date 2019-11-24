@@ -82,7 +82,6 @@
             </div>   
         </div>
     </div>
-    {{ $photos->links('front-end.pagination') }}
 </section>
 
 <div id="AddPhotoModal" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
