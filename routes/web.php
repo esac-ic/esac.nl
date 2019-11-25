@@ -18,10 +18,6 @@ Route::get('/', function () {
 
 Auth::routes();
 
-//import routes Important: Remove import routes in production
-Route::get('import/users','ImportController@importUsers');
-
-
 //Admin routes
 Route::get('beheer/home','ManageController@index');
 
