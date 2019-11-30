@@ -1,5 +1,5 @@
 composer install
-composer update
+#composer update
 npm install
 npm run dev
 php artisan migrate:fresh --seed --env=docker

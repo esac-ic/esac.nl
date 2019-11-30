@@ -1,1 +1,5 @@
-/node_modules*
+node_modules
+vendor
+storage/framework/cache/**
+storage/framework/sessions/**
+storage/framework/views/**
