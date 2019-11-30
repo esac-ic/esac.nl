@@ -5,7 +5,7 @@ services:
   #  The Application
   app:
     container_name: laravel_app
-    image: esac/website:0.0.4
+    image: esac/website:0.0.5
     volumes:
       - ./storage:/var/www/storage
 #      - ./dump:/var/www/public/storage
@@ -21,7 +21,8 @@ services:
   # The Web Server
   web:
     container_name: nginx_server
-    image: esac_web:0.0.0
+
+    image: esac/nginx:0.0.5
     volumes:
       - ./storage/logs/:/var/log/nginx
       - ./storage/app/public/:/var/www/public/storage
