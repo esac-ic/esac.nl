@@ -38,7 +38,7 @@ Clone the project repository
 
 Execute the following commands from the repository root
 
-	composer install
+    composer install --no-dev
     php artisan migrate
     php artisan db:seed
     php artisan key:generate
