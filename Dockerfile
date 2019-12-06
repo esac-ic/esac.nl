@@ -3,13 +3,16 @@ RUN apt-get update && docker-php-ext-install pdo_mysql && apt install -y zip \
    libzip-dev zip libwebp-dev libjpeg62-turbo-dev libpng-dev libxpm-dev \
    libfreetype6-dev zlib1g-dev  && docker-php-ext-configure gd --with-gd --with-webp-dir --with-jpeg-dir \
    --with-png-dir --with-zlib-dir --with-xpm-dir --with-freetype-dir \
-   --enable-gd-native-ttf && docker-php-ext-install gd
+   --enable-gd-native-ttf && docker-php-ext-install gd && rm -rf /var/lib/apt/lists/*
+
+COPY . /var/www/
+WORKDIR "/var/www/"
+
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
 RUN curl -sL https://deb.nodesource.com/setup_10.x | bash - && apt install -y nodejs
 #this next line is needed for composer install for some reason
 
-COPY . /var/www/
-WORKDIR "/var/www/"
+
 
 #installing zip for composer to work
 #RUN apt install -y zip libzip-dev zip
@@ -53,7 +56,7 @@ RUN npm install
 RUN npm run dev
 RUN php artisan storage:link
 RUN php artisan config:clear
-
+RUN rm -rf /var/lib/apt/lists/*
 
 ENTRYPOINT /bin/bash
 

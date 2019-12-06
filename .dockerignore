@@ -5,3 +5,4 @@ storage/framework/sessions/**
 storage/framework/views/**
 .env
 .env.prod
+tests
