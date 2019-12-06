@@ -1,36 +1,42 @@
 language: php
 sudo: required
+
 php:
-- 7.3
-- 7.2
+  - 7.3
+  - 7.2
+
 services:
-- mysql
+  - mysql
+
 addons:
   chrome: stable
+
 before_install:
-- cp .env.example .env
-- composer self-update
-- composer validate
-- mysql -e 'CREATE DATABASE esac;'
+  - cp .env.example .env
+  - composer self-update
+  - composer validate
+  - mysql -e 'CREATE DATABASE esac;'
+
 install:
-- composer install --no-interaction --prefer-dist --no-suggest
-- npm install npm@latest -g
-- npm install
+  - composer install --no-interaction --prefer-dist --no-suggest
+  - npm install npm@latest -g
+  - npm install
+
 before_script:
-- php artisan key:generate
-- php artisan storage:link
-- php artisan dusk:chrome-driver
-- php artisan migrate
-- php artisan db:seed
-- npm run prod
-- npm run prod
-- php artisan serve &
+  - php artisan key:generate
+  - php artisan storage:link
+  - php artisan dusk:chrome-driver
+  - php artisan migrate
+  - php artisan db:seed
+  - npm run prod
+  - npm run prod
+  - php artisan serve &
+
 script:
-- vendor/bin/phpunit -c phpunit.xml --coverage-clover=coverage.xml
+  - vendor/bin/phpunit -c phpunit.xml --coverage-clover=coverage.xml
+
 after_failure:
-- cat storage/logs/laravel.log
+  - cat storage/logs/laravel.log
+
 after_success:
-- bash <(curl -s https://codecov.io/bash)
-env:
-  global:
-    secure: r0egYb8IGy+BLIfgwV8b+uO+7zbC2qbfHzpURdVCUIxsMHEpfXgRXQkXY3L+IEBUFnPBLPAUbMeVnRRtiVhlqllQMqU9CQmr4QkIRC8NuSbjAJBsFmTw5igKrcUJ8KrhMLP1b15n2FVnjRXPO7PP5B6k7lc/pil8qVJgDq6QIHctexKDGiWaRPLXJziHJIbM42Tii8sIxG6qS4O2Z191+Bbn3H4rJzcV0Hyklm6mh+IbnqPEaurZyxaIcoBeGzTYw38PzBgb02xrHBZLikcGudDHgXSp/wOP+QlxQ3VLK6fNBiVwdlZZglKvpPHIDbry98ymlgw3SFPTk6vMXhblV40xClxegiz92bvb3+JqUnNeryGvO+1d+imsrzDow7acWYJpNbWM4KcfUOBgwlqQ8RrmNAkqFPhu2WJLYdIqx4f/9Yz7/7/DaXDFgYETgy7DbIYbSqLj36qymSnMYDoxW5x9pVieFle6G/W3dpP03RpUOUBl6S3hiQ7olmo2baHhb+m/Q+HxuSzDkwYqCpuJlG9KK4Tn3RHveEMPG3mZCYvLZj/WoTTZCv9G/AOYOnaB65Vb4+s3d125bK4U48+WtfgbEUIBjM2D8OfxkkwlaCDXBo/ytxSlbJuQ4HWQux8bvH2LufWWLnKlfrMrvdfre0jB+4BDr/7jk/tfrx+T3GE=
+  - bash <(curl -s https://codecov.io/bash)

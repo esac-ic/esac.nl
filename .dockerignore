@@ -1,5 +1,5 @@
 node_modules
 vendor
-storage/framework/cache/**
-storage/framework/sessions/**
-storage/framework/views/**
+storage/
+.env
+.env.prod
