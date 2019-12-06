@@ -5,7 +5,7 @@ services:
   #  The Application
   app:
     container_name: laravel_app
-    image: esac/website:0.0.8
+    image: esac/website:0.0.9
     volumes:
       - ./storage:/var/www/storage
 #      - ./dump:/var/www/public/storage
@@ -48,23 +48,6 @@ services:
     # redis
   cache:
     image: redis:3.0-alpine
-
-  # The Application
-#  app:
-#    build:
-#      context: ""
-#      dockerfile: ../local_app.dockerfile
-#    working_dir: /var/www
-#    container_name: esac_application
-#    volumes:
-#      - ../:/var/www
-#    environment:
-#      - "DB_PORT=3306"
-#      - "DB_HOST=database"
-#    ports:
-#      - 80:8000
-#    depends_on:
-#      - "database"
 
 volumes:
   dbdata:
