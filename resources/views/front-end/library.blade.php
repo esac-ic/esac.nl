@@ -25,6 +25,7 @@
                                 <th>{{trans('book.year')}}</th>
                                 <th>{{trans('book.country')}}</th>
                                 <th>{{trans('book.type')}}</th>
+                                <th>{{trans('book.code')}}</th>
                             </tr>
                         </thead>
                         <tbody class="table-striped">
@@ -34,6 +35,7 @@
                                 <td>{{$book->year}}</td>
                                 <td>{{$book->country}}</td>
                                 <td>{{$book->type}}</td>
+                                <td>{{$book->code}}</td>
                             </tr>
                         @endforeach
                         </tbody>

@@ -11,6 +11,8 @@ namespace App\repositories;
 
 use App\Photo;
 use Illuminate\Support\Facades\Auth;
+use esac\B2\Client;
+use esac\B2\Bucket;
 
 class PhotoRepository implements IRepository
 {
@@ -57,14 +59,22 @@ class PhotoRepository implements IRepository
         return $m;
     }
 
-    public function getAWSLink($filepath){
-        $s3 = \Storage::disk('s3');
-        return $s3->url($filepath);
+    public function getFileLink($filepath){
+        return config('custom.b2_storage_url') . "/" . $filepath;
     }
 
-    public function saveToAWS($filepath, $file){
-        $s3 = \Storage::disk('s3');
-        $s3->put($filepath, file_get_contents($file), 'public');
+    public function saveToCloud($filepath, $file){
+        $client = new Client(config('custom.b2_account_key_id'), [
+            'applicationKey' => config('custom.b2_application_key'),
+            'version' => '2',
+        ]);
+
+        $client->upload([
+            'BucketName' => config('custom.b2_bucketname'),
+            'FileName' => $filepath,
+            'Body' => file_get_contents($file)
+        ]);
+
         return $filepath;
     }
 }

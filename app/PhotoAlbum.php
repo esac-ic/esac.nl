@@ -3,16 +3,16 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class PhotoAlbum extends Model
 {
-    protected $table = 'photo_albums';
-    public $incrementing = true;
+    use SoftDeletes;
     protected $fillable = [
         'title',
         'description',
         'date',
-        'thumbnail'
+        'thumbnail',
     ];
 
     public function photos(){

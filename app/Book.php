@@ -12,6 +12,7 @@ class Book extends Model
         'title',
         'year',
         'country',
-        'type'
+        'type',
+        'code',
     ];
 }
