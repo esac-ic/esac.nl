@@ -8,22 +8,15 @@ services:
     image: esac/website:0.0.9
     volumes:
       - ./storage:/var/www/storage
-#      - ./dump:/var/www/public/storage
     env_file:
       - ".env.prod"
     environment:
-      - "DB_PORT=3306"
-      - "DB_HOST=database"
       - "REDIS_HOST=cache"
-#    ports:
-#      - "700:700"
     entrypoint: php-fpm
-
 
   # The Web Server
   web:
     container_name: nginx_server
-
     image: esac/nginx:0.0.5
     volumes:
       - ./storage/logs/:/var/log/nginx
