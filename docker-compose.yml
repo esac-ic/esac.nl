@@ -5,10 +5,12 @@ services:
   #  The Application
   app:
     container_name: laravel_app
-    image: esac/website:0.0.7
+    image: esac/website:0.0.8
     volumes:
       - ./storage:/var/www/storage
 #      - ./dump:/var/www/public/storage
+    env_file:
+      - ".env.prod"
     environment:
       - "DB_PORT=3306"
       - "DB_HOST=database"

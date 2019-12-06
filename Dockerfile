@@ -30,16 +30,17 @@ RUN docker-php-ext-install gd
 
 COPY . /var/www/
 WORKDIR "/var/www/"
-RUN chown -R www-data:www-data \
-        /var/www/storage
+#RUN chown -R www-data:www-data \
+#        /var/www/storage
 
 #command to modify the fpm config to listen to nginx in docker-compose
 RUN echo "listen = web:9000" >> /usr/local/etc/php-fpm.d/www.conf
 # alternatief: RUN sed -e 's/127.0.0.1:9000/9000/' -i /etc/php-fpm.d/www.conf (misschien netter?)
-RUN composer install
+RUN composer install --no-dev
 RUN npm install
 RUN npm run dev
 RUN php artisan storage:link
+RUN php artisan config:clear
 #RUN php-fpm -D
 ENTRYPOINT /bin/bash
 #ENTRYPOINT php artisan serve --env=docker3 --host=0.0.0.0 --port=8000
