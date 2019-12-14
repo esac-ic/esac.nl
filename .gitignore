@@ -3,7 +3,6 @@
 /vendor
 /.idea
 .env
-.env.prod
 /.vagrant
 _ide_helper.php
 .phpstorm.meta.php
