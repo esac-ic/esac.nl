@@ -2,7 +2,6 @@ language: php
 sudo: required
 php:
 - 7.3
-- 7.2
 services:
 - mysql
 addons:
@@ -18,7 +17,7 @@ install:
 - composer install --no-interaction --prefer-dist --no-suggest
 - npm install npm@latest -g
 - npm install
-- docker build -t esac/website:web_build .
+#- docker build -t esac/website:web_build .
 - bash install.sh
 before_script:
 - php artisan key:generate
