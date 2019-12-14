@@ -28,6 +28,7 @@ before_script:
   - php artisan migrate
   - php artisan db:seed
   - npm run prod
+  - npm run prod
   - php artisan serve &
 
 script:
