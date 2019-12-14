@@ -1,4 +1,4 @@
-FROM php:7.2.25-fpm
+FROM php:7.3.12-fpm
 RUN apt-get update && docker-php-ext-install pdo_mysql && apt install -y zip \
    libzip-dev zip libwebp-dev libjpeg62-turbo-dev libpng-dev libxpm-dev \
    libfreetype6-dev zlib1g-dev  && docker-php-ext-configure gd --with-gd --with-webp-dir --with-jpeg-dir \
@@ -18,9 +18,8 @@ RUN composer install --no-dev
 # alternatief: RUN sed -e 's/127.0.0.1:9000/9000/' -i /etc/php-fpm.d/www.conf (misschien netter?)
 RUN echo "listen = web:9000" >> /usr/local/etc/php-fpm.d/www.conf
 
-RUN composer install --no-dev
 RUN npm install
-RUN npm run dev
+RUN npm run prod
 RUN php artisan storage:link
 RUN php artisan config:clear
 RUN rm -rf /var/lib/apt/lists/*
