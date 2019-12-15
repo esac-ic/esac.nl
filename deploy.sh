@@ -11,15 +11,15 @@ else
   SNAPSHOTTAG='-snapshot'
 fi
 
-
+#deploy to test server when brach is develop, deploy to prod server when branch is master
 if [ $TRAVIS_BRANCH == 'docker_deploy_travis' ]
 then
-  ssh deploy@beta.esac.nl './update.sh'
+  ssh deploy@beta.esac.nl './update.sh 0.0.'$TRAVIS_BUILD_NUMBER$SNAPSHOTTAG 0.0.25
 elif [ $TRAVIS_BRANCH == 'master' ]
 then
   ssh deploy@esac.nl './update.sh' #account is not setup yet
 fi
 
-ssh deploy@beta.esac.nl './update.sh 0.0.'$TRAVIS_BUILD_NUMBER$SNAPSHOTTAG 0.0.25
+#ssh deploy@beta.esac.nl './update.sh 0.0.'$TRAVIS_BUILD_NUMBER$SNAPSHOTTAG 0.0.25
 
 
