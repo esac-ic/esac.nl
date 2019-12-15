@@ -9,8 +9,13 @@ mv deploy-key ~/.ssh/id_rsa
 
 #creating the docker image, the tag represents
 SNAPSHOTTAG=''
-if [ $TRAVIS_BRANCH != 'master' ]
+if [ $TRAVIS_BRANCH == 'docker_deploy_travis' ]
 then
+  SNAPSHOTTAG='-staging'
+elif [ $TRAVIS_BRANCH == 'master' ]
+then
+  SNAPSHOTTAG=''
+else
   SNAPSHOTTAG='-snapshot'
 fi
 docker build -t esac/website:0.0.$TRAVIS_BUILD_NUMBER$SNAPSHOTTAG .
