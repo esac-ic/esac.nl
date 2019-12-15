@@ -6,4 +6,13 @@ openssl aes-256-cbc -K $encrypted_705ea9aa11f9_key -iv $encrypted_705ea9aa11f9_i
 rm deploy-key.enc # Don't need it anymore
 chmod 600 deploy-key
 mv deploy-key ~/.ssh/id_rsa
-    
+
+#creating the docker image, the tag represents
+SNAPSHOTTAG=''
+if [ $TRAVIS_BRANCH != 'master' ]
+then
+  SNAPSHOTTAG='-snapshot'
+fi
+docker build -t esac/website:0.0.$TRAVIS_BUILD_NUMBER$SNAPSHOTTAG .
+docker login --username=esactravis --password=$DOCKER_PASSWORD
+docker push esac/website:0.0.$TRAVIS_BUILD_NUMBER$SNAPSHOTTAG
