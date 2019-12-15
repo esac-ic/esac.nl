@@ -3,7 +3,6 @@ sudo: required
 
 php:
   - 7.3
-  - 7.2
 
 services:
   - mysql
