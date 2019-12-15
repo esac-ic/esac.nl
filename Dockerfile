@@ -17,6 +17,9 @@ RUN composer install --no-dev
 # alternatief: RUN sed -e 's/127.0.0.1:9000/9000/' -i /etc/php-fpm.d/www.conf (misschien netter?)
 RUN echo "listen = web:9000" >> /usr/local/etc/php-fpm.d/www.conf
 
+#command to fix the export excel bug, cannot get this fixed in another way:
+RUN sed -i '288s/continue/continue 2/' /var/www/vendor/phpoffice/phpexcel/Classes/PHPExcel/Shared/OLE.php
+
 RUN npm install
 RUN npm run prod
 RUN php artisan storage:link
