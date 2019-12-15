@@ -1,1 +1,1 @@
-ssh -oStrictHostKeyChecking=no deploy@beta.esac.nl './deploy.sh'
+ssh deploy@beta.esac.nl './deploy.sh'
