@@ -3,7 +3,10 @@ RUN apt-get update && docker-php-ext-install pdo_mysql && apt install -y zip \
    libzip-dev zip libwebp-dev libjpeg62-turbo-dev libpng-dev libxpm-dev \
    libfreetype6-dev zlib1g-dev  && docker-php-ext-configure gd --with-gd --with-webp-dir --with-jpeg-dir \
    --with-png-dir --with-zlib-dir --with-xpm-dir --with-freetype-dir \
-   --enable-gd-native-ttf && docker-php-ext-install gd && rm -rf /var/lib/apt/lists/*
+   --enable-gd-native-ttf && docker-php-ext-install gd
+   #&& rm -rf /var/lib/apt/lists/*
+RUN apt-get install -y libxslt1-dev
+RUN docker-php-ext-install xsl
 
 COPY . /var/www/
 WORKDIR "/var/www/"
