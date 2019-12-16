@@ -9,7 +9,7 @@ mv deploy-key ~/.ssh/id_rsa
 
 #creating the docker image, the tag represents
 SNAPSHOTTAG=''
-if [ $TRAVIS_BRANCH == 'docker_deploy_travis' ]
+if [ $TRAVIS_BRANCH == 'develop' ]
 then
   SNAPSHOTTAG='-staging'
 elif [ $TRAVIS_BRANCH == 'master' ]
