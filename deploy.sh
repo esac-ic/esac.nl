@@ -23,17 +23,6 @@ fi
 #ssh deploy@beta.esac.nl './update.sh 0.0.'$TRAVIS_BUILD_NUMBER$SNAPSHOTTAG 0.0.25
 
 
-if [ $1 == 'website' ]
-then
-  ESAC_VERSION=$2
-  NGINX_VERSION=$(cat versions/nginx)
-elif [ $1 == 'nginx' ]
-then
-  ESAC_VERSION=$(cat versions/website)
-  NGINX_VERSION=$2
-else
-  sl -e
-fi
 
 
 
