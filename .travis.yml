@@ -16,9 +16,9 @@ before_install:
 - mysql -e 'CREATE DATABASE esac;'
 install:
 - bash install.sh
-- composer install --no-interaction --prefer-dist --no-suggest
-- npm install npm@latest -g
-- npm install
+#- composer install --no-interaction --prefer-dist --no-suggest
+#- npm install npm@latest -g
+#- npm install
 
 before_script:
   - php artisan key:generate
@@ -31,6 +31,7 @@ before_script:
 #  - php artisan serve &
 
 script:
+  - echo 'test'
 #- vendor/bin/phpunit -c phpunit.xml --coverage-clover=coverage.xml
 after_failure:
 - cat storage/logs/laravel.log
