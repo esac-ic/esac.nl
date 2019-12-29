@@ -16,28 +16,27 @@ before_install:
 - mysql -e 'CREATE DATABASE esac;'
 install:
 - bash install.sh
-#- composer install --no-interaction --prefer-dist --no-suggest
-#- npm install npm@latest -g
-#- npm install
+- composer install --no-interaction --prefer-dist --no-suggest
+- npm install npm@latest -g
+- npm install
 
 before_script:
   - php artisan key:generate
-#  - php artisan storage:link
-#  - php artisan dusk:chrome-driver
-#  - php artisan migrate
-#  - php artisan db:seed
-#  - npm run prod
-#  - npm run prod
-#  - php artisan serve &
+  - php artisan storage:link
+  - php artisan dusk:chrome-driver
+  - php artisan migrate
+  - php artisan db:seed
+  - npm run prod
+  - npm run prod
+  - php artisan serve &
 
 script:
-  - echo 'test'
-#- vendor/bin/phpunit -c phpunit.xml --coverage-clover=coverage.xml
+- vendor/bin/phpunit -c phpunit.xml --coverage-clover=coverage.xml
 after_failure:
 - cat storage/logs/laravel.log
 after_success:
-- bash deploy.sh
 - bash <(curl -s https://codecov.io/bash)
+- bash deploy.sh
 env:
   global:
   - secure: zOIBJNffsovNV+bBNwAvGLn+JKkYEXYQj6WVDviFsrn1aZalRlwar2DuxYZv+RwRxCK1g9sr/XZi6/ntoqCrcaVXBp2OD1usHwqV3Y3MQa2HxWkT78+WFa/wLKkdoOEiCkT25aY65O95cO8D8DZF+lzeagdYQ26bH1AfsNP3ghoD5uDQCF2THfCHvEGI5lTnMgl+LUTUxn4yta6VZ6imvNG/enrwxvEv3GY6/XSfVD37TtBEg3RGwbFchfxE+hjqAFfZJpqt35PNaxv0bPANA10eBZsdSbSGJl6TnCvWM8dQTc8N272LaHx1izVyQNfH3Fzq0h5k+caEkAgcGXRqZzgkz4VUmi+zpuTOEUd4wIx62k4oO0Py1HENOGGeadT8HV613H6wzeFS0CmhgUvso6IocXQyy4a4ExCG6B4q27RUCYgHxf7xgkzvPmzuIcSUAfLW2PjJQ9n/TuYJ/ELmzKQr/y+JG6hqLkcInwdeHszETqZ989aFU2et8CLtycp37BF3PrftZu10Hk8/Zod2IuQ538UN2kDiqt1M9AZkyu9BcGtRLzFUjGD2aMrUwOsSNaCAIRHhKTvh2u/Q1PXOqRmAaBLSC4UKZBlySpIKote+cVNo104lZHAOxElvRjHc9EMIljei1HMM9nT1UFxJteJ1buZKTrJiAWmf9nEBrHA=
