@@ -6,19 +6,20 @@ services:
 - mysql
 addons:
   chrome: stable
-  ssh_known_hosts: beta.esac.nl
+  ssh_known_hosts:
+  - beta.esac.nl
+  - esac.nl
 before_install:
-- openssl aes-256-cbc -K $encrypted_705ea9aa11f9_key -iv $encrypted_705ea9aa11f9_iv
-  -in deploy-key.enc -out deploy-key -d
 - cp .env.example .env
 - composer self-update
 - composer validate
 - mysql -e 'CREATE DATABASE esac;'
 install:
+- bash install.sh
 - composer install --no-interaction --prefer-dist --no-suggest
 - npm install npm@latest -g
 - npm install
-- bash install.sh
+
 before_script:
   - php artisan key:generate
   - php artisan storage:link
