@@ -26,8 +26,6 @@ then
 fi
 
 
-#ssh deploy@beta.esac.nl './update.sh 0.0.'$TRAVIS_BUILD_NUMBER$SNAPSHOTTAG 0.0.25
-
 
 
 
