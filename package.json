@@ -22,6 +22,7 @@
     "datatables.net-responsive-bs4": "^2.2.3",
     "jquery": "^3.4.1",
     "laravel-mix": "^5.0.0",
+    "lighthousebot": "git+https://github.com/ebidel/lighthousebot.git",
     "lodash": "^4.17.15",
     "moment": "^2.24.0",
     "photoswipe": "^4.1.3",
