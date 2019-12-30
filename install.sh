@@ -5,10 +5,10 @@ set -x # Show the output of the following commands (useful for debugging)
 
 #creating the docker image, the tag represents the environment
 SNAPSHOTTAG=''
-if [ $TRAVIS_BRANCH == 'develop' ]
+if [ $TRAVIS_PULL_REQUEST_BRANCH != '' ]
 then
   SNAPSHOTTAG='-staging'
-elif [ $TRAVIS_BRANCH == 'master' ]
+elif [[ $TRAVIS_BRANCH == 'master' && $TRAVIS_PULL_REQUEST_BRANCH == '' ]]
 then
   SNAPSHOTTAG=''
 else

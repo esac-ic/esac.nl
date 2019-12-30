@@ -6,12 +6,12 @@ echo $private_key_staging_server | base64 --decode > deploy-key
 chmod 600 deploy-key
 mv deploy-key ~/.ssh/id_rsa
 
-#creating the docker image, the tag represents
+
 SNAPSHOTTAG=''
-if [ $TRAVIS_BRANCH == 'develop' ]
+if [ $TRAVIS_PULL_REQUEST_BRANCH != '' ]
 then
   SNAPSHOTTAG='-staging'
-elif [ $TRAVIS_BRANCH == 'master' ]
+elif [[ $TRAVIS_BRANCH == 'master' && $TRAVIS_PULL_REQUEST_BRANCH == '' ]]
 then
   SNAPSHOTTAG=''
 else
