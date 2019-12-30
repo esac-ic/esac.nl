@@ -1,5 +1,11 @@
 #when push is being made to dev branch, run update.sh on dev server, if master run on prod server
 #see the server config branch for the contents of the update.sh script
+
+#setup ssh private key
+echo $private_key_staging_server | base64 --decode > deploy-key
+chmod 600 deploy-key
+mv deploy-key ~/.ssh/id_rsa
+
 #creating the docker image, the tag represents
 SNAPSHOTTAG=''
 if [ $TRAVIS_BRANCH == 'develop' ]
