@@ -1,39 +1,39 @@
-language: generic
+language: php
 sudo: required
-#php:
-#- 7.3
+php:
+  - 7.3
 services:
-- mysql
+  - mysql
 addons:
   chrome: stable
   ssh_known_hosts:
-  - beta.esac.nl
-  - esac.nl
+    - beta.esac.nl
+    - esac.nl
 before_install:
-- cp .env.example .env
-#- composer self-update
-#- composer validate
-#- mysql -e 'CREATE DATABASE esac;'
+  - cp .env.example .env
+  - composer self-update
+  - composer validate
+  - mysql -e 'CREATE DATABASE esac;'
 install:
-- bash install.sh
-#- composer install --no-interaction --prefer-dist --no-suggest
-- npm install npm@latest -gsudo
-- npm install
+  - bash install.sh
+  - composer install --no-interaction --prefer-dist --no-suggest
+  - npm install npm@latest -g
+  - npm install
 
 before_script:
-#  - php artisan key:generate
-#  - php artisan storage:link
-#  - php artisan dusk:chrome-driver
-#  - php artisan migrate
-#  - php artisan db:seed
+  - php artisan key:generate
+  - php artisan storage:link
+  - php artisan dusk:chrome-driver
+  - php artisan migrate
+  - php artisan db:seed
   - npm run prod
   - npm run prod
-#  - php artisan serve &
+  - php artisan serve &
 
 script:
-#- vendor/bin/phpunit -c phpunit.xml --coverage-clover=coverage.xml
+  - vendor/bin/phpunit -c phpunit.xml --coverage-clover=coverage.xml
 after_failure:
-#- cat storage/logs/laravel.log
+  - cat storage/logs/laravel.log
 after_success:
-#- bash <(curl -s https://codecov.io/bash)
-- bash deploy.sh
+  - bash <(curl -s https://codecov.io/bash)
+  - bash deploy.sh
