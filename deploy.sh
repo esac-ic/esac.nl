@@ -27,6 +27,7 @@ COMMMIT_DATE="$(git log -1 $TRAVIS_COMMIT --pretty="%cD")"
 if [[ $TRAVIS_PULL_REQUEST_BRANCH != '' ]]
 then
   ssh deploy@beta.esac.nl './update.sh website 0.0.'$TRAVIS_BUILD_NUMBER$SNAPSHOTTAG '"'$AUTHOR_NAME'"' '"'$COMMIT_MSG'"' '"'$COMMMIT_DATE'"' '"'$TRAVIS_PULL_REQUEST_BRANCH'"'
+  npm run lh -- --perf=80 https://beta.esac.nl
 elif [[ $TRAVIS_BRANCH == 'master' && $TRAVIS_PULL_REQUEST_BRANCH == '' ]]
 then
   echo 'deploy to master'
