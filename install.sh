@@ -14,6 +14,7 @@ then
 else
   SNAPSHOTTAG='-snapshot'
 fi
-docker build -t esac/website:0.0.$TRAVIS_BUILD_NUMBER$SNAPSHOTTAG .
-docker login --username=esactravis --password=$DOCKER_PASSWORD
-docker push esac/website:0.0.$TRAVIS_BUILD_NUMBER$SNAPSHOTTAG
+docker pull esac/website:0.0.29
+#docker build -t esac/website:0.0.$TRAVIS_BUILD_NUMBER$SNAPSHOTTAG .
+#docker login --username=esactravis --password=$DOCKER_PASSWORD
+#docker push esac/website:0.0.$TRAVIS_BUILD_NUMBER$SNAPSHOTTAG

@@ -31,7 +31,7 @@ COMMMIT_DATE="$(git log -1 $TRAVIS_COMMIT --pretty="%cD")"
 #deploy to test server when brach is develop, deploy to prod server when branch is master
 if [ $TRAVIS_BRANCH == 'develop' ]
 then
-  ssh deploy@beta.esac.nl './update.sh website 0.0.'$TRAVIS_BUILD_NUMBER$SNAPSHOTTAG '"'$AUTHOR_NAME'"' '"'$COMMIT_MSG'"' '"'$COMMMIT_DATE'"'
+  ssh deploy@beta.esac.nl './update.sh website 0.0.29' '"'$AUTHOR_NAME'"' '"'$COMMIT_MSG'"' '"'$COMMMIT_DATE'"'
 elif [ $TRAVIS_BRANCH == 'master' ]
 then
   ssh deploy@esac.nl './update.sh' #account is not setup yet
