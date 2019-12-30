@@ -10,14 +10,14 @@ addons:
   - beta.esac.nl
   - esac.nl
 before_install:
-#- cp .env.example .env
+- cp .env.example .env
 #- composer self-update
 #- composer validate
 #- mysql -e 'CREATE DATABASE esac;'
 install:
 - bash install.sh
 #- composer install --no-interaction --prefer-dist --no-suggest
-- npm install npm@latest -g
+- npm install npm@latest -gsudo
 - npm install
 
 before_script:
