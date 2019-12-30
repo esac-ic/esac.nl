@@ -1,4 +1,5 @@
 #when push is being made to dev branch, run update.sh on dev server, if master run on prod server
+#see the server config branch for the contents of the update.sh script
 #creating the docker image, the tag represents
 SNAPSHOTTAG=''
 if [ $TRAVIS_BRANCH == 'develop' ]
@@ -11,7 +12,7 @@ else
   SNAPSHOTTAG='-snapshot'
 fi
 
-#get commiter name:
+#get commiter name for the version.txt  file:
 AUTHOR_NAME="$(git log -1 $TRAVIS_COMMIT --pretty="%aN")"
 COMMIT_MSG="$(git log -1 $TRAVIS_COMMIT --pretty="%s")"
 COMMMIT_DATE="$(git log -1 $TRAVIS_COMMIT --pretty="%cD")"
