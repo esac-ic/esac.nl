@@ -26,7 +26,8 @@ COMMMIT_DATE="$(git log -1 $TRAVIS_COMMIT --pretty="%cD")"
 #The variable  $$TRAVIS_PULL_REQUEST_BRANCH is  empty when the run is not a PR,  so it will deploy to beta.esac.nl when there is a PR
 if [ $TRAVIS_PULL_REQUEST_BRANCH != '' ]
 then
-  ssh deploy@beta.esac.nl './update.sh website 0.0.'$TRAVIS_BUILD_NUMBER$SNAPSHOTTAG '"'$AUTHOR_NAME'"' '"'$COMMIT_MSG'"' '"'$COMMMIT_DATE'"' '"'$TRAVIS_PULL_REQUEST_BRANCH'"'
+  ssh deploy@beta.esac.nl './update.sh website 0.0.29' '"'$AUTHOR_NAME'"' '"'$COMMIT_MSG'"' '"'$COMMMIT_DATE'"' '"'$TRAVIS_PULL_REQUEST_BRANCH'"'
+  npm run lh https://beta.esac.nl
 elif [[ $TRAVIS_BRANCH == 'master' && $TRAVIS_PULL_REQUEST_BRANCH == '' ]]
 then
   echo 'deploy to master'
