@@ -6,11 +6,6 @@ echo $private_key_staging_server | base64 --decode > deploy-key
 chmod 600 deploy-key
 mv deploy-key ~/.ssh/id_rsa
 
-#chmod 600 id_rsa.pub
-#mv id_rsa.pub ~/.ssh/id_rsa.pub
-
-
-
 #creating the docker image, the tag represents
 SNAPSHOTTAG=''
 if [ $TRAVIS_BRANCH == 'develop' ]
@@ -28,7 +23,7 @@ AUTHOR_NAME="$(git log -1 $TRAVIS_COMMIT --pretty="%aN")"
 COMMIT_MSG="$(git log -1 $TRAVIS_COMMIT --pretty="%s")"
 COMMMIT_DATE="$(git log -1 $TRAVIS_COMMIT --pretty="%cD")"
 
-#deploy to test server when brach is develop, deploy to prod server when branch is master
+#The variable  $$TRAVIS_PULL_REQUEST_BRANCH is  empty when the run is not a PR,  so it will deploy to beta.esac.nl when there is a PR
 if [ $TRAVIS_PULL_REQUEST_BRANCH != '' ]
 then
   ssh deploy@beta.esac.nl './update.sh website 0.0.'$TRAVIS_BUILD_NUMBER$SNAPSHOTTAG '"'$AUTHOR_NAME'"' '"'$COMMIT_MSG'"' '"'$COMMMIT_DATE'"' '"'$TRAVIS_PULL_REQUEST_BRANCH'"'
