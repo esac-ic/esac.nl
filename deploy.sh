@@ -6,8 +6,8 @@ echo $private_key_staging_server | base64 --decode > deploy-key
 chmod 600 deploy-key
 mv deploy-key ~/.ssh/id_rsa
 
-chmod 600 id_rsa.pub
-mv id_rsa.pub ~/.ssh/id_rsa.pub
+#chmod 600 id_rsa.pub
+#mv id_rsa.pub ~/.ssh/id_rsa.pub
 
 
 
@@ -29,10 +29,10 @@ COMMIT_MSG="$(git log -1 $TRAVIS_COMMIT --pretty="%s")"
 COMMMIT_DATE="$(git log -1 $TRAVIS_COMMIT --pretty="%cD")"
 
 #deploy to test server when brach is develop, deploy to prod server when branch is master
-if [ $TRAVIS_BRANCH == 'develop' ]
+if [ $TRAVIS_PULL_REQUEST_BRANCH != '' ]
 then
-  ssh deploy@beta.esac.nl './update.sh website 0.0.29' '"'$AUTHOR_NAME'"' '"'$COMMIT_MSG'"' '"'$COMMMIT_DATE'"'
-elif [ $TRAVIS_BRANCH == 'master' ]
+  ssh deploy@beta.esac.nl './update.sh website 0.0.'$TRAVIS_BUILD_NUMBER$SNAPSHOTTAG '"'$AUTHOR_NAME'"' '"'$COMMIT_MSG'"' '"'$COMMMIT_DATE'"' '"'$TRAVIS_PULL_REQUEST_BRANCH'"'
+elif [[ $TRAVIS_BRANCH == 'master' && $TRAVIS_PULL_REQUEST_BRANCH == '' ]]
 then
   ssh deploy@esac.nl './update.sh' #account is not setup yet
 fi
