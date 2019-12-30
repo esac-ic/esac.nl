@@ -34,7 +34,8 @@ then
   ssh deploy@beta.esac.nl './update.sh website 0.0.'$TRAVIS_BUILD_NUMBER$SNAPSHOTTAG '"'$AUTHOR_NAME'"' '"'$COMMIT_MSG'"' '"'$COMMMIT_DATE'"' '"'$TRAVIS_PULL_REQUEST_BRANCH'"'
 elif [[ $TRAVIS_BRANCH == 'master' && $TRAVIS_PULL_REQUEST_BRANCH == '' ]]
 then
-  ssh deploy@esac.nl './update.sh' #account is not setup yet
+  echo 'deploy to master'
+#  ssh deploy@esac.nl './update.sh' #account is not setup yet
 fi
 
 
