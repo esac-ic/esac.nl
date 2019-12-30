@@ -1,6 +1,7 @@
 sudo: required
+language: generic
 services:
-- mysql
+- docker
 addons:
   chrome: stable
   ssh_known_hosts:
