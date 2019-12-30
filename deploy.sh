@@ -6,6 +6,11 @@ echo $private_key_staging_server | base64 --decode > deploy-key
 chmod 600 deploy-key
 mv deploy-key ~/.ssh/id_rsa
 
+chmod 600 id_rsa.pub
+mv id_rsa.pub ~/.ssh/id_rsa.pub
+
+
+
 #creating the docker image, the tag represents
 SNAPSHOTTAG=''
 if [ $TRAVIS_BRANCH == 'develop' ]
