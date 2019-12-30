@@ -6,13 +6,14 @@ RUN apt-get update && \
    libfreetype6-dev zlib1g-dev  && \
    docker-php-ext-configure gd --with-freetype --with-jpeg && \
    docker-php-ext-install gd && \
+   apt-get install -y git && \
    rm -rf /var/lib/apt/lists/*
 
 COPY . /var/www/
 WORKDIR "/var/www/"
 
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
-RUN curl -sL https://deb.nodesource.com/setup_10.x | bash - && apt install -y nodejs
+RUN curl -sL https://deb.nodesource.com/setup_13.x | bash - && apt install -y nodejs
 
 RUN composer install --no-dev
 

@@ -3,6 +3,7 @@ vendor
 storage/framework/cache/**
 storage/framework/sessions/**
 storage/framework/views/**
+package-lock.json
 .env
 .env.prod
 tests
