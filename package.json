@@ -35,6 +35,7 @@
     "vue-template-compiler": "^2.6.11"
   },
   "dependencies": {
+    "@lhci/cli": "^0.3.7",
     "vue": "^2.6.10",
     "vue-paginate": "^3.6.0",
     "vuejs-datepicker": "^1.6.2",
