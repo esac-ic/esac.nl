@@ -35,6 +35,7 @@ before_script:
 #  - php artisan serve &
 
 script:
+  - npm -v
 #  - global.URL = require('url').URL;
 #  - vendor/bin/phpunit -c phpunit.xml --coverage-clover=coverage.xml
 after_failure:
