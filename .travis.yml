@@ -12,6 +12,7 @@ addons:
     - beta.esac.nl
     - esac.nl
 before_install:
+  - nvm install 10.15
   - cp .env.example .env
   - composer self-update
   - composer validate
