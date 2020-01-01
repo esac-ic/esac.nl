@@ -20,7 +20,7 @@ before_install:
 install:
 #  - bash install.sh
 #  - composer install --no-interaction --prefer-dist --no-suggest
-  - npm i -g npm@10
+  - npm -v
   - npm install npm@latest -g
   - npm install -g @lhci/cli@0.3.x
   - npm install
