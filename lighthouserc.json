@@ -8,11 +8,13 @@
       "assertions": {
         "offscreen-images": "off",
         "uses-webp-images": "off"
-      },
-      "staticDistDir": "./dist"
+      }
     },
     "upload": {
       "target": "temporary-public-storage"
+    },
+    "collect": {
+      "url": "https://beta.esac.nl"
     }
   }
 }

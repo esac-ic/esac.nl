@@ -15,7 +15,7 @@ before_install:
 #  - composer validate
 #  - mysql -e 'CREATE DATABASE esac;'
 install:
-  - bash install.sh
+#  - bash install.sh
 #  - composer install --no-interaction --prefer-dist --no-suggest
   - npm install npm@latest -g
   - npm install -g @lhci/cli@0.3.x
