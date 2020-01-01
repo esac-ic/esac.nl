@@ -17,7 +17,7 @@ before_install:
 #  - composer validate
 #  - mysql -e 'CREATE DATABASE esac;'
 install:
-#  - bash install.sh
+  - bash install.sh
 #  - composer install --no-interaction --prefer-dist --no-suggest
   - npm -v
   - npm install npm@latest -g
@@ -41,5 +41,4 @@ after_failure:
   - cat storage/logs/laravel.log
 after_success:
 #  - bash <(curl -s https://codecov.io/bash)
-  - lhci autorun --upload.serverBaseUrl="http://beta.esac.nl:9001" --upload.token="$LHCI_TOKEN"
-#  - bash deploy.sh
+  - bash deploy.sh
