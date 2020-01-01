@@ -20,6 +20,7 @@ before_install:
 install:
 #  - bash install.sh
 #  - composer install --no-interaction --prefer-dist --no-suggest
+  - npm i -g npm@10
   - npm install npm@latest -g
   - npm install -g @lhci/cli@0.3.x
   - npm install
@@ -35,7 +36,6 @@ before_script:
 #  - php artisan serve &
 
 script:
-  - npm -v
 #  - global.URL = require('url').URL;
 #  - vendor/bin/phpunit -c phpunit.xml --coverage-clover=coverage.xml
 after_failure:
