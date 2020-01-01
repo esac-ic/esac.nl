@@ -31,6 +31,7 @@ then
 elif [[ $TRAVIS_BRANCH == 'master' && $TRAVIS_PULL_REQUEST_BRANCH == '' ]]
 then
   echo 'deploy to master'
+  lhci autorun --upload.serverBaseUrl="http://beta.esac.nl:9001" --upload.token="$LHCI_TOKEN"
 #  ssh deploy@esac.nl './update.sh' #account is not setup yet
 fi
 
