@@ -5,7 +5,7 @@ RUN apt-get update && \
    libzip-dev zip libwebp-dev libjpeg62-turbo-dev libpng-dev libxpm-dev \
    libfreetype6-dev zlib1g-dev  && \
    docker-php-ext-configure gd --with-freetype --with-jpeg && \
-   docker-php-ext-install gd &&
+   docker-php-ext-install gd && \
    rm -rf /var/lib/apt/lists/*
 
 COPY . /var/www/
