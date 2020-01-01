@@ -1,5 +1,7 @@
 language: generic
 sudo: required
+node_js:
+  - 10
 #php:
 #  - 7.3
 #services:
@@ -37,5 +39,5 @@ after_failure:
   - cat storage/logs/laravel.log
 after_success:
 #  - bash <(curl -s https://codecov.io/bash)
-  - lhci autorun --collect.url="https://beta.esac.nl"
+  - lhci autorun --collect.url="https://beta.esac.nl" --assert.preset=lighthouse:recommended
 #  - bash deploy.sh
