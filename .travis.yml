@@ -10,10 +10,11 @@ addons:
   - beta.esac.nl
   - esac.nl
 before_install:
-- cp .env.example .env
-- composer self-update
-- composer validate
-- mysql -e 'CREATE DATABASE esac;'
+  - nvm install 10.15
+  - cp .env.example .env
+  - composer self-update
+  - composer validate
+  - mysql -e 'CREATE DATABASE esac;'
 install:
 - bash install.sh
 - composer install --no-interaction --prefer-dist --no-suggest

@@ -8,7 +8,7 @@ mv deploy-key ~/.ssh/id_rsa
 
 
 SNAPSHOTTAG=''
-if [ $TRAVIS_PULL_REQUEST_BRANCH != '' ]
+if [[ $TRAVIS_PULL_REQUEST_BRANCH != '' ]]
 then
   SNAPSHOTTAG='-staging'
 elif [[ $TRAVIS_BRANCH == 'master' && $TRAVIS_PULL_REQUEST_BRANCH == '' ]]
@@ -24,9 +24,10 @@ COMMIT_MSG="$(git log -1 $TRAVIS_COMMIT --pretty="%s")"
 COMMMIT_DATE="$(git log -1 $TRAVIS_COMMIT --pretty="%cD")"
 
 #The variable  $$TRAVIS_PULL_REQUEST_BRANCH is  empty when the run is not a PR,  so it will deploy to beta.esac.nl when there is a PR
-if [ $TRAVIS_PULL_REQUEST_BRANCH != '' ]
+if [[ $TRAVIS_PULL_REQUEST_BRANCH != '' ]]
 then
   ssh deploy@beta.esac.nl './update.sh website 0.0.'$TRAVIS_BUILD_NUMBER$SNAPSHOTTAG '"'$AUTHOR_NAME'"' '"'$COMMIT_MSG'"' '"'$COMMMIT_DATE'"' '"'$TRAVIS_PULL_REQUEST_BRANCH'"'
+  lhci autorun --upload.serverBaseUrl="http://beta.esac.nl:9001" --upload.token="$LHCI_TOKEN"
 elif [[ $TRAVIS_BRANCH == 'master' && $TRAVIS_PULL_REQUEST_BRANCH == '' ]]
 then
   echo 'deploy to master'
