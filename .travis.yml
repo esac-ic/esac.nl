@@ -41,5 +41,5 @@ after_failure:
   - cat storage/logs/laravel.log
 after_success:
 #  - bash <(curl -s https://codecov.io/bash)
-  - lhci autorun --collect.url="https://beta.esac.nl" --assert.preset=lighthouse:recommended
+  - lhci autorun --collect.url="https://beta.esac.nl"
 #  - bash deploy.sh
