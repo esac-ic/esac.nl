@@ -1,8 +1,7 @@
 {
   "ci": {
     "collect": {
-      "numberOfRuns": 3,
-      "url": "https://beta.esac.nl"
+      "numberOfRuns": 3
     },
     "assert": {
       "preset": "lighthouse:recommended",

@@ -37,5 +37,5 @@ after_failure:
   - cat storage/logs/laravel.log
 after_success:
 #  - bash <(curl -s https://codecov.io/bash)
-  - lhci autorun --upload.target=temporary-public-storage
-  - bash deploy.sh
+  - lhci autorun --collect.url="https://beta.esac.nl"
+#  - bash deploy.sh
