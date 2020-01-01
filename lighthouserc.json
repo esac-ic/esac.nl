@@ -3,11 +3,6 @@
     "collect": {
       "numberOfRuns": 1,
       "url": "https://beta.esac.nl"
-    },
-    "upload": {
-      "target": "lhci",
-      "serverBaseUrl": "http://beta.esac.nl:9001",
-      "token": "$LHCI_TOKEN"
     }
   }
 }

@@ -41,5 +41,5 @@ after_failure:
   - cat storage/logs/laravel.log
 after_success:
 #  - bash <(curl -s https://codecov.io/bash)
-  - lhci autorun --assert.preset=lighthouse:no-pwa
+  - lhci autorun --upload.serverBaseUrl="http://beta.esac.nl:9001" --upload.token="$LHCI_TOKEN" --assert.preset=lighthouse:recommended
 #  - bash deploy.sh
