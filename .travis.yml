@@ -12,6 +12,7 @@ addons:
     - beta.esac.nl
     - esac.nl
 before_install:
+  - npm i -g npm@version-number
   - cp .env.example .env
 #  - composer self-update
 #  - composer validate
@@ -34,7 +35,7 @@ before_script:
 #  - php artisan serve &
 
 script:
-  - global.URL = require('url').URL;
+#  - global.URL = require('url').URL;
 #  - vendor/bin/phpunit -c phpunit.xml --coverage-clover=coverage.xml
 after_failure:
   - cat storage/logs/laravel.log
