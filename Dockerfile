@@ -25,7 +25,7 @@ RUN echo "listen = web:9000" >> /usr/local/etc/php-fpm.d/www.conf
 #command to fix the export excel bug, cannot get this fixed in another way:
 RUN sed -i '288s/continue/continue 2/' /var/www/vendor/phpoffice/phpexcel/Classes/PHPExcel/Shared/OLE.php
 
-RUN npm install
+RUN npm install --only=prod
 RUN npm run prod
 RUN php artisan storage:link
 RUN php artisan config:clear

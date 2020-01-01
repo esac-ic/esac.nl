@@ -1,7 +1,5 @@
 language: php
 sudo: required
-node_js:
-  - 10
 php:
   - 7.3
 services:
@@ -20,8 +18,6 @@ before_install:
 install:
   - bash install.sh
   - composer install --no-interaction --prefer-dist --no-suggest
-  - npm -v
-  - node -v
   - npm install npm@latest -g
   - npm install -g @lhci/cli@0.3.x
   - npm install
