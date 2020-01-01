@@ -1,7 +1,8 @@
 {
   "ci": {
     "collect": {
-      "numberOfRuns": 3
+      "numberOfRuns": 3,
+      "url": "https://beta.esac.nl"
     },
     "upload": {
       "target": "temporary-public-storage"
