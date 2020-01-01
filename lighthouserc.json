@@ -7,7 +7,7 @@
     "upload": {
       "target": "lhci",
       "serverBaseUrl": "http://beta.esac.nl:9001",
-      "token": "$LHCI_SERVER_TOKEN"
+      "token": "$LHCI_TOKEN"
     }
   }
 }
