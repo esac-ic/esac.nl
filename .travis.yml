@@ -12,6 +12,7 @@ addons:
 before_install:
   - git log -1
   - git log -2
+  - git show --pretty=%P HEAD
   - nvm install 10.15
   - cp .env.example .env
   - composer self-update
