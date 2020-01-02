@@ -15,14 +15,14 @@ else
   SNAPSHOTTAG='-snapshot'
 fi
 docker build -t esac/website:0.0.$TRAVIS_BUILD_NUMBER$SNAPSHOTTAG .
-buildstatus=$?
+BUILDSTATUS=$?
 docker login --username=esactravis --password=$DOCKER_PASSWORD
 docker push esac/website:0.0.$TRAVIS_BUILD_NUMBER$SNAPSHOTTAG
-pushstatus=$?
+PUSHSTATUS=$?
 
 
 #set github status when succeeds or fails
-if [[$buildstatus != 0 && $pushstatus != 0]]
+if [[ $BUILDSTATUS != '0' && $PUSHSTATUS != '0']]
 then
   curl -X POST -H "Content-Type: application/json" -d \
   '{"state": "success",
