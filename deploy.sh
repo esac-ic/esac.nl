@@ -29,7 +29,7 @@ then
   ssh deploy@beta.esac.nl './update.sh website 0.0.'$TRAVIS_BUILD_NUMBER$SNAPSHOTTAG '"'$AUTHOR_NAME'"' '"'$COMMIT_MSG'"' '"'$COMMMIT_DATE'"' '"'$TRAVIS_PULL_REQUEST_BRANCH'"'
   DEPLOYSTATUS = $?
   lhci autorun --upload.serverBaseUrl="http://beta.esac.nl:9001" --upload.token="$LHCI_TOKEN"
-  if [$DEPLOYSTATUS == '0']
+  if [[ $DEPLOYSTATUS == '0' ]]
   then
     curl -X POST -H "Content-Type: application/json" -d \
     '{"state": "success", "target_url": "https://beta.esac.nl", "description": "check https://beta.esac.nl", "context": "Staging deployment"}' \
