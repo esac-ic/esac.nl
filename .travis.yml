@@ -13,6 +13,7 @@ before_install:
   - git log -1
   - git log -2
   - git show --pretty=%P HEAD
+  - git show --pretty=%P HEAD | head -1 | cut -d\  -f 2
   - nvm install 10.15
   - cp .env.example .env
   - composer self-update
