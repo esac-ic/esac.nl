@@ -37,11 +37,11 @@ then
   if [[ $DEPLOYSTATUS == '0' ]]
   then
     curl -X POST -H "Content-Type: application/json" -d \
-    '{"state": "success", "target_url": "https://beta.esac.nl", "description": "check https://beta.esac.nl", "context": "Staging deployment"}' \
+    '{"state": "success", "target_url": "https://beta.esac.nl", "description": "check https://beta.esac.nl", "context": "Staging deployment successful"}' \
     https://api.github.com/repos/esac-ic/esac.nl/statuses/$ORIGINAL_COMMIT\?access_token\=$github_token_wouter
   else
     curl -X POST -H "Content-Type: application/json" -d \
-    '{"state": "failure", "target_url": "https://beta.esac.nl", "description": "check https://beta.esac.nl", "context": "Staging deployment"}' \
+    '{"state": "failure", "target_url": "", "description": "check https://beta.esac.nl", "context": "Staging deployment failed"}' \
     https://api.github.com/repos/esac-ic/esac.nl/statuses/$ORIGINAL_COMMIT\?access_token\=$github_token_wouter
   fi
 elif [[ $TRAVIS_BRANCH == 'master' && $TRAVIS_PULL_REQUEST_BRANCH == '' ]]
