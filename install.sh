@@ -14,14 +14,15 @@ then
 else
   SNAPSHOTTAG='-snapshot'
 fi
-buildstatus= docker build -t esac/website:0.0.$TRAVIS_BUILD_NUMBER$SNAPSHOTTAG .
+docker build -t esac/website:0.0.$TRAVIS_BUILD_NUMBER$SNAPSHOTTAG .
+buildstatus=$?
 docker login --username=esactravis --password=$DOCKER_PASSWORD
-pusstatus=docker push esac/website:0.0.$TRAVIS_BUILD_NUMBER$SNAPSHOTTAG
-
+docker push esac/website:0.0.$TRAVIS_BUILD_NUMBER$SNAPSHOTTAG
+pushstatus=$?
 
 echo $TRAVIS_COMMIT
 #set github status when succeeds or fails
-if [[buildstatus != 0 && pusstatus != 0]]
+if [[buildstatus != 0 && pushstatus != 0]]
 then
   curl -X POST -H "Content-Type: application/json" -d \
   '{"state": "success", "target_url": "https://hub.docker.com/repository/docker/esac/website", "description": "build and push successful", "context": "Docker image esac/website:0.0.'$TRAVIS_BUILD_NUMBER$SNAPSHOTTAG'"}' \
