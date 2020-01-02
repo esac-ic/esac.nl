@@ -18,6 +18,10 @@ else
   SNAPSHOTTAG='-snapshot'
 fi
 
+#get the original commit in case of a PR build
+ORIGINAL_COMMIT=$(git show --pretty=%P HEAD | head -1 | cut -d\  -f 2)
+
+ECHO $ORIGINAL_COMMIT
 #get commiter name for the version.txt  file:
 AUTHOR_NAME="$(git log -1 $TRAVIS_COMMIT --pretty="%aN")"
 COMMIT_MSG="$(git log -1 $TRAVIS_COMMIT --pretty="%s")"
@@ -29,15 +33,16 @@ then
   ssh deploy@beta.esac.nl './update.sh website 0.0.'$TRAVIS_BUILD_NUMBER$SNAPSHOTTAG '"'$AUTHOR_NAME'"' '"'$COMMIT_MSG'"' '"'$COMMMIT_DATE'"' '"'$TRAVIS_PULL_REQUEST_BRANCH'"'
   DEPLOYSTATUS=$?
   lhci autorun --upload.serverBaseUrl="http://beta.esac.nl:9001" --upload.token="$LHCI_TOKEN"
+
   if [[ $DEPLOYSTATUS == '0' ]]
   then
     curl -X POST -H "Content-Type: application/json" -d \
-    '{"state": "success", "target_url": "https://beta.esac.nl", "description": "check https://beta.esac.nl", "context": "Staging deployment"}' \
-    https://api.github.com/repos/esac-ic/esac.nl/statuses/$TRAVIS_COMMIT\?access_token\=$github_token_wouter
+    '{"state": "success", "target_url": "https://beta.esac.nl", "description": "check https://beta.esac.nl", "context": "Staging deployment successful"}' \
+    https://api.github.com/repos/esac-ic/esac.nl/statuses/$ORIGINAL_COMMIT\?access_token\=$github_token_wouter
   else
     curl -X POST -H "Content-Type: application/json" -d \
-    '{"state": "failure", "target_url": "https://beta.esac.nl", "description": "check https://beta.esac.nl", "context": "Staging deployment"}' \
-    https://api.github.com/repos/esac-ic/esac.nl/statuses/$TRAVIS_COMMIT\?access_token\=$github_token_wouter
+    '{"state": "failure", "target_url": "", "description": "check https://beta.esac.nl", "context": "Staging deployment failed"}' \
+    https://api.github.com/repos/esac-ic/esac.nl/statuses/$ORIGINAL_COMMIT\?access_token\=$github_token_wouter
   fi
 elif [[ $TRAVIS_BRANCH == 'master' && $TRAVIS_PULL_REQUEST_BRANCH == '' ]]
 then
