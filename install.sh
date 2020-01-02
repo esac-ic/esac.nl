@@ -1,7 +1,8 @@
 #!/bin/bash
 set -x # Show the output of the following commands (useful for debugging)
 
-ORIGINAL_COMMIT='git show --pretty=%P HEAD | head -1 | cut -d\  -f 2'
+#get the original commit in case of a PR build
+ORIGINAL_COMMIT=$(git show --pretty=%P HEAD | head -1 | cut -d\  -f 2)
 ECHO $ORIGINAL_COMMIT
 #creating the docker image, the tag represents the environment
 SNAPSHOTTAG=''
