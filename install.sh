@@ -20,12 +20,15 @@ docker login --username=esactravis --password=$DOCKER_PASSWORD
 docker push esac/website:0.0.$TRAVIS_BUILD_NUMBER$SNAPSHOTTAG
 pushstatus=$?
 
-echo $TRAVIS_COMMIT
+
 #set github status when succeeds or fails
-if [[buildstatus != 0 && pushstatus != 0]]
+if [[$buildstatus != 0 && $pushstatus != 0]]
 then
   curl -X POST -H "Content-Type: application/json" -d \
-  '{"state": "success", "target_url": "https://hub.docker.com/repository/docker/esac/website", "description": "build and push successful", "context": "Docker image esac/website:0.0.'$TRAVIS_BUILD_NUMBER$SNAPSHOTTAG'"}' \
+  '{"state": "success",
+  "target_url": "https://hub.docker.com/repository/docker/esac/website",
+  "description": "build and push successful",
+  "context": "Docker image esac/website:0.0.'$TRAVIS_BUILD_NUMBER$SNAPSHOTTAG'"}' \
   https://api.github.com/repos/esac-ic/esac.nl/statuses/$TRAVIS_COMMIT\?access_token\=$github_token_wouter
 else
   curl -X POST -H "Content-Type: application/json" -d \
