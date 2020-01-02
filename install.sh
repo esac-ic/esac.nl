@@ -22,7 +22,7 @@ PUSHSTATUS=$?
 
 
 #set github status when succeeds or fails
-if [[ $BUILDSTATUS != '0' && $PUSHSTATUS != '0']]
+if [[ $BUILDSTATUS != '0' && $PUSHSTATUS != '0' ]]
 then
   curl -X POST -H "Content-Type: application/json" -d \
   '{"state": "success",
