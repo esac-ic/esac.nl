@@ -26,8 +26,18 @@ COMMMIT_DATE="$(git log -1 $TRAVIS_COMMIT --pretty="%cD")"
 #The variable  $$TRAVIS_PULL_REQUEST_BRANCH is  empty when the run is not a PR,  so it will deploy to beta.esac.nl when there is a PR
 if [[ $TRAVIS_PULL_REQUEST_BRANCH != '' ]]
 then
-  ssh deploy@beta.esac.nl './update.sh website 0.0.'$TRAVIS_BUILD_NUMBER$SNAPSHOTTAG '"'$AUTHOR_NAME'"' '"'$COMMIT_MSG'"' '"'$COMMMIT_DATE'"' '"'$TRAVIS_PULL_REQUEST_BRANCH'"'
+  status=ssh deploy@beta.esac.nl './update.sh website 0.0.'$TRAVIS_BUILD_NUMBER$SNAPSHOTTAG '"'$AUTHOR_NAME'"' '"'$COMMIT_MSG'"' '"'$COMMMIT_DATE'"' '"'$TRAVIS_PULL_REQUEST_BRANCH'"'
   lhci autorun --upload.serverBaseUrl="http://beta.esac.nl:9001" --upload.token="$LHCI_TOKEN"
+  if [status == 0]
+  then
+    curl -X POST -H "Content-Type: application/json" -d \
+    '{"state": "success", "target_url": "https://beta.esac.nl", "description": "check https://beta.esac.nl", "context": "Staging deployment"}' \
+    https://api.github.com/repos/esac-ic/esac.nl/statuses/$TRAVIS_COMMIT\?access_token\=$github_token_wouter
+  else
+    curl -X POST -H "Content-Type: application/json" -d \
+    '{"state": "failure", "target_url": "https://beta.esac.nl", "description": "check https://beta.esac.nl", "context": "Staging deployment"}' \
+    https://api.github.com/repos/esac-ic/esac.nl/statuses/$TRAVIS_COMMIT\?access_token\=$github_token_wouter
+  fi
 elif [[ $TRAVIS_BRANCH == 'master' && $TRAVIS_PULL_REQUEST_BRANCH == '' ]]
 then
   echo 'deploy to master'
