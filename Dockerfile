@@ -1,9 +1,12 @@
-FROM php:7.3.12-fpm
-RUN apt-get update && docker-php-ext-install pdo_mysql && apt install -y zip \
+FROM php:7.4.0-fpm
+RUN apt-get update && \
+   docker-php-ext-install pdo_mysql && \
+   apt install -y zip \
    libzip-dev zip libwebp-dev libjpeg62-turbo-dev libpng-dev libxpm-dev \
-   libfreetype6-dev zlib1g-dev  && docker-php-ext-configure gd --with-gd --with-webp-dir --with-jpeg-dir \
-   --with-png-dir --with-zlib-dir --with-xpm-dir --with-freetype-dir \
-   --enable-gd-native-ttf && docker-php-ext-install gd && rm -rf /var/lib/apt/lists/*
+   libfreetype6-dev zlib1g-dev  && \
+   docker-php-ext-configure gd --with-freetype --with-jpeg && \
+   docker-php-ext-install gd && \
+   rm -rf /var/lib/apt/lists/*
 
 COPY . /var/www/
 WORKDIR "/var/www/"
