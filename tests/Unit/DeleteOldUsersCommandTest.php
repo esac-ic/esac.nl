@@ -68,7 +68,6 @@ class DeleteOldUsersCommandTest extends TestCase
 
         Artisan::call("remove:oldUsers");
 
-
         $user = User::find($id);
         $this->assertNotEquals(null,$user);
         $this->assertNotEquals(null,$user->firstname);
