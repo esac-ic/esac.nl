@@ -15,6 +15,7 @@ return [
     "leden"     => "Leden",
     "rols"      => "Rollen",
     "books"     => "Boeken",
+    "photoAlbums" => "Fotoalbums",
     "paginaBeheer"  => "Pagina beheer",
     "yes"       => "Ja",
     "no"       => "Nee",

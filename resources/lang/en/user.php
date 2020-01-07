@@ -54,6 +54,7 @@ return [
     "lid_af"        => "Date of resignation",
     "created_at"    => "User created at",
     "updated_at"    => "User updated at",
+    'makeActiveMember' => "Make active member",
     'removeAsActiveMember' => "Remove as active member",
     "approveAsPendingMember" => "Approve as member",
     "removeAsPendingMember" => "Remove as pending",

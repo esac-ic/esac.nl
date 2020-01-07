@@ -131,6 +131,14 @@ class User extends Authenticatable
             Auth::logout();
         }
     }
+
+    public function makeActiveMember(){
+        if($this->email){
+            $this->lid_af = null;
+            $this->save();
+        }
+    }
+
     public function getAdress() {
         return $this->street . " " . $this->houseNumber;
     }

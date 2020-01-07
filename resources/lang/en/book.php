@@ -5,6 +5,7 @@ return [
     "year" => "Year",
     "type" => "Type",
     "country" => "Country",
+    "code" => "Code",
     "new"           => "New book",
     "edit"          => "Edit book",
     "show"          => "Show book",

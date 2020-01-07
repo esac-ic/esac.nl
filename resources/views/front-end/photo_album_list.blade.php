@@ -6,7 +6,7 @@
     <div class="container intro-container">
         <div class="card">
             <div class="card-body">
-                <button type="button" class="btn btn-outline-primary float-right" data-toggle="modal" data-target="#AddAlbumModal">{{trans('front-end/photo.addAlbum')}} <span class="ion-android-add"></span></button>
+                <button type="button" class="btn btn-outline-primary float-right" data-toggle="modal" data-target="#AddAlbumModal"><span class="ion-android-add"> {{trans('front-end/photo.addAlbum')}}</span></button>
                 <h2 class="card-title">{{ $curPageName }}</h2>
                 {!! $content !!}
             </div>
@@ -49,6 +49,7 @@
                     </button>
                 </div>
                 <div class="modal-body">
+                <form id="AddAlbumForm" onsubmit="event.preventDefault(); uploadPhotos()">
                     <div class="form-group">
                         <input class="form-control" id="inputTitle" type="text" name="title" placeholder="{{trans('front-end/photo.title')}}" required/>
                     </div>
@@ -89,8 +90,9 @@
                             @endpush
                             <p class="text-danger">{{$errors->first()}}</p>
                         @endif
-                        <button class="btn btn-primary" id='submit' onclick="uploadPhotos()">{{trans('front-end/photo.add')}}</button>
+                        <button class="btn btn-primary" type="submit" id='submit'>{{trans('front-end/photo.add')}}</button>
                         <button type="button" class="btn btn-secondary" data-dismiss="modal">{{trans('front-end/photo.close')}}</button>
+                        <form>
                     </div>
                 </div>
             </div>

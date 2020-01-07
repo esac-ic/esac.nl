@@ -54,6 +54,7 @@ return [
     "lid_af"        => "Datum lid af",
     "created_at"    => "Gebruiker aangemaakt op",
     "updated_at"    => "Gebruiker bijgewerkt op",
+    'makeActiveMember' => "Maak actief lid",
     'removeAsActiveMember' => "Verwijder als actief lid",
     "approveAsPendingMember" => "Goedkeuren als lid",
     "removeAsPendingMember" => "Verwijderen als in afwachting",

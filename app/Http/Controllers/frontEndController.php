@@ -35,6 +35,7 @@ class frontEndController extends Controller
         $this->_agendaRepository = $repositorieFactory->getRepositorie(RepositorieFactory::$AGENDAITEMREPOKEY);
         $this->_userRepository = $repositorieFactory->getRepositorie(RepositorieFactory::$USERREPOKEY);
         $this->_bookRepository = $repositorieFactory->getRepositorie(RepositorieFactory::$BOOKREPOKEY);
+        $this->_PhotoAlbumRepository = $repositorieFactory->getRepositorie(RepositorieFactory::$PHOTOALBUMREPOKEY);
     }
 
     public function agenda(){
@@ -48,6 +49,18 @@ class frontEndController extends Controller
         }
 
         return view('front-end.agenda', compact('categories','curPageName','content'));
+    }
+
+    public function photoAlbums()
+    {
+        $photoAlbums = $this->_PhotoAlbumRepository->all();
+        foreach($photoAlbums as $photoalbum){
+              $photoalbum->description = str_replace("\r\n","<br>", $photoalbum->description);
+        }
+        $curPageName = trans('front-end/photo.pagetitle');
+        $menuItem = $this->_MenuItemRepository->findby('urlName',MenuItem::PHOTOURL);
+        $content = $menuItem->content->text();
+        return view('front-end.photo_album_list', compact('curPageName', 'photoAlbums', 'content'));
     }
 
     public function agendaDetailView(Request $request, AgendaItem $agendaItem){
@@ -103,7 +116,7 @@ class frontEndController extends Controller
     }
 
     public function library(){
-        $books = $this->_bookRepository->all(array("id","title","year","type","country"));
+        $books = $this->_bookRepository->all(array("id","title","year","type","country","code"));
         $curPageName = trans('front-end/library.title');
         $menuItem = $this->_MenuItemRepository->findby('urlName',MenuItem::LIBRARYURL);
         $content = $menuItem->content->text();

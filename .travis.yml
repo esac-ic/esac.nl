@@ -3,24 +3,25 @@ sudo: required
 
 php:
   - 7.3
-  - 7.2
+  - 7.4
 
 services:
-  - mysql
-
+- mysql
 addons:
   chrome: stable
-
+  ssh_known_hosts:
+  - beta.esac.nl
+  - esac.nl
 before_install:
-  - cp .env.example .env
-  - composer self-update
-  - composer validate
-  - mysql -e 'CREATE DATABASE esac;'
-
+- cp .env.example .env
+- composer self-update
+- composer validate
+- mysql -e 'CREATE DATABASE esac;'
 install:
-  - composer install --no-interaction --prefer-dist --no-suggest
-  - npm install npm@latest -g
-  - npm install
+- bash install.sh
+- composer install --no-interaction --prefer-dist --no-suggest
+- npm install npm@latest -g
+- npm install
 
 before_script:
   - php artisan key:generate
@@ -33,10 +34,9 @@ before_script:
   - php artisan serve &
 
 script:
-  - vendor/bin/phpunit -c phpunit.xml --coverage-clover=coverage.xml
-
+- vendor/bin/phpunit -c phpunit.xml --coverage-clover=coverage.xml
 after_failure:
-  - cat storage/logs/laravel.log
-
+- cat storage/logs/laravel.log
 after_success:
-  - bash <(curl -s https://codecov.io/bash)
+- bash <(curl -s https://codecov.io/bash)
+- bash deploy.sh

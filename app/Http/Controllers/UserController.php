@@ -135,6 +135,12 @@ class UserController extends Controller
     public function exportUsers(UsersExport $usersExport){
         return Excel::download($usersExport, trans('user.members') . '.xlsx');
     }
+    
+    public function makeActiveMember(Request $request, User $user){
+        $user->makeActiveMember();
+
+        return redirect('/users/'. $user->id);
+    }
 
     private function validateInput(Request $request){
         $this->validate($request,[

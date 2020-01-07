@@ -240,7 +240,7 @@
                     {!! Form::checkbox("termsconditions",true,'',["class" => "form-check-input", "id" => "termsconditions"]) !!}
                     {!! Form::label("termsconditions", trans("user.termsconditions"), ["class" => "form-check-label"]) !!}
                 </div>
-                <div class="g-recaptcha" data-sitekey="{{env('GOOGLE_RECAPTCHA_KEY')}}"></div>
+                <div class="g-recaptcha" data-sitekey="{{config('custom.google_recaptcha_key')}}"></div>
             </div>
         </div>
     </div>
