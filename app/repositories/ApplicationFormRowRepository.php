@@ -9,6 +9,7 @@
 namespace App\repositories;
 
 use App\Models\ApplicationForm\ApplicationFormRow;
+use App\Models\ApplicationForm\ApplicationFormRowOption;
 
 /**
  * Class ApplicationFormRowRepository
@@ -22,12 +23,19 @@ class ApplicationFormRowRepository
     private $textRepository;
 
     /**
+     * @var ApplicationFormRowOptionRepository
+     */
+    private $applicationFormRowOptionRepository;
+
+    /**
      * ApplicationFormRowRepository constructor.
      * @param TextRepository $textRepository
+     * @param ApplicationFormRowOptionRepository $applicationFormRowOptionRepository
      */
-    public function __construct(TextRepository $textRepository)
+    public function __construct(TextRepository $textRepository, ApplicationFormRowOptionRepository $applicationFormRowOptionRepository)
     {
         $this->textRepository = $textRepository;
+        $this->applicationFormRowOptionRepository = $applicationFormRowOptionRepository;
     }
 
     /**
@@ -42,6 +50,12 @@ class ApplicationFormRowRepository
         $row->application_form_id = $formId;
         $row->required = array_key_exists('required', $data);
         $row->save();
+
+        if (array_key_exists('options', $data)) {
+            foreach ($data['options'] as $optionData) {
+                $this->applicationFormRowOptionRepository->create($row->id, $optionData);
+            }
+        }
 
         return $row;
     }
@@ -61,6 +75,24 @@ class ApplicationFormRowRepository
         $row->type = $data['type'];
         $row->required = array_key_exists('required', $data);
         $row->save();
+
+        $optionIds = [];
+
+        if (array_key_exists('options', $data)) {
+            foreach ($data['options'] as $optionData) {
+                if(array_key_exists('id', $optionData)) {
+                    $option = $this->applicationFormRowOptionRepository->update($optionData['id'], $optionData);
+                } else {
+                    $option = $this->applicationFormRowOptionRepository->create($row->id, $optionData);
+                }
+                $optionIds[] = $option->id;
+            }
+        }
+
+        ApplicationFormRowOption::query()
+            ->whereNotIn('id', $optionIds)
+            ->where('application_form_row_id', $row->id)
+            ->delete();
     }
 
     /**
@@ -69,7 +101,7 @@ class ApplicationFormRowRepository
     public function delete($id)
     {
         $applicationFormRow = $this->find($id);
-        if($applicationFormRow != null){
+        if ($applicationFormRow != null) {
             $applicationFormRow->delete();
             $this->textRepository->delete($applicationFormRow->name);
         }
@@ -93,7 +125,7 @@ class ApplicationFormRowRepository
      */
     public function findBy($field, $value, $columns = array('*'))
     {
-        return ApplicationFormRow::where($field, '=',$value)->get($columns);
+        return ApplicationFormRow::where($field, '=', $value)->get($columns);
     }
 
     /**
@@ -109,7 +141,8 @@ class ApplicationFormRowRepository
      * @param $application_form_id
      * @return mixed
      */
-    public function getRows($application_form_id) {
+    public function getRows($application_form_id)
+    {
         return $this->findBy('application_form_id', $application_form_id, $columns = array('*'));
 
     }

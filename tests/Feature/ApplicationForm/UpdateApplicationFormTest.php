@@ -4,6 +4,7 @@ namespace Tests\Feature;
 
 use App\Models\ApplicationForm\ApplicationForm;
 use App\Models\ApplicationForm\ApplicationFormRow;
+use App\Models\ApplicationForm\ApplicationFormRowOption;
 use App\User;
 use Artisan;
 use Config;
@@ -57,21 +58,50 @@ class UpdateApplicationFormTest extends TestCase
     /** @test */
     public function update_application_form_as_content_administrator(): void
     {
+        $applicationFormRow = factory(ApplicationFormRow::class)->create([
+            'application_form_id' => $this->applicationForm->id,
+        ]);
+        $applicationFormRowOption = factory(ApplicationFormRowOption::class)->create([
+            'application_form_row_id' => $applicationFormRow->id,
+        ]);
+        factory(ApplicationFormRowOption::class)->create([
+            'application_form_row_id' => $applicationFormRow->id,
+        ]);
+
         $body = [
             'nl_name' => 'test nl name',
             'en_name' => 'test en name',
             'rows' => [
                 [
+                    'id' => $applicationFormRow->id,
+                    'nl_name' => 'Vraag 2',
+                    'en_name' => 'Question 2',
+                    'type' => ApplicationFormRow::FORM_TYPE_CHECK_BOX,
+                    'required' => true,
+                    'options' => [
+                        [
+                            'id' => $applicationFormRowOption->id,
+                            'value' => 1,
+                            'nl_name' => 'optie 1',
+                            'en_name' => 'Option 1'
+                        ],
+                        [
+                            'value' => 3,
+                            'nl_name' => 'optie 2',
+                            'en_name' => 'Option 2'
+                        ],
+                        [
+                            'value' => 16,
+                            'nl_name' => 'optie 3',
+                            'en_name' => 'Option 3'
+                        ]
+                    ]
+                ],
+                [
                     'nl_name' => 'Vraag 1',
                     'en_name' => 'Question 1',
                     'type' => ApplicationFormRow::FORM_TYPE_NUMBER,
                 ],
-                [
-                    'nl_name' => 'Vraag 2',
-                    'en_name' => 'Question 2',
-                    'type' => ApplicationFormRow::FORM_TYPE_CHECK_BOX,
-                    'required' => true
-                ]
             ]
         ];
 

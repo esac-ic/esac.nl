@@ -68,6 +68,29 @@ class CreateApplicationFormTest extends TestCase
                     'en_name' => 'Question 2',
                     'type' => ApplicationFormRow::FORM_TYPE_CHECK_BOX,
                     'required' => true
+                ],
+                [
+                    'nl_name' => 'Vraag 3',
+                    'en_name' => 'Question 3',
+                    'type' => ApplicationFormRow::FORM_TYPE_RADIO,
+                    'required' => true,
+                    'options' => [
+                        [
+                            'value' => 1,
+                            'nl_name' => 'optie 1',
+                            'en_name' => 'Option 1'
+                        ],
+                        [
+                            'value' => 3,
+                            'nl_name' => 'optie 2',
+                            'en_name' => 'Option 2'
+                        ],
+                        [
+                            'value' => 16,
+                            'nl_name' => 'optie 3',
+                            'en_name' => 'Option 3'
+                        ]
+                    ]
                 ]
             ]
         ];
@@ -174,12 +197,13 @@ class CreateApplicationFormTest extends TestCase
      * @param ApplicationForm $applicationForm
      * @param array $data
      */
-    private function assertApplicationForm(ApplicationForm $applicationForm, array $data){
+    private function assertApplicationForm(ApplicationForm $applicationForm, array $data)
+    {
         $this->assertEquals($data['nl_name'], $applicationForm->applicationFormName->NL_text);
         $this->assertEquals($data['en_name'], $applicationForm->applicationFormName->EN_text);
         $this->assertCount(count($data['rows']), $applicationForm->applicationFormRows);
 
-        for($i=0; $i < count($applicationForm->applicationFormRows); $i++) {
+        for ($i = 0; $i < count($applicationForm->applicationFormRows); $i++) {
             $rowData = $data['rows'][$i];
             $row = $applicationForm->applicationFormRows[$i];
 
@@ -187,6 +211,21 @@ class CreateApplicationFormTest extends TestCase
             $this->assertEquals($rowData['en_name'], $row->applicationFormRowName->EN_text);
             $this->assertEquals($rowData['type'], $row->type);
             $this->assertEquals(array_key_exists('required', $rowData), $row->required);
+
+            if (array_key_exists('options', $rowData)) {
+                $optionDataItems = $rowData['options'];
+                $options = $row->applicationFormRowOptions;
+
+                $this->assertCount(count($optionDataItems), $options);
+                for ($x = 0; $x < count($options); $x++) {
+                    $optionData = $optionDataItems[$x];
+                    $option = $options[$x];
+
+                    $this->assertEquals($optionData['value'], $option->value);
+                    $this->assertEquals($optionData['nl_name'], $option->applicationFormRowOptionName->NL_text);
+                    $this->assertEquals($optionData['en_name'], $option->applicationFormRowOptionName->EN_text);
+                }
+            }
         }
     }
 }
