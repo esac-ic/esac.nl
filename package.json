@@ -13,6 +13,7 @@
     "axios": "^0.19.1",
     "blueimp-load-image": "2.24.0",
     "bootstrap": "^4.4.1",
+    "bootstrap-select": "^1.13.12",
     "browser-sync": "^2.26.5",
     "browser-sync-webpack-plugin": "^2.2.2",
     "cross-env": "^6.0.3",
