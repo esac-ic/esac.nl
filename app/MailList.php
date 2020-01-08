@@ -28,7 +28,7 @@ class MailList extends Model
     public function __construct(array $attributes = [])
     {
         parent::__construct($attributes);
-        $this->EMAILDOMAIN = env('MAILGUN_DOMAIN',"sandbox8bdaf70c1bab472ab5f998c1347c0f4b.mailgun.org");
+        $this->EMAILDOMAIN = config('mailgun.domain');
         $this->acces_level = key_exists('acces_level',$attributes) ? $attributes['acces_level'] : "";
         $this->address = (key_exists('address',$attributes) ? $attributes['address'] : "" ). $this->emailDomain;
         $this->name = key_exists('name',$attributes) ? $attributes['name'] : "";

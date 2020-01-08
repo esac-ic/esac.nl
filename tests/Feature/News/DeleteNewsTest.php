@@ -32,7 +32,7 @@ class RemoveNewsItemTest extends TestCase
         parent::tearDown();
     }
     /** @test */
-    public function CreateNewsItem(){
+    public function DeleteNewsItem(){
         $newsItem = factory(NewsItem::class)->create();
 
         $response = $this->delete($this->url . '/' . $newsItem->id);

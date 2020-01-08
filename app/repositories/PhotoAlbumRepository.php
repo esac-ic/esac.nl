@@ -31,9 +31,19 @@ class PhotoAlbumRepository implements IRepository
     public function update($id, array $data)
     {
         $album = $this->find($id);
-        $album->update($data);
+        $album->title = $data["title"];
+        $album->description = $data["description"];
+        $album->date = Carbon::parse($data["date"]);
         $album->save();
-        return $album;    
+        return $album;
+    }
+
+    public function updateThumbnail($id, array $data)
+    {
+        $album = $this->find($id);
+        $album->thumbnail = $data["thumbnail"];
+        $album->save();
+        return $album;
     }
 
     public function delete($id)
@@ -57,6 +67,6 @@ class PhotoAlbumRepository implements IRepository
     }
 
     public function getThumbnails($id){
-        return Photo::with('photo_album')->where('photo_album_id',$id)->paginate(60);    
+        return Photo::with('photo_album')->where('photo_album_id',$id)->get();    
     }
 }

@@ -22,8 +22,8 @@ class UpdateRoleTest extends TestCase
      * @var
      */
     private $user;
-
-    protected function setUp(): void
+  
+  protected function setUp(): void
     {
         parent::setUp();
         $this->user = $user = factory(User::class)->create();
