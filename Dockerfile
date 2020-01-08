@@ -6,6 +6,7 @@ RUN apt-get update && \
    libfreetype6-dev zlib1g-dev  && \
    docker-php-ext-configure gd --with-freetype --with-jpeg && \
    docker-php-ext-install gd && \
+   docker-php-ext-install zip && \
    rm -rf /var/lib/apt/lists/*
 
 COPY . /var/www/
