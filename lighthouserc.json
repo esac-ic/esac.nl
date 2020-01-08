@@ -1,0 +1,8 @@
+{
+  "ci": {
+    "collect": {
+      "numberOfRuns": 5,
+      "url": "https://beta.esac.nl"
+    }
+  }
+}

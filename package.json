@@ -21,6 +21,7 @@
     "datatables.net-responsive-bs4": "^2.2.3",
     "jquery": "^3.4.1",
     "laravel-mix": "^5.0.0",
+    "@lhci/cli": "^0.3.7",
     "lodash": "^4.17.15",
     "moment": "^2.24.0",
     "photoswipe": "^4.1.3",
