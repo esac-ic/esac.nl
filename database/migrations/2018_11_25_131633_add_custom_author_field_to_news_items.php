@@ -14,7 +14,7 @@ class AddCustomAuthorFieldToNewsItems extends Migration
     public function up()
     {
         Schema::table('news_items',function(Blueprint $table){
-            $table->string('author');
+            $table->string('author')->nullable();
         });
     }
 

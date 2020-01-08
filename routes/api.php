@@ -18,6 +18,7 @@ use Symfony\Component\HttpFoundation\Session\Session;
 Route::get('/menuItems', 'ApiController@getMenuItems');
 Route::get('/setLanguage', 'SettingsController@setLanguage');
 Route::get('/users', 'ApiController@getUsers');
+Route::get('/users/autoComplete', 'Api\UserController@autoComplete')->name('user.autoComplete');
 
 Route::get('/agenda', 'Api\AgendaController@getAgenda');
 Route::get('/agendaCategories','Api\AgendaController@getCategories');

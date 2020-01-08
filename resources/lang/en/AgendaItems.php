@@ -25,6 +25,7 @@ return [
     "category"  =>  "Category",
     "applicationForm" => "Application form",
     "noapplicationForm" => "No application form",
+    'climbingActivity' => "Show certificates in the event item",
 
 
     //defauls values

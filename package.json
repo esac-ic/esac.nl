@@ -10,31 +10,33 @@
     "production": "cross-env NODE_ENV=production node_modules/webpack/bin/webpack.js --no-progress --hide-modules --config=node_modules/laravel-mix/setup/webpack.config.js"
   },
   "devDependencies": {
-    "axios": "^0.18",
-    "blueimp-load-image": "2.20.1",
-    "bootstrap": "^4.3.1",
-    "browser-sync": "^2.26.3",
+    "axios": "^0.19.0",
+    "blueimp-load-image": "2.24.0",
+    "bootstrap": "^4.4.1",
+    "browser-sync": "^2.26.5",
     "browser-sync-webpack-plugin": "^2.2.2",
-    "cross-env": "^5.2.0",
-    "datatables.net": "^1.10.19",
-    "datatables.net-bs4": "^1.10.19",
+    "cross-env": "^6.0.3",
+    "datatables.net": "^1.10.20",
+    "datatables.net-bs4": "^1.10.20",
     "datatables.net-responsive-bs4": "^2.2.3",
     "jquery": "^3.4.1",
-    "laravel-mix": "^4.0.7",
-    "lodash": "^4.17.11",
-    "moment": "^2.24",
+    "laravel-mix": "^5.0.0",
+    "@lhci/cli": "^0.3.7",
+    "lodash": "^4.17.15",
+    "moment": "^2.24.0",
     "photoswipe": "^4.1.3",
-    "popper.js": "^1.14.7",
-    "sass": "^1.17.3",
-    "sass-loader": "^7.1.0",
-    "summernote": "^0.8.11",
+    "popper.js": "^1.16.0",
+    "sass": "^1.23.7",
+    "sass-loader": "^7.3.1",
+    "summernote": "^0.8.12",
     "tempusdominus-bootstrap-4": "^5.1.2",
-    "vue-template-compiler": "^2.6.10"
+    "tempusdominus-core": "^5.0.3",
+    "vue-template-compiler": "^2.6.11"
   },
   "dependencies": {
     "vue": "^2.6.10",
     "vue-paginate": "^3.6.0",
-    "vuejs-datepicker": "^1.5.4",
-    "vuex": "^3.1.0"
+    "vuejs-datepicker": "^1.6.2",
+    "vuex": "^3.1.2"
   }
 }

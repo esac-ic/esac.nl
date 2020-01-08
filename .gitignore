@@ -1,5 +1,4 @@
 /node_modules
-/bower_components
 /storage/*.key
 /vendor
 /.idea
@@ -12,3 +11,4 @@ public/storage
 /public/css
 /public/img
 /public/mix-manifest.json
+composer.phar

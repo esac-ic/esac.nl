@@ -20,7 +20,7 @@ class SettingsController extends Controller
      */
     public function __construct()
     {
-        $this->middleware('auth');
+        $this->middleware('auth')->except('setLanguage');;
         $this->middleware('authorize:' . Config::get('constants.Administrator'))
             ->except('setLanguage');
     }
@@ -68,10 +68,9 @@ class SettingsController extends Controller
         return redirect('/beheer/settings');
     }
 
-    public function setLanguage(){
+    public function setLanguage(Request $request){
         $language = Input::get('language','nl');
-        $session = new SymfonySession();
-        $session->set($this->_LANGSESSIONNAME,$language);
+        $request->session()->put($this->_LANGSESSIONNAME,$language);
         return "";
     }
 }

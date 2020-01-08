@@ -25,6 +25,7 @@ return [
     "category"  =>  "Categorie",
     "applicationForm" => "Inschrijf formulier",
     "noapplicationForm" => "Geen inschrijf formulier",
+    'climbingActivity' => "Laat certificaten zien in agenda item",
 
 
     //defauls values

@@ -1,0 +1,2 @@
+export const BASE_URL = APP_URL + '/api';
+export const EVENT_RELOAD_ZEKERINGEN = "EVENT_RELOAD_ZEKERINGEN";

@@ -100,8 +100,8 @@
                                 <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
                                     <a class="dropdown-item" href="{{ url('pages') }}">{{trans("menu.paginaBeheer")}}</a>
                                     <a class="dropdown-item" href="{{ url('newsItems') }}">{{trans("menu.newsItems")}}</a>
+                                    <a class="dropdown-item" href="{{ url('photoAlbums') }}">{{trans("menu.photoAlbums")}}</a>
                                     @if(\Illuminate\Support\Facades\Auth::user()->hasRole(Config::get('constants.Administrator')))
-                                        <a class="dropdown-item" href="{{ url('frontEndReplacement') }}">{{trans("frontEndReplacement.menuname")}}</a>
                                         <a class="dropdown-item" href="{{ url('books') }}">{{trans("menu.books")}}</a>
                                     @endif
                                 </div>

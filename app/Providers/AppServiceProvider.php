@@ -2,7 +2,10 @@
 
 namespace App\Providers;
 
+use DB;
 use App\ApplicationResponse;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Fluent;
 use App\CustomClasses\MenuSingleton;
 use App\Observers\ApplicationResponseObserver;
 use App\Setting;
@@ -43,6 +46,11 @@ class AppServiceProvider extends ServiceProvider
             $setting = new Setting();
             $setting->initialise();
             return $setting;
+        });
+
+        Blueprint::macro('dropForeignSilently', function($index): Fluent {
+            if (DB::getDriverName() === 'sqlite') return new Fluent();
+            return self::dropForeign($index);
         });
     }
 }

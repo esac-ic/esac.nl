@@ -44,6 +44,10 @@
                 {!! Form::label('category', trans('AgendaItems.category')) !!}
                 {!! Form::select('category',$agendaItemCategories, ($agendaItem != null) ? $agendaItem->category : "", ['class' => 'form-control','required' => 'required']) !!}
             </div>
+            <div class="form-group col-md-6">
+                {!! Form::label('climbing_activity', trans('AgendaItems.climbingActivity')) !!}
+                {!! Form::checkbox('climbing_activity', 1, ($agendaItem != null) ? $agendaItem->climbing_activity : true, ['class' => 'form-control']) !!}
+            </div>
         </div>
     </div>
 </div>
