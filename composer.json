@@ -8,7 +8,7 @@
     ],
     "license": "MIT",
     "require": {
-        "php": "^7.3",
+        "php": "^7.4",
         "barryvdh/laravel-ide-helper": "^2.4",
         "bogardo/mailgun": "^5.0",
         "esac/backblaze-b2": "^1.0",
