@@ -2,6 +2,7 @@
 
 namespace App;
 
+use App\Models\User\UserRegistrationInfo;
 use Carbon\Carbon;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -69,6 +70,10 @@ class User extends Authenticatable
 
     public function albums(){
         return $this->hasMany(PhotoAlbum::class);
+    }
+
+    public function registrationInfo(){
+        return $this->hasOne(UserRegistrationInfo::class);
     }
 
     public function hasRole(...$rols){

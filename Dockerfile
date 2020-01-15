@@ -6,6 +6,7 @@ RUN apt-get update && \
    libfreetype6-dev zlib1g-dev  && \
    docker-php-ext-configure gd --with-freetype --with-jpeg && \
    docker-php-ext-install gd && \
+   docker-php-ext-install zip && \
    rm -rf /var/lib/apt/lists/*
 
 COPY . /var/www/
@@ -20,9 +21,6 @@ RUN composer install --no-dev
 #command to modify the fpm config to listen to nginx in docker-compose
 # alternatief: RUN sed -e 's/127.0.0.1:9000/9000/' -i /etc/php-fpm.d/www.conf (misschien netter?)
 RUN echo "listen = web:9000" >> /usr/local/etc/php-fpm.d/www.conf
-
-#command to fix the export excel bug, cannot get this fixed in another way:
-RUN sed -i '288s/continue/continue 2/' /var/www/vendor/phpoffice/phpexcel/Classes/PHPExcel/Shared/OLE.php
 
 RUN npm install
 RUN npm run prod

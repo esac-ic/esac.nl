@@ -16,7 +16,7 @@ Route::get('/', function () {
     return redirect('/home', 301);
 });
 
-Auth::routes();
+Auth::routes(['register' => false]);
 
 //Admin routes
 Route::get('beheer/home','ManageController@index');
@@ -25,6 +25,7 @@ Route::get('beheer/home','ManageController@index');
 Route::get('users/old_members','UserController@indexOldMembers');
 Route::get('users/pending_members','PendingUserController@indexPendingMembers'); 
 Route::get('users/exportUsers','UserController@exportUsers');
+Route::get('users/exportRegistrationInfo', 'PendingUserController@getRegistrationExportData')->name('export-registration-info');
 Route::patch('users/{user}/removeAsActiveMember', 'UserController@removeAsActiveMember');
 Route::patch('users/{user}/makeActiveMember', 'UserController@makeActiveMember');
 Route::patch('users/{user}/removeAsPendingMember', 'PendingUserController@removeAsPendingMember');
@@ -94,3 +95,8 @@ Route::get('/{menuItem}','frontEndController@showPage');
 Route::get('/beheer/settings','SettingsController@index');
 Route::put('/beheer/settings','SettingsController@update');
 Route::get('/beheer/settings/edit','SettingsController@edit');
+
+// intro routes
+Route::resource('beheer/intro/packages', 'IntroPackageController', [
+    'names' => 'beheer.intro.packages',
+]);

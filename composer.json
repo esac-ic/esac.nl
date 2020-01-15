@@ -15,10 +15,10 @@
         "eluceo/ical": "^0.15",
         "esac/backblaze-b2": "^1.0",
         "intervention/image": "^2.4",
+        "maatwebsite/excel": "^3.1",
         "laravel/framework": "5.8.*",
         "laravel/tinker": "^1.0",
         "laravelcollective/html": "~5.8",
-        "maatwebsite/excel": "~2.1.0",
         "mews/purifier": "^3.1",
         "php-http/guzzle6-adapter": "^1.1",
         "spatie/laravel-blade-javascript": "^2.3"

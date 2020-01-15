@@ -72,6 +72,33 @@ return [
     "privacy_policy" => "Accept the Privacy Policy",
     "privacy_and_incasso" => "Privacy Policy and Automatic Collection",
     "termsconditions" => "Accept the Terms and Conditions",
-    'registrations' => 'Registrations'
+    'registrations' => 'Registrations',
+
+    'introPackageOptions' => 'Intro package options',
+    'introPackage' => 'Intro pakket',
+    'tshirt' => 'ESAC Intro shirt',
+    'topropCourse' => 'Toprope course',
+    'introWeekend' => 'Intro weekend',
+    'registrationInfo' => 'Registration info',
+    'packagePlaceholder' => 'No introduction package...',
+
+
+    'packageTypes' => [
+        'standard' => 'Standard introduction package (€ 110)',
+        'noToprope' => 'Introduction package without course (€ 90)',
+    ],
+
+    'shirtSizes' => [
+        's' => 'S',
+        'm' => 'M',
+        'l' => 'L',
+        'xl' => 'XL',
+    ],
+
+    'weekendDates' => [
+        'intro1' => 'Intro 1 Avalonia - 28 and 29 sept.',
+        'intro2' => 'Intro 2 Hotton - 12 and 13 oct.',
+        'intro3' => 'Intro 3 Sy - 19 and 20 oct.',
+    ]
 
 ];

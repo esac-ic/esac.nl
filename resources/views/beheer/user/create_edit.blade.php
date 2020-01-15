@@ -193,6 +193,36 @@
             </div>
         </div>
     </div>
+    @if(null !== $user && null !== $user->registrationInfo)
+        @php($registrationInfo = $user->registrationInfo)
+        <div class="card mt-4">
+            <div class="card-header">
+                <h3>{{trans('user.introPackageOptions')}}</h3>
+            </div>
+            <div class="card-body">
+                <div class="form-row">
+                    <div class="form-group col-md-6">
+                        {!! Form::label('intro_package', trans('user.introPackage')) !!}
+                        {!! Form::checkbox('intro_package',1, $registrationInfo->intro_package, ['class' => 'form-control']) !!}
+                    </div>
+                    <div class="form-group col-md-6">
+                        {!! Form::label('toprope_course', trans('user.topropCourse')) !!}
+                        {!! Form::checkbox('toprope_course',1, $registrationInfo->toprope_course, ['class' => 'form-control']) !!}
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group col-md-6">
+                        {!! Form::label('shirt_size', trans('user.tshirt')) !!}
+                        {!! Form::select('shirt_size',trans('user.shirtSizes'), $registrationInfo->shirt_size, ['class' => 'form-control']) !!}
+                    </div>
+                    <div class="form-group col-md-6">
+                        {!! Form::label('intro_weekend_date', trans('user.introWeekend')) !!}
+                        {!! Form::select('intro_weekend_date',trans('user.weekendDates'), $registrationInfo->intro_weekend_date != null ? $registrationInfo->intro_weekend_date->format('Y-m-d') : null, ['class' => 'form-control']) !!}
+                    </div>
+                </div>
+            </div>
+        </div>
+    @endif
     <div class="my-4">
         {!! Form::submit(trans('menu.save'), ['class'=> 'btn btn-primary'] ) !!}
         <a class="btn btn-danger" href="{{ ($user == null) ? ('/users') : ('/users/' . $user->id)}}">{{trans('menu.cancel')}}</a>
