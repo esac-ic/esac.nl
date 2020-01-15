@@ -4,7 +4,7 @@
     <div class="card">
         <div class="card-body">
             <h2 class="card-title">{{ $curPageName }}</h2>
-            {!! clean($content) !!}
+            {!! clean($content, 'iframe') !!}
         </div>
     </div>
 </div>

@@ -80,7 +80,7 @@
             <h3>{{trans('AgendaItems.content') }}</h3>
         </div>
         <div class="card-body">
-            {!! clean($agendaItem->agendaItemText->text()) !!}
+            {!! clean($agendaItem->agendaItemText->text(), 'iframe') !!}
         </div>
     </div>
 @endsection

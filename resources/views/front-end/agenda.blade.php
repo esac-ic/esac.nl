@@ -44,6 +44,6 @@
 
 @push('scripts')
     <script>
-        var DESCRIPTION = "{!! clean($content) !!}";
+        var DESCRIPTION = "{!! clean($content, 'iframe') !!}";
     </script>
 @endpush
