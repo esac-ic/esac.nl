@@ -24,18 +24,14 @@ return [
     'settings'      => [
         'default' => [
             'HTML.Doctype'             => 'HTML 4.01 Transitional',
-            'HTML.AllowedElements'     => 'div,b,strong,i,em,u,a,ul,ol,li,p,br,span,img,h1,h2,h3,h4,h5,h6,table,td,tr,tbody,thead',
-            'HTML.AllowedAttributes'   => 'id,class,src,alt,width,height,href,title',
-            'CSS.AllowedProperties'    => ' ',
-            'AutoFormat.AutoParagraph' => true,
-            'AutoFormat.RemoveEmpty'   => true,
+            "HTML.SafeIframe"          => true,
+            "URI.SafeIframeRegexp"     => "%^(http://|https://|//)(www.youtube.com/embed/|player.vimeo.com/video/|drive.google.com/)%",
+            'HTML.AllowedElements'     => 'div,b,strong,i,em,u,a,ul,ol,li,p,br,span,img,h1,h2,h3,h4,h5,h6,table,td,tr,tbody,thead,iframe,section,nav,article,aside,header,footer,address,figure,figcaption',
+            'HTML.AllowedAttributes'   => 'id,class,src,alt,width,height,href,title,allowfullscreen,frameborder,target,border',
+            'AutoFormat.RemoveEmpty' => true,
         ],
         'test'    => [
             'Attr.EnableID' => 'true',
-        ],
-        "iframe" => [
-            "HTML.SafeIframe"      => 'true',
-            "URI.SafeIframeRegexp" => "%^(http://|https://|//)(www.youtube.com/embed/|player.vimeo.com/video/|drive.google.com/)%",
         ],
         'custom_definition' => [
             'id'  => 'html5-definitions',
