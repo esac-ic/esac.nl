@@ -25,7 +25,7 @@ RUN echo "listen = web:9000" >> /usr/local/etc/php-fpm.d/www.conf
 RUN npm install
 RUN npm run prod
 RUN php artisan storage:link
-RUN php artisan config:clear
+RUN php artisan config:cache
 RUN rm -rf /var/lib/apt/lists/*
 
 ENTRYPOINT /bin/bash
