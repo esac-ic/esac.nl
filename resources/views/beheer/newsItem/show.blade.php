@@ -58,7 +58,7 @@
             <h3>{{trans('NewsItem.text') }}</h3>
         </div>
         <div class="card-body">
-            {!! clean($newsItem->newsItemText->text(), 'iframe') !!}
+            {!! clean($newsItem->newsItemText->text()) !!}
         </div>
     </div>
 @endsection
