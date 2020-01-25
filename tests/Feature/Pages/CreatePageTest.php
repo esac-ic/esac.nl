@@ -77,6 +77,33 @@ class CreatePageTest extends TestCase
         $this->assertEquals($body['content_nl'], $menuItem->content->NL_text);
     }
 
+    public function admin_can_create_page_with_emoji()
+    {
+        $body = [
+            'urlName' => 'test',
+            'itemType' => 'subItem',
+            'parentItem' => 0,
+            'afterItem' => 0,
+            'NL_text' => 'Test titel 😀',
+            'EN_text' => 'Test title 😀',
+            'content_nl' => 'Hele leuke test inhoud. 😀',
+            'content_en' => 'Very cool test content. 😀',
+            '_token'  => csrf_token(),
+        ];
+
+        $response = $this->post($this->url, $body);
+
+        // After creation the user should be redirect to /pages.
+        $response->assertStatus(302);
+        $response->assertSessionHasNoErrors();
+        $response->assertRedirect('/pages');
+
+        // Check whether a new page has been added to DB, other test will make sure content is actually correct.
+        $menuItem = MenuItem::all()->last();
+
+        $this->assertEquals($body['content_nl'], $menuItem->content->NL_text);
+    }
+
     /**
      * @test whether users without content admin role cannot create a new page.
      */
