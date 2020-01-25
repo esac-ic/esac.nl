@@ -116,4 +116,33 @@ class CreateAgendaItemTest extends TestCase
         ];
         $response->assertStatus(500);
     }
+
+    public function CreateAgendaItemWithEmoji(){
+        //Attach 
+        $this->user->roles()->attach($this->role->id);
+
+        $agendaItemCategory = factory(AgendaItemCategorie::class)->create();
+
+        $body = [
+            '_token' => csrf_token(),
+            'NL_title' => 'test agenda 😀',
+            'EN_title' => 'test agenda 😀',
+            'NL_text' => 'test agenda 😀',
+            'EN_text' => 'test agenda 😀',
+            'NL_shortDescription' => 'test agenda 😀',
+            'EN_shortDescription' => 'test agenda 😀',
+            'category' => $agendaItemCategory->id,
+            'applicationForm' => factory(ApplicationForm::class)->create()->id,
+            'subscription_endDate' => Carbon::now()->addDays(2),
+            'endDate' =>  Carbon::now()->addDays(3),
+            'startDate' => Carbon::now()->addDays(1),
+        ];
+        $response = $this->post($this->url, $body);
+        $response->assertStatus(302);
+        $agendaItem = AgendaItem::all()->last();
+
+        $this->assertEquals($body['NL_text'],$agendaItem->agendaItemText->text());
+        $this->assertEquals($body['NL_title'],$agendaItem->agendaItemTitle->text());
+        $this->assertEquals($body['category'],$agendaItem->agendaItemCategory->id);
+    }
 }
