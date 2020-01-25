@@ -23,7 +23,7 @@
         </ul>
     @endif
 
-    {!! Form::open(['method' => $fields['method'], 'url' => $fields['url'], 'enctype' => 'multipart/form-data'])  !!}
+    {!! Form::open(['method' => $fields['method'], 'url' => $fields['url'], 'enctype' => 'multipart/form-data', 'id' => 'agenda-form'])  !!}
     @include('beheer.agendaItem.create_edit_default_info')
     @include('beheer.agendaItem.create_edit_image')
     @include('beheer.agendaItem.create_edit_content')
@@ -37,6 +37,7 @@
 
 @push('scripts')
 <script src="{{mix("js/vendor/moment.js")}}" type="text/javascript"></script>
+<script src="{{mix("js/fileHandler.js")}}" type="text/javascript"></script>
 <script src="{{mix("js/vendor/tempusdominus.js")}}" type="text/javascript"></script>
 <script type="text/javascript">
     $('#startDateBox, #endDateBox, #subscription_endDateBox').datetimepicker({
@@ -53,6 +54,13 @@
             close: 'ion-close'
         }
     });
+
+    $('#agenda-form').on('submit', function(event){
+        if(false === validateFileSize()){
+            alert('{{ trans('validation.fileToLarge') }}');
+            return false;
+        }
+    })
 
     $(function () {
         $('#startDateBox').datetimepicker();
