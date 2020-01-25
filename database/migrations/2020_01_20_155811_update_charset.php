@@ -13,7 +13,7 @@ class UpdateCharset extends Migration
      */
     public function up()
     {
-        DB::unprepared('ALTER DATABASE esac CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci');
+        DB::unprepared('ALTER DATABASE '.$_ENV['DB_DATABASE'].' CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci');
         DB::unprepared('ALTER TABLE texts CONVERT TO CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci');
         DB::unprepared('ALTER TABLE zekerings CONVERT TO CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci');
         DB::unprepared('ALTER TABLE books CONVERT TO CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci');
