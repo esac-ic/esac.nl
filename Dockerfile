@@ -17,7 +17,6 @@ RUN curl -sL https://deb.nodesource.com/setup_10.x | bash - && apt install -y no
 
 RUN composer install --no-dev
 
-
 #command to modify the fpm config to listen to nginx in docker-compose
 # alternatief: RUN sed -e 's/127.0.0.1:9000/9000/' -i /etc/php-fpm.d/www.conf (misschien netter?)
 RUN echo "listen = web:9000" >> /usr/local/etc/php-fpm.d/www.conf
