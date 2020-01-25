@@ -38,7 +38,7 @@
 @endsection
 
 @push('scripts')
-    <script src="{{mix("/js/vendor/photoswipe.js")}}" type="text/javascript"></script>
+    <script src="{{mix("/js/vendor/photoswipe.js")}}"></script>
     <script language="JavaScript">
 
         /**

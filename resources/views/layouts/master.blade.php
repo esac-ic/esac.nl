@@ -25,7 +25,6 @@
 
         <link href="https://fonts.googleapis.com/css?family=Rubik:300,400,400i,500" rel="stylesheet">
         <link rel="stylesheet" type="text/css" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
-
         @stack('styles')
         <link rel="stylesheet" type="text/css" href="{{mix("css/app.css")}}">
 
@@ -33,15 +32,11 @@
     <body>
         @yield('main')
 
-        <script src="{{mix("/js/vendor/jquery.js")}}" type="text/javascript"></script>
-        <script src="{{mix("/js/vendor/popper.js")}}" type="text/javascript"></script>
-        <script src="{{mix("/js/vendor/bootstrap.js")}}" type="text/javascript"></script>
+        <script>var APP_URL = "{{env('APP_URL')}}";</script>
+        <script src="{{mix("/js/vendor/jquery-bootstrap.js")}}"></script>
         @stack('scripts')
+        <script src="{{mix("/js/app.js")}}"></script>
         <script>
-            var APP_URL = "{{env('APP_URL')}}";
-        </script>
-        <script src="{{mix("/js/app.js")}}" type="text/javascript"></script>
-        <script type="text/javascript">
             const COOKIE_NAME = "lang";
             const COOKIE_LANG_SET_NAME = "langset";
             const DEFAULT_LANG = "nl";
@@ -49,7 +44,6 @@
                 "en" : {"src" : "flag-united-kingdom", "name" : "{{trans('menu.en')}}"},
                 "nl" : {"src" : "flag-the-netherlands", "name" : "{{trans('menu.nl')}}"}
             };
-            var current_lang;
 
             $(document).ready(function() {
                 sessionStorage.setItem("COOKIE_NAME","en");
@@ -88,7 +82,6 @@
 
             function setLangServerSide(lang){
                 $.get("{{url("")}}/api/setLanguage?language=" + lang , function(data){
-                    console.log('new lang is set');
                     createCookie(COOKIE_LANG_SET_NAME,'set',1);
                     window.location.reload();
                 });

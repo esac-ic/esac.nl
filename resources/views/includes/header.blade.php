@@ -18,7 +18,7 @@
 @endif
 
 @push('scripts')
-<script type="text/javascript">
+<script>
 var headerHome = [{
     background: 'header-1.jpg',
     heading: '{{trans('front-end/home.headerMessages.stunt_title')}}',
