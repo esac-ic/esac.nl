@@ -116,10 +116,7 @@
 </div>
 
 @push('scripts')
-    <script src="{{mix("js/photoswipe.min.js")}}"></script>
-    <script src="{{mix("js/photoswipe-ui-default.min.js")}}"></script>
-    <script src="{{mix("js/photoAlbum.js")}}"></script>
-    <script src="{{mix("js/load-image.all.min.js")}}"></script>
+    <script src="{{mix("js/photoalbum.js")}}"></script>
     <script>
     $(document).on('change', ':file', function() {
         var input = $(this),

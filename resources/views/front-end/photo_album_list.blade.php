@@ -82,7 +82,7 @@
                     <div class="modal-footer">
                         @if($errors->any())
                             @push('scripts')
-                                <script type="text/javascript">
+                                <script>
                                     $(window).on('load',function(){
                                         $('#AddAlbumModal').modal('show');
                                     });
@@ -101,10 +101,9 @@
 @endsection
 
 @push('scripts')
-    <script src="{{mix("js/vendor/moment.js")}}" type="text/javascript"></script>
-    <script src="{{mix("js/vendor/tempusdominus.js")}}" type="text/javascript"></script>
-    <script src="{{mix("js/photoAlbum.js")}}"></script>
-    <script src="{{mix("js/load-image.all.min.js")}}"></script>
+    <script src="{{mix("js/vendor/moment.js")}}"></script>
+    <script src="{{mix("js/vendor/tempusdominus.js")}}"></script>
+    <script src="{{mix("js/photoalbum.js")}}"></script>
     <script>
     $(document).on('change', ':file', function() {
         var input = $(this),

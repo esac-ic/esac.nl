@@ -106,7 +106,7 @@
 @endpush
 @push('scripts')
     @yield('modal_javascript')
-    <script type="text/javascript">
+    <script>
 
         $(document).ready(function() {
             $('#maillistMembers').dataTable({
