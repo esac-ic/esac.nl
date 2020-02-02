@@ -19,7 +19,7 @@ fi
 #get the original commit in case of a PR build
 ORIGINAL_COMMIT=$(git show --pretty=%P HEAD | head -1 | cut -d\  -f 2)
 
-ECHO $ORIGINAL_COMMIT
+echo $ORIGINAL_COMMIT
 #get commiter name for the version.txt  file:
 AUTHOR_NAME="$(git log -1 $TRAVIS_COMMIT --pretty="%aN")"
 COMMIT_MSG="$(git log -1 $TRAVIS_COMMIT --pretty="%s")"
