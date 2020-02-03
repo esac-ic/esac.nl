@@ -27,4 +27,6 @@ RUN php artisan storage:link
 RUN php artisan config:clear
 RUN rm -rf /var/lib/apt/lists/*
 
+RUN cp -R public/. public_backup/
+
 ENTRYPOINT /bin/bash
