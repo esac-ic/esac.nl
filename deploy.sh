@@ -51,16 +51,24 @@ then
   fi
 elif [[ $TRAVIS_BRANCH == 'master' && $TRAVIS_PULL_REQUEST_BRANCH == '' ]]
 then
-  echo 'deploy to master'
 
+  echo 'deploy and test beta server'
   #creating private key
-  echo $private_key_productie_server | base64 --decode > deploy-key
+  echo $private_key_staging_server | base64 --decode > deploy-key
   chmod 600 deploy-key
   mv deploy-key ~/.ssh/id_rsa
 
   ssh deploy@beta.esac.nl './update.sh website 0.0.'$TRAVIS_BUILD_NUMBER$SNAPSHOTTAG '"'$AUTHOR_NAME'"' '"'$COMMIT_MSG'"' '"'$COMMMIT_DATE'"' '"'$TRAVIS_PULL_REQUEST_BRANCH'"'
   DEPLOYSTATUS=$?
-  ssh ic@esac.nl './update.sh website 0.0.'$TRAVIS_BUILD_NUMBER$SNAPSHOTTAG '"'$AUTHOR_NAME'"' '"'$COMMIT_MSG'"' '"'$COMMMIT_DATE'"' '"'$TRAVIS_PULL_REQUEST_BRANCH'"'
+
+
+  echo 'deploy to master'
+  #creating private key
+  echo $private_key_productie_server | base64 --decode > deploy-key
+  chmod 600 deploy-key
+  mv deploy-key ~/.ssh/id_rsa
+
+  ssh ic@docker.esac.nl './update.sh website 0.0.'$TRAVIS_BUILD_NUMBER$SNAPSHOTTAG '"'$AUTHOR_NAME'"' '"'$COMMIT_MSG'"' '"'$COMMMIT_DATE'"' '"'$TRAVIS_PULL_REQUEST_BRANCH'"'
   DEPLOYSTATUS=$?
 
   lhci autorun --upload.serverBaseUrl="http://beta.esac.nl:9001" --upload.token="$LHCI_TOKEN"

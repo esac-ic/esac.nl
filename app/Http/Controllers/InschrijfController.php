@@ -189,7 +189,7 @@ class InschrijfController extends Controller
         $agendaItem = AgendaItem::findOrFail($agendaId);
         return Excel::download(
             new AgendaRegistrationExport($inschrijvenRepository, $agendaItem),
-            $agendaItem->agendaItemTitle->text() . '.xlsx'
+            preg_replace('/[^a-zA-Z0-9]+/', '-', $agendaItem->agendaItemTitle->text()) . '.xlsx'
         );
 
     }
