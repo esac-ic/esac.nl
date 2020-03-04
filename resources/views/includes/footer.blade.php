@@ -17,7 +17,7 @@
                     <br>Eindhovense Studenten
                     <br>Alpen Club
                     <br><br>
-                    T: +31 634140111
+                    T: {{ app(\App\Setting::SINGELTONNAME)->getsetting(\App\Setting::SETTING_FOOTER_PHONE_NR) }}
                     <br>M: bestuur@esac.nl
                     <br>B: NL75 RABO 0117 0524 85
                     <br>KvK: 40236076
