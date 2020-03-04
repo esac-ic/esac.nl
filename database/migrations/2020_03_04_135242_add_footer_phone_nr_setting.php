@@ -27,6 +27,5 @@ class AddFooterPhoneNrSetting extends Migration
     public function down()
     {
         Setting::where('name', Setting::SETTING_FOOTER_PHONE_NR)->delete();
-
     }
 }
