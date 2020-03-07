@@ -2,14 +2,18 @@
 
 namespace App\Http\Controllers;
 
+use App\Exports\UserRegistrationInfoExport;
+use App\Models\User\UserRegistrationInfo;
 use App\repositories\RepositorieFactory as RepositorieFactory;
 use App\Rol;
 use App\Rules\EmailDomainValidator;
 use App\User;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Input;
 use Illuminate\Support\Facades\Session;
+use Maatwebsite\Excel\Facades\Excel;
 
 class PendingUserController extends Controller
 {
@@ -39,9 +43,6 @@ class PendingUserController extends Controller
         $this->validateInput($request);
 
         $user = $this->_userRepository->createPendingUser($request->all());
-        if(Input::get('roles') != null){
-            $this->_userRepository->addRols($user->id,Input::get('roles'));
-        }
 
         Session::flash("message",trans('front-end/subscribe.success'));
 
@@ -58,6 +59,13 @@ class PendingUserController extends Controller
         $user->approveAsPendingMember();
 
         return redirect('users/pending_members');
+    }
+
+    public function getRegistrationExportData(){
+        return Excel::download(
+            new UserRegistrationInfoExport(),
+            trans('user.registrationInfo') . '.xlsx'
+        );
     }
 
     private function validateInput(Request $request){

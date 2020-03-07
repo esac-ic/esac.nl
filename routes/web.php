@@ -16,7 +16,7 @@ Route::get('/', function () {
     return redirect('/home', 301);
 });
 
-Auth::routes();
+Auth::routes(['register' => false]);
 
 //Admin routes
 Route::group(['as' => 'beheer.', 'prefix' => 'beheer/', 'middleware' => 'auth'], function(){
@@ -34,6 +34,7 @@ Route::group(['as' => 'beheer.', 'prefix' => 'beheer/', 'middleware' => 'auth'],
 Route::get('users/old_members','UserController@indexOldMembers');
 Route::get('users/pending_members','PendingUserController@indexPendingMembers'); 
 Route::get('users/exportUsers','UserController@exportUsers');
+Route::get('users/exportRegistrationInfo', 'PendingUserController@getRegistrationExportData')->name('export-registration-info');
 Route::patch('users/{user}/removeAsActiveMember', 'UserController@removeAsActiveMember');
 Route::patch('users/{user}/makeActiveMember', 'UserController@makeActiveMember');
 Route::patch('users/{user}/removeAsPendingMember', 'PendingUserController@removeAsPendingMember');
@@ -91,9 +92,20 @@ Route::get('/bibliotheek','frontEndController@library');
 Route::get('/agenda','frontEndController@agenda');
 Route::get('/agenda/{agendaItem}','frontEndController@agendaDetailView')->name('agenda.detail');
 Route::get('/lidworden','frontEndController@publicSubscribe');
+Route::get('/signup','frontEndController@publicSubscribe');
 Route::get('/home','frontEndController@home');
 Route::get('/nieuws','frontEndController@news');
 Route::get('/nieuws/{newsItem}','frontEndController@newsDetailView');
 Route::get('/ledenlijst','frontEndController@memberList');
 Route::get("/ical", "ICalController@getAgendaItemsICalObject");
 Route::get('/{menuItem}','frontEndController@showPage');
+
+//setting routes
+Route::get('/beheer/settings','SettingsController@index');
+Route::put('/beheer/settings','SettingsController@update');
+Route::get('/beheer/settings/edit','SettingsController@edit');
+
+// intro routes
+Route::resource('beheer/intro/packages', 'IntroPackageController', [
+    'names' => 'beheer.intro.packages',
+]);

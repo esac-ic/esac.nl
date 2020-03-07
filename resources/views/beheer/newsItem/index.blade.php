@@ -59,7 +59,7 @@
 @endpush
 
 @push('scripts')
-    <script src="{{mix("js/vendor/datatables.js")}}" type="text/javascript"></script>
+    <script src="{{mix("js/vendor/datatables.js")}}"></script>
     <script>
         $('#newsItems').DataTable({
             columnDefs: [

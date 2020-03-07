@@ -7,16 +7,15 @@ use App\ApplicationForm;
 use App\ApplicationFormRow;
 use App\ApplicationResponse;
 use App\ApplicationResponseRow;
+use App\Exports\AgendaRegistrationExport;
+use App\repositories\InschrijvenRepository;
 use App\User;
 use App\Notifications\AgendaSubscribed;
 use Illuminate\Http\Request;
 use App\CustomClasses\MenuSingleton;
 use App\repositories\RepositorieFactory;
-use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Config;
 use Maatwebsite\Excel\Facades\Excel;
-
 
 
 class InschrijfController extends Controller
@@ -186,8 +185,13 @@ class InschrijfController extends Controller
         $this->_InschrijvenRepository->delete($applicationResponseId);
         return redirect('forms/users/'.$Agenda_id);
     }
-    public function exportUsers($Agenda_id){
-        $this->_InschrijvenRepository->exportUsers($Agenda_id);
+    public function exportUsers(int $agendaId, InschrijvenRepository $inschrijvenRepository){
+        $agendaItem = AgendaItem::findOrFail($agendaId);
+        return Excel::download(
+            new AgendaRegistrationExport($inschrijvenRepository, $agendaItem),
+            preg_replace('/[^a-zA-Z0-9]+/', '-', $agendaItem->agendaItemTitle->text()) . '.xlsx'
+        );
+
     }
 
 }

@@ -88,6 +88,11 @@
                 <li class="nav-item">
                     <a class="nav-link" id="tab3" data-toggle="tab" href="#registrations" role="tab" aria-controls="security" aria-selected="false">{{trans('user.registrations') }}</a>
                 </li>
+                @if($user->registrationInfo !== null)
+                    <li class="nav-item">
+                        <a class="nav-link" data-toggle="tab" href="#registration_info" role="tab" aria-controls="security" aria-selected="false">{{trans('user.registrationInfo') }}</a>
+                    </li>
+                @endif
             </ul>
             @if(\Illuminate\Support\Facades\Auth::user()->hasRole(Config::get('constants.Administrator')) || \Illuminate\Support\Facades\Auth::user()->id === $user->id)
             <div class="tab-content space-sm">
@@ -299,13 +304,18 @@
                         </tbody>
                     </table>
                 </div>
+                @if($user->registrationInfo !== null)
+                    <div class="tab-pane fade" id="registration_info" role="tabpanel">
+                        @include('beheer.user.partials.intro-info')
+                    </div>
+                @endif
             </div>
         </div>
     </div>
 @endsection
 
 @push('scripts')
-    <script src="{{mix("js/vendor/datatables.js")}}" type="text/javascript"></script>
+    <script src="{{mix("js/vendor/datatables.js")}}"></script>
     <script>
         $('#registrations_table').DataTable({
             "order": [[ 1, "asc" ]],

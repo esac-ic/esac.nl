@@ -33,14 +33,6 @@
                             {{ trans('menu.account_overview') }}
                         </a>
                     </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="{{ url('/logout') }}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
-                            Logout
-                        </a>
-                        <form id="logout-form" action="{{ url('/logout') }}" method="POST" style="display: none;">
-                            {{ csrf_field() }}
-                        </form>
-                    </li>
                     @if (Auth::guest())
                         <li class="nav-item">
                             <a href="{{ url('/login') }}" class="nav-link">
@@ -92,6 +84,16 @@
                                 </div>
                             </li>
                         @endif
+                        @if(\Illuminate\Support\Facades\Auth::user()->hasRole(Config::get('constants.Content_administrator'),Config::get('constants.Activity_administrator')))
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    {{trans("menu.intro")}}
+                                </a>
+                                <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                                    <a class="dropdown-item" href="{{ route('beheer.intro.packages.index') }}">{{trans("menu.introPackages")}}</a>
+                                </div>
+                            </li>
+                        @endif
                         @if(\Illuminate\Support\Facades\Auth::user()->hasRole(Config::get('constants.Content_administrator')))
                             <li class="nav-item dropdown">
                                 <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -134,10 +136,9 @@
 @endsection
 
 @push('scripts')
-<script src="{{mix("js/vendor/datatables.js")}}" type="text/javascript"></script>
-<script src="{{mix("js/vendor/popper.js")}}" type="text/javascript"></script>
-<script src="{{mix("js/vendor/summernote.js")}}" type="text/javascript"></script>
-<script type="text/javascript">
+<script src="{{mix("js/vendor/datatables.js")}}"></script>
+<script src="{{mix("js/vendor/summernote.js")}}"></script>
+<script>
     $('#users').DataTable();
     
     $(document).ready(function() {

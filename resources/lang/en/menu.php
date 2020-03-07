@@ -36,5 +36,7 @@ return [
     "user" => "User",
     "become_member" => "Become a member",
     "activities" => "Activities",
-    "content" => "Content"
+    "content" => "Content",
+    "intro" => "Intro",
+    "introPackages" => "Intro packages"
 ];
