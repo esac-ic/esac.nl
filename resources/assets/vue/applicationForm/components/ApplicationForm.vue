@@ -9,7 +9,7 @@
             </h3>
         </div>
         <div class="card-body">
-            <div v-for="(row, index) in applicationRows" :index="index">
+            <div v-for="(row, index) in applicationRows" :key="index" class="application-form-row">
                 <div class="row">
                     <div class="col-md-5">
                         <label>Naam (NL)</label>
@@ -42,13 +42,18 @@
                             </select>
                         </div>
                     </div>
-                </div>
-                <div class="row">
                     <div class="col-md-5">
                         <div class="form-group">
-                            <input type="checkbox" v-model="row.required" :name="'rows[' + index + '][required]'"> Verplicht
+                            <label>Verplicht</label>
+                            <input type="checkbox"
+                                   v-model="row.required"
+                                   :name="'rows[' + index + '][required]'"
+                                   class="form-control">
                         </div>
                     </div>
+                </div>
+                <div class="row" v-if="showRowOptions(row)">
+                    <application-form-row-options :rows="row.applicationFormRowOptions" :application-form-index="index"></application-form-row-options>
                 </div>
                 <input type="hidden" v-if="row.id !== undefined" v-model="row.id" :name="'rows[' + index + '][id]'">
             </div>
@@ -57,14 +62,17 @@
 </template>
 
 <script>
-    import {FORM_TYPES} from '../constants';
+    import {FORM_TYPES, ROW_OPTION_FORM_TYPE} from '../constants';
+    import ApplicationFormRowOptions from "./ApplicationFormRowOptions";
 
     export default {
         name: "ApplicationForm",
+        components: {ApplicationFormRowOptions},
         data(){
             return {
                 applicationRows: [],
-                FORM_TYPES
+                FORM_TYPES,
+                ROW_OPTION_FORM_TYPE
             }
         },
         props:['rows'],
@@ -80,6 +88,9 @@
             },
             deleteRow(index){
                 this.applicationRows.splice(index, 1);
+            },
+            showRowOptions(row) {
+                return ROW_OPTION_FORM_TYPE.includes(row.type);
             }
         },
         mounted(){
@@ -93,5 +104,9 @@
 </script>
 
 <style scoped>
-
+    .application-form-row {
+        margin-bottom: 10px;
+        padding: 5px;
+        border-bottom: solid lightgray;
+    }
 </style>

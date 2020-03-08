@@ -34,6 +34,7 @@
                 <th>{{trans('ApplicationForm.name')}}</td>
                 <th>{{trans('ApplicationForm.rowType')}}</td>
                 <th>{{trans('ApplicationForm.rowRequired')}}</td>
+                <th>{{trans('ApplicationForm.rowOptions')}}</td>
                 </thead>
                 <tbody>
                 @foreach($applicationForm->applicationFormRows as $row)
@@ -41,6 +42,15 @@
                         <td>{{$row->applicationFormRowName->text()}}</td>
                         <td>{{$row->type}}</td>
                         <td>{{($row->required == 1)? trans('menu.yes'): trans('menu.no')}}</td>
+                        <td>
+                            @if ($row->applicationFormRowOptions->count() > 0)
+                                <ul>
+                                    @foreach($row->applicationFormRowOptions as $rowOption)
+                                        <li>{{ $rowOption->applicationFormRowOptionName->text() }} - {{ $rowOption->value }}</li>
+                                    @endforeach
+                                </ul>
+                            @endif
+                        </td>
                     </tr>
                 @endforeach
                 </tbody>

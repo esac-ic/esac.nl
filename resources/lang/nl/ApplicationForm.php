@@ -23,5 +23,6 @@ return [
     "rowRequired"       => "Waarde verplicht",
     "applicationformRows" => "Formulier rijen",
     "rowType"   => "Rij type",
+    'rowOptions' => 'Opties'
 
 ];

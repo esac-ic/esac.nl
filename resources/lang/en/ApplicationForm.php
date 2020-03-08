@@ -23,6 +23,7 @@ return [
     "rowRequired"       => "Value required",
     "applicationformRows" => "Form rows",
     "rowType"   => "Row type",
+    'rowOptions' => 'Options'
 
 ];
 

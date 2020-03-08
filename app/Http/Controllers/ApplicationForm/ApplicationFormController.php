@@ -68,7 +68,7 @@ class ApplicationFormController extends Controller
      *
      * @param ApplicationFormStoreRequest $request
      * @param ApplicationFormRepository $applicationFormRepository
-     * @return void
+     * @return RedirectResponse
      */
     public function store(ApplicationFormStoreRequest $request, ApplicationFormRepository $applicationFormRepository): RedirectResponse
     {
