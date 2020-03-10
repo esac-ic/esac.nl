@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\AgendaItem;
+use App\repositories\ApplicationFormRepository\ApplicationFormRepository;
 use App\repositories\RepositorieFactory;
 use Intervention\Image\ImageManagerStatic as Image;
 use Illuminate\Http\Request;
@@ -17,11 +18,11 @@ class AgendaItemController extends Controller
     /**
      * AgendaItemController constructor.
      */
-    public function __construct(RepositorieFactory $repositorieFactory)
+    public function __construct(RepositorieFactory $repositorieFactory, ApplicationFormRepository $applicationFormRepository)
     {
         $this->_agendaItemRepository = $repositorieFactory->getRepositorie(RepositorieFactory::$AGENDAITEMREPOKEY);
         $this->_agendaItemCategoryRepository = $repositorieFactory->getRepositorie(RepositorieFactory::$AGENDAITEMRECATEGORYPOKEY);
-        $this->_applicationFormRepostory = $repositorieFactory->getRepositorie(RepositorieFactory::$APPLICATIONFORMREPOKEY);
+        $this->_applicationFormRepostory = $applicationFormRepository;
 
         $this->middleware('auth');
         $this->middleware('authorize:'.\Config::get('constants.Content_administrator') .',' . \Config::get('constants.Activity_administrator'));

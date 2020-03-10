@@ -65,9 +65,9 @@ Route::delete('images/delete', 'StorageController@deleteImage');
 //inschrijf routes
 Route::get('forms/{agendaItem}', array('as' => 'editSchedule', 'uses' => 'InschrijfController@showPersonalRegistrationForm'));
 Route::post('forms/{agendaItem}', array('as' => 'editSchedule', 'uses' => 'InschrijfController@savePersonalRegistrationForm'));
-Route::get('forms/admin/{agendaItem}','InschrijfController@showRegistrationform');
+Route::get('forms/admin/{agendaItem}','ApplicationForm\AgendaApplicationFormController@registerUser');
 Route::post('forms/admin/{agendaItem}','InschrijfController@saveRegistrationform');
-Route::get('forms/users/{agendaItem}', array('as' => 'editSchedule', 'uses' => 'InschrijfController@index'));
+Route::get('forms/users/{agendaItem}', array('as' => 'editSchedule', 'uses' => 'ApplicationForm\AgendaApplicationFormController@index'));
 Route::get("forms/users/{user}/detail/{agendaItem}","InschrijfController@showApplicationFormInformation");
 Route::get('forms/users/{inschrijfId}/export', array('as' => 'editSchedule', 'uses' => 'InschrijfController@exportUsers'));
 Route::delete('forms/{agenda_id}/remove/{applicationResponseId}', array('as' => 'editSchedule', 'uses' => 'InschrijfController@destroy'));

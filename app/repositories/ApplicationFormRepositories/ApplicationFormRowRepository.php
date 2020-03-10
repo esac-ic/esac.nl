@@ -6,10 +6,11 @@
  * Time: 16:17
  */
 
-namespace App\repositories;
+namespace App\repositories\ApplicationFormRepository;
 
 use App\Models\ApplicationForm\ApplicationFormRow;
 use App\Models\ApplicationForm\ApplicationFormRowOption;
+use App\repositories\TextRepository;
 
 /**
  * Class ApplicationFormRowRepository

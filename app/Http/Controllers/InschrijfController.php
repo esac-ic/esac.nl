@@ -3,10 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\AgendaItem;
-use App\ApplicationForm;
-use App\ApplicationFormRow;
-use App\ApplicationResponse;
-use App\ApplicationResponseRow;
 use App\Exports\AgendaRegistrationExport;
 use App\repositories\InschrijvenRepository;
 use App\User;
@@ -48,16 +44,9 @@ class InschrijfController extends Controller
 
         $this->_menu = $menuSingleton;
         $this->_MenuItemRepository = $repositorieFactory->getRepositorie(RepositorieFactory::$MENUREPOKEY);
-        $this->_ApplicationResponse = new ApplicationResponse();
+        //$this->_ApplicationResponse = new ApplicationResponse();
         $this->_InschrijvenRepository = $repositorieFactory->getRepositorie(RepositorieFactory::$INSCHRIJVENREPOKEY);
         $this->_userRepository = $repositorieFactory->getRepositorie(RepositorieFactory::$USERREPOKEY);
-    }
-
-    public function index(AgendaItem $agendaItem)
-    {
-        $users = $this->_InschrijvenRepository->getUsers($agendaItem->id);
-        $agendaId = $agendaItem->id;
-        return view("forms.inschrijven_show", compact('users','agendaId'));
     }
 
     /**
@@ -130,9 +119,7 @@ class InschrijfController extends Controller
     public function showRegistrationform(AgendaItem $agendaItem){
         //retrieves all the rows of the form
         $applicationForm = $agendaItem->getApplicationForm;
-        $rows = $applicationForm->getActiveApplicationFormRows;
-        $route = "forms/admin/" . $agendaItem->id;
-        $cancleRoute = '/forms/users/'. $agendaItem->id;
+        $rows = $applicationForm->applicationFormRows;
         $users = array();
         $registerdUsers = array();
 
@@ -145,7 +132,7 @@ class InschrijfController extends Controller
             }
         }
 
-        return view("forms.inschrijven_admin", compact('rows', 'route','applicationForm','users','cancleRoute'));
+        return view("forms.inschrijven_admin", compact('rows', 'applicationForm','users','agendaItem'));
     }
 
     /*Return a view to register a user */

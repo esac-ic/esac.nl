@@ -5,7 +5,7 @@ namespace App\Http\Controllers\ApplicationForm;
 use App\Http\Requests\ApplicationFormStoreRequest;
 use App\Http\Resources\ApplicationFormRowVueResource;
 use App\Models\ApplicationForm\ApplicationForm;
-use App\repositories\ApplicationFormRepository;
+use App\repositories\ApplicationFormRepository\ApplicationFormRepository;
 use App\repositories\RepositorieFactory;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;

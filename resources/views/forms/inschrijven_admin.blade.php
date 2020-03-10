@@ -10,16 +10,12 @@
             <h3>{{$applicationForm->applicationFormName->text()}}</h3>
         </div>
         <div class="card-body">
-            {!! Form::open(['method' => 'POST',$route]) !!}
+            {!! Form::open(['method' => 'POST', "forms/admin/" . $agendaItem->id]) !!}
             <div class="form-group">
                 {!! Form::label('user', trans('inschrijven.applicationFormUser')) !!}
                 {!! Form::select('user',$users,null, ['class' => 'form-control','required' => 'required']) !!}
             </div>
-            @foreach ($rows as $row)
-                <div class="form-group">
-                    {!! $row->getInputBox() !!}
-                </div>
-            @endforeach
+
         </div>
     </div>
 
@@ -27,6 +23,6 @@
         {!! Form::submit(trans('menu.submit'), ['class'=> 'btn btn-primary'] ) !!}
         {{ csrf_field() }}
         {!! Form::close() !!}
-        <a class="btn btn-danger btn-close" href="{{url($cancleRoute)}}">{{trans('menu.cancel')}}</a>
+        <a class="btn btn-danger btn-close" href="{{url('/forms/users/'. $agendaItem->id)}}">{{trans('menu.cancel')}}</a>
     </div>
 @endsection

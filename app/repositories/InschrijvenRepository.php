@@ -1,17 +1,10 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: IA02UI
- * Date: 15-6-2017
- * Time: 20:39
- */
 
 namespace App\repositories;
 
-
 use App\AgendaItem;
-use App\ApplicationResponse;
 use App\ApplicationResponseRow;
+use App\Models\ApplicationForm\ApplicationResponse;
 use Illuminate\Support\Collection;
 
 class InschrijvenRepository implements IRepository

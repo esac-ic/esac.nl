@@ -1,9 +1,11 @@
 <?php
 
-namespace App\repositories;
+namespace App\repositories\ApplicationFormRepository;
 
 use App\Models\ApplicationForm\ApplicationForm;
 use App\Models\ApplicationForm\ApplicationFormRow;
+use App\repositories\IRepository;
+use App\repositories\TextRepository;
 
 class ApplicationFormRepository implements IRepository
 {
