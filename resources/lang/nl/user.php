@@ -54,6 +54,7 @@ return [
     "lid_af"        => "Datum lid af",
     "created_at"    => "Gebruiker aangemaakt op",
     "updated_at"    => "Gebruiker bijgewerkt op",
+    'makeActiveMember' => "Maak actief lid",
     'removeAsActiveMember' => "Verwijder als actief lid",
     "approveAsPendingMember" => "Goedkeuren als lid",
     "removeAsPendingMember" => "Verwijderen als in afwachting",
@@ -71,6 +72,41 @@ return [
     "privacy_policy" => "Akkoord met de Privacy Policy",
     "privacy_and_incasso" => "Privacy Policy en Incasso Machtiging",
     "termsconditions" => "Akkoord met de Terms and Conditions",
-    'registrations' => 'Inschrijvingen'
+    'registrations' => 'Inschrijvingen',
+    'exportRegistrationInfo' => 'Export intro pakket info',
+    'certificates' => 'Certificaten',
+    "emNumber" => "Nood Telefoonnummer",
+    "emeName" => "Naam Nood contact persoon",
+    "emHouseNumber" => "Nood Huisnummer",
+    "emstreet" => "Nood Straat",
+    "emcity" => "Nood Stad",
+    "emzipcode" => "Nood Postcode",
+    "emcountry" => "Nood Land",
 
+    'introPackageOptions' => 'Intro pakket opties',
+    'introPackage' => 'Intro pakket',
+    'tshirt' => 'ESAC Intro shirt',
+    'topropCourse' => 'Toprope cursus',
+    'introWeekend' => 'Intro weekend',
+    'registrationInfo' => 'Registratie info',
+    'packagePlaceholder' => 'Geen intro pakket...',
+
+
+    'packageTypes' => [
+        'standard' => 'Standaard introductie packet (€ 110)',
+        'noToprope' => 'Introductie paket zonder cursus (€ 90)',
+    ],
+
+    'shirtSizes' => [
+        's' => 'S',
+        'm' => 'M',
+        'l' => 'L',
+        'xl' => 'XL',
+    ],
+
+    'weekendDates' => [
+        'intro1' => 'Intro 1 Avalonia - 28 en 29 sept.',
+        'intro2' => 'Intro 2 Hotton - 12 en 13 okt.',
+        'intro3' => 'Intro 3 Sy - 19 en 20 okt.',
+    ]
 ];

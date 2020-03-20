@@ -15,6 +15,7 @@ return [
     "leden"     => "Members",
     "rols"      => "Roles",
     "books"     => "Books",
+    "photoAlbums" => "Photoalbums",
     "paginaBeheer"  => "Page management",
     "yes"       => "Yes",
     "no"       => "No",
@@ -35,5 +36,7 @@ return [
     "user" => "User",
     "become_member" => "Become a member",
     "activities" => "Activities",
-    "content" => "Content"
+    "content" => "Content",
+    "intro" => "Intro",
+    "introPackages" => "Intro packages"
 ];

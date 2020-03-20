@@ -58,9 +58,9 @@ class NewsItemController extends Controller
             $newsItem->save();
 
             //resize both images
-            $header_path = "../storage/app/public/" . $newsItem->image_url;
+            $header_path = storage_path('app/public/' . $newsItem->image_url);
             Image::make($header_path)->fit(1200, 500)->save($header_path);
-            $thumb_path = "../storage/app/public/" . $newsItem->thumbnail_url;
+            $thumb_path = storage_path('app/public/' . $newsItem->thumbnail_url);
             Image::make($thumb_path)->fit(400, 300)->save($thumb_path);
         }
 

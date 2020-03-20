@@ -25,13 +25,18 @@
         <div class="col-md-6">
             <div class="btn-group mt-2 float-md-right" role="group" aria-label="Actions">
             @if($user->isPendingMember() and \Illuminate\Support\Facades\Auth::user()->hasRole(Config::get('constants.Administrator')))
-                        {{ Form::open(array('url' => '/users/'.$user->id . '/approveAsPendingMember', 'method' => 'patch')) }}
-                        <button type="submit" class="btn btn-success"><em class="ion-checkmark"></em> {{trans("user.approveAsPendingMember")}}</button>
-                        {{ Form::close() }}
-                        {{ Form::open(array('url' => '/users/'.$user->id . '/removeAsPendingMember', 'method' => 'patch')) }}
-                        <button type="submit" class="btn btn-danger"><em class="ion-trash-a"></em> {{trans("user.removeAsPendingMember")}}</button>
-                        {{ Form::close() }}
+                {{ Form::open(array('url' => '/users/'.$user->id . '/approveAsPendingMember', 'method' => 'patch')) }}
+                <button type="submit" class="btn btn-success"><em class="ion-checkmark"></em> {{trans("user.approveAsPendingMember")}}</button>
+                {{ Form::close() }}
+                {{ Form::open(array('url' => '/users/'.$user->id . '/removeAsPendingMember', 'method' => 'patch')) }}
+                <button type="submit" class="btn btn-danger"><em class="ion-trash-a"></em> {{trans("user.removeAsPendingMember")}}</button>
+                {{ Form::close() }}
             @else
+                @if($user->isOldMember() and \Illuminate\Support\Facades\Auth::user()->hasRole(Config::get('constants.Administrator')))
+                    {{ Form::open(array('url' => '/users/'.$user->id . '/makeActiveMember', 'method' => 'patch')) }}
+                        <button type="submit" class="btn btn-success"><em class="ion-plus"></em> {{trans("user.makeActiveMember")}}</button>
+                    {{ Form::close() }}
+                @endif
                 <a href="{{url('/users/'.$user->id . '/edit' )}}" class="btn btn-primary">
                     <span title="{{trans("menu.edit")}}" class="ion-edit" aria-hidden="true"></span>
                     {{trans("menu.edit")}}
@@ -83,6 +88,11 @@
                 <li class="nav-item">
                     <a class="nav-link" id="tab3" data-toggle="tab" href="#registrations" role="tab" aria-controls="security" aria-selected="false">{{trans('user.registrations') }}</a>
                 </li>
+                @if($user->registrationInfo !== null)
+                    <li class="nav-item">
+                        <a class="nav-link" data-toggle="tab" href="#registration_info" role="tab" aria-controls="security" aria-selected="false">{{trans('user.registrationInfo') }}</a>
+                    </li>
+                @endif
             </ul>
             @if(\Illuminate\Support\Facades\Auth::user()->hasRole(Config::get('constants.Administrator')) || \Illuminate\Support\Facades\Auth::user()->id === $user->id)
             <div class="tab-content space-sm">
@@ -294,13 +304,18 @@
                         </tbody>
                     </table>
                 </div>
+                @if($user->registrationInfo !== null)
+                    <div class="tab-pane fade" id="registration_info" role="tabpanel">
+                        @include('beheer.user.partials.intro-info')
+                    </div>
+                @endif
             </div>
         </div>
     </div>
 @endsection
 
 @push('scripts')
-    <script src="{{mix("js/vendor/datatables.js")}}" type="text/javascript"></script>
+    <script src="{{mix("js/vendor/datatables.js")}}"></script>
     <script>
         $('#registrations_table').DataTable({
             "order": [[ 1, "asc" ]],

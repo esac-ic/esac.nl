@@ -28,7 +28,7 @@
             </div>
         </div>
     </div>
-    <table id="users" class="table table-striped dt-responsive nowrap" style="width:100%">
+    <table id="newsItems" class="table table-striped dt-responsive nowrap" style="width:100%">
         <thead>
         <tr>
             <th>{{trans('NewsItem.title')}}</th>
@@ -53,3 +53,19 @@
         </tbody>
     </table>
 @endsection
+
+@push('styles')
+    <link rel="stylesheet" type="text/css" href="{{mix("css/vendor/datatables.css")}}">
+@endpush
+
+@push('scripts')
+    <script src="{{mix("js/vendor/datatables.js")}}"></script>
+    <script>
+        $('#newsItems').DataTable({
+            columnDefs: [
+                {type: 'de_datetime', targets: 1},
+                {type: 'de_datetime', targets: 2},
+            ]
+        })
+    </script>
+@endpush

@@ -58,7 +58,7 @@
             <h3>{{trans('NewsItem.text') }}</h3>
         </div>
         <div class="card-body">
-            {!! $newsItem->newsItemText->text() !!}
+            {!! clean($newsItem->newsItemText->text()) !!}
         </div>
     </div>
 @endsection

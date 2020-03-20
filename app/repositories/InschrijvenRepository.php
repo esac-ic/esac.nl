@@ -12,7 +12,7 @@ namespace App\repositories;
 use App\AgendaItem;
 use App\ApplicationResponse;
 use App\ApplicationResponseRow;
-use Maatwebsite\Excel\Facades\Excel;
+use Illuminate\Support\Collection;
 
 class InschrijvenRepository implements IRepository
 {
@@ -111,13 +111,15 @@ class InschrijvenRepository implements IRepository
 //            Adding the signup id in the fields
             $user["_signupId"] = $response->id;
             $certificates = "";
-            $user['certificate_names'] = $user->getCertificationsAbbreviations();
+            if(true === $agendaitem->climbing_activity) {
+                $user['certificate_names'] = $user->getCertificationsAbbreviations();
+            }
             array_push($userdata["userdata"],$user);
 
         }
         return $userdata;
     }
-    public function exportUsers($Agenda_id){
+    public function getExportData($Agenda_id){
         $users = $this->getUsers($Agenda_id);
         $activeUsers = array();
         $selectedElements = array(
@@ -140,16 +142,18 @@ class InschrijvenRepository implements IRepository
             array_push($activeUsers, $userline);
         }
 
-        // Generate and return the spreadsheet
-        Excel::create($users["agendaitem"], function($excel) use ($activeUsers){
+        return new Collection($activeUsers);
 
-            // Build the spreadsheet, passing in the payments array
-            $excel->sheet(trans('forms.inschrijvingen'), function($sheet) use ($activeUsers) {
-
-                $sheet->fromArray($activeUsers);
-            });
-
-        })->download('xls');
+//        // Generate and return the spreadsheet
+//        Excel::create($users["agendaitem"], function($excel) use ($activeUsers){
+//
+//            // Build the spreadsheet, passing in the payments array
+//            $excel->sheet(trans('forms.inschrijvingen'), function($sheet) use ($activeUsers) {
+//
+//                $sheet->fromArray($activeUsers);
+//            });
+//
+//        })->download('xls');
     }
 
 

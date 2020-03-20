@@ -2,6 +2,7 @@
 
 namespace App;
 
+use App\Models\User\UserRegistrationInfo;
 use Carbon\Carbon;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -71,6 +72,10 @@ class User extends Authenticatable
         return $this->hasMany(PhotoAlbum::class);
     }
 
+    public function registrationInfo(){
+        return $this->hasOne(UserRegistrationInfo::class);
+    }
+
     public function hasRole(...$rols){
         foreach ($rols as $rol){
             if($this->roles->contains($rol)){
@@ -126,6 +131,14 @@ class User extends Authenticatable
             Auth::logout();
         }
     }
+
+    public function makeActiveMember(){
+        if($this->email){
+            $this->lid_af = null;
+            $this->save();
+        }
+    }
+
     public function getAdress() {
         return $this->street . " " . $this->houseNumber;
     }

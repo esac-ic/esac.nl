@@ -15,14 +15,14 @@ class RemoveOldApplicationResponseTest extends TestCase
 {
     use DatabaseMigrations;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
         Artisan::call('db:seed');
 
     }
 
-    protected function tearDown()
+    protected function tearDown() : void
     {
         Artisan::call('migrate:reset');
         parent::tearDown();
@@ -42,8 +42,8 @@ class RemoveOldApplicationResponseTest extends TestCase
         foreach ($responseRows as $row){
             $this->assertEquals(null,ApplicationResponseRow::find($row->id));
         }
-
     }
+
     public function testDontRemoveOldApplicationResponseFrom1YearsAgo(){
         $id = 1;
         $applicationResponse = ApplicationResponse::find($id);
@@ -58,6 +58,5 @@ class RemoveOldApplicationResponseTest extends TestCase
         foreach ($responseRows as $row){
             $this->assertNotEquals(null,ApplicationResponseRow::find($row->id));
         }
-
     }
 }

@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
 @push('styles')
-    <link rel="stylesheet" type="text/css" href="{{asset("css/vendor/tempusdominus.css")}}">
+    <link rel="stylesheet" type="text/css" href="{{mix("css/vendor/tempusdominus.css")}}">
 @endpush
 
 @section('title')
@@ -13,7 +13,7 @@
     <div class="card">
         <div class="card-body">
             <h2 class="card-title">{{$curPageName}}</h2>
-            {!!$content!!}
+            {!! clean($content) !!}
         </div>
     </div>
 </div>
@@ -60,7 +60,7 @@
                 </div>
                 <div class="form-group col-md-6">
                     {!! Form::label('password', trans('user.password')) !!}
-                    {!! Form::password('password',  ['class' => 'form-control','required' => 'required', 'minlength' => 6]) !!}
+                    {!! Form::password('password',  ['class' => 'form-control','required' => 'required', 'minlength' => 8]) !!}
                 </div>
             </div>
             <div class="form-row">
@@ -170,6 +170,11 @@
             </div>
         </div>
     </div>
+
+     @if($showIntroPackageForm)
+         @include('front-end.intro-package-form')
+     @endif
+
     <div class="card mt-4">
         <div class="card-header">
             <h3>{{trans('user.privacy_and_incasso')}}</h3>
@@ -235,7 +240,7 @@
                     {!! Form::checkbox("termsconditions",true,'',["class" => "form-check-input", "id" => "termsconditions"]) !!}
                     {!! Form::label("termsconditions", trans("user.termsconditions"), ["class" => "form-check-label"]) !!}
                 </div>
-                <div class="g-recaptcha" data-sitekey="{{env('GOOGLE_RECAPTCHA_KEY')}}"></div>
+                <div class="g-recaptcha" data-sitekey="{{config('custom.google_recaptcha_key')}}"></div>
             </div>
         </div>
     </div>
@@ -247,8 +252,8 @@
 @endsection
 
 @push('scripts')
-    <script src="{{asset("js/vendor/moment.js")}}" type="text/javascript"></script>
-    <script src="{{asset("js/vendor/tempusdominus.js")}}" type="text/javascript"></script>
+    <script src="{{mix("js/vendor/moment.js")}}"></script>
+    <script src="{{mix("js/vendor/tempusdominus.js")}}"></script>
     <script>
         $('#birthDayBox').datetimepicker({
             locale: 'nl',

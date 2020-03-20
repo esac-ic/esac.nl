@@ -6,7 +6,7 @@
         <span>{{trans("AgendaItems.tumpnailImage")}}</span>
         <div class="form-group mt-2">
             <div class="custom-file">
-              <input type="file" class="custom-file-input" id="thumbnail" name="thumbnail" @if($agendaItem->image_url == "")required="required"@endif>
+              <input type="file" class="custom-file-input" id="thumbnail" name="thumbnail" @if($agendaItem == NULL)required="required"@endif>
               <label class="custom-file-label" for="customFile">Choose file</label>
             </div>
         </div>
@@ -14,7 +14,7 @@
 </div>
 
 @push('scripts')
-    <script type="text/javascript">
+    <script>
         $('.custom-file-input').on('change', function() { 
            let fileName = $(this).val().split('\\').pop(); 
            $(this).next('.custom-file-label').addClass("selected").html(fileName); 

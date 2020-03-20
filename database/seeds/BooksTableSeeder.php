@@ -16,6 +16,7 @@ class BooksTableSeeder extends Seeder
         $book->year = 2012;
         $book->country = "Nederland";
         $book->type = "Gidsje";
+        $book->code = "A301";
 
         $book->save();
     }

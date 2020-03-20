@@ -10,13 +10,14 @@ TODO: voeg toe moet gewoon plusje worden
 @extends('layouts.app')
 
 @section('content')
+<div id="app">
     <div class="container intro-container">
         <div class="row d-flex align-items-stretch">
             <div class="col-sm-8 d-flex flex-wrap">
                 <div class="card w-100">
                     <div class="card-body">
                         <h2 class="card-title">{{trans('front-end/zekeringen.gezekertdat')}}</h2>
-                        {!! $content !!}
+                        {!! clean($content) !!}
                     </div>
                 </div>     
             </div>
@@ -43,16 +44,13 @@ TODO: voeg toe moet gewoon plusje worden
             </div>
         </div>
     </div>
-    {{--The zekeringen list will be mounted  to this div by vue--}}
-    <div id="zekeringen">
-    </div>
+    <zekeringen></zekeringen>
+</div>
 @endsection
 
 @push('scripts')
     <script>
-        var APP_URL = "{{env('APP_URL')}}";
         var LOGDIN = "{{Auth::guest() ? "0" : "1"}}";
         var ADMIN = "{{!Auth::guest() && Auth::getUser()->hasRole(\Config::get('constants.Activity_administrator')) ? "1" : "0"}}"
     </script>
-    <script src="{{mix('js/zekeringen.js')}}"></script>
 @endpush

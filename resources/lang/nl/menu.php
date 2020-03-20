@@ -15,6 +15,7 @@ return [
     "leden"     => "Leden",
     "rols"      => "Rollen",
     "books"     => "Boeken",
+    "photoAlbums" => "Fotoalbums",
     "paginaBeheer"  => "Pagina beheer",
     "yes"       => "Ja",
     "no"       => "Nee",
@@ -36,5 +37,7 @@ return [
     "user" => "Gebruiker",
     "become_member" => "Word lid",
     "activities" => "Activiteiten",
-    "content" => "Content"
+    "content" => "Content",
+    "intro" => "Intro",
+    "introPackages" => "Intro pakketten",
 ];

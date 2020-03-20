@@ -13,9 +13,9 @@
 <div class="container intro-container">
     <div class="card">
         <div class="card-body">
-            <button type="button" class="btn btn-outline-primary float-right" data-toggle="modal" data-target="#AddPhotoModal">{{trans('front-end/photo.addPhoto')}} <span class="ion-android-add"></span></button>
+            <button type="button" class="btn btn-outline-primary float-right" data-toggle="modal" data-target="#AddPhotoModal"><span class="ion-android-add"> {{trans('front-end/photo.addPhoto')}}</span></button>
             <h2 class="card-title">{{$photoAlbum->title}}</h2>
-            <p id="albumDescription"> {!! nl2br($photoAlbum->description) !!} </p>
+            <p id="albumDescription"> {{ nl2br($photoAlbum->description) }} </p>
         </div>
     </div>
 </div>
@@ -75,14 +75,13 @@
                 <div class="row no-gutters">
                     @foreach ($photos as $id=>$photo)
                         <div class="col-md-4 col-sm-6 p-1">
-                            <img class="w-100 hover-lighten c-pointer" src="{!! $photo->thumbnail !!}" onclick="openGallery('{{ $loop->index }}');">
+                            <img class="w-100 hover-lighten c-pointer" src="{{ $photo->thumbnail }}" onclick="openGallery('{{ $loop->index }}');">
                         </div>
                     @endforeach
                 </div>
             </div>   
         </div>
     </div>
-    {{ $photos->links('front-end.pagination') }}
 </section>
 
 <div id="AddPhotoModal" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
@@ -117,10 +116,7 @@
 </div>
 
 @push('scripts')
-    <script src="{{mix("js/photoswipe.min.js")}}"></script>
-    <script src="{{mix("js/photoswipe-ui-default.min.js")}}"></script>
-    <script src="{{mix("js/photoAlbum.js")}}"></script>
-    <script src="{{mix("js/load-image.all.min.js")}}"></script>
+    <script src="{{mix("js/photoalbum.js")}}"></script>
     <script>
     $(document).on('change', ':file', function() {
         var input = $(this),

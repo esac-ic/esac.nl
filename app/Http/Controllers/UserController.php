@@ -3,9 +3,11 @@
 namespace App\Http\Controllers;
 
 use App\Certificate;
+use App\Exports\UsersExport;
 use App\CustomClasses\MailList\MailListFacade;
 use App\repositories\RepositorieFactory as RepositorieFactory;
 use App\Rol;
+use App\Rules\EmailDomainValidator;
 use App\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -35,7 +37,7 @@ class UserController extends Controller
 
     //gives the user views
     public function index(){
-        $users = $this->_userRepository->getCurrentUsers(array('id','firstname','lastname','email','preposition','kind_of_member'));
+        $users = $this->_userRepository->getCurrentUsers(array('id','firstname','lastname','email','preposition','kind_of_member'), ['roles']);
         $roles = Rol::all();
 
         return view('beheer.user.index', compact('users','roles'));
@@ -129,27 +131,25 @@ class UserController extends Controller
         return redirect('/users/'. $user->id);
     }
 
-    public function exportUsers(){
-        $activeUsers = $this->_userRepository->getCurrentUsers();
-        $exportData = [];
-        foreach ($activeUsers as $user){
-            $data = $user->toArray();
-            $data['certificates'] = $user->getCertificationsAbbreviations();
-            array_push($exportData,$data);
-        }
-        // Generate and return the spreadsheet
-        Excel::create(trans('user.members'), function($excel) use ($exportData){
-            // Build the spreadsheet, passing in the payments array
-            $excel->sheet(trans('user.active_members'), function($sheet) use ($exportData) {
+    public function exportUsers(UsersExport $usersExport){
+        return Excel::download($usersExport, trans('user.members') . '.xlsx');
+    }
 
-                $sheet->fromArray($exportData,null,'A1');
-            });
-        })->download('xls');
+    public function makeActiveMember(Request $request, User $user){
+        $user->makeActiveMember();
+
+        return redirect('/users/'. $user->id);
     }
 
     private function validateInput(Request $request){
         $this->validate($request,[
-            'email' => 'required|email|max:255|unique:users',
+            'email' => [
+                'required',
+                'email',
+                'max:255',
+                'unique:users',
+                new EmailDomainValidator()
+            ],
             'firstname' => 'required',
             'lastname' => 'required',
             'street' => 'required',

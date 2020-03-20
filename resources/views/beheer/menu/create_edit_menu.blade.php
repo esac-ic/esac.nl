@@ -66,7 +66,7 @@
 </div>
 
 @push('scripts')
-    <script type="text/javascript">
+    <script>
         $(document).ready(function() {
             $( "#menuType" ).change(function() {
                 $("#afterItem").empty();
