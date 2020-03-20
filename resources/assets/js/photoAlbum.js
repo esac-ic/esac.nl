@@ -1,5 +1,4 @@
 var PhotoSwipeItems = []; // Contains the photos used by photoswipe.
-
 try {
     var currentPhotoAlbum = photoAlbum.id;
     for (var photo in photos) {
@@ -7,7 +6,7 @@ try {
     }
 }
 catch(err) {
-
+    console.log(err);
 }
 finally{
     $("p#albumDesciption").text($("p#albumDesciption").text().replace(/\n/g, "<br>"));
@@ -23,7 +22,6 @@ function openGallery(index) {
     var gallery = new PhotoSwipe(pswpElement, PhotoSwipeUI_Default, PhotoSwipeItems, options);
     gallery.init();
 }
-
 
 var files;
 var albumName;
@@ -66,8 +64,8 @@ var fileIndex = 0; //fileIndex of the files array, needs to be global because it
 //recusrive function the process photos.
 function processPhotos(){
     ChangebuttonState("Uploading photos...");
-    resizeThumbnail(files[fileIndex]).then(function({thumbnail, file}){
-        downscalePhoto(file).then(function({photo, file}){
+    resizeImage(files[fileIndex], 356, 356, 0.5).then(function(thumbnail){
+        downscaleImage(files[fileIndex], 0.5).then(function(photo){
             if (currentPhotoAlbum != undefined) { //if currentAlbum is undefined then it means that we are adding an album.
                 addPhotoToAlbum(thumbnail, photo, fileIndex).then(function(index){
                     if(index >= (files.length -1)){ //if returned index equals files length then last photo has uploaded. refresh page
@@ -79,7 +77,7 @@ function processPhotos(){
                 fileIndex++; //increase Fileindex for next recurse
                 processPhotos();
             } else{
-                addAlbum(thumbnail, photo, albumName, albumDescription, captureDate, fileIndex).then(function(index){
+                createAlbum(thumbnail, photo, albumName, albumDescription, captureDate, fileIndex).then(function(index){
                     if(index >= (files.length -1)){ //if returned index equals files length then last photo has uploaded. refresh page
                         location.reload();
                     } else{
@@ -91,52 +89,6 @@ function processPhotos(){
             }
         });
     });
-
-}
-
-
-//Downscales the original photo to a smaller size
-//file: Photo to downscale
-function downscalePhoto(file) {
-    return new Promise(function (resolve, reject) {
-        loadImage(file,
-            function(canvas){
-                canvas.toBlob(function (blob) {
-                        resolve({photo: blob, file: file});
-                    }, 'image/jpeg', 0.5
-                );
-            },
-            {
-                canvas: true,
-                orientation: true,
-                downsamplingRatio: 0.2
-            }
-        );
-    });
-}
-
-//Resizes the original photo to a thumbnail
-//file: Photo to resize
-function resizeThumbnail(file) {
-    return new Promise(function (resolve, reject) {
-        loadImage(file,
-            function(canvas){
-                canvas.toBlob(function (blob) {
-                        resolve({thumbnail: blob, file: file});
-                    }, 'image/jpeg', 0.5
-                );
-            },
-            {
-            maxWidth: 354,
-            maxHeight: 354,
-            minWidth: 354,
-            minHeight: 354,
-            crop: true,
-            canvas: true,
-            orientation: true
-            }
-        );
-    });
 }
 
 //Api Post request to backend to add one album.
@@ -146,7 +98,7 @@ function resizeThumbnail(file) {
 //albumdescription: description of album that will be created
 //captureDate: Capture date of the photos
 //fileIndex: fileIndex of current photo (This is given to ensure to reload after last photo)
-function addAlbum(thumbnail, photo, albumName, albumDescription, captureDate, fileIndex) {
+function createAlbum(thumbnail, photo, albumName, albumDescription, captureDate, fileIndex) {
     return new Promise(function (resolve, reject) {
         var type = "POST";
         var formData = new FormData();
@@ -181,6 +133,7 @@ function addAlbum(thumbnail, photo, albumName, albumDescription, captureDate, fi
 function addPhotoToAlbum(thumbnail, photo, fileIndex){
     return new Promise(function (resolve, reject) {
         var formData = new FormData();
+        formData.append('fileName', files[fileIndex].name)
         formData.append('thumbnails[]',thumbnail);
         formData.append('photos[]', photo);
 

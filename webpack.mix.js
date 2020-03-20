@@ -47,8 +47,11 @@ mix.combine([
    "node_modules/photoswipe/dist/photoswipe.js",
    "node_modules/photoswipe/dist/photoswipe-ui-default.js",
    "node_modules/blueimp-load-image/js/load-image.all.min.js",
+   "resources/assets/js/manipulateImage.js",
    "resources/assets/js/photoAlbum.js"], 
    "public/js/photoalbum.js");
+
+mix.js("resources/assets/js/manipulateImage.js","public/js/manipulateImage.js")
 
 mix.browserSync('localhost');
 
