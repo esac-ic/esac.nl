@@ -35,55 +35,53 @@ function uploadPhotos() {
 
     //check if albumname, description and date exists.
     if(albumNameInput  && albumDescriptionInput && captureDateInput){
-        //check if input of the albumname,description and date are correct.
-        if(albumNameInput.checkValidity() && albumDescriptionInput.checkValidity() && captureDateInput.checkValidity()){
-            albumName = albumNameInput.value;
-            albumDescription = albumDescriptionInput.value;
-            captureDate = captureDateInput.value;
-            var justPhoto = (albumName === undefined || albumDescription === undefined);
-
-            //check if albumname, description is not empty and not exceed 250 characters.
-            if(!justPhoto && (albumName.length >= 250 || albumDescription.length >= 250)) {
-                alert("The album name and description have to consist of less than 250 characters.");
-                return;
-            }
-        } else return;
+        albumName = albumNameInput.value;
+        albumDescription = albumDescriptionInput.value;
+        captureDate = captureDateInput.value;
+        //check if albumname, description is not empty and not exceed 250 characters.
+        if(albumName.length >= 250 || albumDescription.length >= 250) {
+            alert("The album name and description have to consist of less than 250 characters.");
+            return;
+        }
     }
-
     //check if selectedfile input is valid (not null)
     if(fileInput.checkValidity()){
         files = Array.from(fileInput.files);
         numberOfPhotos = files.length;
         updateProgressBar(); //show progressbar
-        processPhotos(); //start processing photos
-    } else alert("Selecteer een aantal foto's om toe te voegen.");
+        processPhotos(0); //start processing photos
+    }
 }
 
 
-var fileIndex = 0; //fileIndex of the files array, needs to be global because its a recursive function.
 //recusrive function the process photos.
-function processPhotos(){
+function processPhotos(fileIndex){
     ChangebuttonState("Uploading photos...");
     resizeImage(files[fileIndex], 356, 356, 0.5).then(function(thumbnail){
         downscaleImage(files[fileIndex], 0.5).then(function(photo){
+            if(fileIndex != 0){
+                processPhotos((fileIndex + 1));
+            }
             if (currentPhotoAlbum != undefined) { //if currentAlbum is undefined then it means that we are adding an album.
                 addPhotoToAlbum(thumbnail, photo, fileIndex).then(function(index){
+                    if(index == 0){
+                        processPhotos((fileIndex + 1));
+                    }
                     if(index >= (files.length -1)){ //if returned index equals files length then last photo has uploaded. refresh page
                         location.reload();
                     } else{
                         updateProgressBar();
                     }
                 });
-                fileIndex++; //increase Fileindex for next recurse
-                processPhotos();
             } else{
                 createAlbum(thumbnail, photo, albumName, albumDescription, captureDate, fileIndex).then(function(index){
+                    if(index == 0){
+                        processPhotos((fileIndex + 1));
+                    }
                     if(index >= (files.length -1)){ //if returned index equals files length then last photo has uploaded. refresh page
                         location.reload();
                     } else{
                         updateProgressBar();
-                        fileIndex++; //increase Fileindex for next recurse
-                        processPhotos();
                     }
                 });
             }

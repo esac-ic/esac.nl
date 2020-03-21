@@ -1,6 +1,7 @@
 //Downscales the original photo to a smaller size
 //file: Photo to downscale
 function downscaleImage(image, ratio) {
+    
     return new Promise(function (resolve, reject) {
         loadImage(image,
             function(canvas){
