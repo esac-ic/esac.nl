@@ -41,6 +41,7 @@ class AgendaApplicationFormService
             array_push($userdata["userdata"], $user);
 
         }
+
         return $userdata;
     }
 }

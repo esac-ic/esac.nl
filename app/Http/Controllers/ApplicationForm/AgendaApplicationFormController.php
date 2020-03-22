@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\ApplicationForm;
 
 use App\AgendaItem;
+use App\Http\Resources\ApplicationFormRowVueResource;
 use App\repositories\InschrijvenRepository;
 use App\repositories\UserRepository;
 use App\Services\AgendaApplicationFormService;
@@ -17,7 +18,7 @@ class AgendaApplicationFormController extends Controller
     public function __construct()
     {
         $this->middleware('auth');
-        $this->middleware('authorize:'.\Config::get('constants.Content_administrator') .',' . \Config::get('constants.Activity_administrator'));
+        $this->middleware('authorize:' . \Config::get('constants.Content_administrator') . ',' . \Config::get('constants.Activity_administrator'));
     }
 
     /**
@@ -30,28 +31,31 @@ class AgendaApplicationFormController extends Controller
         $users = $agendaApplicationFormService->getRegisteredUsers($agendaItem);
         $agendaId = $agendaItem->id;
 
-        return view("forms.inschrijven_show", compact('users','agendaId'));
+        return view("forms.inschrijven_show", compact('users', 'agendaId'));
     }
 
-    public function registerUser(AgendaItem $agendaItem, UserRepository $userRepository, InschrijvenRepository $registerRepository): View
-    {
+    public function registerUser(
+        AgendaItem $agendaItem,
+        UserRepository $userRepository,
+        InschrijvenRepository $registerRepository
+    ): View {
         //retrieves all the rows of the form
         $applicationForm = $agendaItem->getApplicationForm;
-        $rows = $applicationForm->applicationFormRows;
-        $users = array();
-        $registeredUsers = array();
+        $rows            = ApplicationFormRowVueResource::collection($applicationForm->applicationFormRows);
+        $users           = [];
+        $registeredUsers = [];
 
-        foreach ($registerRepository->getRegisterdusers($agendaItem->id) as $registeredUser){
-            array_push($registeredUsers,$registeredUser->user_id);
+        foreach ($registerRepository->getRegisterdusers($agendaItem->id) as $registeredUser) {
+            array_push($registeredUsers, $registeredUser->user_id);
         }
 
-        foreach ($userRepository->getCurrentUsers(array('id','firstname','lastname')) as $user){
-            if(!in_array($user->id,$registeredUsers)){
+        foreach ($userRepository->getCurrentUsers(array('id', 'firstname', 'lastname')) as $user) {
+            if (!in_array($user->id, $registeredUsers)) {
                 $users[$user->id] = $user->getName();
             }
         }
 
-        return view("forms.inschrijven_admin", compact('rows', 'applicationForm','users','agendaItem'));
+        return view("forms.inschrijven_admin", compact('rows', 'applicationForm', 'users', 'agendaItem'));
     }
 
 }

@@ -13,16 +13,18 @@ class AgendaItemController extends Controller
 
     private $_agendaItemRepository;
     private $_agendaItemCategoryRepository;
-    private $_applicationFormRepostory;
+    private $_applicationFormRepository;
 
     /**
      * AgendaItemController constructor.
+     * @param RepositorieFactory $repositorieFactory
+     * @param ApplicationFormRepository $applicationFormRepository
      */
     public function __construct(RepositorieFactory $repositorieFactory, ApplicationFormRepository $applicationFormRepository)
     {
         $this->_agendaItemRepository = $repositorieFactory->getRepositorie(RepositorieFactory::$AGENDAITEMREPOKEY);
         $this->_agendaItemCategoryRepository = $repositorieFactory->getRepositorie(RepositorieFactory::$AGENDAITEMRECATEGORYPOKEY);
-        $this->_applicationFormRepostory = $applicationFormRepository;
+        $this->_applicationFormRepository = $applicationFormRepository;
 
         $this->middleware('auth');
         $this->middleware('authorize:'.\Config::get('constants.Content_administrator') .',' . \Config::get('constants.Activity_administrator'));
@@ -62,7 +64,7 @@ class AgendaItemController extends Controller
             $agendaItemCategories[$category->id] = $category->categorieName->text();
         }
 
-        foreach ($this->_applicationFormRepostory->all(array('id','name')) as $form){
+        foreach ($this->_applicationFormRepository->all(array('id','name')) as $form){
             $applicationForms[$form->id] = $form->applicationFormName->text();
         }
 
@@ -128,7 +130,7 @@ class AgendaItemController extends Controller
             $agendaItemCategories[$category->id] = $category->categorieName->text();
         }
 
-        foreach ($this->_applicationFormRepostory->all(array('id','name')) as $form){
+        foreach ($this->_applicationFormRepository->all(array('id','name')) as $form){
             $applicationForms[$form->id] = $form->applicationFormName->text();
         }
 
