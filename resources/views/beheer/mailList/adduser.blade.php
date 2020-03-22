@@ -49,7 +49,7 @@
         $(document).on('click','#addUser',function(){
             var email = $(this).attr('data-email');
             var name = $(this).attr('data-name');
-            var mailListId = '{{$mailList->address}}';
+            var mailListId = '{{$mailList->getId()}}';
             $.ajax({
                 url: '/mailList/' + mailListId + '/member' ,
                 data : {

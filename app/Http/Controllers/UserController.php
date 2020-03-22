@@ -3,8 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Certificate;
-use App\CustomClasses\MailgunFacade;
 use App\Exports\UsersExport;
+use App\CustomClasses\MailList\MailListFacade;
 use App\repositories\RepositorieFactory as RepositorieFactory;
 use App\Rol;
 use App\Rules\EmailDomainValidator;
@@ -15,7 +15,6 @@ use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Input;
 use Illuminate\Support\Facades\Session;
 use Maatwebsite\Excel\Facades\Excel;
-use Psy\Test\Exception\RuntimeExceptionTest;
 
 class UserController extends Controller
 {
@@ -99,7 +98,7 @@ class UserController extends Controller
     }
 
     //update user
-    public function update(Request $request,User $user, MailgunFacade $mailgunFacade){
+    public function update(Request $request, User $user, MailListFacade $mailListFacade){
         if(!Auth::user()->hasRole(Config::get('constants.Administrator'))){
             if(Auth::user()->id != $user->id || $request->has('kind_of_member')){
                 abort(403, trans('validation.Unauthorized'));
@@ -108,7 +107,7 @@ class UserController extends Controller
         if($user->email != $request['email']){
             //check if email is unique
             $this->validateInput($request);
-            $mailgunFacade->updateUserEmailFormAllMailList($user,$user->email,$request['email']);
+            $mailListFacade->updateUserEmailFormAllMailList($user,$user->email,$request['email']);
         }
 
         $this->_userRepository->update($user->id, $request->all());
@@ -125,7 +124,7 @@ class UserController extends Controller
         }
     }
 
-    public function removeAsActiveMember(Request $request, User $user,MailgunFacade $mailgunFacade){
+    public function removeAsActiveMember(Request $request, User $user, MailListFacade $mailgunFacade){
         $user->removeAsActiveMember();
         $mailgunFacade->deleteUserFormAllMailList($user);
 
@@ -135,7 +134,7 @@ class UserController extends Controller
     public function exportUsers(UsersExport $usersExport){
         return Excel::download($usersExport, trans('user.members') . '.xlsx');
     }
-    
+
     public function makeActiveMember(Request $request, User $user){
         $user->makeActiveMember();
 
