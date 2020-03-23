@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\CustomClasses\MailList\MailListFacade;
 use App\MailList;
+use App\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Session;
@@ -62,7 +63,11 @@ class MailListController extends Controller
     }
 
     public function addMember(Request $request, $mailList){
-        $this->_mailListFacade->addMember($mailList,$request['email'],$request['name']);
+        $users = User::find($request->get('userIds'));
+        foreach ($users as $user) {
+            $this->_mailListFacade->addMember($mailList, $user->email, $user->getName());
+        }
+
         return "";
     }
 

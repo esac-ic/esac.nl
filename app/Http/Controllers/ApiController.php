@@ -47,7 +47,6 @@ class ApiController extends Controller
                 'id'    => $user->id,
                 'name'  => $user->getName(),
                 'email' => $user->email,
-                'action' => "<button class='btn btn-primary' id='addUser' data-name='" . $user->getName(). "' data-email='" . $user->email ."'>" . trans('MailList.addMemberShort') . "</button>"
             ]);
         }
 
