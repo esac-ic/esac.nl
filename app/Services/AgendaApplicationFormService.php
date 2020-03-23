@@ -29,7 +29,7 @@ class AgendaApplicationFormService
             $user                    = $response->getApplicationResponseUser;
             $applicationResponseRows = $response->getApplicationFormResponseRows;
             foreach ($applicationResponseRows as $responseRow) {
-                $columnname        = $responseRow->getApplicationFormResponseRowName->applicationFormRowName->text();
+                $columnname        = $responseRow->getApplicationFormRow->applicationFormRowName->text();
                 $user[$columnname] = $responseRow->value;
             }
 

@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Models\ApplicationForm;
+
 ;
 
 use Illuminate\Database\Eloquent\Model;
@@ -31,5 +32,15 @@ class ApplicationResponseRow extends Model
     public function getApplicationFormRow(): HasOne
     {
         return $this->hasOne(ApplicationFormRow::class, 'id', 'application_form_row_id')->withTrashed();
+    }
+
+    public function getFormattedValueAttribute(): string
+    {
+        switch ($this->getApplicationFormRow->type) {
+            case ApplicationFormRow::FORM_TYPE_CHECK_BOX:
+                return $this->value === 'on' ? trans('inschrijven.yes') : trans('inschrijven.no');
+            default:
+                return $this->value;
+        }
     }
 }

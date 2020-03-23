@@ -2,9 +2,8 @@
 
 namespace App\repositories;
 
-use App\AgendaItem;
-use App\ApplicationResponseRow;
 use App\Models\ApplicationForm\ApplicationResponse;
+use App\Models\ApplicationForm\ApplicationResponseRow;
 use Illuminate\Support\Collection;
 
 class InschrijvenRepository implements IRepository
@@ -17,30 +16,6 @@ class InschrijvenRepository implements IRepository
     public function update($id, array $data)
     {
         // TODO: Implement update() method.
-    }
-
-    public function store($agendaitem, $request,$userid ) {
-        $inschrijving = $request->all();
-        $applicationResponse = new ApplicationResponse();
-
-        $applicationFormId = $agendaitem->application_form_id;
-
-        $applicationResponse->agenda_id = $agendaitem->id;
-        $applicationResponse->inschrijf_form_id = $applicationFormId;
-        $applicationResponse->user_id = $userid;
-        $applicationResponse->save();
-        $applicationResponseId = $applicationResponse->id;
-
-        //set the responserows
-        unset($inschrijving['_token']);
-        unset($inschrijving['user']);
-        foreach($inschrijving as $key => $value) {
-            $applicationResponseRow = new ApplicationResponseRow();
-            $applicationResponseRow->application_response_id = $applicationResponseId;
-            $applicationResponseRow->application_form_row_id = $key;
-            $applicationResponseRow->value = $value;
-            $applicationResponseRow->save();
-        }
     }
 
     public function delete($id)
@@ -63,55 +38,7 @@ class InschrijvenRepository implements IRepository
 
     }
 
-    /**
-     * gets the users that signed up for an agendaitem in the format:
-     *        $userdata = array(
-            "agendaitem" => $agendaitem->agendaItemTitle->text(),
-            "userdata" => array(),
-            "agendaId" => $agendaId,
-            "customfields" => array()
-            );
-     * @param $agendaId the id of the agenda item
-     * @return array array with data, see above
-     */
-    public function getUsers($agendaId) {
-        $agendaitem = AgendaItem::find($agendaId);
 
-//        TODO: add certificates
-
-//        userdata is an array with 3 items, the agenda item titel, the indexes and the double array with data
-        $userdata = array(
-            "agendaitem" => $agendaitem->agendaItemTitle->text(),
-            "userdata" => array(),
-            "agendaId" => $agendaId,
-            "customfields" => array()
-        );
-        $application_form = $agendaitem->getApplicationForm;
-        $application_rows = $application_form->getActiveApplicationFormRows;
-
-        foreach ($application_rows as $application_row) {
-            array_push($userdata["customfields"],$application_row->applicationFormRowName->text());
-        }
-
-        $applicationResponses = $agendaitem->getApplicationFormResponses;
-        foreach ($applicationResponses as $index=>$response) {
-            $user = $response->getApplicationResponseUser;
-            $applicationResponseRows = $response->getApplicationFormResponseRows;
-            foreach ($applicationResponseRows as $responseRow) {
-                $columnname = $responseRow->getApplicationFormResponseRowName->applicationFormRowName->text();
-                $user[$columnname] = $responseRow->value;
-            }
-//            Adding the signup id in the fields
-            $user["_signupId"] = $response->id;
-            $certificates = "";
-            if(true === $agendaitem->climbing_activity) {
-                $user['certificate_names'] = $user->getCertificationsAbbreviations();
-            }
-            array_push($userdata["userdata"],$user);
-
-        }
-        return $userdata;
-    }
     public function getExportData($Agenda_id){
         $users = $this->getUsers($Agenda_id);
         $activeUsers = array();
@@ -154,8 +81,5 @@ class InschrijvenRepository implements IRepository
         return ApplicationResponse::where('agenda_id','=',$agendaId)->select('user_id')->get();
     }
 
-    public function getApplicationInformation($agendaId, $userId){
-        $applicationResponse = ApplicationResponse::where('agenda_id','=',$agendaId)->where('user_id','=',$userId)->select('id')->get();
-        return ApplicationResponseRow::where('application_response_id','=',$applicationResponse[0]->id)->get();
-    }
+
 }

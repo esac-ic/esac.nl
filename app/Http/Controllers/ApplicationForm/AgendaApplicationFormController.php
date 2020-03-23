@@ -4,10 +4,16 @@ namespace App\Http\Controllers\ApplicationForm;
 
 use App\AgendaItem;
 use App\Http\Resources\ApplicationFormRowVueResource;
+use App\Models\ApplicationForm\ApplicationResponse;
+use App\repositories\ApplicationFormRepositories\ApplicationFormRegistrationRepository;
 use App\repositories\InschrijvenRepository;
 use App\repositories\UserRepository;
 use App\Services\AgendaApplicationFormService;
 use App\Http\Controllers\Controller;
+use App\User;
+use Auth;
+use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Request;
 use Illuminate\View\View;
 
 class AgendaApplicationFormController extends Controller
@@ -18,7 +24,7 @@ class AgendaApplicationFormController extends Controller
     public function __construct()
     {
         $this->middleware('auth');
-        $this->middleware('authorize:' . \Config::get('constants.Content_administrator') . ',' . \Config::get('constants.Activity_administrator'));
+        $this->middleware('authorize:' . \Config::get('constants.Content_administrator') . ',' . \Config::get('constants.Activity_administrator'))->except('destroy');
     }
 
     /**
@@ -28,7 +34,7 @@ class AgendaApplicationFormController extends Controller
      */
     public function index(AgendaItem $agendaItem, AgendaApplicationFormService $agendaApplicationFormService): View
     {
-        $users = $agendaApplicationFormService->getRegisteredUsers($agendaItem);
+        $users    = $agendaApplicationFormService->getRegisteredUsers($agendaItem);
         $agendaId = $agendaItem->id;
 
         return view("forms.inschrijven_show", compact('users', 'agendaId'));
@@ -56,6 +62,56 @@ class AgendaApplicationFormController extends Controller
         }
 
         return view("forms.inschrijven_admin", compact('rows', 'applicationForm', 'users', 'agendaItem'));
+    }
+
+    /**
+     * @param Request $request
+     * @param AgendaItem $agendaItem
+     * @param ApplicationFormRegistrationRepository $repository
+     * @return RedirectResponse
+     */
+    public function saveRegistration(
+        Request $request,
+        AgendaItem $agendaItem,
+        ApplicationFormRegistrationRepository $repository
+    ): RedirectResponse {
+        $repository->storeRegistration($request->except(['_token', 'user']), $agendaItem, $request['user']);
+
+        return redirect('/forms/users/' . $agendaItem->id);
+    }
+
+    /**
+     * @param User $user
+     * @param AgendaItem $agendaItem
+     * @param ApplicationFormRegistrationRepository $repository
+     * @return \Illuminate\Contracts\View\Factory|View
+     */
+    public function show(User $user, AgendaItem $agendaItem, ApplicationFormRegistrationRepository $repository){
+
+        $applicationDataRows = $repository->getApplicationInformation($agendaItem->id,$user->id);
+        $agendaId = $agendaItem->id;
+
+        return view('forms.inschrijven_details',compact('agendaId','applicationDataRows'));
+    }
+
+    /**
+     * Remove the specified resource from storage.
+     *
+     * @param $Agenda_id
+     * @param $applicationResponseId
+     * @return \Illuminate\Http\Response
+     */
+    public function destroy($Agenda_id, $applicationResponseId)
+    {
+        $applicationReponse = ApplicationResponse::find($applicationResponseId);
+        if(!Auth::user()->hasRole(\Config::get('constants.Activity_administrator'))){
+            if(Auth::user()->id != $applicationReponse->user_id){
+                abort(401);
+            }
+        }
+
+        ApplicationResponse::destroy($applicationResponseId);
+        return redirect('forms/users/'.$Agenda_id);
     }
 
 }

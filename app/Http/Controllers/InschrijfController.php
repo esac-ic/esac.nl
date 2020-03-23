@@ -135,43 +135,7 @@ class InschrijfController extends Controller
         return view("forms.inschrijven_admin", compact('rows', 'applicationForm','users','agendaItem'));
     }
 
-    /*Return a view to register a user */
-    public function saveRegistrationform(Request $request, AgendaItem $agendaItem){
-        $this->_InschrijvenRepository->store($agendaItem,$request,$request['user']);
 
-        return redirect('/forms/users/'. $agendaItem->id);
-    }
-
-    public function showApplicationFormInformation(User $user, AgendaItem $agendaItem){
-        if(!Auth::user()->hasRole(\Config::get('constants.Activity_administrator'))){
-            if(Auth::user()->id != $user->id){
-                abort(401);
-            }
-        }
-
-        $applicationDataRows = $this->_InschrijvenRepository->getApplicationInformation($agendaItem->id,$user->id);
-        $agendaId = $agendaItem->id;
-
-        return view('forms.inschrijven_details',compact('agendaId','applicationDataRows'));
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy($Agenda_id, $applicationResponseId)
-    {
-        $applicationReponse = ApplicationResponse::find($applicationResponseId);
-        if(!Auth::user()->hasRole(\Config::get('constants.Activity_administrator'))){
-            if(Auth::user()->id != $applicationReponse->user_id){
-                abort(401);
-            }
-        }
-        $this->_InschrijvenRepository->delete($applicationResponseId);
-        return redirect('forms/users/'.$Agenda_id);
-    }
     public function exportUsers(int $agendaId, InschrijvenRepository $inschrijvenRepository){
         $agendaItem = AgendaItem::findOrFail($agendaId);
         return Excel::download(
