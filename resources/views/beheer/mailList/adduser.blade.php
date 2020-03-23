@@ -10,13 +10,6 @@
                 </button>
             </div>
             <div class="modal-body">
-                <div class="row mb-3">
-                    <div class="col-md-12">
-                        <div class="btn-group mt-2 float-md-right" role="group" aria-label="Actions">
-                            <button id="addUsers" class="btn btn-primary float-right">{{ trans('MailList.addUsers') }}</button>
-                        </div>
-                    </div>
-                </div>
                 <table class="table table-striped collection table-condensed table-bordered table-hover"
                        id="maillistUserList" style="width: 100%">
                     <thead>
@@ -31,6 +24,7 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button id="addUsers" class="btn btn-primary float-right">{{ trans('MailList.addUsers') }}</button>
             </div>
         </div>
     </div>
