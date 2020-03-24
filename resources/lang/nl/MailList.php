@@ -19,4 +19,5 @@ return [
     "members"       => "Leden",
     "addMember"     => "Voeg een gebruiker toe",
     'addMemberShort' => 'Voeg toe',
+    'addUsers' => 'Voeg leden toe',
 ];

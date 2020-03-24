@@ -13,7 +13,7 @@
         <div class="col-md-6">
             <div class="btn-group mt-2 float-md-right" role="group" aria-label="Actions">
                 <a href="#" id="addMember" class="btn btn-primary" data-toggle="modal" data-target="#addUserModal">
-                    <em class="ion-plus"></em> {{trans("MailList.addMember")}}
+                    <em class="ion-plus"></em> {{trans("MailList.addUsers")}}
                 </a>
                 <a href="{{url('/mailList/')}}" class="btn btn-primary">
                     <em class="ion-android-arrow-back"></em>  {{trans("menu.back")}}

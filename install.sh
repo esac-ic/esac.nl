@@ -38,5 +38,7 @@ else
   "description": "build or push unsuccessful '$TRAVIS_BUILD_NUMBER$SNAPSHOTTAG'",
   "context": "Docker image esac/website:0.0.'$TRAVIS_BUILD_NUMBER$SNAPSHOTTAG'"}' \
   https://api.github.com/repos/esac-ic/esac.nl/statuses/$ORIGINAL_COMMIT\?access_token\=$github_token_wouter
+  echo ERROR: failed to either push or build
+  exit 1
 fi
 

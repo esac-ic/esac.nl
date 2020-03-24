@@ -19,4 +19,5 @@ return [
     "members"       => "Members",
     "addMember"     => "Add member",
     'addMemberShort' => 'Add',
+    'addUsers' => 'Add members'
 ];
