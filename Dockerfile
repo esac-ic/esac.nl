@@ -14,9 +14,8 @@ WORKDIR "/var/www/"
 
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
 RUN curl -sL https://deb.nodesource.com/setup_10.x | bash - && apt install -y nodejs
-
+RUN composer config disable-tls true
 RUN composer install --no-dev
-
 
 #command to modify the fpm config to listen to nginx in docker-compose
 # alternatief: RUN sed -e 's/127.0.0.1:9000/9000/' -i /etc/php-fpm.d/www.conf (misschien netter?)
@@ -27,5 +26,7 @@ RUN npm run prod
 RUN php artisan storage:link
 RUN php artisan config:clear
 RUN rm -rf /var/lib/apt/lists/*
+
+RUN cp -R public/. public_backup/
 
 ENTRYPOINT /bin/bash

@@ -19,7 +19,6 @@ const getters = {
 
 const actions = {
     fetchAgendaItems: context => {
-        console.log('load agenda items');
         agendaApi.getAgenda(
             context.state.startDate,
             context.state.selectedCategory,

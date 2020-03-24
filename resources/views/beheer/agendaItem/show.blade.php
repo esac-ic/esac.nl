@@ -80,7 +80,7 @@
             <h3>{{trans('AgendaItems.content') }}</h3>
         </div>
         <div class="card-body">
-            {!! $agendaItem->agendaItemText->text() !!}
+            {!! clean($agendaItem->agendaItemText->text()) !!}
         </div>
     </div>
 @endsection

@@ -55,9 +55,9 @@
 @endsection
 
 @push('scripts')
-<script src="{{mix("js/vendor/moment.js")}}" type="text/javascript"></script>
-<script src="{{mix("js/vendor/tempusdominus.js")}}" type="text/javascript"></script>
-<script type="text/javascript">
+<script src="{{mix("js/vendor/moment.js")}}"></script>
+<script src="{{mix("js/vendor/tempusdominus.js")}}"></script>
+<script>
     $('#dateBox').datetimepicker({
         locale: 'nl',
         format: "DD-MM-YYYY",

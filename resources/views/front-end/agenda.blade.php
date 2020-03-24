@@ -44,6 +44,6 @@
 
 @push('scripts')
     <script>
-        var DESCRIPTION = "{!! $content !!}";
+        var DESCRIPTION = "{!! clean($content) !!}";
     </script>
 @endpush

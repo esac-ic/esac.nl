@@ -81,10 +81,10 @@ $create = $package == null;
 @endsection
 
 @push('scripts')
-<script src="{{mix("js/vendor/datatables.js")}}" type="text/javascript"></script>
-<script src="{{mix("js/vendor/moment.js")}}" type="text/javascript"></script>
-<script src="{{mix("js/vendor/tempusdominus.js")}}" type="text/javascript"></script>
-<script src="{{mix("js/vendor/bootstrap-select.js")}}" type="text/javascript"></script>
+<script src="{{mix("js/vendor/datatables.js")}}"></script>
+<script src="{{mix("js/vendor/moment.js")}}"></script>
+<script src="{{mix("js/vendor/tempusdominus.js")}}"></script>
+<script src="{{mix("js/vendor/bootstrap-select.js")}}"></script>
 <script>
     $('#deadlineBox').datetimepicker({
         locale: 'nl',

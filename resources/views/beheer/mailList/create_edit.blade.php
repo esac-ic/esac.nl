@@ -20,28 +20,15 @@
         </div>
         <div class="card-body">
             {!! Form::open(['method' => $fields['method'], 'url' => $fields['url']]) !!}
-            <input type="hidden" name="id" value="{{($mailList != null) ? $mailList->address : ""}}">
+            <input type="hidden" name="id" value="{{($mailList != null) ? $mailList->getAddress() : ""}}">
             <div class="form-group">
                 {!! Form::label('address', trans('MailList.address')) !!}
                 <div class="input-group">
-                    {!! Form::text('address', ($mailList != null) ? explode('@',$mailList->address)[0] : "", ['class' => 'form-control','required' => 'required','aria-describedby' => 'basic-addon3']) !!}
+                    {!! Form::text('address', ($mailList != null) ? explode('@',$mailList->getAddress())[0] : "", ['class' => 'form-control','required' => 'required','aria-describedby' => 'basic-addon3']) !!}
                     <div class="input-group-append">
-                        <span class="input-group-text" id="basic-addon3">@esac.nl</span>
+                        <span class="input-group-text" id="basic-addon3">{{env("MAIL_MAN_DOMAIN")}}</span>
                     </div>
                 </div>
-            </div>
-            <div class="form-group">
-                {!! Form::label('name', trans('MailList.name')) !!}
-                {!! Form::text('name', ($mailList != null) ? $mailList->name : "", ['class' => 'form-control','required' => 'required','aria-describedby' => 'basic-addon3']) !!}
-            </div>
-            <div class="form-group">
-                {!! Form::label('description', trans('MailList.description')) !!}
-                {!! Form::text('description', ($mailList != null) ? $mailList->description : "", ['class' => 'form-control','required' => 'required','aria-describedby' => 'basic-addon3']) !!}
-            </div>
-            <div class="form-group">
-                {!! Form::label('acces_level', trans('MailList.acces_level')) !!}
-                {!! Form::select('acces_level',trans('MailListAccesLevels'), ($mailList != null) ? $mailList->acces_level : "", ['class' => 'form-control','required' => 'required','aria-describedby' => 'passwordHelpBlock']) !!}
-                <div id="acces_level_help_block" class="form-text text-muted">Help blok over acces level</div>
             </div>
         </div>
     </div>
@@ -52,22 +39,3 @@
         <a class="btn btn-danger btn-close" href="{{ ($mailList == null) ? ('/mailList') : ('/mailList/' . $mailList->address)}}">{{trans('menu.cancel')}}</a>
     </div>
 @endsection
-
-@push('scripts')
-<script>
-    $(function(){
-        var acces_level_help_text_lookup = {
-            'readonly': '{{trans('MailListAccesLevelHelpText.readonly')}}',
-            'members': '{{trans('MailListAccesLevelHelpText.members')}}',
-            'everyone': '{{trans('MailListAccesLevelHelpText.everyone')}}'
-        };
-       $(document).on('change','#acces_level',function(){
-           var selected_acces_level = $('#acces_level').val();
-           $('#acces_level_help_block').text(acces_level_help_text_lookup[selected_acces_level]);
-       });
-
-       $('#acces_level').change();
-    });
-
-</script>
-@endpush

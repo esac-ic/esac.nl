@@ -19,7 +19,7 @@ fi
 #get the original commit in case of a PR build
 ORIGINAL_COMMIT=$(git show --pretty=%P HEAD | head -1 | cut -d\  -f 2)
 
-ECHO $ORIGINAL_COMMIT
+echo $ORIGINAL_COMMIT
 #get commiter name for the version.txt  file:
 AUTHOR_NAME="$(git log -1 $TRAVIS_COMMIT --pretty="%aN")"
 COMMIT_MSG="$(git log -1 $TRAVIS_COMMIT --pretty="%s")"
@@ -68,7 +68,7 @@ then
   chmod 600 deploy-key
   mv deploy-key ~/.ssh/id_rsa
 
-  ssh ic@docker.esac.nl './update.sh website 0.0.'$TRAVIS_BUILD_NUMBER$SNAPSHOTTAG '"'$AUTHOR_NAME'"' '"'$COMMIT_MSG'"' '"'$COMMMIT_DATE'"' '"'$TRAVIS_PULL_REQUEST_BRANCH'"'
+  ssh ic@esac.nl './update.sh website 0.0.'$TRAVIS_BUILD_NUMBER$SNAPSHOTTAG '"'$AUTHOR_NAME'"' '"'$COMMIT_MSG'"' '"'$COMMMIT_DATE'"' '"'$TRAVIS_PULL_REQUEST_BRANCH'"'
   DEPLOYSTATUS=$?
 
   lhci autorun --upload.serverBaseUrl="http://beta.esac.nl:9001" --upload.token="$LHCI_TOKEN"

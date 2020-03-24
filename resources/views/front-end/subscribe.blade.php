@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
 @push('styles')
-    <link rel="stylesheet" type="text/css" href="{{asset("css/vendor/tempusdominus.css")}}">
+    <link rel="stylesheet" type="text/css" href="{{mix("css/vendor/tempusdominus.css")}}">
 @endpush
 
 @section('title')
@@ -13,7 +13,7 @@
     <div class="card">
         <div class="card-body">
             <h2 class="card-title">{{$curPageName}}</h2>
-            {!!$content!!}
+            {!! clean($content) !!}
         </div>
     </div>
 </div>
@@ -252,8 +252,8 @@
 @endsection
 
 @push('scripts')
-    <script src="{{asset("js/vendor/moment.js")}}" type="text/javascript"></script>
-    <script src="{{asset("js/vendor/tempusdominus.js")}}" type="text/javascript"></script>
+    <script src="{{mix("js/vendor/moment.js")}}"></script>
+    <script src="{{mix("js/vendor/tempusdominus.js")}}"></script>
     <script>
         $('#birthDayBox').datetimepicker({
             locale: 'nl',

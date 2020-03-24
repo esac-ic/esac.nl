@@ -8,7 +8,7 @@
             <div class="card-body">
                 <button type="button" class="btn btn-outline-primary float-right" data-toggle="modal" data-target="#AddAlbumModal"><span class="ion-android-add"> {{trans('front-end/photo.addAlbum')}}</span></button>
                 <h2 class="card-title">{{ $curPageName }}</h2>
-                {!! $content !!}
+                {!! clean($content, 'iframe') !!}
             </div>
         </div>
     </div>
@@ -18,18 +18,18 @@
                 @foreach ($photoAlbums as $album)
                     <div class="col-lg-4 col-md-6 d-flex flex-wrap">
                         <div class="card w-100 position-relative">
-                            <a href="photoalbums/{!! $album->id !!}">
-                                <img class="card-img-top" src="{!! $album->thumbnail !!}" alt="Card image cap">
+                            <a href="photoalbums/{{ $album->id }}">
+                                <img class="card-img-top" src="{{ $album->thumbnail }}" alt="Card image cap">
                             </a>
                             <span class="card-date position-absolute bg-light py-1 px-3 rounded">{{\Carbon\Carbon::parse($album->date)->format('d M Y')}}</span>
                             <div class="card-body">
-                                <a href="photoalbums/{!! $album->id !!}">
-                                    <h4 class="card-title">{!! $album->title !!}</h4>
-                                    <p class="card-text text-body">{!! nl2br($album->description) !!}</p>
+                                <a href="photoalbums/{{ $album->id }}">
+                                    <h4 class="card-title">{{ $album->title }}</h4>
+                                    <p class="card-text text-body">{{ nl2br($album->description) }}</p>
                                 </a>
                             </div>
                             <div class="card-footer bg-white p-3">
-                                <a class="btn btn-outline-primary" href="photoalbums/{!! $album->id !!}">{{trans('front-end/photo.show')}}</a>
+                                <a class="btn btn-outline-primary" href="photoalbums/{{ $album->id }}">{{trans('front-end/photo.show')}}</a>
                             </div>
                         </div>
                     </div>
@@ -82,7 +82,7 @@
                     <div class="modal-footer">
                         @if($errors->any())
                             @push('scripts')
-                                <script type="text/javascript">
+                                <script>
                                     $(window).on('load',function(){
                                         $('#AddAlbumModal').modal('show');
                                     });
@@ -101,10 +101,9 @@
 @endsection
 
 @push('scripts')
-    <script src="{{mix("js/vendor/moment.js")}}" type="text/javascript"></script>
-    <script src="{{mix("js/vendor/tempusdominus.js")}}" type="text/javascript"></script>
-    <script src="{{mix("js/photoAlbum.js")}}"></script>
-    <script src="{{mix("js/load-image.all.min.js")}}"></script>
+    <script src="{{mix("js/vendor/moment.js")}}"></script>
+    <script src="{{mix("js/vendor/tempusdominus.js")}}"></script>
+    <script src="{{mix("js/photoalbum.js")}}"></script>
     <script>
     $(document).on('change', ':file', function() {
         var input = $(this),
