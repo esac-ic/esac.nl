@@ -1,28 +1,25 @@
 @extends('layouts.beheer')
 
 @section('title')
-{{$mailList->name}}
+{{$mailList->getName()}}
 @endsection
 
 @section('content')
     <div class="row mb-3">
         <div class="col-md-6">
-            <h1>{{$mailList->name}}</h1>
+            <h1>{{$mailList->getName()}}</h1>
         </div>
 
         <div class="col-md-6">
             <div class="btn-group mt-2 float-md-right" role="group" aria-label="Actions">
-                <a href="{{url('/mailList/'.$mailList->address . '/edit' )}}" class="btn btn-primary">
-                    <em class="ion-edit"></em> {{trans("menu.edit")}}
-                </a>
                 <a href="#" id="addMember" class="btn btn-primary" data-toggle="modal" data-target="#addUserModal">
-                    <em class="ion-plus"></em> {{trans("MailList.addMember")}}
+                    <em class="ion-plus"></em> {{trans("MailList.addUsers")}}
                 </a>
                 <a href="{{url('/mailList/')}}" class="btn btn-primary">
                     <em class="ion-android-arrow-back"></em>  {{trans("menu.back")}}
                 </a>
-                {{ Form::open(array('url' => 'mailList/' . $mailList->address, 'method' => 'delete')) }}
-                <button type="submit" class="btn btn-danger btn-primary"><em class="ion-trash-a"></em> {{trans('menu.delete')}}</button>
+                {{ Form::open(array('url' => 'mailList/' . $mailList->getId(), 'method' => 'delete')) }}
+                    <button type="submit" class="btn btn-danger btn-primary"><em class="ion-trash-a"></em> {{trans('menu.delete')}}</button>
                 {{ Form::close() }}
             </div>
         </div>
@@ -38,7 +35,7 @@
                         {{trans('MailList.name')}}
                     </td>
                     <td>
-                        {{$mailList->name}}
+                        {{$mailList->getName()}}
                     </td>
                 </tr>
                 <tr>
@@ -46,23 +43,7 @@
                         {{trans('MailList.address')}}
                     </td>
                     <td>
-                        {{$mailList->address}}
-                    </td>
-                </tr>
-                <tr>
-                    <td>
-                        {{trans('MailList.acces_level')}}
-                    </td>
-                    <td>
-                        {{$mailList->acces_level}}
-                    </td>
-                </tr>
-                <tr>
-                    <td>
-                        {{trans('MailList.description')}}
-                    </td>
-                    <td>
-                        {{$mailList->description}}
+                        {{$mailList->getAddress()}}
                     </td>
                 </tr>
                 <tr>
@@ -70,7 +51,7 @@
                         {{trans('MailList.members_count')}}
                     </td>
                     <td>
-                        {{$mailList->members_count}}
+                        {{$mailList->getMembersCount()}}
                     </td>
                 </tr>
             </table>
@@ -82,12 +63,12 @@
                     <td><strong>{{trans('menu.beheer')}}</strong></td>
                 </thead>
                 <tbody>
-                @foreach($mailList->members as $member)
+                @foreach($mailList->getMembers() as $member)
                     <tr>
-                        <td>{{$member->address}}</td>
-                        <td>{{$member->name}}</td>
+                        <td>{{$member->getAddress()}}</td>
+                        <td>{{$member->getName()}}</td>
                         <td>
-                            <a href="#" id="deleteMemebr" data-mailList-id="{{$mailList->address}}" data-member-id="{{$member->address}}"><em class="ion-trash-a"></em></a>
+                            <a href="#" id="deleteMemebr" data-mailList-id="{{$mailList->getId()}}" data-member-email="{{$member->getAddress()}}"><em class="ion-trash-a"></em></a>
                         </td>
                     </tr>
                 @endforeach
@@ -125,9 +106,9 @@
            if(confirm('{{trans('menu.confirmDelete')}}')){
                //delete user from maillist
                var mailListId = $(this).attr('data-mailList-id');
-               var memberId = $(this).attr('data-member-id');
+               var memberEmail = $(this).attr('data-member-email');
                $.ajax({
-                   url: '/mailList/' + mailListId + '/member/' + memberId,
+                   url: '/mailList/' + mailListId + '/member/' + memberEmail,
                    data : {
                        _token : window.Laravel.csrfToken
                    },
