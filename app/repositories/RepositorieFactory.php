@@ -24,7 +24,6 @@ class RepositorieFactory{
     public static $NEWSITEMREPOKEY = "NewsItem";
     public static $AGENDAITEMRECATEGORYPOKEY = "AgendaItemCategory";
     public static $ZEKERINGENREPOKEY = "Zekeringen";
-    public static $INSCHRIJVENREPOKEY = "InschrijvenRepository";
     public static $BOOKREPOKEY = "BookRepository";
     public static $PHOTOALBUMREPOKEY = "PhotoAlbum";
     public static $PHOTOREPOKEY = "Photo";
@@ -44,7 +43,6 @@ class RepositorieFactory{
             RepositorieFactory::$AGENDAITEMRECATEGORYPOKEY => new AgendaItemCategorieRepository($textRepository),
             RepositorieFactory::$NEWSITEMREPOKEY  => new NewsItemRepository($textRepository),
             RepositorieFactory::$ZEKERINGENREPOKEY  => new ZekeringenRepository(),
-            RepositorieFactory::$INSCHRIJVENREPOKEY => new InschrijvenRepository(),
             RepositorieFactory::$BOOKREPOKEY => new BookRepository($textRepository), 
             RepositorieFactory::$PHOTOALBUMREPOKEY => new PhotoAlbumRepository(),
             RepositorieFactory::$PHOTOREPOKEY => new PhotoRepository(),

@@ -16,7 +16,7 @@ use Auth;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
-use Maatwebsite\Excel\Excel;
+use Maatwebsite\Excel\Facades\Excel;
 
 class AgendaApplicationFormController extends Controller
 {
@@ -42,26 +42,12 @@ class AgendaApplicationFormController extends Controller
         return view("forms.inschrijven_show", compact('users', 'agendaId'));
     }
 
-    public function registerUser(
-        AgendaItem $agendaItem,
-        UserRepository $userRepository,
-        InschrijvenRepository $registerRepository
-    ): View {
+    public function registerUser(AgendaItem $agendaItem): View
+    {
         //retrieves all the rows of the form
         $applicationForm = $agendaItem->getApplicationForm;
         $rows            = ApplicationFormRowVueResource::collection($applicationForm->applicationFormRows);
-        $users           = [];
-        $registeredUsers = [];
-
-        foreach ($registerRepository->getRegisterdusers($agendaItem->id) as $registeredUser) {
-            array_push($registeredUsers, $registeredUser->user_id);
-        }
-
-        foreach ($userRepository->getCurrentUsers(array('id', 'firstname', 'lastname')) as $user) {
-            if (!in_array($user->id, $registeredUsers)) {
-                $users[$user->id] = $user->getName();
-            }
-        }
+        $users           = $agendaItem->getApplicationFormResponses->pluck('user.full_name', 'user.id');
 
         return view("forms.inschrijven_admin", compact('rows', 'applicationForm', 'users', 'agendaItem'));
     }
@@ -88,12 +74,13 @@ class AgendaApplicationFormController extends Controller
      * @param ApplicationFormRegistrationRepository $repository
      * @return \Illuminate\Contracts\View\Factory|View
      */
-    public function show(User $user, AgendaItem $agendaItem, ApplicationFormRegistrationRepository $repository){
+    public function show(User $user, AgendaItem $agendaItem, ApplicationFormRegistrationRepository $repository)
+    {
 
-        $applicationDataRows = $repository->getApplicationInformation($agendaItem->id,$user->id);
-        $agendaId = $agendaItem->id;
+        $applicationDataRows = $repository->getApplicationInformation($agendaItem->id, $user->id);
+        $agendaId            = $agendaItem->id;
 
-        return view('forms.inschrijven_details',compact('agendaId','applicationDataRows'));
+        return view('forms.inschrijven_details', compact('agendaId', 'applicationDataRows'));
     }
 
     /**
@@ -106,27 +93,28 @@ class AgendaApplicationFormController extends Controller
     public function destroy($Agenda_id, $applicationResponseId)
     {
         $applicationReponse = ApplicationResponse::find($applicationResponseId);
-        if(!Auth::user()->hasRole(\Config::get('constants.Activity_administrator'))){
-            if(Auth::user()->id != $applicationReponse->user_id){
+        if (!Auth::user()->hasRole(\Config::get('constants.Activity_administrator'))) {
+            if (Auth::user()->id != $applicationReponse->user_id) {
                 abort(401);
             }
         }
 
         ApplicationResponse::destroy($applicationResponseId);
-        return redirect('forms/users/'.$Agenda_id);
+        return redirect('forms/users/' . $Agenda_id);
     }
 
     /**
      * @param int $agendaId
-     * @param InschrijvenRepository $inschrijvenRepository
+     * @param AgendaApplicationFormService $agendaApplicationFormService
      * @return Excel|\Symfony\Component\HttpFoundation\BinaryFileResponse
      * @throws \PhpOffice\PhpSpreadsheet\Exception
      * @throws \PhpOffice\PhpSpreadsheet\Writer\Exception
      */
-    public function exportData(int $agendaId, InschrijvenRepository $inschrijvenRepository){
+    public function exportData(int $agendaId, AgendaApplicationFormService $agendaApplicationFormService)
+    {
         $agendaItem = AgendaItem::findOrFail($agendaId);
         return Excel::download(
-            new AgendaRegistrationExport($inschrijvenRepository, $agendaItem),
+            new AgendaRegistrationExport($agendaApplicationFormService, $agendaItem),
             preg_replace('/[^a-zA-Z0-9]+/', '-', $agendaItem->agendaItemTitle->text()) . '.xlsx'
         );
 

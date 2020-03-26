@@ -4,6 +4,7 @@ namespace App\Exports;
 
 use App\AgendaItem;
 use App\repositories\InschrijvenRepository;
+use App\Services\AgendaApplicationFormService;
 use Maatwebsite\Excel\Concerns\FromCollection;
 use Maatwebsite\Excel\Concerns\ShouldAutoSize;
 use Maatwebsite\Excel\Concerns\WithHeadings;
@@ -16,9 +17,9 @@ use Maatwebsite\Excel\Concerns\WithTitle;
 class AgendaRegistrationExport implements FromCollection, WithTitle, WithHeadings, ShouldAutoSize
 {
     /**
-     * @var InschrijvenRepository
+     * @var AgendaApplicationFormService
      */
-    private $agendaRegistrationRepository;
+    private $agendaApplicationFormService;
 
     /**
      * @var AgendaItem
@@ -27,12 +28,12 @@ class AgendaRegistrationExport implements FromCollection, WithTitle, WithHeading
 
     /**
      * AgendaRegistrationExport constructor.
-     * @param InschrijvenRepository $agendaRegistrationRepository
-     * @param int $agendaId
+     * @param AgendaApplicationFormService $agendaApplicationFormService
+     * @param AgendaItem $agendaItem
      */
-    public function __construct(InschrijvenRepository $agendaRegistrationRepository, AgendaItem $agendaItem)
+    public function __construct(AgendaApplicationFormService $agendaApplicationFormService, AgendaItem $agendaItem)
     {
-        $this->agendaRegistrationRepository = $agendaRegistrationRepository;
+        $this->agendaApplicationFormService = $agendaApplicationFormService;
         $this->agendaItem = $agendaItem;
     }
 
@@ -41,7 +42,7 @@ class AgendaRegistrationExport implements FromCollection, WithTitle, WithHeading
     */
     public function collection()
     {
-        return $this->agendaRegistrationRepository->getExportData($this->agendaItem->id);
+        return $this->agendaApplicationFormService->getExportData($this->agendaItem);
     }
 
     /**
@@ -69,7 +70,7 @@ class AgendaRegistrationExport implements FromCollection, WithTitle, WithHeading
         ];
 
         $formQuestions = [];
-        $rows = $this->agendaItem->getApplicationForm->getActiveApplicationFormRows;
+        $rows = $this->agendaItem->getApplicationForm->applicationFormRows;
         foreach ($rows as $row) {
             $formQuestions[] = $row->applicationFormRowName->text();
         }

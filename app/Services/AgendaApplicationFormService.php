@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use App\AgendaItem;
+use Illuminate\Support\Collection;
 
 class AgendaApplicationFormService
 {
@@ -20,7 +21,7 @@ class AgendaApplicationFormService
         );
 
         $applicationForm = $agendaItem->getApplicationForm;
-        foreach ($applicationForm->applicationFormRows() as $application_row) {
+        foreach ($applicationForm->applicationFormRows as $application_row) {
             array_push($userdata["customfields"], $application_row->applicationFormRowName->text());
         }
 
@@ -44,4 +45,36 @@ class AgendaApplicationFormService
 
         return $userdata;
     }
+
+    /**
+     * @param AgendaItem $agendaItem
+     * @return Collection
+     */
+    public function getExportData(AgendaItem $agendaItem): Collection
+    {
+        $users            = $this->getRegisteredUsers($agendaItem);
+        $selectedElements = array(
+            "firstname",
+            "preposition",
+            "lastname",
+            "street",
+            "houseNumber",
+            "city",
+            "email",
+            "phonenumber"
+        );
+        $selectedElements = array_merge($selectedElements, $users["customfields"]);
+
+        $activeUsers = [];
+        foreach ($users["userdata"] as $user) {
+            $userline = array();
+            foreach ($selectedElements as $element) {
+                $userline[$element] = $user[$element];
+            }
+            array_push($activeUsers, $userline);
+        }
+
+        return new Collection($activeUsers);
+    }
+
 }
