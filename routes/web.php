@@ -69,7 +69,7 @@ Route::get('forms/admin/{agendaItem}','ApplicationForm\AgendaApplicationFormCont
 Route::post('forms/admin/{agendaItem}','ApplicationForm\AgendaApplicationFormController@saveRegistration');
 Route::get('forms/users/{agendaItem}', array('as' => 'editSchedule', 'uses' => 'ApplicationForm\AgendaApplicationFormController@index'));
 Route::get("forms/users/{user}/detail/{agendaItem}","ApplicationForm\AgendaApplicationFormController@show");
-Route::get('forms/users/{inschrijfId}/export', array('as' => 'editSchedule', 'uses' => 'InschrijfController@exportUsers'));
+Route::get('forms/users/{inschrijfId}/export', array('as' => 'editSchedule', 'uses' => 'ApplicationForm\AgendaApplicationFormController@exportData'));
 Route::delete('forms/{agenda_id}/remove/{applicationResponseId}', 'ApplicationForm\AgendaApplicationFormController@destroy');
 
 Route::resource('forms', 'InschrijfController');

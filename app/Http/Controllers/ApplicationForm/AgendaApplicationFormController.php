@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\ApplicationForm;
 
 use App\AgendaItem;
+use App\Exports\AgendaRegistrationExport;
 use App\Http\Resources\ApplicationFormRowVueResource;
 use App\Models\ApplicationForm\ApplicationResponse;
 use App\repositories\ApplicationFormRepositories\ApplicationFormRegistrationRepository;
@@ -15,6 +16,7 @@ use Auth;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
+use Maatwebsite\Excel\Excel;
 
 class AgendaApplicationFormController extends Controller
 {
@@ -114,4 +116,19 @@ class AgendaApplicationFormController extends Controller
         return redirect('forms/users/'.$Agenda_id);
     }
 
+    /**
+     * @param int $agendaId
+     * @param InschrijvenRepository $inschrijvenRepository
+     * @return Excel|\Symfony\Component\HttpFoundation\BinaryFileResponse
+     * @throws \PhpOffice\PhpSpreadsheet\Exception
+     * @throws \PhpOffice\PhpSpreadsheet\Writer\Exception
+     */
+    public function exportData(int $agendaId, InschrijvenRepository $inschrijvenRepository){
+        $agendaItem = AgendaItem::findOrFail($agendaId);
+        return Excel::download(
+            new AgendaRegistrationExport($inschrijvenRepository, $agendaItem),
+            preg_replace('/[^a-zA-Z0-9]+/', '-', $agendaItem->agendaItemTitle->text()) . '.xlsx'
+        );
+
+    }
 }
