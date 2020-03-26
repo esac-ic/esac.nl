@@ -5,6 +5,7 @@ namespace App\repositories\ApplicationFormRepositories;
 use App\AgendaItem;
 use App\Models\ApplicationForm\ApplicationResponse;
 use App\Models\ApplicationForm\ApplicationResponseRow;
+use Illuminate\Database\Eloquent\Collection;
 
 /**
  * Class ApplicationFormRegistrationRepository
@@ -42,9 +43,9 @@ class ApplicationFormRegistrationRepository
     /**
      * @param $agendaId
      * @param $userId
-     * @return mixed
+     * @return Collection
      */
-    public function getApplicationInformation($agendaId, $userId)
+    public function getApplicationInformation($agendaId, $userId): Collection
     {
         $applicationResponse = ApplicationResponse::query()
             ->where('agenda_id', $agendaId)

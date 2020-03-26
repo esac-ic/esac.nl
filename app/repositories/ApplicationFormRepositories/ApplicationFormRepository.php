@@ -7,9 +7,19 @@ use App\Models\ApplicationForm\ApplicationFormRow;
 use App\repositories\IRepository;
 use App\repositories\TextRepository;
 
+/**
+ * Class ApplicationFormRepository
+ * @package App\repositories\ApplicationFormRepository
+ */
 class ApplicationFormRepository implements IRepository
 {
+    /**
+     * @var TextRepository
+     */
     private $textRepository;
+    /**
+     * @var ApplicationFormRowRepository
+     */
     private $applicationFormRowRepository;
 
     /**
@@ -17,13 +27,19 @@ class ApplicationFormRepository implements IRepository
      * @param TextRepository $textRepository
      * @param ApplicationFormRowRepository $applicationFormRowRepository
      */
-    public function __construct(TextRepository $textRepository, ApplicationFormRowRepository $applicationFormRowRepository)
-    {
-        $this->textRepository = $textRepository;
+    public function __construct(
+        TextRepository $textRepository,
+        ApplicationFormRowRepository $applicationFormRowRepository
+    ) {
+        $this->textRepository               = $textRepository;
         $this->applicationFormRowRepository = $applicationFormRowRepository;
     }
 
-    public function create(array $data)
+    /**
+     * @param array $data
+     * @return ApplicationForm
+     */
+    public function create(array $data): ApplicationForm
     {
         $text = $this->textRepository->create([
             'NL_text' => $data['nl_name'],
@@ -33,7 +49,7 @@ class ApplicationFormRepository implements IRepository
         $applicationForm = new ApplicationForm(["name" => $text->id]);
         $applicationForm->save();
 
-        if(array_key_exists('rows', $data) === true) {
+        if (array_key_exists('rows', $data) === true) {
             foreach ($data['rows'] as $rowData) {
                 $this->applicationFormRowRepository->create($applicationForm->id, $rowData);
             }
@@ -42,7 +58,12 @@ class ApplicationFormRepository implements IRepository
         return $applicationForm;
     }
 
-    public function update($id, array $data)
+    /**
+     * @param $id
+     * @param array $data
+     * @return ApplicationForm
+     */
+    public function update($id, array $data): ApplicationForm
     {
         $applicationForm = $this->find($id);
         $this->textRepository->update($applicationForm->name, [
@@ -52,13 +73,15 @@ class ApplicationFormRepository implements IRepository
 
         $applicationFormRowIds = [];
 
-        if(array_key_exists('rows', $data) === true) {
+        if (array_key_exists('rows', $data) === true) {
             foreach ($data['rows'] as $rowData) {
-                if(array_key_exists('id', $rowData) === true) {
+                if (array_key_exists('id', $rowData) === true) {
                     $this->applicationFormRowRepository->update($rowData['id'], $rowData);
                     $applicationFormRowIds[] = $rowData['id'];
                 } else {
-                    $applicationFormRow = $this->applicationFormRowRepository->create($applicationForm->id, $rowData);
+                    $applicationFormRow      = $this
+                        ->applicationFormRowRepository
+                        ->create($applicationForm->id, $rowData);
                     $applicationFormRowIds[] = $applicationFormRow->id;
                 }
             }
@@ -72,26 +95,45 @@ class ApplicationFormRepository implements IRepository
         return $applicationForm;
     }
 
-    public function delete($id)
+    /**
+     * @param $id
+     * @throws \Exception
+     */
+    public function delete($id): void
     {
         $applicationForm = $this->find($id);
-        foreach ($applicationForm->applicationFormRows as $row){
+        foreach ($applicationForm->applicationFormRows as $row) {
             $this->applicationFormRowRepository->delete($row->id);
         }
         $applicationForm->delete();
         $this->textRepository->delete($applicationForm->name);
     }
 
+    /**
+     * @param $id
+     * @param array $columns
+     * @return \Illuminate\Database\Eloquent\Builder|\Illuminate\Database\Eloquent\Model|null|object
+     */
     public function find($id, $columns = array('*'))
     {
-        return $this->findBy('id',$id,$columns);
+        return $this->findBy('id', $id, $columns);
     }
 
+    /**
+     * @param $field
+     * @param $value
+     * @param array $columns
+     * @return \Illuminate\Database\Eloquent\Builder|\Illuminate\Database\Eloquent\Model|null|object
+     */
     public function findBy($field, $value, $columns = array('*'))
     {
-        return ApplicationForm::query()->where($field,'=',$value)->first($columns);
+        return ApplicationForm::query()->where($field, '=', $value)->first($columns);
     }
 
+    /**
+     * @param array $columns
+     * @return ApplicationForm[]|\Illuminate\Database\Eloquent\Collection
+     */
     public function all($columns = array('*'))
     {
         return ApplicationForm::all($columns);

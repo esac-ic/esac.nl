@@ -54,8 +54,6 @@ class User extends Authenticatable
         'password', 'remember_token',
     ];
 
-    protected $appends = ['full_name'];
-
     public function roles(){
         return $this->belongsToMany('App\Rol','rol_user');
     }
@@ -103,15 +101,6 @@ class User extends Authenticatable
         return count($this->roles) > 0;
     }
 
-    public function getFullNameAttribute(): string{
-        $name = $this->firstname;
-        $name .= ($this->preposition == null)? ' ' : ' ' . $this->preposition . ' ' ;
-        $name .= $this->lastname;
-
-        return $name;
-    }
-
-    /** @deprecated User full_name attribute */
     public function getName(){
         $name = $this->firstname;
         $name .= ($this->preposition == null)? ' ' : ' ' . $this->preposition . ' ' ;

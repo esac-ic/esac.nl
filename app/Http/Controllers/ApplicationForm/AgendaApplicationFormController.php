@@ -17,6 +17,7 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
 use Maatwebsite\Excel\Facades\Excel;
+use Symfony\Component\HttpFoundation\BinaryFileResponse;
 
 class AgendaApplicationFormController extends Controller
 {
@@ -42,13 +43,23 @@ class AgendaApplicationFormController extends Controller
         return view("forms.inschrijven_show", compact('users', 'agendaId'));
     }
 
-    public function registerUser(AgendaItem $agendaItem): View
+    public function registerUser(AgendaItem $agendaItem, UserRepository $userRepository): View
     {
         //retrieves all the rows of the form
         $applicationForm = $agendaItem->getApplicationForm;
         $rows            = ApplicationFormRowVueResource::collection($applicationForm->applicationFormRows);
-        $users           = $agendaItem->getApplicationFormResponses->pluck('user.full_name', 'user.id');
+        $users           = [];
+        $registeredUsers = [];
 
+        foreach ($agendaItem->getApplicationFormResponses as $registeredUser) {
+            array_push($registeredUsers, $registeredUser->user_id);
+        }
+
+        foreach ($userRepository->getCurrentUsers(array('id', 'firstname', 'lastname')) as $user) {
+            if (!in_array($user->id, $registeredUsers)) {
+                $users[$user->id] = $user->getName();
+            }
+        }
         return view("forms.inschrijven_admin", compact('rows', 'applicationForm', 'users', 'agendaItem'));
     }
 
@@ -74,9 +85,8 @@ class AgendaApplicationFormController extends Controller
      * @param ApplicationFormRegistrationRepository $repository
      * @return \Illuminate\Contracts\View\Factory|View
      */
-    public function show(User $user, AgendaItem $agendaItem, ApplicationFormRegistrationRepository $repository)
+    public function show(User $user, AgendaItem $agendaItem, ApplicationFormRegistrationRepository $repository): View
     {
-
         $applicationDataRows = $repository->getApplicationInformation($agendaItem->id, $user->id);
         $agendaId            = $agendaItem->id;
 
@@ -90,7 +100,7 @@ class AgendaApplicationFormController extends Controller
      * @param $applicationResponseId
      * @return \Illuminate\Http\Response
      */
-    public function destroy($Agenda_id, $applicationResponseId)
+    public function destroy($Agenda_id, $applicationResponseId): RedirectResponse
     {
         $applicationReponse = ApplicationResponse::find($applicationResponseId);
         if (!Auth::user()->hasRole(\Config::get('constants.Activity_administrator'))) {
@@ -106,11 +116,11 @@ class AgendaApplicationFormController extends Controller
     /**
      * @param int $agendaId
      * @param AgendaApplicationFormService $agendaApplicationFormService
-     * @return Excel|\Symfony\Component\HttpFoundation\BinaryFileResponse
+     * @return BinaryFileResponse
      * @throws \PhpOffice\PhpSpreadsheet\Exception
      * @throws \PhpOffice\PhpSpreadsheet\Writer\Exception
      */
-    public function exportData(int $agendaId, AgendaApplicationFormService $agendaApplicationFormService)
+    public function exportData(int $agendaId, AgendaApplicationFormService $agendaApplicationFormService): BinaryFileResponse
     {
         $agendaItem = AgendaItem::findOrFail($agendaId);
         return Excel::download(
