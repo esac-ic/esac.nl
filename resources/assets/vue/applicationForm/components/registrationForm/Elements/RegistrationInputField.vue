@@ -1,5 +1,8 @@
 <template>
-    <input class="form-control" :type="inputType" :required="row.required" :name="row.id">
+    <div>
+        <input class="form-control" v-model="value" :type="inputType" :required="row.required" :name="row.id">
+        <input v-if="row.type === FORM_TYPE_CHECK_BOX && !value" type="hidden" value="0" :name="row.id">
+    </div>
 </template>
 
 <script>
@@ -10,6 +13,12 @@
         props: [
             'row'
         ],
+        data(){
+            return {
+                FORM_TYPE_CHECK_BOX,
+                value: ""
+            }
+        },
         computed: {
             inputType(){
                 switch (this.row.type) {
