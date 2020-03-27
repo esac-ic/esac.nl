@@ -21,6 +21,7 @@ class PhotoAlbumController extends Controller
         $this->middleware('auth');
         $this->middleware('authorize:'.Config::get('constants.Administrator'));
         $this->_PhotoAlbumRepository = $repositorieFactory->getRepositorie(RepositorieFactory::$PHOTOALBUMREPOKEY);
+        $this->_PhotoRepository = $repositorieFactory->getRepositorie(RepositorieFactory::$PHOTOREPOKEY);
     }
 
     public function index(){
@@ -31,6 +32,21 @@ class PhotoAlbumController extends Controller
     public function show(Request $request, PhotoAlbum $photoAlbum){
         return view('beheer.photoAlbum.show', compact('photoAlbum'));
     }
+
+    public function store(Request $request){
+        $title = $request->title;
+        $description = $request->description;
+        $date = $request->captureDate;
+        if($title!= null && $description !=null && $date != null){
+            if(strlen($title) < 256 && strlen($description) < 256 ){
+                PhotoAlbum:$photoAlbum = $this->_PhotoAlbumRepository->create(["title" => $title, "description"=> $description, "date" => $date]);
+                $this->addPhotoToAlbum($request, $photoAlbum->id);
+                return $photoAlbum->id;
+            } else{
+                redirect()->back()->withErrors(["error" => trans('front-end/photo.inputToLong')]);
+            }
+        } 
+    }  
 
     public function edit(Request $request, PhotoAlbum $photoAlbum){
         $fields = ['title' => trans('photoAlbum.edit'),
@@ -62,5 +78,42 @@ class PhotoAlbumController extends Controller
             'description' => 'required',
             'date' => 'required|date',
         ]);
+    }
+
+    public function addPhotoToAlbum(Request $request, $ablumId){
+        PhotoAlbum:$photoAlbum = $this->_PhotoAlbumRepository->find($ablumId);
+        $photos = $request->photos;
+        $thumbnails = $request->thumbnails;
+        if($photos !=null && $thumbnails  !=null){
+            for ($i = 0; $i < count($photos); $i++) {
+                $image = $photos[$i];
+                $thumbnail = $thumbnails[$i];
+                $fileExtension = $photos[$i]->clientExtension();
+                if($fileExtension == "png"||"jpeg"||"jpg"){
+                    Photo:$photo = $this->_PhotoRepository->create(["album" => $photoAlbum]);
+                    $imageFileName = $photo->id . '.' . $fileExtension;
+                    $thumbnailFileName = $photo->id .'_thumbnail' . '.' . $fileExtension;
+                    $albumtitle = str_replace(' ', '_',$photo->photo_album->title);
+                    $thumbnailPath = 'photos/' . $albumtitle .'/' . $thumbnailFileName ;
+                    $photoPath = 'photos/' . $albumtitle .'/' . $imageFileName;
+            
+                    $photoLink = $this->_PhotoRepository->saveToCloud($photoPath, $image);
+                    $thumbnailLink = $this->_PhotoRepository->saveToCloud($thumbnailPath, $thumbnail);
+                    if($photoLink != null && $thumbnailLink != null){
+                        $photoLink = $this->_PhotoRepository->getFileLink($photoLink);
+                        $thumbnailLink = $this->_PhotoRepository->getFileLink($thumbnailLink);
+                        $Photodemensions = getimagesize($photoLink);
+                        $this->_PhotoRepository->update($photo->id,["link" => $photoLink, "thumbnail" => $thumbnailLink, "width" => $Photodemensions[0], "height" => $Photodemensions[1] ]);
+                        
+                        //Photoalbum thumbnail link
+                        if($photoAlbum->thumbnail == null){
+                            $this->_PhotoAlbumRepository->updateThumbnail($photoAlbum->id, ["thumbnail" => $thumbnailLink]);
+                        }
+                        return $photo->id;
+                    }                
+                }
+            }
+        }
+        return redirect()->route('PhotoAlbum', ['albumId' => $ablumId]);
     }
 }

@@ -71,14 +71,12 @@ Route::delete('/mailList/{mailistid}/member/{memberid}','MailListController@dele
 Route::post('/mailList/{mailistid}/member','MailListController@addMember');
 
 //photo routes
-Route::post('/photoalbums/{albumId}', 'PhotoController@addPhotoToAlbum');
-Route::post('/photoalbums','PhotoController@addAlbum');
+Route::post('/photoalbums/{albumId}', 'PhotoAlbumController@addPhotoToAlbum');
+Route::post('/photoalbums','PhotoAlbumController@store');
 
 //front-end routes
-Route::get('/photoalbums/{albumId}','PhotoController@index')->name('PhotoAlbum');
-Route::get('/photo/{id}','PhotoController@getPhotos')->name('getPhotos');
+Route::get('/photoalbums/{albumId}','frontEndController@photoAlbumDetailView')->name('PhotoAlbum');
 Route::get('/photoalbums','frontEndController@photoAlbums');
-Route::get('/photo/{id}','PhotoController@getPhotos')->name('getPhotos');
 Route::get('/zekeringen','frontEndController@zekeringen');
 Route::get('/bibliotheek','frontEndController@library');
 Route::get('/agenda','frontEndController@agenda');

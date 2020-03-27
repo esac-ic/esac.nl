@@ -14,6 +14,7 @@ use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Str;
 use App\NewsItem;
+use App\PhotoAlbum;
 use App\User;
 use App\Book;
 
@@ -25,6 +26,7 @@ class frontEndController extends Controller
     private $_inschrijvenRepository;
     private $_agendaRepository;
     private $_userRepository;
+    private $_PhotoAlbumRepository;
 
     public function __construct(RepositorieFactory $repositorieFactory)
     {
@@ -49,18 +51,6 @@ class frontEndController extends Controller
         }
 
         return view('front-end.agenda', compact('categories','curPageName','content'));
-    }
-
-    public function photoAlbums()
-    {
-        $photoAlbums = $this->_PhotoAlbumRepository->all();
-        foreach($photoAlbums as $photoalbum){
-              $photoalbum->description = str_replace("\r\n","<br>", $photoalbum->description);
-        }
-        $curPageName = trans('front-end/photo.pagetitle');
-        $menuItem = $this->_MenuItemRepository->findby('urlName',MenuItem::PHOTOURL);
-        $content = $menuItem->content->text();
-        return view('front-end.photo_album_list', compact('curPageName', 'photoAlbums', 'content'));
     }
 
     public function agendaDetailView(Request $request, AgendaItem $agendaItem){
@@ -124,6 +114,27 @@ class frontEndController extends Controller
         return view("front-end.library", compact('curPageName','content','books'));
     }
   
+    public function photoAlbums()
+    {
+        $photoAlbums = $this->_PhotoAlbumRepository->all();
+        foreach($photoAlbums as $photoalbum){
+              $photoalbum->description = str_replace("\r\n","<br>", $photoalbum->description);
+        }
+        $curPageName = trans('front-end/photo.pagetitle');
+        $menuItem = $this->_MenuItemRepository->findby('urlName',MenuItem::PHOTOURL);
+        $content = $menuItem->content->text();
+        return view('front-end.photo_album_list', compact('curPageName', 'photoAlbums', 'content'));
+    }
+
+    public function photoAlbumDetailView($id)
+    {
+        PhotoAlbum:$photoAlbum = $this->_PhotoAlbumRepository->find($id);
+        $photoAlbum->description = str_replace("\r\n","<br>", $photoAlbum->description);
+        $photos = $this->_PhotoAlbumRepository->getThumbnails($photoAlbum->id);
+        $curPageName = $photoAlbum->title;
+        return view('front-end.photo_album', compact('curPageName', 'photoAlbum', 'photos'));
+    }
+
     public function memberlist(){
         $users = $this->_userRepository->getCurrentUsers(array('firstname','lastname','email','preposition','kind_of_member','phonenumber'));
         $curPageName = trans('front-end/memberlist.memberlist');
