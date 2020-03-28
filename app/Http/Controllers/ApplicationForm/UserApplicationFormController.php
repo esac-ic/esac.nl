@@ -36,7 +36,7 @@ class UserApplicationFormController extends Controller
             $error       = trans("forms.signupexpired");
             $curPageName = $error;
 
-            return view("forms.inschrijven_error", compact('menu', 'error', 'curPageName'));
+            return view("forms.inschrijven_error", compact('error', 'curPageName'));
         }
 
         $applicationForm = $agendaItem->getApplicationForm;
@@ -44,7 +44,7 @@ class UserApplicationFormController extends Controller
             $error       = trans("forms.form_not_available");
             $curPageName = $error;
 
-            return view("forms.inschrijven_error", compact('menu', 'error', 'curPageName'));
+            return view("forms.inschrijven_error", compact('error', 'curPageName'));
         }
 
         //check if the user has already signed up
@@ -57,7 +57,7 @@ class UserApplicationFormController extends Controller
             $error       = trans("forms.duplicatesignup");
             $curPageName = $error;
 
-            return view("forms.inschrijven_error", compact('menu', 'error', 'curPageName'));
+            return view("forms.inschrijven_error", compact('error', 'curPageName'));
         }
 
         //retrieves all the rows of the form
@@ -69,7 +69,7 @@ class UserApplicationFormController extends Controller
 
         return view(
             "forms.inschrijven",
-            compact('menu', 'rows', 'route', 'applicationForm', 'cancleRoute', 'curPageName')
+            compact('rows', 'route', 'applicationForm', 'cancleRoute', 'curPageName')
         );
     }
 
