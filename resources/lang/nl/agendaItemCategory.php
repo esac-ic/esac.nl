@@ -13,7 +13,7 @@ return [
     "new"           => "Nieuwe categorie",
     "edit"          => "Wijzig categorie",
     "show"          => "Laat categorie zien",
-    "Categories"    => "Evenement categori&euml;n",
+    "Categories"    => "Evenement categorieën",
     "Category"      => "Evenement categorie",
     "add"           => "Een categorie voor evenementen toevoegen",
     "added"         => "Evenement categorie toegevoegd",

@@ -22,7 +22,7 @@ return [
     "beheer"    =>  "Beheer",
     "certificate"   => "Certificaten",
     "agendaItems"    => "Agenda items",
-    "agendaItemCategories" => "Agenda categorie&euml;n",
+    "agendaItemCategories" => "Agenda categorieën",
     "applicationForms"  => "Inschrijf formulieren",
     'newsItems'     => "Nieuwsberichten",
     "from_till"      => "Van :startDate tot :endDate",
