@@ -1,7 +1,7 @@
 <template>
     <div>
-        <div v-for="(option, index) in row.applicationFormRowOptions">
-            <input :type="getType()" :name="row.id + '[]'" :value="option.value" :key="index">{{getName(option)}}
+        <div v-for="(option, index) in row.applicationFormRowOptions" style="margin-bottom: 5px">
+            <input :type="getType()" :name="row.id + '[]'" :value="option.value" :key="index" style="margin-right: 5px;">{{getName(option)}}
         </div>
     </div>
 </template>
