@@ -44,9 +44,13 @@
                             <ol class="column-count-lg-3">
                                 @foreach($users as $user)
                                     <li>{{$user['name']}}
-                                    @if($user["certificate_names"] != null)
-                                        ({{$user["certificate_names"]}})
-                                    @endif</li>
+                                        @if($user["certificate_names"] != null)
+                                            ({{$user["certificate_names"]}})
+                                        @endif
+                                        @if($agendaItem->subscription_endDate > \Carbon\Carbon::now())
+                                            <a href="{{ url('forms/' . $agendaItem->id .'/unregister') }}" style="color: red"><i class="ion-trash-a"></i> </a>
+                                        @endif
+                                    </li>
                                 @endforeach
                             </ol>
                         @endif

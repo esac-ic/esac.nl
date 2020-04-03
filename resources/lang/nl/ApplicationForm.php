@@ -23,6 +23,8 @@ return [
     "rowRequired"       => "Waarde verplicht",
     "applicationformRows" => "Formulier rijen",
     "rowType"   => "Rij type",
-    'rowOptions' => 'Opties'
+    'rowOptions' => 'Opties',
+    'userUnregisterd' => 'Je hebt je succesvol afgemeld',
+    'subscriptionDatePastUnregisterFailed' => 'De inschrijf datum is verlopen daarom kan je je niet meer afmelden'
 
 ];

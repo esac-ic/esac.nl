@@ -9,8 +9,11 @@ use App\Models\ApplicationForm\ApplicationResponse;
 use App\Notifications\AgendaSubscribed;
 use App\repositories\ApplicationFormRepositories\ApplicationFormRegistrationRepository;
 use Auth;
+use Carbon\Carbon;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Session;
 
 class UserApplicationFormController extends Controller
 {
@@ -99,6 +102,29 @@ class UserApplicationFormController extends Controller
         $repository->storeRegistration($request->except(['_token']), $agendaItem, Auth::user()->id);
         $user = Auth::user();
         $user->notify(new AgendaSubscribed($agendaItem));
+
+        return redirect('agenda/' . $agendaItem->id);
+    }
+
+    /**
+     * @param AgendaItem $agendaItem
+     * @return RedirectResponse
+     */
+    public function unregister(AgendaItem $agendaItem): RedirectResponse
+    {
+        if (Carbon::parse($agendaItem->subscription_endDate) < Carbon::now()) {
+            Session::flash("message",trans('ApplicationForm.subscriptionDatePastUnregisterFailed'));
+
+            return redirect('agenda/' . $agendaItem->id);
+        }
+
+        ApplicationResponse::query()
+            ->where('agenda_id', $agendaItem->id)
+            ->where('inschrijf_form_id', $agendaItem->application_form_id)
+            ->where('user_id', Auth::user()->id)
+            ->delete();
+
+        Session::flash("message",trans('ApplicationForm.userUnregisterd'));
 
         return redirect('agenda/' . $agendaItem->id);
     }

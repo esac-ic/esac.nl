@@ -2,6 +2,7 @@
 
 namespace App;
 
+use App\Models\ApplicationForm\ApplicationResponse;
 use App\Models\User\UserRegistrationInfo;
 use Carbon\Carbon;
 use Illuminate\Notifications\Notifiable;

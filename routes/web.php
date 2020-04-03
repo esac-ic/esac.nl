@@ -64,6 +64,7 @@ Route::delete('images/delete', 'StorageController@deleteImage');
 
 //inschrijf routes
 Route::get('forms/{agendaItem}', array('as' => 'editSchedule', 'uses' => 'ApplicationForm\UserApplicationFormController@showRegistrationForm'));
+Route::get('forms/{agendaItem}/unregister', 'ApplicationForm\UserApplicationFormController@unregister');
 Route::post('forms/{agendaItem}', array('as' => 'editSchedule', 'uses' => 'ApplicationForm\UserApplicationFormController@store'));
 Route::get('forms/admin/{agendaItem}','ApplicationForm\AgendaApplicationFormController@registerUser');
 Route::post('forms/admin/{agendaItem}','ApplicationForm\AgendaApplicationFormController@saveRegistration');
