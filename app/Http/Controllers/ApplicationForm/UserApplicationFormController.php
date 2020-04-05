@@ -120,7 +120,6 @@ class UserApplicationFormController extends Controller
 
         ApplicationResponse::query()
             ->where('agenda_id', $agendaItem->id)
-            ->where('inschrijf_form_id', $agendaItem->application_form_id)
             ->where('user_id', Auth::user()->id)
             ->delete();
 
