@@ -38,7 +38,7 @@
                     <i class="ion-trash-a"></i>
                 </button>
             </div>
-            <input type="hidden" v-if="row.id !== undefined" v-model="row.id" :name="'rows[' + index + '][id]'">
+            <input type="hidden" v-if="row.id !== undefined" v-model="row.id" :name="'rows[' + applicationFormIndex + '][options][' + index + '][id]'">
         </div>
     </div>
 </template>

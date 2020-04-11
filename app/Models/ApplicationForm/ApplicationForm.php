@@ -34,6 +34,6 @@ class ApplicationForm extends Model
      * @return HasMany
      */
     public function applicationFormRows(): HasMany{
-        return $this->hasMany(ApplicationFormRow::class,'application_form_id')->withTrashed();
+        return $this->hasMany(ApplicationFormRow::class,'application_form_id');
     }
 }
