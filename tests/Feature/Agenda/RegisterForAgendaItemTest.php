@@ -166,20 +166,6 @@ class RegisterForAgendaItemTest extends TestCase
         $response = $this->post($this->url . 'admin/' . $agendaItem->id, $body);
 
         $response->assertStatus(403);
-
-        $applicationResponse = ApplicationResponse::all()->last();
-
-        $this->assertEquals($userToRegister->id, $applicationResponse->user_id);
-        $this->assertEquals($agendaItem->id, $applicationResponse->agenda_id);
-        $this->assertEquals($applicationForm->id, $applicationResponse->inschrijf_form_id);
-
-        $this->assertCount(3, $applicationResponse->getApplicationFormResponseRows);
-
-        $appliationForRowIds = [];
-        foreach ($applicationResponse->getApplicationFormResponseRows as $responseRow) {
-            $appliationForRowIds[] = $responseRow->application_form_row_id;
-            $this->assertEquals($body[$responseRow->application_form_row_id], $responseRow->value);
-        }
     }
 
     /** @test */
