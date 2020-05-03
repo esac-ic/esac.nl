@@ -36,6 +36,7 @@ return [
     "added"         => "Event added",
     "edited"        => "Event edited",
     "deleted"       => "Event removed",
+    "copy"          => "Copy event",
 
     "endDateSubscription" => "Last possible registration date",
     "showsignups" => "Show sign ups"
