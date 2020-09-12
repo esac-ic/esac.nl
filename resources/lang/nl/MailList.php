@@ -3,10 +3,8 @@ return [
     "mailLists"      => "Maillijsten",
     "mailList"      => "Maillijst",
     "name"          => "Naam",
-    "acces_level"   => "Toegangs niveau",
     "address"       => "Email",
     "members_count" => "Aantal leden",
-    "description"   => "Omschrijving",
     "created_at"    => "Gemaakt op",
     "new"           => "Nieuwe maillijst",
     "edit"          => "Wijzig maillijst",
@@ -21,4 +19,5 @@ return [
     "members"       => "Leden",
     "addMember"     => "Voeg een gebruiker toe",
     'addMemberShort' => 'Voeg toe',
+    'addUsers' => 'Voeg leden toe',
 ];
