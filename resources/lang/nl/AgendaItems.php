@@ -36,6 +36,7 @@ return [
     "added"         => "Evenement toegevoegd",
     "edited"        => "Evenement aangepast",
     "deleted"       => "Evenement verwijderd",
+    "copy"          => "Kopier agenda item",
 
     "endDateSubscription" => "Uiterlijke inschrijfdatum",
     "showsignups" => "Laat inschrijvingen zien"
