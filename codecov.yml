@@ -2,5 +2,5 @@
     project: no
     patch: no
     changes: no
-ignore:
- - "config/"
+  ignore:
+  - "config/"
