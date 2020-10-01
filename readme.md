@@ -6,7 +6,7 @@
 </a>
 </p>
 
-## Framework/libaries
+## Framework/Libaries
 
 The following libaries and framework are used:
 - [Laravel](https://laravel.com)
@@ -20,7 +20,7 @@ The following libaries and framework are used:
 - [Tempus Dominus](https://tempusdominus.github.io/bootstrap-4/)
 
 
-## Setting up steps
+## Setting Up Steps
 Create an .env file from .env.example, with your local values for 
 DB\_HOST, DB\_PORT, DB\_DATABASE, DB\_USERNAME and DB\_PASSWORD
 **Note**: When running your local environment on a certain port, let's say 3000, modify your `APP_URL` in the file to reflect that port, else the api's won't work
@@ -32,11 +32,11 @@ you need the following programs to run the code on your local environment:
 * NodeJS: https://nodejs.org/en/download/
 * Git: https://git-scm.com/download/win
 
-Clone the project repository
+Clone the project repository by following command :-
 
     git clone https://github.com/esac-ic/esac.nl.git
 
-Execute the following commands from the repository root
+Execute the following commands from the repository root :-
 
 	composer install
     php artisan migrate
@@ -46,16 +46,15 @@ Execute the following commands from the repository root
     npm install
     npm run dev
 
-When you make changes to CSS or JS file you need to build again which can be done with
+When you had changed CSS or JS file you need to build again which can be done with the command :-
 
     npm run dev
 
-It is also possible to recompile your files when you make a change by running the following command
+It is also possible to recompile your files when you make a change by running the following command :-
 
     npm run watch
 
 ### Production environment
-When you update the server make sure you run the following commands
-
+Make sure you run the following commands when you update the server :-
     php artisan migrate
     npm run production
