@@ -29,12 +29,6 @@ class CreatePageTest extends TestCase
         parent::setUp();
         $this->user = $user = factory(User::class)->create();
 
-        foreach(Config::get('constants') as $key => $value) {
-            factory(Rol::class)->create([
-                'id' => $value,
-            ]) ;
-        }
-
         $user->roles()->attach(Config::get('constants.Content_administrator'));
         $this->be($user);
 

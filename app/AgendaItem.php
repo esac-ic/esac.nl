@@ -2,8 +2,11 @@
 
 namespace App;
 
+use App\Models\ApplicationForm\ApplicationForm;
+use App\Models\ApplicationForm\ApplicationResponse;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 
 class AgendaItem extends Model
 {
@@ -23,8 +26,8 @@ class AgendaItem extends Model
         'climbing_activity' => 'boolean'
     ];
 
-    public function getApplicationForm(){
-        return $this->hasOne('App\ApplicationForm','id',"application_form_id");
+    public function getApplicationForm(): HasOne{
+        return $this->hasOne(ApplicationForm::class,'id',"application_form_id");
     }
 
     public function agendaItemText(){
@@ -59,7 +62,7 @@ class AgendaItem extends Model
     }
 
     public function getApplicationFormResponses(){
-        return $this->hasMany('App\ApplicationResponse','agenda_id');
+        return $this->hasMany(ApplicationResponse::class,'agenda_id');
     }
 
     public function canRegister(){

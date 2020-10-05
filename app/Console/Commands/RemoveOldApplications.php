@@ -2,8 +2,7 @@
 
 namespace App\Console\Commands;
 
-use App\ApplicationForm;
-use App\ApplicationResponse;
+use App\Models\ApplicationForm\ApplicationResponse;
 use Carbon\Carbon;
 use Illuminate\Console\Command;
 

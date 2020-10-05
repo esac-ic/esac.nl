@@ -33,8 +33,8 @@
                 <tbody>
                 @foreach($applicationDataRows as $applicationDataRow)
                     <tr>
-                        <td>{{$applicationDataRow->getApplicationFormResponseRowName->applicationFormRowName->text()}}</td>
-                        <td>{{$applicationDataRow->value}}</td>
+                        <td>{{$applicationDataRow->getApplicationFormRow->applicationFormRowName->text()}}</td>
+                        <td>{{$applicationDataRow->formatted_value}}</td>
                     </tr>
                 @endforeach
                 </tbody>

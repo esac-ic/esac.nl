@@ -4,6 +4,7 @@ namespace Tests\Feature;
 
 use App\Rol;
 use App\User;
+use Config;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Support\Facades\Artisan;
 use TestCase;
@@ -26,11 +27,8 @@ class CreateRoleTest extends TestCase
     {
         parent::setUp();
         $this->user = $user = factory(User::class)->create();
-        $role = factory(Rol::class)->create([
-            'id' => 1
-        ]);
 
-        $user->roles()->attach($role->id);
+        $user->roles()->attach(Config::get('constants.Administrator'));
         $this->be($user);
 
         session()->start();

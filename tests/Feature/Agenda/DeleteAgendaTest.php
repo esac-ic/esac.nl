@@ -5,6 +5,7 @@ namespace Tests\Feature;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Artisan;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Config;
 use TestCase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -31,11 +32,7 @@ class DeleteAgendaItemTest extends TestCase
     {
         parent::setUp();
         $this->user = $user = factory(User::class)->create();
-        $role = factory(Rol::class)->create([
-            'id' => 3
-        ]);
-
-        $user->roles()->attach($role->id);
+        $user->roles()->attach(Config::get('constants.Activity_administrator'));
         $this->be($user);
 
         session()->start();
