@@ -23,5 +23,6 @@ $factory->define(AgendaItem::class, function (Faker $faker) {
         'endDate' => $faker->date,
         'subscription_endDate' => $faker->date,
         'image_url' => $faker->imageUrl,
+        'climbing_activity' => $faker->boolean,
     ];
 });

@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\AgendaItem;
 use App\repositories\ApplicationFormRepository\ApplicationFormRepository;
 use App\repositories\RepositorieFactory;
+use Illuminate\Http\RedirectResponse;
 use Intervention\Image\ImageManagerStatic as Image;
 use Illuminate\Http\Request;
 
@@ -176,6 +177,17 @@ class AgendaItemController extends Controller
 
         \Session::flash("message",trans('AgendaItems.deleted'));
         return redirect('/agendaItems');
+    }
+
+    /**
+     * @param AgendaItem $agendaItem
+     * @return RedirectResponse
+     */
+    public function copy(AgendaItem $agendaItem): RedirectResponse
+    {
+        $newAgendaItem = $this->_agendaItemRepository->copy($agendaItem);
+
+        return redirect('/agendaItems/' . $newAgendaItem->id . '/edit');
     }
 
     private function validateInput(Request $request){
