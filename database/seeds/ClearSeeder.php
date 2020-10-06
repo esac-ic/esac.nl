@@ -1,5 +1,16 @@
 <?php
 
+use App\AgendaItem;
+use App\AgendaItemCategorie;
+use App\Certificate;
+use App\MenuItem;
+use App\Models\ApplicationForm\ApplicationForm;
+use App\Models\ApplicationForm\ApplicationFormRow;
+use App\NewsItem;
+use App\Rol;
+use App\Text;
+use App\User;
+use App\Zekering;
 use Illuminate\Database\Seeder;
 
 
@@ -13,17 +24,17 @@ class ClearSeeder extends Seeder
      */
     public function run()
     {
-        \App\Certificate::getQuery()->delete();
-        \App\MenuItem::getQuery()->delete();
-        \App\Rol::getQuery()->delete();
-        \App\AgendaItem::getQuery()->delete();
-        \App\AgendaItemCategorie::getQuery()->delete();
-        \App\ApplicationFormRow::getQuery()->delete();
-        \App\ApplicationForm::getQuery()->delete();
-        \App\NewsItem::getQuery()->delete();
-        \App\User::getQuery()->delete();
-        \App\Text::getQuery()->delete();
-        \App\Zekering::getQuery()->delete();
+        Certificate::getQuery()->delete();
+        MenuItem::getQuery()->delete();
+        Rol::getQuery()->delete();
+        AgendaItem::getQuery()->delete();
+        AgendaItemCategorie::getQuery()->delete();
+        ApplicationFormRow::getQuery()->delete();
+        ApplicationForm::getQuery()->delete();
+        NewsItem::getQuery()->delete();
+        User::getQuery()->delete();
+        Text::getQuery()->delete();
+        Zekering::getQuery()->delete();
         \App\Book::getQuery()->delete();
     }
 }

@@ -16,5 +16,6 @@ return [
     'export_agenda' => 'Export agenda',
     'export_explanation' => 'By pressing one of the links below it is possible to synchronize all ESAC activities with your own agenda.',
     'other' => 'Other',
+    'unregister' => 'Unregister'
 
 ];

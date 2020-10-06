@@ -1,13 +1,15 @@
 <?php
 
+/* @var $factory Factory */
+
+use App\Models\ApplicationForm\ApplicationForm;
 use App\Text;
-use App\ApplicationForm;
 use Faker\Generator as Faker;
+use Illuminate\Database\Eloquent\Factory;
 
 $factory->define(ApplicationForm::class, function (Faker $faker) {
-    $name = factory(Text::class)->create();
-
+    $text = \factory(Text::class)->create();
     return [
-        'name' => $name->id,
+        'name' => $text->id
     ];
 });

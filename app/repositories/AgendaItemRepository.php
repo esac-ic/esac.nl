@@ -11,6 +11,7 @@ namespace App\repositories;
 
 use App\AgendaItem;
 use Carbon\Carbon;
+use Storage;
 
 class AgendaItemRepository implements IRepository
 {
@@ -109,6 +110,39 @@ class AgendaItemRepository implements IRepository
     public function all($columns = array('*'))
     {
         return AgendaItem::all($columns);
+    }
+
+    /**
+     * @param AgendaItem $agendaItem
+     * @return AgendaItem
+     */
+    public function copy(AgendaItem $agendaItem): AgendaItem
+    {
+        $newAgendaItem = $agendaItem->replicate();
+        $newAgendaItem->createdBy = \Auth::user()->id;
+
+        $title = $agendaItem->agendaItemTitle->replicate();
+        $title->save();
+        $text = $agendaItem->agendaItemText->replicate();
+        $text->save();
+        $shortDescription = $agendaItem->agendaItemShortDescription->replicate();
+        $shortDescription->save();
+
+        $newAgendaItem->text = $text->id;
+        $newAgendaItem->title = $title->id;
+        $newAgendaItem->shortDescription = $shortDescription->id;
+        $newAgendaItem->save();
+
+        if ($agendaItem->image_url !== null && $agendaItem->image_url  !== "") {
+            $oldPath = $agendaItem->image_url;
+            $newPath = str_replace($agendaItem->id,$newAgendaItem->id, $oldPath);
+            Storage::disk('public')->copy($oldPath, $newPath);
+            $newAgendaItem->image_url = $newPath;
+            $newAgendaItem->save();
+        }
+
+
+        return $newAgendaItem;
     }
 
     /**

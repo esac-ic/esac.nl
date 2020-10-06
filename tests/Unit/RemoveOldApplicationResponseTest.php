@@ -2,8 +2,8 @@
 
 namespace Tests\Feature;
 
-use App\ApplicationResponse;
-use App\ApplicationResponseRow;
+use App\Models\ApplicationForm\ApplicationResponse;
+use App\Models\ApplicationForm\ApplicationResponseRow;
 use Artisan;
 use Carbon\Carbon;
 use Illuminate\Foundation\Testing\DatabaseMigrations;

@@ -2,9 +2,11 @@
 
 namespace Tests\Feature;
 
+use App\Models\ApplicationForm\ApplicationForm;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Artisan;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Config;
 use TestCase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -13,7 +15,6 @@ use App\User;
 use App\Text;
 use App\AgendaItem;
 use App\AgendaItemCategorie;
-use App\ApplicationForm;
 
 class CreateAgendaItemTest extends TestCase
 {
@@ -22,16 +23,12 @@ class CreateAgendaItemTest extends TestCase
     private $url = 'agendaItems';
     private $agendaItem;
 
-    private $role;
     private $user;
 
     protected function setUp() : void
     {
         parent::setUp();
         $this->user = $user = factory(User::class)->create();
-        $this->role = factory(Rol::class)->create([
-            'id' => 3
-        ]);
 
         $this->be($user);
 
@@ -46,7 +43,7 @@ class CreateAgendaItemTest extends TestCase
     /** @test */
     public function CreateAgendaItem(){
         //Attach 
-        $this->user->roles()->attach($this->role->id);
+        $this->user->roles()->attach(Config::get('constants.Activity_administrator'));
 
         $agendaItemCategory = factory(AgendaItemCategorie::class)->create();
 
@@ -97,7 +94,7 @@ class CreateAgendaItemTest extends TestCase
     }
 
     public function CreateAgendaWithEmptyFields(){
-        $this->user->roles()->attach($this->role->id);
+        $this->user->roles()->attach(Config::get('constants.Activity_administrator'));
 
         $agendaItemCategory = factory(AgendaItemCategorie::class)->create();
         $body = [
@@ -119,7 +116,7 @@ class CreateAgendaItemTest extends TestCase
 
     public function CreateAgendaItemWithEmoji(){
         //Attach 
-        $this->user->roles()->attach($this->role->id);
+        $this->user->roles()->attach(Config::get('constants.Activity_administrator'));
 
         $agendaItemCategory = factory(AgendaItemCategorie::class)->create();
 
