@@ -19,7 +19,16 @@ Route::get('/', function () {
 Auth::routes(['register' => false]);
 
 //Admin routes
-Route::get('beheer/home','ManageController@index');
+Route::group(['as' => 'beheer.', 'prefix' => 'beheer/', 'middleware' => 'auth'], function(){
+    Route::get('home','ManageController@index');
+    Route::resource('applicationForms', 'ApplicationForm\ApplicationFormController');
+
+    //setting routes
+    Route::get('/settings','SettingsController@index');
+    Route::put('/settings','SettingsController@update');
+    Route::get('/settings/edit','SettingsController@edit');
+});
+
 
 //extra user routes
 Route::get('users/old_members','UserController@indexOldMembers');
@@ -45,7 +54,6 @@ Route::resource('pages', 'PaginaBeheerController');
 Route::resource('certificates', 'CertificateController');
 Route::resource('agendaItems', 'AgendaItemController');
 Route::resource('agendaItemCategories', 'AgendaItemCategorieController');
-Route::resource('applicationForms', 'ApplicationFormController');
 Route::resource('newsItems', 'NewsItemController');
 Route::resource('mailList', 'MailListController');
 Route::post('/lidworden', 'PendingUserController@storePendingUser');
@@ -53,16 +61,18 @@ Route::resource('books', 'LibraryController');
 Route::resource('photoAlbums', 'PhotoAlbumController');
 Route::post('images/upload', 'StorageController@uploadImage');
 Route::delete('images/delete', 'StorageController@deleteImage');
+Route::get('agendaItems/{agendaItem}/copy', 'AgendaItemController@copy')->name('copyAgendaItem');
 
 //inschrijf routes
-Route::get('forms/{agendaItem}', array('as' => 'editSchedule', 'uses' => 'InschrijfController@showPersonalRegistrationForm'));
-Route::post('forms/{agendaItem}', array('as' => 'editSchedule', 'uses' => 'InschrijfController@savePersonalRegistrationForm'));
-Route::get('forms/admin/{agendaItem}','InschrijfController@showRegistrationform');
-Route::post('forms/admin/{agendaItem}','InschrijfController@saveRegistrationform');
-Route::get('forms/users/{agendaItem}', array('as' => 'editSchedule', 'uses' => 'InschrijfController@index'));
-Route::get("forms/users/{user}/detail/{agendaItem}","InschrijfController@showApplicationFormInformation");
-Route::get('forms/users/{inschrijfId}/export', array('as' => 'editSchedule', 'uses' => 'InschrijfController@exportUsers'));
-Route::delete('forms/{agenda_id}/remove/{applicationResponseId}', array('as' => 'editSchedule', 'uses' => 'InschrijfController@destroy'));
+Route::get('forms/{agendaItem}', array('as' => 'editSchedule', 'uses' => 'ApplicationForm\UserApplicationFormController@showRegistrationForm'));
+Route::get('forms/{agendaItem}/unregister', 'ApplicationForm\UserApplicationFormController@unregister');
+Route::post('forms/{agendaItem}', array('as' => 'editSchedule', 'uses' => 'ApplicationForm\UserApplicationFormController@store'));
+Route::get('forms/admin/{agendaItem}','ApplicationForm\AgendaApplicationFormController@registerUser');
+Route::post('forms/admin/{agendaItem}','ApplicationForm\AgendaApplicationFormController@saveRegistration');
+Route::get('forms/users/{agendaItem}', array('as' => 'editSchedule', 'uses' => 'ApplicationForm\AgendaApplicationFormController@index'));
+Route::get("forms/users/{user}/detail/{agendaItem}","ApplicationForm\AgendaApplicationFormController@show");
+Route::get('forms/users/{inschrijfId}/export', array('as' => 'editSchedule', 'uses' => 'ApplicationForm\AgendaApplicationFormController@exportData'));
+Route::delete('forms/{agenda_id}/remove/{applicationResponseId}', 'ApplicationForm\AgendaApplicationFormController@destroy');
 
 Route::resource('forms', 'InschrijfController');
 

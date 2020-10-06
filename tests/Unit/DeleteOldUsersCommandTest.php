@@ -7,8 +7,6 @@ use Artisan;
 use Carbon\Carbon;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use TestCase;
-use Illuminate\Foundation\Testing\WithFaker;
-use Illuminate\Foundation\Testing\RefreshDatabase;
 
 class DeleteOldUsersCommandTest extends TestCase
 {
@@ -60,6 +58,7 @@ class DeleteOldUsersCommandTest extends TestCase
         $this->assertEquals(null,$user->remark);
         $this->assertEquals(0,$user->incasso);
     }
+
     public function testDeleteOldUserWichIsLidAfFor1Years(){
         $id = 1;
         $user = User::find($id);

@@ -23,6 +23,9 @@ return [
     "rowRequired"       => "Value required",
     "applicationformRows" => "Form rows",
     "rowType"   => "Row type",
+    'rowOptions' => 'Options',
+    'userUnregisterd' => 'You successfully unsubscribed from the event',
+    'subscriptionDatePastUnregisterFailed' => 'The registration date is past. Because of that you can\'t unsubscribe from the event'
 
 ];
 

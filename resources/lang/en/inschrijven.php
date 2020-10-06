@@ -9,5 +9,7 @@ return [
     "applicationFormDetailTitle" => "Details application form",
     "applicationRowName" => 'Field name',
     "applicationRowValue" => "Filled value",
-    "deleteRegistrationConfurm" => 'Are you sure you want do remove your registration for this event?'
+    "deleteRegistrationConfurm" => 'Are you sure you want do remove your registration for this event?',
+    'yes' => 'Ja',
+    'no' => 'Nee'
 ];

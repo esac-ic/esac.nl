@@ -7,6 +7,7 @@ use App\User;
 use App\Text;
 use App\AgendaItem;
 use App\AgendaItemCategorie;
+use Config;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Support\Facades\Artisan;
 use TestCase;
@@ -29,11 +30,8 @@ class AgendaFilterTest extends TestCase
     {
         parent::setUp();
         $this->user = $user = factory(User::class)->create();
-        $role = factory(Rol::class)->create([
-            'id' => 1
-        ]);
 
-        $user->roles()->attach($role->id);
+        $user->roles()->attach(Config::get('constants.Administrator'));
         $this->be($user);
 
         session()->start();

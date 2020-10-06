@@ -7,6 +7,7 @@ use App\CustomClasses\MenuSingleton;
 use App\MenuItem;
 use App\repositories\AgendaItemRepository;
 use App\repositories\RepositorieFactory;
+use App\Services\AgendaApplicationFormService;
 use App\Setting;
 use App\Zekering;
 use Illuminate\Http\Request;
@@ -22,7 +23,6 @@ class frontEndController extends Controller
     private $_MenuItemRepository;
     private $_agendaCategoryRepository;
     private $_newsItemRepository;
-    private $_inschrijvenRepository;
     private $_agendaRepository;
     private $_userRepository;
 
@@ -31,7 +31,6 @@ class frontEndController extends Controller
         $this->_MenuItemRepository = $repositorieFactory->getRepositorie(RepositorieFactory::$MENUREPOKEY);
         $this->_agendaCategoryRepository = $repositorieFactory->getRepositorie(RepositorieFactory::$AGENDAITEMRECATEGORYPOKEY);
         $this->_newsItemRepository = $repositorieFactory->getRepositorie(RepositorieFactory::$NEWSITEMREPOKEY);
-        $this->_inschrijvenRepository = $repositorieFactory->getRepositorie(RepositorieFactory::$INSCHRIJVENREPOKEY);
         $this->_agendaRepository = $repositorieFactory->getRepositorie(RepositorieFactory::$AGENDAITEMREPOKEY);
         $this->_userRepository = $repositorieFactory->getRepositorie(RepositorieFactory::$USERREPOKEY);
         $this->_bookRepository = $repositorieFactory->getRepositorie(RepositorieFactory::$BOOKREPOKEY);
@@ -63,15 +62,18 @@ class frontEndController extends Controller
         return view('front-end.photo_album_list', compact('curPageName', 'photoAlbums', 'content'));
     }
 
-    public function agendaDetailView(Request $request, AgendaItem $agendaItem){
+    public function agendaDetailView(
+        AgendaItem $agendaItem,
+        AgendaApplicationFormService $agendaApplicationFormService
+    ) {
         $users = array();
         $curPageName = $agendaItem->agendaItemTitle->text();
         if($agendaItem->application_form_id != null){
-            foreach ($this->_inschrijvenRepository->getUsers($agendaItem->id)['userdata'] as $user){
-                   array_push($users,[
-                       "name" => $user->getName(),
-                       "certificate_names" => $user->certificate_names
-                   ]);
+            foreach ($agendaApplicationFormService->getRegisteredUsers($agendaItem)['userdata'] as $user){
+                $users[$user->id] = [
+                    "name" => $user->getName(),
+                    "certificate_names" => $user->certificate_names
+                ];
             }
         }
 

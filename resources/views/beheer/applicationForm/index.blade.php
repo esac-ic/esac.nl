@@ -21,7 +21,7 @@
 
         <div class="col-md-6">
             <div class="btn-group mt-2 float-md-right" role="group" aria-label="Actions">
-                <a href="{{url('applicationForms/create')}}" class="btn btn-primary">
+                <a href="{{ route('beheer.applicationForms.create') }}" class="btn btn-primary">
                     <span title="{{trans("user.new")}}" class="ion-plus" aria-hidden="true"></span>
                     {{trans("ApplicationForm.new")}}
                 </a>
@@ -32,20 +32,19 @@
         <thead>
         <tr>
             <th>{{trans('ApplicationForm.name')}}</th>
-            <th>Beheer</th>
+            <th>{{ trans('menu.beheer') }}</th>
         </tr>
         </thead>
         <tbody>
-
-        @foreach ($applicationForms as $applicationForm)
-            <tr >
-                <td>{{$applicationForm->applicationFormName->text()}}</td>
-                <td>
-                    <a href="{{url('/applicationForms/' . $applicationForm->id . '/edit')}}"><span title="{{trans('ApplicationForm.edit')}}" class="ion-edit" aria-hidden="true"></span></a>
-                    <a href="{{url('/applicationForms/'. $applicationForm->id)}}"><span title="{{trans("ApplicationForm.show")}}" class="ion-eye" aria-hidden="true"></span></a>
-                </td>
-            </tr>
-        @endforeach
+            @foreach ($applicationForms as $applicationForm)
+                <tr >
+                    <td>{{$applicationForm->applicationFormName->text()}}</td>
+                    <td>
+                        <a href="{{route('beheer.applicationForms.edit', $applicationForm->id)}}"><span title="{{trans('ApplicationForm.edit')}}" class="ion-edit" aria-hidden="true"></span></a>
+                        <a href="{{route('beheer.applicationForms.show', $applicationForm->id)}}"><span title="{{trans("ApplicationForm.show")}}" class="ion-eye" aria-hidden="true"></span></a>
+                    </td>
+                </tr>
+            @endforeach
         </tbody>
     </table>
 @endsection
