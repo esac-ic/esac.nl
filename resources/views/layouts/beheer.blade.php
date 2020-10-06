@@ -77,7 +77,7 @@
                                 </a>
                                 <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
                                     <a class="dropdown-item" href="{{ url('agendaItems') }}">{{trans("menu.agendaItems")}}</a>
-                                    <a class="dropdown-item" href="{{ url('applicationForms') }}">{{trans("menu.applicationForms")}}</a>
+                                    <a class="dropdown-item" href="{{ route('beheer.applicationForms.index') }}">{{trans("menu.applicationForms")}}</a>
                                     @if(\Illuminate\Support\Facades\Auth::user()->hasRole(Config::get('constants.Administrator')))
                                         <a class="dropdown-item" href="{{ url('agendaItemCategories') }}">{{trans("menu.agendaItemCategories")}}</a>
                                     @endif

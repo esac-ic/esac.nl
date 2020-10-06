@@ -23,7 +23,11 @@
                                         {{trans('front-end/agenda.loginNeeded')}}
                                     @else
                                         @if($agendaItem->canRegister())
-                                        <a class="btn btn-outline-primary" href="{{url('')}}/forms/{{$agendaItem->id}}">{{trans('front-end/agenda.register')}}</a>
+                                            @if($agendaItem->subscription_endDate > \Carbon\Carbon::now() && array_key_exists(Auth::id(), $users))
+                                                <a class="btn btn-outline-primary" href="{{ url('forms/' . $agendaItem->id .'/unregister') }}" style="color: red">{{ trans('front-end/agenda.unregister') }} </a>
+                                            @else
+                                                <a class="btn btn-outline-primary" href="{{url('')}}/forms/{{$agendaItem->id}}">{{trans('front-end/agenda.register')}}</a>
+                                            @endif
                                         @else
                                         {{trans('front-end/agenda.cantregister')}}
                                         @endif
@@ -44,9 +48,11 @@
                             <ol class="column-count-lg-3">
                                 @foreach($users as $user)
                                     <li>{{$user['name']}}
-                                    @if($user["certificate_names"] != null)
-                                        ({{$user["certificate_names"]}})
-                                    @endif</li>
+                                        @if($user["certificate_names"] != null)
+                                            ({{$user["certificate_names"]}})
+                                        @endif
+
+                                    </li>
                                 @endforeach
                             </ol>
                         @endif

@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\User;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -36,7 +37,7 @@ class RegistrationController extends Controller
             foreach ($user->applicationResponses as $applicationRespons){
                 array_push($registrations,[
                     'name' => $applicationRespons->agendaItem->agendaItemTitle->text(),
-                    'startDate' => \Carbon\Carbon::parse($applicationRespons->agendaItem->startDate)->format('d-m-Y H:i'),
+                    'startDate' => Carbon::parse($applicationRespons->agendaItem->startDate)->format('d-m-Y H:i'),
                     'actions' => '
                         <a href="' . url('/forms/users/'. $user->id . '/detail/'. $applicationRespons->agenda_id). '"><span title="' . trans("inschrijven.applicationFormDetail") . '" class="ion-eye" aria-hidden="true"></span></a>
                         <a href="#" id="delete_button" data-url="' . url('/forms/'. $applicationRespons->agenda_id . '/remove/' . $applicationRespons->id). '"><span  class="ion-trash-a"></span></a>

@@ -1,18 +1,12 @@
 <?php
 
 namespace Tests\Feature;
-
-use App\ApplicationResponse;
-use App\ApplicationResponseRow;
+use Config;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use App\NewsItem;
-use App\Rol;
 use App\User;
 use Artisan;
-use Carbon\Carbon;
 use TestCase;
-use Illuminate\Foundation\Testing\WithFaker;
-use Illuminate\Foundation\Testing\RefreshDatabase;
 
 class RemoveNewsItemTest extends TestCase
 {
@@ -25,11 +19,8 @@ class RemoveNewsItemTest extends TestCase
     {
         parent::setUp();
         $this->user = $user = factory(User::class)->create();
-        $role = factory(Rol::class)->create([
-            'id' => 3
-        ]);
 
-        $user->roles()->attach($role->id);
+        $user->roles()->attach(Config::get('constants.Activity_administrator'));
         $this->be($user);
 
         session()->start();
