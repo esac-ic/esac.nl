@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\ApplicationForm\ApplicationResponse;
 use Illuminate\Database\Seeder;
 
 class ApplicationResponseSeeder extends Seeder
@@ -12,7 +13,7 @@ class ApplicationResponseSeeder extends Seeder
     public function run()
     {
 
-        $applicationResponse = new \App\ApplicationResponse();
+        $applicationResponse = new ApplicationResponse();
         $applicationResponse->agenda_id=1;
         $applicationResponse->inschrijf_form_id = 1;
         $applicationResponse->user_id = 1;
