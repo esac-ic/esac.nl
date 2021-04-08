@@ -2,6 +2,7 @@
 
 namespace App;
 
+use App\Events\User\UserApplicationApprovedEvent;
 use App\Models\ApplicationForm\ApplicationResponse;
 use App\Models\User\UserRegistrationInfo;
 use Carbon\Carbon;
@@ -151,6 +152,9 @@ class User extends Authenticatable
     public function approveAsPendingMember(){
         $this->pending_user = null;
         $this->save();
+
+        event(new UserApplicationApprovedEvent($this));
+
     }
     public function removeAsPendingMember(){
         $this->delete();
