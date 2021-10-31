@@ -38,16 +38,13 @@
                     <div class="col-6 col-lg-3">
                         <a href="https://www.neoliet.nl"><img class="img-fluid" src="{{asset('img/neoliet.png')}}"></a>
                     </div>
-                </div>
-                <div class="row mt-4">
                     <div class="col-6 col-lg-3">
                         <a href="https://www.klimwinkel.nl"><img class="img-fluid" src="{{asset('img/klimwinkel.png')}}"></a>
                     </div>
+                </div>
+                <div class="row mt-4">
                     <div class="col-6 col-lg-3">
                         <a href="https://www.awin1.com/awclick.php?gid=321466&mid=8522&awinaffid=362489&linkid=2031800&clickref="><img class="img-fluid" src="{{asset('img/bever.png')}}"></a>
-                    </div>
-                    <div class="col-6 col-lg-3">
-                        <a href="https://www.awin1.com/awclick.php?gid=317127&mid=8305&awinaffid=362489&linkid=1020095&clickref="><img class="img-fluid" src="{{asset('img/decathlon.png')}}"></a>
                     </div>
                     <div class="col-6 col-lg-3">
                         <a href="https://www.awin1.com/awclick.php?gid=355812&mid=11143&awinaffid=362489&linkid=2326714&clickref="><img class="img-fluid" src="{{asset('img/hunkemoller.jpg')}}" title="Hunkemoller NL homepage"></a>
