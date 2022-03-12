@@ -45,15 +45,15 @@ jobs:
       run: php -r "file_exists('.env') || copy('.env.example', '.env');"
     - name: Install Dependencies
       run: >
-        composer install -q --no-ansi --no-interaction --no-scripts --no-progress --prefer-dist
-        npm install
+        composer install -q --no-ansi --no-interaction --no-scripts --no-progress --prefer-dist &\
+        npm install &\
         npm install -g @lhci/cli@0.3.x
     - name: PHP artisan meuk
       run: >
-        php artisan key:generate
-        php artisan storage:link
-        php artisan dusk:chrome-driver
-        php artisan migrate
+        php artisan key:generate &\
+        php artisan storage:link &\
+        php artisan dusk:chrome-driver &\
+        php artisan migrate &\
         php artisan db:seed
     - name: NPM build
       run: npm run prod
