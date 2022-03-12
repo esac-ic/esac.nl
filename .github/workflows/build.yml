@@ -31,7 +31,7 @@ jobs:
         # The port of container
         container port: 3306
         # Version of MySQL to use
-        mysql version: 5.6
+        mysql version: 5.7
         mysql database: esac
         mysql user: mysql
         mysql password: mysql
