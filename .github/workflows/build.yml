@@ -50,6 +50,7 @@ jobs:
         npm install -g @lhci/cli@0.3.x
     - name: PHP artisan meuk
       run: |
+        php -r "putenv('DB_DATABASE=esac');"
         php artisan key:generate
         php artisan storage:link
         php artisan dusk:chrome-driver
