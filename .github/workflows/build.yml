@@ -1,0 +1,75 @@
+name: Build & Test
+
+on:
+  pull_request:
+    branches: [ master ]
+
+jobs:
+  laravel-tests:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: shivammathur/setup-php@v2.17
+      with:
+        php-version: '7.4'
+    - uses: actions/checkout@v2
+    - name: Setup MySQL
+      uses: mirromutth/mysql-action@v1.1
+      with:
+        # The port of host
+        host port: 3306
+        # The port of container
+        container port: 3306
+        # Version of MySQL to use
+        mysql version: 3.6
+        mysql root password: mysql
+        mysql database: esac
+        mysql user: mysql
+        mysql password: mysql
+    - name: Setup Node.js environment
+      uses: actions/setup-node@v3.0.0
+      with:
+        # Version Spec of the version to use.  Examples: 12.x, 10.15.1, >=10.15.0
+        node-version: 10.15
+    - name: Docker Login
+      # You may pin to the exact commit or the version.
+      # uses: docker/login-action@dd4fa0671be5250ee6f50aedf4cb05514abda2c7
+      uses: docker/login-action@v1.14.1
+      with:
+        # Username used to log against the Docker registry
+        username: esacci
+        # Password or personal access token used to log against the Docker registry
+        password: $DOCKER_ACCESS_TOKEN
+    - name: Copy .env
+      run: php -r "file_exists('.env') || copy('.env.example', '.env');"
+    - name: Install Dependencies
+      run: >
+        composer install -q --no-ansi --no-interaction --no-scripts --no-progress --prefer-dist
+        npm install
+        npm install -g @lhci/cli@0.3.x
+    - name: PHP artisan meuk
+      run: >
+        php artisan key:generate
+        php artisan storage:link
+        php artisan dusk:chrome-driver
+        php artisan migrate
+        php artisan db:seed
+    - name: NPM build
+      run: npm run prod
+    - name: Directory Permissions
+      run: chmod -R 777 storage bootstrap/cache
+    - name: Execute tests (Unit and Feature tests) via PHPUnit
+      env:
+        DB_DATABASE: esac
+        DB_USERNAME: mysql
+        DB_PASSWORD: mysql
+      run: vendor/bin/phpunit -c phpunit.xml --coverage-clover=coverage.xml
+    - name: Upload to codecov
+      run: bash <(curl -s https://codecov.io/bash)
+    - name: Build and push Docker images
+      uses: docker/build-push-action@v2.9.0
+      with:
+        push: true
+        # List of tags
+        tags: $GITHUB_REF_NAME
