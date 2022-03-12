@@ -57,7 +57,7 @@ jobs:
         php -r "putenv('DB_DATABASE=esac');"
         php artisan key:generate
         php artisan storage:link
-        php artisan dusk:chrome-driver 99
+        php artisan dusk:chrome-driver 98
         php artisan migrate
         php artisan db:seed
       env:
