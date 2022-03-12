@@ -10,6 +10,13 @@ jobs:
     runs-on: ubuntu-latest
     environment: Build
     steps:
+    - name: Setup Chrome
+      # You may pin to the exact commit or the version.
+      # uses: browser-actions/setup-chrome@4fa655aad48f56911cad16db9252399a9e592848
+      uses: browser-actions/setup-chrome@v0.0.0
+      with:
+        # The Chromium version to install and use.
+        chromium-version: 99
     - name: Docker Login
       # You may pin to the exact commit or the version.
       # uses: docker/login-action@dd4fa0671be5250ee6f50aedf4cb05514abda2c7
