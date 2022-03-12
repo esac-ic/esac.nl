@@ -73,6 +73,7 @@ jobs:
         DB_DATABASE: esac
         DB_USERNAME: mysql
         DB_PASSWORD: mysql
+        CHROMIUM_BIN: $(which chrome)
       run: vendor/bin/phpunit -c phpunit.xml --coverage-clover=coverage.xml
     - name: Upload to codecov
       run: bash <(curl -s https://codecov.io/bash)
