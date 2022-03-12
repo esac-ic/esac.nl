@@ -40,6 +40,8 @@ jobs:
         username: esacci
         # Password or personal access token used to log against the Docker registry
         password: $DOCKER_ACCESS_TOKEN
+      env:
+        DOCKER_ACCESS_TOKEN: ${{ secrets.DOCKER_ACCESS_TOKEN }}
     - name: Copy .env
       run: php -r "file_exists('.env') || copy('.env.example', '.env');"
     - name: Install Dependencies
