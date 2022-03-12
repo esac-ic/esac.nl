@@ -55,6 +55,10 @@ jobs:
         php artisan dusk:chrome-driver
         php artisan migrate
         php artisan db:seed
+      env:
+        DB_DATABASE: esac
+        DB_USERNAME: mysql
+        DB_PASSWORD: mysql
     - name: NPM build
       run: npm run prod
     - name: Directory Permissions
