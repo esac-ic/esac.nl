@@ -39,14 +39,14 @@ jobs:
       uses: actions/setup-node@v3.0.0
       with:
         # Version Spec of the version to use.  Examples: 12.x, 10.15.1, >=10.15.0
-        node-version: 10.15
+        node-version: 14
     
     - name: Copy .env
       run: php -r "file_exists('.env') || copy('.env.example', '.env');"
     - name: Install Dependencies
-      run: >
-        composer install -q --no-ansi --no-interaction --no-scripts --no-progress --prefer-dist &\
-        npm install &\
+      run: |
+        composer install -q --no-ansi --no-interaction --no-scripts --no-progress --prefer-dist
+        npm install
         npm install -g @lhci/cli@0.3.x
     - name: PHP artisan meuk
       run: >
