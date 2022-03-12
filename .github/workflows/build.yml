@@ -10,7 +10,7 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - uses: shivammathur/setup-php@v2.17
+    - uses: shivammathur/setup-php@2.17.1
       with:
         php-version: '7.4'
     - uses: actions/checkout@v2
