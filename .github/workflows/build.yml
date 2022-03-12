@@ -8,7 +8,7 @@ jobs:
   laravel-tests:
 
     runs-on: ubuntu-latest
-
+    environment: Build
     steps:
     - name: Docker Login
       # You may pin to the exact commit or the version.
