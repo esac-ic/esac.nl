@@ -83,4 +83,4 @@ jobs:
       with:
         push: true
         # List of tags
-        tags: $GITHUB_REF_NAME
+        tags: esac/website:$GITHUB_REF_NAME
