@@ -60,7 +60,7 @@ jobs:
         php artisan dusk:chrome-driver 98
         php artisan migrate
         php artisan db:seed
-        php artisan serve
+        php artisan serve &
       env:
         DB_DATABASE: esac
         DB_USERNAME: mysql
