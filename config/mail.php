@@ -73,7 +73,7 @@ return [
     |
     | Here you may specify the encryption protocol that should be used when
     | the application send e-mail messages. A sensible default using the
-    | port layer security protocol should provide great security.
+    | transport layer security protocol should provide great security.
     |
     */
 

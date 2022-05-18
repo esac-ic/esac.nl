@@ -32,7 +32,7 @@ class NewsItemController extends Controller
 
     //show create screen
     public function create(){
-        $fields = ['title' => ('NewsItem.add'),
+        $fields = ['title' => get('NewsItem.add'),
             'method' => 'POST',
             'url' => '/newsItems',];
         $newsItem = null;
@@ -64,7 +64,7 @@ class NewsItemController extends Controller
             Image::make($thumb_path)->fit(400, 300)->save($thumb_path);
         }
 
-        \Session::flash("message",('NewsItem.added'));
+        \Session::flash("message", get('NewsItem.added'));
         return redirect('/newsItems');
     }
 
@@ -74,7 +74,7 @@ class NewsItemController extends Controller
 
     //show edit screen
     public function edit(Request $request,NewsItem $newsItem){
-        $fields = ['title' => ('NewsItem.edit'),
+        $fields = ['title' => get('NewsItem.edit'),
             'method' => 'PATCH',
             'url' => '/newsItems/'. $newsItem->id];
 
@@ -106,14 +106,14 @@ class NewsItemController extends Controller
             Image::make($thumb_path)->fit(400, 300)->save($thumb_path);
         }
 
-        \Session::flash("message",('NewsItem.edited'));
+        \Session::flash("message", get('NewsItem.edited'));
         return redirect('/newsItems');
     }
 
     public function destroy(Request $request, NewsItem $newsItem){
         $this->_newsItemRepository->delete($newsItem->id);
 
-        \Session::flash("message",('NewsItem.deleted'));
+        \Session::flash("message", get('NewsItem.deleted'));
         return redirect('/newsItems');
     }
 

@@ -26,7 +26,7 @@ class CertificateController extends Controller
     {
         $certificates = $this->_certificateRepository->all(array("id","name"));
 
-        return view("beheer.certificate.index",compact("certificates"));
+        return view("beheer.certificate.index", compact("certificates"));
     }
 
     /**
@@ -36,11 +36,11 @@ class CertificateController extends Controller
      */
     public function create()
     {
-        $fields = ['title' => ('certificate.add'),
+        $fields = ['title' => get('certificate.add'),
             'method' => 'POST',
             'url' => '/certificates',];
         $certificate = null;
-        return view("beheer.certificate.create_edit",compact('certificate','fields'));
+        return view("beheer.certificate.create_edit", compact('certificate','fields'));
     }
 
     /**
@@ -55,7 +55,7 @@ class CertificateController extends Controller
 
         $this->_certificateRepository->create($request->all());
 
-        \Session::flash("message",('certificate.added'));
+        \Session::flash("message", get('certificate.added'));
         return redirect('/certificates');
     }
 
@@ -78,11 +78,11 @@ class CertificateController extends Controller
      */
     public function edit(Certificate $certificate)
     {
-        $fields = ['title' => ('certificate.add'),
+        $fields = ['title' => get('certificate.add'),
             'method' => 'PATCH',
             'url' => '/certificates/' . $certificate->id,];
 
-        return view("beheer.certificate.create_edit",compact('certificate','fields'));
+        return view("beheer.certificate.create_edit", compact('certificate','fields'));
     }
 
     /**
@@ -98,7 +98,7 @@ class CertificateController extends Controller
 
         $this->_certificateRepository->update($certificate->id, $request->all());
 
-        \Session::flash("message",('certificate.edited'));
+        \Session::flash("message", get('certificate.edited'));
         return redirect('/certificates');
     }
 
@@ -112,7 +112,7 @@ class CertificateController extends Controller
     {
         $this->_certificateRepository->delete($certificate->id);
 
-        \Session::flash("message",('certificate.deleted'));
+        \Session::flash("message", get('certificate.deleted'));
         return redirect('/certificates');
     }
 

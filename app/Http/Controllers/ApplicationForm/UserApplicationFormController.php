@@ -36,7 +36,7 @@ class UserApplicationFormController extends Controller
         $agendaEndDate = new \DateTime($agendaItem->subscription_endDate);
         $now           = new \DateTime();
         if ($agendaEndDate < $now) {
-            $error       = ("forms.signupexpired");
+            $error       = get("forms.signupexpired");
             $curPageName = $error;
 
             return view("forms.inschrijven_error", compact('error', 'curPageName'));
@@ -44,7 +44,7 @@ class UserApplicationFormController extends Controller
 
         $applicationForm = $agendaItem->getApplicationForm;
         if ($applicationForm == null) {
-            $error       = ("forms.form_not_available");
+            $error       = get("forms.form_not_available");
             $curPageName = $error;
 
             return view("forms.inschrijven_error", compact('error', 'curPageName'));
@@ -57,7 +57,7 @@ class UserApplicationFormController extends Controller
             ->first();
 
         if ($signup != null) {
-            $error       = ("forms.duplicatesignup");
+            $error       = get("forms.duplicatesignup");
             $curPageName = $error;
 
             return view("forms.inschrijven_error", compact('error', 'curPageName'));
@@ -93,7 +93,7 @@ class UserApplicationFormController extends Controller
             ->first();
 
         if ($signup != null) {
-            $error       = ("forms.duplicatesignup");
+            $error       = get("forms.duplicatesignup");
             $curPageName = $error;
 
             return view("forms.inschrijven_error", compact('menu', 'error', 'curPageName'));
@@ -113,7 +113,7 @@ class UserApplicationFormController extends Controller
     public function unregister(AgendaItem $agendaItem): RedirectResponse
     {
         if (Carbon::parse($agendaItem->subscription_endDate) < Carbon::now()) {
-            Session::flash("message",('ApplicationForm.subscriptionDatePastUnregisterFailed'));
+            Session::flash("message", get('ApplicationForm.subscriptionDatePastUnregisterFailed'));
 
             return redirect('agenda/' . $agendaItem->id);
         }
@@ -123,7 +123,7 @@ class UserApplicationFormController extends Controller
             ->where('user_id', Auth::user()->id)
             ->delete();
 
-        Session::flash("message",('ApplicationForm.userUnregisterd'));
+        Session::flash("message", get('ApplicationForm.userUnregisterd'));
 
         return redirect('agenda/' . $agendaItem->id);
     }

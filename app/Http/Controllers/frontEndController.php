@@ -39,7 +39,7 @@ class frontEndController extends Controller
 
     public function agenda(){
         $categories = array();
-        $curPageName = ('AgendaItems.agendaItem');
+        $curPageName = get('AgendaItems.agendaItem');
         $menuItem = $this->_MenuItemRepository->findby('urlName',MenuItem::AGENDAURL);
         $content = $menuItem->content->text();
 
@@ -56,7 +56,7 @@ class frontEndController extends Controller
         foreach($photoAlbums as $photoalbum){
               $photoalbum->description = str_replace("\r\n","<br>", $photoalbum->description);
         }
-        $curPageName = ('front-end/photo.pagetitle');
+        $curPageName = get('front-end/photo.pagetitle');
         $menuItem = $this->_MenuItemRepository->findby('urlName',MenuItem::PHOTOURL);
         $content = $menuItem->content->text();
         return view('front-end.photo_album_list', compact('curPageName', 'photoAlbums', 'content'));
@@ -81,7 +81,7 @@ class frontEndController extends Controller
     }
 
     public function zekeringen(){
-        $curPageName = ('front-end/zekeringen.title');
+        $curPageName = get('front-end/zekeringen.title');
         $menuItem = $this->_MenuItemRepository->findby('urlName',MenuItem::ZEKERINGURL);
         $content = $menuItem->content->text();
 
@@ -95,14 +95,14 @@ class frontEndController extends Controller
     public function publicSubscribe(){
         $menuItem = $this->_MenuItemRepository->findby('urlName',MenuItem::SUBSCRIBEURL);
         $content = $menuItem->content->text();
-        $curPageName = ('front-end/subscribe.title');
+        $curPageName = get('front-end/subscribe.title');
         $showIntroPackageForm = app(Setting::SINGELTONNAME)->getsetting(Setting::SETTING_SHOW_INTRO_OPTION);
         return view("front-end.subscribe", compact('curPageName','content', 'showIntroPackageForm'));
     }
 
     public function news(){
         $newsItems = NewsItem::orderBy('id', 'desc')->paginate(9);
-        $curPageName = ('front-end/news.title');
+        $curPageName = get('front-end/news.title');
         $menuItem = $this->_MenuItemRepository->findby('urlName',MenuItem::NEWSURL);
         $content = $menuItem->content->text();
 
@@ -119,7 +119,7 @@ class frontEndController extends Controller
 
     public function library(){
         $books = $this->_bookRepository->all(array("id","title","year","type","country","code"));
-        $curPageName = ('front-end/library.title');
+        $curPageName = get('front-end/library.title');
         $menuItem = $this->_MenuItemRepository->findby('urlName',MenuItem::LIBRARYURL);
         $content = $menuItem->content->text();
 
@@ -128,7 +128,7 @@ class frontEndController extends Controller
   
     public function memberlist(){
         $users = $this->_userRepository->getCurrentUsers(array('firstname','lastname','email','preposition','kind_of_member','phonenumber'));
-        $curPageName = ('front-end/memberlist.memberlist');
+        $curPageName = get('front-end/memberlist.memberlist');
         $menuItem = $this->_MenuItemRepository->findby('urlName',MenuItem::MEMBERLISTURL);
         $content = $menuItem->content->text();
 
@@ -142,7 +142,7 @@ class frontEndController extends Controller
     public function home(AgendaItemRepository $agendaItemRepository){
         $newsItems = $this->_newsItemRepository->getLastXNewsItems(3);
         $agendaItems = $this->_agendaRepository->getFirstXItems(4);
-        $curPageName = ('front-end/home.title');
+        $curPageName = get('front-end/home.title');
         $menuItem = MenuItem::query()
             ->with('content')
             ->where('urlName','=',MenuItem::HOMEURL)

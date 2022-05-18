@@ -23,7 +23,7 @@ return [
     'cacheFileMode' => 0755,
     'settings'      => [
         'default' => [
-            'HTML.Doctype'             => 'HTML 4.01 itional',
+            'HTML.Doctype'             => 'HTML 4.01 Transitional',
             "HTML.SafeIframe"          => true,
             "URI.SafeIframeRegexp"     => "%^(http://|https://|//)(www.youtube.com/embed/|player.vimeo.com/video/|drive.google.com/)%",
             'HTML.AllowedElements'     => 'div,b,strong,i,em,u,a,ul,ol,li,p,br,span,img,h1,h2,h3,h4,h5,h6,table,td,tr,tbody,thead,iframe,section,nav,article,aside,header,footer,address,figure,figcaption',

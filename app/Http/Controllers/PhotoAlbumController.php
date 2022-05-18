@@ -33,7 +33,7 @@ class PhotoAlbumController extends Controller
     }
 
     public function edit(Request $request, PhotoAlbum $photoAlbum){
-        $fields = ['title' => ('photoAlbum.edit'),
+        $fields = ['title' => get('photoAlbum.edit'),
             'method' => 'PATCH',
             'url' => '/photoAlbums/'. $photoAlbum->id];
 
@@ -45,14 +45,14 @@ class PhotoAlbumController extends Controller
 
         $this->_PhotoAlbumRepository->update($photoAlbum->id,$request->all());
 
-        Session::flash("message",('photoAlbum.edited'));
+        Session::flash("message", get('photoAlbum.edited'));
         return redirect('/photoAlbums');
     }
 
     public function destroy(Request $request, PhotoAlbum $photoAlbum){
         $this->_PhotoAlbumRepository->delete($photoAlbum->id);
 
-        Session::flash("message",('photoAlbum.deleted'));
+        Session::flash("message", get('photoAlbum.deleted'));
         return redirect('/photoAlbums');
     }
 

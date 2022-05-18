@@ -32,7 +32,7 @@ class LibraryController extends Controller
 
     //show create screen
     public function create(){
-        $fields = ['title' => ('book.add'),
+        $fields = ['title' => get('book.add'),
             'method' => 'POST',
             'url' => '/books',];
         $book = null;
@@ -45,7 +45,7 @@ class LibraryController extends Controller
 
         $this->_bookRepository->create($request->all());
 
-        Session::flash("message",('book.added'));
+        Session::flash("message", get('book.added'));
         return redirect('/books');
     }
 
@@ -55,7 +55,7 @@ class LibraryController extends Controller
 
     //show edit screen
     public function edit(Request $request, Book $book){
-        $fields = ['title' => ('book.edit'),
+        $fields = ['title' => get('book.edit'),
             'method' => 'PATCH',
             'url' => '/books/'. $book->id];
 
@@ -68,14 +68,14 @@ class LibraryController extends Controller
 
         $this->_bookRepository->update($book->id,$request->all());
 
-        Session::flash("message",('book.edited'));
+        Session::flash("message", get('book.edited'));
         return redirect('/books');
     }
 
     public function destroy(Request $request, Book $book){
         $this->_bookRepository->delete($book->id);
 
-        Session::flash("message",('book.deleted'));
+        Session::flash("message", get('book.deleted'));
         return redirect('/books');
     }
 

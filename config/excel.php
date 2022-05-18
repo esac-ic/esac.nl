@@ -133,19 +133,19 @@ return [
         'default' => Maatwebsite\Excel\DefaultValueBinder::class,
     ],
 
-    'actions' => [
+    'transactions' => [
 
         /*
         |--------------------------------------------------------------------------
-        | action Handler
+        | Transaction Handler
         |--------------------------------------------------------------------------
         |
-        | By default the import is wrapped in a action. This is useful
+        | By default the import is wrapped in a transaction. This is useful
         | for when an import may fail and you want to retry it. With the
-        | actions, the previous import gets rolled-back.
+        | transactions, the previous import gets rolled-back.
         |
-        | You can disable the action handler by setting this to null.
-        | Or you can choose a custom made action handler here.
+        | You can disable the transaction handler by setting this to null.
+        | Or you can choose a custom made transaction handler here.
         |
         | Supported handlers: null|db
         |

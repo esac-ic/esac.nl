@@ -15,7 +15,7 @@ use Illuminate\Http\Resources\Json\JsonResource;
 class ApplicationFormRowVueResource extends JsonResource
 {
     /**
-     * form the resource into an array.
+     * Transform the resource into an array.
      *
      * @param \Illuminate\Http\Request $request
      * @return array

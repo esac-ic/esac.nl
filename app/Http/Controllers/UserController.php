@@ -52,7 +52,7 @@ class UserController extends Controller
 
     //show create screen
     public function create(){
-        $fields = ['title' => ('user.add'),
+        $fields = ['title' => get('user.add'),
             'method' => 'POST',
             'url' => '/users',];
         $user = null;
@@ -70,14 +70,14 @@ class UserController extends Controller
             $this->_userRepository->addRols($user->id,Input::get('roles'));
         }
 
-        Session::flash("message",('user.added'));
+        Session::flash("message", get('user.added'));
 
         return redirect('/users');
     }
 
     public function show(Request $request, User $user){
         if(Auth::user()->id != $user->id && !Auth::user()->hasRole(Config::get('constants.Administrator'),Config::get('constants.Certificate_administrator'))){
-            abort(403, ('validation.Unauthorized'));
+            abort(403, get('validation.Unauthorized'));
         }
         return view('beheer.user.show', compact('user'));
     }
@@ -85,10 +85,10 @@ class UserController extends Controller
     //show edit screen
     public function edit(Request $request,User $user){
         if(Auth::user()->id != $user->id && !Auth::user()->hasRole(Config::get('constants.Administrator'))){
-            abort(403, ('validation.Unauthorized'));
+            abort(403, get('validation.Unauthorized'));
         }
 
-        $fields = ['title' => ('user.edit'),
+        $fields = ['title' => get('user.edit'),
             'method' => 'PATCH',
             'url' => '/users/'. $user->id];
 
@@ -101,7 +101,7 @@ class UserController extends Controller
     public function update(Request $request, User $user, MailListFacade $mailListFacade){
         if(!Auth::user()->hasRole(Config::get('constants.Administrator'))){
             if(Auth::user()->id != $user->id || $request->has('kind_of_member')){
-                abort(403, ('validation.Unauthorized'));
+                abort(403, get('validation.Unauthorized'));
             }
         }
         if($user->email != $request['email']){
@@ -118,7 +118,7 @@ class UserController extends Controller
         if(Auth::user()->id === $user->id){
             return redirect('/users/'. $user->id . '?back=false');
         } else{
-            Session::flash("message",('user.edited'));
+            Session::flash("message", get('user.edited'));
 
             return redirect('/users');
         }
@@ -132,7 +132,7 @@ class UserController extends Controller
     }
 
     public function exportUsers(UsersExport $usersExport){
-        return Excel::download($usersExport, ('user.members') . '.xlsx');
+        return Excel::download($usersExport, get('user.members') . '.xlsx');
     }
 
     public function makeActiveMember(Request $request, User $user){

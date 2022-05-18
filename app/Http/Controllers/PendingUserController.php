@@ -44,7 +44,7 @@ class PendingUserController extends Controller
 
         $user = $this->_userRepository->createPendingUser($request->all());
 
-        Session::flash("message",('front-end/subscribe.success'));
+        Session::flash("message", get('front-end/subscribe.success'));
 
         return redirect('/lidworden');
     }
@@ -64,7 +64,7 @@ class PendingUserController extends Controller
     public function getRegistrationExportData(){
         return Excel::download(
             new UserRegistrationInfoExport(),
-            ('user.registrationInfo') . '.xlsx'
+            get('user.registrationInfo') . '.xlsx'
         );
     }
 

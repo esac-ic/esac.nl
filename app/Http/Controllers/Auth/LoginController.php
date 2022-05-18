@@ -50,7 +50,7 @@ class LoginController extends Controller
     public function showLoginForm()
     {
         $menu = $this->_menu;
-        return view('auth.login',compact('menu'));
+        return view('auth.login', compact('menu'));
     }
 
     /**
@@ -80,12 +80,12 @@ class LoginController extends Controller
         if($user != null && $user->isOldMember()){
             return redirect()->back()
                 ->withInput($request->only($this->username(), 'remember'))
-                ->withErrors([$this->username() => ('validation.oldUserLogin')]);
+                ->withErrors([$this->username() => get('validation.oldUserLogin')]);
         }
         else if($user != null && $user->isPendingMember()){
             return redirect()->back()
                 ->withInput($request->only($this->username(), 'remember'))
-                ->withErrors([$this->username() => ('validation.pendingUserLogin')]);
+                ->withErrors([$this->username() => get('validation.pendingUserLogin')]);
         }
 
         if ($this->attemptLogin($request)) {
