@@ -1,6 +1,6 @@
 <?php
 
-/* @var $factory Factory */
+namespace Database\Factories;
 
 use App\Models\ApplicationForm\ApplicationForm;
 use App\Text;

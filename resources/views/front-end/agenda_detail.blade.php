@@ -42,7 +42,7 @@
                 <div class="card w-100">
                     <div class="card-body">
                         <h4 class="card-title">{{trans('front-end/agenda.info')}}</h4>
-                        <p class="card-text">{!! clean($agendaItem->agendaItemText->text()) !!}</p>
+                        <p class="card-text">{!! $agendaItem->agendaItemText->text() !!}</p>
                         @if($agendaItem->application_form_id != null && !Auth::guest())
                             <h4 class="card-title">{{trans('front-end/agenda.registrations')}}</h2>
                             <ol class="column-count-lg-3">

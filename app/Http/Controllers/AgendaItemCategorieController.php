@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\AgendaItemCategorie;
-use App\repositories\RepositorieFactory;
+use App\Repositories\RepositorieFactory;
 use Illuminate\Http\Request;
 
 class AgendaItemCategorieController extends Controller

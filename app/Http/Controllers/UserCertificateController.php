@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Certificate;
-use App\repositories\RepositorieFactory;
+use App\Repositories\RepositorieFactory;
 use App\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Config;
@@ -26,7 +26,7 @@ class UserCertificateController extends Controller
     }
 
     public function addCertificate(Request $request, User $user){
-        $fields = ['title' => trans('user.addCertificate'),
+        $fields = ['title' => ('user.addCertificate'),
             'method' => 'POST',
             'url' => '/users/'. $user->id . '/addCertificate'];
 
@@ -53,7 +53,7 @@ class UserCertificateController extends Controller
     }
 
     public function editUserCertificate(Request $request, User $user, Certificate $certificate){
-        $fields = ['title' => trans('user.editCertificate'),
+        $fields = ['title' => ('user.editCertificate'),
             'method' => 'PATCH',
             'url' => '/users/'. $user->id . '/addCertificate/'. $certificate->id];
 

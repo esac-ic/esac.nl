@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\IntroPackage;
-use App\repositories\RepositorieFactory;
+use App\Repositories\RepositorieFactory;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Session;
@@ -86,7 +86,7 @@ class IntroPackageController extends Controller
         $this->validateInput($request);
         $this->_introPackageRepository->create($request->all());
 
-        Session::flash("message", trans('intro.packageAdded'));
+        Session::flash("message", ('intro.packageAdded'));
 
         return redirect()->route('beheer.intro.packages.index');
     }
@@ -133,7 +133,7 @@ class IntroPackageController extends Controller
         $this->validateInput($request);
         $this->_introPackageRepository->update($package->id, $request->all());
 
-        Session::flash("message", trans('intro.packageEdited'));
+        Session::flash("message", ('intro.packageEdited'));
 
         return redirect()->route('beheer.intro.packages.index');
     }
@@ -148,7 +148,7 @@ class IntroPackageController extends Controller
     {
         $this->_introPackageRepository->delete($package->id);
 
-        Session::flash("message", trans('intro.packageDeleted'));
+        Session::flash("message", ('intro.packageDeleted'));
 
         return redirect()->route('beheer.intro.packages.index');
     }

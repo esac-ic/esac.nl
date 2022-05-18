@@ -3,7 +3,7 @@
 namespace App\Exports;
 
 use App\AgendaItem;
-use App\repositories\InschrijvenRepository;
+use App\Repositories\InschrijvenRepository;
 use App\Services\AgendaApplicationFormService;
 use Maatwebsite\Excel\Concerns\FromCollection;
 use Maatwebsite\Excel\Concerns\ShouldAutoSize;
@@ -50,7 +50,7 @@ class AgendaRegistrationExport implements FromCollection, WithTitle, WithHeading
      */
     public function title(): string
     {
-        return trans('forms.Inschrijvingen');
+        return get('forms.Inschrijvingen');
     }
 
     /**

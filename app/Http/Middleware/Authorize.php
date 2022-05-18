@@ -19,7 +19,7 @@ class Authorize
         if(Auth::user()->hasRole($role,$role2)){
             return $next($request);
         } else {
-            abort(403, trans('validation.Unauthorized'));
+            abort(403, ('validation.Unauthorized'));
         }
 
     }

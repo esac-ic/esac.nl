@@ -6,7 +6,7 @@
     <div class="container intro-container">
         <div class="card">
             <div class="card-body">
-                {!! clean($content) !!}
+                {!! $content !!}
             </div>
         </div> 
     </div>
@@ -37,7 +37,7 @@
                   <div class="card-body">
                     <h4 class="card-title">{{$newsItem->newsItemTitle->text()}}</h4>
                     <p class="card-text text-body">
-                        {!! clean($newsItem->newsItemText->text()) !!}
+                        {!! $newsItem->newsItemText->text() !!}
                     </p>
                   </div>
                   <div class="card-footer bg-white p-3">

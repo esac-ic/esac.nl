@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\repositories\RepositorieFactory;
+use App\Repositories\RepositorieFactory;
 use App\Rol;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Config;
@@ -32,7 +32,7 @@ class RolController extends Controller
 
     //show create screen
     public function create(){
-        $fields = ['title' => trans('rol.add'),
+        $fields = ['title' => ('rol.add'),
             'method' => 'POST',
             'url' => '/rols',];
         $rol = null;
@@ -45,7 +45,7 @@ class RolController extends Controller
 
         $this->_rolRepository->create($request->all());
 
-        Session::flash("message",trans('rol.added'));
+        Session::flash("message",('rol.added'));
         return redirect('/rols');
     }
 
@@ -55,7 +55,7 @@ class RolController extends Controller
 
     //show edit screen
     public function edit(Request $request,Rol $rol){
-        $fields = ['title' => trans('rol.edit'),
+        $fields = ['title' => ('rol.edit'),
             'method' => 'PATCH',
             'url' => '/rols/'. $rol->id];
 
@@ -68,14 +68,14 @@ class RolController extends Controller
 
         $this->_rolRepository->update($rol->id,$request->all());
 
-        Session::flash("message",trans('rol.edited'));
+        Session::flash("message",('rol.edited'));
         return redirect('/rols');
     }
 
     public function destroy(Request $request, Rol $rol){
         $this->_rolRepository->delete($rol->id);
 
-        Session::flash("message",trans('rol.deleted'));
+        Session::flash("message",('rol.deleted'));
         return redirect('/rols');
     }
 

@@ -4,7 +4,7 @@ namespace App\Exceptions;
 
 use App\CustomClasses\MenuSingleton;
 use App\MenuItem;
-use Exception;
+use Throwable;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Auth\AuthenticationException;
 use Illuminate\Contracts\Container\Container;
@@ -39,10 +39,10 @@ class Handler extends ExceptionHandler
      *
      * This is a great spot to send exceptions to Sentry, Bugsnag, etc.
      *
-     * @param  \Exception  $exception
+     * @param  \Throwable  $exception
      * @return void
      */
-    public function report(Exception $exception)
+    public function report(Throwable $exception)
     {
         parent::report($exception);
     }
@@ -51,10 +51,10 @@ class Handler extends ExceptionHandler
      * Render an exception into an HTTP response.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \Exception  $exception
+     * @param  \Throwable  $exception
      * @return \Illuminate\Http\Response
      */
-    public function render($request, Exception $exception)
+    public function render($request, Throwable $exception)
     {
         if($this->_menu === null){
             $this->_menu = new MenuSingleton(new MenuItem());
@@ -62,7 +62,7 @@ class Handler extends ExceptionHandler
 
         if(method_exists($exception,"getStatusCode")){
             $menu = $this->_menu;
-            $curPageName = trans('validation.error');
+            $curPageName = get('validation.error');
             switch ($exception->getStatusCode()){
                 case 403:
                     return response()->view('errors.403',compact('menu','curPageName'),403);

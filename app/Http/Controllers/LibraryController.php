@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\repositories\RepositorieFactory;
+use App\Repositories\RepositorieFactory;
 use App\Book;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Config;
@@ -32,7 +32,7 @@ class LibraryController extends Controller
 
     //show create screen
     public function create(){
-        $fields = ['title' => trans('book.add'),
+        $fields = ['title' => ('book.add'),
             'method' => 'POST',
             'url' => '/books',];
         $book = null;
@@ -45,7 +45,7 @@ class LibraryController extends Controller
 
         $this->_bookRepository->create($request->all());
 
-        Session::flash("message",trans('book.added'));
+        Session::flash("message",('book.added'));
         return redirect('/books');
     }
 
@@ -55,7 +55,7 @@ class LibraryController extends Controller
 
     //show edit screen
     public function edit(Request $request, Book $book){
-        $fields = ['title' => trans('book.edit'),
+        $fields = ['title' => ('book.edit'),
             'method' => 'PATCH',
             'url' => '/books/'. $book->id];
 
@@ -68,14 +68,14 @@ class LibraryController extends Controller
 
         $this->_bookRepository->update($book->id,$request->all());
 
-        Session::flash("message",trans('book.edited'));
+        Session::flash("message",('book.edited'));
         return redirect('/books');
     }
 
     public function destroy(Request $request, Book $book){
         $this->_bookRepository->delete($book->id);
 
-        Session::flash("message",trans('book.deleted'));
+        Session::flash("message",('book.deleted'));
         return redirect('/books');
     }
 

@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Exports\UserRegistrationInfoExport;
 use App\Models\User\UserRegistrationInfo;
-use App\repositories\RepositorieFactory as RepositorieFactory;
+use App\Repositories\RepositorieFactory as RepositorieFactory;
 use App\Rol;
 use App\Rules\EmailDomainValidator;
 use App\User;
@@ -44,7 +44,7 @@ class PendingUserController extends Controller
 
         $user = $this->_userRepository->createPendingUser($request->all());
 
-        Session::flash("message",trans('front-end/subscribe.success'));
+        Session::flash("message",('front-end/subscribe.success'));
 
         return redirect('/lidworden');
     }
@@ -64,7 +64,7 @@ class PendingUserController extends Controller
     public function getRegistrationExportData(){
         return Excel::download(
             new UserRegistrationInfoExport(),
-            trans('user.registrationInfo') . '.xlsx'
+            ('user.registrationInfo') . '.xlsx'
         );
     }
 

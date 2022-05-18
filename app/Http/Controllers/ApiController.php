@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use App\AgendaItem;
 use App\MenuItem;
-use App\repositories\RepositorieFactory;
+use App\Repositories\RepositorieFactory;
 use App\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;

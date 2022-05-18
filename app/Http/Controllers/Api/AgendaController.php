@@ -50,7 +50,7 @@ class AgendaController extends Controller
                 "id"    => $agendaItem->id,
                 "title" => $agendaItem->agendaItemTitle->text(),
                 "thumbnail" => $agendaItem->getImageUrl(),
-                "startDate" => \Carbon\Carbon::parse($agendaItem->startDate)->format('d M'),
+                "startDate" => Carbon::parse($agendaItem->startDate)->format('d M'),
                 "endDate" => $agendaItem->endDate,
                 "full_startDate" => $agendaItem->startDate,
                 "category" => $agendaItem->agendaItemCategory->categorieName->text(),

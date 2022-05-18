@@ -64,7 +64,7 @@ class SettingsController extends Controller
             $setting->save();
         }
 
-        Session::flash("message",trans('settings.flashUpdateSetting'));
+        Session::flash("message",('settings.flashUpdateSetting'));
         return redirect('/beheer/settings');
     }
 

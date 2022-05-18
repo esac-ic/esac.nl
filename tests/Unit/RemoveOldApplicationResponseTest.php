@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Feature;
+namespace Tests\Unit;
 
 use App\Models\ApplicationForm\ApplicationResponse;
 use App\Models\ApplicationForm\ApplicationResponseRow;

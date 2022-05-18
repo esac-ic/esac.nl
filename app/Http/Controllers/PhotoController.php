@@ -3,8 +3,9 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\repositories\PhotoAlbumRepository;
-use App\repositories\RepositorieFactory;
+use Illuminate\Support\Str;
+use App\Repositories\PhotoAlbumRepository;
+use App\Repositories\RepositorieFactory;
 
 class PhotoController extends Controller
 {
@@ -47,7 +48,7 @@ class PhotoController extends Controller
                 $this->addPhotoToAlbum($request, $photoAlbum->id);
                 return $photoAlbum->id;
             } else{
-                redirect()->back()->withErrors(["error" => trans('front-end/photo.inputToLong')]);
+                redirect()->back()->withErrors(["error" => ('front-end/photo.inputToLong')]);
             }
         } 
     }  

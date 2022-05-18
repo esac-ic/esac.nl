@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Certificate;
-use App\repositories\RepositorieFactory;
+use App\Repositories\RepositorieFactory;
 use Illuminate\Http\Request;
 
 class CertificateController extends Controller
@@ -36,7 +36,7 @@ class CertificateController extends Controller
      */
     public function create()
     {
-        $fields = ['title' => trans('certificate.add'),
+        $fields = ['title' => ('certificate.add'),
             'method' => 'POST',
             'url' => '/certificates',];
         $certificate = null;
@@ -55,7 +55,7 @@ class CertificateController extends Controller
 
         $this->_certificateRepository->create($request->all());
 
-        \Session::flash("message",trans('certificate.added'));
+        \Session::flash("message",('certificate.added'));
         return redirect('/certificates');
     }
 
@@ -78,7 +78,7 @@ class CertificateController extends Controller
      */
     public function edit(Certificate $certificate)
     {
-        $fields = ['title' => trans('certificate.add'),
+        $fields = ['title' => ('certificate.add'),
             'method' => 'PATCH',
             'url' => '/certificates/' . $certificate->id,];
 
@@ -98,7 +98,7 @@ class CertificateController extends Controller
 
         $this->_certificateRepository->update($certificate->id, $request->all());
 
-        \Session::flash("message",trans('certificate.edited'));
+        \Session::flash("message",('certificate.edited'));
         return redirect('/certificates');
     }
 
@@ -112,7 +112,7 @@ class CertificateController extends Controller
     {
         $this->_certificateRepository->delete($certificate->id);
 
-        \Session::flash("message",trans('certificate.deleted'));
+        \Session::flash("message",('certificate.deleted'));
         return redirect('/certificates');
     }
 

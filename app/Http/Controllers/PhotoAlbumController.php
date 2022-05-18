@@ -4,8 +4,8 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\PhotoAlbum;
-use App\repositories\PhotoAlbumRepository;
-use App\repositories\RepositorieFactory;
+use App\Repositories\PhotoAlbumRepository;
+use App\Repositories\RepositorieFactory;
 use App\MenuItem;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Session;
@@ -33,7 +33,7 @@ class PhotoAlbumController extends Controller
     }
 
     public function edit(Request $request, PhotoAlbum $photoAlbum){
-        $fields = ['title' => trans('photoAlbum.edit'),
+        $fields = ['title' => ('photoAlbum.edit'),
             'method' => 'PATCH',
             'url' => '/photoAlbums/'. $photoAlbum->id];
 
@@ -45,14 +45,14 @@ class PhotoAlbumController extends Controller
 
         $this->_PhotoAlbumRepository->update($photoAlbum->id,$request->all());
 
-        Session::flash("message",trans('photoAlbum.edited'));
+        Session::flash("message",('photoAlbum.edited'));
         return redirect('/photoAlbums');
     }
 
     public function destroy(Request $request, PhotoAlbum $photoAlbum){
         $this->_PhotoAlbumRepository->delete($photoAlbum->id);
 
-        Session::flash("message",trans('photoAlbum.deleted'));
+        Session::flash("message",('photoAlbum.deleted'));
         return redirect('/photoAlbums');
     }
 

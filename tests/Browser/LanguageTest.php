@@ -9,11 +9,11 @@ use Illuminate\Foundation\Testing\DatabaseMigrations;
 class LanguageTest extends DuskTestCase
 {
     /**
-     * A Dusk test to test website translation.
+     * A Dusk test to test website lation.
      *
      * @return void
      */
-    public function test_translation()
+    public function test_lation()
     {
         $this->browse(function (Browser $browser) {
             $browser->maximize()

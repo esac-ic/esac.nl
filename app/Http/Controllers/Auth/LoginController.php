@@ -4,8 +4,8 @@ namespace App\Http\Controllers\Auth;
 
 use App\CustomClasses\MenuSingleton;
 use App\Http\Controllers\Controller;
-use App\repositories\RepositorieFactory;
-use App\repositories\UserRepository;
+use App\Repositories\RepositorieFactory;
+use App\Repositories\UserRepository;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use Illuminate\Http\Request;
 
@@ -80,12 +80,12 @@ class LoginController extends Controller
         if($user != null && $user->isOldMember()){
             return redirect()->back()
                 ->withInput($request->only($this->username(), 'remember'))
-                ->withErrors([$this->username() => trans('validation.oldUserLogin')]);
+                ->withErrors([$this->username() => ('validation.oldUserLogin')]);
         }
         else if($user != null && $user->isPendingMember()){
             return redirect()->back()
                 ->withInput($request->only($this->username(), 'remember'))
-                ->withErrors([$this->username() => trans('validation.pendingUserLogin')]);
+                ->withErrors([$this->username() => ('validation.pendingUserLogin')]);
         }
 
         if ($this->attemptLogin($request)) {
