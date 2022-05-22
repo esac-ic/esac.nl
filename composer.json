@@ -28,7 +28,8 @@
         "laravel/dusk": "^6.22",
         "mockery/mockery": "^1.5",
         "phpunit/phpunit": "^9.5",
-        "barryvdh/laravel-debugbar": "^3.6"
+        "barryvdh/laravel-debugbar": "^3.6",
+        "fakerphp/faker": "^1.19"
     },
     "config": {
         "optimize-autoloader": true,
