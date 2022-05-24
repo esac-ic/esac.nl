@@ -107,4 +107,4 @@ jobs:
         # private ssh key registered on the server
         PRIVATE_SSH_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
         # command to be executed
-        COMMAND: ./update-test.sh website ${{ github.run_number }} ${{ github.event.pusher.name }} ${{ github.event.head_commit.message }} ${{ github.event.head_commit.timestamp }} ${{ github.ref }}
+        COMMAND: ./update-test.sh website "${{ github.run_number }}" "${{ github.event.pusher.name }}" "${{ github.event.head_commit.message }}" "${{ github.event.head_commit.timestamp }}" "${{ github.ref }}"
