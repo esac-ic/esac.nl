@@ -101,7 +101,6 @@ class UserApplicationFormController extends Controller
 
         $repository->storeRegistration($request->except(['_token']), $agendaItem, Auth::user()->id);
         $user = Auth::user();
-        $user->notify(new AgendaSubscribed($agendaItem));
 
         return redirect('agenda/' . $agendaItem->id);
     }
