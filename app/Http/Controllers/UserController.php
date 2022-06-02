@@ -124,9 +124,9 @@ class UserController extends Controller
         }
     }
 
-    public function removeAsActiveMember(Request $request, User $user, MailListFacade $mailgunFacade){
+    public function removeAsActiveMember(Request $request, User $user, MailListFacade $mailListFacade){
         $user->removeAsActiveMember();
-        $mailgunFacade->deleteUserFormAllMailList($user);
+        $mailListFacade->deleteUserFormAllMailList($user);
 
         return redirect('/users/'. $user->id);
     }

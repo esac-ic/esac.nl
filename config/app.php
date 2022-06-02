@@ -212,7 +212,6 @@ return [
         'Form' => Collective\Html\FormFacade::class,
         'Html' => Collective\Html\HtmlFacade::class,
         'Excel' => Maatwebsite\Excel\Facades\Excel::class,
-        'Mailgun' => Bogardo\Mailgun\Facades\Mailgun::class,
         ],
 
 ];

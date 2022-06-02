@@ -31,11 +31,6 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        $this->app->bind('mailgun.client', function() {
-            //todo set correct config values
-            return \Http\Adapter\Guzzle6\Client::createWithConfig(array());
-        });
-
         $this->app->singleton(MenuSingleton::MENUSINGLETON, function()
         {
             return new MenuSingleton();
