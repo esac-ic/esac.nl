@@ -5,8 +5,9 @@ let mix = require('laravel-mix');
 // .combine for concatenating and/or copying simple .js or .css files
 // .sass for SCSS/SASS files
 
-// General
-mix.js('resources/assets/js/app.js', 'public/js').vue({ version: 2 })
+// Vue
+mix.js('resources/assets/js/app.js', 'public/js')
+   .vue({ version: 2 })
    .combine([
       "node_modules/jquery/dist/jquery.js",
       "node_modules/popper.js/dist/umd/popper.js",
@@ -17,8 +18,8 @@ mix.js('resources/assets/js/app.js', 'public/js').vue({ version: 2 })
       "node_modules/datatables.net-bs4/js/dataTables.bootstrap4.js",
       "node_modules/datatables.net-responsive/js/dataTables.responsive.js",
       "node_modules/datatables.net-responsive-bs4/js/responsive.bootstrap4.js",
-      "resources/assets/js/datatables.js"
-   ], "public/js/vendor/datatables.js")
+      "resources/assets/js/datatables.js"],
+      "public/js/vendor/datatables.js")
    .combine([
       "node_modules/moment/moment.js",
       "node_modules/moment/locale/nl.js"],
