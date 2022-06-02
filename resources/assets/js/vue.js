@@ -1,7 +1,8 @@
-window.Vue = require('vue');
+import Vue from 'vue';
 import store from '../vue/store';
 import VuePaginate from 'vue-paginate';
 
+window.Vue = Vue;
 Vue.use(VuePaginate);
 
 //load components
@@ -11,7 +12,7 @@ require('../vue/applicationForm/applicationForm');
 
 Vue.component('auto-complete-field', require('../vue/components/AutoCompleteField').default);
 
-if(document.getElementById('app') !== null) {
+if (document.getElementById('app') !== null) {
     /**
      * Create vue for the core package
      */

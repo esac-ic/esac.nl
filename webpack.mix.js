@@ -5,8 +5,9 @@ let mix = require('laravel-mix');
 // .combine for concatenating and/or copying simple .js or .css files
 // .sass for SCSS/SASS files
 
-// General
+// Vue
 mix.js('resources/assets/js/app.js', 'public/js')
+   .vue({ version: 2 })
    .combine([
       "node_modules/jquery/dist/jquery.js",
       "node_modules/popper.js/dist/umd/popper.js",
@@ -17,21 +18,21 @@ mix.js('resources/assets/js/app.js', 'public/js')
       "node_modules/datatables.net-bs4/js/dataTables.bootstrap4.js",
       "node_modules/datatables.net-responsive/js/dataTables.responsive.js",
       "node_modules/datatables.net-responsive-bs4/js/responsive.bootstrap4.js",
-      "resources/assets/js/datatables.js"
-      ], "public/js/vendor/datatables.js")
+      "resources/assets/js/datatables.js"],
+      "public/js/vendor/datatables.js")
    .combine([
       "node_modules/moment/moment.js",
-      "node_modules/moment/locale/nl.js"], 
+      "node_modules/moment/locale/nl.js"],
       "public/js/vendor/moment.js")
    .sass("resources/assets/scss/theme.scss", "public/css/app.css")
-      .options({
-         processCssUrls: false
-      })
+   .options({
+      processCssUrls: false
+   })
    .combine([
       "node_modules/datatables.net-bs4/css/dataTables.bootstrap4.css",
       "node_modules/datatables.net-responsive-bs4/css/responsive.bootstrap4.css"
-      ], "public/css/vendor/datatables.css")
-   .copyDirectory("resources/assets/img","public/img");
+   ], "public/css/vendor/datatables.css")
+   .copyDirectory("resources/assets/img", "public/img");
 
 // Management
 mix.combine("node_modules/bootstrap-select/dist/js/bootstrap-select.min.js", "public/js/vendor/bootstrap-select.js")
@@ -40,20 +41,20 @@ mix.combine("node_modules/bootstrap-select/dist/js/bootstrap-select.min.js", "pu
    .combine("node_modules/bootstrap-select/dist/css/bootstrap-select.css", "public/css/vendor/bootstrap-select.css")
    .combine("node_modules/summernote/dist/summernote-bs4.css", "public/css/vendor/summernote.css")
    .combine("node_modules/tempusdominus-bootstrap-4/build/css/tempusdominus-bootstrap-4.css", "public/css/vendor/tempusdominus.css")
-   .copyDirectory("node_modules/summernote/dist/font","public/css/vendor/font");
-   
+   .copyDirectory("node_modules/summernote/dist/font", "public/css/vendor/font");
+
 // App
 mix.combine([
    "node_modules/photoswipe/dist/photoswipe.js",
    "node_modules/photoswipe/dist/photoswipe-ui-default.js",
    "node_modules/blueimp-load-image/js/load-image.all.min.js",
-   "resources/assets/js/photoAlbum.js"], 
+   "resources/assets/js/photoAlbum.js"],
    "public/js/photoalbum.js");
 
 mix.browserSync('localhost');
 
 if (mix.inProduction()) {
-   mix.version(); 
+   mix.version();
 }
 
 mix.options({
