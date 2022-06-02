@@ -5,7 +5,6 @@ namespace App\Http\Controllers;
 use App\Setting;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Config;
-use Illuminate\Support\Facades\Input;
 use Illuminate\Support\Facades\Session;
 use Symfony\Component\HttpFoundation\Session\Session as SymfonySession;
 
@@ -69,7 +68,7 @@ class SettingsController extends Controller
     }
 
     public function setLanguage(Request $request){
-        $language = Input::get('language','nl');
+        $language = $request->get('language','nl');
         $request->session()->put($this->_LANGSESSIONNAME,$language);
         return "";
     }

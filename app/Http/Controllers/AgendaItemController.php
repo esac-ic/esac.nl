@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\AgendaItem;
-use App\Repositories\ApplicationFormRepository\ApplicationFormRepository;
+use App\Repositories\ApplicationFormRepositories\ApplicationFormRepository;
 use App\Repositories\RepositorieFactory;
 use Illuminate\Http\RedirectResponse;
 use Intervention\Image\ImageManagerStatic as Image;
