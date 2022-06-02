@@ -82,7 +82,7 @@ jobs:
     runs-on: ubuntu-latest
     needs: laravel-tests
     # Only execute deploy when a push to master is made.
-    if: github.event_name == 'push' && github.ref == 'refs/heads/feature/master'
+    if: github.event_name == 'push' && github.ref == 'refs/heads/master'
     steps:
     - name: SSH Command
       uses: D3rHase/ssh-command-action@v0.2.1
