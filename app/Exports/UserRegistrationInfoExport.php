@@ -29,9 +29,9 @@ class UserRegistrationInfoExport implements FromCollection, WithTitle, WithHeadi
                 'name' => $user->getName(),
                 'email' => $user->email,
                 'phone' => $user->phonenumber,
-                'introPackage' => get('user.packageTypes.' . $registration->package_type),
-                'shirt' => get('user.shirtSizes.' . $registration->shirt_size),
-                'weekendDate' => get('user.weekendDates.' . $registration->intro_weekend)
+                'introPackage' => trans('user.packageTypes.' . $registration->package_type),
+                'shirt' => trans('user.shirtSizes.' . $registration->shirt_size),
+                'weekendDate' => trans('user.weekendDates.' . $registration->intro_weekend)
             ];
         }
 

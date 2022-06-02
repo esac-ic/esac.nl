@@ -86,7 +86,7 @@ class IntroPackageController extends Controller
         $this->validateInput($request);
         $this->_introPackageRepository->create($request->all());
 
-        Session::flash("message", get('intro.packageAdded'));
+        Session::flash("message", trans('intro.packageAdded'));
 
         return redirect()->route('beheer.intro.packages.index');
     }
@@ -133,7 +133,7 @@ class IntroPackageController extends Controller
         $this->validateInput($request);
         $this->_introPackageRepository->update($package->id, $request->all());
 
-        Session::flash("message", get('intro.packageEdited'));
+        Session::flash("message", trans('intro.packageEdited'));
 
         return redirect()->route('beheer.intro.packages.index');
     }
@@ -148,7 +148,7 @@ class IntroPackageController extends Controller
     {
         $this->_introPackageRepository->delete($package->id);
 
-        Session::flash("message", get('intro.packageDeleted'));
+        Session::flash("message", trans('intro.packageDeleted'));
 
         return redirect()->route('beheer.intro.packages.index');
     }

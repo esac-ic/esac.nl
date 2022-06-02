@@ -25,7 +25,7 @@ class CheckKillswitch
     public function handle($request, Closure $next)
     {
         if(app(Setting::SINGELTONNAME)->getsetting(Setting::SETTING_KILLSWITCH) && ! $request->is($this->excludedRoutes)) {
-            $curPageName = get('front-end/killswitch.title');
+            $curPageName = trans('front-end/killswitch.title');
 
             return response()->view('errors.killswitch',compact('curPageName'), 404);
         }

@@ -36,7 +36,7 @@ class CertificateController extends Controller
      */
     public function create()
     {
-        $fields = ['title' => get('certificate.add'),
+        $fields = ['title' => trans('certificate.add'),
             'method' => 'POST',
             'url' => '/certificates',];
         $certificate = null;
@@ -55,7 +55,7 @@ class CertificateController extends Controller
 
         $this->_certificateRepository->create($request->all());
 
-        \Session::flash("message", get('certificate.added'));
+        \Session::flash("message", trans('certificate.added'));
         return redirect('/certificates');
     }
 
@@ -78,7 +78,7 @@ class CertificateController extends Controller
      */
     public function edit(Certificate $certificate)
     {
-        $fields = ['title' => get('certificate.add'),
+        $fields = ['title' => trans('certificate.add'),
             'method' => 'PATCH',
             'url' => '/certificates/' . $certificate->id,];
 
@@ -98,7 +98,7 @@ class CertificateController extends Controller
 
         $this->_certificateRepository->update($certificate->id, $request->all());
 
-        \Session::flash("message", get('certificate.edited'));
+        \Session::flash("message", trans('certificate.edited'));
         return redirect('/certificates');
     }
 
@@ -112,7 +112,7 @@ class CertificateController extends Controller
     {
         $this->_certificateRepository->delete($certificate->id);
 
-        \Session::flash("message", get('certificate.deleted'));
+        \Session::flash("message", trans('certificate.deleted'));
         return redirect('/certificates');
     }
 

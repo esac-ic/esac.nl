@@ -16,7 +16,7 @@ class ManageController extends Controller
 
     public function index(){
         if(Auth::guest() || !Auth::user()->hasBackendRigths()){
-            abort(403, get('validation.Unauthorized'));
+            abort(403, trans('validation.Unauthorized'));
         }
 
         return view('beheer/home');

@@ -70,7 +70,7 @@ class DeleteAgendaRegistrationTest extends TestCase
 
         $response->assertStatus(302);
 
-        $response->assertSessionHas('message', get('ApplicationForm.subscriptionDatePastUnregisterFailed'));
+        $response->assertSessionHas('message', trans('ApplicationForm.subscriptionDatePastUnregisterFailed'));
         $this->assertNotNull(ApplicationResponse::find($applicationResponse->id));
     }
 }

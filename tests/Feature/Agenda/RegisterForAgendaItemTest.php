@@ -51,7 +51,7 @@ class RegisterForAgendaItemTest extends TestCase
         $response = $this->get($this->url . $agendaItem->id);
 
         $response->assertStatus(200);
-        $response->assertViewHas('error', get("forms.form_not_available"));
+        $response->assertViewHas('error', trans("forms.form_not_available"));
     }
 
     /** @test */
@@ -62,7 +62,7 @@ class RegisterForAgendaItemTest extends TestCase
         $response = $this->get($this->url . $agendaItem->id);
 
         $response->assertStatus(200);
-        $response->assertViewHas('error', get("forms.signupexpired"));
+        $response->assertViewHas('error', trans("forms.signupexpired"));
     }
 
     /** @test */
@@ -83,7 +83,7 @@ class RegisterForAgendaItemTest extends TestCase
         $response = $this->get($this->url . $agendaItem->id);
 
         $response->assertStatus(200);
-        $response->assertViewHas('error', get("forms.duplicatesignup"));
+        $response->assertViewHas('error', trans("forms.duplicatesignup"));
     }
 
     /** @test */

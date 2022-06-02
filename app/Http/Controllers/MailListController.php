@@ -35,7 +35,7 @@ class MailListController extends Controller
 
     //show create screen
     public function create(){
-        $fields = ['title' => get('MailList.add'),
+        $fields = ['title' => trans('MailList.add'),
             'method' => 'POST',
             'url' => '/mailList',];
         $mailList = null;
@@ -46,7 +46,7 @@ class MailListController extends Controller
     public function store(Request $request){
         $this->_mailListFacade->storeMailList($request->all());
 
-        Session::flash("message", get('MailList.added'));
+        Session::flash("message", trans('MailList.added'));
         return redirect('/mailList');
     }
 

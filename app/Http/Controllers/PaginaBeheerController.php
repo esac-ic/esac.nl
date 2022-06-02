@@ -33,8 +33,8 @@ class PaginaBeheerController extends Controller
     //show create screen
     public function create(){
         $fields = [
-            'title_menu' => get('menuItems.addMenu'),
-            'title_page' => get('menuItems.addPage'),
+            'title_menu' => trans('menuItems.addMenu'),
+            'title_page' => trans('menuItems.addPage'),
             'method' => 'POST',
             'url' => '/pages',];
         $page = null;
@@ -48,7 +48,7 @@ class PaginaBeheerController extends Controller
 
         $this->_menuRepository->create($request->all());
 
-        Session::flash("message", get('menuItems.added'));
+        Session::flash("message", trans('menuItems.added'));
         return redirect('/pages');
     }
 
@@ -60,8 +60,8 @@ class PaginaBeheerController extends Controller
     //show edit screen
     public function edit(Request $request,MenuItem $page){
         $fields = [
-            'title_menu' => get('menuItems.editMenu'),
-            'title_page' => get('menuItems.editPage'),
+            'title_menu' => trans('menuItems.editMenu'),
+            'title_page' => trans('menuItems.editPage'),
             'method' => 'PATCH',
             'url' => '/pages/' . $page->id,];
         $pages = $this->_menuRepository->all();
@@ -76,13 +76,13 @@ class PaginaBeheerController extends Controller
 
         $this->_menuRepository->update($page->id,$request->all());
 
-        Session::flash("message", get('menuItems.edited'));
+        Session::flash("message", trans('menuItems.edited'));
         return redirect('/pages');
     }
 
     public function destroy(Request $request, MenuItem $page){
         $this->_menuRepository->delete($page->id);
-        Session::flash("message", get('menuItems.deleted'));
+        Session::flash("message", trans('menuItems.deleted'));
 
         return redirect('/pages');
     }

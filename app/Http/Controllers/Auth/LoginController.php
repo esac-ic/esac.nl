@@ -80,12 +80,12 @@ class LoginController extends Controller
         if($user != null && $user->isOldMember()){
             return redirect()->back()
                 ->withInput($request->only($this->username(), 'remember'))
-                ->withErrors([$this->username() => get('validation.oldUserLogin')]);
+                ->withErrors([$this->username() => trans('validation.oldUserLogin')]);
         }
         else if($user != null && $user->isPendingMember()){
             return redirect()->back()
                 ->withInput($request->only($this->username(), 'remember'))
-                ->withErrors([$this->username() => get('validation.pendingUserLogin')]);
+                ->withErrors([$this->username() => trans('validation.pendingUserLogin')]);
         }
 
         if ($this->attemptLogin($request)) {

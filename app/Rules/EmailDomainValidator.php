@@ -45,6 +45,6 @@ class EmailDomainValidator implements Rule
      */
     public function message()
     {
-        return get('validation.bannedEmailDomain');
+        return trans('validation.bannedEmailDomain');
     }
 }

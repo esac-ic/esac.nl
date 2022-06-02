@@ -50,7 +50,7 @@ class ApplicationFormController extends Controller
     public function create(): View
     {
         $fields = [
-            'title'  => get('ApplicationForm.add'),
+            'title'  => trans('ApplicationForm.add'),
             'method' => 'POST',
             'url'    => route('beheer.applicationForms.store')
         ];
@@ -76,7 +76,7 @@ class ApplicationFormController extends Controller
     ): RedirectResponse {
         $applicationFormRepository->create($request->all());
 
-        Session::flash("message", get('ApplicationForm.added'));
+        Session::flash("message", trans('ApplicationForm.added'));
         return redirect()->route('beheer.applicationForms.index');
     }
 
@@ -103,7 +103,7 @@ class ApplicationFormController extends Controller
     public function edit(ApplicationForm $applicationForm): View
     {
         $fields = [
-            'title'  => get('ApplicationForm.add'),
+            'title'  => trans('ApplicationForm.add'),
             'method' => 'PUT',
             'url'    => route('beheer.applicationForms.update', $applicationForm->id)
         ];
@@ -131,7 +131,7 @@ class ApplicationFormController extends Controller
     ): RedirectResponse {
         $applicationFormRepository->update($id, $request->all());
 
-        Session::flash("message", get('ApplicationForm.edited'));
+        Session::flash("message", trans('ApplicationForm.edited'));
         return redirect()->route('beheer.applicationForms.index');
     }
 
@@ -146,7 +146,7 @@ class ApplicationFormController extends Controller
     {
         $applicationFormRepository->delete($id);
 
-        Session::flash("message", get('ApplicationForm.edited'));
+        Session::flash("message", trans('ApplicationForm.edited'));
         return redirect()->route('beheer.applicationForms.index');
     }
 }

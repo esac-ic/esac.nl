@@ -48,7 +48,7 @@ class PhotoController extends Controller
                 $this->addPhotoToAlbum($request, $photoAlbum->id);
                 return $photoAlbum->id;
             } else{
-                redirect()->back()->withErrors(["error" => get('front-end/photo.inputToLong')]);
+                redirect()->back()->withErrors(["error" => trans('front-end/photo.inputToLong')]);
             }
         } 
     }  

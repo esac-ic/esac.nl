@@ -32,7 +32,7 @@ class RolController extends Controller
 
     //show create screen
     public function create(){
-        $fields = ['title' => get('rol.add'),
+        $fields = ['title' => trans('rol.add'),
             'method' => 'POST',
             'url' => '/rols',];
         $rol = null;
@@ -45,7 +45,7 @@ class RolController extends Controller
 
         $this->_rolRepository->create($request->all());
 
-        Session::flash("message", get('rol.added'));
+        Session::flash("message", trans('rol.added'));
         return redirect('/rols');
     }
 
@@ -55,7 +55,7 @@ class RolController extends Controller
 
     //show edit screen
     public function edit(Request $request,Rol $rol){
-        $fields = ['title' => get('rol.edit'),
+        $fields = ['title' => trans('rol.edit'),
             'method' => 'PATCH',
             'url' => '/rols/'. $rol->id];
 
@@ -68,14 +68,14 @@ class RolController extends Controller
 
         $this->_rolRepository->update($rol->id,$request->all());
 
-        Session::flash("message", get('rol.edited'));
+        Session::flash("message", trans('rol.edited'));
         return redirect('/rols');
     }
 
     public function destroy(Request $request, Rol $rol){
         $this->_rolRepository->delete($rol->id);
 
-        Session::flash("message", get('rol.deleted'));
+        Session::flash("message", trans('rol.deleted'));
         return redirect('/rols');
     }
 

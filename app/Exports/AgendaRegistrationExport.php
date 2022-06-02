@@ -50,7 +50,7 @@ class AgendaRegistrationExport implements FromCollection, WithTitle, WithHeading
      */
     public function title(): string
     {
-        return get('forms.Inschrijvingen');
+        return trans('forms.Inschrijvingen');
     }
 
     /**
