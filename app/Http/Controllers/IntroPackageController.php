@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\IntroPackage;
-use App\repositories\RepositorieFactory;
+use App\Repositories\RepositorieFactory;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Session;

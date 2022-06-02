@@ -1,5 +1,7 @@
 <?php
 
+namespace Database\Factories;
+
 use Faker\Generator as Faker;
 use App\NewsItem;
 use App\Text;

@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Certificate;
-use App\repositories\RepositorieFactory;
+use App\Repositories\RepositorieFactory;
 use App\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Config;

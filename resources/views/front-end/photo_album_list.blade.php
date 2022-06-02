@@ -8,7 +8,7 @@
             <div class="card-body">
                 <button type="button" class="btn btn-outline-primary float-right" data-toggle="modal" data-target="#AddAlbumModal"><span class="ion-android-add"> {{trans('front-end/photo.addAlbum')}}</span></button>
                 <h2 class="card-title">{{ $curPageName }}</h2>
-                {!! clean($content, 'iframe') !!}
+                {!! $content !!}
             </div>
         </div>
     </div>

@@ -3,8 +3,9 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\repositories\PhotoAlbumRepository;
-use App\repositories\RepositorieFactory;
+use Illuminate\Support\Str;
+use App\Repositories\PhotoAlbumRepository;
+use App\Repositories\RepositorieFactory;
 
 class PhotoController extends Controller
 {

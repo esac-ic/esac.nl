@@ -4,8 +4,8 @@ namespace App\Http\Controllers\Auth;
 
 use App\CustomClasses\MenuSingleton;
 use App\Http\Controllers\Controller;
-use App\repositories\RepositorieFactory;
-use App\repositories\UserRepository;
+use App\Repositories\RepositorieFactory;
+use App\Repositories\UserRepository;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use Illuminate\Http\Request;
 
@@ -50,7 +50,7 @@ class LoginController extends Controller
     public function showLoginForm()
     {
         $menu = $this->_menu;
-        return view('auth.login',compact('menu'));
+        return view('auth.login', compact('menu'));
     }
 
     /**

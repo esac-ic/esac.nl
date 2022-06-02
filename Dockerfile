@@ -1,4 +1,4 @@
-FROM php:7.4.0-fpm
+FROM php:8.1.6-fpm
 RUN apt-get update && \
    docker-php-ext-install pdo_mysql && \
    apt install -y zip \
@@ -13,7 +13,7 @@ COPY . /var/www/
 WORKDIR "/var/www/"
 
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
-RUN curl -sL https://deb.nodesource.com/setup_10.x | bash - && apt install -y nodejs
+RUN curl -sL https://deb.nodesource.com/setup_16.x | bash - && apt install -y nodejs
 RUN composer config disable-tls true
 RUN composer install --no-dev
 

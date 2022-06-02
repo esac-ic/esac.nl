@@ -17,7 +17,7 @@ TODO: voeg toe moet gewoon plusje worden
                 <div class="card w-100">
                     <div class="card-body">
                         <h2 class="card-title">{{trans('front-end/zekeringen.gezekertdat')}}</h2>
-                        {!! clean($content) !!}
+                        {!! $content !!}
                     </div>
                 </div>     
             </div>

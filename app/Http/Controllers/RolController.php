@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\repositories\RepositorieFactory;
+use App\Repositories\RepositorieFactory;
 use App\Rol;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Config;
@@ -45,7 +45,7 @@ class RolController extends Controller
 
         $this->_rolRepository->create($request->all());
 
-        Session::flash("message",trans('rol.added'));
+        Session::flash("message", trans('rol.added'));
         return redirect('/rols');
     }
 
@@ -68,14 +68,14 @@ class RolController extends Controller
 
         $this->_rolRepository->update($rol->id,$request->all());
 
-        Session::flash("message",trans('rol.edited'));
+        Session::flash("message", trans('rol.edited'));
         return redirect('/rols');
     }
 
     public function destroy(Request $request, Rol $rol){
         $this->_rolRepository->delete($rol->id);
 
-        Session::flash("message",trans('rol.deleted'));
+        Session::flash("message", trans('rol.deleted'));
         return redirect('/rols');
     }
 

@@ -7,7 +7,7 @@ use App\Http\Resources\ApplicationFormRowVueResource;
 use App\Models\ApplicationForm\ApplicationFormRow;
 use App\Models\ApplicationForm\ApplicationResponse;
 use App\Notifications\AgendaSubscribed;
-use App\repositories\ApplicationFormRepositories\ApplicationFormRegistrationRepository;
+use App\Repositories\ApplicationFormRepositories\ApplicationFormRegistrationRepository;
 use Auth;
 use Carbon\Carbon;
 use Illuminate\Http\RedirectResponse;
@@ -101,7 +101,6 @@ class UserApplicationFormController extends Controller
 
         $repository->storeRegistration($request->except(['_token']), $agendaItem, Auth::user()->id);
         $user = Auth::user();
-        $user->notify(new AgendaSubscribed($agendaItem));
 
         return redirect('agenda/' . $agendaItem->id);
     }
@@ -113,7 +112,7 @@ class UserApplicationFormController extends Controller
     public function unregister(AgendaItem $agendaItem): RedirectResponse
     {
         if (Carbon::parse($agendaItem->subscription_endDate) < Carbon::now()) {
-            Session::flash("message",trans('ApplicationForm.subscriptionDatePastUnregisterFailed'));
+            Session::flash("message", trans('ApplicationForm.subscriptionDatePastUnregisterFailed'));
 
             return redirect('agenda/' . $agendaItem->id);
         }
@@ -123,7 +122,7 @@ class UserApplicationFormController extends Controller
             ->where('user_id', Auth::user()->id)
             ->delete();
 
-        Session::flash("message",trans('ApplicationForm.userUnregisterd'));
+        Session::flash("message", trans('ApplicationForm.userUnregisterd'));
 
         return redirect('agenda/' . $agendaItem->id);
     }

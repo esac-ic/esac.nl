@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\repositories\RepositorieFactory;
+use App\Repositories\RepositorieFactory;
 use App\Book;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Config;
@@ -45,7 +45,7 @@ class LibraryController extends Controller
 
         $this->_bookRepository->create($request->all());
 
-        Session::flash("message",trans('book.added'));
+        Session::flash("message", trans('book.added'));
         return redirect('/books');
     }
 
@@ -68,14 +68,14 @@ class LibraryController extends Controller
 
         $this->_bookRepository->update($book->id,$request->all());
 
-        Session::flash("message",trans('book.edited'));
+        Session::flash("message", trans('book.edited'));
         return redirect('/books');
     }
 
     public function destroy(Request $request, Book $book){
         $this->_bookRepository->delete($book->id);
 
-        Session::flash("message",trans('book.deleted'));
+        Session::flash("message", trans('book.deleted'));
         return redirect('/books');
     }
 

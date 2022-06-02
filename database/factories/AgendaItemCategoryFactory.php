@@ -1,5 +1,7 @@
 <?php
 
+namespace Database\Factories;
+
 use App\Text;
 use App\AgendaItemCategorie;
 use Faker\Generator as Faker;

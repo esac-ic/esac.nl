@@ -5,14 +5,13 @@ namespace App\Http\Controllers;
 use App\Certificate;
 use App\Exports\UsersExport;
 use App\CustomClasses\MailList\MailListFacade;
-use App\repositories\RepositorieFactory as RepositorieFactory;
+use App\Repositories\RepositorieFactory as RepositorieFactory;
 use App\Rol;
 use App\Rules\EmailDomainValidator;
 use App\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Config;
-use Illuminate\Support\Facades\Input;
 use Illuminate\Support\Facades\Session;
 use Maatwebsite\Excel\Facades\Excel;
 
@@ -66,11 +65,11 @@ class UserController extends Controller
         $this->validateInput($request);
 
         $user = $this->_userRepository->create($request->all());
-        if(Input::get('roles') != null){
-            $this->_userRepository->addRols($user->id,Input::get('roles'));
+        if($request->get('roles') != null){
+            $this->_userRepository->addRols($user->id, $request->get('roles'));
         }
 
-        Session::flash("message",trans('user.added'));
+        Session::flash("message", trans('user.added'));
 
         return redirect('/users');
     }
@@ -112,21 +111,21 @@ class UserController extends Controller
 
         $this->_userRepository->update($user->id, $request->all());
         if(Auth::user()->hasRole(Config::get('constants.Administrator'))){
-            $this->_userRepository->addRols($user->id,Input::get('roles',[]));
+            $this->_userRepository->addRols($user->id, $request->get('roles',[]));
         }
 
         if(Auth::user()->id === $user->id){
             return redirect('/users/'. $user->id . '?back=false');
         } else{
-            Session::flash("message",trans('user.edited'));
+            Session::flash("message", trans('user.edited'));
 
             return redirect('/users');
         }
     }
 
-    public function removeAsActiveMember(Request $request, User $user, MailListFacade $mailgunFacade){
+    public function removeAsActiveMember(Request $request, User $user, MailListFacade $mailListFacade){
         $user->removeAsActiveMember();
-        $mailgunFacade->deleteUserFormAllMailList($user);
+        $mailListFacade->deleteUserFormAllMailList($user);
 
         return redirect('/users/'. $user->id);
     }

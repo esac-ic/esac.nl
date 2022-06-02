@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Feature;
+namespace Tests\Feature\ApplicationForm;
 
 use App\Models\ApplicationForm\ApplicationForm;
 use App\Rol;

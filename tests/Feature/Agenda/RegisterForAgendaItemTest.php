@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Feature;
+namespace Tests\Feature\Agenda;
 
 use App\AgendaItem;
 use App\Models\ApplicationForm\ApplicationForm;

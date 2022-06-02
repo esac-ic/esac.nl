@@ -11,7 +11,7 @@
         <div class="card-body">
             <h4 class="card-title">{{$newsItem->newsItemTitle->text()}}</h4>
             <p class="card-text text-body">
-                {!! clean($newsItem->newsItemText->text()) !!}
+                {!! $newsItem->newsItemText->text() !!}
             </p>
         </div>
         <div class="card-footer bg-white p-3">

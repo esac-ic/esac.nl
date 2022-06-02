@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\MenuItem;
-use App\repositories\RepositorieFactory;
+use App\Repositories\RepositorieFactory;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Session;
 
@@ -48,7 +48,7 @@ class PaginaBeheerController extends Controller
 
         $this->_menuRepository->create($request->all());
 
-        Session::flash("message",trans('menuItems.added'));
+        Session::flash("message", trans('menuItems.added'));
         return redirect('/pages');
     }
 
@@ -76,13 +76,13 @@ class PaginaBeheerController extends Controller
 
         $this->_menuRepository->update($page->id,$request->all());
 
-        Session::flash("message",trans('menuItems.edited'));
+        Session::flash("message", trans('menuItems.edited'));
         return redirect('/pages');
     }
 
     public function destroy(Request $request, MenuItem $page){
         $this->_menuRepository->delete($page->id);
-        Session::flash("message",trans('menuItems.deleted'));
+        Session::flash("message", trans('menuItems.deleted'));
 
         return redirect('/pages');
     }

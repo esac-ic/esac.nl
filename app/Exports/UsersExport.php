@@ -2,7 +2,7 @@
 
 namespace App\Exports;
 
-use App\repositories\UserRepository;
+use App\Repositories\UserRepository;
 use Illuminate\Support\Collection;
 use Maatwebsite\Excel\Concerns\FromCollection;
 use Maatwebsite\Excel\Concerns\ShouldAutoSize;

@@ -3,8 +3,8 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
-use App\repositories\RepositorieFactory;
-use App\repositories\ZekeringenRepository;
+use App\Repositories\RepositorieFactory;
+use App\Repositories\ZekeringenRepository;
 use App\Zekering;
 use Illuminate\Http\Request;
 
