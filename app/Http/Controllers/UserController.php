@@ -12,7 +12,6 @@ use App\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Config;
-use Illuminate\Support\Facades\Input;
 use Illuminate\Support\Facades\Session;
 use Maatwebsite\Excel\Facades\Excel;
 
@@ -66,8 +65,8 @@ class UserController extends Controller
         $this->validateInput($request);
 
         $user = $this->_userRepository->create($request->all());
-        if(Input::get('roles') != null){
-            $this->_userRepository->addRols($user->id,Input::get('roles'));
+        if($request->get('roles') != null){
+            $this->_userRepository->addRols($user->id, $request->get('roles'));
         }
 
         Session::flash("message", trans('user.added'));
@@ -112,7 +111,7 @@ class UserController extends Controller
 
         $this->_userRepository->update($user->id, $request->all());
         if(Auth::user()->hasRole(Config::get('constants.Administrator'))){
-            $this->_userRepository->addRols($user->id,Input::get('roles',[]));
+            $this->_userRepository->addRols($user->id, $request->get('roles',[]));
         }
 
         if(Auth::user()->id === $user->id){

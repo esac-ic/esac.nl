@@ -8,7 +8,6 @@ use App\Repositories\RepositorieFactory;
 use App\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Input;
 
 class ApiController extends Controller
 {
@@ -20,8 +19,8 @@ class ApiController extends Controller
     public function getMenuItems(Request $request){
         $menuItemQeury = MenuItem::query();
         if($request->has('type')) {
-            if(Input::get('type') === "subItem"){
-                $menuItemQeury->where('parent_id', '=', intval(Input::get('parentId')));
+            if($request->get('type') === "subItem"){
+                $menuItemQeury->where('parent_id', '=', intval($request->get('parentId')));
             } else {
                 $menuItemQeury->where('parent_id', '=', null);
             }

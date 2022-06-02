@@ -7,7 +7,6 @@ use App\AgendaItemCategorie;
 use App\Http\Controllers\Controller;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Input;
 
 class AgendaController extends Controller
 {
@@ -25,7 +24,7 @@ class AgendaController extends Controller
 
         //add parameters if there set in the url
         if($request->has('category')){
-            $agendaItemQeury->where('category','=', intval(Input::get('category')));
+            $agendaItemQeury->where('category','=', intval($request->get('category')));
         }
         if($request->has('startDate')){
             $startDate = Carbon::createFromFormat('d-m-Y', $request->get('startDate'))->setTime(0, 0, 0);
