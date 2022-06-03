@@ -27,7 +27,6 @@ class RepositorieFactory{
     public static $BOOKREPOKEY = "BookRepository";
     public static $PHOTOALBUMREPOKEY = "PhotoAlbum";
     public static $PHOTOREPOKEY = "Photo";
-    public static $INTROPACKAGEREPOKEY = "IntroPackage";
 
 
     public function __construct() {
@@ -46,7 +45,6 @@ class RepositorieFactory{
             RepositorieFactory::$BOOKREPOKEY => new BookRepository($textRepository), 
             RepositorieFactory::$PHOTOALBUMREPOKEY => new PhotoAlbumRepository(),
             RepositorieFactory::$PHOTOREPOKEY => new PhotoRepository(),
-            RepositorieFactory::$INTROPACKAGEREPOKEY => new IntroPackageRepository($textRepository),
         ];
     }
 

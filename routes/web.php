@@ -106,8 +106,3 @@ Route::get('/{menuItem}','frontEndController@showPage');
 Route::get('/beheer/settings','SettingsController@index');
 Route::put('/beheer/settings','SettingsController@update');
 Route::get('/beheer/settings/edit','SettingsController@edit');
-
-// intro routes
-Route::resource('beheer/intro/packages', 'IntroPackageController', [
-    'names' => 'beheer.intro.packages',
-]);
