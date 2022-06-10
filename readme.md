@@ -26,33 +26,44 @@ DB\_HOST, DB\_PORT, DB\_DATABASE, DB\_USERNAME and DB\_PASSWORD
 **Note**: When running your local environment on a certain port, let's say 3000, modify your `APP_URL` in the file to reflect that port, else the api's won't work
 
 ### Development environment (Windows)
-you need the following programs to run the code on your local environment:
-* A web serverXampp: https://www.apachefriends.org/index.html
-* Composer: https://getcomposer.org/download/
-* NodeJS: https://nodejs.org/en/download/
-* Git: https://git-scm.com/download/win
+1. you need the following programs to run the code on your local environment:
+	* A web serverXampp: https://www.apachefriends.org/index.html
+	* Composer: https://getcomposer.org/download/
+	* NodeJS: https://nodejs.org/en/download/
+	* Git: https://git-scm.com/download/win
 
-Clone the project repository
+2. Clone the project repository
+	```
+	git clone https://github.com/esac-ic/esac.nl.git
+	```
+3. Create an .env file from .env.example, with your local values for 
+DB\_HOST, DB\_PORT, DB\_DATABASE, DB\_USERNAME and DB\_PASSWORD
+**Note**: When running your local environment on a certain port, let's say 3000, modify your `APP_URL` in the file to reflect that port, else the api's won't work
 
-    git clone https://github.com/esac-ic/esac.nl.git
-
-Execute the following commands from the repository root
-
+4. Make sure you've enabled the following extensions in your php.ini file, this can be found next to the php.exe location
+	```
+	extension=fileinfo
+	extension=gd
+	extension=pdo_mysql
+	```
+5. Execute the following commands from the repository root
+	```
 	composer install
-    php artisan migrate
-    php artisan db:seed
-    php artisan key:generate
-    php artisan storage:link
-    npm install
-    npm run dev
-
-When you make changes to CSS or JS file you need to build again which can be done with
-
-    npm run dev
-
-It is also possible to recompile your files when you make a change by running the following command
-
-    npm run watch
+	php artisan migrate
+	php artisan db:seed
+	php artisan key:generate
+	php artisan storage:link
+	npm install
+	npm run dev
+	```
+	When you make changes to CSS or JS file you need to build again which can be done with
+	```
+	npm run dev
+	```
+	It is also possible to recompile your files when you make a change by running the following command
+	```
+	npm run watch
+	```
 
 ### Production environment
 When you update the server make sure you run the following commands
