@@ -27,8 +27,8 @@ var headerHome = [{
     buttonText: '{{trans('front-end/home.moreInfo')}}'
 }, {
     background: 'header-2.jpg',
-    heading: '{{trans('front-end/home.headerMessages.tourskie_title')}}',
-    message: '{{trans('front-end/home.headerMessages.tourskie_desc')}}',
+    heading: '{{trans('front-end/home.headerMessages.tourskiecursus_title')}}',
+    message: '{{trans('front-end/home.headerMessages.tourskiecursus_desc')}}',
     buttonUrl: '{{url('courses')}}',
     buttonText: '{{trans('front-end/home.moreInfo')}}'
 }, {
@@ -45,8 +45,8 @@ var headerHome = [{
     buttonText: '{{trans('front-end/home.moreInfo')}}'
 }, {
     background: 'header-5.jpg',
-    heading: '{{trans('front-end/home.headerMessages.tourskiecursus_title')}}',
-    message: '{{trans('front-end/home.headerMessages.tourskiecursus_desc')}}',
+    heading: '{{trans('front-end/home.headerMessages.ski_title')}}',
+    message: '{{trans('front-end/home.headerMessages.ski_desc')}}',
     buttonUrl: '{{url('courses')}}',
     buttonText: '{{trans('front-end/home.moreInfo')}}'
 },  {

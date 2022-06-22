@@ -9,8 +9,8 @@ return [
     'headerMessages' => [
         'stunt_title' => 'Stunts en meer',
         'stunt_desc' => 'Met de Stuntcommissie organiseren we stunts tijdens evenementen, zoals abseilen, tokkels en beklimmingen.',
-        'tourskie_title' => 'Tourskiën in de Alpen',
-        'tourskie_desc' => 'Tijdens de carnavalsvakantie vertrekt de ESAC een week richting de Alpen om daar van de sneeuw te genieten.',
+        'ski_title' => 'Skiën in de Alpen',
+        'ski_desc' => 'Tijdens de carnavalsvakantie vertrekt de ESAC een week richting de Alpen om daar van de sneeuw te genieten.',
         'klimweekend_title' => 'Klimweekenden in België',
         'klimweekend_desc' => 'De ESAC organiseert jaarlijks ongeveer 12 klimweekenden richting België, Duitsland of verder.',
         'eplakka_title' => 'Klimwedstrijden',

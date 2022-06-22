@@ -9,8 +9,8 @@ return [
     'headerMessages' => [
         'stunt_title' => 'Stunts and more',
         'stunt_desc' => 'With the Stuntcommittee we organize stunts during events such as abseiling, zip lining and climbing.',
-        'tourskie_title' => 'Ski mountaineering in the Alps',
-        'tourskie_desc' => 'During the carnival holiday the ESAC leaves travels a week to the Alps to enjoy the snow.',
+        'skie_title' => 'Ski in the Alps',
+        'skie_desc' => 'During the carnival holiday the ESAC leaves travels a week to the Alps to enjoy the snow.',
         'klimweekend_title' => 'Climbing weekends in Belgium',
         'klimweekend_desc' => 'The ESAC annually organizes about 12 climbing weekends to Belgium, Germany or beyond.',
         'eplakka_title' => 'Climbing competition',
