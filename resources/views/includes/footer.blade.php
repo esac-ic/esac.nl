@@ -13,7 +13,7 @@
                   <path class="cls-1" d="M504.45 137.45v8.93M383.93 98.67l40.45-32.36M424.38 66.31l80.07 80.07M377.83 92.55l46.55-36.12M424.38 56.43l80.07 81.02M377.83 92.55l6.1 6.12"/>
                 </svg>
                 <p class="text-muted mt-4">
-                    © 2018 ESAC
+                    © {{ now()->year }} ESAC
                     <br>Eindhovense Studenten
                     <br>Alpen Club
                     <br><br>
