@@ -26,7 +26,7 @@ var headerHome = [{
     buttonUrl: '{{url('stunt')}}',
     buttonText: '{{trans('front-end/home.moreInfo')}}'
 }, {
-    background: 'header-2.jpg',
+    background: 'header-2.jpeg',
     heading: '{{trans('front-end/home.headerMessages.tourskiecursus_title')}}',
     message: '{{trans('front-end/home.headerMessages.tourskiecursus_desc')}}',
     buttonUrl: '{{url('courses')}}',
