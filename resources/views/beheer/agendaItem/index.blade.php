@@ -128,12 +128,12 @@
 
         function getAgendaItemActions(data) {
             let actions = "";
-            actions += '<a href="{{url('agendaItems')}}/' + data.id + '/edit"><span title="{{trans('AgendaItems.edit')}}" class="ion-edit icon" aria-hidden="true"></span></a>';
-            actions += '<a href="{{url('agendaItems')}}/' + data.id + '"><span title="{{trans('AgendaItems.show')}}" class="ion-eye icon" aria-hidden="true"></span></a>';
+            actions += '<a class="mr-1 ml-1" href="{{url('agendaItems')}}/' + data.id + '/edit"><span title="{{trans('AgendaItems.edit')}}" class="ion-edit font-size-120 icon" aria-hidden="true"></span></a>';
+            actions += '<a class="mr-1 ml-1" href="{{url('agendaItems')}}/' + data.id + '"><span title="{{trans('AgendaItems.show')}}" class="ion-eye font-size-120 icon" aria-hidden="true"></span></a>';
             if (data.application_form_id != null) {
-                actions += '<a href="{{url('/forms/users')}}/' + data.id + '"><span title="{{trans("AgendaItems.showsignups")}}" class="ion-android-list icon" aria-hidden="true"></span></a>';
+                actions += '<a class="mr-1 ml-1" href="{{url('/forms/users')}}/' + data.id + '"><span title="{{trans("AgendaItems.showsignups")}}" class="ion-android-list font-size-120 icon" aria-hidden="true"></span></a>';
             }
-            actions += '<a href="{{url('agendaItems')}}/' + data.id + '/copy"><span title="{{trans('AgendaItems.copy')}}" class="ion-ios-copy icon" aria-hidden="true"></span></a>';
+            actions += '<a class="mr-1 ml-1" href="{{url('agendaItems')}}/' + data.id + '/copy"><span title="{{trans('AgendaItems.copy')}}" class="ion-ios-copy font-size-120 icon" aria-hidden="true"></span></a>';
             return actions;
         }
 

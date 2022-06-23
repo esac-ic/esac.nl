@@ -41,8 +41,8 @@
             <tr >
                 <td>{{$rol->text->text()}}</td>
                 <td>
-                    <a href="{{url('/rols/' . $rol->id . '/edit')}}"><span title="{{trans('rol.edit')}}" class="ion-edit" aria-hidden="true"></span></a>
-                    <a href="{{url('/rols/'. $rol->id)}}"><span title="{{trans("rol.show")}}" class="ion-eye" aria-hidden="true"></span></a>
+                    <a class="mr-1 ml-1" href="{{url('/rols/' . $rol->id . '/edit')}}"><span title="{{trans('rol.edit')}}" class="ion-edit font-size-120" aria-hidden="true"></span></a>
+                    <a class="mr-1 ml-1" href="{{url('/rols/'. $rol->id)}}"><span title="{{trans("rol.show")}}" class="ion-eye font-size-120" aria-hidden="true"></span></a>
                 </td>
             </tr>
         @endforeach

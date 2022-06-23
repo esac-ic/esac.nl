@@ -52,8 +52,8 @@
                 <td>{{trans('kind_of_member.' . $user->kind_of_member)}}</td>
                 <td>@for($i=0; $i<count($user->roles);$i++) {{$user->roles[$i]->id}}@endfor</td>
                 <td>
-                    <a href="{{url('/users/' . $user->id . '/edit')}}"><span title="{{trans('user.edit')}}" class="ion-edit" aria-hidden="true"></span></a>
-                    <a href="{{url('/users/'. $user->id)}}"><span title="{{trans("user.show")}}" class="ion-eye" aria-hidden="true"></span></a>
+                    <a class="mr-1 ml-1" href="{{url('/users/' . $user->id . '/edit')}}"><span title="{{trans('user.edit')}}" class="ion-edit font-size-120" aria-hidden="true"></span></a>
+                    <a class="mr-1 ml-1" href="{{url('/users/'. $user->id)}}"><span title="{{trans("user.show")}}" class="ion-eye font-size-120" aria-hidden="true"></span></a>
                 </td>
             </tr>
         @endforeach

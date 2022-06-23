@@ -45,8 +45,8 @@
                     @endisset
                 </td>
                 <td>
-                    <a href="{{url('/users/' . $user->id . '/edit')}}"><span title="{{trans('user.edit')}}" class="ion-edit" aria-hidden="true"></span></a>
-                    <a href="{{url('/users/'. $user->id)}}"><span title="{{trans("user.show")}}" class="ion-eye" aria-hidden="true"></span></a>
+                    <a class="mr-1 ml-1" href="{{url('/users/' . $user->id . '/edit')}}"><span title="{{trans('user.edit')}}" class="ion-edit font-size-120" aria-hidden="true"></span></a>
+                    <a class="mr-1 ml-1" href="{{url('/users/'. $user->id)}}"><span title="{{trans("user.show")}}" class="ion-eye font-size-120" aria-hidden="true"></span></a>
                 </td>
             </tr>
         @endforeach
