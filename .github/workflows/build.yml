@@ -13,8 +13,11 @@ jobs:
     steps:
 #     - name: Setup Chrome
 #       uses: browser-actions/setup-chrome@v0.0.0
-    - name: Chrome Version Test
-      run: echo "$CHROME_VERSION"
+    - name: Chrome Version
+      run: |
+        export CHROME_VERSION=$(/usr/bin/google-chrome --version | grep "[0-9]."[-1])
+        echo $CHROME_VERSION
+      
     - name: Docker Login
       uses: docker/login-action@v1.14.1
       with:
@@ -54,7 +57,7 @@ jobs:
         php -r "putenv('DB_DATABASE=esac');"
         php artisan key:generate
         php artisan storage:link
-        php artisan dusk:chrome-driver $(chrome --version | grep "[0-9]."[-1])
+        php artisan dusk:chrome-driver $CHROME_VERSION
         php artisan migrate
         php artisan db:seed
         php artisan serve &
@@ -80,8 +83,6 @@ jobs:
       with:
         push: true
         tags: esac/website:${{ github.run_number }}
-    env:
-      CHROME_VERSION: $(/usr/bin/google-chrome --version)
   deploy:
     runs-on: ubuntu-latest
     needs: laravel-tests
