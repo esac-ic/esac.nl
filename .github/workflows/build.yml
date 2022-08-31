@@ -14,7 +14,7 @@ jobs:
 #     - name: Setup Chrome
 #       uses: browser-actions/setup-chrome@v0.0.0
     - name: Chrome Version Test
-      run: /usr/bin/google-chrome --version
+      run: echo "$CHROME_VERSION"
     - name: Docker Login
       uses: docker/login-action@v1.14.1
       with:
@@ -80,6 +80,8 @@ jobs:
       with:
         push: true
         tags: esac/website:${{ github.run_number }}
+    env:
+      CHROME_VERSION: $(/usr/bin/google-chrome --version)
   deploy:
     runs-on: ubuntu-latest
     needs: laravel-tests
