@@ -14,7 +14,7 @@ jobs:
 #     - name: Setup Chrome
 #       uses: browser-actions/setup-chrome@v0.0.0
     - name: Chrome Version Test
-    - run: /usr/bin/google-chrome --version
+      run: /usr/bin/google-chrome --version
     - name: Docker Login
       uses: docker/login-action@v1.14.1
       with:
