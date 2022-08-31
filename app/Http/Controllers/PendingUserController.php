@@ -98,7 +98,7 @@ class PendingUserController extends Controller
             'birthDay' => 'required|date',
             'gender' => 'required',
             'IBAN' => 'required',
-            // 'g-recaptcha-response' => 'required',
+            'g-recaptcha-response' => 'required',
             'incasso' => 'required',
             'privacy_policy' => 'required',
             'termsconditions' => 'required'
