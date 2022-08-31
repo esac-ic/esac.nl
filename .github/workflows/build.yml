@@ -52,7 +52,7 @@ jobs:
         php -r "putenv('DB_DATABASE=esac');"
         php artisan key:generate
         php artisan storage:link
-        php artisan dusk:chrome-driver $(which chrome)
+        php artisan dusk:chrome-driver $(chrome --version | grep "[0-9]."[-1])
         php artisan migrate
         php artisan db:seed
         php artisan serve &
