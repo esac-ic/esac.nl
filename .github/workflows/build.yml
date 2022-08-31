@@ -11,8 +11,8 @@ jobs:
     runs-on: ubuntu-latest
     environment: Build
     steps:
-    - name: Setup Chrome
-      uses: browser-actions/setup-chrome@v0.0.0
+#     - name: Setup Chrome
+#       uses: browser-actions/setup-chrome@v0.0.0
     - name: Docker Login
       uses: docker/login-action@v1.14.1
       with:
@@ -52,7 +52,7 @@ jobs:
         php -r "putenv('DB_DATABASE=esac');"
         php artisan key:generate
         php artisan storage:link
-        php artisan dusk:chrome-driver $(/usr/bin/google-chrome --version)
+        php artisan dusk:chrome-driver $(chrome --version | grep "[0-9]."[-1])
         php artisan migrate
         php artisan db:seed
         php artisan serve &
