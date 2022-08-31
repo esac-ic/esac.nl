@@ -18,6 +18,7 @@ class PendingUserController extends Controller
 {
 
     private $_userRepository;
+
     /**
      * Create a new controller instance.
      *
@@ -49,6 +50,10 @@ class PendingUserController extends Controller
     }
 
     public function removeAsPendingMember(Request $request, User $user){
+        $registration_info = $user->registrationInfo();
+        if(!is_null($registration_info)){
+            $registration_info->delete();
+        }
         $user->removeAsPendingMember();
 
         return redirect('users/pending_members');
@@ -93,7 +98,7 @@ class PendingUserController extends Controller
             'birthDay' => 'required|date',
             'gender' => 'required',
             'IBAN' => 'required',
-            'g-recaptcha-response' => 'required',
+            // 'g-recaptcha-response' => 'required',
             'incasso' => 'required',
             'privacy_policy' => 'required',
             'termsconditions' => 'required'
