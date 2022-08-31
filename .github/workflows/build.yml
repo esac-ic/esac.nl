@@ -15,7 +15,7 @@ jobs:
 #       uses: browser-actions/setup-chrome@v0.0.0
     - name: Chrome Version
       run: |
-        export CHROME_VERSION=$(/usr/bin/google-chrome --version | grep -o "[0-9]."[-1])
+        export CHROME_VERSION=$(/usr/bin/google-chrome --version | grep -o "[0-9][0-9][0-9]")
         echo $CHROME_VERSION
       
     - name: Docker Login
