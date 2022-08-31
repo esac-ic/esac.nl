@@ -52,7 +52,7 @@ jobs:
         php -r "putenv('DB_DATABASE=esac');"
         php artisan key:generate
         php artisan storage:link
-        php artisan dusk:chrome-driver 101
+        php artisan dusk:chrome-driver $(which chrome)
         php artisan migrate
         php artisan db:seed
         php artisan serve &
