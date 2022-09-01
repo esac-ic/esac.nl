@@ -13,11 +13,6 @@ jobs:
     steps:
 #     - name: Setup Chrome
 #       uses: browser-actions/setup-chrome@v0.0.0
-    - name: Chrome Version
-      run: |
-        export CHROME_VERSION=$(/usr/bin/google-chrome --version | cut -c15-17)
-        echo $CHROME_VERSION
-      
     - name: Docker Login
       uses: docker/login-action@v1.14.1
       with:
@@ -54,6 +49,9 @@ jobs:
         npm install -g @lhci/cli@0.3.x
     - name: PHP artisan meuk
       run: |
+        export CHROME_VERSION=$(/usr/bin/google-chrome --version | cut -c15-17)
+        echo $CHROME_VERSION
+        echo "php artisan dusk:chrome-driver $CHROME_VERSION"
         php -r "putenv('DB_DATABASE=esac');"
         php artisan key:generate
         php artisan storage:link
