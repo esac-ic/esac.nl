@@ -1,6 +1,7 @@
 {
   "private": true,
   "scripts": {
+    "start": "npm run development && php artisan serve",
     "dev": "npm run development",
     "development": "mix",
     "watch": "mix watch",

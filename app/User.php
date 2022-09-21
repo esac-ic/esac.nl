@@ -91,8 +91,6 @@ class User extends Authenticatable
         $certificates = "";
         foreach ($this->certificates as $certificate){
             $certificates .= $certificate->abbreviation . ", ";
-            info($certificate->abbreviation);
-
         }
         return trim($certificates,", ");
     }
