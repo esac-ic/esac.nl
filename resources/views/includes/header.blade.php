@@ -20,55 +20,55 @@
 @push('scripts')
 <script>
 var headerHome = [{
-    background: 'header-1.jpg',
+    background: 'header-img1.jpeg',
     heading: '{{trans('front-end/home.headerMessages.stunt_title')}}',
     message: '{{trans('front-end/home.headerMessages.stunt_desc')}}',
     buttonUrl: '{{url('stunt')}}',
     buttonText: '{{trans('front-end/home.moreInfo')}}'
 }, {
-    background: 'header-2.jpeg',
+    background: 'header-img2.jpeg',
     heading: '{{trans('front-end/home.headerMessages.tourskiecursus_title')}}',
     message: '{{trans('front-end/home.headerMessages.tourskiecursus_desc')}}',
     buttonUrl: '{{url('courses')}}',
     buttonText: '{{trans('front-end/home.moreInfo')}}'
 }, {
-    background: 'header-3.jpg',
+    background: 'header-img3.jpeg',
     heading: '{{trans('front-end/home.headerMessages.klimweekend_title')}}',
     message: '{{trans('front-end/home.headerMessages.klimweekend_desc')}}',
     buttonUrl: '{{url('klimweekenden')}}',
     buttonText: '{{trans('front-end/home.moreInfo')}}'
 }, {
-    background: 'header-4.jpg',
+    background: 'header-img4.jpeg',
     heading: '{{trans('front-end/home.headerMessages.eplakka_title')}}',
     message: '{{trans('front-end/home.headerMessages.eplakka_desc')}}',
     buttonUrl: '{{url('eplakka')}}',
     buttonText: '{{trans('front-end/home.moreInfo')}}'
 }, {
-    background: 'header-5.jpg',
+    background: 'header-img5.jpeg',
     heading: '{{trans('front-end/home.headerMessages.ski_title')}}',
     message: '{{trans('front-end/home.headerMessages.ski_desc')}}',
     buttonUrl: '{{url('courses')}}',
     buttonText: '{{trans('front-end/home.moreInfo')}}'
 },  {
-    background: 'header-7.jpg',
+    background: 'header-img7.jpeg',
     heading: '{{trans('front-end/home.headerMessages.alpinecursus_title')}}',
     message: '{{trans('front-end/home.headerMessages.alpinecursus_desc')}}',
     buttonUrl: '{{url('courses')}}',
     buttonText: '{{trans('front-end/home.moreInfo')}}'
 }, {
-    background: 'header-8.jpg',
+    background: 'header-img8.jpeg',
     heading: '{{trans('front-end/home.headerMessages.alpine_title')}}',
     message: '{{trans('front-end/home.headerMessages.alpine_desc')}}',
     buttonUrl: '{{url('courses')}}',
     buttonText: '{{trans('front-end/home.moreInfo')}}'
 }, {
-    background: 'header-9.jpg',
+    background: 'header-img9.jpeg',
     heading: '{{trans('front-end/home.headerMessages.sociability_title')}}',
     message: '{{trans('front-end/home.headerMessages.sociability_desc')}}',
     buttonUrl: '{{url('agenda')}}',
     buttonText: '{{trans('front-end/home.moreInfo')}}'
 }, {
-    background: 'header-10.jpg',
+    background: 'header-img10.jpeg',
     heading: '{{trans('front-end/home.headerMessages.bouldering_title')}}',
     message: '{{trans('front-end/home.headerMessages.bouldering_desc')}}',
     buttonUrl: '{{url('agenda')}}',
