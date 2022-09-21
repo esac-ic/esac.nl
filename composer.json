@@ -10,7 +10,7 @@
     "require": {
         "php": "^8.1",
         "doctrine/dbal": "^3.3",
-        "eluceo/ical": "^2.5",
+        "eluceo/ical": "^2.7",
         "fruitcake/laravel-cors": "^3.0",
         "intervention/image": "^2.7",
         "laravel/framework": "9.4.*",

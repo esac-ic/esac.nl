@@ -49,6 +49,11 @@ class PendingUserController extends Controller
     }
 
     public function removeAsPendingMember(Request $request, User $user){
+        $registration_info = $user->registrationInfo();
+        if(!is_null($registration_info)){
+            $registration_info->delete();
+        }
+        
         $user->removeAsPendingMember();
 
         return redirect('users/pending_members');
