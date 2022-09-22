@@ -19,15 +19,17 @@ class ICalController extends Controller
 {
     public function getAgendaItemsICalObject()
     {
-        $agenda_items = AgendaItem::all();
-        $calendar = new Calendar([]);
-
         $phpDateTimeZone = new PhpDateTimeZone('Europe/Amsterdam');
         $timeZone = TimeZone::createFromPhpDateTimeZone(
             $phpDateTimeZone,
-            new DateTimeImmutable(date("Y",strtotime("-1 year")) . '-05-01 15:00:00', $phpDateTimeZone),
-            new DateTimeImmutable(date("Y",strtotime("1 year")) . '-12-24 18:00:00', $phpDateTimeZone),
+            new DateTimeImmutable(date("Y",strtotime("-1 year")) . '-' . date("m") . '-' . date("d") . ' 00:00:00', $phpDateTimeZone),
+            new DateTimeImmutable(date("Y",strtotime("+1 year")) . '-' . date("m") . '-' . date("d") . ' 00:00:00', $phpDateTimeZone),
         );
+
+        $agenda_items = AgendaItem::all();
+        $calendar = new Calendar([]);
+        $calendar->addTimeZone($timeZone);
+
         // create Ical events from agenda items
         foreach ($agenda_items as $agenda_item) {
             $event = new Event();
