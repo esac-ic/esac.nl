@@ -45,8 +45,8 @@
                 <td>{{$certificate->abbreviation}}</td>
                 <td>{{$certificate->duration === 0 ? "" : $certificate->duration }}</td>
                 <td>
-                    <a href="{{url('/certificates/' . $certificate->id . '/edit')}}"><span title="{{trans('certificate.edit')}}" class="ion-edit" aria-hidden="true"></span></a>
-                    <a href="{{url('/certificates/'. $certificate->id)}}"><span title="{{trans("certificate.show")}}" class="ion-eye" aria-hidden="true"></span></a>
+                    <a class="mr-1 ml-1" href="{{url('/certificates/' . $certificate->id . '/edit')}}"><span title="{{trans('certificate.edit')}}" class="ion-edit font-size-120" aria-hidden="true"></span></a>
+                    <a class="mr-1 ml-1" href="{{url('/certificates/'. $certificate->id)}}"><span title="{{trans("certificate.show")}}" class="ion-eye font-size-120" aria-hidden="true"></span></a>
                 </td>
             </tr>
         @endforeach

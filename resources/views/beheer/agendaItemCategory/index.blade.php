@@ -41,8 +41,8 @@
             <tr>
                 <td>{{$category->categorieName->text()}}</td>
                 <td>
-                    <a href="{{url('/agendaItemCategories/' . $category->id . '/edit')}}"><span title="{{trans('agendaItemCategory.edit')}}" class="ion-edit" aria-hidden="true"></span></a>
-                    <a href="{{url('/agendaItemCategories/'. $category->id)}}"><span title="{{trans("agendaItemCategory.show")}}" class="ion-eye" aria-hidden="true"></span></a>
+                    <a class="mr-1 ml-1" href="{{url('/agendaItemCategories/' . $category->id . '/edit')}}"><span title="{{trans('agendaItemCategory.edit')}}" class="ion-edit font-size-120" aria-hidden="true"></span></a>
+                    <a class="mr-1 ml-1" href="{{url('/agendaItemCategories/'. $category->id)}}"><span title="{{trans("agendaItemCategory.show")}}" class="ion-eye font-size-120" aria-hidden="true"></span></a>
                 </td>
             </tr>
         @endforeach

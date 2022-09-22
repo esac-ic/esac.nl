@@ -34,8 +34,8 @@
                 <td>{{$photoAlbum->title}}</td>
                 <td>{{\Carbon\Carbon::parse($photoAlbum->date)->format('d-m-Y')}}</td>
                 <td>
-                    <a href="{{url('/photoAlbums/' . $photoAlbum->id . '/edit')}}"><span title="{{trans('photoAlbum.edit')}}" class="ion-edit" aria-hidden="true"></span></a>
-                    <a href="{{url('/photoAlbums/'. $photoAlbum->id)}}"><span title="{{trans("photoAlbum.show")}}" class="ion-eye" aria-hidden="true"></span></a>
+                    <a class="mr-1 ml-1" href="{{url('/photoAlbums/' . $photoAlbum->id . '/edit')}}"><span title="{{trans('photoAlbum.edit')}}" class="ion-edit pr-1 pl-1 font-size-120" aria-hidden="true"></span></a>
+                    <a class="mr-1 ml-1" href="{{url('/photoAlbums/'. $photoAlbum->id)}}"><span title="{{trans("photoAlbum.show")}}" class="ion-eye pr-1 pl-1 font-size-120" aria-hidden="true"></span></a>
                 </td>
             </tr>
         @endforeach
