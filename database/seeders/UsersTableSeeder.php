@@ -35,7 +35,6 @@ class UsersTableSeeder extends Seeder
         $user->emergencyzipcode = "3633IK";
         $user->emergencycountry = "NL";
         $user->birthDay = Carbon::now()->subYear(20);
-        $user->gender = "man";
         $user->kind_of_member = "member";
         $user->IBAN = "NL55 RABO 0107331020";
         $user->BIC = "";
@@ -68,7 +67,6 @@ class UsersTableSeeder extends Seeder
         $user->emergencyzipcode = "3633IK";
         $user->emergencycountry = "NL";
         $user->birthDay = Carbon::now()->subYear(20);
-        $user->gender = "man";
         $user->kind_of_member = "member";
         $user->IBAN = "NL55 RABO 0107331020";
         $user->BIC = "";
@@ -97,7 +95,6 @@ class UsersTableSeeder extends Seeder
         $user->emergencyzipcode = "3633IK";
         $user->emergencycountry = "NL";
         $user->birthDay = Carbon::now()->subYear(20);
-        $user->gender = "man";
         $user->kind_of_member = "member";
         $user->IBAN = "NL55 RABO 0107331020";
         $user->BIC = "";

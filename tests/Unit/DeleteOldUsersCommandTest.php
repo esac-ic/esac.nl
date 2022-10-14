@@ -51,7 +51,6 @@ class DeleteOldUsersCommandTest extends TestCase
         $this->assertEquals(null,$user->emergencyzipcode);
         $this->assertEquals(null,$user->emergencycountry);
         $this->assertEquals(null,$user->birthDay);
-        $this->assertEquals(null,$user->gender);
         $this->assertEquals(null,$user->kind_of_member);
         $this->assertEquals(null,$user->IBAN);
         $this->assertEquals(null,$user->BIC);
@@ -85,7 +84,6 @@ class DeleteOldUsersCommandTest extends TestCase
         $this->assertNotEquals(null,$user->emergencyzipcode);
         $this->assertNotEquals(null,$user->emergencycountry);
         $this->assertNotEquals(null,$user->birthDay);
-        $this->assertNotEquals(null,$user->gender);
         $this->assertNotEquals(null,$user->kind_of_member);
         $this->assertNotEquals(null,$user->IBAN);
         $this->assertNotEquals(null,$user->remark);

@@ -29,7 +29,6 @@ class MakeUserFieldsNullable extends Migration
             $table->string('emergencyzipcode')->nullable()->change();
             $table->string('emergencycountry')->nullable()->change();
             $table->string('birthDay')->nullable()->change();
-            $table->string('gender')->nullable()->change();
             $table->string('kind_of_member')->nullable()->change();
             $table->string('IBAN')->nullable()->change();
             $table->string('BIC')->nullable()->change();

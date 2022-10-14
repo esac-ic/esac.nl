@@ -36,7 +36,6 @@ class CreateUsersTable extends Migration
             $table->string('emergencyzipcode');
             $table->string('emergencycountry');
             $table->date('birthDay');
-            $table->string('gender');
             $table->string('kind_of_member'); //todo make it so the kind of members are dynamic
             $table->integer('nkbv_nr');
             $table->boolean('climbingCard');

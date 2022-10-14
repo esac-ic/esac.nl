@@ -28,7 +28,6 @@ return [
     "birthDay"      => "Geboortedatum",
     "man"           => "Man",
     "female"        => "Vrouw",
-    "gender"        => "Geslacht",
     "kind_of_member" => "Soort lid",
     "nkbv_nr"       => "NKBV nummer",
     "climbingCard"  => "Klimkaart",
