@@ -33,7 +33,7 @@ DB\_HOST, DB\_PORT, DB\_DATABASE, DB\_USERNAME and DB\_PASSWORD
 3. Install necessary packages
 	```sudo apt-get update
 	sudo apt-get upgrade
-	sudo apt-get install git php-common php-mysql php-cli php-gd php-curl composer mysql-server
+	sudo apt-get install git php-common php-mysql php-cli php-gd php-curl php-dom php-zip composer mysql-server
 	```
 4. Start the MySQL (database) server, set a root password, create a database, and make MySQL start on root
 	```
