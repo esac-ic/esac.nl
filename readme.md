@@ -39,6 +39,7 @@ DB\_HOST, DB\_PORT, DB\_DATABASE, DB\_USERNAME and DB\_PASSWORD
 	```
 4. Start the MySQL (database) server, set a root password, create a database, and make MySQL start on root
 	```
+	sudo service mysql start
 	sudo mysql
 	ALTER USER 'root'@'localhost' IDENTIFIED WITH mysql_native_password BY 'PASSWORD_HERE';
 	CREATE DATABASE 'esac';
