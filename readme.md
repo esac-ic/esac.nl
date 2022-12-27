@@ -62,7 +62,7 @@ DB\_HOST, DB\_PORT, DB\_DATABASE, DB\_USERNAME and DB\_PASSWORD
 	```
 	nano .env
 	```
-10. As of now, the only thing you need to change is DB_PASSWORD. Then Press Ctrl X and follow instructions.
+10. As of now, the only thing you need to change is DB_PASSWORD. If you mindlessly copied the commands in step 4, your password is now PASSWORD_HERE. Then Press Ctrl X and follow instructions.
 11. Make sure you've enabled the following extensions in your php.ini file. To find the location, use ```php --ini``` and note down the "Loaded Configuration File" path. You can use ```sudo nano [path]``` to then edit it. Make sure that these lines are uncommented (use Ctrl+W to search if you wish):
 	```
 	extension=fileinfo
