@@ -87,15 +87,15 @@ DB\_HOST, DB\_PORT, DB\_DATABASE, DB\_USERNAME and DB\_PASSWORD
 	npm run watch
 	```
 13. Open another Ubuntu (from Windows Start) and run, from the repository root
-```
-code .
-```
-This will open Visual Studio Code in the codebase.
+	```
+	code .
+	```
+	This will open Visual Studio Code in the codebase.
 14. Then run
-```
-php artisan serve
-```
-15. You can then 
+	```
+	php artisan serve
+	```
+15. You can then go to localhost:8000 in your favorite browser and view your own version of the esac website!
 
 ### Development environment (Windows)
 1. you need the following programs to run the code on your local environment:
