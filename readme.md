@@ -29,8 +29,7 @@ DB\_HOST, DB\_PORT, DB\_DATABASE, DB\_USERNAME and DB\_PASSWORD
 1. Install the following:
 	* Visual Studio Code: https://code.visualstudio.com/
 	* Ubuntu (Windows Subsystem for Linux): https://www.microsoft.com/store/productId/9PDXGNCFSCZV (link may break, just search for Ubuntu in the Windows Store. Make sure it's from Canonical Group)
-
-1.1. Enable WSL feature on Windows: Go to Open Control Panel -> Programs -> Programs and Features -> Turn Windows Feature on or off -> Check Windows Subsystem for Linux. 
+	* Enable WSL feature on Windows: Go to Open Control Panel -> Programs -> Programs and Features -> Turn Windows Feature on or off -> Check Windows Subsystem for Linux. 
 2. Open Ubuntu, wait, and set a username and password when prompted
 3. Install necessary packages
 	```
