@@ -48,13 +48,16 @@ DB\_HOST, DB\_PORT, DB\_DATABASE, DB\_USERNAME and DB\_PASSWORD
 	git clone https://github.com/esac-ic/esac.nl.git
 	```
 7. Move into the repository root 
-	```cd esac.nl/
+	```
+	cd esac.nl/
 	```
 8. Copy .env.example to .env
-	```cp .env.example .env
+	```
+	cp .env.example .env
 	```
 9. Edit .env using nano
-	```nano .env
+	```
+	nano .env
 	```
 10. As of now, the only thing you need to change is DB_PASSWORD. Then Press Ctrl X and follow instructions.
 11. Make sure you've enabled the following extensions in your php.ini file. To find the location, use ```php --ini``` and note down the "Loaded Configuration File" path. You can use ```sudo nano [path]``` to then edit it. Make sure that these lines are uncommented (use Ctrl+W to search if you wish):
@@ -84,10 +87,14 @@ DB\_HOST, DB\_PORT, DB\_DATABASE, DB\_USERNAME and DB\_PASSWORD
 	npm run watch
 	```
 13. Open another Ubuntu (from Windows Start) and run, from the repository root
-```code .```
+```
+code .
+```
 This will open Visual Studio Code in the codebase.
 14. Then run
-```php artisan serve```
+```
+php artisan serve
+```
 15. You can then 
 
 ### Development environment (Windows)
