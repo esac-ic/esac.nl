@@ -42,7 +42,7 @@ DB\_HOST, DB\_PORT, DB\_DATABASE, DB\_USERNAME and DB\_PASSWORD
 	sudo service mysql start
 	sudo mysql
 	ALTER USER 'root'@'localhost' IDENTIFIED WITH mysql_native_password BY 'PASSWORD_HERE';
-	CREATE DATABASE 'esac';
+	CREATE DATABASE esac;
 	exit
 	sudo update-rc.d mysql defaults
 	```
