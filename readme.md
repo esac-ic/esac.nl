@@ -25,6 +25,27 @@ Create an .env file from .env.example, with your local values for
 DB\_HOST, DB\_PORT, DB\_DATABASE, DB\_USERNAME and DB\_PASSWORD
 **Note**: When running your local environment on a certain port, let's say 3000, modify your `APP_URL` in the file to reflect that port, else the api's won't work
 
+### Development environment (Ubuntu on Windows + Visual Studio Code, prevents having to install a lot on Windows)
+1. Install the following:
+	* Visual Studio Code: https://code.visualstudio.com/
+	* Ubuntu (Windows Subsystem for Linux): https://www.microsoft.com/store/productId/9PDXGNCFSCZV (link may break, just search for Ubuntu in the Windows Store. Make sure it's from Canonical Group)
+2. Open Ubuntu, wait, and set a username and password when prompted
+3. Install necessary packages
+	```sudo apt-get update
+	sudo apt-get upgrade
+	sudo apt-get install git php composer mysql-server```
+4. Start the MySQL (database) server and make it start on boot
+	```sudo service mysql start
+	sudo update-rc.d mysql defaults```
+5. Set up MySQL (follow the instructions)
+	```sudo mysql_secure_installation```
+6. Clone the project repository 
+	```
+	git clone https://github.com/esac-ic/esac.nl.git
+	```
+7. Move into the repository ```cd esac.nl/```, copy env.example
+WIP.. need to restart my PC.
+
 ### Development environment (Windows)
 1. you need the following programs to run the code on your local environment:
 	* A web serverXampp: https://www.apachefriends.org/index.html
