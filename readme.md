@@ -46,7 +46,8 @@ DB\_HOST, DB\_PORT, DB\_DATABASE, DB\_USERNAME and DB\_PASSWORD
 	extension=gd
 	extension=pdo_mysql
 	```
-5. Execute the following commands from the repository root
+5. Create the Esac database within mysql by launching the Admin portal in Xampp and creating the database 'esac' manually.
+6. Execute the following commands from the repository root
 	```
 	composer install
 	php artisan migrate
@@ -63,6 +64,11 @@ DB\_HOST, DB\_PORT, DB\_DATABASE, DB\_USERNAME and DB\_PASSWORD
 	It is also possible to recompile your files when you make a change by running the following command
 	```
 	npm run watch
+	```
+7. Run the dev server locally
+	```
+    cd public
+    php -S localhost:8000
 	```
 
 ### Production environment
