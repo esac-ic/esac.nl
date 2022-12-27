@@ -70,7 +70,6 @@ DB\_HOST, DB\_PORT, DB\_DATABASE, DB\_USERNAME and DB\_PASSWORD
 	```
 12. Execute the following commands from the repository root
 	```
-	composer update
 	composer install
 	php artisan migrate
 	php artisan db:seed
