@@ -24,7 +24,7 @@
                 </p>
                 <p class="font-size-180">
                   <span class="p-1"><a href="https://www.facebook.com/esac040" class="ion-social-facebook"></a></span>
-                  <span class="p-1"><a href="https://www.instagram.com/esac040" class="ion-social-instagram"></a></span>
+                  <span class="p-1"><a href="https://www.instagram.com/esac.nl/" class="ion-social-instagram"></a></span>
                   <span class="p-1"><a href="https://www.youtube.com/channel/UCn6jb9BA10f-rbvinYCYlxA/" class="ion-social-youtube"></a></span>
                 </p>
             </div>
