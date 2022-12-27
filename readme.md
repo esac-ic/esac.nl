@@ -33,18 +33,62 @@ DB\_HOST, DB\_PORT, DB\_DATABASE, DB\_USERNAME and DB\_PASSWORD
 3. Install necessary packages
 	```sudo apt-get update
 	sudo apt-get upgrade
-	sudo apt-get install git php composer mysql-server```
-4. Start the MySQL (database) server and make it start on boot
-	```sudo service mysql start
-	sudo update-rc.d mysql defaults```
-5. Set up MySQL (follow the instructions)
-	```sudo mysql_secure_installation```
+	sudo apt-get install git php-common php-mysql php-cli php-gd php-curl composer mysql-server
+	```
+4. Start the MySQL (database) server, set a root password, create a database, and make MySQL start on root
+	```
+	sudo mysql
+	ALTER USER 'root'@'localhost' IDENTIFIED WITH mysql_native_password BY 'PASSWORD_HERE';
+	CREATE DATABASE 'esac';
+	exit
+	sudo update-rc.d mysql defaults
+	```
 6. Clone the project repository 
 	```
 	git clone https://github.com/esac-ic/esac.nl.git
 	```
-7. Move into the repository ```cd esac.nl/```, copy env.example
-WIP.. need to restart my PC.
+7. Move into the repository root 
+	```cd esac.nl/
+	```
+8. Copy .env.example to .env
+	```cp .env.example .env
+	```
+9. Edit .env using nano
+	```nano .env
+	```
+10. As of now, the only thing you need to change is DB_PASSWORD. Then Press Ctrl X and follow instructions.
+11. Make sure you've enabled the following extensions in your php.ini file. To find the location, use ```php --ini``` and note down the "Loaded Configuration File" path. You can use ```sudo nano [path]``` to then edit it. Make sure that these lines are uncommented (use Ctrl+W to search if you wish):
+	```
+	extension=fileinfo
+	extension=gd
+	extension=pdo_mysql
+	extension=curl
+	```
+12. Execute the following commands from the repository root
+	```
+	composer update
+	composer install
+	php artisan migrate
+	php artisan db:seed
+	php artisan key:generate
+	php artisan storage:link
+	npm install
+	npm run dev
+	```
+	When you make changes to CSS or JS file you need to build again which can be done with
+	```
+	npm run dev
+	```
+	It is also possible to recompile your files when you make a change by running the following command
+	```
+	npm run watch
+	```
+13. Open another Ubuntu (from Windows Start) and run, from the repository root
+```code .```
+This will open Visual Studio Code in the codebase.
+14. Then run
+```php artisan serve```
+15. You can then 
 
 ### Development environment (Windows)
 1. you need the following programs to run the code on your local environment:
