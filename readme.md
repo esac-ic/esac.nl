@@ -31,7 +31,8 @@ DB\_HOST, DB\_PORT, DB\_DATABASE, DB\_USERNAME and DB\_PASSWORD
 	* Ubuntu (Windows Subsystem for Linux): https://www.microsoft.com/store/productId/9PDXGNCFSCZV (link may break, just search for Ubuntu in the Windows Store. Make sure it's from Canonical Group)
 2. Open Ubuntu, wait, and set a username and password when prompted
 3. Install necessary packages
-	```sudo apt-get update
+	```
+	sudo apt-get update
 	sudo apt-get upgrade
 	sudo apt-get install git php-common php-mysql php-cli php-gd php-curl php-dom php-zip composer mysql-server npm
 	```
