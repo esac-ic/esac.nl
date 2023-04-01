@@ -5,6 +5,8 @@ namespace App\Http\Controllers\Api;
 use App\AgendaItem;
 use App\AgendaItemCategorie;
 use App\Http\Controllers\Controller;
+use App\Services\AgendaApplicationFormService;
+use Auth;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 
@@ -42,9 +44,24 @@ class AgendaController extends Controller
 
         $agendaItems_compleet = $agendaItemQeury->orderBy('startDate', 'asc')->get();
         $agendaItems = array();
-
+        
+        //service to get the responses for an agenda item
+        $agendaApplicationFormService = new AgendaApplicationFormService();
+        
+        //echo("<script>console.log('PHP: ');</script>");
+       
         for($i= $start; $i < ($start + $limit >= count($agendaItems_compleet)? count($agendaItems_compleet) : $start + $limit); $i++){
             $agendaItem = $agendaItems_compleet[$i];
+            //check if the currently signed in user is signed up for the agenda item
+            $currentUserSignedUp = false;
+            if($agendaItem->application_form_id != null){
+                foreach ($agendaApplicationFormService->getRegisteredUsers($agendaItem)['userdata'] as $user){
+                    if($user->id == Auth::id()) {
+                        $currentUserSignedUp = true;
+                    }
+                }
+            }
+            
             array_push($agendaItems,[
                 "id"    => $agendaItem->id,
                 "title" => $agendaItem->agendaItemTitle->text(),
@@ -57,7 +74,8 @@ class AgendaController extends Controller
                 "formId" => $agendaItem->getApplicationForm,
                 "canRegister" => $agendaItem->canRegister(),
                 "application_form_id" => $agendaItem->application_form_id,
-                "amountOfPeopleRegisterd" => count($agendaItem->getApplicationFormResponses)
+                "amountOfPeopleRegisterd" => count($agendaItem->getApplicationFormResponses),
+                "currentUserSignedUp" => $currentUserSignedUp
                 ]);
         }
         return [

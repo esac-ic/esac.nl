@@ -6,9 +6,9 @@
                     <div class="card w-100">
                         <div class="card-body">
                         <button type="button" class="btn btn-outline-primary float-right" data-toggle="modal" data-target="#ExportModal">
-                            <span class="ion-android-download"></span> Exporteren
+                            <span class="ion-android-download"></span> {{exportText}}
                         </button>
-                        <h2 class="card-title">Activiteiten</h2>
+                        <h2 class="card-title">{{ titleText }}</h2>
                          <p class="card-text" v-html="description"></p>
                         </div>
                     </div>
@@ -16,7 +16,7 @@
                 <div class="col-sm-4 d-flex flex-wrap">
                     <div class="card w-100">
                         <div class="card-body">
-                            <h4 class="card-title">Filters</h4>
+                            <h4 class="card-title">{{filterText}}</h4>
                             <agenda-filters/>
                         </div>
                     </div>
@@ -39,7 +39,7 @@
     import AgendaFilters from './AgendaFilters';
     import AgendaItem from './AgendaItem';
     import AgendaPagination from './AgendaPagination';
-
+    
     export default {
         name: "Agenda",
         components: {
@@ -62,7 +62,10 @@
         },
         data() {
             return {
-                description: DESCRIPTION
+                description: DESCRIPTION,
+                titleText: 'Activiteiten',
+                exportText: 'Exporteren',
+                filterText: "Filters",
             }
         }
     }

@@ -17,7 +17,8 @@
                         <span class="ion-person-stalker"></span> {{agenda.amountOfPeopleRegisterd}}
                     </div>
                     <div v-show="agenda.canRegister" class="col-auto">
-                        <a class="btn btn-outline-primary" :href="makeApplicationFormUrl()">Schrijf je in</a>
+                        <a v-if="checkIfCurrentUserSignedUp()" class="btn btn-outline-primary" style="color:red" :href="makeAgendaSignOffUrl()">Afmelden</a>
+                        <a v-if="!checkIfCurrentUserSignedUp()" class="btn btn-outline-primary" :href="makeApplicationFormUrl()">Schrijf je in</a>
                     </div>
                 </div>
             </div>
@@ -26,6 +27,7 @@
 </template>
 
 <script>
+    
     export default {
         name: "AgendaItem",
         props: [
@@ -37,7 +39,23 @@
             },
             makeAgendaDetailUrl(){
                 return '/agenda/' + this.agenda.id
+            },
+            makeAgendaSignOffUrl(){
+                return '/agenda/' + this.agenda.id + "/unregister"
+            },
+            checkIfCurrentUserSignedUp() {
+                return this.agenda.currentUserSignedUp;
             }
+        },
+        data() {
+            return {
+                hasNotSignedUp: ''
+            }
+        },
+        created() {
+            this.hasNotSignedUp = true;
+            //console.log(this.agenda.currentUserSignedUp);
+            
         }
     }
 </script>

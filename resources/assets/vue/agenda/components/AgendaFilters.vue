@@ -1,14 +1,14 @@
 <template>
     <div>
         <div class="form-group">
-            <label>Categoriën</label>
+            <label>{{categorieString}}</label>
             <select class="form-control" v-model="selectedCategorie" v-on:change="categorieChanged">
-                <option value="">Alles</option>
+                <option value="">{{everythingString}}</option>
                 <option v-for="categorie in categories" :key="categorie.id" :value="categorie.id">{{categorie.name}}</option>
             </select>
         </div>
         <div class="form-group">
-            <label>Start datum</label>
+            <label>{{startDateString}}</label>
             <datepicker v-model="startDate" input-class="form-control" :format="dateFormat" v-on:input="startDateChanged"></datepicker>
         </div>
     </div>
@@ -24,6 +24,9 @@
             return {
                 selectedCategorie: "",
                 startDate:  new Date(),
+                categorieString: 'Categorien',
+                everythingString: 'Alles',
+                startDateString: 'Start datum'
             }
         },
         components: {
