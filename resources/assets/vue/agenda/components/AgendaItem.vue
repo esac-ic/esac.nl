@@ -41,7 +41,7 @@
                 return '/agenda/' + this.agenda.id
             },
             makeAgendaSignOffUrl(){
-                return '/agenda/' + this.agenda.id + "/unregister"
+                return '/forms/' + this.agenda.id + "/unregister/0" //0 is added to redirect to agenda page and not the agenda item
             },
             checkIfCurrentUserSignedUp() {
                 return this.agenda.currentUserSignedUp;
