@@ -46,16 +46,6 @@
             checkIfCurrentUserSignedUp() {
                 return this.agenda.currentUserSignedUp;
             }
-        },
-        data() {
-            return {
-                hasNotSignedUp: ''
-            }
-        },
-        created() {
-            this.hasNotSignedUp = true;
-            //console.log(this.agenda.currentUserSignedUp);
-            
         }
     }
 </script>

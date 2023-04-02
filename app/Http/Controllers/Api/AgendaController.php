@@ -55,9 +55,11 @@ class AgendaController extends Controller
             //check if the currently signed in user is signed up for the agenda item
             $currentUserSignedUp = false;
             if($agendaItem->application_form_id != null){
-                foreach ($agendaApplicationFormService->getRegisteredUsers($agendaItem)['userdata'] as $user){
-                    if($user->id == Auth::id()) {
-                        $currentUserSignedUp = true;
+                if($agendaItem->canRegister()) {
+                    foreach ($agendaApplicationFormService->getRegisteredUsers($agendaItem)['userdata'] as $user){
+                        if($user->id == Auth::id()) {
+                            $currentUserSignedUp = true;
+                        }
                     }
                 }
             }
