@@ -17,7 +17,7 @@
                     <div class="card w-100">
                         <div class="card-body">
                             <h4 class="card-title">{{filterText}}</h4>
-                            <agenda-filters/>
+                            <agenda-filters :lang="lang" />
                         </div>
                     </div>
                 </div>
@@ -26,7 +26,7 @@
         <section class="py-3">
             <div class="container">
                 <div class="row d-flex align-items-stretch align-items-center">
-                    <agenda-item v-for="agendaItem in agendaItems" :key="agendaItem.id" :agenda="agendaItem"/>
+                    <agenda-item v-for="agendaItem in agendaItems" :key="agendaItem.id" :agenda="agendaItem" :lang="lang" />
                 </div>
                 <agenda-pagination/>
             </div>
@@ -59,10 +59,28 @@
         },
         mounted () {
             this.fetchAgendaItems();
+            
+            //translate based on the language
+            console.log(this.lang);
+            if (this.lang == 'en') {
+                this.titleText = 'Activities';
+                this.exportText = 'Export';
+                this.filterText = 'Filters';
+            } else if (this.lang == 'nl') {
+                this.titleText = 'Activiteiten';
+                this.exportText = 'Exporteren';
+                this.filterText = "Filters";
+            } else {
+                //currently the default language is dutch
+                this.titleText = 'Activiteiten';
+                this.exportText = 'Exporteren';
+                this.filterText = "Filters";
+            }
         },
         data() {
             return {
                 description: DESCRIPTION,
+                lang: LANG,
                 titleText: 'Activiteiten',
                 exportText: 'Exporteren',
                 filterText: "Filters",

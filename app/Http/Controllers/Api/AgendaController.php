@@ -9,6 +9,7 @@ use App\Services\AgendaApplicationFormService;
 use Auth;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\App;
 
 class AgendaController extends Controller
 {
@@ -48,7 +49,6 @@ class AgendaController extends Controller
         //service to get the responses for an agenda item
         $agendaApplicationFormService = new AgendaApplicationFormService();
         
-        //echo("<script>console.log('PHP: ');</script>");
        
         for($i= $start; $i < ($start + $limit >= count($agendaItems_compleet)? count($agendaItems_compleet) : $start + $limit); $i++){
             $agendaItem = $agendaItems_compleet[$i];
@@ -63,6 +63,7 @@ class AgendaController extends Controller
                     }
                 }
             }
+            //$test = App::getLocale();//test
             
             array_push($agendaItems,[
                 "id"    => $agendaItem->id,

@@ -17,8 +17,8 @@
                         <span class="ion-person-stalker"></span> {{agenda.amountOfPeopleRegisterd}}
                     </div>
                     <div v-show="agenda.canRegister" class="col-auto">
-                        <a v-if="checkIfCurrentUserSignedUp()" class="btn btn-outline-primary" style="color:red" :href="makeAgendaSignOffUrl()">Afmelden</a>
-                        <a v-if="!checkIfCurrentUserSignedUp()" class="btn btn-outline-primary" :href="makeApplicationFormUrl()">Schrijf je in</a>
+                        <a v-if="checkIfCurrentUserSignedUp()" class="btn btn-outline-primary" style="color:red" :href="makeAgendaSignOffUrl()">{{deregesterText}}</a>
+                        <a v-if="!checkIfCurrentUserSignedUp()" class="btn btn-outline-primary" :href="makeApplicationFormUrl()">{{regesterText}}</a>
                     </div>
                 </div>
             </div>
@@ -31,7 +31,8 @@
     export default {
         name: "AgendaItem",
         props: [
-            'agenda'
+            'agenda',
+            'lang'
         ],
         methods: {
             makeApplicationFormUrl(){
@@ -46,6 +47,34 @@
             checkIfCurrentUserSignedUp() {
                 return this.agenda.currentUserSignedUp;
             }
+        },
+        data() {
+            return {
+                deregesterText: 'Afmelden',
+                regesterText: 'Schrijf je in'
+            }
+        },
+        mounted() {
+            /**
+             * I can't figure out how to make the language of the agenda item bits update in time because as far as I can tell, when the agenda items are loaded
+             * the current language preference is not loaded yet so it defaults to nl.
+             * If there was a way to make sure the current language is already updated when the agenda items are fetched by AgendaController.php it would automatically translate.
+             */
+            
+            //set the language for the stuff that doesn't come from agenda items
+            if (this.lang == 'en') {
+                this.deregesterText = 'Unregister'
+                this.regesterText = 'Register now'
+            } else if (this.lang == 'nl') { 
+                this.deregesterText = 'Afmelden'
+                this.regesterText = 'Schrijf je in'
+            } else {
+                //currently the default language is dutch
+                this.deregesterText = 'Afmelden'
+                this.regesterText = 'Schrijf je in'
+            }
+            
+            
         }
     }
 </script>
