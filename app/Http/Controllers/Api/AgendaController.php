@@ -63,7 +63,6 @@ class AgendaController extends Controller
                     }
                 }
             }
-            //$test = App::getLocale();//test
             
             array_push($agendaItems,[
                 "id"    => $agendaItem->id,
