@@ -107,14 +107,19 @@ class UserApplicationFormController extends Controller
 
     /**
      * @param AgendaItem $agendaItem
+     * @param int $fromAgendaItem
      * @return RedirectResponse
      */
-    public function unregister(AgendaItem $agendaItem): RedirectResponse
+    public function unregister(AgendaItem $agendaItem, int $fromAgendaItem = 1): RedirectResponse
     {
         if (Carbon::parse($agendaItem->subscription_endDate) < Carbon::now()) {
             Session::flash("message", trans('ApplicationForm.subscriptionDatePastUnregisterFailed'));
 
-            return redirect('agenda/' . $agendaItem->id);
+            if ($fromAgendaItem == 1) {
+                return redirect('agenda/' . $agendaItem->id);
+            } else if ($fromAgendaItem == 0) {
+                return redirect('agenda/');
+            }
         }
 
         ApplicationResponse::query()
@@ -124,6 +129,10 @@ class UserApplicationFormController extends Controller
 
         Session::flash("message", trans('ApplicationForm.userUnregisterd'));
 
-        return redirect('agenda/' . $agendaItem->id);
+        if ($fromAgendaItem == 1) {
+            return redirect('agenda/' . $agendaItem->id);
+        } else if ($fromAgendaItem == 0) {
+            return redirect('agenda/');
+        }
     }
 }
