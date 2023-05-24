@@ -6,7 +6,7 @@
             <paginate
                     name="zekeringenList"
                     :list="zekeringen"
-                    :per="5"
+                    :per="10"
             >
             </paginate>
             <paginate-links for="zekeringenList" :async="true" :limit="2" :show-step-links="true" :classes="{
