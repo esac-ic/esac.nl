@@ -26,7 +26,7 @@ class UsersExport implements FromCollection, WithTitle, WithHeadings, ShouldAuto
         $activeUsers = $this->userRepository->getCurrentUsers(['*'],['certificates']);
         $exportData = [];
         foreach ($activeUsers as $user){
-            $user->makeHidden(['created_at', 'updated_at', 'lid_af', 'pending_user']);
+            $user->makeHidden(['updated_at', 'lid_af', 'pending_user']);
             $data = $user->toArray();
             $data['certificates'] = $user->getCertificationsAbbreviations();
             array_push($exportData,$data);
@@ -74,7 +74,8 @@ class UsersExport implements FromCollection, WithTitle, WithHeadings, ShouldAuto
             trans('user.BIC'),
             trans('user.incasso'),
             trans('user.remark'),
-            trans('user.certificates')
+            trans('user.created_at'),
+            trans('user.certificates'),
         ];
     }
 }
