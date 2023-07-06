@@ -11,6 +11,6 @@ return [
     "Content_administrator" => 2,
     "Activity_administrator" => 3,
     "Certificate_administrator" => 4,
-    "NSAC_emegency_info_administrator" => 5
+    "NSAC_emergency_info_administrator" => 5
     
 ];

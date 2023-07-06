@@ -14,9 +14,9 @@ class Authorize
      * @param  \Closure  $next
      * @return mixed
      */
-    public function handle($request, Closure $next, $role,$role2 = "-1")
+    public function handle($request, Closure $next, $role,$role2,$role3 = "-1")
     {
-        if(Auth::user()->hasRole($role,$role2)){
+        if(Auth::user()->hasRole($role,$role2,$role3)){
             return $next($request);
         } else {
             abort(403, trans('validation.Unauthorized'));

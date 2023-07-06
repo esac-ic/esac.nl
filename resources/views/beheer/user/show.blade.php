@@ -99,7 +99,7 @@
                 @endif
             </ul>
             
-            @if(\Illuminate\Support\Facades\Auth::user()->hasRole(Config::get('constants.Administrator')) || \Illuminate\Support\Facades\Auth::user()->id === $user->id || \Illuminate\Support\Facades\Auth::user()->hasRole(Config::get('constants.NSAC_emegency_info_administrator')))
+            @if(\Illuminate\Support\Facades\Auth::user()->hasRole(Config::get('constants.Administrator')) || \Illuminate\Support\Facades\Auth::user()->id === $user->id || \Illuminate\Support\Facades\Auth::user()->hasRole(Config::get('constants.NSAC_emergency_info_administrator')))
             <div class="tab-content space-sm">
                 @if(\Illuminate\Support\Facades\Auth::user()->hasRole(Config::get('constants.Administrator')) || \Illuminate\Support\Facades\Auth::user()->id === $user->id)
                 <div class="tab-pane fade show active" id="tab1-content" role="tabpanel" aria-labelledby="tab1-content">
