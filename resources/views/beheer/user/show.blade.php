@@ -37,10 +37,14 @@
                         <button type="submit" class="btn btn-success"><em class="ion-plus"></em> {{trans("user.makeActiveMember")}}</button>
                     {{ Form::close() }}
                 @endif
+                
+                @if(\Illuminate\Support\Facades\Auth::user()->hasRole(Config::get('constants.Administrator')) || \Illuminate\Support\Facades\Auth::user()->id === $user->id)
                 <a href="{{url('/users/'.$user->id . '/edit' )}}" class="btn btn-primary">
                     <span title="{{trans("menu.edit")}}" class="ion-edit" aria-hidden="true"></span>
                     {{trans("menu.edit")}}
                 </a>
+                @endif
+                
                 @if(\Illuminate\Support\Facades\Auth::user()->hasRole(Config::get('constants.Administrator'),Config::get('constants.Certificate_administrator')))
                     <a href="{{url('/users/'.$user->id . '/addCertificate' )}}" class="btn btn-primary">
                         <span title="{{trans("user.addCertificate")}}" class="ion-plus" aria-hidden="true"></span>
@@ -94,8 +98,10 @@
                     </li>
                 @endif
             </ul>
-            @if(\Illuminate\Support\Facades\Auth::user()->hasRole(Config::get('constants.Administrator')) || \Illuminate\Support\Facades\Auth::user()->id === $user->id)
+            
+            @if(\Illuminate\Support\Facades\Auth::user()->hasRole(Config::get('constants.Administrator')) || \Illuminate\Support\Facades\Auth::user()->id === $user->id || \Illuminate\Support\Facades\Auth::user()->hasRole(Config::get('constants.NSAC_emegency_info_administrator')))
             <div class="tab-content space-sm">
+                @if(\Illuminate\Support\Facades\Auth::user()->hasRole(Config::get('constants.Administrator')) || \Illuminate\Support\Facades\Auth::user()->id === $user->id)
                 <div class="tab-pane fade show active" id="tab1-content" role="tabpanel" aria-labelledby="tab1-content">
                     <table class="table table-striped" style="width:100%">
                         <tr>
@@ -176,6 +182,8 @@
                         </tr>
                     </table>
                 </div>
+                @endif
+                @if(\Illuminate\Support\Facades\Auth::user()->hasRole(Config::get('constants.Administrator')) || \Illuminate\Support\Facades\Auth::user()->id === $user->id)
                 <div class="tab-pane fade" id="tab2-content" role="tabpanel" aria-labelledby="tab2-content">
                     <table class="table table-striped" style="width:100%">
                         <tr>
@@ -192,6 +200,8 @@
                         </tr>
                     </table>
                 </div>
+                @endif
+                {{-- This tab should be visible to the NSAC emergency info role --}}
                 <div class="tab-pane fade" id="tab3-content" role="tabpanel" aria-labelledby="tab3-content">
                     <table class="table table-striped" style="width:100%">
                         <tr>
@@ -220,6 +230,7 @@
                         </tr>
                     </table>
                 </div>
+                @if(\Illuminate\Support\Facades\Auth::user()->hasRole(Config::get('constants.Administrator')) || \Illuminate\Support\Facades\Auth::user()->id === $user->id)
                 <div class="tab-pane fade" id="rols" role="tabpanel" aria-labelledby="tab3-content">
                     <table class="table table-striped" style="width:100%">
                         @if(count($user->roles) > 0)
@@ -236,6 +247,8 @@
                     </table>
                 </div>
                 @endif
+            {{-- @endif --}}
+                @if(\Illuminate\Support\Facades\Auth::user()->hasRole(Config::get('constants.Administrator')) || \Illuminate\Support\Facades\Auth::user()->id === $user->id)
                 <div class="tab-pane fade" id="certifications" role="tabpanel" aria-labelledby="tab3-content">
                     <table class="table table-striped" style="width:100%">
                         <thead>
@@ -285,6 +298,8 @@
                         </tbody>
                     </table>
                 </div>
+                @endif
+                @if(\Illuminate\Support\Facades\Auth::user()->hasRole(Config::get('constants.Administrator')) || \Illuminate\Support\Facades\Auth::user()->id === $user->id)
                 <div class="tab-pane fade" id="registrations" role="tabpanel" aria-labelledby="registrations">
                     <table class="table table-striped" style="width:100%" id="registrations_table">
                         <thead>
@@ -304,12 +319,15 @@
                         </tbody>
                     </table>
                 </div>
-                @if($user->registrationInfo !== null)
+                @endif
+                
+                @if($user->registrationInfo !== null && (\Illuminate\Support\Facades\Auth::user()->hasRole(Config::get('constants.Administrator')) || \Illuminate\Support\Facades\Auth::user()->id === $user->id))
                     <div class="tab-pane fade" id="registration_info" role="tabpanel">
                         @include('beheer.user.partials.intro-info')
                     </div>
                 @endif
             </div>
+            @endif
         </div>
     </div>
 @endsection
