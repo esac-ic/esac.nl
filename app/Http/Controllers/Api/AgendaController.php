@@ -15,73 +15,81 @@ class AgendaController extends Controller
 {
     public function getAgenda(Request $request)
     {
-        $agendaItemQuery = AgendaItem::query()
-            ->with(
-                'agendaItemShortDescription',
-                'getApplicationForm',
-                'getApplicationFormResponses',
-                'agendaItemCategory',
-                'agendaItemCategory.categorieName'
-            );
+        $agendaItemQuery = AgendaItem::with([
+            'agendaItemShortDescription',
+            'getApplicationForm',
+            'getApplicationFormResponses',
+            'agendaItemCategory.categorieName'
+        ]);
     
         // Set limit and page
-        $limit = $request->get('limit', 9);
-        $page = $request->get('page', 1);
+        $limit = $request->input('limit', 9);
+        $page = $request->input('page', 1);
         $skip = ($page - 1) * $limit;
     
-        // Add parameters if they are set in the url
-        if ($request->has('category')) {
-            $agendaItemQuery->where('category', '=', intval($request->get('category')));
+        // Apply filters
+        $category = $request->input('category');
+        if ($category) {
+            $agendaItemQuery->where('category', intval($category));
         }
-        if ($request->has('startDate')) {
-            $startDate = Carbon::createFromFormat('d-m-Y', $request->get('startDate'))->setTime(0, 0, 0);
+    
+        $startDate = $request->input('startDate');
+        if ($startDate) {
+            $startDate = Carbon::createFromFormat('d-m-Y', $startDate)->startOfDay();
             $agendaItemQuery->where(function ($query) use ($startDate) {
-                $query->where("startDate", '>=', $startDate)
-                    ->orWhere("endDate", '>=', $startDate);
+                $query->where('startDate', '>=', $startDate)
+                    ->orWhere('endDate', '>=', $startDate);
             });
         }
-        if ($request->has('endDate')) {
-            $endDate = Carbon::createFromFormat('d-m-Y', $request->get('endDate'))->setTime(0, 0, 0);
-            $agendaItemQuery->where("startDate", '<=', $endDate);
+    
+        $endDate = $request->input('endDate');
+        if ($endDate) {
+            $endDate = Carbon::createFromFormat('d-m-Y', $endDate)->startOfDay();
+            $agendaItemQuery->where('startDate', '<=', $endDate);
         }
     
         $agendaItemQuery->orderBy('startDate', 'asc');
-        $agendaItemsCompleet = $agendaItemQuery->skip($skip)->take($limit)->get();
     
-        $agendaItems = array();
+        // Get total count for pagination
+        $agendaItemCount = $agendaItemQuery->count();
     
-        $agendaApplicationFormService = new AgendaApplicationFormService();
+        // Get paginated agenda items
+        $agendaItems = $agendaItemQuery
+            ->skip($skip)
+            ->take($limit)
+            ->get()
+            ->map(function ($agendaItem) {
+                $agendaApplicationFormService = new AgendaApplicationFormService();
+                $currentUserSignedUp = false;
     
-        foreach ($agendaItemsCompleet as $agendaItem) {
-            $currentUserSignedUp = false;
-            if ($agendaItem->application_form_id != null) {
-                if ($agendaItem->canRegister()) {
+                if ($agendaItem->application_form_id && $agendaItem->canRegister()) {
                     $registeredUserIds = $agendaApplicationFormService->getRegisteredUserIds($agendaItem);
                     $currentUserSignedUp = in_array(Auth::id(), $registeredUserIds);
                 }
-            }
     
-            array_push($agendaItems, [
-                "id" => $agendaItem->id,
-                "title" => $agendaItem->agendaItemTitle->text(),
-                "thumbnail" => $agendaItem->getImageUrl(),
-                "startDate" => Carbon::parse($agendaItem->startDate)->format('d M'),
-                "endDate" => $agendaItem->endDate,
-                "full_startDate" => $agendaItem->startDate,
-                "category" => $agendaItem->agendaItemCategory->categorieName->text(),
-                "text" => $agendaItem->agendaItemShortDescription->text(),
-                "formId" => $agendaItem->getApplicationForm,
-                "canRegister" => $agendaItem->canRegister(),
-                "application_form_id" => $agendaItem->application_form_id,
-                "amountOfPeopleRegisterd" => count($agendaItem->getApplicationFormResponses),
-                "currentUserSignedUp" => $currentUserSignedUp
-            ]);
-        }
+                return [
+                    'id' => $agendaItem->id,
+                    'title' => $agendaItem->agendaItemTitle->text(),
+                    'thumbnail' => $agendaItem->getImageUrl(),
+                    'startDate' => Carbon::parse($agendaItem->startDate)->format('d M'),
+                    'endDate' => $agendaItem->endDate,
+                    'full_startDate' => $agendaItem->startDate,
+                    'category' => $agendaItem->agendaItemCategory->categorieName->text(),
+                    'text' => $agendaItem->agendaItemShortDescription->text(),
+                    'formId' => $agendaItem->getApplicationForm,
+                    'canRegister' => $agendaItem->canRegister(),
+                    'application_form_id' => $agendaItem->application_form_id,
+                    'amountOfPeopleRegisterd' => count($agendaItem->getApplicationFormResponses),
+                    'currentUserSignedUp' => $currentUserSignedUp,
+                ];
+            });
+    
         return [
-            "agendaItemCount" => count($agendaItemsCompleet),
-            "agendaItems" => $agendaItems
+            'agendaItemCount' => $agendaItemCount,
+            'agendaItems' => $agendaItems,
         ];
     }
+    
     
 
     public function getCategories(){
