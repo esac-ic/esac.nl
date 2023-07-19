@@ -37,7 +37,7 @@ class AgendaApplicationFormService
             });
             
             if ($agendaItem->climbing_activity) {
-                $user['certificate_names'] = $userObj->getCertificationsAbbreviations();
+                $user['certificate_names'] = $user->getCertificationsAbbreviations();
             }
             return $user;
         })->all();
