@@ -56,8 +56,8 @@ class AgendaController extends Controller
             $currentUserSignedUp = false;
             if ($agendaItem->application_form_id != null) {
                 if ($agendaItem->canRegister()) {
-                    $registeredUsers = collect($agendaApplicationFormService->getRegisteredUsers($agendaItem)['userdata']);
-                    $currentUserSignedUp = $registeredUsers->contains('id', Auth::id());
+                    $registeredUserIds = $agendaApplicationFormService->getRegisteredUserIds($agendaItem);
+                    $currentUserSignedUp = in_array(Auth::id(), $registeredUserIds);
                 }
             }
     

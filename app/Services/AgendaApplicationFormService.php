@@ -28,8 +28,7 @@ class AgendaApplicationFormService
     
         // Map user data
         $userdata = $applicationResponses->map(function ($response) use ($agendaItem) {
-            $userObj = $response->getApplicationResponseUser;
-            $user = $userObj->toArray();
+            $user = $response->getApplicationResponseUser;
             $user["_signupId"] = $response->id;
             
             $response->getApplicationFormResponseRows->each(function($responseRow) use (&$user) {
@@ -50,6 +49,25 @@ class AgendaApplicationFormService
             "userdata"     => $userdata,
             "customfields" => $customfields
         ];
+    }
+
+
+    /**
+     * @param AgendaItem $agendaItem
+     * @return array
+     */
+    public function getRegisteredUserIds(AgendaItem $agendaItem): array
+    {
+        // This method now only returns user IDs
+        $applicationResponses = $agendaItem->getApplicationFormResponses;
+
+        // Map user data
+        $userdataIds = $applicationResponses->map(function ($response) {
+            $user = $response->getApplicationResponseUser;
+            return $user->id;
+        })->all();
+
+        return $userdataIds;
     }
     
 
