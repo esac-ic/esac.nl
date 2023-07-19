@@ -70,9 +70,9 @@ class frontEndController extends Controller
         $curPageName = $agendaItem->agendaItemTitle->text();
         if($agendaItem->application_form_id != null){
             foreach ($agendaApplicationFormService->getRegisteredUsers($agendaItem)['userdata'] as $user){
-                $users[$user->id] = [
-                    "name" => $user->getName(),
-                    "certificate_names" => $user->certificate_names
+                $users[$user['id']] = [
+                    "name" => $user['name'],
+                    "certificate_names" => $user['certificate_names']
                 ];
             }
         }
