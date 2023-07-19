@@ -28,8 +28,7 @@ class AgendaApplicationFormService
     
         // Map user data
         $userdata = $applicationResponses->map(function ($response) use ($agendaItem) {
-            $userObj = $response->getApplicationResponseUser;
-            $user = $userObj->toArray();
+            $user = $response->getApplicationResponseUser;
             $user["_signupId"] = $response->id;
             
             $response->getApplicationFormResponseRows->each(function($responseRow) use (&$user) {
@@ -52,7 +51,7 @@ class AgendaApplicationFormService
         ];
     }
 
-    
+
     /**
      * @param AgendaItem $agendaItem
      * @return array
