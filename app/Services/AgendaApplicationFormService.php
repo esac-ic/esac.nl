@@ -51,6 +51,25 @@ class AgendaApplicationFormService
             "customfields" => $customfields
         ];
     }
+
+    
+    /**
+     * @param AgendaItem $agendaItem
+     * @return array
+     */
+    public function getRegisteredUserIds(AgendaItem $agendaItem): array
+    {
+        // This method now only returns user IDs
+        $applicationResponses = $agendaItem->getApplicationFormResponses;
+
+        // Map user data
+        $userdataIds = $applicationResponses->map(function ($response) {
+            $user = $response->getApplicationResponseUser;
+            return $user->id;
+        })->all();
+
+        return $userdataIds;
+    }
     
 
     /**
