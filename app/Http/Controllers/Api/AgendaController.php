@@ -13,58 +13,56 @@ use Illuminate\Support\Facades\App;
 
 class AgendaController extends Controller
 {
-    public function getAgenda(Request $request){
+    public function getAgenda(Request $request)
+    {
         $agendaItemQuery = AgendaItem::query()
-        ->with(
-            'agendaItemShortDescription',
-            'getApplicationForm',
-            'getApplicationFormResponses',
-            'agendaItemCategory',
-            'agendaItemCategory.categorieName'
-        );
-
+            ->with(
+                'agendaItemShortDescription',
+                'getApplicationForm',
+                'getApplicationFormResponses',
+                'agendaItemCategory',
+                'agendaItemCategory.categorieName'
+            );
+    
         // Set limit and page
         $limit = $request->get('limit', 9);
         $page = $request->get('page', 1);
         $skip = ($page - 1) * $limit;
-
-        //add parameters if there set in the url
-        if($request->has('category')){
-            $agendaItemQeury->where('category','=', intval($request->get('category')));
+    
+        // Add parameters if they are set in the url
+        if ($request->has('category')) {
+            $agendaItemQuery->where('category', '=', intval($request->get('category')));
         }
-        if($request->has('startDate')){
+        if ($request->has('startDate')) {
             $startDate = Carbon::createFromFormat('d-m-Y', $request->get('startDate'))->setTime(0, 0, 0);
-            $agendaItemQeury
-                ->where(function ($query) use ($startDate) {
-                    $query
-                        ->where("startDate",'>=',$startDate)
-                        ->orWhere("endDate",'>=',$startDate);
-                });
+            $agendaItemQuery->where(function ($query) use ($startDate) {
+                $query->where("startDate", '>=', $startDate)
+                    ->orWhere("endDate", '>=', $startDate);
+            });
         }
-        if($request->has('endDate')){
+        if ($request->has('endDate')) {
             $endDate = Carbon::createFromFormat('d-m-Y', $request->get('endDate'))->setTime(0, 0, 0);
-            $agendaItemQeury->where("startDate",'<=',$endDate);
+            $agendaItemQuery->where("startDate", '<=', $endDate);
         }
-
+    
         $agendaItemQuery->orderBy('startDate', 'asc');
-        $agendaItems_compleet = $agendaItemQuery->skip($skip)->take($limit)->get();
-        
+        $agendaItemsCompleet = $agendaItemQuery->skip($skip)->take($limit)->get();
+    
         $agendaItems = array();
-        
+    
         $agendaApplicationFormService = new AgendaApplicationFormService();
-        
-       
-        foreach($agendaItems_compleet as $agendaItem){
+    
+        foreach ($agendaItemsCompleet as $agendaItem) {
             $currentUserSignedUp = false;
-            if($agendaItem->application_form_id != null){
-                if($agendaItem->canRegister()) {
+            if ($agendaItem->application_form_id != null) {
+                if ($agendaItem->canRegister()) {
                     $registeredUsers = collect($agendaApplicationFormService->getRegisteredUsers($agendaItem)['userdata']);
                     $currentUserSignedUp = $registeredUsers->contains('id', Auth::id());
                 }
             }
-            
-            array_push($agendaItems,[
-                "id"    => $agendaItem->id,
+    
+            array_push($agendaItems, [
+                "id" => $agendaItem->id,
                 "title" => $agendaItem->agendaItemTitle->text(),
                 "thumbnail" => $agendaItem->getImageUrl(),
                 "startDate" => Carbon::parse($agendaItem->startDate)->format('d M'),
@@ -77,13 +75,14 @@ class AgendaController extends Controller
                 "application_form_id" => $agendaItem->application_form_id,
                 "amountOfPeopleRegisterd" => count($agendaItem->getApplicationFormResponses),
                 "currentUserSignedUp" => $currentUserSignedUp
-                ]);
+            ]);
         }
         return [
-            "agendaItemCount" => count($agendaItems_compleet),
+            "agendaItemCount" => count($agendaItemsCompleet),
             "agendaItems" => $agendaItems
         ];
     }
+    
 
     public function getCategories(){
         $categories = AgendaItemCategorie::with('categorieName')
