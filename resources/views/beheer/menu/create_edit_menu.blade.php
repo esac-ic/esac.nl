@@ -84,7 +84,6 @@
             });
 
             $('#menuItem').change(function () {
-               console.log('menuitem chnge');
                 if($('#menuItem').is(':checked')){
                     $('#menuSettingRow1').show();
                     $('#menuSettingRow2').show();
