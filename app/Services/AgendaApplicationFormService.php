@@ -28,7 +28,8 @@ class AgendaApplicationFormService
     
         // Map user data
         $userdata = $applicationResponses->map(function ($response) use ($agendaItem) {
-            $user = $response->getApplicationResponseUser->toArray();
+            $userObj = $response->getApplicationResponseUser;
+            $user = $userObj->toArray();
             $user["_signupId"] = $response->id;
             
             $response->getApplicationFormResponseRows->each(function($responseRow) use (&$user) {
@@ -37,7 +38,7 @@ class AgendaApplicationFormService
             });
             
             if ($agendaItem->climbing_activity) {
-                $user['certificate_names'] = $user->getCertificationsAbbreviations();
+                $user['certificate_names'] = $userObj->getCertificationsAbbreviations();
             }
             return $user;
         })->all();
