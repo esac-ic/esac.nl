@@ -1,5 +1,8 @@
 FROM php:8.1.6-fpm
+
 RUN apt-get update && \
+   docker-php-ext-install opcache && \
+   docker-php-ext-enable opcache && \
    docker-php-ext-install pdo_mysql && \
    apt install -y zip \
    libzip-dev zip libwebp-dev libjpeg62-turbo-dev libpng-dev libxpm-dev \
@@ -8,6 +11,8 @@ RUN apt-get update && \
    docker-php-ext-install gd && \
    docker-php-ext-install zip && \
    rm -rf /var/lib/apt/lists/*
+
+COPY opcache.ini /usr/local/etc/php/conf.d/opcache.ini
 
 COPY . /var/www/
 WORKDIR "/var/www/"
