@@ -23,9 +23,8 @@ class AgendaController extends Controller
         ]);
     
         // Set limit and page
-        $limit = $request->input('limit', 9);
-        $page = $request->input('page', 1);
-        $skip = ($page - 1) * $limit;
+        $limit = $request->has('limit')? $request->get('limit'): 9;
+        $start = $request->has('start')? $request->get('start') : 0;
     
         // Apply filters
         $category = $request->input('category');
@@ -55,7 +54,7 @@ class AgendaController extends Controller
     
         // Get paginated agenda items
         $agendaItems = $agendaItemQuery
-            ->skip($skip)
+            ->skip($start)
             ->take($limit)
             ->get()
             ->map(function ($agendaItem) {
