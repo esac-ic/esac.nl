@@ -18,7 +18,7 @@
             <p class="card-text">
                 ...{{zekering.text}}
             </p>
-            <sub-zekering v-for="subzekering in zekering.childZekeringen"  :key="subzekering.id" :zekering="subzekering"/>
+            <sub-zekering v-for="subzekering in zekering.children"  :key="subzekering.id" :zekering="subzekering"/>
             <div class="form-row ml-4" v-if="showForm">
                 <div class="col-6 form-group">
                     <input type="text" class="form-control" id="subZekering" v-model="subZekering" placeholder="...Sub-zekering">
@@ -71,7 +71,7 @@
             }
         },
         mounted(){
-            this.canAddSubzekering = this.zekering.childZekeringen.length < 4 && LOGDIN === "1";
+            this.canAddSubzekering = this.zekering.children.length < 4 && LOGDIN === "1";
             this.canDelete = ADMIN === "1";
         }
     }
