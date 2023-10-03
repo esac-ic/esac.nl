@@ -21,18 +21,15 @@ class ZekeringenRepository implements IRepository
         $zekering->text = $data["text"];
         $zekering->createdBy = Auth::user()->id;
         $zekering->score = 1;
-        $zekering->save();
-
-        if(array_key_exists('parent',$data)) {
+    
+        if (array_key_exists('parent', $data)) {
             $zekering->parent_id = $data["parent"];
             $zekering->has_parent = True;
-            $zekering->save();
         } else {
-            $zekeringId = $zekering->id;
-            $zekering->parent_id = $zekeringId;
             $zekering->has_parent = False;
-            $zekering->save();
         }
+    
+        $zekering->save();
     }
 
     public function update($id, array $data)
