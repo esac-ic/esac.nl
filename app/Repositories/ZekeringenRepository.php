@@ -52,7 +52,7 @@ class ZekeringenRepository implements IRepository
 
     public function findBy($field, $value, $columns = array('*'))
     {
-        return Zekering::where($field, '=',$value)->orderBy('id', 'desc')->get($columns);
+        return Zekering::where($field, '=',$value)->orderBy('id', 'desc');
     }
 
     public function all($columns = array('*'))
