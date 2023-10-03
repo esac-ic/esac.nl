@@ -16,34 +16,15 @@ class ZekeringController extends Controller
         $this->middleware('authorize:'.\Config::get('constants.Activity_administrator'))->only('destroy');
     }
 
-    public function getZekeringen(Request $request, RepositorieFactory $repositorieFactory){
+    public function getZekeringen(Request $request, RepositorieFactory $repositorieFactory) {
         $zekeringenRepo = $repositorieFactory->getRepositorie($repositorieFactory::$ZEKERINGENREPOKEY);
-
-        $zekeringen = array();
-        foreach($zekeringenRepo->findBy('has_parent',false) as $zekering){
-            $childZekeringen = [];
-            foreach ($zekeringenRepo->getChildZekeringen($zekering->id) as $childZekering){
-                array_push($childZekeringen,[
-                    "id" => $childZekering->id,
-                    "text" => $childZekering->text,
-                    "parent_id" => $childZekering->parent_id,
-                    "has_parent" => $childZekering->has_parent
-                ]);
-            }
-            array_push($zekeringen,[
-                "id" => $zekering->id,
-                "text" => $zekering->text,
-                "parent_id" => $zekering->parent_id,
-                "has_parent" => $zekering->has_parent,
-                "childZekeringen" => $childZekeringen
-            ]);
-        }
+        
+        $zekeringen = $zekeringenRepo->findBy('has_parent',false)->with('children')->get();
+    
         return [
             "zekeringen" => $zekeringen
         ];
     }
-
-
 
     public function storeZekering(Request $request,ZekeringenRepository $zekeringenRepository){
         $this->validateInput($request);

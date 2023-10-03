@@ -59,8 +59,4 @@ class ZekeringenRepository implements IRepository
     {
         return Zekering::query()->orderBy('parent_id', 'desc')->get();
     }
-
-    public function getChildZekeringen($parentid){
-        return Zekering::query()->where('parent_id','=',$parentid)->where('id', '!=',$parentid)->orderBy('id', 'asc')->get();
-    }
 }
