@@ -21,5 +21,7 @@ class Zekering extends Model {
         'has_parent'
     ];
 
-
+    public function children() {
+        return $this->hasMany(Zekering::class, 'parent_id', 'id')->where('id', '!=', 'parent_id');
+    }
 }
