@@ -31,7 +31,7 @@
     "summernote": "^0.8.20",
     "tempusdominus-bootstrap-4": "^5.39.2",
     "tempusdominus-core": "^5.19.3",
-    "vue-loader": "^15.9.7",
+    "vue-loader": "^17.2.2",
     "vue-template-compiler": "^2.6.14"
   },
   "dependencies": {
