@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class DeleteGenderFromUser extends Migration
+class RemoveGenderFromUsersTable extends Migration
 {
     /**
      * Run the migrations.
@@ -26,7 +26,7 @@ class DeleteGenderFromUser extends Migration
     public function down()
     {
         Schema::table('users', function (Blueprint $table) {
-            $table->string('gender');
+            $table->string('gender')->nullable(); // Adding the column back in the reverse migration.
         });
     }
 }
