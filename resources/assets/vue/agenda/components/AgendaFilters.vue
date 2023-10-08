@@ -1,14 +1,14 @@
 <template>
     <div>
         <div class="form-group">
-            <label>Categoriën</label>
+            <label>{{categoriesText}}</label>
             <select class="form-control" v-model="selectedCategorie" v-on:change="categorieChanged">
-                <option value="">Alles</option>
+                <option value="">{{allCategoriesText}}</option>
                 <option v-for="categorie in categories" :key="categorie.id" :value="categorie.id">{{categorie.name}}</option>
             </select>
         </div>
         <div class="form-group">
-            <label>Start datum</label>
+            <label>{{startDateText}}</label>
             <datepicker v-model="startDate" input-class="form-control" :format="dateFormat" v-on:input="startDateChanged"></datepicker>
         </div>
     </div>
@@ -20,10 +20,16 @@
 
     export default {
         name: "AgendaFilters",
+        props:[
+            'lang'
+        ],
         data(){
             return {
                 selectedCategorie: "",
                 startDate:  new Date(),
+                allCategoriesText: 'Alles',
+                categoriesText: 'Categorien',
+                startDateText: 'Start datum'
             }
         },
         components: {
@@ -52,6 +58,22 @@
         },
         mounted () {
             this.fetchAgendaCategories();
+            
+            //set the language
+            if (this.lang == 'en') {
+                this.allCategoriesText = 'All';
+                this.categoriesText = 'Categories';
+                this.startDateText=  'Start date';
+            } else if (this.lang == 'nl') {
+                this.allCategoriesText = 'Alles';
+                this.categoriesText = 'Categorien';
+                this.startDateText=  'Start datum';
+            } else {
+                //currently the default language is dutch
+                this.allCategoriesText = 'Alles';
+                this.categoriesText = 'Categorien';
+                this.startDateText=  'Start datum';
+            }
         }
     }
 </script>
