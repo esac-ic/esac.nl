@@ -52,7 +52,6 @@ class RegisterNewMemberTest extends TestCase
             'emergencyzipcode' => '3473JP',
             'emergencycountry' => 'NL',
             'birthDay' => Carbon::now()->subCenturies(2)->format('d-m-Y'),
-            'gender' => 'Man',
             'IBAN' => "BLNDj838474784848",
             'incasso' => 1,
             'privacy_policy' => 1,
@@ -83,7 +82,6 @@ class RegisterNewMemberTest extends TestCase
         $this->assertEquals($body['emergencyzipcode'], $user->emergencyzipcode);
         $this->assertEquals($body['emergencycountry'], $user->emergencycountry);
         $this->assertEquals($body['birthDay'], Carbon::parse($user->birthDay)->format('d-m-Y'));
-        $this->assertEquals($body['gender'], $user->gender);
         $this->assertEquals('member', $user->kind_of_member);
         $this->assertEquals($body['IBAN'], $user->IBAN);
         $this->assertEquals($body['incasso'], $user->incasso);
@@ -115,7 +113,6 @@ class RegisterNewMemberTest extends TestCase
         $this->assertEquals("Veld emergencyzipcode moet ingevuld zijn", $errors->get('emergencyzipcode')[0]);
         $this->assertEquals("Veld emergencycountry moet ingevuld zijn", $errors->get('emergencycountry')[0]);
         $this->assertEquals("Veld birth day moet ingevuld zijn", $errors->get('birthDay')[0]);
-        $this->assertEquals("Veld gender moet ingevuld zijn", $errors->get('gender')[0]);
         $this->assertEquals("Veld i b a n moet ingevuld zijn", $errors->get('IBAN')[0]);
         $this->assertEquals("'Ik ben geen robot' validatie moet ingevuld zijn", $errors->get('g-recaptcha-response')[0]);
         $this->assertEquals("Veld Automatic Collection moet ingevuld zijn", $errors->get('incasso')[0]);

@@ -151,10 +151,6 @@
                             <td>{{$user->birthDay}}</td>
                         </tr>
                         <tr>
-                            <td>{{trans('user.gender')}}</td>
-                            <td>{{$user->gender}}</td>
-                        </tr>
-                        <tr>
                             <td>{{trans('user.kind_of_member')}}</td>
                             <td>
                                 @isset($user->kind_of_member)
