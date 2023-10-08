@@ -8,7 +8,7 @@
 
 return [
     "member" => "Lid",
-    "extraordinary_member" => "Buitengewoon lid",
+    "extraordinary_member" => "Buitengewoon deelnemer",
     "reunist" => "Reunist",
     "honorary_member" => "Erelid",
     "member_of_merit" => "Lid van Verdienste",
