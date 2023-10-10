@@ -90,7 +90,7 @@
                 </div>
             </div>
             <div class="form-row">
-                <div class="form-group col-md-4">
+                <div class="form-group col-md-6">
                     {!! Form::label('birthDay', trans('user.birthDay')) !!}
                     <div class="input-group date" id="birthDayBox" data-target-input="nearest">
                         <input type='text' class="form-control datetimepicker-input" id="birthDay" name="birthDay" data-target="#birthDayBox" value="{{($user != null) ? \Carbon\Carbon::parse($user->birthDay)->format('d-m-Y') : \Carbon\Carbon::now()->format('d-m-Y')}}" required="required">
@@ -99,12 +99,8 @@
                         </div>
                     </div>
                 </div>
-                <div class="form-group col-md-4">
-                    {!! Form::label('gender', trans('user.gender')) !!}
-                    {!! Form::select('gender',["man" => trans('user.man'), "female" => trans('user.female')], ($user != null) ? $user->gender : "", ['class' => 'form-control','required' => 'required','id' => 'gender']) !!}
-                </div>
                 @if(\Illuminate\Support\Facades\Auth::user()->hasRole(Config::get('constants.Administrator')))
-                    <div class="form-group col-md-4">
+                    <div class="form-group col-md-6">
                         {!! Form::label('kind_of_member', trans('user.kind_of_member')) !!}
                         {!! Form::select('kind_of_member',trans('kind_of_member'), ($user != null) ? $user->kind_of_member : "", ['class' => 'form-control','required' => 'required','id' => 'kind_of_member']) !!}
                     </div>

@@ -165,7 +165,6 @@ class UserController extends Controller
             'emergencyzipcode' => 'required',
             'emergencycountry' => 'required',
             'birthDay' => 'required|date',
-            'gender' => 'required',
             'IBAN' => 'required'
         ]);
 

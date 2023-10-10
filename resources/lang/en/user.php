@@ -28,7 +28,6 @@ return [
     "birthDay"      => "Birthdate",
     "man"           => "Male",
     "female"        => "Female",
-    "gender"        => "Gender",
     "kind_of_member" => "Kind of member",
     "nkbv_nr"       => "NKBV number",
     "climbingCard"  => "Climbing card",

@@ -68,7 +68,6 @@ class UsersExport implements FromCollection, WithTitle, WithHeadings, ShouldAuto
             trans('user.emzipcode'),
             trans('user.emcountry'),
             trans('user.birthDay'),
-            trans('user.gender'),
             trans('user.kind_of_member'),
             trans('user.IBAN'),
             trans('user.BIC'),

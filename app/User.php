@@ -38,7 +38,6 @@ class User extends Authenticatable
         'emergencyzipcode',
         'emergencycountry',
         'birthDay',
-        'gender',
         'kind_of_member',
         'IBAN',
         'BIC',

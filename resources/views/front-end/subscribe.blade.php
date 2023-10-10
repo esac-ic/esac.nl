@@ -98,7 +98,7 @@
                 </div>
             </div>
             <div class="form-row">
-                <div class="form-group col-md-4">
+                <div class="form-group col-md-6">
                     {!! Form::label('birthDay', trans('user.birthDay')) !!}
                     <div class="input-group date" id="birthDayBox" data-target-input="nearest">
                         <input type='text' class="form-control datetimepicker-input" id="birthDay" name="birthDay" data-target="#birthDayBox" value="" required="required">
@@ -107,11 +107,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="form-group col-md-4">
-                    {!! Form::label('gender', trans('user.gender')) !!}
-                    {!! Form::select('gender',["man" => trans('user.man'), "female" => trans('user.female')], '', ['class' => 'form-control','required' => 'required','id' => 'gender']) !!}
-                </div>
-                <div class="form-group col-md-4">
+                <div class="form-group col-md-6">
                     {!! Form::label('kind_of_member', trans('user.kind_of_member')) !!}
                     {!! Form::select('kind_of_member',trans('kind_of_member'), 'member', ['class' => 'form-control', 'required' => 'required', 'readonly' => 'readonly']) !!}
                 </div>
@@ -161,7 +157,7 @@
                 </div>
                 <div class="form-group col-md-4">
                     {!! Form::label('emergencycountry', trans('user.emergencycountry')) !!}
-                    {!! Form::select('emergencycountry',trans("countries"), '', ['class' => 'form-control','required' => 'required']) !!}
+                    {!! Form::select('emergencycountry',trans("countries"), 'NL', ['class' => 'form-control','required' => 'required']) !!}
                 </div>
             </div>
             <div class="form-group">
