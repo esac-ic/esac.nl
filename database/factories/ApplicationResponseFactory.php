@@ -3,7 +3,6 @@
 namespace Database\Factories;
 
 use App\AgendaItem;
-use App\Model;
 use App\Models\ApplicationForm\ApplicationForm;
 use App\Models\ApplicationForm\ApplicationResponse;
 use App\User;

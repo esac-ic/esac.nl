@@ -6,10 +6,10 @@
     {{ csrf_field() }}
         <div class="card">
             <div class="card-header">
-                <h3>{{ $applicationForm->applicationFormName->text() }}</h3>
+                <h3>{{ $applicationForm->name }}</h3>
             </div>
             <div class="card-body">
-                <registration-form rows="{{ json_encode($rows) }}" lang="{{  app()->getLocale() }}"></registration-form>
+                <registration-form rows="{{ json_encode($rows) }}"></registration-form>
             </div>
         </div>
 

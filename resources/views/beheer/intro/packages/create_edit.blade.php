@@ -36,12 +36,8 @@ $create = $package == null;
             {!! Form::open(['method' => $create ? 'POST' : 'PATCH', 'url' => route('beheer.intro.packages.' . ($create ? 'store' : 'update'), $package)]) !!}
             <div class="form-row">
                 <div class="form-group col-md-6">
-                    {!! Form::label('NL_text', trans('intro.packageName') . ' NL') !!}
-                    {!! Form::text('NL_text', $create ? '' : $package->packageName->NL_text, ['class' => 'form-control','required' => 'required']) !!}
-                </div>
-                <div class="form-group col-md-6">
-                    {!! Form::label('EN_text', trans('intro.packageName') . ' EN') !!}
-                    {!! Form::text('EN_text', $create ? '' : $package->packageName->EN_text, ['class' => 'form-control','required' => 'required']) !!}
+                    {!! Form::label('name', trans('intro.packageName') . ' EN') !!}
+                    {!! Form::text('name', $create ? '' : $package->name, ['class' => 'form-control','required' => 'required']) !!}
                 </div>
             </div>
             <div class="form-row">
@@ -63,7 +59,7 @@ $create = $package == null;
                         <select class="selectpicker w-100" id="application-select" data-live-search="true" name="application_form_id">
                             @foreach($applicationForms as $applicationForm)
                                 <option value="{{ $applicationForm->id }}">
-                                    {{ $applicationForm->applicationFormName->text() }}
+                                    {{ $applicationForm->name }}
                                 </option>
                             @endforeach
                         </select>

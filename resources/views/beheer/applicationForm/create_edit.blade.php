@@ -30,12 +30,8 @@
                     <input name="amount_of_formrows" type="hidden" id="amount_of_formrows" value="0">
                     <div class="form-row">
                         <div class="form-group col-md-6">
-                            {!! Form::label('name', trans('ApplicationForm.nameNl')) !!}
-                            {!! Form::text('nl_name', ($applicationForm != null) ? $applicationForm->applicationFormName->NL_text : "", ['class' => 'form-control','required' => 'required']) !!}
-                        </div>
-                        <div class="form-group col-md-6">
                             {!! Form::label('name', trans('ApplicationForm.nameEn')) !!}
-                            {!! Form::text('en_name', ($applicationForm != null) ? $applicationForm->applicationFormName->EN_text : "", ['class' => 'form-control','required' => 'required']) !!}
+                            {!! Form::text('name', ($applicationForm != null) ? $applicationForm->name : "", ['class' => 'form-control','required' => 'required']) !!}
                         </div>
                     </div>
                 </div>

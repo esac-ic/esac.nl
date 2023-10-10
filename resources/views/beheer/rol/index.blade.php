@@ -39,7 +39,7 @@
 
         @foreach ($rols as $rol)
             <tr >
-                <td>{{$rol->text->text()}}</td>
+                <td>{{$rol->name}}</td>
                 <td>
                     <a class="mr-1 ml-1" href="{{url('/rols/' . $rol->id . '/edit')}}"><span title="{{trans('rol.edit')}}" class="ion-edit font-size-120" aria-hidden="true"></span></a>
                     <a class="mr-1 ml-1" href="{{url('/rols/'. $rol->id)}}"><span title="{{trans("rol.show")}}" class="ion-eye font-size-120" aria-hidden="true"></span></a>

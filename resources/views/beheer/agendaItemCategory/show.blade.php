@@ -29,7 +29,7 @@
             <h3>{{trans('agendaItemCategory.Category')}}</h3>
         </div>
         <div class="card-body">
-            {{trans('agendaItemCategory.name'). ": " . $agendaItemCategory->categorieName->text()}}
+            {{trans('agendaItemCategory.name'). ": " . $agendaItemCategory->name}}
         </div>
     </div>
 @endsection

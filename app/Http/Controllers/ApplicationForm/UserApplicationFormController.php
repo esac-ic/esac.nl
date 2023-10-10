@@ -3,16 +3,14 @@
 namespace App\Http\Controllers\ApplicationForm;
 
 use App\AgendaItem;
+use App\Http\Controllers\Controller;
 use App\Http\Resources\ApplicationFormRowVueResource;
-use App\Models\ApplicationForm\ApplicationFormRow;
 use App\Models\ApplicationForm\ApplicationResponse;
-use App\Notifications\AgendaSubscribed;
 use App\Repositories\ApplicationFormRepositories\ApplicationFormRegistrationRepository;
 use Auth;
 use Carbon\Carbon;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Session;
 
 class UserApplicationFormController extends Controller
@@ -22,21 +20,15 @@ class UserApplicationFormController extends Controller
         $this->middleware('auth');
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @param AgendaItem $agendaItem
-     * @return \Illuminate\Http\Response
-     */
     public function showRegistrationForm(AgendaItem $agendaItem)
     {
         $user_id = Auth::user()->id;
 
         //check if the date has expired
         $agendaEndDate = new \DateTime($agendaItem->subscription_endDate);
-        $now           = new \DateTime();
+        $now = new \DateTime();
         if ($agendaEndDate < $now) {
-            $error       = trans("forms.signupexpired");
+            $error = trans("forms.signupexpired");
             $curPageName = $error;
 
             return view("forms.inschrijven_error", compact('error', 'curPageName'));
@@ -44,7 +36,7 @@ class UserApplicationFormController extends Controller
 
         $applicationForm = $agendaItem->getApplicationForm;
         if ($applicationForm == null) {
-            $error       = trans("forms.form_not_available");
+            $error = trans("forms.form_not_available");
             $curPageName = $error;
 
             return view("forms.inschrijven_error", compact('error', 'curPageName'));
@@ -57,18 +49,18 @@ class UserApplicationFormController extends Controller
             ->first();
 
         if ($signup != null) {
-            $error       = trans("forms.duplicatesignup");
+            $error = trans("forms.duplicatesignup");
             $curPageName = $error;
 
             return view("forms.inschrijven_error", compact('error', 'curPageName'));
         }
 
         //retrieves all the rows of the form
-        $rows        = ApplicationFormRowVueResource::collection($applicationForm->applicationFormRows);
-        $route       = 'forms/' . $agendaItem->id; //route for the form sign up
+        $rows = ApplicationFormRowVueResource::collection($applicationForm->applicationFormRows);
+        $route = 'forms/' . $agendaItem->id; //route for the form sign up
         $cancleRoute = 'agenda/' . $agendaItem->id; //route for the form sign up
 
-        $curPageName = $applicationForm->applicationFormName->text();
+        $curPageName = $applicationForm->name;
 
         return view(
             "forms.inschrijven",
@@ -76,14 +68,6 @@ class UserApplicationFormController extends Controller
         );
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request $request
-     * @param AgendaItem $agendaItem
-     * @param ApplicationFormRegistrationRepository $repository
-     * @return \Illuminate\Http\Response
-     */
     public function store(Request $request, AgendaItem $agendaItem, ApplicationFormRegistrationRepository $repository)
     {
         //check if the user has already signed up
@@ -93,7 +77,7 @@ class UserApplicationFormController extends Controller
             ->first();
 
         if ($signup != null) {
-            $error       = trans("forms.duplicatesignup");
+            $error = trans("forms.duplicatesignup");
             $curPageName = $error;
 
             return view("forms.inschrijven_error", compact('menu', 'error', 'curPageName'));
@@ -105,11 +89,6 @@ class UserApplicationFormController extends Controller
         return redirect('agenda/' . $agendaItem->id);
     }
 
-    /**
-     * @param AgendaItem $agendaItem
-     * @param int $fromAgendaItem
-     * @return RedirectResponse
-     */
     public function unregister(AgendaItem $agendaItem, int $fromAgendaItem = 1): RedirectResponse
     {
         if (Carbon::parse($agendaItem->subscription_endDate) < Carbon::now()) {

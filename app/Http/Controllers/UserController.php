@@ -2,10 +2,9 @@
 
 namespace App\Http\Controllers;
 
-use App\Certificate;
-use App\Exports\UsersExport;
 use App\CustomClasses\MailList\MailListFacade;
-use App\Repositories\RepositorieFactory as RepositorieFactory;
+use App\Exports\UsersExport;
+use App\Repositories\UserRepository;
 use App\Rol;
 use App\Rules\EmailDomainValidator;
 use App\User;
@@ -14,6 +13,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Session;
 use Maatwebsite\Excel\Facades\Excel;
+
 
 class UserController extends Controller
 {
@@ -24,14 +24,15 @@ class UserController extends Controller
      *
      * @return void
      */
-    public function __construct(RepositorieFactory $repositoryFactory)
+    public function __construct(UserRepository $userRepository)
     {
         $this->middleware('auth');
         // The edit, update, and show methods check the authorization themselves, so we don't apply a role middleware there.
         // Only the index method is accessible by both Administrators and Certificate admins, so we apply a different middleware there.
-        $this->middleware('authorize:'.\Config::get('constants.Administrator'))->except(['edit', 'update', 'show', 'index']);
-        $this->middleware('authorize:'.\Config::get('constants.Administrator') .',' . \Config::get('constants.Certificate_administrator'))->only(['index']);
-        $this->_userRepository = $repositoryFactory->getRepositorie(RepositorieFactory::$USERREPOKEY);
+        $this->middleware('authorize:'. Config::get('constants.Administrator'))->except(['edit', 'update', 'show', 'index']);
+        $this->middleware('authorize:'. Config::get('constants.Administrator') .',' . Config::get('constants.Certificate_administrator'))->only(['index']);
+        
+        $this->_userRepository = $userRepository;
     }
 
     //gives the user views

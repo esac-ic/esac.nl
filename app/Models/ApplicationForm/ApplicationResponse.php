@@ -1,7 +1,6 @@
 <?php
 
 namespace App\Models\ApplicationForm;
-;
 
 use App\AgendaItem;
 use App\User;

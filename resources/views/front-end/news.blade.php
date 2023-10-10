@@ -23,8 +23,8 @@
                     <span class="card-date position-absolute bg-light py-1 px-3 rounded">{{\Carbon\Carbon::parse($newsItem->created_at)->format('d M')}}</span>
                     <div class="card-body">
                         <a href="/nieuws/{{ $newsItem->id }}">
-                            <h4 class="card-title">{{$newsItem->newsItemTitle->text()}}</h4>
-                            <p class="card-text text-body">{{ strip_tags(str_limit($newsItem->newsItemText->text(), $limit = 150, $end = '...')) }}</p>
+                            <h4 class="card-title">{{$newsItem->title}}</h4>
+                            <p class="card-text text-body">{{ strip_tags(str_limit($newsItem->text, $limit = 150, $end = '...')) }}</p>
                         </a>
                     </div>
                     <div class="card-footer bg-white p-3">

@@ -2,28 +2,15 @@
 
 namespace App\Repositories;
 
-
 use App\IntroPackage;
 use Carbon\Carbon;
 
 class IntroPackageRepository implements IRepository
 {
-    private $_textRepository;
-
-    public function __construct(TextRepository $textRepository)
-    {
-        $this->_textRepository = $textRepository;
-    }
-
     public function create(array $data)
     {
-        $text = $this->_textRepository->create($data);
-
         $data['deadline'] = Carbon::createFromFormat('d-m-Y', $data['deadline']);
-
-        $package = new IntroPackage($data);
-        $package->name = $text->id;
-        $package->save();
+        $package = IntroPackage::create($data);
 
         return $package;
     }
@@ -31,11 +18,8 @@ class IntroPackageRepository implements IRepository
     public function update($id, array $data)
     {
         $package = $this->find($id);
-
         $data['deadline'] = Carbon::createFromFormat('d-m-Y', $data['deadline']);
-
         $package->update($data);
-        $this->_textRepository->update($package->name, $data);
 
         return $package;
     }
@@ -44,8 +28,6 @@ class IntroPackageRepository implements IRepository
     {
         $package = $this->find($id);
         $package->delete();
-        $this->_textRepository->delete($package->name);
-
     }
 
     public function find($id, $columns = array('*'))

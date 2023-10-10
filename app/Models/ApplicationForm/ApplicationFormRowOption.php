@@ -2,9 +2,7 @@
 
 namespace App\Models\ApplicationForm;
 
-use App\Text;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 /**
@@ -19,12 +17,7 @@ class ApplicationFormRowOption extends Model
      * @var array
      */
     protected $fillable = [
-        'name_id',
-        'value'
+        'name',
+        'value',
     ];
-
-    public function applicationFormRowOptionName(): BelongsTo
-    {
-        return $this->belongsTo(Text::class, 'name_id');
-    }
 }

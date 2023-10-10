@@ -2,11 +2,11 @@
 
 namespace Tests\Feature\News;
 
-use Config;
-use Illuminate\Foundation\Testing\DatabaseMigrations;
 use App\NewsItem;
 use App\User;
 use Artisan;
+use Config;
+use Illuminate\Foundation\Testing\DatabaseMigrations;
 use TestCase;
 
 class UpdateNewsItemTest extends TestCase
@@ -37,10 +37,8 @@ class UpdateNewsItemTest extends TestCase
         $newsItem = factory(NewsItem::class)->create();
         $body = [
             '_token' => csrf_token(),
-            'NL_title' => 'test nieuws',
-            'EN_title' => 'test news',
-            'NL_text' => 'test nieuws',
-            'EN_text' => 'test news',
+            'title' => 'test news',
+            'text' => 'test nieuws',
             'author' => 'Gebruiker1'
         ];
 
@@ -50,8 +48,8 @@ class UpdateNewsItemTest extends TestCase
 
         $newsItem = $newsItem->refresh();
 
-        $this->assertEquals($body['NL_text'],$newsItem->newsItemText->text());
-        $this->assertEquals($body['NL_title'],$newsItem->newsItemTitle->text());
+        $this->assertEquals($body['text'],$newsItem->text);
+        $this->assertEquals($body['title'],$newsItem->title);
         $this->assertEquals($body['author'],$newsItem->author);
     }
 }

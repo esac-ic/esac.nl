@@ -26,12 +26,8 @@
         <div class="card-body">
             {!! Form::open(['method' => $fields['method'], 'url' => $fields['url']]) !!}
             <div class="form-group">
-                {!! Form::label('name', trans('agendaItemCategory.nameNl')) !!}
-                {!! Form::text('NL_text', ($agendaItemCategory != null) ? $agendaItemCategory->categorieName->NL_text : "", ['class' => 'form-control','required' => 'required']) !!}
-            </div>
-            <div class="form-group">
                 {!! Form::label('name', trans('agendaItemCategory.nameEn')) !!}
-                {!! Form::text('EN_text', ($agendaItemCategory != null) ? $agendaItemCategory->categorieName->EN_text : "", ['class' => 'form-control','required' => 'required']) !!}
+                {!! Form::text('name', ($agendaItemCategory != null) ? $agendaItemCategory->name : "", ['class' => 'form-control','required' => 'required']) !!}
             </div>
         </div>
     </div>

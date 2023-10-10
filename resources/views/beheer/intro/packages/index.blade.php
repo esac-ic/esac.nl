@@ -46,7 +46,7 @@
         <tbody>
         @foreach ($packages as $package)
             <tr>
-                <td>{{ $package->packageName->text() }}</td>
+                <td>{{ $package->name }}</td>
                 <td>{{ $package->deadline->format('d-m-Y') }}</td>
                 <td>
                     <a class="mr-1 ml-1" href="{{ route('beheer.intro.packages.edit', $package) }}"><span title="{{trans('intro.packageEdit')}}" class="ion-edit font-size-120" aria-hidden="true"></span></a>

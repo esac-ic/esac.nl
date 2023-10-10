@@ -7,9 +7,6 @@ use Illuminate\Support\Facades\Storage;
 
 class StorageController extends Controller
 {
-    /**
-     * StorageController constructor.
-     */
     public function __construct()
     {
         $this->middleware('auth');

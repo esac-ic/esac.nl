@@ -10,12 +10,6 @@ class Certificate extends Model
     use SoftDeletes;
     protected $fillable = [
         'name',
-        'duration',
-        'abbreviation'
+        'abbreviation',
     ];
-
-    public function certificateName(){
-        return $this->hasOne('App\Text', 'id', 'name');
-    }
-
 }

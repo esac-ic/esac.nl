@@ -1,13 +1,13 @@
 @extends('layouts.beheer')
 
 @section('title')
-{{$applicationForm->applicationFormName->text()}}
+{{$applicationForm->name}}
 @endsection
 
 @section('content')
     <div class="row mb-3">
         <div class="col-md-6">
-            <h1>{{$applicationForm->applicationFormName->text()}}</h1>
+            <h1>{{$applicationForm->name}}</h1>
         </div>
 
         <div class="col-md-6">
@@ -39,14 +39,14 @@
                 <tbody>
                 @foreach($applicationForm->applicationFormRows as $row)
                     <tr>
-                        <td>{{$row->applicationFormRowName->text()}}</td>
+                        <td>{{$row->name}}</td>
                         <td>{{$row->type}}</td>
                         <td>{{($row->required == 1)? trans('menu.yes'): trans('menu.no')}}</td>
                         <td>
                             @if ($row->applicationFormRowOptions->count() > 0)
                                 <ul>
                                     @foreach($row->applicationFormRowOptions as $rowOption)
-                                        <li>{{ $rowOption->applicationFormRowOptionName->text() }} - {{ $rowOption->value }}</li>
+                                        <li>{{ $rowOption->name }} - {{ $rowOption->value }}</li>
                                     @endforeach
                                 </ul>
                             @endif

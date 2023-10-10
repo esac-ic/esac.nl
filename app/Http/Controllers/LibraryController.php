@@ -2,85 +2,81 @@
 
 namespace App\Http\Controllers;
 
-use App\Repositories\RepositorieFactory;
 use App\Book;
+use App\Repositories\BookRepository;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Session;
 
 class LibraryController extends Controller
 {
-
     private $_bookRepository;
-    /**
-     * Create a new controller instance.
-     *
-     * @return void
-     */
-    public function __construct(RepositorieFactory $repositorieFactory)
+
+    public function __construct(BookRepository $bookRepository)
     {
         $this->middleware('auth');
-        $this->middleware('authorize:'.Config::get('constants.Administrator'));
-        $this->_bookRepository = $repositorieFactory->getRepositorie(RepositorieFactory::$BOOKREPOKEY);
+        $this->middleware('authorize:' . Config::get('constants.Administrator'));
+        
+        $this->_bookRepository = $bookRepository;
     }
 
-    //gives the book views
-    public function index(){
-        $books = $this->_bookRepository->all(array('title','id','type','code','year','country'));
+    public function index()
+    {
+        $books = $this->_bookRepository->all(['title','id','type','code','year','country']);
         return view('beheer.book.index', compact('books'));
     }
 
-    //show create screen
-    public function create(){
-        $fields = ['title' => trans('book.add'),
+    public function create()
+    {
+        $fields = [
+            'title' => trans('book.add'),
             'method' => 'POST',
-            'url' => '/books',];
-        $book = null;
-        return view('beheer.book.create_edit', compact('fields','book'));
+            'url' => route('books.store')
+        ];
+        return view('beheer.book.create_edit', compact('fields'));
     }
 
-    //store book
-    public function store(Request $request){
+    public function store(Request $request)
+    {
         $this->validateInput($request);
-
         $this->_bookRepository->create($request->all());
-
         Session::flash("message", trans('book.added'));
-        return redirect('/books');
+        return redirect()->route('books.index');
     }
 
-    public function show(Request $request, Book $book){
+    public function show(Book $book)
+    {
         return view('beheer.book.show', compact('book'));
     }
 
-    //show edit screen
-    public function edit(Request $request, Book $book){
-        $fields = ['title' => trans('book.edit'),
+    public function edit(Book $book)
+    {
+        $fields = [
+            'title' => trans('book.edit'),
             'method' => 'PATCH',
-            'url' => '/books/'. $book->id];
-
-        return view('beheer.book.create_edit', compact('fields','book'));
+            'url' => route('books.update', $book->id)
+        ];
+        return view('beheer.book.create_edit', compact('fields', 'book'));
     }
 
-    //update book
-    public function update(Request $request, Book $book){
+    public function update(Request $request, Book $book)
+    {
         $this->validateInput($request);
-
-        $this->_bookRepository->update($book->id,$request->all());
-
+        $this->_bookRepository->update($book->id, $request->all());
         Session::flash("message", trans('book.edited'));
-        return redirect('/books');
+        return redirect()->route('books.index');
     }
 
-    public function destroy(Request $request, Book $book){
+    public function destroy(Book $book)
+    {
         $this->_bookRepository->delete($book->id);
-
         Session::flash("message", trans('book.deleted'));
-        return redirect('/books');
+        return redirect()->route('books.index');
     }
 
-    private function validateInput(Request $request){
-        $this->validate($request,[
+    private function validateInput(Request $request)
+    {
+        $this->validate($request, [
             'title' => 'required',
             'year' => 'integer',
             'type' => 'required',

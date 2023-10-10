@@ -3,12 +3,8 @@
     <div class="card-body">
         <div class="form-row">
             <div class="form-group col-md-6">
-                {!! Form::label('NL_text', trans('menuItems.nameNl')) !!}
-                {!! Form::text('NL_text', ($page != null) ? $page->text->NL_text : "", ['class' => 'form-control','required' => 'required']) !!}
-            </div>
-            <div class="form-group col-md-6">
-                {!! Form::label('EN_text', trans('menuItems.nameEn')) !!}
-                {!! Form::text('EN_text', ($page != null) ? $page->text->EN_text : "", ['class' => 'form-control','required' => 'required']) !!}
+                {!! Form::label('name', trans('menuItems.nameEn')) !!}
+                {!! Form::text('name', ($page != null) ? $page->name : "", ['class' => 'form-control','required' => 'required']) !!}
             </div>
         </div>
         <div class="form-row">
@@ -47,9 +43,9 @@
                 <select class="form-control" name="parentItem" id="parentItem">
                     @foreach($pages as $item)
                         @if($page != null  && $item->id === $page->parent_id)
-                            <option value="{{$item->id}}" selected >{{$item->text->text()}}</option>
+                            <option value="{{$item->id}}" selected >{{$item->name}}</option>
                         @else
-                            <option value="{{$item->id}}">{{$item->text->text()}}</option>
+                            <option value="{{$item->id}}">{{$item->name}}</option>
                         @endif
                     @endforeach
                 </select>

@@ -3,7 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\IntroPackage;
-use App\Repositories\RepositorieFactory;
+use App\Repositories\ApplicationFormRepositories\ApplicationFormRepository;
+use App\Repositories\IntroPackageRepository;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Session;
@@ -14,20 +15,19 @@ class IntroPackageController extends Controller
     private $_introPackageRepository;
     private $_applicationFormRepository;
 
-
     /**
      * IntroPackageController constructor.
      */
-    public function __construct(RepositorieFactory $repositoryFactory)
+    public function __construct(IntroPackageRepository $introPackageRepository, ApplicationFormRepository $applicationFormRepository)
     {
-        $this->_introPackageRepository = $repositoryFactory->getRepositorie(RepositorieFactory::$INTROPACKAGEREPOKEY);
-        $this->_applicationFormRepository = $repositoryFactory->getRepositorie(RepositorieFactory::$APPLICATIONFORMREPOKEY);
-
         $this->middleware('auth');
         $this->middleware('authorize:'
-            . \Config::get('constants.Content_administrator') .','
+            . \Config::get('constants.Content_administrator') . ','
             . \Config::get('constants.Activity_administrator')
         );
+
+        $this->_introPackageRepository = $introPackageRepository;
+        $this->_applicationFormRepository = $applicationFormRepository;
     }
 
     /**
@@ -36,10 +36,10 @@ class IntroPackageController extends Controller
      * @param Request $request
      * @throws ValidationExceptionAlias
      */
-    private function validateInput(Request $request){
+    private function validateInput(Request $request)
+    {
         $this->validate($request, [
-            'NL_text' => 'required',
-            'EN_text' => 'required',
+            'text' => 'required',
             'deadline' => 'required|date',
             'application_form_id' => 'required|integer',
         ]);
@@ -66,7 +66,7 @@ class IntroPackageController extends Controller
      */
     public function create()
     {
-        $applicationForms = $this->_applicationFormRepository->all(array("name","id"));
+        $applicationForms = $this->_applicationFormRepository->all(array("name", "id"));
 
         return view('beheer.intro.packages.create_edit', [
             'package' => null,
@@ -112,7 +112,7 @@ class IntroPackageController extends Controller
      */
     public function edit(IntroPackage $package)
     {
-        $applicationForms = $this->_applicationFormRepository->all(array("name","id"));
+        $applicationForms = $this->_applicationFormRepository->all(array("name", "id"));
 
         return view('beheer.intro.packages.create_edit', [
             'package' => $package,

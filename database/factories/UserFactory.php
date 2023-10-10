@@ -28,12 +28,12 @@ $factory->define(User::class, function (Faker $faker) {
         'birthday' => $faker->date(),
         'gender' => $faker->randomElement([
             'man',
-            'female'
+            'female',
         ]),
         'kind_of_member' => 'member',
         'IBAN' => $faker->iban(),
         'BIC' => $faker->bankAccountNumber,
         'incasso' => $faker->boolean,
-        'remark' => $faker->sentence
+        'remark' => $faker->sentence,
     ];
 });

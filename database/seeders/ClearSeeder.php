@@ -3,7 +3,7 @@
 namespace Database\Seeders;
 
 use App\AgendaItem;
-use App\AgendaItemCategorie;
+use App\AgendaItemCategory;
 use App\Certificate;
 use App\MenuItem;
 use App\Models\ApplicationForm\ApplicationForm;
@@ -30,7 +30,7 @@ class ClearSeeder extends Seeder
         MenuItem::getQuery()->delete();
         Rol::getQuery()->delete();
         AgendaItem::getQuery()->delete();
-        AgendaItemCategorie::getQuery()->delete();
+        AgendaItemCategory::getQuery()->delete();
         ApplicationFormRow::getQuery()->delete();
         ApplicationForm::getQuery()->delete();
         NewsItem::getQuery()->delete();

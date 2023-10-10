@@ -2,11 +2,9 @@
 
 namespace Tests\Feature\Agenda;
 
-use App\Rol;
-use App\User;
-use App\Text;
 use App\AgendaItem;
 use App\AgendaItemCategorie;
+use App\User;
 use Config;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Support\Facades\Artisan;
@@ -44,7 +42,8 @@ class AgendaFilterTest extends TestCase
     }
 
     /** @test */
-    public function api_returns_filtered_agenda_items(){
+    public function api_returns_filtered_agenda_items()
+    {
         $agendaItemCategory = factory(AgendaItemCategorie::class)->create();
         $agendaItem = factory(AgendaItem::class)->create();
         $agendaItem->category = $agendaItemCategory->id;
@@ -57,8 +56,8 @@ class AgendaFilterTest extends TestCase
         $json = json_decode($response->getContent());
 
         $this->assertEquals($json->{"agendaItemCount"}, 1);
-        $this->assertEquals($json->{"agendaItems"}[0]->{"category"}, $agendaItemCategory->categorieName->text());
-        $this->assertEquals($json->{"agendaItems"}[0]->{"title"}, $agendaItem->agendaItemTitle->text());
+        $this->assertEquals($json->{"agendaItems"}[0]->{"category"}, $agendaItemCategory->name);
+        $this->assertEquals($json->{"agendaItems"}[0]->{"title"}, $agendaItem->title);
 
         $response = $this->get($this->url . "?category=" . ($agendaItemCategory->id + 1));
         $json = json_decode($response->getContent());

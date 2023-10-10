@@ -33,7 +33,6 @@
         <tr>
             <th>{{trans('certificate.name')}}</th>
             <th>{{trans('certificate.abbreviation')}}</th>
-            <th>{{trans('certificate.duration')}}</th>
             <th>{{trans('menu.beheer')}}</th>
         </tr>
         </thead>
@@ -41,9 +40,8 @@
 
         @foreach ($certificates as $certificate)
             <tr >
-                <td>{{$certificate->certificateName->text()}}</td>
+                <td>{{$certificate->name}}</td>
                 <td>{{$certificate->abbreviation}}</td>
-                <td>{{$certificate->duration === 0 ? "" : $certificate->duration }}</td>
                 <td>
                     <a class="mr-1 ml-1" href="{{url('/certificates/' . $certificate->id . '/edit')}}"><span title="{{trans('certificate.edit')}}" class="ion-edit font-size-120" aria-hidden="true"></span></a>
                     <a class="mr-1 ml-1" href="{{url('/certificates/'. $certificate->id)}}"><span title="{{trans("certificate.show")}}" class="ion-eye font-size-120" aria-hidden="true"></span></a>

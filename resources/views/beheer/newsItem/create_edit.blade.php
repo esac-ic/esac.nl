@@ -27,12 +27,8 @@
             </div>
             <div class="card-body">
                 <div class="form-group">
-                    {!! Form::label('NL_title', trans('NewsItem.titleNl')) !!}
-                    {!! Form::text('NL_title', ($newsItem != null) ? $newsItem->newsItemTitle->NL_text : "", ['class' => 'form-control','required' => 'required']) !!}
-                </div>
-                <div class="form-group">
-                    {!! Form::label('name', trans('NewsItem.titleEn')) !!}
-                    {!! Form::text('EN_title', ($newsItem != null) ? $newsItem->newsItemTitle->EN_text : "", ['class' => 'form-control','required' => 'required']) !!}
+                    {!! Form::label('title', trans('NewsItem.titleEn')) !!}
+                    {!! Form::text('title', ($newsItem != null) ? $newsItem->title : "", ['class' => 'form-control','required' => 'required']) !!}
                 </div>
                 <div class="form-group">
                     {!! Form::label('author', trans('NewsItem.author')) !!}
@@ -51,12 +47,8 @@
                     </div>
                 </div>
                 <div class="form-group">
-                    {{Form::label('content_nl',  trans('NewsItem.textNl'))}}
-                    {{Form::textarea('NL_text',($newsItem != null) ? $newsItem->newsItemText->NL_text : "",array('class' => 'form-control', 'id' => 'content_nl'))}}
-                </div>
-                <div class="form-group">
-                    {{Form::label('content_en',  trans('NewsItem.textEn'))}}
-                    {{Form::textarea('EN_text',($newsItem != null) ?  $newsItem->newsItemText->EN_text : "",array('class' => 'form-control', 'id' => 'content_en'))}}
+                    {{Form::label('text',  trans('NewsItem.textEn'))}}
+                    {{Form::textarea('text',($newsItem != null) ?  $newsItem->text : "",array('class' => 'form-control', 'id' => 'content_en'))}}
                 </div>
             </div>
         </div>
@@ -71,9 +63,9 @@
 
 @push('scripts')
     <script>
-        $('.custom-file-input').on('change', function() { 
-           let fileName = $(this).val().split('\\').pop(); 
-           $(this).next('.custom-file-label').addClass("selected").html(fileName); 
+        $('.custom-file-input').on('change', function() {
+           let fileName = $(this).val().split('\\').pop();
+           $(this).next('.custom-file-label').addClass("selected").html(fileName);
         });
     </script>
 

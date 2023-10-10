@@ -63,7 +63,7 @@
     <h5 class="mt-3 mb-0 bold">*{{trans('user.rols')}}</h4>
     <ol>
     @for($i=0; $i<count($roles);$i++)
-        <li>{{$roles[$i]->text->text()}}</li>
+        <li>{{$roles[$i]->name}}</li>
     @endfor
     </ol>
 @endsection

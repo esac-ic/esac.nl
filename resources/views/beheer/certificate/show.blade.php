@@ -35,7 +35,7 @@
                         {{trans('certificate.name')}}
                     </td>
                     <td>
-                        {{$certificate->certificateName->text()}}
+                        {{$certificate->name}}
                     </td>
                 </tr>
                 <tr>

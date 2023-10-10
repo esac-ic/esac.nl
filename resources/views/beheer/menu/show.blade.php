@@ -30,17 +30,17 @@
     </div>
     <div class="card mt-4">
         <div class="card-header">
-            <h3>{{trans('menuItems.menuItem')}} {{$page->text->text()}}</h3>
+            <h3>{{trans('menuItems.menuItem')}} {{$page->name}}</h3>
         </div>
         <div class="card-body">
             <table class="table table-striped" style="width:100%">
                 <tr>
                     <td>{{trans('menuItems.name')}}</td>
-                    <td>{{$page->text->text() }}</td>
+                    <td>{{$page->name}}</td>
                 </tr>
                 <tr>
                     <td>{{trans('menuItems.SubItemVan')}}</td>
-                    <td>{{($page->partner != null) ?$page->partner->text->text() : ""}}</td>
+                    <td>{{($page->partner != null) ?$page->partner->name : ""}}</td>
                 </tr>
                 <tr>
                     <td>{{trans('menuItems.urlName')}}</td>
@@ -52,14 +52,14 @@
                 </tr>
                 <tr>
                     <td>{{trans('menuItems.afterItem')}}</td>
-                    <td>{{($page->after != null) ?$page->afterItem->text->text() : ""}}</td>
+                    <td>{{($page->after != null) ?$page->afterItem->name : ""}}</td>
                 </tr>
                 @if($subItems != null && count($subItems) > 0)
                     <tr>
                         <td rowspan="{{count($subItems) == 0 ? 1 : count($subItems)}}">{{trans('menuItems.subItems')}}</td>
                         @if( count($subItems) > 0)
                             <td>
-                                {{$subItems[0]->text->text()}}
+                                {{$subItems[0]->name}}
                             </td>
                         @else
                             <td> </td>
@@ -68,7 +68,7 @@
                     @for ($i = 1; $i < count($subItems); $i++)
                         <tr>
                             <td>
-                                {{$subItems[$i]->text->text()}}
+                                {{$subItems[$i]->name}}
                             </td>
                         </tr>
                     @endfor

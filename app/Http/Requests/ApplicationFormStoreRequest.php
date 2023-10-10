@@ -14,10 +14,8 @@ class ApplicationFormStoreRequest extends FormRequest
     public function rules()
     {
         return [
-            'nl_name' => 'required',
-            'en_name' => 'required',
-            'rows.*.nl_name' => 'required',
-            'rows.*.en_name' => 'required',
+            'name' => 'required',
+            'rows.*.name' => 'required',
             'rows.*.type' => 'required',
         ];
     }

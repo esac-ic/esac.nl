@@ -8,7 +8,7 @@
             <div class="card-body">
                 {!! $content !!}
             </div>
-        </div> 
+        </div>
     </div>
 </section>
 
@@ -35,9 +35,9 @@
                     <span class="card-date position-absolute bg-light py-1 px-3 rounded">{{\Carbon\Carbon::parse($newsItem->created_at)->format('d M')}}</span>
                   </div>
                   <div class="card-body">
-                    <h4 class="card-title">{{$newsItem->newsItemTitle->text()}}</h4>
+                    <h4 class="card-title">{{$newsItem->title}}</h4>
                     <p class="card-text text-body">
-                        {!! $newsItem->newsItemText->text() !!}
+                        {!! $newsItem->text !!}
                     </p>
                   </div>
                   <div class="card-footer bg-white p-3">
@@ -50,7 +50,7 @@
                 </div>
             </div>
             @endforeach
-        </div> 
+        </div>
     </div>
     <div class="col-sm-4 mt-5 mt-sm-0">
         <div class="row justify-content-between mb-4">
@@ -72,8 +72,8 @@
                     <div class="card-body">
                     <a href="/agenda/{{$agendaItem->id}} ">
 
-                            <h4 class="card-title">{{$agendaItem->agendaItemTitle->text()}}</h4>
-                            <p class="card-text text-body">{{$agendaItem->agendaItemShortDescription->text()}}</p>
+                            <h4 class="card-title">{{$agendaItem->title}}</h4>
+                            <p class="card-text text-body">{{$agendaItem->shortDescription}}</p>
                     </a>
                     </div>
                     @if($agendaItem->application_form_id != null)

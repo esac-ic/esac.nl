@@ -3,23 +3,21 @@
 namespace App\Http\Controllers\Api;
 
 use App\AgendaItem;
-use App\AgendaItemCategorie;
+use App\AgendaItemCategory;
 use App\Http\Controllers\Controller;
 use App\Services\AgendaApplicationFormService;
-use Auth;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\App;
+use Illuminate\Support\Facades\Auth;
 
 class AgendaController extends Controller
 {
     public function getAgenda(Request $request)
     {
         $agendaItemQuery = AgendaItem::with([
-            'agendaItemShortDescription',
             'getApplicationForm',
             'getApplicationFormResponses',
-            'agendaItemCategory.categorieName'
+            'agendaItemCategory'
         ]);
     
         // Set limit and page
@@ -68,13 +66,13 @@ class AgendaController extends Controller
     
                 return [
                     'id' => $agendaItem->id,
-                    'title' => $agendaItem->agendaItemTitle->text(),
+                    'title' => $agendaItem->title,
                     'thumbnail' => $agendaItem->getImageUrl(),
                     'startDate' => Carbon::parse($agendaItem->startDate)->format('d M'),
                     'endDate' => $agendaItem->endDate,
                     'full_startDate' => $agendaItem->startDate,
-                    'category' => $agendaItem->agendaItemCategory->categorieName->text(),
-                    'text' => $agendaItem->agendaItemShortDescription->text(),
+                    'category' => $agendaItem->agendaItemCategory->name,
+                    'text' => $agendaItem->shortDescription,
                     'formId' => $agendaItem->getApplicationForm,
                     'canRegister' => $agendaItem->canRegister(),
                     'application_form_id' => $agendaItem->application_form_id,
@@ -89,15 +87,12 @@ class AgendaController extends Controller
         ];
     }
     
-    
-
     public function getCategories(){
-        $categories = AgendaItemCategorie::with('categorieName')
-            ->get()
+        $categories = AgendaItemCategory::all()
             ->map(function ($category) {
                 return [
                     'id' => $category->id,
-                    'name' => $category->categorieName->text()
+                    'name' => $category->name
                 ];
             });
             

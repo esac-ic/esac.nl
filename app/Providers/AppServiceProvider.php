@@ -2,15 +2,13 @@
 
 namespace App\Providers;
 
-use DB;
-use App\ApplicationResponse;
-use Illuminate\Database\Schema\Blueprint;
-use Illuminate\Support\Fluent;
 use App\CustomClasses\MenuSingleton;
-use App\Observers\ApplicationResponseObserver;
 use App\Setting;
-use Illuminate\Support\ServiceProvider;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Fluent;
+use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -21,7 +19,7 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        Validator::extend('recaptcha','App\\Validators\\ReCaptcha@validate');
+        Validator::extend('recaptcha', 'App\\Validators\\ReCaptcha@validate');
     }
 
     /**
@@ -31,20 +29,21 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        $this->app->singleton(MenuSingleton::MENUSINGLETON, function()
-        {
+        $this->app->singleton(MenuSingleton::MENUSINGLETON, function () {
             return new MenuSingleton();
         });
 
-        $this->app->singleton(Setting::SINGELTONNAME, function()
-        {
+        $this->app->singleton(Setting::SINGELTONNAME, function () {
             $setting = new Setting();
             $setting->initialise();
             return $setting;
         });
 
-        Blueprint::macro('dropForeignSilently', function($index): Fluent {
-            if (DB::getDriverName() === 'sqlite') return new Fluent();
+        Blueprint::macro('dropForeignSilently', function ($index): Fluent {
+            if (DB::getDriverName() === 'sqlite') {
+                return new Fluent();
+            }
+
             return self::dropForeign($index);
         });
     }

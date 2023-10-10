@@ -29,7 +29,7 @@
             <h3>{{trans('rol.rol')}}</h3>
         </div>
         <div class="card-body">
-            {{trans('rol.name'). ": " . $rol->text->text()}}
+            {{trans('rol.name'). ": " . $rol->name}}
         </div>
     </div>
 @endsection

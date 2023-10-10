@@ -88,15 +88,8 @@
 @push('scripts')
     @yield('modal_javascript')
     <script>
-
         $(document).ready(function() {
-            $('#maillistMembers').dataTable({
-                @if(App::isLocale('nl'))
-                    "language": {
-                        "url": "js/dutch.lang"
-                }
-                @endif
-            });
+            $('#maillistMembers').dataTable();
         });
 
         $(document).on('click','#addMeber',function(){

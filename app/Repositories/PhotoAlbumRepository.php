@@ -8,9 +8,8 @@
 
 namespace App\Repositories;
 
-
-use App\PhotoAlbum;
 use App\Photo;
+use App\PhotoAlbum;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
 
@@ -58,7 +57,7 @@ class PhotoAlbumRepository implements IRepository
 
     public function findBy($field, $value, $columns = array('*'))
     {
-        return PhotoAlbum::where($field, '=',$value)->orderBy('id', 'desc')->get($columns);
+        return PhotoAlbum::where($field, '=', $value)->orderBy('id', 'desc')->get($columns);
     }
 
     public function all($columns = array('*'))
@@ -66,7 +65,8 @@ class PhotoAlbumRepository implements IRepository
         return PhotoAlbum::query()->orderBy('date', 'desc')->paginate(9);
     }
 
-    public function getThumbnails($id){
-        return Photo::with('photo_album')->where('photo_album_id',$id)->get();    
+    public function getThumbnails($id)
+    {
+        return Photo::with('photo_album')->where('photo_album_id', $id)->get();
     }
 }

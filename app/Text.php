@@ -15,14 +15,15 @@ class Text extends Model
      */
     protected $fillable = [
         'NL_text',
-        'EN_text'
+        'EN_text',
     ];
 
     /**
      * @return mixed
      */
-    public function text(){
-        if(App::isLocale('en')){
+    public function text()
+    {
+        if (App::isLocale('en')) {
             return $this->EN_text;
         } else {
             return $this->NL_text;

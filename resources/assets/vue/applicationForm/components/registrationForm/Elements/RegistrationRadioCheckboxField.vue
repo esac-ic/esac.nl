@@ -13,17 +13,16 @@
 </template>
 
 <script>
-    import {FORM_TYPE_RADIO} from "../../../constants";
+    import { FORM_TYPE_RADIO } from "../../../constants";
 
     export default {
         name: "RegistrationRadioCheckboxField",
         props: [
             'row',
-            'lang'
         ],
         methods: {
             getName(option) {
-                return this.lang === 'en' ? option.nameEN : option.nameNL;
+                return option.name;
             },
             getType() {
                 if (this.row.type === FORM_TYPE_RADIO) {

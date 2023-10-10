@@ -43,8 +43,7 @@ class CreateRoleTest extends TestCase
     /** @test */
     public function an_admin_can_create_a_role(){
         $body = [
-            'NL_text' => 'test role',
-            'EN_text' => 'test role',
+            'name' => 'test role',
             '_token' => csrf_token()
         ];
 
@@ -54,14 +53,13 @@ class CreateRoleTest extends TestCase
 
         $role = Rol::all()->last();
 
-        $this->assertEquals($body['NL_text'], $role->text->text());
+        $this->assertEquals($body['name'], $role->name);
     }
 
     /** @test */
     public function a_role_can_not_create_a_role(){
         $body = [
-            'NL_text' => 'test role',
-            'EN_text' => 'test role',
+            'name' => 'test role',
             '_token' => csrf_token()
         ];
 
@@ -85,7 +83,6 @@ class CreateRoleTest extends TestCase
         $errors = session('errors');
         $this->count(2,$errors);
 
-        $this->assertEquals("Veld n l text moet ingevuld zijn", $errors->get('NL_text')[0]);
-        $this->assertEquals("Veld e n text moet ingevuld zijn", $errors->get('EN_text')[0]);
+        $this->assertEquals("Veld name moet ingevuld zijn", $errors->get('name')[0]);
     }
 }

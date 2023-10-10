@@ -69,7 +69,6 @@
     });
 
     $(document).ready(function() {
-        $('#content_nl').summernote(summernoteSettings);
         $('#content_en').summernote(summernoteSettings);
     });
 

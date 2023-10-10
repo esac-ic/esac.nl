@@ -4,7 +4,6 @@ namespace App\Models\User;
 
 use App\User;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\SoftDeletes;
 
 class UserRegistrationInfo extends Model
 {
@@ -16,7 +15,8 @@ class UserRegistrationInfo extends Model
         'intro_weekend',
     ];
 
-    public function user(){
+    public function user()
+    {
         return $this->belongsTo(User::class);
     }
 }

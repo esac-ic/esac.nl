@@ -13,14 +13,10 @@ class CertificaatSeeder extends Seeder
      */
     public function run()
     {
-        $text = new \App\Text(['NL_text' => 'Outdoor voorklimmen', 'EN_text' => 'Outdoor lead climbing ']);
-        $text->save();
-        $certificat  = new \App\certificate(['name' => $text->id, 'abbreviation' => "OV"]);
+        $certificat  = new \App\certificate(['name' => 'Outdoor lead climbing', 'abbreviation' => "OV"]);
         $certificat->save();
 
-        $text = new \App\Text(['NL_text' => 'Indoor voorklimmen', 'EN_text' => 'Indoor lead climbing ']);
-        $text->save();
-        $certificat  = new \App\certificate(['name' => $text->id, 'abbreviation' => "IV"]);
+        $certificat  = new \App\certificate(['name' => 'Indoor lead climbing', 'abbreviation' => "IV"]);
         $certificat->save();
     }
 }

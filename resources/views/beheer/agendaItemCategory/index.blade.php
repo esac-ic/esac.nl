@@ -39,7 +39,7 @@
 
         @foreach ($agendaItemCategories as $category)
             <tr>
-                <td>{{$category->categorieName->text()}}</td>
+                <td>{{$category->name}}</td>
                 <td>
                     <a class="mr-1 ml-1" href="{{url('/agendaItemCategories/' . $category->id . '/edit')}}"><span title="{{trans('agendaItemCategory.edit')}}" class="ion-edit font-size-120" aria-hidden="true"></span></a>
                     <a class="mr-1 ml-1" href="{{url('/agendaItemCategories/'. $category->id)}}"><span title="{{trans("agendaItemCategory.show")}}" class="ion-eye font-size-120" aria-hidden="true"></span></a>

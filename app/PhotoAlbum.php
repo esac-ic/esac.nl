@@ -15,11 +15,13 @@ class PhotoAlbum extends Model
         'thumbnail',
     ];
 
-    public function photos(){
+    public function photos()
+    {
         return $this->hasMany(Photo::class);
     }
 
-    public function user(){
+    public function user()
+    {
         return $this->belongsTo(User::class, 'createdBy');
     }
 }

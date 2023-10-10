@@ -12,19 +12,11 @@
             <div v-for="(row, index) in applicationRows" :key="index" class="application-form-row">
                 <div class="row">
                     <div class="col-md-5">
-                        <label>Naam (NL)</label>
-                        <input type="text"
-                               class="form-control"
-                               v-model="row.nameNL"
-                               :name="'rows[' + index + '][nl_name]'"
-                               required>
-                    </div>
-                    <div class="col-md-5">
                         <label>Naam (EN)</label>
                         <input type="text"
                                class="form-control"
                                v-model="row.nameEN"
-                               :name="'rows[' + index + '][en_name]'"
+                               :name="'rows[' + index + '][name]'"
                                required>
                     </div>
                     <div class="col-md-1">

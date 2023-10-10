@@ -3,12 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Exports\UserRegistrationInfoExport;
-use App\Models\User\UserRegistrationInfo;
-use App\Repositories\RepositorieFactory as RepositorieFactory;
-use App\Rol;
+use App\Repositories\UserRepository;
 use App\Rules\EmailDomainValidator;
 use App\User;
-use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Session;
@@ -23,11 +20,12 @@ class PendingUserController extends Controller
      *
      * @return void
      */
-    public function __construct(RepositorieFactory $repositoryFactory)
+    public function __construct(UserRepository $userRepository)
     {
         $this->middleware('auth')->except('storePendingUser');
         $this->middleware('authorize:'. Config::get('constants.Administrator'))->except('storePendingUser');
-        $this->_userRepository = $repositoryFactory->getRepositorie(RepositorieFactory::$USERREPOKEY);
+        
+        $this->_userRepository = $userRepository;
     }
 
     //pending users view

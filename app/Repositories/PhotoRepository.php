@@ -8,11 +8,9 @@
 
 namespace App\Repositories;
 
-
 use App\Photo;
-use Illuminate\Support\Facades\Auth;
 use esac\B2\Client;
-use esac\B2\Bucket;
+use Illuminate\Support\Facades\Auth;
 
 class PhotoRepository implements IRepository
 {
@@ -31,7 +29,7 @@ class PhotoRepository implements IRepository
         $photo = $this->find($id);
         $photo->update($data);
         $photo->save();
-        return $photo;  
+        return $photo;
     }
 
     public function delete($id)
@@ -46,7 +44,7 @@ class PhotoRepository implements IRepository
 
     public function findBy($field, $value, $columns = array('*'))
     {
-        return Photo::where($field, '=',$value)->orderBy('id', 'desc')->get($columns);
+        return Photo::where($field, '=', $value)->orderBy('id', 'desc')->get($columns);
     }
 
     public function all($columns = array('*'))
@@ -54,16 +52,19 @@ class PhotoRepository implements IRepository
         return Photo::query()->orderBy('id', 'desc')->get();
     }
 
-    public function getFirstPhoto($id){
-        $m =Photo::with('photo_album')->where('photo_album_id',$id)->first();
+    public function getFirstPhoto($id)
+    {
+        $m = Photo::with('photo_album')->where('photo_album_id', $id)->first();
         return $m;
     }
 
-    public function getFileLink($filepath){
+    public function getFileLink($filepath)
+    {
         return config('custom.b2_storage_url') . "/" . $filepath;
     }
 
-    public function saveToCloud($filepath, $file){
+    public function saveToCloud($filepath, $file)
+    {
         $client = new Client(config('custom.b2_account_key_id'), [
             'applicationKey' => config('custom.b2_application_key'),
             'version' => '2',
@@ -72,7 +73,7 @@ class PhotoRepository implements IRepository
         $client->upload([
             'BucketName' => config('custom.b2_bucketname'),
             'FileName' => $filepath,
-            'Body' => file_get_contents($file)
+            'Body' => file_get_contents($file),
         ]);
 
         return $filepath;

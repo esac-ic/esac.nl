@@ -2,18 +2,12 @@
 
 namespace Tests\Feature\News;
 
-use App\ApplicationResponse;
-use App\ApplicationResponseRow;
-use Config;
-use Illuminate\Foundation\Testing\DatabaseMigrations;
 use App\NewsItem;
-use App\Rol;
 use App\User;
 use Artisan;
-use Carbon\Carbon;
+use Config;
+use Illuminate\Foundation\Testing\DatabaseMigrations;
 use TestCase;
-use Illuminate\Foundation\Testing\WithFaker;
-use Illuminate\Foundation\Testing\RefreshDatabase;
 
 class CreateNewsItemTest extends TestCase
 {
@@ -42,36 +36,32 @@ class CreateNewsItemTest extends TestCase
     public function CreateNewsItem(){
         $body = [
             '_token' => csrf_token(),
-            'NL_title' => 'test nieuws',
-            'EN_title' => 'test news',
-            'NL_text' => 'test nieuws',
-            'EN_text' => 'test news',
+            'title' => 'test nieuws',
+            'text' => 'test nieuws',
             'author' => 'Gebruiker1'
         ];
         $response = $this->post($this->url, $body);
         $response->assertStatus(302);
         $newsItem = NewsItem::all()->last();
 
-        $this->assertEquals($body['NL_text'],$newsItem->newsItemText->text());
-        $this->assertEquals($body['NL_title'],$newsItem->newsItemTitle->text());
+        $this->assertEquals($body['text'],$newsItem->text);
+        $this->assertEquals($body['title'],$newsItem->title);
         $this->assertEquals($body['author'],$newsItem->author);
     }
 
     public function CreateNewsItemWithEmoji(){
         $body = [
             '_token' => csrf_token(),
-            'NL_title' => 'test nieuws 😀',
-            'EN_title' => 'test news 😀',
-            'NL_text' => 'test nieuws 😀',
-            'EN_text' => 'test news 😀',
+            'title' => 'test news 😀',
+            'text' => 'test nieuws 😀',
             'author' => 'Gebruiker1'
         ];
         $response = $this->post($this->url, $body);
         $response->assertStatus(302);
         $newsItem = NewsItem::all()->last();
 
-        $this->assertEquals($body['NL_text'],$newsItem->newsItemText->text());
-        $this->assertEquals($body['NL_title'],$newsItem->newsItemTitle->text());
+        $this->assertEquals($body['text'],$newsItem->text);
+        $this->assertEquals($body['title'],$newsItem->title);
         $this->assertEquals($body['author'],$newsItem->author);
     }
 }

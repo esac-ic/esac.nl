@@ -2,13 +2,11 @@
 
 namespace Database\Factories;
 
-use App\Text;
-use App\AgendaItemCategorie;
+use App\AgendaItemCategory;
 use Faker\Generator as Faker;
 
-$factory->define(AgendaItemCategorie::class, function (Faker $faker) {
-    $text = factory(Text::class)->create();
+$factory->define(AgendaItemCategory::class, function (Faker $faker) {
     return [
-        'name' => $text->id
+        'name' => $faker->word,
     ];
 });

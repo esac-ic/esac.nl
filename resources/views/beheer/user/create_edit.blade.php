@@ -186,7 +186,7 @@
                             @else
                                 <input class="form-check-input" type="checkbox" name="roles[]" value="{{$role->id}}" id="{{$role->id}}">
                             @endif
-                            <label class="form-check-label" for="{{$role->id}}">{{$role->text->text()}}</label>
+                            <label class="form-check-label" for="{{$role->id}}">{{$role->name}}</label>
                         </div>
                     @endforeach
                 @endif

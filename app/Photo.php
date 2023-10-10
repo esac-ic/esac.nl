@@ -12,18 +12,21 @@ class Photo extends Model
         'link',
         'thumbnail',
         'width',
-        'height'
+        'height',
     ];
 
-    public function thumbnail(){
+    public function thumbnail()
+    {
         return $this->hasOne(Photo::class);
     }
 
-    public function photo_album(){
+    public function photo_album()
+    {
         return $this->belongsTo(PhotoAlbum::class);
     }
 
-    public function user(){
+    public function user()
+    {
         return $this->belongsTo(User::class, 'createdBy');
     }
 }

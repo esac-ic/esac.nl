@@ -58,15 +58,8 @@ class CopyAgendaItem extends TestCase
         $this->assertEquals($agendaItem->category, $newAgendaItem->category);
         $this->assertEquals($agendaItem->climbing_activity, $newAgendaItem->climbing_activity);
 
-        $this->assertNotEquals($agendaItem->title, $newAgendaItem->title);
-        $this->assertNotEquals($agendaItem->text, $newAgendaItem->text);
-        $this->assertNotEquals($agendaItem->shortDescription, $newAgendaItem->shortDescription);
-
-        $this->assertEquals($agendaItem->agendaItemText->NL_text, $newAgendaItem->agendaItemText->NL_text);
-        $this->assertEquals($agendaItem->agendaItemText->EN_text, $newAgendaItem->agendaItemText->EN_text);
-        $this->assertEquals($agendaItem->agendaItemTitle->NL_text, $newAgendaItem->agendaItemTitle->NL_text);
-        $this->assertEquals($agendaItem->agendaItemTitle->EN_text, $newAgendaItem->agendaItemTitle->EN_text);
-        $this->assertEquals($agendaItem->agendaItemShortDescription->NL_text, $newAgendaItem->agendaItemShortDescription->NL_text);
-        $this->assertEquals($agendaItem->agendaItemShortDescription->EN_text, $newAgendaItem->agendaItemShortDescription->EN_text);
+        $this->assertEquals($agendaItem->title, $newAgendaItem->title);
+        $this->assertEquals($agendaItem->text, $newAgendaItem->text);
+        $this->assertEquals($agendaItem->shortDescription, $newAgendaItem->shortDescription);
     }
 }

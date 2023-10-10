@@ -9,10 +9,6 @@ class Rol extends Model
 {
     use SoftDeletes;
     protected $fillable = [
-        'name'
+        'name',
     ];
-
-    public function text(){
-        return $this->hasOne('App\Text', 'id', 'name')->withTrashed();
-    }
 }

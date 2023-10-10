@@ -67,7 +67,7 @@ class CreateApplicationFormTest extends TestCase
                     'nl_name' => 'Vraag 2',
                     'en_name' => 'Question 2',
                     'type' => ApplicationFormRow::FORM_TYPE_CHECK_BOX,
-                    'required' => true
+                    'required' => true,
                 ],
                 [
                     'nl_name' => 'Vraag 3',
@@ -78,21 +78,21 @@ class CreateApplicationFormTest extends TestCase
                         [
                             'value' => 1,
                             'nl_name' => 'optie 1',
-                            'en_name' => 'Option 1'
+                            'en_name' => 'Option 1',
                         ],
                         [
                             'value' => 3,
                             'nl_name' => 'optie 2',
-                            'en_name' => 'Option 2'
+                            'en_name' => 'Option 2',
                         ],
                         [
                             'value' => 16,
                             'nl_name' => 'optie 3',
-                            'en_name' => 'Option 3'
-                        ]
-                    ]
-                ]
-            ]
+                            'en_name' => 'Option 3',
+                        ],
+                    ],
+                ],
+            ],
         ];
 
         $response = $this->post(self::URL, $body);
@@ -122,9 +122,9 @@ class CreateApplicationFormTest extends TestCase
                     'nl_name' => 'Vraag 2',
                     'en_name' => 'Question 2',
                     'type' => ApplicationFormRow::FORM_TYPE_CHECK_BOX,
-                    'required' => true
-                ]
-            ]
+                    'required' => true,
+                ],
+            ],
         ];
 
         $response = $this->post(self::URL, $body);
@@ -155,9 +155,9 @@ class CreateApplicationFormTest extends TestCase
                     'nl_name' => 'Vraag 2',
                     'en_name' => 'Question 2',
                     'type' => ApplicationFormRow::FORM_TYPE_CHECK_BOX,
-                    'required' => true
-                ]
-            ]
+                    'required' => true,
+                ],
+            ],
         ];
 
         $response = $this->post(self::URL, $body);
@@ -183,9 +183,9 @@ class CreateApplicationFormTest extends TestCase
                     'nl_name' => 'Vraag 2',
                     'en_name' => 'Question 2',
                     'type' => ApplicationFormRow::FORM_TYPE_CHECK_BOX,
-                    'required' => true
-                ]
-            ]
+                    'required' => true,
+                ],
+            ],
         ];
 
         $response = $this->post(self::URL, $body);
@@ -199,16 +199,14 @@ class CreateApplicationFormTest extends TestCase
      */
     private function assertApplicationForm(ApplicationForm $applicationForm, array $data)
     {
-        $this->assertEquals($data['nl_name'], $applicationForm->applicationFormName->NL_text);
-        $this->assertEquals($data['en_name'], $applicationForm->applicationFormName->EN_text);
+        $this->assertEquals($data['name'], $applicationForm->name);
         $this->assertCount(count($data['rows']), $applicationForm->applicationFormRows);
 
         for ($i = 0; $i < count($applicationForm->applicationFormRows); $i++) {
             $rowData = $data['rows'][$i];
             $row = $applicationForm->applicationFormRows[$i];
 
-            $this->assertEquals($rowData['nl_name'], $row->applicationFormRowName->NL_text);
-            $this->assertEquals($rowData['en_name'], $row->applicationFormRowName->EN_text);
+            $this->assertEquals($rowData['name'], $row->name);
             $this->assertEquals($rowData['type'], $row->type);
             $this->assertEquals(array_key_exists('required', $rowData), $row->required);
 
@@ -222,8 +220,7 @@ class CreateApplicationFormTest extends TestCase
                     $option = $options[$x];
 
                     $this->assertEquals($optionData['value'], $option->value);
-                    $this->assertEquals($optionData['nl_name'], $option->applicationFormRowOptionName->NL_text);
-                    $this->assertEquals($optionData['en_name'], $option->applicationFormRowOptionName->EN_text);
+                    $this->assertEquals($optionData['name'], $option->name);
                 }
             }
         }

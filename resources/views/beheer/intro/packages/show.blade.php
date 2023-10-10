@@ -40,18 +40,12 @@
         <div class="card-body">
             <div class="form-row">
                 <div class="form-group col-md-6">
-                    <b>@lang('intro.packageName') NL</b>
-                </div>
-                <div class="form-group col-md-6">
                     <b>@lang('intro.packageName') EN</b>
                 </div>
             </div>
             <div class="form-row">
                 <div class="form-group col-md-6">
-                    {{ $package->packageName->NL_text }}
-                </div>
-                <div class="form-group col-md-6">
-                    {{ $package->packageName->EN_text }}
+                    {{ $package->name }}
                 </div>
             </div>
             <div class="form-row">
@@ -67,7 +61,7 @@
                     {{ $package->deadline->format('d-m-Y') }}
                 </div>
                 <div class="form-group col-md-6">
-                    {{ $package->applicationForm->applicationFormName->text() }}
+                    {{ $package->applicationForm->name }}
                 </div>
             </div>
         </div>

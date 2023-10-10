@@ -26,12 +26,8 @@
         <div class="card-body">
             {!! Form::open(['method' => $fields['method'], 'url' => $fields['url']]) !!}
             <div class="form-group">
-                {!! Form::label('name', trans('rol.nameNl')) !!}
-                {!! Form::text('NL_text', ($rol != null) ? $rol->text->NL_text : "", ['class' => 'form-control','required' => 'required']) !!}
-            </div>
-            <div class="form-group">
                 {!! Form::label('name', trans('rol.nameEn')) !!}
-                {!! Form::text('EN_text', ($rol != null) ? $rol->text->EN_text : "", ['class' => 'form-control','required' => 'required']) !!}
+                {!! Form::text('name', ($rol != null) ? $rol->name : "", ['class' => 'form-control','required' => 'required']) !!}
             </div>
         </div>
     </div>

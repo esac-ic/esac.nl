@@ -7,7 +7,7 @@
                 <div class="card w-100">
                     <img class="card-img-top" src="{{$agendaItem->getImageUrl()}}">
                     <div class="card-body">
-                        <h3 class="card-title">{{$agendaItem->agendaItemTitle->text()}}</h3>
+                        <h3 class="card-title">{{$agendaItem->title}}</h3>
                         <p class="card-text">{{trans('menu.from')}} <span class="badge badge-secondary font-size-100">{{trans(\Carbon\Carbon::parse($agendaItem->startDate)->format('d M H:i'))}}</span> {{trans('menu.to')}} <span class="badge badge-secondary font-size-100">{{trans(\Carbon\Carbon::parse($agendaItem->endDate)->format('d M H:i'))}}</span></p>
                     </div>
                     <div class="card-footer bg-white p-3">
@@ -42,7 +42,7 @@
                 <div class="card w-100">
                     <div class="card-body">
                         <h4 class="card-title">{{trans('front-end/agenda.info')}}</h4>
-                        <p class="card-text">{!! $agendaItem->agendaItemText->text() !!}</p>
+                        <p class="card-text">{!! $agendaItem->text !!}</p>
                         @if($agendaItem->application_form_id != null && !Auth::guest())
                             <h4 class="card-title">{{trans('front-end/agenda.registrations')}}</h2>
                             <ol class="column-count-lg-3">

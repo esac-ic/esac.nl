@@ -2,19 +2,18 @@
     <div>
         <div v-for="(row, index) in applicationFormRows" class="form-group" :key="index">
             <label>{{getLabel(row)}}</label>
-            <component :is="getComponentName(row)" :row="row" :lang="lang"></component>
+            <component :is="getComponentName(row)" :row="row"></component>
         </div>
     </div>
 </template>
 
 <script>
-    import {FORM_TYPE_TEXT, FORM_TYPE_NUMBER, FORM_TYPE_TEXT_BOX, FORM_TYPE_CHECK_BOX, FORM_TYPE_SELECT, FORM_TYPE_RADIO, FORM_TYPE_CHECK_BOXEN} from "../../constants";
+    import { FORM_TYPE_CHECK_BOX, FORM_TYPE_CHECK_BOXEN, FORM_TYPE_NUMBER, FORM_TYPE_RADIO, FORM_TYPE_SELECT, FORM_TYPE_TEXT, FORM_TYPE_TEXT_BOX } from "../../constants";
 
     export default {
         name: "RegistrationForm",
         props: [
             'rows',
-            'lang'
         ],
         data(){
             return {
@@ -40,7 +39,7 @@
                 console.error(row.type + ' is not supported');
             },
             getLabel(row) {
-                return this.lang === 'en' ? row.nameEN : row.nameNL;
+                return row.name;
             }
         },
         mounted(){

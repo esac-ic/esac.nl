@@ -2,11 +2,9 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
 use App\PhotoAlbum;
 use App\Repositories\PhotoAlbumRepository;
-use App\Repositories\RepositorieFactory;
-use App\MenuItem;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Session;
 
@@ -14,13 +12,12 @@ use Illuminate\Support\Facades\Session;
 class PhotoAlbumController extends Controller
 {
     private $_PhotoAlbumRepository;
-    private $_PhotoRepository;
-    private $_MenuItemRepository;
 
-    public function __construct(RepositorieFactory $repositorieFactory){
+    public function __construct(PhotoAlbumRepository $photoAlbumRepository){
         $this->middleware('auth');
         $this->middleware('authorize:'.Config::get('constants.Administrator'));
-        $this->_PhotoAlbumRepository = $repositorieFactory->getRepositorie(RepositorieFactory::$PHOTOALBUMREPOKEY);
+
+        $this->_PhotoAlbumRepository = $photoAlbumRepository;
     }
 
     public function index(){

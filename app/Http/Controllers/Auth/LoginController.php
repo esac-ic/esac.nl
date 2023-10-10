@@ -4,7 +4,7 @@ namespace App\Http\Controllers\Auth;
 
 use App\CustomClasses\MenuSingleton;
 use App\Http\Controllers\Controller;
-use App\Repositories\RepositorieFactory;
+use App\Repositories\RepositoryFactory;
 use App\Repositories\UserRepository;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use Illuminate\Http\Request;

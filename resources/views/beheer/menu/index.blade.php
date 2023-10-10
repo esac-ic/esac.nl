@@ -41,9 +41,9 @@
 
         @foreach ($pages as $menu)
             <tr>
-                <td>{{$menu->text->text()}}</td>
-                <td>{{($menu->partner != null) ? $menu->partner->text->text() : ""}}</td>
-                <td>{{($menu->after != null) ? $menu->afterItem->text->text() : ""}}</td>
+                <td>{{$menu->name}}</td>
+                <td>{{($menu->partner != null) ? $menu->partner->name : ""}}</td>
+                <td>{{($menu->after != null) ? $menu->afterItem->name : ""}}</td>
                 <td>
                     <a class="mr-1 ml-1" href="{{url('/pages/' . $menu->id . '/edit')}}"><span title="{{trans('menuItems.edit')}}" class="ion-edit font-size-120" aria-hidden="true"></span></a>
                     <a class="mr-1 ml-1" href="{{url('/pages/'. $menu->id)}}"><span title="{{trans("menuItems.show")}}" class="ion-eye font-size-120" aria-hidden="true"></span></a>

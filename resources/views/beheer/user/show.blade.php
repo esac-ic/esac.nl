@@ -225,11 +225,11 @@
                         @if(count($user->roles) > 0)
                             <tr>
                                 <td rowspan="{{count($user->roles)}}">{{trans('user.rols')}}</td>
-                                <td>{{$user->roles[0]->text->text()}}</td>
+                                <td>{{$user->roles[0]->name}}</td>
                             </tr>
                             @for($i=1; $i<count($user->roles);$i++)
                                 <tr>
-                                    <td>{{$user->roles[$i]->text->text()}}</td>
+                                    <td>{{$user->roles[$i]->name}}</td>
                                 </tr>
                             @endfor
                         @endif
@@ -261,7 +261,7 @@
                         @foreach($user->certificates as $certificate)
                             <tr>
                                 <td>
-                                    {{$certificate->certificateName->text()}}
+                                    {{$certificate->name}}
                                 </td>
                                 <td>
                                     {{$certificate->abbreviation}}

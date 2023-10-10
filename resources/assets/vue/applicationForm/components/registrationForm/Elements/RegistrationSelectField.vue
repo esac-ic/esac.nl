@@ -11,11 +11,10 @@
         name: "RegistrationSelectField",
         props: [
             'row',
-            'lang'
         ],
         methods: {
             getName(option) {
-                return this.lang === 'en' ? option.nameEN : option.nameNL;
+                return option.name;
             }
         }
     }

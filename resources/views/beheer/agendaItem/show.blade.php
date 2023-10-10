@@ -34,11 +34,11 @@
             <table class="table table-striped" style="width:100%">
                 <tr>
                     <td>{{trans('AgendaItems.title')}}</td>
-                    <td>{{$agendaItem->agendaItemTitle->text()}}</td>
+                    <td>{{$agendaItem->title}}</td>
                 </tr>
                 <tr>
                     <td>{{trans('AgendaItems.shortDescription')}}</td>
-                    <td>{{$agendaItem->agendaItemShortDescription->text()}}</td>
+                    <td>{{$agendaItem->shortDescription}}</td>
                 </tr>
                 <tr>
                     <td>{{trans('AgendaItems.startDate')}}</td>
@@ -54,7 +54,7 @@
                 </tr>
                 <tr>
                     <td>{{trans('AgendaItems.category')}}</td>
-                    <td>{{$agendaItem->agendaItemCategory->categorieName->text()}}</td>
+                    <td>{{$agendaItem->agendaItemCategory->name}}</td>
                 </tr>
                 <tr>
                     <td>{{trans('AgendaItems.climbingActivity')}}</td>
@@ -66,7 +66,7 @@
                 </tr>
                 <tr>
                     <td>{{trans("AgendaItems.applicationForm")}}</td>
-                    <td>{{($agendaItem->application_form_id !=null)? $agendaItem->getApplicationForm->applicationFormName->text():""}}</td>
+                    <td>{{($agendaItem->application_form_id !=null)? $agendaItem->getApplicationForm->name:""}}</td>
                 </tr>
                 <tr>
                     <td>{{trans("AgendaItems.tumpnailImage")}}</td>
@@ -80,7 +80,7 @@
             <h3>{{trans('AgendaItems.content') }}</h3>
         </div>
         <div class="card-body">
-            {!! $agendaItem->agendaItemText->text() !!}
+            {!! $agendaItem->text !!}
         </div>
     </div>
 @endsection

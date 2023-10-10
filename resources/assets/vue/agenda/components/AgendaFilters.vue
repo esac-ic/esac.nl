@@ -15,21 +15,18 @@
 </template>
 
 <script>
-    import { mapGetters, mapActions } from 'vuex';
     import Datepicker from 'vuejs-datepicker';
+import { mapActions, mapGetters } from 'vuex';
 
     export default {
         name: "AgendaFilters",
-        props:[
-            'lang'
-        ],
         data(){
             return {
                 selectedCategorie: "",
                 startDate:  new Date(),
-                allCategoriesText: 'Alles',
-                categoriesText: 'Categorien',
-                startDateText: 'Start datum'
+                allCategoriesText: 'All',
+                categoriesText: 'Categories',
+                startDateText: 'Start date'
             }
         },
         components: {
@@ -59,21 +56,9 @@
         mounted () {
             this.fetchAgendaCategories();
             
-            //set the language
-            if (this.lang == 'en') {
-                this.allCategoriesText = 'All';
-                this.categoriesText = 'Categories';
-                this.startDateText=  'Start date';
-            } else if (this.lang == 'nl') {
-                this.allCategoriesText = 'Alles';
-                this.categoriesText = 'Categorien';
-                this.startDateText=  'Start datum';
-            } else {
-                //currently the default language is dutch
-                this.allCategoriesText = 'Alles';
-                this.categoriesText = 'Categorien';
-                this.startDateText=  'Start datum';
-            }
+            this.allCategoriesText = 'All';
+            this.categoriesText = 'Categories';
+            this.startDateText=  'Start date';
         }
     }
 </script>

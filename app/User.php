@@ -5,8 +5,8 @@ namespace App;
 use App\Models\ApplicationForm\ApplicationResponse;
 use App\Models\User\UserRegistrationInfo;
 use Carbon\Carbon;
-use Illuminate\Notifications\Notifiable;
 use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Facades\Auth;
 
 class User extends Authenticatable
@@ -55,31 +55,37 @@ class User extends Authenticatable
         'password', 'remember_token',
     ];
 
-    public function roles(){
-        return $this->belongsToMany('App\Rol','rol_user');
+    public function roles()
+    {
+        return $this->belongsToMany('App\Rol', 'rol_user');
     }
 
-    public function certificates(){
-        return $this->belongsToMany('App\Certificate','certificate_user')
+    public function certificates()
+    {
+        return $this->belongsToMany('App\Certificate', 'certificate_user')
             ->withPivot('startDate')
             ->withTimestamps()->withTrashed();
     }
 
-    public function photos(){
+    public function photos()
+    {
         return $this->hasMany(Photo::class);
     }
 
-    public function albums(){
+    public function albums()
+    {
         return $this->hasMany(PhotoAlbum::class);
     }
 
-    public function registrationInfo(){
+    public function registrationInfo()
+    {
         return $this->hasOne(UserRegistrationInfo::class);
     }
 
-    public function hasRole(...$rols){
-        foreach ($rols as $rol){
-            if($this->roles->contains($rol)){
+    public function hasRole(...$rols)
+    {
+        foreach ($rols as $rol) {
+            if ($this->roles->contains($rol)) {
                 return true;
             }
         }
@@ -87,70 +93,82 @@ class User extends Authenticatable
 
     }
 
-    public function getCertificationsAbbreviations(){
+    public function getCertificationsAbbreviations()
+    {
         $certificates = "";
-        foreach ($this->certificates as $certificate){
+        foreach ($this->certificates as $certificate) {
             $certificates .= $certificate->abbreviation . ", ";
         }
-        return trim($certificates,", ");
+        return trim($certificates, ", ");
     }
 
     //checks if a user has role like admin or content administrator
-    public function hasBackendRigths(){
+    public function hasBackendRigths()
+    {
         return count($this->roles) > 0;
     }
 
-    public function getName(){
+    public function getName()
+    {
         $name = $this->firstname;
-        $name .= ($this->preposition == null)? ' ' : ' ' . $this->preposition . ' ' ;
+        $name .= ($this->preposition == null) ? ' ' : ' ' . $this->preposition . ' ';
         $name .= $this->lastname;
 
         return $name;
     }
 
-    public function isOldMember(){
+    public function isOldMember()
+    {
         return $this->lid_af !== null;
     }
 
-    public function isPendingMember(){
+    public function isPendingMember()
+    {
         return $this->pending_user !== null;
     }
 
-    public function isActiveMember(){
-        return ($this->lid_af === null && $this->pending_user === null); 
+    public function isActiveMember()
+    {
+        return ($this->lid_af === null && $this->pending_user === null);
     }
 
-    public function removeAsActiveMember(){
+    public function removeAsActiveMember()
+    {
         $this->lid_af = Carbon::now();
         $this->save();
 
         $this->roles()->detach();
 
-        if(Auth::user()->id === $this->id){
+        if (Auth::user()->id === $this->id) {
             Auth::logout();
         }
     }
 
-    public function makeActiveMember(){
-        if($this->email){
+    public function makeActiveMember()
+    {
+        if ($this->email) {
             $this->lid_af = null;
             $this->save();
         }
     }
 
-    public function getAdress() {
+    public function getAdress()
+    {
         return $this->street . " " . $this->houseNumber;
     }
 
-    public function applicationResponses(){
-        return $this->hasMany(ApplicationResponse::class,'user_id');
+    public function applicationResponses()
+    {
+        return $this->hasMany(ApplicationResponse::class, 'user_id');
     }
 
-    public function approveAsPendingMember(){
+    public function approveAsPendingMember()
+    {
         $this->pending_user = null;
         $this->save();
     }
-    public function removeAsPendingMember(){
+    public function removeAsPendingMember()
+    {
         $this->delete();
     }
 

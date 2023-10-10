@@ -24,18 +24,18 @@ class ApplicationFormRegistrationRepository
 
         $applicationFormId = $agendaItem->application_form_id;
 
-        $applicationResponse->agenda_id         = $agendaItem->id;
+        $applicationResponse->agenda_id = $agendaItem->id;
         $applicationResponse->inschrijf_form_id = $applicationFormId;
-        $applicationResponse->user_id           = $userId;
+        $applicationResponse->user_id = $userId;
         $applicationResponse->save();
         $applicationResponseId = $applicationResponse->id;
 
         //set the responserows
         foreach ($data as $key => $value) {
-            $applicationResponseRow                          = new ApplicationResponseRow();
+            $applicationResponseRow = new ApplicationResponseRow();
             $applicationResponseRow->application_response_id = $applicationResponseId;
             $applicationResponseRow->application_form_row_id = $key;
-            $applicationResponseRow->value                   = gettype($value) === 'array' ? implode(',', $value) : $value;
+            $applicationResponseRow->value = gettype($value) === 'array' ? implode(',', $value) : $value;
             $applicationResponseRow->save();
         }
     }

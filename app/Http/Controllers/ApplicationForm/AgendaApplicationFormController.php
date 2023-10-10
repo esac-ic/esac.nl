@@ -4,13 +4,12 @@ namespace App\Http\Controllers\ApplicationForm;
 
 use App\AgendaItem;
 use App\Exports\AgendaRegistrationExport;
+use App\Http\Controllers\Controller;
 use App\Http\Resources\ApplicationFormRowVueResource;
 use App\Models\ApplicationForm\ApplicationResponse;
 use App\Repositories\ApplicationFormRepositories\ApplicationFormRegistrationRepository;
-use App\Repositories\InschrijvenRepository;
 use App\Repositories\UserRepository;
 use App\Services\AgendaApplicationFormService;
-use App\Http\Controllers\Controller;
 use App\User;
 use Auth;
 use Illuminate\Http\RedirectResponse;
@@ -37,7 +36,7 @@ class AgendaApplicationFormController extends Controller
      */
     public function index(AgendaItem $agendaItem, AgendaApplicationFormService $agendaApplicationFormService): View
     {
-        $users    = $agendaApplicationFormService->getRegisteredUsers($agendaItem);
+        $users = $agendaApplicationFormService->getRegisteredUsers($agendaItem);
         $agendaId = $agendaItem->id;
 
         return view("forms.inschrijven_show", compact('users', 'agendaId'));
@@ -47,8 +46,8 @@ class AgendaApplicationFormController extends Controller
     {
         //retrieves all the rows of the form
         $applicationForm = $agendaItem->getApplicationForm;
-        $rows            = ApplicationFormRowVueResource::collection($applicationForm->applicationFormRows);
-        $users           = [];
+        $rows = ApplicationFormRowVueResource::collection($applicationForm->applicationFormRows);
+        $users = [];
         $registeredUsers = [];
 
         foreach ($agendaItem->getApplicationFormResponses as $registeredUser) {
@@ -88,7 +87,7 @@ class AgendaApplicationFormController extends Controller
     public function show(User $user, AgendaItem $agendaItem, ApplicationFormRegistrationRepository $repository): View
     {
         $applicationDataRows = $repository->getApplicationInformation($agendaItem->id, $user->id);
-        $agendaId            = $agendaItem->id;
+        $agendaId = $agendaItem->id;
 
         return view('forms.inschrijven_details', compact('agendaId', 'applicationDataRows'));
     }
@@ -125,7 +124,7 @@ class AgendaApplicationFormController extends Controller
         $agendaItem = AgendaItem::findOrFail($agendaId);
         return Excel::download(
             new AgendaRegistrationExport($agendaApplicationFormService, $agendaItem),
-            preg_replace('/[^a-zA-Z0-9]+/', '-', $agendaItem->agendaItemTitle->text()) . '.xlsx'
+            preg_replace('/[^a-zA-Z0-9]+/', '-', $agendaItem->title) . '.xlsx'
         );
 
     }

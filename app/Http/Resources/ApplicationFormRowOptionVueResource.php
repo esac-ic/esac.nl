@@ -15,10 +15,9 @@ class ApplicationFormRowOptionVueResource extends JsonResource
     public function toArray($request)
     {
         return [
-            'id'     => $this->id,
-            'nameNL' => $this->applicationFormRowOptionName->NL_text,
-            'nameEN' => $this->applicationFormRowOptionName->EN_text,
-            'value'  => $this->value,
+            'id' => $this->id,
+            'name' => $this->name,
+            'value' => $this->value,
         ];
     }
 }

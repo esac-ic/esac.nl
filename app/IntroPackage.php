@@ -16,11 +16,6 @@ class IntroPackage extends Model
         'application_form_id',
     ];
 
-    public function packageName()
-    {
-        return $this->hasOne(Text::class, 'id', 'name');
-    }
-
     public function applicationForm()
     {
         return $this->belongsTo(ApplicationForm::class);

@@ -34,7 +34,7 @@
             <table class="table table-striped" style="width:100%">
                 <tr>
                     <td>{{trans('NewsItem.title')}}</td>
-                    <td>{{$newsItem->newsItemTitle->text()}}</td>
+                    <td>{{$newsItem->title}}</td>
                 </tr>
                 <tr>
                     <td>{{trans('NewsItem.placeDate')}}</td>
@@ -58,7 +58,7 @@
             <h3>{{trans('NewsItem.text') }}</h3>
         </div>
         <div class="card-body">
-            {!! $newsItem->newsItemText->text() !!}
+            {!! $newsItem->text !!}
         </div>
     </div>
 @endsection

@@ -45,6 +45,5 @@
 @push('scripts')
     <script>
         var DESCRIPTION = "{!! $content !!}";
-        let LANG = "{{ App::getLocale() }}";
     </script>
 @endpush

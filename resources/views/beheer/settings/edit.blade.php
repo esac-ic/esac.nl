@@ -16,7 +16,7 @@
                     {{ Form::label('setting['. $setting->name . ']', trans('settings.' . $setting->name)) }}
                     {{Form::text('setting['. $setting->name . ']',$setting->value,['class' => 'form-control'])}}
                 </div>
-            @endforeach 
+            @endforeach
         </div>
     </div>
 
@@ -26,4 +26,3 @@
         {!! Form::close() !!}
     </div>
 @endsection
-

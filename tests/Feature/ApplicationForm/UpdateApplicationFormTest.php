@@ -83,26 +83,26 @@ class UpdateApplicationFormTest extends TestCase
                             'id' => $applicationFormRowOption->id,
                             'value' => 1,
                             'nl_name' => 'optie 1',
-                            'en_name' => 'Option 1'
+                            'en_name' => 'Option 1',
                         ],
                         [
                             'value' => 3,
                             'nl_name' => 'optie 2',
-                            'en_name' => 'Option 2'
+                            'en_name' => 'Option 2',
                         ],
                         [
                             'value' => 16,
                             'nl_name' => 'optie 3',
-                            'en_name' => 'Option 3'
-                        ]
-                    ]
+                            'en_name' => 'Option 3',
+                        ],
+                    ],
                 ],
                 [
                     'nl_name' => 'Vraag 1',
                     'en_name' => 'Question 1',
                     'type' => ApplicationFormRow::FORM_TYPE_NUMBER,
                 ],
-            ]
+            ],
         ];
 
         $response = $this->put($this->url, $body);
@@ -132,9 +132,9 @@ class UpdateApplicationFormTest extends TestCase
                     'nl_name' => 'Vraag 2',
                     'en_name' => 'Question 2',
                     'type' => ApplicationFormRow::FORM_TYPE_CHECK_BOX,
-                    'required' => true
-                ]
-            ]
+                    'required' => true,
+                ],
+            ],
         ];
 
         $response = $this->put($this->url, $body);
@@ -160,9 +160,9 @@ class UpdateApplicationFormTest extends TestCase
                     'nl_name' => 'Vraag 2',
                     'en_name' => 'Question 2',
                     'type' => ApplicationFormRow::FORM_TYPE_CHECK_BOX,
-                    'required' => true
-                ]
-            ]
+                    'required' => true,
+                ],
+            ],
         ];
 
         $response = $this->put($this->url, $body);
@@ -174,17 +174,16 @@ class UpdateApplicationFormTest extends TestCase
      * @param ApplicationForm $applicationForm
      * @param array $data
      */
-    private function assertApplicationForm(ApplicationForm $applicationForm, array $data){
-        $this->assertEquals($data['nl_name'], $applicationForm->applicationFormName->NL_text);
-        $this->assertEquals($data['en_name'], $applicationForm->applicationFormName->EN_text);
+    private function assertApplicationForm(ApplicationForm $applicationForm, array $data)
+    {
+        $this->assertEquals($data['name'], $applicationForm->name);
         $this->assertCount(count($data['rows']), $applicationForm->applicationFormRows);
 
-        for($i=0; $i < count($applicationForm->applicationFormRows); $i++) {
+        for ($i = 0; $i < count($applicationForm->applicationFormRows); $i++) {
             $rowData = $data['rows'][$i];
             $row = $applicationForm->applicationFormRows[$i];
 
-            $this->assertEquals($rowData['nl_name'], $row->applicationFormRowName->NL_text);
-            $this->assertEquals($rowData['en_name'], $row->applicationFormRowName->EN_text);
+            $this->assertEquals($rowData['name'], $row->name);
             $this->assertEquals($rowData['type'], $row->type);
             $this->assertEquals(array_key_exists('required', $rowData), $row->required);
         }
