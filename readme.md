@@ -15,7 +15,6 @@ The following libaries and framework are used:
 - [Summernote](http://summernote.org/)
 - [Laravel-Mix (Webpack)](https://github.com/JeffreyWay/laravel-mix)
 - [Bootstrap](https://getbootstrap.com/)
-- [PhotoSwipe](https://photoswipe.com/)
 - [Vue](https://vuejs.org)
 - [Tempus Dominus](https://tempusdominus.github.io/bootstrap-4/)
 
