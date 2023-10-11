@@ -103,22 +103,22 @@ class RegisterNewMemberTest extends TestCase
         $errors = session('errors');
         $this->assertCount(21, $errors);
 
-        $this->assertEquals("Veld email moet ingevuld zijn", $errors->get('email')[0]);
-        $this->assertEquals("Veld firstname moet ingevuld zijn", $errors->get('firstname')[0]);
-        $this->assertEquals("Veld lastname moet ingevuld zijn", $errors->get('lastname')[0]);
-        $this->assertEquals("Veld street moet ingevuld zijn", $errors->get('street')[0]);
-        $this->assertEquals("Veld house number moet ingevuld zijn", $errors->get('houseNumber')[0]);
-        $this->assertEquals("Veld city moet ingevuld zijn", $errors->get('city')[0]);
-        $this->assertEquals("Veld phonenumber moet ingevuld zijn", $errors->get('phonenumber')[0]);
-        $this->assertEquals("Veld emergency number moet ingevuld zijn", $errors->get('emergencyNumber')[0]);
-        $this->assertEquals("Veld emergencystreet moet ingevuld zijn", $errors->get('emergencystreet')[0]);
-        $this->assertEquals("Veld emergencyzipcode moet ingevuld zijn", $errors->get('emergencyzipcode')[0]);
-        $this->assertEquals("Veld emergencycountry moet ingevuld zijn", $errors->get('emergencycountry')[0]);
-        $this->assertEquals("Veld birth day moet ingevuld zijn", $errors->get('birthDay')[0]);
-        $this->assertEquals("Veld i b a n moet ingevuld zijn", $errors->get('IBAN')[0]);
-        $this->assertEquals("'Ik ben geen robot' validatie moet ingevuld zijn", $errors->get('g-recaptcha-response')[0]);
-        $this->assertEquals("Veld Automatic Collection moet ingevuld zijn", $errors->get('incasso')[0]);
-        $this->assertEquals("Veld Privacy Policy moet ingevuld zijn", $errors->get('privacy_policy')[0]);
-        $this->assertEquals("Veld Terms and Conditions moet ingevuld zijn", $errors->get('termsconditions')[0]);
+        $this->assertEquals("Field email is required", $errors->get('email')[0]);
+        $this->assertEquals("Field firstname is required", $errors->get('firstname')[0]);
+        $this->assertEquals("Field lastname is required", $errors->get('lastname')[0]);
+        $this->assertEquals("Field street is required", $errors->get('street')[0]);
+        $this->assertEquals("Field house number is required", $errors->get('houseNumber')[0]);
+        $this->assertEquals("Field city is required", $errors->get('city')[0]);
+        $this->assertEquals("Field phonenumber is required", $errors->get('phonenumber')[0]);
+        $this->assertEquals("Field emergency number is required", $errors->get('emergencyNumber')[0]);
+        $this->assertEquals("Field emergencystreet is required", $errors->get('emergencystreet')[0]);
+        $this->assertEquals("Field emergencyzipcode is required", $errors->get('emergencyzipcode')[0]);
+        $this->assertEquals("Field emergencycountry is required", $errors->get('emergencycountry')[0]);
+        $this->assertEquals("Field birth day is required", $errors->get('birthDay')[0]);
+        $this->assertEquals("Field i b a n is required", $errors->get('IBAN')[0]);
+        $this->assertEquals("'I'm not a robot' validation is required", $errors->get('g-recaptcha-response')[0]);
+        $this->assertEquals("Field Automatic Collection is required", $errors->get('incasso')[0]);
+        $this->assertEquals("Field Privacy Policy is required", $errors->get('privacy_policy')[0]);
+        $this->assertEquals("Field Terms and Conditions is required", $errors->get('termsconditions')[0]);
     }
 }

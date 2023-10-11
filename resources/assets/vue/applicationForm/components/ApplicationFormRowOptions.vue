@@ -2,7 +2,7 @@
     <div class="row-option-box">
         <div class="title-box">
             <h3>
-                Opties
+                Options
                 <span v-on:click="addRow()" class="float-right" style="cursor: pointer">
                     <i class="ion-plus"></i>
                 </span>
@@ -10,15 +10,15 @@
         </div>
         <div v-for="(row, index) in optionRows" :key="index" class="row" style="margin-bottom: 5px">
             <div class="col-md-4">
-                <label>Naam (EN)</label>
+                <label>Name</label>
                 <input
                         type="text"
                         class="form-control"
-                        v-model="row.nameEN"
+                        v-model="row.name"
                         :name="'rows[' + applicationFormIndex + '][options][' + index + '][name]'">
             </div>
             <div class="col-md-3">
-                <label>Waarde</label>
+                <label>Value</label>
                 <input
                         type="text"
                         class="form-control"
@@ -47,8 +47,7 @@
         methods: {
             addRow(){
                 this.optionRows.push({
-                    'nameNl' : "",
-                    'nameEn' : "",
+                    'name' : "",
                     'value': "",
                 })
             },

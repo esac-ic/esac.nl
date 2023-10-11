@@ -2,7 +2,7 @@
     <div class="card">
         <div class="card-header">
             <h3>
-                Formulier rijen
+                Form rows
                 <span v-on:click="addRow()" class="float-right" style="cursor: pointer">
                     <i class="ion-plus"></i>
                 </span>
@@ -12,10 +12,10 @@
             <div v-for="(row, index) in applicationRows" :key="index" class="application-form-row">
                 <div class="row">
                     <div class="col-md-5">
-                        <label>Naam (EN)</label>
+                        <label>Name</label>
                         <input type="text"
                                class="form-control"
-                               v-model="row.nameEN"
+                               v-model="row.name"
                                :name="'rows[' + index + '][name]'"
                                required>
                     </div>
@@ -36,7 +36,7 @@
                     </div>
                     <div class="col-md-5">
                         <div class="form-group">
-                            <label>Verplicht</label>
+                            <label>Mandatory</label>
                             <input type="checkbox"
                                    v-model="row.required"
                                    :name="'rows[' + index + '][required]'"
@@ -54,8 +54,8 @@
 </template>
 
 <script>
-    import {FORM_TYPES, ROW_OPTION_FORM_TYPE} from '../constants';
-    import ApplicationFormRowOptions from "./ApplicationFormRowOptions";
+    import { FORM_TYPES, ROW_OPTION_FORM_TYPE } from '../constants';
+import ApplicationFormRowOptions from "./ApplicationFormRowOptions";
 
     export default {
         name: "ApplicationForm",
@@ -71,8 +71,7 @@
         methods:{
             addRow(){
                 this.applicationRows.push({
-                    'nameNl' : "",
-                    'nameEn' : "",
+                    'name' : "",
                     'type' : "",
                     'required' : false,
                     'id' : undefined
