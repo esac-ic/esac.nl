@@ -1,10 +1,10 @@
 <?php
 
+use App\AgendaItemCategory;
+use App\Text;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
-use App\Text;
-use App\AgendaItemCategory;
 
 return new class extends Migration
 {
@@ -17,15 +17,15 @@ return new class extends Migration
         Schema::table('agenda_item_categories', function (Blueprint $table) {
             $table->string('name_string')->nullable();
         });
-    
+
         // Migrate data from texts table to agenda_items categories.
         $agendaItemCategories = AgendaItemCategory::all();
         foreach ($agendaItemCategories as $item) {
             $name = Text::find($item->name);
-            $item->name_string = $name ? $name->EN_text : null;    
+            $item->name_string = $name ? $name->EN_text : null;
             $item->save();
         }
-    
+
         // Now drop the foreign keys and original columns, then rename the new columns.
         Schema::table('agenda_item_categories', function (Blueprint $table) {
             $table->dropForeign(['name']);
@@ -39,6 +39,14 @@ return new class extends Migration
      */
     public function down(): void
     {
-        //
+        Schema::table('agenda_item_categories', function (Blueprint $table) {
+
+            $table->dropColumn('name');
+        });
+
+        Schema::table('agenda_item_categories', function (Blueprint $table) {
+            $table->integer('name')->unsigned()->nullable();
+            $table->foreign('name')->references('id')->on('texts')->onDelete('set null');
+        });
     }
 };

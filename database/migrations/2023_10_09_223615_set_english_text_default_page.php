@@ -45,6 +45,16 @@ return new class extends Migration
      */
     public function down(): void
     {
-        //
+        Schema::table('menu_items', function (Blueprint $table) {
+            $table->dropColumn('name');
+            $table->dropColumn('content');
+        });
+
+        Schema::table('menu_items', function (Blueprint $table) {
+            $table->integer('name')->unsigned()->nullable();
+            $table->integer('content_id')->unsigned()->nullable();
+            $table->foreign('name')->references('id')->on('texts')->onDelete('set null');
+            $table->foreign('content_id')->references('id')->on('texts')->onDelete('set null');
+        });
     }
 };

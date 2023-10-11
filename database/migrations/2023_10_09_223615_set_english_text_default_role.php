@@ -39,6 +39,14 @@ return new class extends Migration
      */
     public function down(): void
     {
-        //
+        Schema::table('rols', function (Blueprint $table) {
+
+            $table->dropColumn('name');
+        });
+
+        Schema::table('rols', function (Blueprint $table) {
+            $table->integer('name')->unsigned()->nullable();
+            $table->foreign('name')->references('id')->on('texts')->onDelete('set null');
+        });
     }
 };
