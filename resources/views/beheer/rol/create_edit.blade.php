@@ -26,15 +26,15 @@
         <div class="card-body">
             {!! Form::open(['method' => $fields['method'], 'url' => $fields['url']]) !!}
             <div class="form-group">
-                {!! Form::label('name', trans('rol.nameEn')) !!}
+                {!! Form::label('name', 'Name') !!}
                 {!! Form::text('name', ($rol != null) ? $rol->name : "", ['class' => 'form-control','required' => 'required']) !!}
             </div>
         </div>
     </div>
 
     <div class="my-4">
-        {!! Form::submit(trans('menu.save'), ['class'=> 'btn btn-primary'] ) !!}
+        {!! Form::submit('Save', ['class'=> 'btn btn-primary'] ) !!}
         {!! Form::close() !!}
-        <a class="btn btn-danger btn-close" href="{{ ($rol == null) ? ('/rols') : ('/rols/' . $rol->id)}}">{{trans('menu.cancel')}}</a>
+        <a class="btn btn-danger btn-close" href="{{ ($rol == null) ? ('/rols') : ('/rols/' . $rol->id)}}">{{'Cancel'}}</a>
     </div>
 @endsection

@@ -13,13 +13,13 @@ use Maatwebsite\Excel\Concerns\WithTitle;
 class UserRegistrationInfoExport implements FromCollection, WithTitle, WithHeadings, ShouldAutoSize
 {
     /**
-    * @return \Illuminate\Support\Collection
-    */
+     * @return \Illuminate\Support\Collection
+     */
     public function collection()
     {
         $userRegistrations = UserRegistrationInfo::query()
             ->with('user')
-            ->whereDate('created_at','>', Carbon::now()->subMonth(3))
+            ->whereDate('created_at', '>', Carbon::now()->subMonth(3))
             ->get();
 
         $data = [];
@@ -31,20 +31,19 @@ class UserRegistrationInfoExport implements FromCollection, WithTitle, WithHeadi
                 'phone' => $user->phonenumber,
                 'introPackage' => trans('user.packageTypes.' . $registration->package_type),
                 'shirt' => trans('user.shirtSizes.' . $registration->shirt_size),
-                'weekendDate' => trans('user.weekendDates.' . $registration->intro_weekend)
+                'weekendDate' => trans('user.weekendDates.' . $registration->intro_weekend),
             ];
         }
 
         return new Collection($data);
     }
 
-
     /**
      * @return string
      */
     public function title(): string
     {
-        return trans('user.registrationInfo');
+        return 'Registration info';
     }
 
     /**
@@ -53,12 +52,12 @@ class UserRegistrationInfoExport implements FromCollection, WithTitle, WithHeadi
     public function headings(): array
     {
         return [
-            trans('user.name'),
-            trans('user.email'),
-            trans('user.phonenumber'),
-            trans('user.introPackage'),
-            trans('user.tshirt'),
-            trans('user.introWeekend'),
+            'Name',
+            'Email address',
+            'Phone number',
+            'Intro package',
+            'ESAC Intro shirt',
+            'Intro weekend',
         ];
     }
 }

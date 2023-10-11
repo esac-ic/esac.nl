@@ -18,10 +18,10 @@
     <div class="col-sm-8 pr-sm-5">
         <div class="row justify-content-between mb-4">
             <div class="col-auto">
-                <h3>{{trans('front-end/home.lastNews')}}</h3>
+                <h3>{{'Latest news'}}</h3>
             </div>
             <div class="col-auto">
-                <a href="{{url('nieuws')}}" class="btn btn-outline-primary">{{trans('front-end/home.seeMore')}}</a>
+                <a href="{{url('nieuws')}}" class="btn btn-outline-primary">{{'See more'}}</a>
             </div>
         </div>
         <div class="row d-flex align-items-stretch align-items-center">
@@ -55,10 +55,10 @@
     <div class="col-sm-4 mt-5 mt-sm-0">
         <div class="row justify-content-between mb-4">
             <div class="col-auto">
-                <h3>{{trans('front-end/home.activities')}}</h3>
+                <h3>{{'Activities'}}</h3>
             </div>
             <div class="col-auto">
-                <a href="{{url('agenda')}}" class="btn btn-outline-primary">{{trans('front-end/home.seeMore')}}</a>
+                <a href="{{url('agenda')}}" class="btn btn-outline-primary">{{'See more'}}</a>
             </div>
         </div>
         <div class="row d-flex align-items-stretch align-items-center">
@@ -84,12 +84,12 @@
                             </div>
                             <div class="col-auto">
                                 @if(Auth::guest())
-                                    {{trans('front-end/agenda.loginNeeded')}}
+                                    {{'Please log in to register'}}
                                 @else
                                     @if($agendaItem->canRegister())
-                                        <a class="btn btn-outline-primary" href="{{url('')}}/forms/{{$agendaItem->id}}">{{trans('front-end/agenda.register')}}</a>
+                                        <a class="btn btn-outline-primary" href="{{url('')}}/forms/{{$agendaItem->id}}">{{'Register now'}}</a>
                                     @else
-                                        {{trans('front-end/agenda.cantregister')}}
+                                        {{'Registration not possible'}}
                                     @endif
                                 @endif
                             </div>

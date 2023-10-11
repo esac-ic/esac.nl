@@ -1,7 +1,7 @@
 @extends('layouts.beheer')
 
 @section('title')
-{{trans("forms.Inschrijvingen") . ": " . $users["agendaitem"]}}
+{{'Subscriptions' . ": " . $users["agendaitem"]}}
 @endsection
 
 @section('content')
@@ -14,19 +14,19 @@
 
     <div class="row mb-3">
         <div class="col-md-6">
-            <h1>{{trans("forms.Inschrijvingen") . ": " . $users["agendaitem"]}}</h1>
+            <h1>{{'Subscriptions' . ": " . $users["agendaitem"]}}</h1>
         </div>
 
         <div class="col-md-6">
             <div class="btn-group mt-2 float-md-right" role="group" aria-label="Actions">
                 <a href="{{url('forms/admin/' . $agendaId)}}" class="btn btn-primary">
-                    <em class="ion-person-add"></em> {{trans("forms.nieuweinschrijving")}}
+                    <em class="ion-person-add"></em> {{'TRANSLATION_NOT_FOUND'}}
                 </a>
                 <a href="{{url('forms/users/'.$users["agendaId"].'/export')}}" class="btn btn-primary">
-                    <em class="ion-android-download"></em> {{trans("forms.export")}}
+                    <em class="ion-android-download"></em> {{'TRANSLATION_NOT_FOUND'}}
                 </a>
                 <a href="{{url('/agendaItems/')}}" class="btn btn-primary">
-                    <em class="ion-android-arrow-back"></em> {{trans("menu.back")}}
+                    <em class="ion-android-arrow-back"></em> {{'Back'}}
                 </a>
             </div>
         </div>
@@ -34,8 +34,8 @@
     <table id="users" class="table table-striped dt-responsive nowrap" style="width:100%">
         <thead>
         <tr>
-            <th>{{trans('user.name')}}</th>
-            <th>{{trans('user.email')}}</th>
+            <th>{{'Name'}}</th>
+            <th>{{'Email address'}}</th>
             <th>{{"Adres"}}</th>
             <th>Beheer</th>
         </tr>
@@ -48,7 +48,7 @@
                 <td>{{$user->getAdress()}}</td>
 
                 <td>
-                    <a href="{{url('/forms/users/'. $user->id . '/detail/'. $agendaId)}}"><span title="{{trans("inschrijven.applicationFormDetail")}}" class="ion-eye" aria-hidden="true"></span></a>
+                    <a href="{{url('/forms/users/'. $user->id . '/detail/'. $agendaId)}}"><span title="{{'Show entered information'}}" class="ion-eye" aria-hidden="true"></span></a>
                     <a href="#" id="delete_button" data-url="{{url('/forms/'.$users["agendaId"].'/remove/'.$user["_signupId"])}}"><span  class="ion-trash-a"></span></a>
                 </td>
             </tr>

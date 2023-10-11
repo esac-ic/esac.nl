@@ -43,7 +43,7 @@ class FrontEndController extends Controller
     public function agenda()
     {
         $categories = array();
-        $curPageName = trans('AgendaItems.agendaItem');
+        $curPageName = 'Event';
         $menuItem = $this->_menuItemRepository->findby('urlName', MenuItem::AGENDAURL);
         $content = $menuItem->content;
 
@@ -74,7 +74,7 @@ class FrontEndController extends Controller
 
     public function zekeringen()
     {
-        $curPageName = trans('front-end/zekeringen.title');
+        $curPageName = 'Zekeringen';
         $menuItem = $this->_menuItemRepository->findby('urlName', MenuItem::ZEKERINGURL);
         $content = $menuItem->content;
 
@@ -89,7 +89,7 @@ class FrontEndController extends Controller
     {
         $menuItem = $this->_menuItemRepository->findby('urlName', MenuItem::SUBSCRIBEURL);
         $content = $menuItem->content;
-        $curPageName = trans('front-end/subscribe.title');
+        $curPageName = 'Subscribe as member';
         $showIntroPackageForm = app(Setting::SINGELTONNAME)->getsetting(Setting::SETTING_SHOW_INTRO_OPTION);
         return view("front-end.subscribe", compact('curPageName', 'content', 'showIntroPackageForm'));
     }
@@ -97,7 +97,7 @@ class FrontEndController extends Controller
     public function news()
     {
         $newsItems = NewsItem::orderBy('id', 'desc')->paginate(9);
-        $curPageName = trans('front-end/news.title');
+        $curPageName = 'News';
         $menuItem = $this->_menuItemRepository->findby('urlName', MenuItem::NEWSURL);
         $content = $menuItem->content;
 
@@ -116,7 +116,7 @@ class FrontEndController extends Controller
     public function library()
     {
         $books = $this->_bookRepository->all(array("id", "title", "year", "type", "country", "code"));
-        $curPageName = trans('front-end/library.title');
+        $curPageName = 'Library';
         $menuItem = $this->_menuItemRepository->findby('urlName', MenuItem::LIBRARYURL);
         $content = $menuItem->content;
 
@@ -126,7 +126,7 @@ class FrontEndController extends Controller
     public function memberlist()
     {
         $users = $this->_userRepository->getCurrentUsers(array('firstname', 'lastname', 'email', 'preposition', 'kind_of_member', 'phonenumber'));
-        $curPageName = trans('front-end/memberlist.memberlist');
+        $curPageName = 'Members list';
         $menuItem = $this->_menuItemRepository->findby('urlName', MenuItem::MEMBERLISTURL);
         $content = $menuItem->content;
 
@@ -141,7 +141,7 @@ class FrontEndController extends Controller
     {
         $newsItems = $this->_newsItemRepository->getLastXNewsItems(3);
         $agendaItems = $this->_agendaRepository->getFirstXItems(4);
-        $curPageName = trans('front-end/home.title');
+        $curPageName = 'Home';
         $menuItem = MenuItem::query()
             ->where('urlName', '=', MenuItem::HOMEURL)
             ->first();

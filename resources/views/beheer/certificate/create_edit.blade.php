@@ -26,19 +26,19 @@
         <div class="card-body">
             {!! Form::open(['method' => $fields['method'], 'url' => $fields['url']]) !!}
             <div class="form-group">
-                {!! Form::label('name', trans('certificate.nameEN')) !!}
+                {!! Form::label('name', 'Name') !!}
                 {!! Form::text('name', ($certificate != null) ? $certificate->name : "", ['class' => 'form-control','required' => 'required']) !!}
             </div>
             <div class="form-group">
-                {!! Form::label('abbreviation', trans('certificate.abbreviation')) !!}
+                {!! Form::label('abbreviation', 'Abbreviation') !!}
                 {!! Form::text('abbreviation', ($certificate != null) ? $certificate->abbreviation : "", ['class' => 'form-control','required' => 'required']) !!}
             </div>
         </div>
     </div>
 
     <div class="my-4">
-        {!! Form::submit(trans('menu.save'), ['class'=> 'btn btn-primary'] ) !!}
+        {!! Form::submit('Save', ['class'=> 'btn btn-primary'] ) !!}
         {!! Form::close() !!}
-        <a class="btn btn-danger btn-close" href="{{ ($certificate == null) ? ('/certificates') : ('/certificates/' . $certificate->id)}}">{{trans('menu.cancel')}}</a>
+        <a class="btn btn-danger btn-close" href="{{ ($certificate == null) ? ('/certificates') : ('/certificates/' . $certificate->id)}}">{{'Cancel'}}</a>
     </div>
 @endsection

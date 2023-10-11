@@ -22,8 +22,8 @@
 		@endif
 
 		<div class="my-4">
-			<button type="submit" class="btn btn-primary">{{trans('menu.save')}}</button>
-			<a class="btn btn-danger btn-close" href="{{ ($page == null) ? ('/pages') : ('/pages/' . $page->id)}}">{{trans('menu.cancel')}}</a>
+			<button type="submit" class="btn btn-primary">{{'Save'}}</button>
+			<a class="btn btn-danger btn-close" href="{{ ($page == null) ? ('/pages') : ('/pages/' . $page->id)}}">{{'Cancel'}}</a>
 		</div>
 	</form>
 @endsection

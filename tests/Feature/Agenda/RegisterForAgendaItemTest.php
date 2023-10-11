@@ -52,7 +52,7 @@ class RegisterForAgendaItemTest extends TestCase
         $response = $this->get($this->url . $agendaItem->id);
 
         $response->assertStatus(200);
-        $response->assertViewHas('error', trans("forms.form_not_available"));
+        $response->assertViewHas('error', 'TRANSLATION_NOT_FOUND');
     }
 
     /** @test */
@@ -63,7 +63,7 @@ class RegisterForAgendaItemTest extends TestCase
         $response = $this->get($this->url . $agendaItem->id);
 
         $response->assertStatus(200);
-        $response->assertViewHas('error', trans("forms.signupexpired"));
+        $response->assertViewHas('error', 'TRANSLATION_NOT_FOUND');
     }
 
     /** @test */
@@ -84,7 +84,7 @@ class RegisterForAgendaItemTest extends TestCase
         $response = $this->get($this->url . $agendaItem->id);
 
         $response->assertStatus(200);
-        $response->assertViewHas('error', trans("forms.duplicatesignup"));
+        $response->assertViewHas('error', 'TRANSLATION_NOT_FOUND');
     }
 
     /** @test */

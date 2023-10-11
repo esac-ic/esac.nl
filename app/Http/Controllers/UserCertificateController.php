@@ -29,7 +29,7 @@ class UserCertificateController extends Controller
 
     public function addCertificate(Request $request, User $user)
     {
-        $fields = ['title' => trans('user.addCertificate'),
+        $fields = ['title' => 'Add certificate',
             'method' => 'POST',
             'url' => '/users/' . $user->id . '/addCertificate'];
 
@@ -58,7 +58,7 @@ class UserCertificateController extends Controller
 
     public function editUserCertificate(Request $request, User $user, Certificate $certificate)
     {
-        $fields = ['title' => trans('user.editCertificate'),
+        $fields = ['title' => 'Edit certificate',
             'method' => 'PATCH',
             'url' => '/users/' . $user->id . '/addCertificate/' . $certificate->id];
 

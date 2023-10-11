@@ -1,5 +1,5 @@
 @extends('layouts.app',[
-    'curPageName' => trans('auth.403')
+    'curPageName' => 'No access'
 ])
 
 @section('content')
@@ -7,7 +7,7 @@
         <div class="card">
             <div class="card-body">
                 <h2 class="card-title">{{$curPageName}}</h2>
-                <p>{{trans('validation.Unauthorized')}}</p>
+                <p>{{'You do not have sufficient access to view this page'}}</p>
             </div>
         </div>
     </div>

@@ -7,10 +7,10 @@ use App\Http\Controllers\Controller;
 use App\Http\Resources\ApplicationFormRowVueResource;
 use App\Models\ApplicationForm\ApplicationResponse;
 use App\Repositories\ApplicationFormRepositories\ApplicationFormRegistrationRepository;
-use Auth;
 use Carbon\Carbon;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Session;
 
 class UserApplicationFormController extends Controller
@@ -28,7 +28,7 @@ class UserApplicationFormController extends Controller
         $agendaEndDate = new \DateTime($agendaItem->subscription_endDate);
         $now = new \DateTime();
         if ($agendaEndDate < $now) {
-            $error = trans("forms.signupexpired");
+            $error = 'TRANSLATION_NOT_FOUND';
             $curPageName = $error;
 
             return view("forms.inschrijven_error", compact('error', 'curPageName'));
@@ -36,7 +36,7 @@ class UserApplicationFormController extends Controller
 
         $applicationForm = $agendaItem->getApplicationForm;
         if ($applicationForm == null) {
-            $error = trans("forms.form_not_available");
+            $error = 'TRANSLATION_NOT_FOUND';
             $curPageName = $error;
 
             return view("forms.inschrijven_error", compact('error', 'curPageName'));
@@ -49,7 +49,7 @@ class UserApplicationFormController extends Controller
             ->first();
 
         if ($signup != null) {
-            $error = trans("forms.duplicatesignup");
+            $error = 'TRANSLATION_NOT_FOUND';
             $curPageName = $error;
 
             return view("forms.inschrijven_error", compact('error', 'curPageName'));
@@ -77,7 +77,7 @@ class UserApplicationFormController extends Controller
             ->first();
 
         if ($signup != null) {
-            $error = trans("forms.duplicatesignup");
+            $error = 'TRANSLATION_NOT_FOUND';
             $curPageName = $error;
 
             return view("forms.inschrijven_error", compact('menu', 'error', 'curPageName'));
@@ -92,7 +92,7 @@ class UserApplicationFormController extends Controller
     public function unregister(AgendaItem $agendaItem, int $fromAgendaItem = 1): RedirectResponse
     {
         if (Carbon::parse($agendaItem->subscription_endDate) < Carbon::now()) {
-            Session::flash("message", trans('ApplicationForm.subscriptionDatePastUnregisterFailed'));
+            Session::flash("message", 'The registration date has expired, so you can no longer unsubscribe');
 
             if ($fromAgendaItem == 1) {
                 return redirect('agenda/' . $agendaItem->id);
@@ -106,7 +106,7 @@ class UserApplicationFormController extends Controller
             ->where('user_id', Auth::user()->id)
             ->delete();
 
-        Session::flash("message", trans('ApplicationForm.userUnregisterd'));
+        Session::flash("message", 'You successfully unsubscribed from the event');
 
         if ($fromAgendaItem == 1) {
             return redirect('agenda/' . $agendaItem->id);

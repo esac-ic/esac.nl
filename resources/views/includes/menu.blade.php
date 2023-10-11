@@ -47,7 +47,7 @@
                         @else @if(Auth::user()->hasBackendRigths())
                         <li class="nav-item">
                             <a class="nav-link" href="{{ url('beheer/home') }}" class="nav-link">
-                                {{trans('menu.beheer')}}
+                                {{'Management'}}
                             </a>
                         </li>
                         @endif
@@ -56,7 +56,7 @@
                                 {{ Auth::user()->firstname }}
                             </a>
                             <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-                                <a class="dropdown-item" href="{{ url('/users/'. Auth::user()->id) . '?back=false'}}">{{ trans('menu.account_overview') }}</a>
+                                <a class="dropdown-item" href="{{ url('/users/'. Auth::user()->id) . '?back=false'}}">{{ 'Account overview' }}</a>
                                 <a class="dropdown-item" href="{{ url('/logout') }}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">Logout</a>
                                 <form id="logout-form" action="{{ url('/logout') }}" method="POST" style="display: none;">
                                     {{ csrf_field() }}
@@ -65,7 +65,7 @@
                         </li>
                         @endif @if (Auth::guest())
                         <li class="nav-item d-flex align-items-center">
-                            <a class="btn btn-info text-dark" href="/lidworden">{{ trans('menu.become_member') }}</a>
+                            <a class="btn btn-info text-dark" href="/lidworden">{{ 'Become a member' }}</a>
                         </li>
                         @endif
                     </ul>

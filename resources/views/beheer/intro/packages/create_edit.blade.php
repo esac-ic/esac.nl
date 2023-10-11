@@ -10,7 +10,7 @@ $create = $package == null;
 @endphp
 
 @section('title')
-{{ $create ? trans('intro.packageCreate') : trans('intro.packageEdit') }}
+{{ $create ? 'New introduction package' : 'Edit package' }}
 @endsection
 
 @section('content')
@@ -30,19 +30,19 @@ $create = $package == null;
 
     <div class="card">
         <div class="card-header">
-            <h3>{{ $create ? trans('intro.packageCreate') : trans('intro.packageEdit') }}</h3>
+            <h3>{{ $create ? 'New introduction package' : 'Edit package' }}</h3>
         </div>
         <div class="card-body">
             {!! Form::open(['method' => $create ? 'POST' : 'PATCH', 'url' => route('beheer.intro.packages.' . ($create ? 'store' : 'update'), $package)]) !!}
             <div class="form-row">
                 <div class="form-group col-md-6">
-                    {!! Form::label('name', trans('intro.packageName') . ' EN') !!}
+                    {!! Form::label('name', 'Name' . ' EN') !!}
                     {!! Form::text('name', $create ? '' : $package->name, ['class' => 'form-control','required' => 'required']) !!}
                 </div>
             </div>
             <div class="form-row">
                 <div class="form-group col-md-6">
-                    {!! Form::label('startDate', trans('intro.packageDeadline')) !!}
+                    {!! Form::label('startDate', 'Registration deadline') !!}
                     <div class="input-group date" id="deadlineBox" data-target-input="nearest">
                         <input type='text' class="form-control datetimepicker-input" id="deadline"
                                name="deadline"
@@ -54,7 +54,7 @@ $create = $package == null;
                     </div>
                 </div>
                 <div class="form-group col-md-6">
-                    {!! Form::label('startDate', trans('intro.packageForm')) !!}
+                    {!! Form::label('startDate', 'Registration form') !!}
                     <div class="input-group date" id="deadlineBox" data-target-input="nearest">
                         <select class="selectpicker w-100" id="application-select" data-live-search="true" name="application_form_id">
                             @foreach($applicationForms as $applicationForm)
@@ -70,9 +70,9 @@ $create = $package == null;
     </div>
 
     <div class="my-4">
-        {!! Form::submit(trans('menu.save'), ['class'=> 'btn btn-primary'] ) !!}
+        {!! Form::submit('Save', ['class'=> 'btn btn-primary'] ) !!}
         {!! Form::close() !!}
-        <a class="btn btn-danger btn-close" href="{{ route('beheer.intro.packages.' . ($create ? 'index' : 'show'), $package) }}">{{trans('menu.cancel')}}</a>
+        <a class="btn btn-danger btn-close" href="{{ route('beheer.intro.packages.' . ($create ? 'index' : 'show'), $package) }}">{{'Cancel'}}</a>
     </div>
 @endsection
 

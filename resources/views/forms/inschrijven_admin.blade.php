@@ -14,7 +14,7 @@
                 </div>
                 <div class="card-body">
                     <div class="form-group">
-                        {!! Form::label('user', trans('inschrijven.applicationFormUser')) !!}
+                        {!! Form::label('user', 'Member who will be registered:') !!}
                         {!! Form::select('user',$users,null, ['class' => 'form-control','required' => 'required']) !!}
                     </div>
                     <registration-form rows="{{ json_encode($rows) }}"></registration-form>
@@ -22,8 +22,8 @@
             </div>
 
             <div class="my-4">
-                {!! Form::submit(trans('menu.submit'), ['class'=> 'btn btn-primary'] ) !!}
-                <a class="btn btn-danger btn-close" href="{{url('/forms/users/'. $agendaItem->id)}}">{{trans('menu.cancel')}}</a>
+                {!! Form::submit('Submit', ['class'=> 'btn btn-primary'] ) !!}
+                <a class="btn btn-danger btn-close" href="{{url('/forms/users/'. $agendaItem->id)}}">{{'Cancel'}}</a>
             </div>
         {!! Form::close() !!}
     </div>

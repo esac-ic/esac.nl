@@ -35,8 +35,8 @@ class PaginaBeheerController extends Controller
     public function create()
     {
         $fields = [
-            'title_menu' => trans('menuItems.addMenu'),
-            'title_page' => trans('menuItems.addPage'),
+            'title_menu' => 'Add menu item ',
+            'title_page' => 'Add page',
             'method' => 'POST',
             'url' => '/pages'];
         $page = null;
@@ -51,7 +51,7 @@ class PaginaBeheerController extends Controller
 
         $this->_menuRepository->create($request->all());
 
-        Session::flash("message", trans('menuItems.added'));
+        Session::flash("message", 'Page is added');
         return redirect('/pages');
     }
 
@@ -65,8 +65,8 @@ class PaginaBeheerController extends Controller
     public function edit(Request $request, MenuItem $page)
     {
         $fields = [
-            'title_menu' => trans('menuItems.editMenu'),
-            'title_page' => trans('menuItems.editPage'),
+            'title_menu' => 'Edit menu page',
+            'title_page' => 'Edit page',
             'method' => 'PATCH',
             'url' => '/pages/' . $page->id];
         $pages = $this->_menuRepository->all();
@@ -82,14 +82,14 @@ class PaginaBeheerController extends Controller
 
         $this->_menuRepository->update($page->id, $request->all());
 
-        Session::flash("message", trans('menuItems.edited'));
+        Session::flash("message", 'Page is edited');
         return redirect('/pages');
     }
 
     public function destroy(Request $request, MenuItem $page)
     {
         $this->_menuRepository->delete($page->id);
-        Session::flash("message", trans('menuItems.deleted'));
+        Session::flash("message", 'Menu item removed');
 
         return redirect('/pages');
     }

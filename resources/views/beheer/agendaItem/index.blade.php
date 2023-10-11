@@ -1,7 +1,7 @@
 @extends('layouts.beheer')
 
 @section('title')
-    {{trans("AgendaItems.agendaItems")}}
+    {{'Events'}}
 @endsection
 
 @section('content')
@@ -16,13 +16,13 @@
 
     <div class="row mb-3">
         <div class="col-md-6">
-            <h1>{{trans("AgendaItems.agendaItems")}}</h1>
+            <h1>{{'Events'}}</h1>
         </div>
         <div class="col-md-6">
             <div class="btn-group mt-2 float-md-right" role="group" aria-label="Actions">
                 <a href="{{url('agendaItems/create')}}" class="btn btn-primary">
-                    <span title="{{trans("user.new")}}" class="ion-plus" aria-hidden="true"></span>
-                    {{trans("AgendaItems.new")}}
+                    <span title="{{'New user'}}" class="ion-plus" aria-hidden="true"></span>
+                    {{'New event'}}
                 </a>
             </div>
         </div>
@@ -30,7 +30,7 @@
     <div class="row mb-3">
         <div class="col-md-3">
             <div class="form-group">
-                {!! Form::label('startDate', trans('AgendaItems.startDate')) !!}
+                {!! Form::label('startDate', 'Start date') !!}
                 <div class="input-group date" id="startDateBox" data-target-input="nearest">
                     <input type='text' class="form-control datetimepicker-input" id="startDate" name="startDate"
                            data-target="#startDateBox" value="{{\Carbon\Carbon::now()->addHours(1)->format('d-m-Y')}}"
@@ -46,10 +46,10 @@
     <table id="agenda-items" class="table table-striped dt-responsive nowrap" style="width:100%">
         <thead>
         <tr>
-            <th>{{trans('AgendaItems.title')}}</th>
-            <th>{{trans('AgendaItems.startDate')}}</th>
-            <th>{{trans('AgendaItems.endDate')}}</th>
-            <th>{{trans('menu.beheer')}}</th>
+            <th>{{'Title'}}</th>
+            <th>{{'Start date'}}</th>
+            <th>{{'End date'}}</th>
+            <th>{{'Management'}}</th>
         </tr>
         </thead>
         <tbody>
@@ -128,12 +128,12 @@
 
         function getAgendaItemActions(data) {
             let actions = "";
-            actions += '<a class="mr-1 ml-1" href="{{url('agendaItems')}}/' + data.id + '/edit"><span title="{{trans('AgendaItems.edit')}}" class="ion-edit font-size-120 icon" aria-hidden="true"></span></a>';
-            actions += '<a class="mr-1 ml-1" href="{{url('agendaItems')}}/' + data.id + '"><span title="{{trans('AgendaItems.show')}}" class="ion-eye font-size-120 icon" aria-hidden="true"></span></a>';
+            actions += '<a class="mr-1 ml-1" href="{{url('agendaItems')}}/' + data.id + '/edit"><span title="{{'Edit event'}}" class="ion-edit font-size-120 icon" aria-hidden="true"></span></a>';
+            actions += '<a class="mr-1 ml-1" href="{{url('agendaItems')}}/' + data.id + '"><span title="{{'Show event'}}" class="ion-eye font-size-120 icon" aria-hidden="true"></span></a>';
             if (data.application_form_id != null) {
-                actions += '<a class="mr-1 ml-1" href="{{url('/forms/users')}}/' + data.id + '"><span title="{{trans("AgendaItems.showsignups")}}" class="ion-android-list font-size-120 icon" aria-hidden="true"></span></a>';
+                actions += '<a class="mr-1 ml-1" href="{{url('/forms/users')}}/' + data.id + '"><span title="{{'Show sign ups'}}" class="ion-android-list font-size-120 icon" aria-hidden="true"></span></a>';
             }
-            actions += '<a class="mr-1 ml-1" href="{{url('agendaItems')}}/' + data.id + '/copy"><span title="{{trans('AgendaItems.copy')}}" class="ion-ios-copy font-size-120 icon" aria-hidden="true"></span></a>';
+            actions += '<a class="mr-1 ml-1" href="{{url('agendaItems')}}/' + data.id + '/copy"><span title="{{'Copy event'}}" class="ion-ios-copy font-size-120 icon" aria-hidden="true"></span></a>';
             return actions;
         }
 

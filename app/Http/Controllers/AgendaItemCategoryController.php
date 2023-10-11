@@ -28,7 +28,7 @@ class AgendaItemCategoryController extends Controller
 
     public function create()
     {
-        $fields = ['title' => trans('agendaItemCategory.add'),
+        $fields = ['title' => 'Add an event category',
             'method' => 'POST',
             'url' => '/agendaItemCategories'];
         $agendaItemCategory = null;
@@ -40,7 +40,7 @@ class AgendaItemCategoryController extends Controller
         $this->validateInput($request);
         $this->agendaItemCategoryRepository->create($request->all());
 
-        Session::flash("message", trans('agendaItemCategory.added'));
+        Session::flash("message", 'Events category is added');
         return redirect('/agendaItemCategories');
     }
 
@@ -51,7 +51,7 @@ class AgendaItemCategoryController extends Controller
 
     public function edit(Request $request, AgendaItemCategory $agendaItemCategory)
     {
-        $fields = ['title' => trans('agendaItemCategory.edit'),
+        $fields = ['title' => 'Edit category',
             'method' => 'PATCH',
             'url' => '/agendaItemCategories/' . $agendaItemCategory->id];
 
@@ -63,7 +63,7 @@ class AgendaItemCategoryController extends Controller
         $this->validateInput($request);
         $this->agendaItemCategoryRepository->update($agendaItemCategory->id, $request->all());
 
-        Session::flash("message", trans('agendaItemCategory.edited'));
+        Session::flash("message", 'Events category is edited');
         return redirect('/agendaItemCategories');
     }
 
@@ -71,7 +71,7 @@ class AgendaItemCategoryController extends Controller
     {
         $this->agendaItemCategoryRepository->delete($agendaItemCategory->id);
 
-        Session::flash("message", trans('agendaItemCategory.deleted'));
+        Session::flash("message", 'Events category is removed');
         return redirect('/agendaItemCategories');
     }
 

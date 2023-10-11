@@ -54,7 +54,7 @@ class UserController extends Controller
     //show create screen
     public function create()
     {
-        $fields = ['title' => trans('user.add'),
+        $fields = ['title' => 'Add user',
             'method' => 'POST',
             'url' => '/users'];
         $user = null;
@@ -73,7 +73,7 @@ class UserController extends Controller
             $this->_userRepository->addRols($user->id, $request->get('roles'));
         }
 
-        Session::flash("message", trans('user.added'));
+        Session::flash("message", 'User is added');
 
         return redirect('/users');
     }
@@ -81,7 +81,7 @@ class UserController extends Controller
     public function show(Request $request, User $user)
     {
         if (Auth::user()->id != $user->id && !Auth::user()->hasRole(Config::get('constants.Administrator'), Config::get('constants.Certificate_administrator'))) {
-            abort(403, trans('validation.Unauthorized'));
+            abort(403, 'You do not have sufficient access to view this page');
         }
         return view('beheer.user.show', compact('user'));
     }
@@ -90,10 +90,10 @@ class UserController extends Controller
     public function edit(Request $request, User $user)
     {
         if (Auth::user()->id != $user->id && !Auth::user()->hasRole(Config::get('constants.Administrator'))) {
-            abort(403, trans('validation.Unauthorized'));
+            abort(403, 'You do not have sufficient access to view this page');
         }
 
-        $fields = ['title' => trans('user.edit'),
+        $fields = ['title' => 'Edit user',
             'method' => 'PATCH',
             'url' => '/users/' . $user->id];
 
@@ -107,7 +107,7 @@ class UserController extends Controller
     {
         if (!Auth::user()->hasRole(Config::get('constants.Administrator'))) {
             if (Auth::user()->id != $user->id || $request->has('kind_of_member')) {
-                abort(403, trans('validation.Unauthorized'));
+                abort(403, 'You do not have sufficient access to view this page');
             }
         }
         if ($user->email != $request['email']) {
@@ -124,7 +124,7 @@ class UserController extends Controller
         if (Auth::user()->id === $user->id) {
             return redirect('/users/' . $user->id . '?back=false');
         } else {
-            Session::flash("message", trans('user.edited'));
+            Session::flash("message", 'Changes to user have been saved');
 
             return redirect('/users');
         }
@@ -140,7 +140,7 @@ class UserController extends Controller
 
     public function exportUsers(UsersExport $usersExport)
     {
-        return Excel::download($usersExport, trans('user.members') . '.xlsx');
+        return Excel::download($usersExport, 'Members' . '.xlsx');
     }
 
     public function makeActiveMember(Request $request, User $user)

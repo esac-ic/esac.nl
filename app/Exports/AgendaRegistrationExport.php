@@ -49,7 +49,7 @@ class AgendaRegistrationExport implements FromCollection, WithTitle, WithHeading
      */
     public function title(): string
     {
-        return trans('forms.Inschrijvingen');
+        return 'Subscriptions';
     }
 
     /**
@@ -58,14 +58,14 @@ class AgendaRegistrationExport implements FromCollection, WithTitle, WithHeading
     public function headings(): array
     {
         $defaultValues = [
-            trans('user.firstname'),
-            trans('user.preposition'),
-            trans('user.lastname'),
-            trans('user.street'),
-            trans('user.housenumber'),
-            trans('user.city'),
-            trans('user.email'),
-            trans('user.phonenumber'),
+            'First name',
+            'Preposition',
+            'Last name',
+            'Street',
+            'House number',
+            'City',
+            'Email address',
+            'Phone number',
         ];
 
         $formQuestions = [];

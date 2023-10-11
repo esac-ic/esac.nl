@@ -30,7 +30,7 @@ class NewsItemController extends Controller
 
     public function create()
     {
-        $fields = ['title' => trans('NewsItem.add'), 'method' => 'POST', 'url' => '/newsItems'];
+        $fields = ['title' => 'Add a news item ', 'method' => 'POST', 'url' => '/newsItems'];
         $newsItem = null;
         return view('beheer.newsItem.create_edit', compact('fields', 'newsItem'));
     }
@@ -44,7 +44,7 @@ class NewsItemController extends Controller
             $this->uploadAndResizeImage($request, $newsItem);
         }
 
-        Session::flash("message", trans('NewsItem.added'));
+        Session::flash("message", 'News item added');
         return redirect('/newsItems');
     }
 
@@ -55,7 +55,7 @@ class NewsItemController extends Controller
 
     public function edit(Request $request, NewsItem $newsItem)
     {
-        $fields = ['title' => trans('NewsItem.edit'), 'method' => 'PATCH', 'url' => '/newsItems/' . $newsItem->id];
+        $fields = ['title' => 'Edit news item ', 'method' => 'PATCH', 'url' => '/newsItems/' . $newsItem->id];
         return view('beheer.newsItem.create_edit', compact('fields', 'newsItem'));
     }
 
@@ -68,7 +68,7 @@ class NewsItemController extends Controller
             $this->uploadAndResizeImage($request, $newsItem);
         }
 
-        Session::flash("message", trans('NewsItem.edited'));
+        Session::flash("message", 'News item edited');
         return redirect('/newsItems');
     }
 
@@ -76,7 +76,7 @@ class NewsItemController extends Controller
     {
         $this->_newsItemRepository->delete($newsItem->id);
 
-        Session::flash("message", trans('NewsItem.deleted'));
+        Session::flash("message", 'News item removed');
         return redirect('/newsItems');
     }
 

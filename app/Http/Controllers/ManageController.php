@@ -15,7 +15,7 @@ class ManageController extends Controller
     public function index()
     {
         if (Auth::guest() || !Auth::user()->hasBackendRigths()) {
-            abort(403, trans('validation.Unauthorized'));
+            abort(403, 'You do not have sufficient access to view this page');
         }
 
         return view('beheer/home');

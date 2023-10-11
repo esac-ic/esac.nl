@@ -21,11 +21,11 @@
                     <table id="dataTable" class="table table-striped dt-responsive nowrap" style="width:100%">
                         <thead>
                             <tr>
-                                <th>{{trans('book.title')}}</th>
-                                <th>{{trans('book.year')}}</th>
-                                <th>{{trans('book.country')}}</th>
-                                <th>{{trans('book.type')}}</th>
-                                <th>{{trans('book.code')}}</th>
+                                <th>{{'Title'}}</th>
+                                <th>{{'Year'}}</th>
+                                <th>{{'Country'}}</th>
+                                <th>{{'Type'}}</th>
+                                <th>{{'Code'}}</th>
                             </tr>
                         </thead>
                         <tbody class="table-striped">

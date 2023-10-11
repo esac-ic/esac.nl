@@ -1,7 +1,7 @@
 @extends('layouts.beheer')
 
 @section('title')
-{{trans('user.info') . $user->getName()}}
+{{'Info of ' . $user->getName()}}
 @endsection
 
 @push('styles')
@@ -20,43 +20,43 @@
 
     <div class="row mb-3">
         <div class="col-md-6">
-            <h1>{{trans("user.view")}}</h1>
+            <h1>{{'View user'}}</h1>
         </div>
         <div class="col-md-6">
             <div class="btn-group mt-2 float-md-right" role="group" aria-label="Actions">
             @if($user->isPendingMember() and \Illuminate\Support\Facades\Auth::user()->hasRole(Config::get('constants.Administrator')))
                 {{ Form::open(array('url' => '/users/'.$user->id . '/approveAsPendingMember', 'method' => 'patch')) }}
-                <button type="submit" class="btn btn-success"><em class="ion-checkmark"></em> {{trans("user.approveAsPendingMember")}}</button>
+                <button type="submit" class="btn btn-success"><em class="ion-checkmark"></em> {{'Approve as member'}}</button>
                 {{ Form::close() }}
                 {{ Form::open(array('url' => '/users/'.$user->id . '/removeAsPendingMember', 'method' => 'patch')) }}
-                <button type="submit" class="btn btn-danger"><em class="ion-trash-a"></em> {{trans("user.removeAsPendingMember")}}</button>
+                <button type="submit" class="btn btn-danger"><em class="ion-trash-a"></em> {{'Remove as pending'}}</button>
                 {{ Form::close() }}
             @else
                 @if($user->isOldMember() and \Illuminate\Support\Facades\Auth::user()->hasRole(Config::get('constants.Administrator')))
                     {{ Form::open(array('url' => '/users/'.$user->id . '/makeActiveMember', 'method' => 'patch')) }}
-                        <button type="submit" class="btn btn-success"><em class="ion-plus"></em> {{trans("user.makeActiveMember")}}</button>
+                        <button type="submit" class="btn btn-success"><em class="ion-plus"></em> {{'Make active member'}}</button>
                     {{ Form::close() }}
                 @endif
                 <a href="{{url('/users/'.$user->id . '/edit' )}}" class="btn btn-primary">
-                    <span title="{{trans("menu.edit")}}" class="ion-edit" aria-hidden="true"></span>
-                    {{trans("menu.edit")}}
+                    <span title="{{'Edit'}}" class="ion-edit" aria-hidden="true"></span>
+                    {{'Edit'}}
                 </a>
                 @if(\Illuminate\Support\Facades\Auth::user()->hasRole(Config::get('constants.Administrator'),Config::get('constants.Certificate_administrator')))
                     <a href="{{url('/users/'.$user->id . '/addCertificate' )}}" class="btn btn-primary">
-                        <span title="{{trans("user.addCertificate")}}" class="ion-plus" aria-hidden="true"></span>
-                        {{trans("user.addCertificate")}}
+                        <span title="{{'Add certificate'}}" class="ion-plus" aria-hidden="true"></span>
+                        {{'Add certificate'}}
                     </a>
                 @endif
                 @if(app('request')->input('back') != "false")
                     <a href="{{url('/users/')}}" class="btn btn-primary">
-                        <span title="{{trans("menu.back")}}" class="ion-android-arrow-back" aria-hidden="true"></span>
-                        {{trans("menu.back")}}
+                        <span title="{{'Back'}}" class="ion-android-arrow-back" aria-hidden="true"></span>
+                        {{'Back'}}
                     </a>
                 @endif
                 @if(\Illuminate\Support\Facades\Auth::user()->hasRole(Config::get('constants.Administrator')))
                     @if($user->isActiveMember())
                         {{ Form::open(array('url' => '/users/'.$user->id . '/removeAsActiveMember', 'method' => 'patch')) }}
-                        <button type="submit" class="btn btn-danger"><em class="ion-trash-a"></em> {{trans("user.removeAsActiveMember")}}</button>
+                        <button type="submit" class="btn btn-danger"><em class="ion-trash-a"></em> {{'Remove as active member'}}</button>
                         {{ Form::close() }}
                     @endif
                 @endif
@@ -66,31 +66,31 @@
     </div>
     <div class="card mt-4">
         <div class="card-header">
-            <h3>{{trans('user.info') . $user->getName()}}</h3>
+            <h3>{{'Info of ' . $user->getName()}}</h3>
         </div>
         <div class="card-body">
             <ul class="nav nav-tabs" id="myTab" role="tablist">
                 <li class="nav-item">
-                    <a class="nav-link active" id="tab1" data-toggle="tab" href="#tab1-content" role="tab" aria-controls="general" aria-selected="true">{{trans('user.personal')}}</a>
+                    <a class="nav-link active" id="tab1" data-toggle="tab" href="#tab1-content" role="tab" aria-controls="general" aria-selected="true">{{'Personal'}}</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" id="tab2" data-toggle="tab" href="#tab2-content" role="tab" aria-controls="billing" aria-selected="false">{{trans('user.financial')}}</a>
+                    <a class="nav-link" id="tab2" data-toggle="tab" href="#tab2-content" role="tab" aria-controls="billing" aria-selected="false">{{'Financial'}}</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" id="tab3" data-toggle="tab" href="#tab3-content" role="tab" aria-controls="security" aria-selected="false">{{trans('user.emergencyInfo')}}</a>
+                    <a class="nav-link" id="tab3" data-toggle="tab" href="#tab3-content" role="tab" aria-controls="security" aria-selected="false">{{'Emergency info'}}</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" id="tab3" data-toggle="tab" href="#rols" role="tab" aria-controls="security" aria-selected="false">{{trans('user.rols')}}</a>
+                    <a class="nav-link" id="tab3" data-toggle="tab" href="#rols" role="tab" aria-controls="security" aria-selected="false">{{'Roles'}}</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" id="tab3" data-toggle="tab" href="#certifications" role="tab" aria-controls="security" aria-selected="false">{{trans('certificate.certificates') }}</a>
+                    <a class="nav-link" id="tab3" data-toggle="tab" href="#certifications" role="tab" aria-controls="security" aria-selected="false">{{'Certificates' }}</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" id="tab3" data-toggle="tab" href="#registrations" role="tab" aria-controls="security" aria-selected="false">{{trans('user.registrations') }}</a>
+                    <a class="nav-link" id="tab3" data-toggle="tab" href="#registrations" role="tab" aria-controls="security" aria-selected="false">{{'Registrations' }}</a>
                 </li>
                 @if($user->registrationInfo !== null)
                     <li class="nav-item">
-                        <a class="nav-link" data-toggle="tab" href="#registration_info" role="tab" aria-controls="security" aria-selected="false">{{trans('user.registrationInfo') }}</a>
+                        <a class="nav-link" data-toggle="tab" href="#registration_info" role="tab" aria-controls="security" aria-selected="false">{{'Registration info' }}</a>
                     </li>
                 @endif
             </ul>
@@ -99,43 +99,43 @@
                 <div class="tab-pane fade show active" id="tab1-content" role="tabpanel" aria-labelledby="tab1-content">
                     <table class="table table-striped" style="width:100%">
                         <tr>
-                            <td>{{trans('user.name')}}</td>
+                            <td>{{'Name'}}</td>
                             <td>{{ $user->getName()}}</td>
                         </tr>
                         <tr>
-                            <td>{{trans('user.email')}}</td>
+                            <td>{{'Email address'}}</td>
                             <td>{{$user->email}}</td>
                         </tr>
                         <tr>
-                            <td>{{trans('user.phonenumber')}}</td>
+                            <td>{{'Phone number'}}</td>
                             <td>{{$user->phonenumber}}</td>
                         </tr>
                         <tr>
-                            <td>{{trans('user.firstname')}}</td>
+                            <td>{{'First name'}}</td>
                             <td>{{ $user->firstname}}</td>
                         </tr>
                         <tr>
-                            <td>{{trans('user.preposition')}}</td>
+                            <td>{{'Preposition'}}</td>
                             <td>{{ $user->preposition}}</td>
                         </tr>
                         <tr>
-                            <td>{{trans('user.lastname')}}</td>
+                            <td>{{'Last name'}}</td>
                             <td>{{ $user->lastname}}</td>
                         </tr>
                         <tr>
-                            <td>{{trans('user.adress')}}</td>
+                            <td>{{'Address'}}</td>
                             <td>{{$user->street . " " . $user->houseNumber}}</td>
                         </tr>
                         <tr>
-                            <td>{{trans('user.city')}}</td>
+                            <td>{{'City'}}</td>
                             <td>{{$user->city}}</td>
                         </tr>
                         <tr>
-                            <td>{{trans('user.zipcode')}}</td>
+                            <td>{{'Postal code'}}</td>
                             <td>{{$user->zipcode}}</td>
                         </tr>
                         <tr>
-                            <td>{{trans('user.country')}}</td>
+                            <td>{{'Country'}}</td>
                             <td>
                                 @isset($user->country)
                                 {{trans('countries.' . $user->country)}}
@@ -143,15 +143,15 @@
                             </td>
                         </tr>
                         <tr>
-                            <td>{{trans('user.phonenumber_alt')}}</td>
+                            <td>{{'Alternative phone number'}}</td>
                             <td>{{$user->phonenumber_alt}}</td>
                         </tr>
                         <tr>
-                            <td>{{trans('user.birthDay')}}</td>
+                            <td>{{'Birthdate'}}</td>
                             <td>{{$user->birthDay}}</td>
                         </tr>
                         <tr>
-                            <td>{{trans('user.kind_of_member')}}</td>
+                            <td>{{'Kind of member'}}</td>
                             <td>
                                 @isset($user->kind_of_member)
                                 {{trans('kind_of_member.' . $user->kind_of_member)}}
@@ -159,15 +159,15 @@
                             </td>
                         </tr>
                         <tr>
-                            <td>{{trans('user.remark')}}</td>
+                            <td>{{'Remarks'}}</td>
                             <td>{{$user->remark}}</td>
                         </tr>
                         <tr>
-                            <td>{{trans('user.created_at')}}</td>
+                            <td>{{'User created at'}}</td>
                             <td>{{trans(\Carbon\Carbon::parse($user->created_at)->format('d-m-Y'))}}</td>
                         </tr>
                         <tr>
-                            <td>{{trans('user.updated_at')}}</td>
+                            <td>{{'User updated at'}}</td>
                             <td>{{trans(\Carbon\Carbon::parse($user->updated_at)->format('d-m-Y'))}}</td>
                         </tr>
                     </table>
@@ -175,43 +175,43 @@
                 <div class="tab-pane fade" id="tab2-content" role="tabpanel" aria-labelledby="tab2-content">
                     <table class="table table-striped" style="width:100%">
                         <tr>
-                            <td>{{trans('user.IBAN')}}</td>
+                            <td>{{'IBAN'}}</td>
                             <td>{{$user->IBAN}}</td>
                         </tr>
                         <tr>
-                            <td>{{trans('user.BIC')}}</td>
+                            <td>{{'BIC'}}</td>
                             <td>{{$user->BIC}}</td>
                         </tr>
                         <tr>
-                            <td>{{trans('user.incasso')}}</td>
-                            <td>{{($user->incasso)? trans('menu.yes') : trans('menu.no')}}</td>
+                            <td>{{'Accept Automatic Collection'}}</td>
+                            <td>{{($user->incasso)? 'Yes' : 'No'}}</td>
                         </tr>
                     </table>
                 </div>
                 <div class="tab-pane fade" id="tab3-content" role="tabpanel" aria-labelledby="tab3-content">
                     <table class="table table-striped" style="width:100%">
                         <tr>
-                            <td>{{trans('user.emergencystreet')}}</td>
+                            <td>{{'Emergency address street'}}</td>
                             <td>{{$user->emergencystreet}}</td>
                         </tr>
                         <tr>
-                            <td>{{trans('user.emergencyHouseNumber')}}</td>
+                            <td>{{'Emergency address house number'}}</td>
                             <td>{{$user->emergencyHouseNumber}}</td>
                         </tr>
                         <tr>
-                            <td>{{trans('user.emergencyzipcode')}}</td>
+                            <td>{{'Emergency address postal code'}}</td>
                             <td>{{$user->emergencyzipcode}}</td>
                         </tr>
                         <tr>
-                            <td>{{trans('user.emergencycity')}}</td>
+                            <td>{{'Emergency address city'}}</td>
                             <td>{{$user->emergencycity}}</td>
                         </tr>
                         <tr>
-                            <td>{{trans('user.emergencycountry')}}</td>
+                            <td>{{'Emergency address country'}}</td>
                             <td>{{trans('countries.' . $user->emergencycountry)}}</td>
                         </tr>
                         <tr>
-                            <td>{{trans('user.emergencyNumber')}}</td>
+                            <td>{{'Emergency phone number'}}</td>
                             <td>{{$user->emergencyNumber}}</td>
                         </tr>
                     </table>
@@ -220,7 +220,7 @@
                     <table class="table table-striped" style="width:100%">
                         @if(count($user->roles) > 0)
                             <tr>
-                                <td rowspan="{{count($user->roles)}}">{{trans('user.rols')}}</td>
+                                <td rowspan="{{count($user->roles)}}">{{'Roles'}}</td>
                                 <td>{{$user->roles[0]->name}}</td>
                             </tr>
                             @for($i=1; $i<count($user->roles);$i++)
@@ -237,19 +237,13 @@
                         <thead>
                         <tr>
                             <td>
-                                <strong>{{trans('certificate.name')}}</strong>
+                                <strong>{{'Name'}}</strong>
                             </td>
                             <td>
-                                <strong>{{trans('certificate.abbreviation')}}</strong>
+                                <strong>{{'Abbreviation'}}</strong>
                             </td>
                             <td>
-                                <strong>{{trans('certificate.duration')}}</strong>
-                            </td>
-                            <td>
-                                <strong>{{trans('certificate.validuntil')}}</strong>
-                            </td>
-                            <td>
-                                <strong>{{trans('menu.beheer')}}</strong>
+                                <strong>{{'Management'}}</strong>
                             </td>
                         </tr>
                         </thead>
@@ -263,15 +257,9 @@
                                     {{$certificate->abbreviation}}
                                 </td>
                                 <td>
-                                    {{$certificate->duration === null ? "" : $certificate->duration}}
-                                </td>
-                                <td>
-                                    {{$certificate->duration === null ? "" : \Carbon\Carbon::parse($certificate->pivot->startDate)->addMonths($certificate->duration)->format('d-m-Y') }}
-                                </td>
-                                <td>
-                                    <a href="{{url('/users/' . $user->id . '/addCertificate/' . $certificate->id)}}"><span title="{{trans('certificate.editUserCertificate')}}" class="ion-edit" aria-hidden="true"></span></a>
+                                    <a href="{{url('/users/' . $user->id . '/addCertificate/' . $certificate->id)}}"><span title="Edit Certificate" class="ion-edit" aria-hidden="true"></span></a>
                                     <a href="{{url('/users/' . $user->id . '/addCertificate/' . $certificate->id)}}" onclick="event.preventDefault(); document.getElementById('delete-usercertificate-{{$certificate->id}}').submit();">
-                                        <span title="{{trans('certificate.deleteUserCertificate')}}" class="ion-trash-a" aria-hidden="true"></span>
+                                        <span title="Remove Certificate" class="ion-trash-a" aria-hidden="true"></span>
                                     </a>
                                     {{ Form::open(array('url' => '/users/' . $user->id . '/addCertificate/' . $certificate->id, 'method' => 'delete', "id"   => "delete-usercertificate-$certificate->id")) }}
                                     {{ Form::close() }}
@@ -286,13 +274,13 @@
                         <thead>
                         <tr>
                             <td>
-                                <strong>{{trans('user.name')}}</strong>
+                                <strong>{{'Name'}}</strong>
                             </td>
                             <td>
-                                <strong>{{trans('AgendaItems.startDate')}}</strong>
+                                <strong>{{'Start date'}}</strong>
                             </td>
                             <td>
-                                <strong>{{trans('menu.action')}}</strong>
+                                <strong>{{'Action'}}</strong>
                             </td>
                         </tr>
                         </thead>
@@ -326,7 +314,7 @@
             ]
         });
         $(document).on('click','#delete_button',function(){
-            if(confirm("{{trans('inschrijven.deleteRegistrationConfurm')}}")){
+            if(confirm("{{'Are you sure you want do remove your registration for this event?'}}")){
                 var url = $(this).attr('data-url');
                 $.ajax({
                     url: url,

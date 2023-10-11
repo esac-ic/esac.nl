@@ -1,7 +1,7 @@
 @extends('layouts.beheer')
 
 @section('title')
-{{trans("user.pending_members")}}
+{{'Pending users'}}
 @endsection
 
 @section('content')
@@ -16,14 +16,14 @@
 
     <div class="row mb-3">
         <div class="col-md-6">
-            <h1>{{trans("user.pending_members")}}</h1>
+            <h1>{{'Pending users'}}</h1>
         </div>
 
         <div class="col-md-6">
             <div class="btn-group mt-2 float-md-right" role="group" aria-label="Actions">
                 <a href="{{route('export-registration-info')}}" class="btn btn-primary">
-                    <span title="{{trans("user.exportRegistrationInfo")}}" class="ion-android-download" aria-hidden="true"></span>
-                    {{trans("user.exportRegistrationInfo")}}
+                    <span title="{{'TRANSLATION_NOT_FOUND'}}" class="ion-android-download" aria-hidden="true"></span>
+                    {{'TRANSLATION_NOT_FOUND'}}
                 </a>
             </div>
         </div>
@@ -31,9 +31,9 @@
     <table id="users" class="table table-striped dt-responsive nowrap" style="width:100%">
         <thead>
         <tr>
-            <th>{{trans('user.name')}}</th>
-            <th>{{trans('user.email')}}</th>
-            <th>{{trans('user.kind_of_member')}}</th>
+            <th>{{'Name'}}</th>
+            <th>{{'Email address'}}</th>
+            <th>{{'Type of member'}}</th>
             <th>Beheer</th>
         </tr>
         </thead>
@@ -45,8 +45,8 @@
                 <td>{{$user->email}}</td>
                 <td>{{trans('kind_of_member.' . $user->kind_of_member)}}</td>
                 <td>
-                    <a class="mr-1 ml-1" href="{{url('/users/' . $user->id . '/edit')}}"><span title="{{trans('user.edit')}}" class="ion-edit font-size-120" aria-hidden="true"></span></a>
-                    <a class="mr-1 ml-1" href="{{url('/users/'. $user->id)}}"><span title="{{trans("user.show")}}" class="ion-eye font-size-120" aria-hidden="true"></span></a>
+                    <a class="mr-1 ml-1" href="{{url('/users/' . $user->id . '/edit')}}"><span title="{{'Edit user'}}" class="ion-edit font-size-120" aria-hidden="true"></span></a>
+                    <a class="mr-1 ml-1" href="{{url('/users/'. $user->id)}}"><span title="{{'Show user information'}}" class="ion-eye font-size-120" aria-hidden="true"></span></a>
                 </td>
             </tr>
         @endforeach

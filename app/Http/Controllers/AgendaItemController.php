@@ -36,7 +36,7 @@ class AgendaItemController extends Controller
 
     public function create()
     {
-        $fields = $this->getFields('POST', '/agendaItems', trans('AgendaItems.add'));
+        $fields = $this->getFields('POST', '/agendaItems', 'Add an event');
         return $this->renderCreateEditView(null, $fields);
     }
 
@@ -45,7 +45,7 @@ class AgendaItemController extends Controller
         $this->validateInput($request);
         $agendaItem = $this->_agendaItemRepository->create($request->all());
         $this->handleImage($request, $agendaItem);
-        Session::flash("message", trans('AgendaItems.added'));
+        Session::flash("message", 'Event added');
         return redirect('/agendaItems');
     }
 
@@ -56,7 +56,7 @@ class AgendaItemController extends Controller
 
     public function edit(AgendaItem $agendaItem)
     {
-        $fields = $this->getFields('PATCH', '/agendaItems/' . $agendaItem->id, trans('AgendaItems.edit'));
+        $fields = $this->getFields('PATCH', '/agendaItems/' . $agendaItem->id, 'Edit event');
         return $this->renderCreateEditView($agendaItem, $fields);
     }
 
@@ -65,14 +65,14 @@ class AgendaItemController extends Controller
         $this->validateInput($request);
         $this->_agendaItemRepository->update($agendaItem->id, $request->all());
         $this->handleImage($request, $agendaItem);
-        Session::flash("message", trans('AgendaItems.edited'));
+        Session::flash("message", 'Event edited');
         return redirect('/agendaItems');
     }
 
     public function destroy($id)
     {
         $this->_agendaItemRepository->delete($id);
-        Session::flash("message", trans('AgendaItems.deleted'));
+        Session::flash("message", 'Event removed');
         return redirect('/agendaItems');
     }
 
@@ -99,9 +99,9 @@ class AgendaItemController extends Controller
     private function getFields($method, $url, $title)
     {
         return [
-            'title_info' => trans('AgendaItems.info'),
-            'title_content' => trans('AgendaItems.content'),
-            'title_image' => trans('AgendaItems.imagePage'),
+            'title_info' => 'Event general information',
+            'title_content' => 'Event item content',
+            'title_image' => 'Event item thumbnail',
             'title' => $title,
             'method' => $method,
             'url' => $url,

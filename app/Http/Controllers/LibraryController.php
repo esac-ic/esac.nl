@@ -29,7 +29,7 @@ class LibraryController extends Controller
     public function create()
     {
         $fields = [
-            'title' => trans('book.add'),
+            'title' => 'Add a book',
             'method' => 'POST',
             'url' => route('books.store'),
         ];
@@ -40,7 +40,7 @@ class LibraryController extends Controller
     {
         $this->validateInput($request);
         $this->_bookRepository->create($request->all());
-        Session::flash("message", trans('book.added'));
+        Session::flash("message", 'Book added');
         return redirect()->route('books.index');
     }
 
@@ -52,7 +52,7 @@ class LibraryController extends Controller
     public function edit(Book $book)
     {
         $fields = [
-            'title' => trans('book.edit'),
+            'title' => 'Edit book',
             'method' => 'PATCH',
             'url' => route('books.update', $book->id),
         ];
@@ -63,14 +63,14 @@ class LibraryController extends Controller
     {
         $this->validateInput($request);
         $this->_bookRepository->update($book->id, $request->all());
-        Session::flash("message", trans('book.edited'));
+        Session::flash("message", 'Book edited');
         return redirect()->route('books.index');
     }
 
     public function destroy(Book $book)
     {
         $this->_bookRepository->delete($book->id);
-        Session::flash("message", trans('book.deleted'));
+        Session::flash("message", 'Book removed');
         return redirect()->route('books.index');
     }
 

@@ -36,7 +36,7 @@ class ApplicationResponseRow extends Model
     {
         switch ($this->getApplicationFormRow->type) {
             case ApplicationFormRow::FORM_TYPE_CHECK_BOX:
-                return $this->value === 'on' ? trans('inschrijven.yes') : trans('inschrijven.no');
+                return $this->value === 'on' ? 'Yes' : 'No';
             default:
                 return $this->value;
         }

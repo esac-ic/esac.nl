@@ -1,7 +1,7 @@
 @extends('layouts.beheer')
 
 @section('title')
-{{ trans("menu.introPackages") }}
+{{ 'Intro packages' }}
 @endsection
 
 @section('content')
@@ -16,26 +16,26 @@
 
     <div class="row mb-3">
         <div class="col-md-6">
-            <h1>{{trans("menu.introPackages")}}</h1>
+            <h1>{{'Intro packages'}}</h1>
         </div>
 
         <div class="col-md-6">
             <div class="btn-group mt-2 float-md-right" role="group" aria-label="Actions">
                 <a href="{{ route('beheer.intro.packages.edit', $package) }}" class="btn btn-primary">
-                    <em class="ion-edit"></em> {{trans("menu.edit")}}
+                    <em class="ion-edit"></em> {{'Edit'}}
                 </a>
                 <a href="{{ route('beheer.intro.packages.index') }}" class="btn btn-block btn-primary">
-                    <em class="ion-android-arrow-back"></em> {{trans("menu.back")}}
+                    <em class="ion-android-arrow-back"></em> {{'Back'}}
                 </a>
                 {{ Form::open(array('url' => route('beheer.intro.packages.destroy', $package), 'method' => 'delete')) }}
-                <button type="submit" class="btn btn-danger"><em class="ion-trash-a"></em> {{trans('menu.delete')}}</button>
+                <button type="submit" class="btn btn-danger"><em class="ion-trash-a"></em> {{'Remove'}}</button>
                 {{ Form::close() }}
             </div>
         </div>
     </div>
     <div class="card mt-4">
         <div class="card-header">
-            <h3>{{ trans("menu.introPackages") }}</h3>
+            <h3>{{ 'Intro packages' }}</h3>
         </div>
         <div class="card-body">
             <div class="form-row">

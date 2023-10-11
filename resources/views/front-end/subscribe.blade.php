@@ -36,70 +36,70 @@
     {!! Form::open(['url' => 'lidworden']) !!}
     <div class="card mt-4" id="personal-info">
         <div class="card-header">
-            <h3>{{trans('user.personal')}}</h3>
+            <h3>{{'Personal'}}</h3>
         </div>
         <div class="card-body">
             <div class="form-row">
                 <div class="form-group col-md-5">
-                    {!! Form::label('firstname', trans('user.firstname')) !!}
-                    {!! Form::text('firstname', '', ['class' => 'form-control','required' => 'required']) !!}                    
+                    {!! Form::label('firstname', 'First name') !!}
+                    {!! Form::text('firstname', '', ['class' => 'form-control','required' => 'required']) !!}
                 </div>
                 <div class="form-group col-md-2">
-                    {!! Form::label('preposition', trans('user.preposition')) !!}
+                    {!! Form::label('preposition', 'Preposition') !!}
                     {!! Form::text('preposition', '', ['class' => 'form-control']) !!}
                 </div>
                 <div class="form-group col-md-5">
-                    {!! Form::label('lastname', trans('user.lastname')) !!}
+                    {!! Form::label('lastname', 'Last name') !!}
                     {!! Form::text('lastname', '', ['class' => 'form-control','required' => 'required']) !!}
                 </div>
             </div>
             <div class="form-row">
                 <div class="form-group col-md-6">
-                    {!! Form::label('emaillbl', trans('user.email')) !!}
+                    {!! Form::label('emaillbl', 'Email address') !!}
                     {!! Form::text('email', '', ['class' => 'form-control','required' => 'required']) !!}
                 </div>
                 <div class="form-group col-md-6">
-                    {!! Form::label('password', trans('user.password')) !!}
+                    {!! Form::label('password', 'Password') !!}
                     {!! Form::password('password',  ['class' => 'form-control','required' => 'required', 'minlength' => 8]) !!}
                 </div>
             </div>
             <div class="form-row">
                 <div class="form-group col-md-6">
-                    {!! Form::label('street', trans('user.street')) !!}
+                    {!! Form::label('street', 'Street') !!}
                     {!! Form::text('street', '', ['class' => 'form-control','required' => 'required']) !!}
                 </div>
                 <div class="form-group col-md-6">
-                    {!! Form::label('houseNumber', trans('user.housenumber')) !!}
+                    {!! Form::label('houseNumber', 'House number') !!}
                     {!! Form::text('houseNumber', '', ['class' => 'form-control','required' => 'required']) !!}
                 </div>
             </div>
             <div class="form-row">
                 <div class="form-group col-md-4">
-                    {!! Form::label('zipcode', trans('user.zipcode')) !!}
+                    {!! Form::label('zipcode', 'Postal code') !!}
                     {!! Form::text('zipcode', '', ['class' => 'form-control','required' => 'required']) !!}
                 </div>
                 <div class="form-group col-md-4">
-                    {!! Form::label('city', trans('user.city')) !!}
+                    {!! Form::label('city', 'City') !!}
                     {!! Form::text('city', '', ['class' => 'form-control','required' => 'required']) !!}
                 </div>
                 <div class="form-group col-md-4">
-                    {!! Form::label('country', trans('user.country')) !!}
-                    {!! Form::select('country', trans("countries"), 'NL', ['class' => 'form-control','required' => 'required']) !!}
+                    {!! Form::label('country', 'Country') !!}
+                    {!! Form::select('country', 'Array', 'NL', ['class' => 'form-control','required' => 'required']) !!}
                 </div>
             </div>
             <div class="form-row">
                 <div class="form-group col-md-6">
-                    {!! Form::label('phonenumber', trans('user.phonenumber')) !!}
+                    {!! Form::label('phonenumber', 'Phone number') !!}
                     {!! Form::text('phonenumber', '', ['class' => 'form-control','required' => 'required']) !!}
                 </div>
                 <div class="form-group col-md-6">
-                    {!! Form::label('phonenumber_alt', trans('user.phonenumber_alt')) !!}
+                    {!! Form::label('phonenumber_alt', 'Alternative phone number') !!}
                     {!! Form::text('phonenumber_alt', '', ['class' => 'form-control']) !!}
                 </div>
             </div>
             <div class="form-row">
                 <div class="form-group col-md-6">
-                    {!! Form::label('birthDay', trans('user.birthDay')) !!}
+                    {!! Form::label('birthDay', 'Birthdate') !!}
                     <div class="input-group date" id="birthDayBox" data-target-input="nearest">
                         <input type='text' class="form-control datetimepicker-input" id="birthDay" name="birthDay" data-target="#birthDayBox" value="" required="required">
                         <div class="input-group-append" data-target="#birthDayBox" data-toggle="datetimepicker">
@@ -108,24 +108,24 @@
                     </div>
                 </div>
                 <div class="form-group col-md-6">
-                    {!! Form::label('kind_of_member', trans('user.kind_of_member')) !!}
-                    {!! Form::select('kind_of_member',trans('kind_of_member'), 'member', ['class' => 'form-control', 'required' => 'required', 'readonly' => 'readonly']) !!}
+                    {!! Form::label('kind_of_member', 'Type of member') !!}
+                    {!! Form::select('kind_of_member', 'Array', 'member', ['class' => 'form-control', 'required' => 'required', 'readonly' => 'readonly']) !!}
                 </div>
             </div>
         </div>
     </div>
     <div class="card mt-4">
         <div class="card-header">
-            <h3>{{trans('user.financial')}}</h3>
+            <h3>{{'Financial'}}</h3>
         </div>
         <div class="card-body">
             <div class="form-row">
                 <div class="form-group col-md-4">
-                    {!! Form::label('BIC', trans('user.BIC')) !!}
+                    {!! Form::label('BIC', 'BIC') !!}
                     {!! Form::text('BIC', '', ['class' => 'form-control']) !!}
                 </div>
                 <div class="form-group col-md-8">
-                    {!! Form::label('IBAN', trans('user.IBAN')) !!}
+                    {!! Form::label('IBAN', 'IBAN') !!}
                     {!! Form::text('IBAN', '', ['class' => 'form-control','required' => 'required']) !!}
                 </div>
             </div>
@@ -133,35 +133,35 @@
     </div>
     <div class="card mt-4">
         <div class="card-header">
-            <h3>{{trans('user.emergencyInfo')}}</h3>
+            <h3>{{'Emergency info'}}</h3>
         </div>
         <div class="card-body">
             <div class="form-row">
                 <div class="form-group col-md-6">
-                    {!! Form::label('emergencystreet', trans('user.emergencystreet')) !!}
+                    {!! Form::label('emergencystreet', 'Emergency address street') !!}
                     {!! Form::text('emergencystreet', '', ['class' => 'form-control','required' => 'required']) !!}
                 </div>
                 <div class="form-group col-md-6">
-                    {!! Form::label('emergencyHouseNumber', trans('user.emergencyHouseNumber')) !!}
+                    {!! Form::label('emergencyHouseNumber', 'Emergency address house number') !!}
                     {!! Form::text('emergencyHouseNumber', '', ['class' => 'form-control','required' => 'required']) !!}
                 </div>
             </div>
             <div class="form-row">
                 <div class="form-group col-md-4">
-                    {!! Form::label('emergencyzipcode', trans('user.emergencyzipcode')) !!}
+                    {!! Form::label('emergencyzipcode', 'Emergency zip code') !!}
                     {!! Form::text('emergencyzipcode', '', ['class' => 'form-control','required' => 'required']) !!}
                 </div>
                 <div class="form-group col-md-4">
-                    {!! Form::label('emergencycity', trans('user.emergencycity')) !!}
+                    {!! Form::label('emergencycity', 'Emergency city') !!}
                     {!! Form::text('emergencycity', '', ['class' => 'form-control','required' => 'required']) !!}
                 </div>
                 <div class="form-group col-md-4">
-                    {!! Form::label('emergencycountry', trans('user.emergencycountry')) !!}
-                    {!! Form::select('emergencycountry',trans("countries"), 'NL', ['class' => 'form-control','required' => 'required']) !!}
+                    {!! Form::label('emergencycountry', 'Emergency country') !!}
+                    {!! Form::select('emergencycountry','Array', 'NL', ['class' => 'form-control','required' => 'required']) !!}
                 </div>
             </div>
             <div class="form-group">
-                {!! Form::label('emergencyNumber', trans('user.emergencyNumber')) !!}
+                {!! Form::label('emergencyNumber', 'Emergency phone number') !!}
                 {!! Form::text('emergencyNumber', '', ['class' => 'form-control','required' => 'required']) !!}
             </div>
         </div>
@@ -173,7 +173,7 @@
 
     <div class="card mt-4">
         <div class="card-header">
-            <h3>{{trans('user.privacy_and_incasso')}}</h3>
+            <h3>{{'Privacy Policy and Automatic Collection'}}</h3>
         </div>
         <div class="card-body">
             <div class="accordion" id="accordion-1" data-children=".accordion-item">
@@ -226,22 +226,22 @@
             <div class="form-group">
                 <div class="form-check">
                     {!! Form::checkbox("privacy_policy",true,'',["class" => "form-check-input", "id" => "privacy_policy"]) !!}
-                    {!! Form::label("privacy_policy", trans("user.privacy_policy"), ["class" => "form-check-label"]) !!}
+                    {!! Form::label("privacy_policy", 'Accept the Privacy Policy', ["class" => "form-check-label"]) !!}
                 </div>
                 <div class="form-check">
                     {!! Form::checkbox("incasso",true,'',["class" => "form-check-input", "id" => "incasso"]) !!}
-                    {!! Form::label("incasso", trans("user.incasso"), ["class" => "form-check-label"]) !!}
+                    {!! Form::label("incasso", 'Accept Automatic Collection', ["class" => "form-check-label"]) !!}
                 </div>
                 <div class="form-check">
                     {!! Form::checkbox("termsconditions",true,'',["class" => "form-check-input", "id" => "termsconditions"]) !!}
-                    {!! Form::label("termsconditions", trans("user.termsconditions"), ["class" => "form-check-label"]) !!}
+                    {!! Form::label("termsconditions", 'Accept the Terms and Conditions', ["class" => "form-check-label"]) !!}
                 </div>
                 <div class="g-recaptcha" data-sitekey="{{config('custom.google_recaptcha_key')}}"></div>
             </div>
         </div>
     </div>
     <div class="my-4">
-        {!! Form::submit(trans('front-end/subscribe.submit'), ['class'=> 'btn btn-primary'] ) !!}
+        {!! Form::submit('Submit', ['class'=> 'btn btn-primary'] ) !!}
     </div>
     {!! Form::close() !!}
 </div>

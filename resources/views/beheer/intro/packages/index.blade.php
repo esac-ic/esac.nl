@@ -1,7 +1,7 @@
 @extends('layouts.beheer')
 
 @section('title')
-{{ trans("menu.introPackages") }}
+{{ 'Intro packages' }}
 @endsection
 
 @section('content')
@@ -16,14 +16,14 @@
 
     <div class="row mb-3">
         <div class="col-md-6">
-            <h1>{{ trans("menu.introPackages") }}</h1>
+            <h1>{{ 'Intro packages' }}</h1>
         </div>
 
         <div class="col-md-6">
             <div class="btn-group mt-2 float-md-right" role="group" aria-label="Actions">
                 <a href="{{ route('beheer.intro.packages.create') }}" class="btn btn-primary">
-                    <span title="{{ trans("intro.packageCreate") }}" class="ion-plus" aria-hidden="true"></span>
-                    {{ trans("intro.packageCreate") }}
+                    <span title="{{ 'New introduction package' }}" class="ion-plus" aria-hidden="true"></span>
+                    {{ 'New introduction package' }}
                 </a>
             </div>
         </div>
@@ -33,13 +33,13 @@
         <thead>
         <tr>
             <td>
-                <strong>{{trans('intro.packageName')}}</strong>
+                <strong>{{'Name'}}</strong>
             </td>
             <td>
-                <strong>{{trans('intro.packageDeadline')}}</strong>
+                <strong>{{'Registration deadline'}}</strong>
             </td>
             <td>
-                <strong>{{trans('menu.action')}}</strong>
+                <strong>{{'Action'}}</strong>
             </td>
         </tr>
         </thead>
@@ -49,8 +49,8 @@
                 <td>{{ $package->name }}</td>
                 <td>{{ $package->deadline->format('d-m-Y') }}</td>
                 <td>
-                    <a class="mr-1 ml-1" href="{{ route('beheer.intro.packages.edit', $package) }}"><span title="{{trans('intro.packageEdit')}}" class="ion-edit font-size-120" aria-hidden="true"></span></a>
-                    <a class="mr-1 ml-1" href="{{ route('beheer.intro.packages.show', $package) }}"><span title="{{trans("intro.packageShow")}}" class="ion-eye font-size-120" aria-hidden="true"></span></a>
+                    <a class="mr-1 ml-1" href="{{ route('beheer.intro.packages.edit', $package) }}"><span title="{{'Edit package'}}" class="ion-edit font-size-120" aria-hidden="true"></span></a>
+                    <a class="mr-1 ml-1" href="{{ route('beheer.intro.packages.show', $package) }}"><span title="Show package" class="ion-eye font-size-120" aria-hidden="true"></span></a>
                 </td>
             </tr>
         @endforeach

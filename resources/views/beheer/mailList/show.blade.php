@@ -13,26 +13,26 @@
         <div class="col-md-6">
             <div class="btn-group mt-2 float-md-right" role="group" aria-label="Actions">
                 <a href="#" id="addMember" class="btn btn-primary" data-toggle="modal" data-target="#addUserModal">
-                    <em class="ion-plus"></em> {{trans("MailList.addUsers")}}
+                    <em class="ion-plus"></em> {{'Add members'}}
                 </a>
                 <a href="{{url('/mailList/')}}" class="btn btn-primary">
-                    <em class="ion-android-arrow-back"></em>  {{trans("menu.back")}}
+                    <em class="ion-android-arrow-back"></em>  {{'Back'}}
                 </a>
                 {{ Form::open(array('url' => 'mailList/' . $mailList->getId(), 'method' => 'delete')) }}
-                    <button type="submit" class="btn btn-danger btn-primary"><em class="ion-trash-a"></em> {{trans('menu.delete')}}</button>
+                    <button type="submit" class="btn btn-danger btn-primary"><em class="ion-trash-a"></em> {{'Remove'}}</button>
                 {{ Form::close() }}
             </div>
         </div>
     </div>
     <div class="card mt-4">
         <div class="card-header">
-            <h3>{{trans('MailList.mailList')}}</h3>
+            <h3>{{'Mailing list'}}</h3>
         </div>
         <div class="card-body">
             <table class="table table-striped dt-responsive nowrap">
                 <tr>
                     <td>
-                        {{trans('MailList.name')}}
+                        {{'Name'}}
                     </td>
                     <td>
                         {{$mailList->getName()}}
@@ -40,7 +40,7 @@
                 </tr>
                 <tr>
                     <td>
-                        {{trans('MailList.address')}}
+                        {{'Email'}}
                     </td>
                     <td>
                         {{$mailList->getAddress()}}
@@ -48,19 +48,19 @@
                 </tr>
                 <tr>
                     <td>
-                        {{trans('MailList.members_count')}}
+                        {{'Members count'}}
                     </td>
                     <td>
                         {{$mailList->getMembersCount()}}
                     </td>
                 </tr>
             </table>
-            <h4> {{trans('MailList.members')}}</h4>
+            <h4> {{'Members'}}</h4>
             <table id="maillistMembers" class="table table-striped dt-responsive nowrap">
                 <thead>
-                    <td><strong>{{trans('MailList.address')}}</strong></td>
-                    <td><strong>{{trans('MailList.name')}}</strong></td>
-                    <td><strong>{{trans('menu.beheer')}}</strong></td>
+                    <td><strong>{{'Email'}}</strong></td>
+                    <td><strong>{{'Name'}}</strong></td>
+                    <td><strong>{{'Management'}}</strong></td>
                 </thead>
                 <tbody>
                 @foreach($mailList->getMembers() as $member)
@@ -96,7 +96,7 @@
            console.log('add member');
         });
         $(document).on('click','#deleteMemebr',function(){
-           if(confirm('{{trans('menu.confirmDelete')}}')){
+           if(confirm('{{'Are you sure you want to delete this?'}}')){
                //delete user from maillist
                var mailListId = $(this).attr('data-mailList-id');
                var memberEmail = $(this).attr('data-member-email');

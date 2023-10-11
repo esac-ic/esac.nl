@@ -33,7 +33,7 @@
                                 <span class="ion-person"></span> {{$newsItem->author}}
                             </div>
                             <div class="col-auto">
-                                <a class="btn btn-outline-primary" href="/nieuws/{{$newsItem->id}}">{{trans('front-end/news.read_more')}}</a>
+                                <a class="btn btn-outline-primary" href="/nieuws/{{$newsItem->id}}">{{'Read more'}}</a>
                             </div>
                         </div>
                     </div>

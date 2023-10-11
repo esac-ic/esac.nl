@@ -19,17 +19,17 @@ class UsersExport implements FromCollection, WithTitle, WithHeadings, ShouldAuto
     }
 
     /**
-    * @return \Illuminate\Support\Collection
-    */
+     * @return \Illuminate\Support\Collection
+     */
     public function collection()
     {
-        $activeUsers = $this->userRepository->getCurrentUsers(['*'],['certificates']);
+        $activeUsers = $this->userRepository->getCurrentUsers(['*'], ['certificates']);
         $exportData = [];
-        foreach ($activeUsers as $user){
+        foreach ($activeUsers as $user) {
             $user->makeHidden(['updated_at', 'lid_af', 'pending_user']);
             $data = $user->toArray();
             $data['certificates'] = $user->getCertificationsAbbreviations();
-            array_push($exportData,$data);
+            array_push($exportData, $data);
         }
 
         return new Collection($exportData);
@@ -40,7 +40,7 @@ class UsersExport implements FromCollection, WithTitle, WithHeadings, ShouldAuto
      */
     public function title(): string
     {
-        return trans('user.active_members');
+        return 'Active members';
     }
 
     /**
@@ -50,31 +50,31 @@ class UsersExport implements FromCollection, WithTitle, WithHeadings, ShouldAuto
     {
         return [
             "#",
-            trans('user.email'),
-            trans('user.firstname'),
-            trans('user.preposition'),
-            trans('user.lastname'),
-            trans('user.street'),
-            trans('user.housenumber'),
-            trans('user.city'),
-            trans('user.zipcode'),
-            trans('user.country'),
-            trans('user.phonenumber'),
-            trans('user.phonenumber_alt'),
-            trans('user.emNumber'),
-            trans('user.emHouseNumber'),
-            trans('user.emstreet'),
-            trans('user.emcity'),
-            trans('user.emzipcode'),
-            trans('user.emcountry'),
-            trans('user.birthDay'),
-            trans('user.kind_of_member'),
-            trans('user.IBAN'),
-            trans('user.BIC'),
-            trans('user.incasso'),
-            trans('user.remark'),
-            trans('user.created_at'),
-            trans('user.certificates'),
+            'Email address',
+            'First name',
+            'Preposition',
+            'Last name',
+            'Street',
+            'House number',
+            'City',
+            'Postal code',
+            'Country',
+            'Phone number',
+            'Alternative phone number',
+            'Emergency phone number',
+            'Emergency house number',
+            'Emergency street',
+            'Emergency city',
+            'Emergency postal code',
+            'Emergency country',
+            'Birthdate',
+            'Kind of member',
+            'IBAN',
+            'BIC',
+            'Accept Automatic Collection',
+            'Remarks',
+            'User created at',
+            'Certificates',
         ];
     }
 }
