@@ -13,7 +13,7 @@ class CertificateController extends Controller
     private $_certificateRepository;
 
     public function __construct(CertificateRepository $certificateRepository)
-    {        
+    {
         $this->middleware('auth');
         $this->middleware('authorize:' . Config::get('constants.Administrator') . ',' . Config::get('constants.Certificate_administrator'));
 
@@ -22,7 +22,7 @@ class CertificateController extends Controller
 
     public function index()
     {
-        $certificates = $this->_certificateRepository->all(array("id","name"));
+        $certificates = $this->_certificateRepository->all(array("id", "name"));
         return view("beheer.certificate.index", compact("certificates"));
     }
 
@@ -30,9 +30,9 @@ class CertificateController extends Controller
     {
         $fields = ['title' => trans('certificate.add'),
             'method' => 'POST',
-            'url' => '/certificates',];
+            'url' => '/certificates'];
         $certificate = null;
-        return view("beheer.certificate.create_edit", compact('certificate','fields'));
+        return view("beheer.certificate.create_edit", compact('certificate', 'fields'));
     }
 
     public function store(Request $request)
@@ -53,9 +53,9 @@ class CertificateController extends Controller
     {
         $fields = ['title' => trans('certificate.add'),
             'method' => 'PATCH',
-            'url' => '/certificates/' . $certificate->id,];
+            'url' => '/certificates/' . $certificate->id];
 
-        return view("beheer.certificate.create_edit", compact('certificate','fields'));
+        return view("beheer.certificate.create_edit", compact('certificate', 'fields'));
     }
 
     public function update(Request $request, Certificate $certificate)
@@ -75,8 +75,9 @@ class CertificateController extends Controller
         return redirect('/certificates');
     }
 
-    private function validateData(Request $reqeust){
-        $this->validate($reqeust,[
+    private function validateData(Request $reqeust)
+    {
+        $this->validate($reqeust, [
             'name' => 'required|max:255',
             'abbreviation' => 'required|max:255',
         ]);

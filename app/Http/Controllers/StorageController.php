@@ -10,7 +10,7 @@ class StorageController extends Controller
     public function __construct()
     {
         $this->middleware('auth');
-        $this->middleware('authorize:'.\Illuminate\Support\Facades\Config::get('constants.Content_administrator'));
+        $this->middleware('authorize:' . \Illuminate\Support\Facades\Config::get('constants.Content_administrator'));
     }
 
     public function uploadImage(Request $request)

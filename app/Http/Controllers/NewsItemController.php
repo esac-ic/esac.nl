@@ -55,8 +55,8 @@ class NewsItemController extends Controller
 
     public function edit(Request $request, NewsItem $newsItem)
     {
-        $fields = ['title' => trans('NewsItem.edit'), 'method' => 'PATCH', 'url' => '/newsItems/'. $newsItem->id];
-        return view('beheer.newsItem.create_edit', compact('fields','newsItem'));
+        $fields = ['title' => trans('NewsItem.edit'), 'method' => 'PATCH', 'url' => '/newsItems/' . $newsItem->id];
+        return view('beheer.newsItem.create_edit', compact('fields', 'newsItem'));
     }
 
     public function update(Request $request, NewsItem $newsItem)
@@ -64,7 +64,7 @@ class NewsItemController extends Controller
         $this->validateInput($request);
         $this->_newsItemRepository->update($newsItem->id, $request->all());
 
-        if($request->hasFile('thumbnail')){
+        if ($request->hasFile('thumbnail')) {
             $this->uploadAndResizeImage($request, $newsItem);
         }
 
@@ -85,11 +85,11 @@ class NewsItemController extends Controller
         $headerFileName = $newsItem->id . '-header.' . $request->thumbnail->extension();
         $thumbnailFileName = $newsItem->id . '-thumbnail.' . $request->thumbnail->extension();
 
-        $request->file('thumbnail')->storeAs('newsItems', $headerFileName,'public');
-        $newsItem->image_url = 'newsItems/' .  $headerFileName;
-        
-        $request->file('thumbnail')->storeAs('newsItems', $thumbnailFileName,'public');
-        $newsItem->thumbnail_url = 'newsItems/' .  $thumbnailFileName;
+        $request->file('thumbnail')->storeAs('newsItems', $headerFileName, 'public');
+        $newsItem->image_url = 'newsItems/' . $headerFileName;
+
+        $request->file('thumbnail')->storeAs('newsItems', $thumbnailFileName, 'public');
+        $newsItem->thumbnail_url = 'newsItems/' . $thumbnailFileName;
         $newsItem->save();
 
         //resize both images

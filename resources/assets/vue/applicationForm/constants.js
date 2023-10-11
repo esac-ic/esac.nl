@@ -8,7 +8,7 @@ export const FORM_TYPE_NUMBER = 'number';
 export const FORM_TYPE_TEXT = 'text';
 
 export const FORM_TYPES = {
-    [FORM_TYPE_TEXT]: "Tekst",
+    [FORM_TYPE_TEXT]: "Text",
     [FORM_TYPE_NUMBER]: "Number",
     [FORM_TYPE_CHECK_BOX]: "Checkbox",
     [FORM_TYPE_TEXT_BOX]: "TextBox",

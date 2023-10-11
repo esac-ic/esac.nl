@@ -18,7 +18,7 @@ use Illuminate\Support\Facades\Redirect;
 
 class FrontEndController extends Controller
 {
-    private $_MenuItemRepository;
+    private $_menuItemRepository;
     private $_agendaCategoryRepository;
     private $_newsItemRepository;
     private $_agendaRepository;
@@ -32,7 +32,7 @@ class FrontEndController extends Controller
         AgendaItemRepository $agendaRepository,
         UserRepository $userRepository,
         BookRepository $bookRepository) {
-        $this->_MenuItemRepository = $menuItemRepository;
+        $this->_menuItemRepository = $menuItemRepository;
         $this->_agendaCategoryRepository = $agendaCategoryRepository;
         $this->_newsItemRepository = $newsItemRepository;
         $this->_agendaRepository = $agendaRepository;
@@ -44,7 +44,7 @@ class FrontEndController extends Controller
     {
         $categories = array();
         $curPageName = trans('AgendaItems.agendaItem');
-        $menuItem = $this->_MenuItemRepository->findby('urlName', MenuItem::AGENDAURL);
+        $menuItem = $this->_menuItemRepository->findby('urlName', MenuItem::AGENDAURL);
         $content = $menuItem->content;
 
         foreach ($this->_agendaCategoryRepository->all() as $category) {
@@ -75,7 +75,7 @@ class FrontEndController extends Controller
     public function zekeringen()
     {
         $curPageName = trans('front-end/zekeringen.title');
-        $menuItem = $this->_MenuItemRepository->findby('urlName', MenuItem::ZEKERINGURL);
+        $menuItem = $this->_menuItemRepository->findby('urlName', MenuItem::ZEKERINGURL);
         $content = $menuItem->content;
 
         if (!$menuItem->show()) {
@@ -87,7 +87,7 @@ class FrontEndController extends Controller
 
     public function publicSubscribe()
     {
-        $menuItem = $this->_MenuItemRepository->findby('urlName', MenuItem::SUBSCRIBEURL);
+        $menuItem = $this->_menuItemRepository->findby('urlName', MenuItem::SUBSCRIBEURL);
         $content = $menuItem->content;
         $curPageName = trans('front-end/subscribe.title');
         $showIntroPackageForm = app(Setting::SINGELTONNAME)->getsetting(Setting::SETTING_SHOW_INTRO_OPTION);
@@ -98,7 +98,7 @@ class FrontEndController extends Controller
     {
         $newsItems = NewsItem::orderBy('id', 'desc')->paginate(9);
         $curPageName = trans('front-end/news.title');
-        $menuItem = $this->_MenuItemRepository->findby('urlName', MenuItem::NEWSURL);
+        $menuItem = $this->_menuItemRepository->findby('urlName', MenuItem::NEWSURL);
         $content = $menuItem->content;
 
         return view("front-end.news", compact('curPageName', 'content', 'newsItems'));
@@ -107,7 +107,7 @@ class FrontEndController extends Controller
     public function newsDetailView(Request $request, NewsItem $newsItem)
     {
         $curPageName = $newsItem->title;
-        $menuItem = $this->_MenuItemRepository->findby('urlName', MenuItem::NEWSURL);
+        $menuItem = $this->_menuItemRepository->findby('urlName', MenuItem::NEWSURL);
         $content = $menuItem->content;
 
         return view("front-end.news_detail", compact('newsItem', 'curPageName'));
@@ -117,7 +117,7 @@ class FrontEndController extends Controller
     {
         $books = $this->_bookRepository->all(array("id", "title", "year", "type", "country", "code"));
         $curPageName = trans('front-end/library.title');
-        $menuItem = $this->_MenuItemRepository->findby('urlName', MenuItem::LIBRARYURL);
+        $menuItem = $this->_menuItemRepository->findby('urlName', MenuItem::LIBRARYURL);
         $content = $menuItem->content;
 
         return view("front-end.library", compact('curPageName', 'content', 'books'));
@@ -127,7 +127,7 @@ class FrontEndController extends Controller
     {
         $users = $this->_userRepository->getCurrentUsers(array('firstname', 'lastname', 'email', 'preposition', 'kind_of_member', 'phonenumber'));
         $curPageName = trans('front-end/memberlist.memberlist');
-        $menuItem = $this->_MenuItemRepository->findby('urlName', MenuItem::MEMBERLISTURL);
+        $menuItem = $this->_menuItemRepository->findby('urlName', MenuItem::MEMBERLISTURL);
         $content = $menuItem->content;
 
         if (!$menuItem->show()) {
@@ -153,7 +153,7 @@ class FrontEndController extends Controller
     //displays the page which is requested.
     public function showPage(Request $request, $menuItemUrl)
     {
-        $menuItem = $this->_MenuItemRepository->findby('urlName', $menuItemUrl);
+        $menuItem = $this->_menuItemRepository->findby('urlName', $menuItemUrl);
 
         if ($menuItem === null) {
             abort(404);

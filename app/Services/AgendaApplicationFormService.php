@@ -22,8 +22,7 @@ class AgendaApplicationFormService
 
         // Map custom fields
         $customfields = $applicationForm->applicationFormRows
-            ->pluck('applicationFormRowName')
-            ->map->text()
+            ->pluck('name')
             ->all();
 
         // Map user data

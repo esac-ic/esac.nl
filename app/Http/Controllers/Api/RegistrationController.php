@@ -30,7 +30,6 @@ class RegistrationController extends Controller
             ->with([
                 'applicationResponses',
                 'applicationResponses.agendaItem',
-                'applicationResponses.agendaItem.agendaItemTitle',
             ])
             ->find($userId);
 

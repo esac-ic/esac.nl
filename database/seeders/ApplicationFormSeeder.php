@@ -28,7 +28,7 @@ class ApplicationFormSeeder extends Seeder
 
         $row = new ApplicationFormRow();
         $row->name = 'Tent available';
-        $row->type = "Cijfer";
+        $row->type = "Number";
         $row->required = 1;
         $row->application_form_id = $applicationForm->id;
         $row->save();

@@ -3,9 +3,11 @@
 namespace App\Http\Controllers;
 
 use App\Certificate;
+use App\Repositories\CertificateRepository;
 use App\Repositories\UserRepository;
 use App\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Config;
 
 class UserCertificateController extends Controller
 {
@@ -19,7 +21,7 @@ class UserCertificateController extends Controller
     public function __construct(UserRepository $userRepository, CertificateRepository $certificateRepository)
     {
         $this->middleware('auth');
-        $this->middleware('authorize:' . \Config::get('constants.Administrator') . ',' . \Config::get('constants.Certificate_administrator'));
+        $this->middleware('authorize:' . Config::get('constants.Administrator') . ',' . Config::get('constants.Certificate_administrator'));
 
         $this->_userRepository = $userRepository;
         $this->_certificateRepository = $certificateRepository;
@@ -90,7 +92,6 @@ class UserCertificateController extends Controller
     {
         $this->validate($request, [
             'certificate_id' => 'required|numeric|min:0',
-            'startDate' => 'required|date',
         ]);
     }
 }

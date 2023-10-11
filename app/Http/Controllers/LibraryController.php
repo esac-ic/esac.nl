@@ -16,13 +16,13 @@ class LibraryController extends Controller
     {
         $this->middleware('auth');
         $this->middleware('authorize:' . Config::get('constants.Administrator'));
-        
+
         $this->_bookRepository = $bookRepository;
     }
 
     public function index()
     {
-        $books = $this->_bookRepository->all(['title','id','type','code','year','country']);
+        $books = $this->_bookRepository->all(['title', 'id', 'type', 'code', 'year', 'country']);
         return view('beheer.book.index', compact('books'));
     }
 
@@ -31,7 +31,7 @@ class LibraryController extends Controller
         $fields = [
             'title' => trans('book.add'),
             'method' => 'POST',
-            'url' => route('books.store')
+            'url' => route('books.store'),
         ];
         return view('beheer.book.create_edit', compact('fields'));
     }
@@ -54,7 +54,7 @@ class LibraryController extends Controller
         $fields = [
             'title' => trans('book.edit'),
             'method' => 'PATCH',
-            'url' => route('books.update', $book->id)
+            'url' => route('books.update', $book->id),
         ];
         return view('beheer.book.create_edit', compact('fields', 'book'));
     }

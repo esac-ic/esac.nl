@@ -16,7 +16,7 @@ class AgendaItemCategoryController extends Controller
     {
         $this->middleware('auth');
         $this->middleware('authorize:' . Config::get('constants.Administrator'));
-        
+
         $this->agendaItemCategoryRepository = $agendaItemCategoryRepository;
     }
 
@@ -30,9 +30,9 @@ class AgendaItemCategoryController extends Controller
     {
         $fields = ['title' => trans('agendaItemCategory.add'),
             'method' => 'POST',
-            'url' => '/agendaItemCategories',];
+            'url' => '/agendaItemCategories'];
         $agendaItemCategory = null;
-        return view('beheer.agendaItemCategory.create_edit', compact(['fields','agendaItemCategory']));
+        return view('beheer.agendaItemCategory.create_edit', compact(['fields', 'agendaItemCategory']));
     }
 
     public function store(Request $request)
@@ -40,7 +40,7 @@ class AgendaItemCategoryController extends Controller
         $this->validateInput($request);
         $this->agendaItemCategoryRepository->create($request->all());
 
-        Session::flash("message",trans('agendaItemCategory.added'));
+        Session::flash("message", trans('agendaItemCategory.added'));
         return redirect('/agendaItemCategories');
     }
 
@@ -53,17 +53,17 @@ class AgendaItemCategoryController extends Controller
     {
         $fields = ['title' => trans('agendaItemCategory.edit'),
             'method' => 'PATCH',
-            'url' => '/agendaItemCategories/'. $agendaItemCategory->id];
+            'url' => '/agendaItemCategories/' . $agendaItemCategory->id];
 
-        return view('beheer.agendaItemCategory.create_edit', compact('fields','agendaItemCategory'));
+        return view('beheer.agendaItemCategory.create_edit', compact('fields', 'agendaItemCategory'));
     }
 
     public function update(Request $request, AgendaItemCategory $agendaItemCategory)
     {
         $this->validateInput($request);
-        $this->agendaItemCategoryRepository->update($agendaItemCategory->id,$request->all());
+        $this->agendaItemCategoryRepository->update($agendaItemCategory->id, $request->all());
 
-        Session::flash("message",trans('agendaItemCategory.edited'));
+        Session::flash("message", trans('agendaItemCategory.edited'));
         return redirect('/agendaItemCategories');
     }
 
@@ -71,13 +71,13 @@ class AgendaItemCategoryController extends Controller
     {
         $this->agendaItemCategoryRepository->delete($agendaItemCategory->id);
 
-        Session::flash("message",trans('agendaItemCategory.deleted'));
+        Session::flash("message", trans('agendaItemCategory.deleted'));
         return redirect('/agendaItemCategories');
     }
 
     private function validateInput(Request $request)
     {
-        $this->validate($request,[
+        $this->validate($request, [
             'name' => 'required|max:255',
         ]);
     }
