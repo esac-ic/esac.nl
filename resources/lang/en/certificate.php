@@ -17,6 +17,7 @@ return [
     "name" => "Name",
     "nameNl" => "Name in Dutch",
     "nameEn" => "Name in English",
+    "nameEN" => "Name in English",
     "duration" => "Duration in months",
     "edit" => "Edit certificate",
     "show" => "Show certificate",

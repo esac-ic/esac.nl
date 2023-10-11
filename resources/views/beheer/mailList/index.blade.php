@@ -1,7 +1,7 @@
 @extends('layouts.beheer')
 
 @section('title')
-{{trans('Maillist.maillist')}}
+{{trans('MailList.maillist')}}
 @endsection
 
 @section('content')

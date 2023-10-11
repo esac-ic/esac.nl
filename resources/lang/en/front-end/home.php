@@ -1,7 +1,7 @@
 <?php
 
 return [
-	"title" => "Home",
+    "title" => "Home",
     "activities" => "Activities",
     'seeMore' => "See more",
     "lastNews" => 'Latest news',
@@ -9,8 +9,8 @@ return [
     'headerMessages' => [
         'stunt_title' => 'Stunts and more',
         'stunt_desc' => 'With the Stuntcommittee we organize stunts during events such as abseiling, zip lining and climbing.',
-        'skie_title' => 'Ski in the Alps',
-        'skie_desc' => 'During the carnival holiday the ESAC leaves travels a week to the Alps to enjoy the snow.',
+        'ski_title' => 'Ski in the Alps',
+        'ski_desc' => 'During the carnival holiday the ESAC leaves travels a week to the Alps to enjoy the snow.',
         'klimweekend_title' => 'Climbing weekends in Belgium',
         'klimweekend_desc' => 'The ESAC annually organizes about 12 climbing weekends to Belgium, Germany or beyond.',
         'eplakka_title' => 'Climbing competition',
@@ -24,6 +24,6 @@ return [
         'sociability_title' => 'Fun!',
         'sociability_desc' => 'During and after climbing there is of course also place for good food and social activities.',
         'bouldering_title' => 'Bouldering',
-        'bouldering_desc' => 'In addition to sports climbing, we also do a lot of bouldering, including in Fontainebleau.'
+        'bouldering_desc' => 'In addition to sports climbing, we also do a lot of bouldering, including in Fontainebleau.',
     ],
 ];

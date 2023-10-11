@@ -26,7 +26,7 @@
                                 {{ session('status') }}
                             </div>
                             @endif
-                            <form class="text-left col-lg-8" role="form" method="POST" action="{{ trans('/password/email') }}">
+                            <form class="text-left col-lg-8" role="form" method="POST" action="/password/email">
                                 {{ csrf_field() }}
                                 <div class="form-group {{ $errors->has('email') ? ' has-error' : '' }}">
                                     <label for="email">{{trans("auth.email")}}</label>
