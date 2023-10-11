@@ -65,7 +65,7 @@ class CreatePageTest extends TestCase
         // Check whether a new page has been added to DB, other test will make sure content is actually correct.
         $menuItem = MenuItem::all()->last();
 
-        $this->assertEquals($body['content_nl'], $menuItem->content->NL_text);
+        $this->assertEquals($body['content'], $menuItem->content);
     }
 
     public function admin_can_create_page_with_emoji()
@@ -90,7 +90,7 @@ class CreatePageTest extends TestCase
         // Check whether a new page has been added to DB, other test will make sure content is actually correct.
         $menuItem = MenuItem::all()->last();
 
-        $this->assertEquals($body['content_nl'], $menuItem->content->NL_text);
+        $this->assertEquals($body['content'], $menuItem->content);
     }
 
     /**

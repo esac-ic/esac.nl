@@ -55,40 +55,33 @@ class CreateApplicationFormTest extends TestCase
     public function create_application_form_as_content_administrator(): void
     {
         $body = [
-            'nl_name' => 'test nl name',
-            'en_name' => 'test en name',
+            'name' => 'test name',
             'rows' => [
                 [
-                    'nl_name' => 'Vraag 1',
-                    'en_name' => 'Question 1',
+                    'name' => 'Question 1',
                     'type' => ApplicationFormRow::FORM_TYPE_NUMBER,
                 ],
                 [
-                    'nl_name' => 'Vraag 2',
-                    'en_name' => 'Question 2',
+                    'name' => 'Question 2',
                     'type' => ApplicationFormRow::FORM_TYPE_CHECK_BOX,
                     'required' => true,
                 ],
                 [
-                    'nl_name' => 'Vraag 3',
-                    'en_name' => 'Question 3',
+                    'name' => 'Question 3',
                     'type' => ApplicationFormRow::FORM_TYPE_RADIO,
                     'required' => true,
                     'options' => [
                         [
                             'value' => 1,
-                            'nl_name' => 'optie 1',
-                            'en_name' => 'Option 1',
+                            'name' => 'Option 1',
                         ],
                         [
                             'value' => 3,
-                            'nl_name' => 'optie 2',
-                            'en_name' => 'Option 2',
+                            'name' => 'Option 2',
                         ],
                         [
                             'value' => 16,
-                            'nl_name' => 'optie 3',
-                            'en_name' => 'Option 3',
+                            'name' => 'Option 3',
                         ],
                     ],
                 ],
@@ -110,17 +103,14 @@ class CreateApplicationFormTest extends TestCase
     {
         $this->user->roles()->sync([Config::get('constants.Activity_administrator')]);
         $body = [
-            'nl_name' => 'test nl name',
-            'en_name' => 'test en name',
+            'name' => 'test name',
             'rows' => [
                 [
-                    'nl_name' => 'Vraag 1',
-                    'en_name' => 'Question 1',
+                    'name' => 'Question 1',
                     'type' => ApplicationFormRow::FORM_TYPE_NUMBER,
                 ],
                 [
-                    'nl_name' => 'Vraag 2',
-                    'en_name' => 'Question 2',
+                    'name' => 'Question 2',
                     'type' => ApplicationFormRow::FORM_TYPE_CHECK_BOX,
                     'required' => true,
                 ],
@@ -143,17 +133,14 @@ class CreateApplicationFormTest extends TestCase
         $this->user->roles()->sync([Config::get('constants.Administrator')]);
 
         $body = [
-            'nl_name' => 'test nl name',
-            'en_name' => 'test en name',
+            'name' => 'test name',
             'rows' => [
                 [
-                    'nl_name' => 'Vraag 1',
-                    'en_name' => 'Question 1',
+                    'name' => 'Question 1',
                     'type' => ApplicationFormRow::FORM_TYPE_NUMBER,
                 ],
                 [
-                    'nl_name' => 'Vraag 2',
-                    'en_name' => 'Question 2',
+                    'name' => 'Question 2',
                     'type' => ApplicationFormRow::FORM_TYPE_CHECK_BOX,
                     'required' => true,
                 ],
@@ -171,17 +158,14 @@ class CreateApplicationFormTest extends TestCase
         $this->user->roles()->sync([Config::get('constants.Certificate_administrator')]);
 
         $body = [
-            'nl_name' => 'test nl name',
-            'en_name' => 'test en name',
+            'name' => 'test name',
             'rows' => [
                 [
-                    'nl_name' => 'Vraag 1',
-                    'en_name' => 'Question 1',
+                    'name' => 'Question 1',
                     'type' => ApplicationFormRow::FORM_TYPE_NUMBER,
                 ],
                 [
-                    'nl_name' => 'Vraag 2',
-                    'en_name' => 'Question 2',
+                    'name' => 'Question 2',
                     'type' => ApplicationFormRow::FORM_TYPE_CHECK_BOX,
                     'required' => true,
                 ],

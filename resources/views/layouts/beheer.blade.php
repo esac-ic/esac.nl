@@ -142,8 +142,7 @@
 
     $(document).ready(function() {
         let $lastClick;
-        let $contentNl = $('#content_nl');
-        let $contentEn = $('#content_en');
+        let $content = $('#content');
 
         // Keep track of the last clicked element.
         $(document).mousedown(function(e) {
@@ -175,8 +174,7 @@
 
         // Initialise summernote textfields & add event to close the code view when focus is lost. This prevents
         // content from being lost, as it is not saved when code view is active.
-        $contentNl.summernote(summernoteSettings).on('summernote.blur.codeview', handleSNBlur);
-        $contentEn.summernote(summernoteSettings).on('summernote.blur.codeview', handleSNBlur);
+        $content.summernote(summernoteSettings).on('summernote.blur.codeview', handleSNBlur);
     });
 </script>
 @endpush

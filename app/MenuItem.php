@@ -4,7 +4,6 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
-use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Auth;
 
 class MenuItem extends Model
@@ -49,11 +48,6 @@ class MenuItem extends Model
     public function getSubMenuItems($id)
     {
         return MenuItem::query()->where('parent_id', '=', $id)->where('menuItem', '=', true)->get();
-    }
-
-    public function getPageName()
-    {
-        return 'pages.' . $this->urlName . ((App::isLocale('en') === true) ? '_en' : '_nl');
     }
 
     public function show()

@@ -71,8 +71,7 @@
 
     <script>
         $(document).ready(function() {
-            $('#content_nl').summernote(summernoteSettings);
-            $('#content_en').summernote(summernoteSettings);
+            $('#content').summernote(summernoteSettings);
         });
     </script>
 @endpush
