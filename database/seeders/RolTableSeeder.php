@@ -30,5 +30,9 @@ class RolTableSeeder extends Seeder
         $text->save();
         $rol  = new \App\Rol(['name' => $text->id]);
         $rol->save();
+        $text = new \App\Text(['NL_text' => 'NSAC noodgegevens beheerder', 'EN_text' => 'NSAC emergency info administrator']);
+        $text->save();
+        $rol  = new \App\Rol(['name' => $text->id]);
+        $rol->save();
     }
 }

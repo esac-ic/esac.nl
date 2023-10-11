@@ -40,7 +40,7 @@
                             </a>
                         </li>
                     @else
-                        @if(\Illuminate\Support\Facades\Auth::user()->hasRole(Config::get('constants.Administrator'),Config::get('constants.Activity_administrator'),Config::get('constants.Content_administrator'),Config::get('constants.Certificate_administrator')))
+                        @if(\Illuminate\Support\Facades\Auth::user()->hasRole(Config::get('constants.Administrator'),Config::get('constants.Activity_administrator'),Config::get('constants.Content_administrator'),Config::get('constants.Certificate_administrator'),Config::get('constants.NSAC_emergency_info_administrator')))
                             <hr class="my-3">
 
                             <li class="nav-item active">
@@ -54,7 +54,7 @@
                                 </a>
                             </li>
                         @endif
-                        @if(\Illuminate\Support\Facades\Auth::user()->hasRole(Config::get('constants.Administrator'),Config::get('constants.Certificate_administrator')))
+                        @if(\Illuminate\Support\Facades\Auth::user()->hasRole(Config::get('constants.Administrator'),Config::get('constants.Certificate_administrator'),Config::get('constants.NSAC_emergency_info_administrator')))
                             <li class="nav-item dropdown">
                                 <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                     {{trans("menu.leden")}}
@@ -66,7 +66,9 @@
                                         <a class="dropdown-item" href="{{ url('users/pending_members') }}">{{trans("user.pending_members")}}</a>
                                         <a class="dropdown-item" href="{{ url('rols') }}">{{trans("menu.rols")}}</a>
                                     @endif
-                                    <a class="dropdown-item" href="{{ url('certificates') }}">{{trans("menu.certificate")}}</a>
+                                    @if(\Illuminate\Support\Facades\Auth::user()->hasRole(Config::get('constants.Administrator'),Config::get('constants.Certificate_administrator')))
+                                        <a class="dropdown-item" href="{{ url('certificates') }}">{{trans("menu.certificate")}}</a>
+                                    @endif
                                 </div>
                             </li>
                         @endif

@@ -10,6 +10,7 @@ return [
     "Administrator" => 1,
     "Content_administrator" => 2,
     "Activity_administrator" => 3,
-    "Certificate_administrator" => 4
-
+    "Certificate_administrator" => 4,
+    "NSAC_emergency_info_administrator" => 5
+    
 ];
