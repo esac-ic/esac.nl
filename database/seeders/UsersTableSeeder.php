@@ -34,7 +34,7 @@ class UsersTableSeeder extends Seeder
         $user->emergencycity = "Eindhoven";
         $user->emergencyzipcode = "3633IK";
         $user->emergencycountry = "NL";
-        $user->birthDay = Carbon::now()->subYear(20);
+        $user->birthDay = Carbon::now()->subYears(20);
         $user->kind_of_member = "member";
         $user->IBAN = "NL55 RABO 0107331020";
         $user->BIC = "";
@@ -43,7 +43,7 @@ class UsersTableSeeder extends Seeder
         $user->save();
 
         //add rol
-        $user->roles()->attach(['1','2','3']); //id for Administrator
+        $user->roles()->attach(['1', '2', '3']); //id for Administrator
         $user->save();
 
         //inserting test data
@@ -66,7 +66,7 @@ class UsersTableSeeder extends Seeder
         $user->emergencycity = "Eindhoven";
         $user->emergencyzipcode = "3633IK";
         $user->emergencycountry = "NL";
-        $user->birthDay = Carbon::now()->subYear(20);
+        $user->birthDay = Carbon::now()->subYears(20);
         $user->kind_of_member = "member";
         $user->IBAN = "NL55 RABO 0107331020";
         $user->BIC = "";
@@ -94,7 +94,7 @@ class UsersTableSeeder extends Seeder
         $user->emergencycity = "Eindhoven";
         $user->emergencyzipcode = "3633IK";
         $user->emergencycountry = "NL";
-        $user->birthDay = Carbon::now()->subYear(20);
+        $user->birthDay = Carbon::now()->subYears(20);
         $user->kind_of_member = "member";
         $user->IBAN = "NL55 RABO 0107331020";
         $user->BIC = "";

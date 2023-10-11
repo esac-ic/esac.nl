@@ -5,9 +5,9 @@ namespace Tests\Feature\ApplicationForm;
 
 use App\Models\ApplicationForm\ApplicationForm;
 use App\User;
-use Artisan;
-use Config;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
+use Illuminate\Support\Facades\Artisan;
+use Illuminate\Support\Facades\Config;
 use TestCase;
 
 class DeleteApplicationFormTest extends TestCase

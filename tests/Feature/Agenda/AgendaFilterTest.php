@@ -3,11 +3,11 @@
 namespace Tests\Feature\Agenda;
 
 use App\AgendaItem;
-use App\AgendaItemCategorie;
+use App\AgendaItemCategory;
 use App\User;
-use Config;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Support\Facades\Artisan;
+use Illuminate\Support\Facades\Config;
 use TestCase;
 
 class AgendaFilterTest extends TestCase
@@ -44,7 +44,7 @@ class AgendaFilterTest extends TestCase
     /** @test */
     public function api_returns_filtered_agenda_items()
     {
-        $agendaItemCategory = factory(AgendaItemCategorie::class)->create();
+        $agendaItemCategory = factory(AgendaItemCategory::class)->create();
         $agendaItem = factory(AgendaItem::class)->create();
         $agendaItem->category = $agendaItemCategory->id;
         $agendaItem->save();

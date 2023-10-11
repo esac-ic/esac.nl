@@ -2,13 +2,11 @@
 
 namespace Tests\Feature\Agenda;
 
-use App\AgendaItem;
-use App\Models\ApplicationForm\ApplicationForm;
 use App\Models\ApplicationForm\ApplicationResponse;
 use App\User;
-use Artisan;
 use Carbon\Carbon;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
+use Illuminate\Support\Facades\Artisan;
 use TestCase;
 
 class DeleteAgendaRegistrationTest extends TestCase

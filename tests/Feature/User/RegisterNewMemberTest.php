@@ -34,7 +34,8 @@ class RegisterNewMemberTest extends TestCase
     }
 
     /** @test */
-    public function a_guest_can_register_a_new_user(){
+    public function a_guest_can_register_a_new_user()
+    {
         $body = [
             'email' => 'test@esac.nl',
             'firstname' => 'esac',
@@ -57,7 +58,7 @@ class RegisterNewMemberTest extends TestCase
             'privacy_policy' => 1,
             'termsconditions' => 1,
             'g-recaptcha-response' => 'ikbenvalid',
-            '_token' => csrf_token()
+            '_token' => csrf_token(),
         ];
 
         $response = $this->post($this->url, $body);
@@ -89,9 +90,10 @@ class RegisterNewMemberTest extends TestCase
     }
 
     /** @test */
-    public function a_user_should_not_be_created_without_the_required_data_fields(){
+    public function a_user_should_not_be_created_without_the_required_data_fields()
+    {
         $body = [
-            '_token' => csrf_token()
+            '_token' => csrf_token(),
         ];
 
         $response = $this->post($this->url, $body);
@@ -99,7 +101,7 @@ class RegisterNewMemberTest extends TestCase
         $response->assertStatus(302);
 
         $errors = session('errors');
-        $this->count(22,$errors);
+        $this->assertCount(22, $errors);
 
         $this->assertEquals("Veld email moet ingevuld zijn", $errors->get('email')[0]);
         $this->assertEquals("Veld firstname moet ingevuld zijn", $errors->get('firstname')[0]);

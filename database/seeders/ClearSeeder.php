@@ -4,6 +4,7 @@ namespace Database\Seeders;
 
 use App\AgendaItem;
 use App\AgendaItemCategory;
+use App\Book;
 use App\Certificate;
 use App\MenuItem;
 use App\Models\ApplicationForm\ApplicationForm;
@@ -14,7 +15,6 @@ use App\Text;
 use App\User;
 use App\Zekering;
 use Illuminate\Database\Seeder;
-
 
 //emptys data from database
 class ClearSeeder extends Seeder
@@ -37,6 +37,6 @@ class ClearSeeder extends Seeder
         User::getQuery()->delete();
         Text::getQuery()->delete();
         Zekering::getQuery()->delete();
-        \App\Book::getQuery()->delete();
+        Book::getQuery()->delete();
     }
 }

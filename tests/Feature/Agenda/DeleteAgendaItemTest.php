@@ -4,8 +4,8 @@ namespace Tests\Feature\Agenda;
 
 use App\AgendaItem;
 use App\User;
-use Artisan;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
+use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Config;
 use TestCase;
 

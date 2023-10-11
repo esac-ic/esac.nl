@@ -3,12 +3,12 @@
 namespace Tests\Feature\Agenda;
 
 use App\AgendaItem;
-use App\AgendaItemCategorie;
+use App\AgendaItemCategory;
 use App\Models\ApplicationForm\ApplicationForm;
 use App\User;
-use Artisan;
 use Carbon\Carbon;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
+use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Config;
 use TestCase;
 
@@ -42,7 +42,7 @@ class UpdateAgendaItemTest extends TestCase
     /** @test */
     public function UpdateAgendaItemTest(){
         $agendaItem = factory(AgendaItem::class)->create();
-        $agendaItemCategory = factory(AgendaItemCategorie::class)->create();
+        $agendaItemCategory = factory(AgendaItemCategory::class)->create();
 
         $body = [
             '_token' => csrf_token(),

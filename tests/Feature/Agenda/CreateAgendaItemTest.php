@@ -3,12 +3,12 @@
 namespace Tests\Feature\Agenda;
 
 use App\AgendaItem;
-use App\AgendaItemCategorie;
+use App\AgendaItemCategory;
 use App\Models\ApplicationForm\ApplicationForm;
 use App\User;
-use Artisan;
 use Carbon\Carbon;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
+use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Config;
 use TestCase;
 
@@ -41,7 +41,7 @@ class CreateAgendaItemTest extends TestCase
         //Attach 
         $this->user->roles()->attach(Config::get('constants.Activity_administrator'));
 
-        $agendaItemCategory = factory(AgendaItemCategorie::class)->create();
+        $agendaItemCategory = factory(AgendaItemCategory::class)->create();
 
         $body = [
             '_token' => csrf_token(),
@@ -79,6 +79,7 @@ class CreateAgendaItemTest extends TestCase
             'endDate' =>  Carbon::now()->addDays(3),
             'startDate' => Carbon::now()->addDays(1),
         ];
+        $response = $this->post($this->url, $body);
         $response->assertStatus(403);
 
     }
@@ -86,7 +87,7 @@ class CreateAgendaItemTest extends TestCase
     public function CreateAgendaWithEmptyFields(){
         $this->user->roles()->attach(Config::get('constants.Activity_administrator'));
 
-        $agendaItemCategory = factory(AgendaItemCategorie::class)->create();
+        $agendaItemCategory = factory(AgendaItemCategory::class)->create();
         $body = [
             '_token' => csrf_token(),
             'NL_title' => '',
@@ -99,6 +100,7 @@ class CreateAgendaItemTest extends TestCase
             'endDate' =>  Carbon::now()->addDays(3),
             'startDate' => Carbon::now()->addDays(1),
         ];
+        $response = $this->post($this->url, $body);
         $response->assertStatus(500);
     }
 
@@ -106,7 +108,7 @@ class CreateAgendaItemTest extends TestCase
         //Attach 
         $this->user->roles()->attach(Config::get('constants.Activity_administrator'));
 
-        $agendaItemCategory = factory(AgendaItemCategorie::class)->create();
+        $agendaItemCategory = factory(AgendaItemCategory::class)->create();
 
         $body = [
             '_token' => csrf_token(),

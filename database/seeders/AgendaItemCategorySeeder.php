@@ -13,11 +13,11 @@ class AgendaItemCategorySeeder extends Seeder
      */
     public function run()
     {
-        $agendaItemCategory  = new \App\AgendaItemCategory(['name' => 'Training']);
+        $agendaItemCategory = new \App\AgendaItemCategory(['name' => 'Training']);
         $agendaItemCategory->save();
-        $agendaItemCategory  = new \App\AgendaItemCategory(['name' => 'Climbing']);
+        $agendaItemCategory = new \App\AgendaItemCategory(['name' => 'Climbing']);
         $agendaItemCategory->save();
-        $agendaItemCategory  = new \App\AgendaItemCategory(['name' => 'Other activities']);
+        $agendaItemCategory = new \App\AgendaItemCategory(['name' => 'Other activities']);
         $agendaItemCategory->save();
     }
 }

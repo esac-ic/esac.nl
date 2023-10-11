@@ -6,8 +6,8 @@ use App\Models\ApplicationForm\ApplicationForm;
 use App\Models\ApplicationForm\ApplicationFormRow;
 use App\Models\ApplicationForm\ApplicationFormRowOption;
 use App\User;
-use Artisan;
-use Config;
+use Illuminate\Support\Facades\Artisan;
+use Illuminate\Support\Facades\Config;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use TestCase;
 

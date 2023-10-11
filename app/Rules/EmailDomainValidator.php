@@ -26,9 +26,9 @@ class EmailDomainValidator implements Rule
      */
     public function passes($attribute, $value)
     {
-        $splitEmail = explode("@",$value);
+        $splitEmail = explode("@", $value);
 
-        if(count($splitEmail) != 2) {
+        if (count($splitEmail) != 2) {
             return false;
         }
 

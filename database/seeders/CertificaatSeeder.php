@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Certificate;
 use Illuminate\Database\Seeder;
 
 class CertificaatSeeder extends Seeder
@@ -13,10 +14,10 @@ class CertificaatSeeder extends Seeder
      */
     public function run()
     {
-        $certificat  = new \App\certificate(['name' => 'Outdoor lead climbing', 'abbreviation' => "OV"]);
+        $certificat = new Certificate(['name' => 'Outdoor lead climbing', 'abbreviation' => "OV"]);
         $certificat->save();
 
-        $certificat  = new \App\certificate(['name' => 'Indoor lead climbing', 'abbreviation' => "IV"]);
+        $certificat = new Certificate(['name' => 'Indoor lead climbing', 'abbreviation' => "IV"]);
         $certificat->save();
     }
 }

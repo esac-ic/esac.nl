@@ -7,9 +7,10 @@ use App\Models\ApplicationForm\ApplicationForm;
 use App\Models\ApplicationForm\ApplicationFormRow;
 use App\Models\ApplicationForm\ApplicationResponse;
 use App\User;
-use Artisan;
 use Carbon\Carbon;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
+use Illuminate\Support\Facades\Artisan;
+use Illuminate\Support\Facades\Config;
 use TestCase;
 
 class RegisterForAgendaItemTest extends TestCase
@@ -170,7 +171,7 @@ class RegisterForAgendaItemTest extends TestCase
 
     /** @test */
     public function register_user_for_agenda_item_as_administrator(): void {
-        $this->user->roles()->attach(\Config::get('constants.Content_administrator'));
+        $this->user->roles()->attach(Config::get('constants.Content_administrator'));
         $userToRegister = factory(User::class)->create();
         $agendaItem = factory(AgendaItem::class)->create();
         $applicationForm = factory(ApplicationForm::class)->create();

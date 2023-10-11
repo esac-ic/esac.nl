@@ -4,9 +4,9 @@ namespace Tests\Feature\News;
 
 use App\NewsItem;
 use App\User;
-use Artisan;
-use Config;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
+use Illuminate\Support\Facades\Artisan;
+use Illuminate\Support\Facades\Config;
 use TestCase;
 
 class UpdateNewsItemTest extends TestCase
@@ -15,6 +15,7 @@ class UpdateNewsItemTest extends TestCase
 
     private $url = 'newsItems';
     private $newsItem;
+    private $user;
 
     protected function setUp(): void
     {

@@ -4,9 +4,9 @@ namespace Tests\Feature\Role;
 
 use App\Rol;
 use App\User;
-use Config;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Support\Facades\Artisan;
+use Illuminate\Support\Facades\Config;
 use TestCase;
 
 class CreateRoleTest extends TestCase
@@ -41,10 +41,11 @@ class CreateRoleTest extends TestCase
     }
 
     /** @test */
-    public function an_admin_can_create_a_role(){
+    public function an_admin_can_create_a_role()
+    {
         $body = [
             'name' => 'test role',
-            '_token' => csrf_token()
+            '_token' => csrf_token(),
         ];
 
         $response = $this->post($this->url, $body);
@@ -57,10 +58,11 @@ class CreateRoleTest extends TestCase
     }
 
     /** @test */
-    public function a_role_can_not_create_a_role(){
+    public function a_role_can_not_create_a_role()
+    {
         $body = [
             'name' => 'test role',
-            '_token' => csrf_token()
+            '_token' => csrf_token(),
         ];
 
         $this->user->roles()->detach();
@@ -71,9 +73,10 @@ class CreateRoleTest extends TestCase
     }
 
     /** @test */
-    public function a_role_can_not_be_created_without_required_fields(){
+    public function a_role_can_not_be_created_without_required_fields()
+    {
         $body = [
-            '_token' => csrf_token()
+            '_token' => csrf_token(),
         ];
 
         $response = $this->post($this->url, $body);
@@ -81,8 +84,8 @@ class CreateRoleTest extends TestCase
         $response->assertStatus(302);
 
         $errors = session('errors');
-        $this->count(2,$errors);
 
+        $this->assertCount(2, $errors);
         $this->assertEquals("Veld name moet ingevuld zijn", $errors->get('name')[0]);
     }
 }

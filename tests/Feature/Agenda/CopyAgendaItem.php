@@ -6,9 +6,9 @@ namespace Tests\Feature\Agenda;
 use App\AgendaItem;
 use App\Rol;
 use App\User;
-use Artisan;
-use Config;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
+use Illuminate\Support\Facades\Artisan;
+use Illuminate\Support\Facades\Config;
 use TestCase;
 
 class CopyAgendaItem extends TestCase
@@ -17,6 +17,7 @@ class CopyAgendaItem extends TestCase
 
     private $url = 'agendaItems/';
     private $user;
+    private $role;
 
     protected function setUp() : void
     {
