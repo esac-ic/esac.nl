@@ -13,5 +13,5 @@ return [
     "honorary_member" => "Honorary member",
     "member_of_merit" => "Member of service",
     "trainer" => "Trainer",
-    "relationship" => "Relationship"
+    "relationship" => "Relationship",
 ];
