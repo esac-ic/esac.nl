@@ -10,7 +10,6 @@ use App\Repositories\AgendaItemRepository;
 use App\Repositories\BookRepository;
 use App\Repositories\MenuRepository;
 use App\Repositories\NewsItemRepository;
-use App\Repositories\PhotoAlbumRepository;
 use App\Repositories\UserRepository;
 use App\Services\AgendaApplicationFormService;
 use App\Setting;
@@ -25,7 +24,6 @@ class FrontEndController extends Controller
     private $_agendaRepository;
     private $_userRepository;
     private $_bookRepository;
-    private $_PhotoAlbumRepository;
 
     public function __construct(
         MenuRepository $menuItemRepository,
@@ -33,15 +31,13 @@ class FrontEndController extends Controller
         NewsItemRepository $newsItemRepository,
         AgendaItemRepository $agendaRepository,
         UserRepository $userRepository,
-        BookRepository $bookRepository,
-        PhotoAlbumRepository $photoAlbumRepository) {
+        BookRepository $bookRepository) {
         $this->_MenuItemRepository = $menuItemRepository;
         $this->_agendaCategoryRepository = $agendaCategoryRepository;
         $this->_newsItemRepository = $newsItemRepository;
         $this->_agendaRepository = $agendaRepository;
         $this->_userRepository = $userRepository;
         $this->_bookRepository = $bookRepository;
-        $this->_PhotoAlbumRepository = $photoAlbumRepository;
     }
 
     public function agenda()
@@ -56,18 +52,6 @@ class FrontEndController extends Controller
         }
 
         return view('front-end.agenda', compact('categories', 'curPageName', 'content'));
-    }
-
-    public function photoAlbums()
-    {
-        $photoAlbums = $this->_PhotoAlbumRepository->all();
-        foreach ($photoAlbums as $photoalbum) {
-            $photoalbum->description = str_replace("\r\n", "<br>", $photoalbum->description);
-        }
-        $curPageName = trans('front-end/photo.pagetitle');
-        $menuItem = $this->_MenuItemRepository->findby('urlName', MenuItem::PHOTOURL);
-        $content = $menuItem->content;
-        return view('front-end.photo_album_list', compact('curPageName', 'photoAlbums', 'content'));
     }
 
     public function agendaDetailView(

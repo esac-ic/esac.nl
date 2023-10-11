@@ -43,14 +43,6 @@ mix.combine("node_modules/bootstrap-select/dist/js/bootstrap-select.min.js", "pu
    .combine("node_modules/tempusdominus-bootstrap-4/build/css/tempusdominus-bootstrap-4.css", "public/css/vendor/tempusdominus.css")
    .copyDirectory("node_modules/summernote/dist/font", "public/css/vendor/font");
 
-// App
-mix.combine([
-   "node_modules/photoswipe/dist/photoswipe.js",
-   "node_modules/photoswipe/dist/photoswipe-ui-default.js",
-   "node_modules/blueimp-load-image/js/load-image.all.min.js",
-   "resources/assets/js/photoAlbum.js"],
-   "public/js/photoalbum.js");
-
 mix.browserSync('localhost');
 
 if (mix.inProduction()) {

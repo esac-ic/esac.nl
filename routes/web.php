@@ -1,5 +1,8 @@
 <?php
 
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Route;
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -58,7 +61,6 @@ Route::resource('mailList', 'MailListController');
 Route::post('/lidworden', 'PendingUserController@storePendingUser');
 Route::post('/signup', 'PendingUserController@storePendingUser');
 Route::resource('books', 'LibraryController');
-Route::resource('photoAlbums', 'PhotoAlbumController');
 Route::post('images/upload', 'StorageController@uploadImage');
 Route::delete('images/delete', 'StorageController@deleteImage');
 Route::get('agendaItems/{agendaItem}/copy', 'AgendaItemController@copy')->name('copyAgendaItem');
@@ -80,15 +82,7 @@ Route::resource('forms', 'InschrijfController');
 Route::delete('/mailList/{mailistid}/member/{memberid}', 'MailListController@deleteMeberOfMailList');
 Route::post('/mailList/{mailistid}/member', 'MailListController@addMember');
 
-//photo routes
-Route::post('/photoalbums/{albumId}', 'PhotoController@addPhotoToAlbum');
-Route::post('/photoalbums', 'PhotoController@addAlbum');
-
 //front-end routes
-Route::get('/photoalbums/{albumId}', 'PhotoController@index')->name('PhotoAlbum');
-Route::get('/photo/{id}', 'PhotoController@getPhotos')->name('getPhotos');
-Route::get('/photoalbums', 'FrontEndController@photoAlbums');
-Route::get('/photo/{id}', 'PhotoController@getPhotos')->name('getPhotos');
 Route::get('/zekeringen', 'FrontEndController@zekeringen');
 Route::get('/bibliotheek', 'FrontEndController@library');
 Route::get('/library', 'FrontEndController@library');

@@ -84,17 +84,6 @@ class MenuItemTableSeeder extends Seeder
         $menuItem->content = 'Library content';
         $menuItem->save();
 
-        //photos
-        $menuItem = new \App\MenuItem();
-        $menuItem->name = 'Photos';
-        $menuItem->urlName = \App\MenuItem::PHOTOURL;
-        $menuItem->login = true;
-        $menuItem->deletable = false;
-        $menuItem->editable = true;
-        $menuItem->menuItem = true;
-        $menuItem->content = 'Photos content';
-        $menuItem->save();
-
         //zekeringen page page
         $menuItem = new \App\MenuItem();
         $menuItem->name = 'Zekeringen';

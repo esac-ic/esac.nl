@@ -66,16 +66,6 @@ class User extends Authenticatable
             ->withTimestamps()->withTrashed();
     }
 
-    public function photos()
-    {
-        return $this->hasMany(Photo::class);
-    }
-
-    public function albums()
-    {
-        return $this->hasMany(PhotoAlbum::class);
-    }
-
     public function registrationInfo()
     {
         return $this->hasOne(UserRegistrationInfo::class);
