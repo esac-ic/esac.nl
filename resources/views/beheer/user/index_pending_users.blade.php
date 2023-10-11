@@ -22,8 +22,8 @@
         <div class="col-md-6">
             <div class="btn-group mt-2 float-md-right" role="group" aria-label="Actions">
                 <a href="{{route('export-registration-info')}}" class="btn btn-primary">
-                    <span title="{{'TRANSLATION_NOT_FOUND'}}" class="ion-android-download" aria-hidden="true"></span>
-                    {{'TRANSLATION_NOT_FOUND'}}
+                    <span title="{{'Export registration info'}}" class="ion-android-download" aria-hidden="true"></span>
+                    {{'Export registration info'}}
                 </a>
             </div>
         </div>

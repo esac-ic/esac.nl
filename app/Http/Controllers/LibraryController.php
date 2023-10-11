@@ -33,7 +33,8 @@ class LibraryController extends Controller
             'method' => 'POST',
             'url' => route('books.store'),
         ];
-        return view('beheer.book.create_edit', compact('fields'));
+        $book = null;
+        return view('beheer.book.create_edit', compact('fields', 'book'));
     }
 
     public function store(Request $request)
