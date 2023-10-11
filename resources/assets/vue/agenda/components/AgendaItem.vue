@@ -44,6 +44,7 @@
                 return '/forms/' + this.agenda.id + "/unregister/0" //0 is added to redirect to agenda page and not the agenda item
             },
             checkIfCurrentUserSignedUp() {
+                console.log(this.agenda.currentUserSignedUp);
                 return this.agenda.currentUserSignedUp;
             }
         },

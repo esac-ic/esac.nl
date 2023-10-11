@@ -76,7 +76,7 @@
                 </div>
                 <div class="form-group col-md-4">
                     {!! Form::label('country', 'Country') !!}
-                    {!! Form::select('country','Array', ($user != null) ? $user->country : "NL", ['class' => 'form-control','required' => 'required']) !!}
+                    {!! Form::select('country',trans("countries"), ($user != null) ? $user->country : "NL", ['class' => 'form-control','required' => 'required']) !!}
                 </div>
             </div>
             <div class="form-row">
@@ -102,7 +102,7 @@
                 @if(\Illuminate\Support\Facades\Auth::user()->hasRole(Config::get('constants.Administrator')))
                     <div class="form-group col-md-6">
                         {!! Form::label('kind_of_member', 'Type of member') !!}
-                        {!! Form::select('kind_of_member','Array', ($user != null) ? $user->kind_of_member : "", ['class' => 'form-control','required' => 'required','id' => 'kind_of_member']) !!}
+                        {!! Form::select('kind_of_member',trans('kind_of_member'), ($user != null) ? $user->kind_of_member : "", ['class' => 'form-control','required' => 'required','id' => 'kind_of_member']) !!}
                     </div>
                 @endif
             </div>
@@ -159,7 +159,7 @@
                 </div>
                 <div class="form-group col-md-4">
                     {!! Form::label('emergencycountry', 'Emergency country') !!}
-                    {!! Form::select('emergencycountry','Array', ($user != null) ? $user->emergencycountry : "NL", ['class' => 'form-control','required' => 'required']) !!}
+                    {!! Form::select('emergencycountry',trans("countries"), ($user != null) ? $user->emergencycountry : "NL", ['class' => 'form-control','required' => 'required']) !!}
                 </div>
             </div>
             <div class="form-group">

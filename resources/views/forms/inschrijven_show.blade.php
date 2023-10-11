@@ -20,10 +20,10 @@
         <div class="col-md-6">
             <div class="btn-group mt-2 float-md-right" role="group" aria-label="Actions">
                 <a href="{{url('forms/admin/' . $agendaId)}}" class="btn btn-primary">
-                    <em class="ion-person-add"></em> {{'TRANSLATION_NOT_FOUND'}}
+                    <em class="ion-person-add"></em> {{'New subscription'}}
                 </a>
                 <a href="{{url('forms/users/'.$users["agendaId"].'/export')}}" class="btn btn-primary">
-                    <em class="ion-android-download"></em> {{'TRANSLATION_NOT_FOUND'}}
+                    <em class="ion-android-download"></em> {{'Export'}}
                 </a>
                 <a href="{{url('/agendaItems/')}}" class="btn btn-primary">
                     <em class="ion-android-arrow-back"></em> {{'Back'}}

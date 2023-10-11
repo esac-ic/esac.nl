@@ -28,7 +28,7 @@ class UserApplicationFormController extends Controller
         $agendaEndDate = new \DateTime($agendaItem->subscription_endDate);
         $now = new \DateTime();
         if ($agendaEndDate < $now) {
-            $error = 'TRANSLATION_NOT_FOUND';
+            $error = 'The registration date has expired, so you can no longer subscribe.';
             $curPageName = $error;
 
             return view("forms.inschrijven_error", compact('error', 'curPageName'));
@@ -36,7 +36,7 @@ class UserApplicationFormController extends Controller
 
         $applicationForm = $agendaItem->getApplicationForm;
         if ($applicationForm == null) {
-            $error = 'TRANSLATION_NOT_FOUND';
+            $error = 'ERROR: No registration form available for this activity.';
             $curPageName = $error;
 
             return view("forms.inschrijven_error", compact('error', 'curPageName'));
@@ -49,7 +49,7 @@ class UserApplicationFormController extends Controller
             ->first();
 
         if ($signup != null) {
-            $error = 'TRANSLATION_NOT_FOUND';
+            $error = 'You have already signed up for this event.';
             $curPageName = $error;
 
             return view("forms.inschrijven_error", compact('error', 'curPageName'));
@@ -77,7 +77,7 @@ class UserApplicationFormController extends Controller
             ->first();
 
         if ($signup != null) {
-            $error = 'TRANSLATION_NOT_FOUND';
+            $error = 'You have already signed up for this event.';
             $curPageName = $error;
 
             return view("forms.inschrijven_error", compact('menu', 'error', 'curPageName'));
@@ -92,7 +92,7 @@ class UserApplicationFormController extends Controller
     public function unregister(AgendaItem $agendaItem, int $fromAgendaItem = 1): RedirectResponse
     {
         if (Carbon::parse($agendaItem->subscription_endDate) < Carbon::now()) {
-            Session::flash("message", 'The registration date has expired, so you can no longer unsubscribe');
+            Session::flash("message", 'The registration date has expired, so you can no longer unsubscribe.');
 
             if ($fromAgendaItem == 1) {
                 return redirect('agenda/' . $agendaItem->id);
@@ -106,11 +106,11 @@ class UserApplicationFormController extends Controller
             ->where('user_id', Auth::user()->id)
             ->delete();
 
-        Session::flash("message", 'You successfully unsubscribed from the event');
+        Session::flash("message", 'You successfully unsubscribed from the event.');
 
         if ($fromAgendaItem == 1) {
             return redirect('agenda/' . $agendaItem->id);
-        } else if ($fromAgendaItem == 0) {
+        } else {
             return redirect('agenda/');
         }
     }

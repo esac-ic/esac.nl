@@ -17,19 +17,19 @@ class AgendaController extends Controller
         $agendaItemQuery = AgendaItem::with([
             'getApplicationForm',
             'getApplicationFormResponses',
-            'agendaItemCategory'
+            'agendaItemCategory',
         ]);
-    
+
         // Set limit and page
-        $limit = $request->has('limit')? $request->get('limit'): 9;
-        $start = $request->has('start')? $request->get('start') : 0;
-    
+        $limit = $request->has('limit') ? $request->get('limit') : 9;
+        $start = $request->has('start') ? $request->get('start') : 0;
+
         // Apply filters
         $category = $request->input('category');
         if ($category) {
             $agendaItemQuery->where('category', intval($category));
         }
-    
+
         $startDate = $request->input('startDate');
         if ($startDate) {
             $startDate = Carbon::createFromFormat('d-m-Y', $startDate)->startOfDay();
@@ -38,18 +38,18 @@ class AgendaController extends Controller
                     ->orWhere('endDate', '>=', $startDate);
             });
         }
-    
+
         $endDate = $request->input('endDate');
         if ($endDate) {
             $endDate = Carbon::createFromFormat('d-m-Y', $endDate)->startOfDay();
             $agendaItemQuery->where('startDate', '<=', $endDate);
         }
-    
+
         $agendaItemQuery->orderBy('startDate', 'asc');
-    
+
         // Get total count for pagination
         $agendaItemCount = $agendaItemQuery->count();
-    
+
         // Get paginated agenda items
         $agendaItems = $agendaItemQuery
             ->skip($start)
@@ -58,12 +58,12 @@ class AgendaController extends Controller
             ->map(function ($agendaItem) {
                 $agendaApplicationFormService = new AgendaApplicationFormService();
                 $currentUserSignedUp = false;
-    
+
                 if ($agendaItem->application_form_id && $agendaItem->canRegister()) {
                     $registeredUserIds = $agendaApplicationFormService->getRegisteredUserIds($agendaItem);
                     $currentUserSignedUp = in_array(Auth::id(), $registeredUserIds);
                 }
-    
+
                 return [
                     'id' => $agendaItem->id,
                     'title' => $agendaItem->title,
@@ -80,22 +80,23 @@ class AgendaController extends Controller
                     'currentUserSignedUp' => $currentUserSignedUp,
                 ];
             });
-    
+
         return [
             'agendaItemCount' => $agendaItemCount,
             'agendaItems' => $agendaItems,
         ];
     }
-    
-    public function getCategories(){
+
+    public function getCategories()
+    {
         $categories = AgendaItemCategory::all()
             ->map(function ($category) {
                 return [
                     'id' => $category->id,
-                    'name' => $category->name
+                    'name' => $category->name,
                 ];
             });
-            
+
         return response()->json($categories);
     }
 }

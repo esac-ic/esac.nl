@@ -84,7 +84,7 @@
                 </div>
                 <div class="form-group col-md-4">
                     {!! Form::label('country', 'Country') !!}
-                    {!! Form::select('country', 'Array', 'NL', ['class' => 'form-control','required' => 'required']) !!}
+                    {!! Form::select('country', trans("countries"), 'NL', ['class' => 'form-control','required' => 'required']) !!}
                 </div>
             </div>
             <div class="form-row">
@@ -109,7 +109,7 @@
                 </div>
                 <div class="form-group col-md-6">
                     {!! Form::label('kind_of_member', 'Type of member') !!}
-                    {!! Form::select('kind_of_member', 'Array', 'member', ['class' => 'form-control', 'required' => 'required', 'readonly' => 'readonly']) !!}
+                    {!! Form::select('kind_of_member', trans("kind_of_member"), 'member', ['class' => 'form-control', 'required' => 'required', 'readonly' => 'readonly']) !!}
                 </div>
             </div>
         </div>
@@ -157,7 +157,7 @@
                 </div>
                 <div class="form-group col-md-4">
                     {!! Form::label('emergencycountry', 'Emergency country') !!}
-                    {!! Form::select('emergencycountry','Array', 'NL', ['class' => 'form-control','required' => 'required']) !!}
+                    {!! Form::select('emergencycountry', trans("countries"), 'NL', ['class' => 'form-control','required' => 'required']) !!}
                 </div>
             </div>
             <div class="form-group">
