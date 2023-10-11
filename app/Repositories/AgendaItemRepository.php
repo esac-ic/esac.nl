@@ -37,8 +37,7 @@ class AgendaItemRepository implements IRepository
     public function update($id, array $data)
     {
         $agendaItem = $this->find($id);
-
-        $agendaItem = new AgendaItem($data);
+        $agendaItem->update($data);
         $starttime = new \DateTime($data['startDate']);
         $endtime = new \DateTime($data['endDate']);
         $subscription_endDate = new \DateTime($data['subscription_endDate']);
