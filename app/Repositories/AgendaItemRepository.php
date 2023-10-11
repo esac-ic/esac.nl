@@ -12,13 +12,14 @@ class AgendaItemRepository implements IRepository
     public function create(array $data)
     {
         $agendaItem = new AgendaItem($data);
+        $starttime = new \DateTime($data['startDate']);
+        $endtime = new \DateTime($data['endDate']);
         $subscription_endDate = new \DateTime($data['subscription_endDate']);
-
-        $agendaItem->startDate = Carbon::createFromFormat('d-m-Y H:i', $data['startDate'])->format('Y-m-d H:i:s');
-        $agendaItem->endDate = Carbon::createFromFormat('d-m-Y H:i', $data['endDate'])->format('Y-m-d H:i:s');
+        $agendaItem->startDate = Carbon::createFromFormat('d-m-Y H:i', $starttime->format('d-m-Y') . ' ' . $starttime->format('H:i'));
+        $agendaItem->endDate = Carbon::createFromFormat('d-m-Y H:i', $endtime->format('d-m-Y') . ' ' . $endtime->format('H:i'));
 
         if ($data['applicationForm'] != 0) {
-            $agendaItem->subscription_endDate = Carbon::parse($subscription_endDate)->format('Y-m-d H:i:s');
+            $agendaItem->subscription_endDate = Carbon::createFromFormat('d-m-Y H:i', $subscription_endDate->format('d-m-Y') . ' ' . $subscription_endDate->format('H:i'));
             $agendaItem->application_form_id = $data['applicationForm'];
         } else {
             $agendaItem->subscription_endDate = null;
@@ -37,12 +38,15 @@ class AgendaItemRepository implements IRepository
     {
         $agendaItem = $this->find($id);
 
-        $agendaItem->category = $data['category'];
-        $agendaItem->startDate = Carbon::createFromFormat('d-m-Y H:i', $data['startDate'])->format('Y-m-d H:i:s');
-        $agendaItem->endDate = Carbon::createFromFormat('d-m-Y H:i', $data['endDate'])->format('Y-m-d H:i:s');
+        $agendaItem = new AgendaItem($data);
+        $starttime = new \DateTime($data['startDate']);
+        $endtime = new \DateTime($data['endDate']);
+        $subscription_endDate = new \DateTime($data['subscription_endDate']);
+        $agendaItem->startDate = Carbon::createFromFormat('d-m-Y H:i', $starttime->format('d-m-Y') . ' ' . $starttime->format('H:i'));
+        $agendaItem->endDate = Carbon::createFromFormat('d-m-Y H:i', $endtime->format('d-m-Y') . ' ' . $endtime->format('H:i'));
 
         if ($data['applicationForm'] != 0) {
-            $agendaItem->subscription_endDate = Carbon::createFromFormat('d-m-Y H:i', $data['subscription_endDate'])->format('Y-m-d H:i:s');
+            $agendaItem->subscription_endDate = Carbon::createFromFormat('d-m-Y H:i', $subscription_endDate->format('d-m-Y') . ' ' . $subscription_endDate->format('H:i'));
             $agendaItem->application_form_id = $data['applicationForm'];
         } else {
             $agendaItem->subscription_endDate = null;

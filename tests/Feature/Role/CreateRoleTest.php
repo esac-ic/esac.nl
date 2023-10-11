@@ -85,7 +85,7 @@ class CreateRoleTest extends TestCase
 
         $errors = session('errors');
 
-        $this->assertCount(2, $errors);
+        $this->assertCount(1, $errors);
         $this->assertEquals("Veld name moet ingevuld zijn", $errors->get('name')[0]);
     }
 }

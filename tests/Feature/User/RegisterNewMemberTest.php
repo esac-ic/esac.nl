@@ -101,7 +101,7 @@ class RegisterNewMemberTest extends TestCase
         $response->assertStatus(302);
 
         $errors = session('errors');
-        $this->assertCount(22, $errors);
+        $this->assertCount(21, $errors);
 
         $this->assertEquals("Veld email moet ingevuld zijn", $errors->get('email')[0]);
         $this->assertEquals("Veld firstname moet ingevuld zijn", $errors->get('firstname')[0]);

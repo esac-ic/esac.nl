@@ -23,8 +23,8 @@ class UpdateAgendaItemTest extends TestCase
      * @var
      */
     private $user;
-    
-    protected function setUp() : void
+
+    protected function setUp(): void
     {
         parent::setUp();
         $this->user = $user = factory(User::class)->create();
@@ -34,13 +34,14 @@ class UpdateAgendaItemTest extends TestCase
         session()->start();
     }
 
-    protected function tearDown() : void
+    protected function tearDown(): void
     {
         Artisan::call('migrate:reset');
         parent::tearDown();
     }
     /** @test */
-    public function UpdateAgendaItemTest(){
+    public function UpdateAgendaItemTest()
+    {
         $agendaItem = factory(AgendaItem::class)->create();
         $agendaItemCategory = factory(AgendaItemCategory::class)->create();
 
@@ -52,7 +53,7 @@ class UpdateAgendaItemTest extends TestCase
             'category' => $agendaItemCategory->id,
             'applicationForm' => factory(ApplicationForm::class)->create()->id,
             'subscription_endDate' => Carbon::now()->addDays(2),
-            'endDate' =>  Carbon::now()->addDays(3),
+            'endDate' => Carbon::now()->addDays(3),
             'startDate' => Carbon::now()->addDays(1),
         ];
 
@@ -62,8 +63,8 @@ class UpdateAgendaItemTest extends TestCase
 
         $agendaItem = $agendaItem->refresh();
 
-        $this->assertEquals($body['text'],$agendaItem->text);
-        $this->assertEquals($body['title'],$agendaItem->title);
-        $this->assertEquals($body['category'],$agendaItem->agendaItemCategory->id);
+        $this->assertEquals($body['text'], $agendaItem->text);
+        $this->assertEquals($body['title'], $agendaItem->title);
+        $this->assertEquals($body['category'], $agendaItem->agendaItemCategory->id);
     }
 }
