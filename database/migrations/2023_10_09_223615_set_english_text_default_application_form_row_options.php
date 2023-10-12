@@ -28,7 +28,7 @@ return new class extends Migration
                 #truncate text to 255 characters
                 $name->EN_text = substr($name->EN_text, 0, 255);
             }
-            $item->name_string = $name->EN_text;
+            $item->name_string = $name ? $name->EN_text : 'ERROR: TEXT NOT FOUND';
             $item->save();
         }
 
