@@ -4,6 +4,7 @@ use App\AgendaItem;
 use App\Text;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
 
 class SetEnglishTextDefaultAgenda extends Migration
@@ -27,14 +28,14 @@ class SetEnglishTextDefaultAgenda extends Migration
             $text = Text::find($item->text);
             $shortDescription = Text::find($item->shortDescription);
 
-            $item->title_string = $title ? $title->EN_text : null;
-            $item->text_string = $text ? $text->EN_text : null;
-            $item->shortDescription_string = $shortDescription ? $shortDescription->EN_text : null;
+            $item->title_string = $title->EN_text;
+            $item->text_string = $text->EN_text;
+            $item->shortDescription_string = $shortDescription->EN_text;
 
             $item->save();
         }
 
-        // Now drop the foreign keys and original columns, then rename the new columns.
+        // Now we'll drop the old columns and foreign keys.
         Schema::table('agenda_items', function (Blueprint $table) {
             $table->dropForeign(['title']);
             $table->dropForeign(['text']);
@@ -44,10 +45,11 @@ class SetEnglishTextDefaultAgenda extends Migration
             $table->dropColumn('text');
             $table->dropColumn('shortDescription');
 
-            $table->renameColumn('title_string', 'title');
-            $table->renameColumn('text_string', 'text');
-            $table->renameColumn('shortDescription_string', 'shortDescription');
         });
+
+        DB::statement("ALTER TABLE agenda_items CHANGE title_string title VARCHAR(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci");
+        DB::statement("ALTER TABLE agenda_items CHANGE text_string text LONGTEXT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci");
+        DB::statement("ALTER TABLE agenda_items CHANGE shortDescription_string shortDescription VARCHAR(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci");
     }
 
     /**

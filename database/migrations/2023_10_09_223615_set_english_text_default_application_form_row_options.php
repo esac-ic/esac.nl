@@ -4,6 +4,7 @@ use App\Models\ApplicationForm\ApplicationFormRowOption;
 use App\Text;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
@@ -22,6 +23,11 @@ return new class extends Migration
         $items = ApplicationFormRowOption::all();
         foreach ($items as $item) {
             $name = Text::find($item->name_id);
+            if (strlen($name->EN_text) > 255) {
+                echo "Text is longer than 255 characters: " . $item->id . "\n";
+                #truncate text to 255 characters
+                $name->EN_text = substr($name->EN_text, 0, 255);
+            }
             $item->name_string = $name->EN_text;
             $item->save();
         }
@@ -30,8 +36,9 @@ return new class extends Migration
         Schema::table('application_form_row_options', function (Blueprint $table) {
             $table->dropForeign(['name_id']);
             $table->dropColumn('name_id');
-            $table->renameColumn('name_string', 'name');
         });
+
+        DB::statement("ALTER TABLE application_form_row_options CHANGE name_string name VARCHAR(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci");
     }
 
     /**

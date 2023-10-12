@@ -4,6 +4,7 @@ use App\Rol;
 use App\Text;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
@@ -30,8 +31,9 @@ return new class extends Migration
         Schema::table('rols', function (Blueprint $table) {
             $table->dropForeign(['name']);
             $table->dropColumn('name');
-            $table->renameColumn('name_string', 'name');
         });
+
+        DB::statement("ALTER TABLE rols CHANGE name_string name VARCHAR(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci");
     }
 
     /**

@@ -4,6 +4,7 @@ use App\Models\ApplicationForm\ApplicationForm;
 use App\Text;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
@@ -15,7 +16,7 @@ return new class extends Migration
     {
         // Modify columns to be able to store string/text directly.
         Schema::table('application_forms', function (Blueprint $table) {
-            $table->string('name_string');
+            $table->string('name_string')->charset('utf8mb4')->collation('utf8mb4_unicode_ci');
         });
 
         // Migrate data from texts table to agenda_items categories.
@@ -30,8 +31,9 @@ return new class extends Migration
         Schema::table('application_forms', function (Blueprint $table) {
             $table->dropForeign(['name']);
             $table->dropColumn('name');
-            $table->renameColumn('name_string', 'name');
         });
+
+        DB::statement("ALTER TABLE application_forms CHANGE name_string name VARCHAR(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci");
     }
 
     /**

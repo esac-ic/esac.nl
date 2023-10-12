@@ -4,6 +4,7 @@ use App\NewsItem;
 use App\Text;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
@@ -35,9 +36,10 @@ return new class extends Migration
             $table->dropForeign(['text']);
             $table->dropColumn('title');
             $table->dropColumn('text');
-            $table->renameColumn('title_string', 'title');
-            $table->renameColumn('text_string', 'text');
         });
+
+        DB::statement("ALTER TABLE news_items CHANGE title_string title VARCHAR(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci");
+        DB::statement("ALTER TABLE news_items CHANGE text_string text LONGTEXT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci");
     }
 
     /**
