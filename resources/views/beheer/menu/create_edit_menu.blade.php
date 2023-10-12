@@ -6,20 +6,20 @@
                 {!! Form::label('name', 'Name') !!}
                 {!! Form::text('name', ($page != null) ? $page->name : "", ['class' => 'form-control','required' => 'required']) !!}
             </div>
-        </div>
-        <div class="form-row">
             @if($page === null || $page->editable)
                 <div class="form-group col-md-6">
                     {!! Form::label('urlName', 'URL name') !!}
                     {!! Form::text('urlName', ($page != null) ? $page->urlName : "", ['class' => 'form-control','required' => 'required']) !!}
                 </div>
             @endif
+        </div>
+        <div class="form-row">
             <div class="col-md-6">
-                <div class="form-check">
+                <div class="form-group form-check">
                     {!! Form::checkbox("menuItem",0,($page != null) ? ($page->menuItem) ? "checked" : "" : "",["class" => "form-check-input","id" => "menuItem"]) !!}
                     {!! Form::label("menuItem", 'Show page in menu', ["class" => "form-check-label"]) !!}
                 </div>
-                <div class="form-check">
+                <div class="form-group form-check">
                     {!! Form::checkbox("login",0,($page != null) ? ($page->login) ? "checked" : "" : "",["class" => "form-check-input", "id" => "login"]) !!}
                     {!! Form::label("login", 'User needs to be logged in to view the page', ["class" => "form-check-label"]) !!}
                 </div>

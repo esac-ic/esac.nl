@@ -11,7 +11,7 @@
         <div class="card-body">
             <div v-for="(row, index) in applicationRows" :key="index" class="application-form-row">
                 <div class="row">
-                    <div class="col-md-4">
+                    <div class="col-md-6">
                         <div class="form-group">
                             <label>Name</label>
                             <input type="text"
@@ -39,7 +39,7 @@
                         </div>
                     </div>
                     <div class="col-md-1">
-                        <div class="form-group">
+                        <div class="form-group pl-4 pr-4">
                             <label>Delete</label>
                             <button type="button" class="btn btn-danger form-control" v-on:click="deleteRow(index)">
                                 <i class="ion-trash-a"></i>

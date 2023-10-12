@@ -26,9 +26,12 @@
                         :name="'rows[' + applicationFormIndex + '][options][' + index + '][value]'">
             </div>
             <div class="col-md-1">
-                <button type="button" class="btn btn-danger" v-on:click="deleteRow(index)">
-                    <i class="ion-trash-a"></i>
-                </button>
+                <div class="form-group pl-4 pr-4">
+                    <label>Delete</label>
+                    <button type="button" class="btn btn-danger form-control" v-on:click="deleteRow(index)">
+                        <i class="ion-trash-a"></i>
+                    </button>
+                </div>
             </div>
             <input type="hidden" v-if="row.id !== undefined" v-model="row.id" :name="'rows[' + applicationFormIndex + '][options][' + index + '][id]'">
         </div>

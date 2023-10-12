@@ -66,7 +66,7 @@
                                         <a class="dropdown-item" href="{{ url('users/pending_members') }}">{{'Pending users'}}</a>
                                         <a class="dropdown-item" href="{{ url('rols') }}">{{'Roles'}}</a>
                                     @endif
-                                    <a class="dropdown-item" href="{{ url('certificates') }}">{{'certificates'}}</a>
+                                    <a class="dropdown-item" href="{{ url('certificates') }}">{{'Certificates'}}</a>
                                 </div>
                             </li>
                         @endif
