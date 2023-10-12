@@ -25,8 +25,8 @@ return new class extends Migration
         foreach ($menu_items as $item) {
             $name = Text::find($item->name);
             $content = Text::find($item->content_id);
-            $item->name_string = $name->EN_text;
-            $item->content_string = $content->EN_text;
+            $item->name_string = $name ? $name->EN_text : 'ERROR: TEXT NOT FOUND';
+            $item->content_string = $content ? $content->EN_text : 'ERROR: TEXT NOT FOUND';
             $item->save();
         }
 

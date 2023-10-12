@@ -23,7 +23,7 @@ return new class extends Migration
         $roles = Rol::all();
         foreach ($roles as $item) {
             $name = Text::find($item->name);
-            $item->name_string = $name->EN_text;
+            $item->name_string = $name ? $name->EN_text : 'ERROR: TEXT NOT FOUND';
             $item->save();
         }
 

@@ -25,8 +25,8 @@ return new class extends Migration
         foreach ($news_items as $item) {
             $title = Text::find($item->title);
             $text = Text::find($item->text);
-            $item->title_string = $title->EN_text;
-            $item->text_string = $text->EN_text;
+            $item->title_string = $title ? $title->EN_text : 'ERROR: TEXT NOT FOUND';
+            $item->text_string = $text ? $text->EN_text : 'ERROR: TEXT NOT FOUND';
             $item->save();
         }
 

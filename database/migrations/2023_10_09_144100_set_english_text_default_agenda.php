@@ -28,9 +28,9 @@ class SetEnglishTextDefaultAgenda extends Migration
             $text = Text::find($item->text);
             $shortDescription = Text::find($item->shortDescription);
 
-            $item->title_string = $title->EN_text;
-            $item->text_string = $text->EN_text;
-            $item->shortDescription_string = $shortDescription->EN_text;
+            $item->title_string = $title ? $title->EN_text : 'ERROR: TEXT NOT FOUND';
+            $item->text_string = $text ? $text->EN_text : 'ERROR: TEXT NOT FOUND';
+            $item->shortDescription_string = $shortDescription ? $shortDescription->EN_text : 'ERROR: TEXT NOT FOUND';
 
             $item->save();
         }

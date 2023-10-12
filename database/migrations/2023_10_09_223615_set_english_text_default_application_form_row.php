@@ -23,15 +23,7 @@ return new class extends Migration
         $items = ApplicationFormRow::all();
         foreach ($items as $item) {
             $name = Text::find($item->name);
-
-            if (!$name) {
-                echo "No text found for row id: " . $item->id . " and name " . $item->name . "\n";
-                # Set name to error text
-                $name = new Text();
-                $name->EN_text = "ERROR: Text not found";
-            }
-
-            $item->name_string = $name->EN_text;
+            $item->name_string = $name ? $name->EN_text : 'ERROR: TEXT NOT FOUND';
             $item->save();
         }
 
