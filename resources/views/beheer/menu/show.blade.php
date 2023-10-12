@@ -54,22 +54,14 @@ Page
                     <td>{{'After menu item'}}</td>
                     <td>{{($page->after != null) ?$page->afterItem->name : ""}}</td>
                 </tr>
-                @if($subItems != null && count($subItems) > 0)
+                @if(!empty($subItems))
                     <tr>
-                        <td rowspan="{{count($subItems) == 0 ? 1 : count($subItems)}}">{{'Submenu items'}}</td>
-                        @if( count($subItems) > 0)
-                            <td>
-                                {{$subItems[0]->name}}
-                            </td>
-                        @else
-                            <td> </td>
-                        @endif
+                        <td rowspan="{{ count($subItems) }}">{{'Submenu items'}}</td>
+                        <td>{{$subItems[0]->name}}</td>
                     </tr>
                     @for ($i = 1; $i < count($subItems); $i++)
                         <tr>
-                            <td>
-                                {{$subItems[$i]->name}}
-                            </td>
+                            <td>{{ $subItems[$i]->name }}</td>
                         </tr>
                     @endfor
                 @endif

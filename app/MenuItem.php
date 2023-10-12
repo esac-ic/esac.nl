@@ -16,7 +16,7 @@ class MenuItem extends Model
     const NEWSURL = 'news';
     const MEMBERLISTURL = 'memberlist';
     const AGENDAURL = 'agenda';
-    const LIBRARYURL = 'bibliotheek';
+    const LIBRARYURL = 'library';
 
     protected $fillable = [
         'name',

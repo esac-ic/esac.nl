@@ -57,7 +57,7 @@ class PaginaBeheerController extends Controller
 
     public function show(Request $request, MenuItem $page)
     {
-        $subItems = $this->_menuRepository->findBy('parent_id', $page->id);
+        $subItems = $page->getSubMenuItems($page->id);
         return view('beheer.menu.show', compact('page', 'subItems'));
     }
 

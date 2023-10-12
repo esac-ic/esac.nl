@@ -84,18 +84,16 @@ Route::post('/mailList/{mailistid}/member', 'MailListController@addMember');
 
 //front-end routes
 Route::get('/zekeringen', 'FrontEndController@zekeringen');
-Route::get('/bibliotheek', 'FrontEndController@library');
+Route::get('/library', 'FrontEndController@library');
 Route::get('/library', 'FrontEndController@library');
 Route::get('/agenda', 'FrontEndController@agenda');
 Route::get('/agenda/{agendaItem}', 'FrontEndController@agendaDetailView')->name('agenda.detail');
-Route::get('/lidworden', 'FrontEndController@publicSubscribe');
 Route::get('/signup', 'FrontEndController@publicSubscribe');
 Route::get('/home', 'FrontEndController@home');
 Route::get('/news', 'FrontEndController@news');
 Route::get('/nieuws', 'FrontEndController@news');
 Route::get('/nieuws/{newsItem}', 'FrontEndController@newsDetailView');
 Route::get('/news/{newsItem}', 'FrontEndController@newsDetailView');
-Route::get('/ledenlijst', 'FrontEndController@memberList');
 Route::get('/memberlist', 'FrontEndController@memberList');
 Route::get("/ical", "ICalController@getAgendaItemsICalObject");
 Route::get('/{menuItem}', 'FrontEndController@showPage');
