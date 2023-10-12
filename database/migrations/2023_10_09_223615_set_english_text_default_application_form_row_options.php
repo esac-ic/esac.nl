@@ -27,7 +27,7 @@ return new class extends Migration
             if (strlen($name) > 255) {
                 echo "Text is longer than 255 characters: " . $item->id . "\n";
                 #truncate text to 255 characters
-                $name = substr($$name, 0, 255);
+                $name = substr($name, 0, 255);
             }
             $item->name_string = $name;
             $item->save();
