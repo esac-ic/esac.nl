@@ -15,9 +15,9 @@ class SetEnglishTextDefaultAgenda extends Migration
     {
         // Modify columns to be able to store string/text directly.
         Schema::table('agenda_items', function (Blueprint $table) {
-            $table->string('title_string')->nullable();
-            $table->text('text_string')->nullable();
-            $table->string('shortDescription_string')->nullable();
+            $table->string('title_string')->charset('utf8mb4')->collation('utf8mb4_unicode_ci');
+            $table->longText('text_string')->charset('utf8mb4')->collation('utf8mb4_unicode_ci');
+            $table->string('shortDescription_string')->charset('utf8mb4')->collation('utf8mb4_unicode_ci');
         });
 
         // Migrate data from texts table to agenda_items.

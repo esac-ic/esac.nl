@@ -15,8 +15,8 @@ return new class extends Migration
     {
         // Modify columns to be able to store string/text directly.
         Schema::table('news_items', function (Blueprint $table) {
-            $table->string('title_string')->nullable();
-            $table->text('text_string')->nullable();
+            $table->string('title_string')->charset('utf8mb4')->collation('utf8mb4_unicode_ci');
+            $table->longText('text_string')->charset('utf8mb4')->collation('utf8mb4_unicode_ci');
         });
 
         // Migrate data from texts table to agenda_items categories.
@@ -24,8 +24,8 @@ return new class extends Migration
         foreach ($news_items as $item) {
             $title = Text::find($item->title);
             $text = Text::find($item->text);
-            $item->title_string = $title ? $title->EN_text : null;
-            $item->text_string = $text ? $text->EN_text : null;
+            $item->title_string = $title->EN_text;
+            $item->text_string = $text->EN_text;
             $item->save();
         }
 

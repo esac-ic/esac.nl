@@ -15,14 +15,14 @@ return new class extends Migration
     {
         // Modify columns to be able to store string/text directly.
         Schema::table('application_form_rows', function (Blueprint $table) {
-            $table->string('name_string')->nullable();
+            $table->string('name_string')->charset('utf8mb4')->collation('utf8mb4_unicode_ci');
         });
 
         // Migrate data from texts table to agenda_items categories.
         $items = ApplicationFormRow::all();
         foreach ($items as $item) {
             $name = Text::find($item->name);
-            $item->name_string = $name ? $name->EN_text : null;
+            $item->name_string = $name->EN_text;
             $item->save();
         }
 
