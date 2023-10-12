@@ -23,12 +23,13 @@ return new class extends Migration
         $items = ApplicationFormRowOption::all();
         foreach ($items as $item) {
             $name = Text::find($item->name_id);
-            if (strlen($name->EN_text) > 255) {
+            $name = $name ? $name->EN_text : 'ERROR: TEXT NOT FOUND';
+            if (strlen($name) > 255) {
                 echo "Text is longer than 255 characters: " . $item->id . "\n";
                 #truncate text to 255 characters
-                $name->EN_text = substr($name->EN_text, 0, 255);
+                $name = substr($$name, 0, 255);
             }
-            $item->name_string = $name ? $name->EN_text : 'ERROR: TEXT NOT FOUND';
+            $item->name_string = $name;
             $item->save();
         }
 
