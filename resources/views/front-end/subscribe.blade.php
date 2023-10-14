@@ -33,7 +33,7 @@
         </ul>
     @endif
 
-    {!! Form::open(['url' => 'lidworden']) !!}
+    {!! Form::open(['url' => 'signup']) !!}
     <div class="card mt-4" id="personal-info">
         <div class="card-header">
             <h3>{{'Personal'}}</h3>

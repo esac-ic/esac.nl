@@ -21,7 +21,7 @@
                 <h3>{{'Latest news'}}</h3>
             </div>
             <div class="col-auto">
-                <a href="{{url('nieuws')}}" class="btn btn-outline-primary">{{'See more'}}</a>
+                <a href="{{url('news')}}" class="btn btn-outline-primary">{{'See more'}}</a>
             </div>
         </div>
         <div class="row d-flex align-items-stretch align-items-center">

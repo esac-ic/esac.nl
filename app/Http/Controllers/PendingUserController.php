@@ -45,7 +45,7 @@ class PendingUserController extends Controller
 
         Session::flash("message", 'Your membership request is pending, we will get back to you as soon as possible');
 
-        return redirect('/lidworden');
+        return redirect('/signup');
     }
 
     public function removeAsPendingMember(Request $request, User $user)

@@ -14,7 +14,7 @@ class RegisterNewMemberTest extends TestCase
     /**
      * @var string
      */
-    private $url = '/lidworden';
+    private $url = '/signup';
 
     /**
      * @var

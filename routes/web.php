@@ -58,7 +58,6 @@ Route::resource('agendaItems', 'AgendaItemController');
 Route::resource('agendaItemCategories', 'AgendaItemCategoryController');
 Route::resource('newsItems', 'NewsItemController');
 Route::resource('mailList', 'MailListController');
-Route::post('/lidworden', 'PendingUserController@storePendingUser');
 Route::post('/signup', 'PendingUserController@storePendingUser');
 Route::resource('books', 'LibraryController');
 Route::post('images/upload', 'StorageController@uploadImage');
@@ -91,8 +90,6 @@ Route::get('/agenda/{agendaItem}', 'FrontEndController@agendaDetailView')->name(
 Route::get('/signup', 'FrontEndController@publicSubscribe');
 Route::get('/home', 'FrontEndController@home');
 Route::get('/news', 'FrontEndController@news');
-Route::get('/nieuws', 'FrontEndController@news');
-Route::get('/nieuws/{newsItem}', 'FrontEndController@newsDetailView');
 Route::get('/news/{newsItem}', 'FrontEndController@newsDetailView');
 Route::get('/memberlist', 'FrontEndController@memberList');
 Route::get("/ical", "ICalController@getAgendaItemsICalObject");
