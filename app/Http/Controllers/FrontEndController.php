@@ -43,7 +43,7 @@ class FrontEndController extends Controller
     public function agenda()
     {
         $categories = array();
-        $curPageName = 'Event';
+        $curPageName = 'Events';
         $menuItem = $this->_menuItemRepository->findby('urlName', MenuItem::AGENDAURL);
         $content = $menuItem->content;
 

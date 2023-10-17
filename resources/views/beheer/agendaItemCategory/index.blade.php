@@ -1,7 +1,7 @@
 @extends('layouts.beheer')
 
 @section('title')
-{{'Events categories'}}
+{{'Event categories'}}
 @endsection
 
 @section('content')
@@ -16,7 +16,7 @@
 
     <div class="row mb-3">
         <div class="col-md-6">
-            <h1>{{'Events categories'}}</h1>
+            <h1>{{'Event categories'}}</h1>
         </div>
 
         <div class="col-md-6">

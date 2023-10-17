@@ -54,7 +54,7 @@ Page
                     <td>{{'After menu item'}}</td>
                     <td>{{($page->after != null) ?$page->afterItem->name : ""}}</td>
                 </tr>
-                @if(!empty($subItems))
+                @if($subItems != null && count($subItems) > 0)
                     <tr>
                         <td rowspan="{{ count($subItems) }}">{{'Submenu items'}}</td>
                         <td>{{$subItems[0]->name}}</td>

@@ -79,7 +79,7 @@
                                     <a class="dropdown-item" href="{{ url('agendaItems') }}">{{'Events'}}</a>
                                     <a class="dropdown-item" href="{{ route('beheer.applicationForms.index') }}">{{'Application forms'}}</a>
                                     @if(\Illuminate\Support\Facades\Auth::user()->hasRole(Config::get('constants.Administrator')))
-                                        <a class="dropdown-item" href="{{ url('agendaItemCategories') }}">{{'Agenda categories'}}</a>
+                                        <a class="dropdown-item" href="{{ url('agendaItemCategories') }}">{{'Event categories'}}</a>
                                     @endif
                                 </div>
                             </li>
