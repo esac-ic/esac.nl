@@ -20,6 +20,10 @@ class AgendaApplicationFormService
         $applicationForm = $agendaItem->getApplicationForm;
         $applicationResponses = $agendaItem->getApplicationFormResponses;
 
+        if (is_null($applicationForm)) {
+            return [];
+        }
+
         // Map custom fields
         $customfields = $applicationForm->applicationFormRows
             ->pluck('name')
