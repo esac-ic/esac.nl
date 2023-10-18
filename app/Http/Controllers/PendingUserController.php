@@ -48,14 +48,6 @@ class PendingUserController extends Controller
 
     public function removeAsPendingMember(Request $request, User $user)
     {
-<<<<<<< HEAD
-        $registration_info = $user->registrationInfo();
-        if (!is_null($registration_info)) {
-            $registration_info->delete();
-        }
-
-=======
->>>>>>> master
         $user->removeAsPendingMember();
 
         return redirect('users/pending_members');
@@ -68,17 +60,6 @@ class PendingUserController extends Controller
         return redirect('users/pending_members');
     }
 
-<<<<<<< HEAD
-    public function getRegistrationExportData()
-    {
-        return Excel::download(
-            new UserRegistrationInfoExport(),
-            'Registration info' . '.xlsx'
-        );
-    }
-
-=======
->>>>>>> master
     private function validateInput(Request $request)
     {
         $this->validate($request, [

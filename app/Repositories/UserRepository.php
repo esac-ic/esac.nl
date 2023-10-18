@@ -38,19 +38,6 @@ class UserRepository implements IRepository
 
         $user->update($data);
 
-<<<<<<< HEAD
-        $userRegistration = $user->registrationInfo;
-
-        if (null !== $userRegistration) {
-            $userRegistration->package_type = $data['package_type'];
-            $userRegistration->shirt_size = $data['shirt_size'];
-            $userRegistration->intro_weekend = $data['intro_weekend'];
-
-            $userRegistration->save();
-        }
-
-=======
->>>>>>> master
         return $user;
     }
 
