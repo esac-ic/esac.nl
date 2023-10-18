@@ -15,42 +15,45 @@ class AgendaApplicationFormService
     {
         // Eager load necessary relationships
         $agendaItem->load('getApplicationForm.applicationFormRows', 'getApplicationFormResponses.getApplicationResponseUser', 'getApplicationFormResponses.getApplicationFormResponseRows.getApplicationFormRow');
-    
+
         // Retrieve necessary objects
         $applicationForm = $agendaItem->getApplicationForm;
         $applicationResponses = $agendaItem->getApplicationFormResponses;
-    
+
+        if (is_null($applicationForm)) {
+            return [];
+        }
+
         // Map custom fields
         $customfields = $applicationForm->applicationFormRows
             ->pluck('applicationFormRowName')
             ->map->text()
             ->all();
-    
+
         // Map user data
         $userdata = $applicationResponses->map(function ($response) use ($agendaItem) {
             $user = $response->getApplicationResponseUser;
             $user["_signupId"] = $response->id;
-            
-            $response->getApplicationFormResponseRows->each(function($responseRow) use (&$user) {
+
+            $response->getApplicationFormResponseRows->each(function ($responseRow) use (&$user) {
                 $columnname = $responseRow->getApplicationFormRow->applicationFormRowName->text();
                 $user[$columnname] = $responseRow->value;
             });
-            
+
             if ($agendaItem->climbing_activity) {
                 $user['certificate_names'] = $user->getCertificationsAbbreviations();
             }
             return $user;
         })->all();
-    
+
         // Build the final array to return
         return [
-            "agendaitem"   => $agendaItem->agendaItemTitle->text(),
-            "agendaId"     => $agendaItem->id,
-            "userdata"     => $userdata,
-            "customfields" => $customfields
+            "agendaitem" => $agendaItem->agendaItemTitle->text(),
+            "agendaId" => $agendaItem->id,
+            "userdata" => $userdata,
+            "customfields" => $customfields,
         ];
     }
-
 
     /**
      * @param AgendaItem $agendaItem
@@ -69,7 +72,6 @@ class AgendaApplicationFormService
 
         return $userdataIds;
     }
-    
 
     /**
      * @param AgendaItem $agendaItem
@@ -77,7 +79,7 @@ class AgendaApplicationFormService
      */
     public function getExportData(AgendaItem $agendaItem): Collection
     {
-        $users            = $this->getRegisteredUsers($agendaItem);
+        $users = $this->getRegisteredUsers($agendaItem);
         $selectedElements = array(
             "firstname",
             "preposition",
@@ -86,7 +88,7 @@ class AgendaApplicationFormService
             "houseNumber",
             "city",
             "email",
-            "phonenumber"
+            "phonenumber",
         );
         $selectedElements = array_merge($selectedElements, $users["customfields"]);
 
