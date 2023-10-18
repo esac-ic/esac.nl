@@ -167,10 +167,6 @@
         </div>
     </div>
 
-     @if($showIntroPackageForm)
-         @include('front-end.intro-package-form')
-     @endif
-
     <div class="card mt-4">
         <div class="card-header">
             <h3>{{'Privacy Policy and Automatic Collection'}}</h3>

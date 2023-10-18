@@ -8,8 +8,6 @@
 
 namespace App\Repositories;
 
-use App\Models\User\UserRegistrationInfo;
-use App\Setting;
 use App\User;
 use Carbon\Carbon;
 
@@ -40,6 +38,7 @@ class UserRepository implements IRepository
 
         $user->update($data);
 
+<<<<<<< HEAD
         $userRegistration = $user->registrationInfo;
 
         if (null !== $userRegistration) {
@@ -50,6 +49,8 @@ class UserRepository implements IRepository
             $userRegistration->save();
         }
 
+=======
+>>>>>>> master
         return $user;
     }
 
@@ -127,16 +128,6 @@ class UserRepository implements IRepository
         $user->lid_af = null;
 
         $user->save();
-
-        $saveIntroOptions = app(Setting::SINGELTONNAME)->getsetting(Setting::SETTING_SHOW_INTRO_OPTION);
-        if ($saveIntroOptions) {
-            if ($data['package_type'] !== "") {
-                //file user registration info
-                $userRegistrationInfo = new UserRegistrationInfo($data);
-                $userRegistrationInfo->user_id = $user->id;
-                $userRegistrationInfo->save();
-            }
-        }
 
         return $user;
     }

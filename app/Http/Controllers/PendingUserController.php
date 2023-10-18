@@ -2,14 +2,12 @@
 
 namespace App\Http\Controllers;
 
-use App\Exports\UserRegistrationInfoExport;
 use App\Repositories\UserRepository;
 use App\Rules\EmailDomainValidator;
 use App\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Session;
-use Maatwebsite\Excel\Facades\Excel;
 
 class PendingUserController extends Controller
 {
@@ -50,11 +48,14 @@ class PendingUserController extends Controller
 
     public function removeAsPendingMember(Request $request, User $user)
     {
+<<<<<<< HEAD
         $registration_info = $user->registrationInfo();
         if (!is_null($registration_info)) {
             $registration_info->delete();
         }
 
+=======
+>>>>>>> master
         $user->removeAsPendingMember();
 
         return redirect('users/pending_members');
@@ -67,6 +68,7 @@ class PendingUserController extends Controller
         return redirect('users/pending_members');
     }
 
+<<<<<<< HEAD
     public function getRegistrationExportData()
     {
         return Excel::download(
@@ -75,6 +77,8 @@ class PendingUserController extends Controller
         );
     }
 
+=======
+>>>>>>> master
     private function validateInput(Request $request)
     {
         $this->validate($request, [

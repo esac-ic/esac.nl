@@ -18,15 +18,6 @@
         <div class="col-md-6">
             <h1>{{'Pending users'}}</h1>
         </div>
-
-        <div class="col-md-6">
-            <div class="btn-group mt-2 float-md-right" role="group" aria-label="Actions">
-                <a href="{{route('export-registration-info')}}" class="btn btn-primary">
-                    <span title="{{'Export registration info'}}" class="ion-android-download" aria-hidden="true"></span>
-                    {{'Export registration info'}}
-                </a>
-            </div>
-        </div>
     </div>
     <table id="users" class="table table-striped dt-responsive nowrap" style="width:100%">
         <thead>
