@@ -18,7 +18,7 @@
                     <div class="card-body">
                         <div class="mb-4">
                             <h1 class="h2 mb-2">{{'Welcome back'}}</h1>
-                            <span>{{'Reset password'}}</span>
+                            <span>{{'Sign in below'}}</span>
                         </div>
                         <div class="row no-gutters justify-content-center">
                             @if (session('status'))
