@@ -78,11 +78,11 @@ class LibraryController extends Controller
     private function validateInput(Request $request)
     {
         $this->validate($request, [
-            'title' => 'required',
+            'title' => 'required|max:255',
             'year' => 'integer',
-            'type' => 'required',
-            'country' => 'required',
-            'code' => 'required',
+            'type' => 'required|max:255',
+            'country' => 'required|max:255',
+            'code' => 'required|max:255',
         ]);
     }
 }

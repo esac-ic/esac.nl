@@ -99,7 +99,7 @@ class PaginaBeheerController extends Controller
         $this->validate($request, [
             'urlName' => 'required|max:255|unique:menu_items',
             'itemType' => 'required',
-            'name' => 'required',
+            'name' => 'required|max:255',
             'content' => 'required',
             'afterItem' => 'required',
         ]);

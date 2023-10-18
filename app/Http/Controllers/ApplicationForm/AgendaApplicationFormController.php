@@ -11,9 +11,10 @@ use App\Repositories\ApplicationFormRepositories\ApplicationFormRegistrationRepo
 use App\Repositories\UserRepository;
 use App\Services\AgendaApplicationFormService;
 use App\User;
-use Auth;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Config;
 use Illuminate\View\View;
 use Maatwebsite\Excel\Facades\Excel;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
@@ -26,7 +27,7 @@ class AgendaApplicationFormController extends Controller
     public function __construct()
     {
         $this->middleware('auth');
-        $this->middleware('authorize:' . \Config::get('constants.Content_administrator') . ',' . \Config::get('constants.Activity_administrator'))->except('destroy');
+        $this->middleware('authorize:' . Config::get('constants.Content_administrator') . ',' . Config::get('constants.Activity_administrator'))->except('destroy');
     }
 
     /**
@@ -102,7 +103,7 @@ class AgendaApplicationFormController extends Controller
     public function destroy($Agenda_id, $applicationResponseId): RedirectResponse
     {
         $applicationReponse = ApplicationResponse::find($applicationResponseId);
-        if (!Auth::user()->hasRole(\Config::get('constants.Activity_administrator'))) {
+        if (!Auth::user()->hasRole(Config::get('constants.Activity_administrator'))) {
             if (Auth::user()->id != $applicationReponse->user_id) {
                 abort(401);
             }

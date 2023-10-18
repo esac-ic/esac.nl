@@ -90,7 +90,7 @@ class RolController extends Controller
     private function validateInput(Request $request)
     {
         $this->validate($request, [
-            'name' => 'required',
+            'name' => 'required|max:255',
         ]);
     }
 }

@@ -8,8 +8,9 @@ use App\Http\Resources\ApplicationFormRowVueResource;
 use App\Models\ApplicationForm\ApplicationForm;
 use App\Repositories\ApplicationFormRepositories\ApplicationFormRepository;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Support\Facades\Config;
+use Illuminate\Support\Facades\Session;
 use Illuminate\View\View;
-use Session;
 
 class ApplicationFormController extends Controller
 {
@@ -20,7 +21,7 @@ class ApplicationFormController extends Controller
      */
     public function __construct()
     {
-        $this->middleware('authorize:' . \Config::get('constants.Content_administrator') . ',' . \Config::get('constants.Activity_administrator'));
+        $this->middleware('authorize:' . Config::get('constants.Content_administrator') . ',' . Config::get('constants.Activity_administrator'));
     }
 
     /**
