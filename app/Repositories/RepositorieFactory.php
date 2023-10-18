@@ -24,7 +24,6 @@ class RepositorieFactory
     public static $AGENDAITEMRECATEGORYPOKEY = "AgendaItemCategory";
     public static $ZEKERINGENREPOKEY = "Zekeringen";
     public static $BOOKREPOKEY = "BookRepository";
-    public static $INTROPACKAGEREPOKEY = "IntroPackage";
 
     public function __construct()
     {
@@ -41,7 +40,6 @@ class RepositorieFactory
             RepositorieFactory::$NEWSITEMREPOKEY => new NewsItemRepository($textRepository),
             RepositorieFactory::$ZEKERINGENREPOKEY => new ZekeringenRepository(),
             RepositorieFactory::$BOOKREPOKEY => new BookRepository($textRepository),
-            RepositorieFactory::$INTROPACKAGEREPOKEY => new IntroPackageRepository($textRepository),
         ];
     }
 
