@@ -17,7 +17,7 @@
                         <span class="ion-person-stalker"></span> {{agenda.amountOfPeopleRegisterd}}
                     </div>
                     <div v-show="agenda.canRegister" class="col-auto">
-                        <a v-if="checkIfCurrentUserSignedUp()" class="btn btn-outline-primary" style="color:red" :href="makeAgendaSignOffUrl()">{{deregesterText}}</a>
+                        <a v-if="checkIfCurrentUserSignedUp()" class="btn btn-outline-danger" :href="makeAgendaSignOffUrl()">{{deregesterText}}</a>
                         <a v-if="!checkIfCurrentUserSignedUp()" class="btn btn-outline-primary" :href="makeApplicationFormUrl()">{{regesterText}}</a>
                     </div>
                 </div>

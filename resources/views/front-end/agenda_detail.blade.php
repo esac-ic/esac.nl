@@ -24,7 +24,7 @@
                                     @else
                                         @if($agendaItem->canRegister())
                                             @if($agendaItem->subscription_endDate > \Carbon\Carbon::now() && array_key_exists(Auth::id(), $users))
-                                                <a class="btn btn-outline-primary" href="{{ url('forms/' . $agendaItem->id .'/unregister') }}" style="color: red">{{ 'Unregister' }} </a>
+                                                <a class="btn btn-outline-danger" href="{{ url('forms/' . $agendaItem->id .'/unregister') }}">{{ 'Unregister' }} </a>
                                             @else
                                                 <a class="btn btn-outline-primary" href="{{url('')}}/forms/{{$agendaItem->id}}">{{'Register now'}}</a>
                                             @endif
