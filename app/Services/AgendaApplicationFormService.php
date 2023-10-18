@@ -4,6 +4,7 @@ namespace App\Services;
 
 use App\AgendaItem;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\Log;
 
 class AgendaApplicationFormService
 {
@@ -15,42 +16,58 @@ class AgendaApplicationFormService
     {
         // Eager load necessary relationships
         $agendaItem->load('getApplicationForm.applicationFormRows', 'getApplicationFormResponses.getApplicationResponseUser', 'getApplicationFormResponses.getApplicationFormResponseRows.getApplicationFormRow');
-    
+
+        // Here, add logging to check if $agendaItem is loaded correctly and if it has associated application form.
+        if ($agendaItem === null) {
+            Log::error('AgendaItem is null', ['agendaItem' => $agendaItem]);
+        } else {
+            Log::info('AgendaItem loaded', ['agendaItem' => $agendaItem]);
+        }
+
         // Retrieve necessary objects
         $applicationForm = $agendaItem->getApplicationForm;
+
+        // Add logging to check if $applicationForm is null
+        if ($applicationForm === null) {
+            Log::error('ApplicationForm is null', ['agendaItemId' => $agendaItem->id]);
+            // Consider returning an empty array or throw an exception here, as the rest of the code assumes $applicationForm is not null
+            return [];
+        } else {
+            Log::info('ApplicationForm loaded', ['applicationForm' => $applicationForm]);
+        }
+
         $applicationResponses = $agendaItem->getApplicationFormResponses;
-    
+
         // Map custom fields
         $customfields = $applicationForm->applicationFormRows
             ->pluck('applicationFormRowName')
             ->map->text()
             ->all();
-    
+
         // Map user data
         $userdata = $applicationResponses->map(function ($response) use ($agendaItem) {
             $user = $response->getApplicationResponseUser;
             $user["_signupId"] = $response->id;
-            
-            $response->getApplicationFormResponseRows->each(function($responseRow) use (&$user) {
+
+            $response->getApplicationFormResponseRows->each(function ($responseRow) use (&$user) {
                 $columnname = $responseRow->getApplicationFormRow->applicationFormRowName->text();
                 $user[$columnname] = $responseRow->value;
             });
-            
+
             if ($agendaItem->climbing_activity) {
                 $user['certificate_names'] = $user->getCertificationsAbbreviations();
             }
             return $user;
         })->all();
-    
+
         // Build the final array to return
         return [
-            "agendaitem"   => $agendaItem->agendaItemTitle->text(),
-            "agendaId"     => $agendaItem->id,
-            "userdata"     => $userdata,
-            "customfields" => $customfields
+            "agendaitem" => $agendaItem->agendaItemTitle->text(),
+            "agendaId" => $agendaItem->id,
+            "userdata" => $userdata,
+            "customfields" => $customfields,
         ];
     }
-
 
     /**
      * @param AgendaItem $agendaItem
@@ -69,7 +86,6 @@ class AgendaApplicationFormService
 
         return $userdataIds;
     }
-    
 
     /**
      * @param AgendaItem $agendaItem
@@ -77,7 +93,7 @@ class AgendaApplicationFormService
      */
     public function getExportData(AgendaItem $agendaItem): Collection
     {
-        $users            = $this->getRegisteredUsers($agendaItem);
+        $users = $this->getRegisteredUsers($agendaItem);
         $selectedElements = array(
             "firstname",
             "preposition",
@@ -86,7 +102,7 @@ class AgendaApplicationFormService
             "houseNumber",
             "city",
             "email",
-            "phonenumber"
+            "phonenumber",
         );
         $selectedElements = array_merge($selectedElements, $users["customfields"]);
 
