@@ -42,7 +42,7 @@
             <div class="form-row">
                 <div class="form-group col-md-5">
                     {!! Form::label('firstname', trans('user.firstname')) !!}
-                    {!! Form::text('firstname', '', ['class' => 'form-control','required' => 'required']) !!}                    
+                    {!! Form::text('firstname', '', ['class' => 'form-control','required' => 'required']) !!}
                 </div>
                 <div class="form-group col-md-2">
                     {!! Form::label('preposition', trans('user.preposition')) !!}
@@ -166,10 +166,6 @@
             </div>
         </div>
     </div>
-
-     @if($showIntroPackageForm)
-         @include('front-end.intro-package-form')
-     @endif
 
     <div class="card mt-4">
         <div class="card-header">

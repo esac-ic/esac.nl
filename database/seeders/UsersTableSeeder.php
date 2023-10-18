@@ -43,7 +43,7 @@ class UsersTableSeeder extends Seeder
         $user->save();
 
         //add rol
-        $user->roles()->attach(['1','2','3']); //id for Administrator
+        $user->roles()->attach(['1', '2', '3']); //id for Administrator
         $user->save();
 
         //inserting test data
@@ -102,12 +102,5 @@ class UsersTableSeeder extends Seeder
         $user->remark = "Ik ben een test gebruiker";
         $user->pending_user = Carbon::now();
         $user->save();
-
-        $userRegistrationInfo = new \App\Models\User\UserRegistrationInfo();
-        $userRegistrationInfo->package_type = "standard";
-        $userRegistrationInfo->shirt_size = "s";
-        $userRegistrationInfo->intro_weekend = "intro1";
-        $userRegistrationInfo->user_id = $user->id;
-        $userRegistrationInfo->save();
     }
 }
