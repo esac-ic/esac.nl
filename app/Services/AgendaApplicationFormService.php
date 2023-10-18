@@ -21,7 +21,12 @@ class AgendaApplicationFormService
         $applicationResponses = $agendaItem->getApplicationFormResponses;
 
         if (is_null($applicationForm)) {
-            return [];
+            return [
+                "agendaitem" => $agendaItem->title,
+                "agendaId" => $agendaItem->id,
+                "userdata" => [],
+                "customfields" => [],
+            ];
         }
 
         // Map custom fields
