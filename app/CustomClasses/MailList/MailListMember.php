@@ -8,7 +8,6 @@
 
 namespace App\CustomClasses\MailList;
 
-
 class MailListMember
 {
     private $name;

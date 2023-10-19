@@ -29,9 +29,9 @@
     @include('beheer.agendaItem.create_edit_content')
 
     <div class="my-4">
-        {!! Form::submit(trans('menu.save'), ['class'=> 'btn btn-primary'] ) !!}
+        {!! Form::submit('Save', ['class'=> 'btn btn-primary'] ) !!}
         {!! Form::close() !!}
-        <a class="btn btn-danger btn-close" href="{{ ($agendaItem == null) ? ('/agendaItems') : ('/agendaItems/' . $agendaItem->id)}}">{{trans('menu.cancel')}}</a>
+        <a class="btn btn-danger btn-close" href="{{ ($agendaItem == null) ? ('/agendaItems') : ('/agendaItems/' . $agendaItem->id)}}">{{'Cancel'}}</a>
     </div>
 @endsection
 
@@ -69,7 +69,6 @@
     });
 
     $(document).ready(function() {
-        $('#content_nl').summernote(summernoteSettings);
         $('#content_en').summernote(summernoteSettings);
     });
 
@@ -80,7 +79,7 @@
             $('#subscription_endDate_box').show();
         }
     })
-    $("#applicationForm").prepend('<option value="0">{{trans('AgendaItems.noapplicationForm')}}</option>');
+    $("#applicationForm").prepend('<option value="0">No application form</option>');
     @if($agendaItem === null || $agendaItem->application_form_id === null)
         $("#applicationForm").val('0');
     @endif

@@ -92,9 +92,7 @@ class UserRepository implements IRepository
     {
         $user = $this->find($userid);
 
-        $starttime = new \DateTime($data['startDate']);
-
-        $user->certificates()->attach($data['certificate_id'], ['startDate' => Carbon::createFromFormat('d-m-Y H:i', $data['startDate'] . ' ' . $starttime->format('H:i'))]);
+        $user->certificates()->attach($data['certificate_id']);
     }
 
     public function getUserCertificates($userid)

@@ -30,12 +30,8 @@
                     <input name="amount_of_formrows" type="hidden" id="amount_of_formrows" value="0">
                     <div class="form-row">
                         <div class="form-group col-md-6">
-                            {!! Form::label('name', trans('ApplicationForm.nameNl')) !!}
-                            {!! Form::text('nl_name', ($applicationForm != null) ? $applicationForm->applicationFormName->NL_text : "", ['class' => 'form-control','required' => 'required']) !!}
-                        </div>
-                        <div class="form-group col-md-6">
-                            {!! Form::label('name', trans('ApplicationForm.nameEn')) !!}
-                            {!! Form::text('en_name', ($applicationForm != null) ? $applicationForm->applicationFormName->EN_text : "", ['class' => 'form-control','required' => 'required']) !!}
+                            {!! Form::label('name', 'Name') !!}
+                            {!! Form::text('name', ($applicationForm != null) ? $applicationForm->name : "", ['class' => 'form-control','required' => 'required']) !!}
                         </div>
                     </div>
                 </div>
@@ -43,9 +39,9 @@
             <application-form :rows="{{ json_encode($rows) }}"></application-form>
 
             <div class="my-4">
-                {!! Form::submit(trans('menu.save'), ['class'=> 'btn btn-primary'] ) !!}
+                {!! Form::submit('Save', ['class'=> 'btn btn-primary'] ) !!}
                 <a class="btn btn-danger btn-close" href="{{ ($applicationForm == null) ? route('beheer.applicationForms.index') : route('beheer.applicationForms.show', $applicationForm->id)}}">
-                    {{trans('menu.cancel')}}
+                    {{'Cancel'}}
                 </a>
             </div>
         {!! Form::close() !!}

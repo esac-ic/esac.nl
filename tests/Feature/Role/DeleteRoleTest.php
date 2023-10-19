@@ -4,9 +4,9 @@ namespace Tests\Feature\Role;
 
 use App\Rol;
 use App\User;
-use Config;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Support\Facades\Artisan;
+use Illuminate\Support\Facades\Config;
 use TestCase;
 
 class DeleteRoleTest extends TestCase
@@ -41,7 +41,8 @@ class DeleteRoleTest extends TestCase
     }
 
     /** @test */
-    public function a_role_can_be_deleted_by_an_admin(){
+    public function a_role_can_be_deleted_by_an_admin()
+    {
         $role = factory(Rol::class)->create();
 
         $response = $this->delete($this->url . '/' . $role->id, ['_token' => csrf_token()]);
@@ -52,7 +53,8 @@ class DeleteRoleTest extends TestCase
     }
 
     /** @test */
-    public function a_user_can_not_delete_a_role(){
+    public function a_user_can_not_delete_a_role()
+    {
         $role = factory(Rol::class)->create();
         $this->user->roles()->detach();
 

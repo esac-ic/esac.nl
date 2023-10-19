@@ -3,53 +3,49 @@
     <div class="card-body">
         <div class="form-row">
             <div class="form-group col-md-6">
-                {!! Form::label('NL_text', trans('menuItems.nameNl')) !!}
-                {!! Form::text('NL_text', ($page != null) ? $page->text->NL_text : "", ['class' => 'form-control','required' => 'required']) !!}
+                {!! Form::label('name', 'Name') !!}
+                {!! Form::text('name', ($page != null) ? $page->name : "", ['class' => 'form-control','required' => 'required']) !!}
             </div>
-            <div class="form-group col-md-6">
-                {!! Form::label('EN_text', trans('menuItems.nameEn')) !!}
-                {!! Form::text('EN_text', ($page != null) ? $page->text->EN_text : "", ['class' => 'form-control','required' => 'required']) !!}
-            </div>
-        </div>
-        <div class="form-row">
             @if($page === null || $page->editable)
                 <div class="form-group col-md-6">
-                    {!! Form::label('urlName', trans('menuItems.urlName')) !!}
+                    {!! Form::label('urlName', 'URL name') !!}
                     {!! Form::text('urlName', ($page != null) ? $page->urlName : "", ['class' => 'form-control','required' => 'required']) !!}
                 </div>
             @endif
+        </div>
+        <div class="form-row">
             <div class="col-md-6">
-                <div class="form-check">
+                <div class="form-group form-check">
                     {!! Form::checkbox("menuItem",0,($page != null) ? ($page->menuItem) ? "checked" : "" : "",["class" => "form-check-input","id" => "menuItem"]) !!}
-                    {!! Form::label("menuItem", trans("menuItems.showInMenu"), ["class" => "form-check-label"]) !!}
+                    {!! Form::label("menuItem", 'Show page in menu', ["class" => "form-check-label"]) !!}
                 </div>
-                <div class="form-check">
+                <div class="form-group form-check">
                     {!! Form::checkbox("login",0,($page != null) ? ($page->login) ? "checked" : "" : "",["class" => "form-check-input", "id" => "login"]) !!}
-                    {!! Form::label("login", trans("menuItems.needLogin"), ["class" => "form-check-label"]) !!}
+                    {!! Form::label("login", 'User needs to be logged in to view the page', ["class" => "form-check-label"]) !!}
                 </div>
             </div>
         </div>
         <div class="form-row mt-2" id="menuSettingRow1">
             <div class="form-group col-md-6">
-                <label for="itemType"> {{trans('menuItems.itemType')}} </label>
+                <label for="itemType"> {{'Item type: '}} </label>
                 <select class="form-control" name="itemType" id="menuType">
                     @if($page != null  &&$page->parent_id != null)
-                        <option value="standAlone">{{trans('menuItems.Standalone')}}</option>
-                        <option value="subItem" selected>{{trans('menuItems.SubItem')}}</option>
+                        <option value="standAlone">{{'Standalone menu item'}}</option>
+                        <option value="subItem" selected>{{'Sub menu item'}}</option>
                     @else
-                        <option value="standAlone" selected>{{trans('menuItems.Standalone')}}</option>
-                        <option value="subItem">{{trans('menuItems.SubItem')}}</option>
+                        <option value="standAlone" selected>{{'Standalone menu item'}}</option>
+                        <option value="subItem">{{'Sub menu item'}}</option>
                     @endif
                 </select>
             </div>
             <div id="parentItemBox" class="col-md-6 hidden">
-                <label for="parentItem"> {{trans('menuItems.ifSubItem')}} </label>
+                <label for="parentItem"> {{'If page is a sub page, who is the parent?'}} </label>
                 <select class="form-control" name="parentItem" id="parentItem">
                     @foreach($pages as $item)
                         @if($page != null  && $item->id === $page->parent_id)
-                            <option value="{{$item->id}}" selected >{{$item->text->text()}}</option>
+                            <option value="{{$item->id}}" selected >{{$item->name}}</option>
                         @else
-                            <option value="{{$item->id}}">{{$item->text->text()}}</option>
+                            <option value="{{$item->id}}">{{$item->name}}</option>
                         @endif
                     @endforeach
                 </select>
@@ -57,7 +53,7 @@
         </div>
         <div class="form-row" id="menuSettingRow2">
             <div class="form-group col-md-6">
-                <label for="afterItem"> {{trans('menuItems.after')}} </label>
+                <label for="afterItem"> {{'After which menu item'}} </label>
                 <select class="form-control" name="afterItem" id="afterItem">
                 </select>
             </div>
@@ -106,7 +102,7 @@
 
         function fillAfterDropDownMenu(data){
             $("#afterItem").empty();
-            $("#afterItem").append('<option value="-1" selected>{{trans('menuItems.notAfter')}}</option>');
+            $("#afterItem").append('<option value="-1" selected>Not after an item</option>');
             $.each(data, function(){
                 @if($page!= null && $page->after  != null)
                 if(this.id == {{$page->after}}){

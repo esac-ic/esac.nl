@@ -31,8 +31,7 @@ class AgendaApplicationFormService
 
         // Map custom fields
         $customfields = $applicationForm->applicationFormRows
-            ->pluck('applicationFormRowName')
-            ->map->text()
+            ->pluck('name')
             ->all();
 
         // Map user data
@@ -41,7 +40,7 @@ class AgendaApplicationFormService
             $user["_signupId"] = $response->id;
 
             $response->getApplicationFormResponseRows->each(function ($responseRow) use (&$user) {
-                $columnname = $responseRow->getApplicationFormRow->applicationFormRowName->text();
+                $columnname = $responseRow->getApplicationFormRow->name;
                 $user[$columnname] = $responseRow->value;
             });
 
@@ -53,7 +52,7 @@ class AgendaApplicationFormService
 
         // Build the final array to return
         return [
-            "agendaitem" => $agendaItem->agendaItemTitle->text(),
+            "agendaitem" => $agendaItem->title,
             "agendaId" => $agendaItem->id,
             "userdata" => $userdata,
             "customfields" => $customfields,

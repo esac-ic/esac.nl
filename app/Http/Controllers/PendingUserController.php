@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Repositories\RepositorieFactory as RepositorieFactory;
+use App\Repositories\UserRepository;
 use App\Rules\EmailDomainValidator;
 use App\User;
 use Illuminate\Http\Request;
@@ -18,11 +18,12 @@ class PendingUserController extends Controller
      *
      * @return void
      */
-    public function __construct(RepositorieFactory $repositoryFactory)
+    public function __construct(UserRepository $userRepository)
     {
         $this->middleware('auth')->except('storePendingUser');
         $this->middleware('authorize:' . Config::get('constants.Administrator'))->except('storePendingUser');
-        $this->_userRepository = $repositoryFactory->getRepositorie(RepositorieFactory::$USERREPOKEY);
+
+        $this->_userRepository = $userRepository;
     }
 
     //pending users view
@@ -40,9 +41,9 @@ class PendingUserController extends Controller
 
         $user = $this->_userRepository->createPendingUser($request->all());
 
-        Session::flash("message", trans('front-end/subscribe.success'));
+        Session::flash("message", 'Your membership request is pending, we will get back to you as soon as possible');
 
-        return redirect('/lidworden');
+        return redirect('/signup');
     }
 
     public function removeAsPendingMember(Request $request, User $user)
@@ -69,22 +70,22 @@ class PendingUserController extends Controller
                 'unique:users',
                 new EmailDomainValidator(),
             ],
-            'firstname' => 'required',
-            'lastname' => 'required',
-            'street' => 'required',
-            'houseNumber' => 'required',
-            'city' => 'required',
-            'zipcode' => 'required',
-            'country' => 'required',
-            'phonenumber' => 'required',
-            'emergencyNumber' => 'required',
-            'emergencyHouseNumber' => 'required',
-            'emergencystreet' => 'required',
-            'emergencycity' => 'required',
-            'emergencyzipcode' => 'required',
-            'emergencycountry' => 'required',
+            'firstname' => 'required|max:255',
+            'lastname' => 'required|max:255',
+            'street' => 'required|max:255',
+            'houseNumber' => 'required|max:255',
+            'city' => 'required|max:255',
+            'zipcode' => 'required|max:255',
+            'country' => 'required|max:255',
+            'phonenumber' => 'required|max:255',
+            'emergencyNumber' => 'required|max:255',
+            'emergencyHouseNumber' => 'required|max:255',
+            'emergencystreet' => 'required|max:255',
+            'emergencycity' => 'required|max:255',
+            'emergencyzipcode' => 'required|max:255',
+            'emergencycountry' => 'required|max:255',
             'birthDay' => 'required|date',
-            'IBAN' => 'required',
+            'IBAN' => 'required|max:255',
             'g-recaptcha-response' => 'required',
             'incasso' => 'required',
             'privacy_policy' => 'required',

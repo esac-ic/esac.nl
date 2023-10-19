@@ -18,7 +18,7 @@ class ResetPasswordController extends Controller
     | and uses a simple trait to include this behavior. You're free to
     | explore this trait and override any methods you wish to tweak.
     |
-    */
+     */
 
     use ResetsPasswords;
 
@@ -53,7 +53,7 @@ class ResetPasswordController extends Controller
     public function showResetForm(Request $request, $token = null)
     {
         $menu = $this->_menu;
-        return view('auth.passwords.reset',compact('menu'))->with(
+        return view('auth.passwords.reset', compact('menu'))->with(
             ['token' => $token, 'email' => $request->email]
         );
     }

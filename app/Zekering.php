@@ -11,17 +11,19 @@ namespace App;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-class Zekering extends Model {
+class Zekering extends Model
+{
     use SoftDeletes;
     protected $fillable = [
         'text',
         'createdBy',
         'score',
         'parent_id',
-        'has_parent'
+        'has_parent',
     ];
 
-    public function children() {
+    public function children()
+    {
         return $this->hasMany(Zekering::class, 'parent_id', 'id')->where('id', '!=', 'parent_id')->orderBy('id', 'asc');
     }
 }

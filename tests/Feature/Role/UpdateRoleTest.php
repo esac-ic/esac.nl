@@ -4,9 +4,9 @@ namespace Tests\Feature\Role;
 
 use App\Rol;
 use App\User;
-use Config;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Support\Facades\Artisan;
+use Illuminate\Support\Facades\Config;
 use TestCase;
 
 class UpdateRoleTest extends TestCase
@@ -22,8 +22,8 @@ class UpdateRoleTest extends TestCase
      * @var
      */
     private $user;
-  
-  protected function setUp(): void
+
+    protected function setUp(): void
     {
         parent::setUp();
         $this->user = $user = factory(User::class)->create();
@@ -41,12 +41,12 @@ class UpdateRoleTest extends TestCase
     }
 
     /** @test */
-    public function an_admin_can_update_a_role(){
+    public function an_admin_can_update_a_role()
+    {
         $role = factory(Rol::class)->create();
         $body = [
-            'NL_text' => 'test role',
-            'EN_text' => 'test role',
-            '_token' => csrf_token()
+            'name' => 'test role',
+            '_token' => csrf_token(),
         ];
 
         $response = $this->patch($this->url . "/" . $role->id, $body);
@@ -55,16 +55,16 @@ class UpdateRoleTest extends TestCase
 
         $role = $role->refresh();
 
-        $this->assertEquals($body['NL_text'], $role->text->text());
+        $this->assertEquals($body['name'], $role->name);
     }
 
     /** @test */
-    public function a_role_can_not_update_a_role(){
+    public function a_role_can_not_update_a_role()
+    {
         $role = factory(Rol::class)->create();
         $body = [
-            'NL_text' => 'test role',
-            'EN_text' => 'test role',
-            '_token' => csrf_token()
+            'name' => 'test role',
+            '_token' => csrf_token(),
         ];
 
         $this->user->roles()->detach();
@@ -75,10 +75,11 @@ class UpdateRoleTest extends TestCase
     }
 
     /** @test */
-    public function a_role_can_not_be_updated_without_required_fields(){
+    public function a_role_can_not_be_updated_without_required_fields()
+    {
         $role = factory(Rol::class)->create();
         $body = [
-            '_token' => csrf_token()
+            '_token' => csrf_token(),
         ];
 
         $response = $this->patch($this->url . "/" . $role->id, $body);
@@ -86,9 +87,7 @@ class UpdateRoleTest extends TestCase
         $response->assertStatus(302);
 
         $errors = session('errors');
-        $this->count(2,$errors);
-
-        $this->assertEquals("Veld n l text moet ingevuld zijn", $errors->get('NL_text')[0]);
-        $this->assertEquals("Veld e n text moet ingevuld zijn", $errors->get('EN_text')[0]);
+        $this->assertCount(1, $errors);
+        $this->assertEquals("Field name is required", $errors->get('name')[0]);
     }
 }

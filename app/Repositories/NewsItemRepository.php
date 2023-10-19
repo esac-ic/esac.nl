@@ -8,33 +8,13 @@
 
 namespace App\Repositories;
 
-
 use App\NewsItem;
 
 class NewsItemRepository implements IRepository
 {
-
-    private $_textRepository;
-
-    /**
-     * NewsItemRepository constructor.
-     * @param $_textRepository
-     */
-    public function __construct(TextRepository $_textRepository)
-    {
-        $this->_textRepository = $_textRepository;
-    }
-
     public function create(array $data)
     {
-        $title = $this->_textRepository->create(['NL_text' => $data['NL_title'], 'EN_text' => $data['EN_title']]);
-        $text = $this->_textRepository->create($data);
-
-        $newsItem = new NewsItem($data);
-        $newsItem->title = $title->id;
-        $newsItem->text = $text->id;
-        $newsItem->save();
-
+        $newsItem = NewsItem::create($data);
         return $newsItem;
     }
 
@@ -43,10 +23,6 @@ class NewsItemRepository implements IRepository
         $newsItem = $this->find($id);
         $newsItem->update($data);
 
-        //update text
-        $this->_textRepository->update($newsItem->title,['NL_text' => $data['NL_title'], 'EN_text' => $data['EN_title']]);
-        $this->_textRepository->update($newsItem->text,$data);
-
         return $newsItem;
     }
 
@@ -54,9 +30,6 @@ class NewsItemRepository implements IRepository
     {
         $newsItem = $this->find($id);
         $newsItem->delete();
-
-        $this->_textRepository->delete($newsItem->title);
-        $this->_textRepository->delete($newsItem->text);
     }
 
     public function find($id, $columns = array('*'))
@@ -66,7 +39,7 @@ class NewsItemRepository implements IRepository
 
     public function findBy($field, $value, $columns = array('*'))
     {
-        return NewsItem::where($field, '=',$value)->get($columns);
+        return NewsItem::where($field, '=', $value)->get($columns);
     }
 
     public function all($columns = array('*'))
@@ -74,7 +47,8 @@ class NewsItemRepository implements IRepository
         return NewsItem::all($columns);
     }
 
-    public function getLastXNewsItems( $limit){
+    public function getLastXNewsItems($limit)
+    {
         return NewsItem::orderBy('id', 'desc')->take($limit)->get();
     }
 }

@@ -17,7 +17,7 @@ class ForgotPasswordController extends Controller
     | includes a trait which assists in sending these notifications from
     | your application to your users. Feel free to explore this trait.
     |
-    */
+     */
 
     use SendsPasswordResetEmails;
 
@@ -42,6 +42,6 @@ class ForgotPasswordController extends Controller
     public function showLinkRequestForm()
     {
         $menu = $this->_menu;
-        return view('auth.passwords.email',compact('menu'));
+        return view('auth.passwords.email', compact('menu'));
     }
 }

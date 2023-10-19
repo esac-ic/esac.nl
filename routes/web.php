@@ -1,5 +1,8 @@
 <?php
 
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Route;
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -51,10 +54,10 @@ Route::resource('rols', 'RolController');
 Route::resource('pages', 'PaginaBeheerController');
 Route::resource('certificates', 'CertificateController');
 Route::resource('agendaItems', 'AgendaItemController');
-Route::resource('agendaItemCategories', 'AgendaItemCategorieController');
+Route::resource('agendaItemCategories', 'AgendaItemCategoryController');
 Route::resource('newsItems', 'NewsItemController');
 Route::resource('mailList', 'MailListController');
-Route::post('/lidworden', 'PendingUserController@storePendingUser');
+Route::post('/signup', 'PendingUserController@storePendingUser');
 Route::resource('books', 'LibraryController');
 Route::post('images/upload', 'StorageController@uploadImage');
 Route::delete('images/delete', 'StorageController@deleteImage');
@@ -78,20 +81,20 @@ Route::delete('/mailList/{mailistid}/member/{memberid}', 'MailListController@del
 Route::post('/mailList/{mailistid}/member', 'MailListController@addMember');
 
 //front-end routes
-Route::get('/zekeringen', 'frontEndController@zekeringen');
-Route::get('/bibliotheek', 'frontEndController@library');
-Route::get('/agenda', 'frontEndController@agenda');
-Route::get('/agenda/{agendaItem}', 'frontEndController@agendaDetailView')->name('agenda.detail');
-Route::get('/lidworden', 'frontEndController@publicSubscribe');
-Route::get('/signup', 'frontEndController@publicSubscribe');
-Route::get('/home', 'frontEndController@home');
-Route::get('/nieuws', 'frontEndController@news');
-Route::get('/nieuws/{newsItem}', 'frontEndController@newsDetailView');
-Route::get('/ledenlijst', 'frontEndController@memberList');
+Route::get('/zekeringen', 'FrontEndController@zekeringen');
+Route::get('/library', 'FrontEndController@library');
+Route::get('/library', 'FrontEndController@library');
+Route::get('/agenda', 'FrontEndController@agenda');
+Route::get('/agenda/{agendaItem}', 'FrontEndController@agendaDetailView')->name('agenda.detail');
+Route::get('/signup', 'FrontEndController@publicSubscribe');
+Route::get('/home', 'FrontEndController@home');
+Route::get('/news', 'FrontEndController@news');
+Route::get('/news/{newsItem}', 'FrontEndController@newsDetailView');
+Route::get('/memberlist', 'FrontEndController@memberList');
 Route::get("/ical", "ICalController@getAgendaItemsICalObject");
-Route::get('/{menuItem}', 'frontEndController@showPage');
+Route::get('/{menuItem}', 'FrontEndController@showPage');
 
 //setting routes
-Route::get('/beheer/settings', 'SettingsController@index');
-Route::put('/beheer/settings', 'SettingsController@update');
-Route::get('/beheer/settings/edit', 'SettingsController@edit');
+Route::get('/management/settings', 'SettingsController@index');
+Route::put('/management/settings', 'SettingsController@update');
+Route::get('/management/settings/edit', 'SettingsController@edit');

@@ -4,6 +4,7 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Facades\Storage;
 
 class NewsItem extends Model
 {
@@ -13,32 +14,20 @@ class NewsItem extends Model
         'text',
         'image_url',
         'thumbnail_url',
-        'author'
+        'author',
     ];
 
-    public function newsItemText(){
-        return $this->hasOne('App\Text', 'id', 'text');
-    }
-
-    public function newsItemTitle()
+    public function getImageUrl()
     {
-        return $this->hasOne('App\Text', 'id', 'title');
+        return $this->image_url != ""
+        ? Storage::disk('public')->url($this->image_url)
+        : "/img/header-3.jpg";
     }
 
-    public function getImageUrl(){
-        if($this->image_url != ""){
-            return \Storage::disk('public')->url($this->image_url);
-        } else {
-            return "/img/header-3.jpg";
-        }
-    }
-
-    public function getThumbnailUrl(){
-        if($this->thumbnail_url != ""){
-            return \Storage::disk('public')->url($this->thumbnail_url);
-        } else {
-            return "/img/header-3.jpg";
-        }
-
+    public function getThumbnailUrl()
+    {
+        return $this->thumbnail_url != ""
+        ? Storage::disk('public')->url($this->thumbnail_url)
+        : "/img/header-3.jpg";
     }
 }

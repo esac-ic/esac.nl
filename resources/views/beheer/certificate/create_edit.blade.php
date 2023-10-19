@@ -26,27 +26,19 @@
         <div class="card-body">
             {!! Form::open(['method' => $fields['method'], 'url' => $fields['url']]) !!}
             <div class="form-group">
-                {!! Form::label('name', trans('certificate.nameNL')) !!}
-                {!! Form::text('NL_text', ($certificate != null) ? $certificate->certificateName->NL_text : "", ['class' => 'form-control','required' => 'required']) !!}
+                {!! Form::label('name', 'Name') !!}
+                {!! Form::text('name', ($certificate != null) ? $certificate->name : "", ['class' => 'form-control','required' => 'required']) !!}
             </div>
             <div class="form-group">
-                {!! Form::label('name', trans('certificate.nameEN')) !!}
-                {!! Form::text('EN_text', ($certificate != null) ? $certificate->certificateName->EN_text : "", ['class' => 'form-control','required' => 'required']) !!}
-            </div>
-            <div class="form-group">
-                {!! Form::label('abbreviation', trans('certificate.abbreviation')) !!}
+                {!! Form::label('abbreviation', 'Abbreviation') !!}
                 {!! Form::text('abbreviation', ($certificate != null) ? $certificate->abbreviation : "", ['class' => 'form-control','required' => 'required']) !!}
-            </div>
-            <div class="form-group">
-                {!! Form::label('duration', trans('certificate.duration')) !!}
-                {!! Form::number('duration', ($certificate != null) ? $certificate->duration === 0 ? "0" : $certificate->duration : "", ['class' => 'form-control', 'min' => 0]) !!}
             </div>
         </div>
     </div>
 
     <div class="my-4">
-        {!! Form::submit(trans('menu.save'), ['class'=> 'btn btn-primary'] ) !!}
+        {!! Form::submit('Save', ['class'=> 'btn btn-primary'] ) !!}
         {!! Form::close() !!}
-        <a class="btn btn-danger btn-close" href="{{ ($certificate == null) ? ('/certificates') : ('/certificates/' . $certificate->id)}}">{{trans('menu.cancel')}}</a>
+        <a class="btn btn-danger btn-close" href="{{ ($certificate == null) ? ('/certificates') : ('/certificates/' . $certificate->id)}}">{{'Cancel'}}</a>
     </div>
 @endsection

@@ -5,7 +5,6 @@ namespace App\Repositories\ApplicationFormRepositories;
 use App\Models\ApplicationForm\ApplicationForm;
 use App\Models\ApplicationForm\ApplicationFormRow;
 use App\Repositories\IRepository;
-use App\Repositories\TextRepository;
 
 /**
  * Class ApplicationFormRepository
@@ -14,24 +13,16 @@ use App\Repositories\TextRepository;
 class ApplicationFormRepository implements IRepository
 {
     /**
-     * @var TextRepository
-     */
-    private $textRepository;
-    /**
      * @var ApplicationFormRowRepository
      */
     private $applicationFormRowRepository;
 
     /**
      * AplicationFormRepository constructor.
-     * @param TextRepository $textRepository
      * @param ApplicationFormRowRepository $applicationFormRowRepository
      */
-    public function __construct(
-        TextRepository $textRepository,
-        ApplicationFormRowRepository $applicationFormRowRepository
+    public function __construct(ApplicationFormRowRepository $applicationFormRowRepository
     ) {
-        $this->textRepository               = $textRepository;
         $this->applicationFormRowRepository = $applicationFormRowRepository;
     }
 
@@ -41,12 +32,7 @@ class ApplicationFormRepository implements IRepository
      */
     public function create(array $data): ApplicationForm
     {
-        $text = $this->textRepository->create([
-            'NL_text' => $data['nl_name'],
-            'EN_text' => $data['en_name']
-        ]);
-
-        $applicationForm = new ApplicationForm(["name" => $text->id]);
+        $applicationForm = new ApplicationForm($data);
         $applicationForm->save();
 
         if (array_key_exists('rows', $data) === true) {
@@ -66,10 +52,7 @@ class ApplicationFormRepository implements IRepository
     public function update($id, array $data): ApplicationForm
     {
         $applicationForm = $this->find($id);
-        $this->textRepository->update($applicationForm->name, [
-            'NL_text' => $data['nl_name'],
-            'EN_text' => $data['en_name']
-        ]);
+        $applicationForm->update($data);
 
         $applicationFormRowIds = [];
 
@@ -79,7 +62,7 @@ class ApplicationFormRepository implements IRepository
                     $this->applicationFormRowRepository->update($rowData['id'], $rowData);
                     $applicationFormRowIds[] = $rowData['id'];
                 } else {
-                    $applicationFormRow      = $this
+                    $applicationFormRow = $this
                         ->applicationFormRowRepository
                         ->create($applicationForm->id, $rowData);
                     $applicationFormRowIds[] = $applicationFormRow->id;
@@ -106,7 +89,6 @@ class ApplicationFormRepository implements IRepository
             $this->applicationFormRowRepository->delete($row->id);
         }
         $applicationForm->delete();
-        $this->textRepository->delete($applicationForm->name);
     }
 
     /**

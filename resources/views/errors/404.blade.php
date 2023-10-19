@@ -1,5 +1,5 @@
 @extends('layouts.app',[
-    'curPageName' => trans('auth.404')
+    'curPageName' => 'Page not found'
 ])
 
 @section('content')
@@ -9,7 +9,7 @@
                 @if (isset($curPageName))
                     <h2 class="card-title">{{$curPageName}}</h2>
                 @endif
-                <p>{{trans('validation.PageNotFound')}}</p>
+                <p>{{'Page not found'}}</p>
             </div>
         </div>
     </div>

@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Book;
 use Illuminate\Database\Seeder;
 
 class BooksTableSeeder extends Seeder
@@ -13,7 +14,7 @@ class BooksTableSeeder extends Seeder
      */
     public function run()
     {
-        $book = new \App\Book();
+        $book = new Book();
         $book->title = "Dit is een boek";
         $book->year = 2012;
         $book->country = "Nederland";

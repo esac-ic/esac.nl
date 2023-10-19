@@ -3,6 +3,7 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Log;
 
 class Setting extends Model
 {
@@ -23,21 +24,23 @@ class Setting extends Model
     protected $fillable = [
         'name',
         'type',
-        'value'
+        'value',
     ];
 
-    public function initialise(){
+    public function initialise()
+    {
         $this->_settings = array();
-        foreach (Setting::all() as $setting){
+        foreach (Setting::all() as $setting) {
             $this->_settings[$setting->name] = $setting->value;
         }
     }
 
-    public function getSetting($name){
-        if(array_key_exists($name,$this->_settings)){
+    public function getSetting($name)
+    {
+        if (array_key_exists($name, $this->_settings)) {
             return $this->_settings[$name];
         } else {
-            \Log::alert('Setting with the name: ' . $name . ' asked but not found in settings list!');
+            Log::alert('Setting with the name: ' . $name . ' asked but not found in settings list!');
             return "";
         }
     }

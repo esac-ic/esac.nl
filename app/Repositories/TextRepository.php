@@ -8,7 +8,6 @@
 
 namespace App\Repositories;
 
-
 use App\Text;
 
 class TextRepository implements IRepository
@@ -42,7 +41,7 @@ class TextRepository implements IRepository
 
     public function findBy($field, $value, $columns = array('*'))
     {
-        return Text::where($field, '=',$value)->get($columns);
+        return Text::where($field, '=', $value)->get($columns);
     }
 
     public function all($columns = array('*'))

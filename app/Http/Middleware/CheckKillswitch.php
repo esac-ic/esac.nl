@@ -2,10 +2,8 @@
 
 namespace App\Http\Middleware;
 
-use Closure;
 use App\Setting;
-use App\MenuItem;
-use App\CustomClasses\MenuSingleton;
+use Closure;
 
 class CheckKillswitch
 {
@@ -24,10 +22,10 @@ class CheckKillswitch
 
     public function handle($request, Closure $next)
     {
-        if(app(Setting::SINGELTONNAME)->getsetting(Setting::SETTING_KILLSWITCH) && ! $request->is($this->excludedRoutes)) {
-            $curPageName = trans('front-end/killswitch.title');
+        if (app(Setting::SINGELTONNAME)->getsetting(Setting::SETTING_KILLSWITCH) && !$request->is($this->excludedRoutes)) {
+            $curPageName = 'Website offline';
 
-            return response()->view('errors.killswitch',compact('curPageName'), 404);
+            return response()->view('errors.killswitch', compact('curPageName'), 404);
         }
 
         return $next($request);

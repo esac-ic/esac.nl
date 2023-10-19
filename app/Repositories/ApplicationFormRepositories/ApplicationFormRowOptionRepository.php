@@ -3,31 +3,13 @@
 namespace App\Repositories\ApplicationFormRepositories;
 
 use App\Models\ApplicationForm\ApplicationFormRowOption;
-use App\Repositories\TextRepository;
 
 class ApplicationFormRowOptionRepository
 {
-    /**
-     * @var TextRepository
-     */
-    private $textRepository;
-
-    /**
-     * ApplicationFormRowRepository constructor.
-     * @param TextRepository $textRepository
-     */
-    public function __construct(TextRepository $textRepository)
-    {
-        $this->textRepository = $textRepository;
-    }
-
     public function create(int $applicationFormRowId, array $data): ApplicationFormRowOption
     {
-        $text = $this->textRepository->create(['NL_text' => $data['nl_name'], 'EN_text' => $data['en_name']]);
-
         $option = new ApplicationFormRowOption($data);
         $option->application_form_row_id = $applicationFormRowId;
-        $option->name_id = $text->id;
         $option->save();
 
         return $option;
@@ -36,12 +18,7 @@ class ApplicationFormRowOptionRepository
     public function update($id, array $data)
     {
         $option = $this->find($id);
-        $this->textRepository->update($option->name_id, [
-            'NL_text' => $data['nl_name'],
-            'EN_text' => $data['en_name']
-        ]);
-
-        $option->value = $data['value'];
+        $option->update($data);
         $option->save();
 
         return $option;

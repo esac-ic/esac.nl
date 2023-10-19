@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Repositories\RepositorieFactory;
+use App\Repositories\RolRepository;
 use App\Rol;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Config;
@@ -17,72 +17,80 @@ class RolController extends Controller
      *
      * @return void
      */
-    public function __construct(RepositorieFactory $repositorieFactory)
+    public function __construct(RolRepository $rolRepository)
     {
         $this->middleware('auth');
-        $this->middleware('authorize:'.Config::get('constants.Administrator'));
-        $this->_rolRepository = $repositorieFactory->getRepositorie(RepositorieFactory::$ROLREPOKEY);
+        $this->middleware('authorize:' . Config::get('constants.Administrator'));
+
+        $this->_rolRepository = $rolRepository;
     }
 
     //gives the rol views
-    public function index(){
-        $rols = $this->_rolRepository->all(array('name','id'));
+    public function index()
+    {
+        $rols = $this->_rolRepository->all(array('name', 'id'));
         return view('beheer.rol.index', compact('rols'));
     }
 
     //show create screen
-    public function create(){
-        $fields = ['title' => trans('rol.add'),
+    public function create()
+    {
+        $fields = ['title' => 'Add a role',
             'method' => 'POST',
-            'url' => '/rols',];
+            'url' => '/rols'];
         $rol = null;
-        return view('beheer.rol.create_edit', compact('fields','rol'));
+        return view('beheer.rol.create_edit', compact('fields', 'rol'));
     }
 
     //store rol
-    public function store(Request $request){
+    public function store(Request $request)
+    {
         $this->validateInput($request);
 
         $this->_rolRepository->create($request->all());
 
-        Session::flash("message", trans('rol.added'));
+        Session::flash("message", 'Role added');
         return redirect('/rols');
     }
 
-    public function show(Request $request, Rol $rol){
+    public function show(Request $request, Rol $rol)
+    {
         return view('beheer.rol.show', compact('rol'));
     }
 
     //show edit screen
-    public function edit(Request $request,Rol $rol){
-        $fields = ['title' => trans('rol.edit'),
+    public function edit(Request $request, Rol $rol)
+    {
+        $fields = ['title' => 'Edit role',
             'method' => 'PATCH',
-            'url' => '/rols/'. $rol->id];
+            'url' => '/rols/' . $rol->id];
 
-        return view('beheer.rol.create_edit', compact('fields','rol'));
+        return view('beheer.rol.create_edit', compact('fields', 'rol'));
     }
 
     //update rol
-    public function update(Request $request,Rol $rol){
+    public function update(Request $request, Rol $rol)
+    {
         $this->validateInput($request);
 
-        $this->_rolRepository->update($rol->id,$request->all());
+        $this->_rolRepository->update($rol->id, $request->all());
 
-        Session::flash("message", trans('rol.edited'));
+        Session::flash("message", 'Role edited');
         return redirect('/rols');
     }
 
-    public function destroy(Request $request, Rol $rol){
+    public function destroy(Request $request, Rol $rol)
+    {
         $this->_rolRepository->delete($rol->id);
 
-        Session::flash("message", trans('rol.deleted'));
+        Session::flash("message", 'Role removed');
         return redirect('/rols');
     }
 
-    private function validateInput(Request $request){
-        $this->validate($request,[
-            'EN_text' => 'required',
-            'NL_text' => 'required',
+    private function validateInput(Request $request)
+    {
+        $this->validate($request, [
+            'name' => 'required|max:255',
         ]);
     }
 }

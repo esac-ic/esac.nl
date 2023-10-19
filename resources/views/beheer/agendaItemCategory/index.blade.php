@@ -1,7 +1,7 @@
 @extends('layouts.beheer')
 
 @section('title')
-{{trans("agendaItemCategory.Categories")}}
+{{'Event categories'}}
 @endsection
 
 @section('content')
@@ -16,14 +16,14 @@
 
     <div class="row mb-3">
         <div class="col-md-6">
-            <h1>{{trans("agendaItemCategory.Categories")}}</h1>
+            <h1>{{'Event categories'}}</h1>
         </div>
 
         <div class="col-md-6">
             <div class="btn-group mt-2 float-md-right" role="group" aria-label="Actions">
                 <a href="{{url('agendaItemCategories/create')}}" class="btn btn-primary">
-                    <span title="{{trans("user.new")}}" class="ion-plus" aria-hidden="true"></span>
-                    {{trans("agendaItemCategory.new")}}
+                    <span title="{{'New user'}}" class="ion-plus" aria-hidden="true"></span>
+                    {{'New category'}}
                 </a>
             </div>
         </div>
@@ -31,7 +31,7 @@
     <table id="users" class="table table-striped dt-responsive nowrap" style="width:100%">
         <thead>
         <tr>
-            <th>{{trans('agendaItemCategory.name')}}</th>
+            <th>{{'Name'}}</th>
             <th>Beheer</th>
         </tr>
         </thead>
@@ -39,10 +39,10 @@
 
         @foreach ($agendaItemCategories as $category)
             <tr>
-                <td>{{$category->categorieName->text()}}</td>
+                <td>{{$category->name}}</td>
                 <td>
-                    <a class="mr-1 ml-1" href="{{url('/agendaItemCategories/' . $category->id . '/edit')}}"><span title="{{trans('agendaItemCategory.edit')}}" class="ion-edit font-size-120" aria-hidden="true"></span></a>
-                    <a class="mr-1 ml-1" href="{{url('/agendaItemCategories/'. $category->id)}}"><span title="{{trans("agendaItemCategory.show")}}" class="ion-eye font-size-120" aria-hidden="true"></span></a>
+                    <a class="mr-1 ml-1" href="{{url('/agendaItemCategories/' . $category->id . '/edit')}}"><span title="{{'Edit category'}}" class="ion-edit font-size-120" aria-hidden="true"></span></a>
+                    <a class="mr-1 ml-1" href="{{url('/agendaItemCategories/'. $category->id)}}"><span title="Show category" class="ion-eye font-size-120" aria-hidden="true"></span></a>
                 </td>
             </tr>
         @endforeach

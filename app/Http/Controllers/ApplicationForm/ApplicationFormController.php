@@ -2,16 +2,15 @@
 
 namespace App\Http\Controllers\ApplicationForm;
 
+use App\Http\Controllers\Controller;
 use App\Http\Requests\ApplicationFormStoreRequest;
 use App\Http\Resources\ApplicationFormRowVueResource;
 use App\Models\ApplicationForm\ApplicationForm;
 use App\Repositories\ApplicationFormRepositories\ApplicationFormRepository;
-use App\Repositories\RepositorieFactory;
 use Illuminate\Http\RedirectResponse;
-use Illuminate\Http\Request;
-use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Config;
+use Illuminate\Support\Facades\Session;
 use Illuminate\View\View;
-use Session;
 
 class ApplicationFormController extends Controller
 {
@@ -22,7 +21,7 @@ class ApplicationFormController extends Controller
      */
     public function __construct()
     {
-        $this->middleware('authorize:' . \Config::get('constants.Content_administrator') . ',' . \Config::get('constants.Activity_administrator'));
+        $this->middleware('authorize:' . Config::get('constants.Content_administrator') . ',' . Config::get('constants.Activity_administrator'));
     }
 
     /**
@@ -33,12 +32,11 @@ class ApplicationFormController extends Controller
     public function index(): View
     {
         $applicationForms = ApplicationForm::query()
-            ->with('applicationFormName')
             ->get();
 
         return view('beheer.applicationForm.index')
             ->with([
-                'applicationForms' => $applicationForms
+                'applicationForms' => $applicationForms,
             ]);
     }
 
@@ -50,16 +48,16 @@ class ApplicationFormController extends Controller
     public function create(): View
     {
         $fields = [
-            'title'  => trans('ApplicationForm.add'),
+            'title' => 'Add an application form',
             'method' => 'POST',
-            'url'    => route('beheer.applicationForms.store')
+            'url' => route('beheer.applicationForms.store'),
         ];
 
         return view('beheer.applicationForm.create_edit')
             ->with([
-                'fields'          => $fields,
+                'fields' => $fields,
                 'applicationForm' => null,
-                'rows'            => [],
+                'rows' => [],
             ]);
     }
 
@@ -76,7 +74,7 @@ class ApplicationFormController extends Controller
     ): RedirectResponse {
         $applicationFormRepository->create($request->all());
 
-        Session::flash("message", trans('ApplicationForm.added'));
+        Session::flash("message", 'Application form added');
         return redirect()->route('beheer.applicationForms.index');
     }
 
@@ -103,16 +101,16 @@ class ApplicationFormController extends Controller
     public function edit(ApplicationForm $applicationForm): View
     {
         $fields = [
-            'title'  => trans('ApplicationForm.add'),
+            'title' => 'Add an application form',
             'method' => 'PUT',
-            'url'    => route('beheer.applicationForms.update', $applicationForm->id)
+            'url' => route('beheer.applicationForms.update', $applicationForm->id),
         ];
 
         return view('beheer.applicationForm.create_edit')
             ->with([
-                'fields'          => $fields,
+                'fields' => $fields,
                 'applicationForm' => $applicationForm,
-                'rows'            => ApplicationFormRowVueResource::collection($applicationForm->applicationFormRows),
+                'rows' => ApplicationFormRowVueResource::collection($applicationForm->applicationFormRows),
             ]);
     }
 
@@ -131,7 +129,7 @@ class ApplicationFormController extends Controller
     ): RedirectResponse {
         $applicationFormRepository->update($id, $request->all());
 
-        Session::flash("message", trans('ApplicationForm.edited'));
+        Session::flash("message", 'Application form edited');
         return redirect()->route('beheer.applicationForms.index');
     }
 
@@ -146,7 +144,7 @@ class ApplicationFormController extends Controller
     {
         $applicationFormRepository->delete($id);
 
-        Session::flash("message", trans('ApplicationForm.edited'));
+        Session::flash("message", 'Application form edited');
         return redirect()->route('beheer.applicationForms.index');
     }
 }

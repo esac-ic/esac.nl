@@ -4,7 +4,6 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
-use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Auth;
 
 class MenuItem extends Model
@@ -13,11 +12,11 @@ class MenuItem extends Model
 
     const HOMEURL = 'home';
     const ZEKERINGURL = 'zekeringen';
-    const SUBSCRIBEURL = 'lidworden';
-    const NEWSURL = 'nieuws';
-    const MEMBERLISTURL = 'ledenlijst';
+    const SUBSCRIBEURL = 'signup';
+    const NEWSURL = 'news';
+    const MEMBERLISTURL = 'memberlist';
     const AGENDAURL = 'agenda';
-    const LIBRARYURL = 'bibliotheek';
+    const LIBRARYURL = 'library';
 
     protected $fillable = [
         'name',
@@ -27,18 +26,8 @@ class MenuItem extends Model
         'menuItem',
         'deletable',
         'editable',
-        'content_id',
+        'content',
     ];
-
-    public function text()
-    {
-        return $this->hasOne('App\Text', 'id', 'name');
-    }
-
-    public function content()
-    {
-        return $this->hasOne(Text::class, 'id', 'content_id');
-    }
 
     public function partner()
     {
@@ -59,11 +48,6 @@ class MenuItem extends Model
     public function getSubMenuItems($id)
     {
         return MenuItem::query()->where('parent_id', '=', $id)->where('menuItem', '=', true)->get();
-    }
-
-    public function getPageName()
-    {
-        return 'pages.' . $this->urlName . ((App::isLocale('en') === true) ? '_en' : '_nl');
     }
 
     public function show()

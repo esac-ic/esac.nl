@@ -3,7 +3,6 @@
 namespace App\Exports;
 
 use App\AgendaItem;
-use App\Repositories\InschrijvenRepository;
 use App\Services\AgendaApplicationFormService;
 use Maatwebsite\Excel\Concerns\FromCollection;
 use Maatwebsite\Excel\Concerns\ShouldAutoSize;
@@ -38,8 +37,8 @@ class AgendaRegistrationExport implements FromCollection, WithTitle, WithHeading
     }
 
     /**
-    * @return \Illuminate\Support\Collection
-    */
+     * @return \Illuminate\Support\Collection
+     */
     public function collection()
     {
         return $this->agendaApplicationFormService->getExportData($this->agendaItem);
@@ -50,7 +49,7 @@ class AgendaRegistrationExport implements FromCollection, WithTitle, WithHeading
      */
     public function title(): string
     {
-        return trans('forms.Inschrijvingen');
+        return 'Subscriptions';
     }
 
     /**
@@ -59,20 +58,20 @@ class AgendaRegistrationExport implements FromCollection, WithTitle, WithHeading
     public function headings(): array
     {
         $defaultValues = [
-            trans('user.firstname'),
-            trans('user.preposition'),
-            trans('user.lastname'),
-            trans('user.street'),
-            trans('user.housenumber'),
-            trans('user.city'),
-            trans('user.email'),
-            trans('user.phonenumber'),
+            'First name',
+            'Preposition',
+            'Last name',
+            'Street',
+            'House number',
+            'City',
+            'Email address',
+            'Phone number',
         ];
 
         $formQuestions = [];
         $rows = $this->agendaItem->getApplicationForm->applicationFormRows;
         foreach ($rows as $row) {
-            $formQuestions[] = $row->applicationFormRowName->text();
+            $formQuestions[] = $row->name;
         }
 
         return array_merge($defaultValues, $formQuestions);

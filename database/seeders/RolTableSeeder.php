@@ -14,21 +14,13 @@ class RolTableSeeder extends Seeder
     public function run()
     {
         //add default data
-        $text = new \App\Text(['NL_text' => 'Beheerder', 'EN_text' => 'Administrator']);
-        $text->save();
-        $rol  = new \App\Rol(['name' => $text->id]);
+        $rol = new \App\Rol(['name' => 'Administrator']);
         $rol->save();
-        $text = new \App\Text(['NL_text' => 'Content beheerder', 'EN_text' => 'Content administrator']);
-        $text->save();
-        $rol  = new \App\Rol(['name' => $text->id]);
+        $rol = new \App\Rol(['name' => 'Content administrator']);
         $rol->save();
-        $text = new \App\Text(['NL_text' => 'Activiteit beheerder', 'EN_text' => 'Activity administrator']);
-        $text->save();
-        $rol  = new \App\Rol(['name' => $text->id]);
+        $rol = new \App\Rol(['name' => 'Activity administrator']);
         $rol->save();
-        $text = new \App\Text(['NL_text' => 'Certificaat beheerder', 'EN_text' => 'Certificate administrator']);
-        $text->save();
-        $rol  = new \App\Rol(['name' => $text->id]);
+        $rol = new \App\Rol(['name' => 'Certificate administrator']);
         $rol->save();
     }
 }

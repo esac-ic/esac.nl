@@ -10,7 +10,6 @@ namespace App\Repositories\ApplicationFormRepositories;
 
 use App\Models\ApplicationForm\ApplicationFormRow;
 use App\Models\ApplicationForm\ApplicationFormRowOption;
-use App\Repositories\TextRepository;
 
 /**
  * Class ApplicationFormRowRepository
@@ -19,23 +18,16 @@ use App\Repositories\TextRepository;
 class ApplicationFormRowRepository
 {
     /**
-     * @var TextRepository
-     */
-    private $textRepository;
-
-    /**
      * @var ApplicationFormRowOptionRepository
      */
     private $applicationFormRowOptionRepository;
 
     /**
      * ApplicationFormRowRepository constructor.
-     * @param TextRepository $textRepository
      * @param ApplicationFormRowOptionRepository $applicationFormRowOptionRepository
      */
-    public function __construct(TextRepository $textRepository, ApplicationFormRowOptionRepository $applicationFormRowOptionRepository)
+    public function __construct(ApplicationFormRowOptionRepository $applicationFormRowOptionRepository)
     {
-        $this->textRepository = $textRepository;
         $this->applicationFormRowOptionRepository = $applicationFormRowOptionRepository;
     }
 
@@ -45,9 +37,7 @@ class ApplicationFormRowRepository
      */
     public function create(int $formId, array $data): ApplicationFormRow
     {
-        $text = $this->textRepository->create(['NL_text' => $data['nl_name'], 'EN_text' => $data['en_name']]);
         $row = new ApplicationFormRow($data);
-        $row->name = $text->id;
         $row->application_form_id = $formId;
         $row->required = array_key_exists('required', $data);
         $row->save();
@@ -68,20 +58,14 @@ class ApplicationFormRowRepository
     public function update(int $id, array $data): void
     {
         $row = $this->find($id);
-        $this->textRepository->update($row->name, [
-            'NL_text' => $data['nl_name'],
-            'EN_text' => $data['en_name']
-        ]);
-
-        $row->type = $data['type'];
-        $row->required = array_key_exists('required', $data);
+        $row->update($data);
         $row->save();
 
         $optionIds = [];
 
         if (array_key_exists('options', $data)) {
             foreach ($data['options'] as $optionData) {
-                if(array_key_exists('id', $optionData)) {
+                if (array_key_exists('id', $optionData)) {
                     $option = $this->applicationFormRowOptionRepository->update($optionData['id'], $optionData);
                 } else {
                     $option = $this->applicationFormRowOptionRepository->create($row->id, $optionData);
@@ -104,7 +88,6 @@ class ApplicationFormRowRepository
         $applicationFormRow = $this->find($id);
         if ($applicationFormRow != null) {
             $applicationFormRow->delete();
-            $this->textRepository->delete($applicationFormRow->name);
         }
     }
 

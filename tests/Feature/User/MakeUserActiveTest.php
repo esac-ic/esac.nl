@@ -3,11 +3,10 @@
 namespace Tests\Feature\User;
 
 use App\User;
-use App\Rol;
 use Carbon\Carbon;
-use Config;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Support\Facades\Artisan;
+use Illuminate\Support\Facades\Config;
 use TestCase;
 
 class MakeUserActiveTest extends TestCase
@@ -39,11 +38,12 @@ class MakeUserActiveTest extends TestCase
     }
 
     /** @test */
-    public function make_user_active_test(){
+    public function make_user_active_test()
+    {
         $response = $this->patch('users/' . $this->user->id . '/makeActiveMember');
 
         $response->assertStatus(302);
-        
+
         $this->assertNotNull($this->user->lid_af);
     }
 }

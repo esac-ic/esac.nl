@@ -61,7 +61,6 @@ class User extends Authenticatable
     public function certificates()
     {
         return $this->belongsToMany('App\Certificate', 'certificate_user')
-            ->withPivot('startDate')
             ->withTimestamps()->withTrashed();
     }
 

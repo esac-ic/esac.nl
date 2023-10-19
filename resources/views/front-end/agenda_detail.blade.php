@@ -7,8 +7,8 @@
                 <div class="card w-100">
                     <img class="card-img-top" src="{{$agendaItem->getImageUrl()}}">
                     <div class="card-body">
-                        <h3 class="card-title">{{$agendaItem->agendaItemTitle->text()}}</h3>
-                        <p class="card-text">{{trans('menu.from')}} <span class="badge badge-secondary font-size-100">{{trans(\Carbon\Carbon::parse($agendaItem->startDate)->format('d M H:i'))}}</span> {{trans('menu.to')}} <span class="badge badge-secondary font-size-100">{{trans(\Carbon\Carbon::parse($agendaItem->endDate)->format('d M H:i'))}}</span></p>
+                        <h3 class="card-title">{{$agendaItem->title}}</h3>
+                        <p class="card-text">{{'From'}} <span class="badge badge-secondary font-size-100">{{trans(\Carbon\Carbon::parse($agendaItem->startDate)->format('d M H:i'))}}</span> {{'to'}} <span class="badge badge-secondary font-size-100">{{trans(\Carbon\Carbon::parse($agendaItem->endDate)->format('d M H:i'))}}</span></p>
                     </div>
                     <div class="card-footer bg-white p-3">
                         <div class="row justify-content-between align-items-center">
@@ -20,16 +20,16 @@
                             <div class="col-auto">
                                 @if($agendaItem->application_form_id != null)
                                     @if(Auth::guest())
-                                        {{trans('front-end/agenda.loginNeeded')}}
+                                        {{'Please log in to register'}}
                                     @else
                                         @if($agendaItem->canRegister())
                                             @if($agendaItem->subscription_endDate > \Carbon\Carbon::now() && array_key_exists(Auth::id(), $users))
-                                                <a class="btn btn-outline-primary" href="{{ url('forms/' . $agendaItem->id .'/unregister') }}" style="color: red">{{ trans('front-end/agenda.unregister') }} </a>
+                                                <a class="btn btn-outline-danger" href="{{ url('forms/' . $agendaItem->id .'/unregister') }}">{{ 'Unregister' }} </a>
                                             @else
-                                                <a class="btn btn-outline-primary" href="{{url('')}}/forms/{{$agendaItem->id}}">{{trans('front-end/agenda.register')}}</a>
+                                                <a class="btn btn-outline-primary" href="{{url('')}}/forms/{{$agendaItem->id}}">{{'Register now'}}</a>
                                             @endif
                                         @else
-                                        {{trans('front-end/agenda.cantregister')}}
+                                        {{'Registration not possible'}}
                                         @endif
                                     @endif
                                 @endif
@@ -41,10 +41,10 @@
             <div class="col-lg-8 d-flex flex-wrap">
                 <div class="card w-100">
                     <div class="card-body">
-                        <h4 class="card-title">{{trans('front-end/agenda.info')}}</h4>
-                        <p class="card-text">{!! $agendaItem->agendaItemText->text() !!}</p>
+                        <h4 class="card-title">{{'General information'}}</h4>
+                        <p class="card-text">{!! $agendaItem->text !!}</p>
                         @if($agendaItem->application_form_id != null && !Auth::guest())
-                            <h4 class="card-title">{{trans('front-end/agenda.registrations')}}</h2>
+                            <h4 class="card-title">{{'Registrations'}}</h2>
                             <ol class="column-count-lg-3">
                                 @foreach($users as $user)
                                     <li>{{$user['name']}}

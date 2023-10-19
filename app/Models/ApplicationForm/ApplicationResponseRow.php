@@ -2,8 +2,6 @@
 
 namespace App\Models\ApplicationForm;
 
-;
-
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -23,7 +21,7 @@ class ApplicationResponseRow extends Model
         'id',
         'application_response_id',
         'application_form_row_id',
-        'value'
+        'value',
     ];
 
     /**
@@ -38,7 +36,7 @@ class ApplicationResponseRow extends Model
     {
         switch ($this->getApplicationFormRow->type) {
             case ApplicationFormRow::FORM_TYPE_CHECK_BOX:
-                return $this->value === 'on' ? trans('inschrijven.yes') : trans('inschrijven.no');
+                return $this->value === 'on' ? 'Yes' : 'No';
             default:
                 return $this->value;
         }

@@ -2,10 +2,8 @@
 
 namespace App\Models\ApplicationForm;
 
-use App\Text;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
-use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 /**
@@ -19,17 +17,17 @@ class ApplicationFormRow extends Model
     /**
      *  @var string
      */
-    const FORM_TYPE_SELECT    = 'select';
+    const FORM_TYPE_SELECT = 'select';
 
     /**
      * @var string
      */
-    const FORM_TYPE_RADIO     = 'radio';
+    const FORM_TYPE_RADIO = 'radio';
 
     /**
      *  @var string
      */
-    const FORM_TYPE_TEXT_BOX  = 'textBox';
+    const FORM_TYPE_TEXT_BOX = 'textBox';
 
     /**
      *  @var string
@@ -39,17 +37,17 @@ class ApplicationFormRow extends Model
     /**
      *  @var string
      */
-    const FORM_TYPE_NUMBER    = 'number';
+    const FORM_TYPE_NUMBER = 'number';
 
     /**
      * @var string
      */
-    const FORM_TYPE_TEXT      = 'text';
+    const FORM_TYPE_TEXT = 'text';
 
     /**
      * @var array
      */
-    protected $fillable    = [
+    protected $fillable = [
         'name',
         'application_form_id',
         'type',
@@ -60,21 +58,13 @@ class ApplicationFormRow extends Model
      * @var array
      */
     protected $casts = [
-        'required' => 'boolean'
+        'required' => 'boolean',
     ];
 
     /**
      * @var array
      */
     private $_inputfiels = null;
-
-    /**
-     * @return HasOne
-     */
-    public function applicationFormRowName(): HasOne
-    {
-        return $this->hasOne(Text::class, 'id', 'name')->withTrashed();
-    }
 
     /**
      * @return HasMany

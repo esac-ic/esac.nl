@@ -22,7 +22,7 @@
             {!! Form::open(['method' => $fields['method'], 'url' => $fields['url']]) !!}
             <input type="hidden" name="id" value="{{($mailList != null) ? $mailList->getAddress() : ""}}">
             <div class="form-group">
-                {!! Form::label('address', trans('MailList.address')) !!}
+                {!! Form::label('address', 'Email') !!}
                 <div class="input-group">
                     {!! Form::text('address', ($mailList != null) ? explode('@',$mailList->getAddress())[0] : "", ['class' => 'form-control','required' => 'required','aria-describedby' => 'basic-addon3']) !!}
                     <div class="input-group-append">
@@ -34,8 +34,8 @@
     </div>
 
     <div class="my-4">
-        {!! Form::submit(trans('menu.save'), ['class'=> 'btn btn-primary'] ) !!}
+        {!! Form::submit('Save', ['class'=> 'btn btn-primary'] ) !!}
         {!! Form::close() !!}
-        <a class="btn btn-danger btn-close" href="{{ ($mailList == null) ? ('/mailList') : ('/mailList/' . $mailList->address)}}">{{trans('menu.cancel')}}</a>
+        <a class="btn btn-danger btn-close" href="{{ ($mailList == null) ? ('/mailList') : ('/mailList/' . $mailList->address)}}">{{'Cancel'}}</a>
     </div>
 @endsection

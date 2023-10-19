@@ -24,8 +24,7 @@ class MenuServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        $this->app->singleton('MenuSingleton', function($app)
-        {
+        $this->app->singleton('MenuSingleton', function ($app) {
             return new MenuSingleton();
         });
     }

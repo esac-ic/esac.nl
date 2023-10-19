@@ -3,13 +3,10 @@
 namespace App\Exceptions;
 
 use App\CustomClasses\MenuSingleton;
-use App\MenuItem;
-use Throwable;
-use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Auth\AuthenticationException;
 use Illuminate\Contracts\Container\Container;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
-use Illuminate\Validation\UnauthorizedException;
+use Throwable;
 
 class Handler extends ExceptionHandler
 {
@@ -56,29 +53,26 @@ class Handler extends ExceptionHandler
      */
     public function render($request, Throwable $exception)
     {
-        if($this->_menu === null){
-            $this->_menu = new MenuSingleton(new MenuItem());
+        if ($this->_menu === null) {
+            $this->_menu = new MenuSingleton();
         }
 
-        if(method_exists($exception,"getStatusCode")){
+        if (method_exists($exception, "getStatusCode")) {
             $menu = $this->_menu;
-            $curPageName = trans('validation.error');
-            switch ($exception->getStatusCode()){
+            $curPageName = 'Error';
+            switch ($exception->getStatusCode()) {
                 case 403:
-                    return response()->view('errors.403',compact('menu','curPageName'),403);
+                    return response()->view('errors.403', compact('menu', 'curPageName'), 403);
                 case 404:
-                    return response()->view('errors.404',compact('menu','curPageName'),404);
+                    return response()->view('errors.404', compact('menu', 'curPageName'), 404);
                 case 503:
-                    return response()->view('errors.503',compact('menu','curPageName'),503);
+                    return response()->view('errors.503', compact('menu', 'curPageName'), 503);
                 default:
                     return parent::render($request, $exception);
             }
         } else {
             return parent::render($request, $exception);
         }
-
-
-
 
     }
 

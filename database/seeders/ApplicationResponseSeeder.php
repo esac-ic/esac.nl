@@ -16,7 +16,7 @@ class ApplicationResponseSeeder extends Seeder
     {
 
         $applicationResponse = new ApplicationResponse();
-        $applicationResponse->agenda_id=1;
+        $applicationResponse->agenda_id = 1;
         $applicationResponse->inschrijf_form_id = 1;
         $applicationResponse->user_id = 1;
         $applicationResponse->save();

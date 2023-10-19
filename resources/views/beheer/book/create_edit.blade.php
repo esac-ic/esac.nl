@@ -26,24 +26,24 @@
         <div class="card-body">
             {!! Form::open(['method' => $fields['method'], 'url' => $fields['url']]) !!}
             <div class="form-group">
-                {!! Form::label('title', trans('book.title')) !!}
+                {!! Form::label('title', 'Title') !!}
                 {!! Form::text('title', ($book != null) ? $book->title : "", ['class' => 'form-control','required' => 'required']) !!}
             </div>
             <div class="form-row">
                 <div class="form-group col-md-3">
-                    {!! Form::label('year', trans('book.year')) !!}
+                    {!! Form::label('year', 'Year') !!}
                     {!! Form::number('year', ($book != null) ? $book->year : "", ['class' => 'form-control','required' => 'required']) !!}
                 </div>
                 <div class="form-group col-md-3">
-                    {!! Form::label('country', trans('book.country')) !!}
+                    {!! Form::label('country', 'Country') !!}
                     {!! Form::text('country', ($book != null) ? $book->country : "", ['class' => 'form-control','required' => 'required']) !!}
                 </div>
                 <div class="form-group col-md-3">
-                    {!! Form::label('type', trans('book.type')) !!}
+                    {!! Form::label('type', 'Type') !!}
                     {!! Form::text('type', ($book != null) ? $book->type : "", ['class' => 'form-control','required' => 'required']) !!}
                 </div>
                 <div class="form-group col-md-3">
-                    {!! Form::label('code', trans('book.code')) !!}
+                    {!! Form::label('code', 'Code') !!}
                     {!! Form::text('code', ($book != null) ? $book->code : "", ['class' => 'form-control','required' => 'required']) !!}
                 </div>
             </div>
@@ -51,8 +51,8 @@
     </div>
 
     <div class="my-4">
-        {!! Form::submit(trans('menu.save'), ['class'=> 'btn btn-primary'] ) !!}
+        {!! Form::submit('Save', ['class'=> 'btn btn-primary'] ) !!}
         {!! Form::close() !!}
-        <a class="btn btn-danger btn-close" href="{{ ($book == null) ? ('/books') : ('/books/' . $book->id)}}">{{trans('menu.cancel')}}</a>
+        <a class="btn btn-danger btn-close" href="{{ ($book == null) ? ('/books') : ('/books/' . $book->id)}}">{{'Cancel'}}</a>
     </div>
 @endsection

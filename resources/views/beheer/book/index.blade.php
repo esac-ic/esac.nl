@@ -1,7 +1,7 @@
 @extends('layouts.beheer')
 
 @section('title')
-{{trans("book.books")}}
+{{'Books'}}
 @endsection
 
 @section('content')
@@ -16,14 +16,14 @@
 
     <div class="row mb-3">
         <div class="col-md-6">
-            <h1>{{trans("book.books")}}</h1>
+            <h1>{{'Books'}}</h1>
         </div>
 
         <div class="col-md-6">
             <div class="btn-group mt-2 float-md-right" role="group" aria-label="Actions">
                 <a href="{{url('books/create')}}" class="btn btn-primary">
-                    <span title="{{trans("user.new")}}" class="ion-plus" aria-hidden="true"></span>
-                    {{trans("book.new")}}
+                    <span title="{{'New user'}}" class="ion-plus" aria-hidden="true"></span>
+                    {{'New book'}}
                 </a>
             </div>
         </div>
@@ -31,12 +31,12 @@
     <table id="users" class="table table-striped dt-responsive nowrap" style="width:100%">
         <thead>
         <tr>
-            <th>{{trans('book.title')}}</th>
-            <th>{{trans('book.year')}}</th>
-            <th>{{trans('book.country')}}</th>
-            <th>{{trans('book.type')}}</th>
-            <th>{{trans('book.code')}}</th>
-            <th>{{trans('menu.beheer')}}</th>
+            <th>{{'Title'}}</th>
+            <th>{{'Year'}}</th>
+            <th>{{'Country'}}</th>
+            <th>{{'Type'}}</th>
+            <th>{{'Code'}}</th>
+            <th>{{'Management'}}</th>
         </tr>
         </thead>
         <tbody>
@@ -49,8 +49,8 @@
                 <td>{{$book->type}}</td>
                 <td>{{$book->code}}</td>
                 <td>
-                    <a class="mr-1 ml-1" href="{{url('/books/' . $book->id . '/edit')}}"><span title="{{trans('book.edit')}}" class="ion-edit font-size-120" aria-hidden="true"></span></a>
-                    <a class="mr-1 ml-1" href="{{url('/books/'. $book->id)}}"><span title="{{trans("book.show")}}" class="ion-eye font-size-120" aria-hidden="true"></span></a>
+                    <a class="mr-1 ml-1" href="{{url('/books/' . $book->id . '/edit')}}"><span title="{{'Edit book'}}" class="ion-edit font-size-120" aria-hidden="true"></span></a>
+                    <a class="mr-1 ml-1" href="{{url('/books/'. $book->id)}}"><span title="Show book" class="ion-eye font-size-120" aria-hidden="true"></span></a>
                 </td>
             </tr>
         @endforeach

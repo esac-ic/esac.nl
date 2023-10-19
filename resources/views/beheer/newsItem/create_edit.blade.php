@@ -27,23 +27,19 @@
             </div>
             <div class="card-body">
                 <div class="form-group">
-                    {!! Form::label('NL_title', trans('NewsItem.titleNl')) !!}
-                    {!! Form::text('NL_title', ($newsItem != null) ? $newsItem->newsItemTitle->NL_text : "", ['class' => 'form-control','required' => 'required']) !!}
+                    {!! Form::label('title', 'Title') !!}
+                    {!! Form::text('title', ($newsItem != null) ? $newsItem->title : "", ['class' => 'form-control','required' => 'required']) !!}
                 </div>
                 <div class="form-group">
-                    {!! Form::label('name', trans('NewsItem.titleEn')) !!}
-                    {!! Form::text('EN_title', ($newsItem != null) ? $newsItem->newsItemTitle->EN_text : "", ['class' => 'form-control','required' => 'required']) !!}
-                </div>
-                <div class="form-group">
-                    {!! Form::label('author', trans('NewsItem.author')) !!}
+                    {!! Form::label('author', 'Author') !!}
                     <auto-complete-field
                             name="author"
                             url="{{ route('user.autoComplete') }}"
-                            placeholder="{{ trans('NewsItem.author') }}"
+                            placeholder="Author"
                             value="{{ ($newsItem != null) ? $newsItem->author : "" }}">
                     </auto-complete-field>
                 </div>
-                <span>{{trans("NewsItem.newsImage")}}</span>
+                <span>{{'Image'}}</span>
                 <div class="form-group mt-2">
                     <div class="custom-file">
                         <input type="file" class="custom-file-input" id="thumbnail" name="thumbnail">
@@ -51,36 +47,31 @@
                     </div>
                 </div>
                 <div class="form-group">
-                    {{Form::label('content_nl',  trans('NewsItem.textNl'))}}
-                    {{Form::textarea('NL_text',($newsItem != null) ? $newsItem->newsItemText->NL_text : "",array('class' => 'form-control', 'id' => 'content_nl'))}}
-                </div>
-                <div class="form-group">
-                    {{Form::label('content_en',  trans('NewsItem.textEn'))}}
-                    {{Form::textarea('EN_text',($newsItem != null) ?  $newsItem->newsItemText->EN_text : "",array('class' => 'form-control', 'id' => 'content_en'))}}
+                    {{Form::label('text',  'News message')}}
+                    {{Form::textarea('text',($newsItem != null) ?  $newsItem->text : "",array('class' => 'form-control', 'id' => 'content'))}}
                 </div>
             </div>
         </div>
 
         <div class="my-4">
-            {!! Form::submit(trans('menu.save'), ['class'=> 'btn btn-primary'] ) !!}
+            {!! Form::submit('Save', ['class'=> 'btn btn-primary'] ) !!}
             {!! Form::close() !!}
-            <a class="btn btn-danger btn-close" href="{{ ($newsItem == null) ? ('/newsItems') : ('/newsItems/' . $newsItem->id)}}">{{trans('menu.cancel')}}</a>
+            <a class="btn btn-danger btn-close" href="{{ ($newsItem == null) ? ('/newsItems') : ('/newsItems/' . $newsItem->id)}}">Cancel</a>
         </div>
     </div>
 @endsection
 
 @push('scripts')
     <script>
-        $('.custom-file-input').on('change', function() { 
-           let fileName = $(this).val().split('\\').pop(); 
-           $(this).next('.custom-file-label').addClass("selected").html(fileName); 
+        $('.custom-file-input').on('change', function() {
+           let fileName = $(this).val().split('\\').pop();
+           $(this).next('.custom-file-label').addClass("selected").html(fileName);
         });
     </script>
 
     <script>
         $(document).ready(function() {
-            $('#content_nl').summernote(summernoteSettings);
-            $('#content_en').summernote(summernoteSettings);
+            $('#content').summernote(summernoteSettings);
         });
     </script>
 @endpush

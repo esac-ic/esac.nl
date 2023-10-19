@@ -7,9 +7,10 @@ use App\Models\ApplicationForm\ApplicationForm;
 use App\Models\ApplicationForm\ApplicationFormRow;
 use App\Models\ApplicationForm\ApplicationResponse;
 use App\User;
-use Artisan;
 use Carbon\Carbon;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
+use Illuminate\Support\Facades\Artisan;
+use Illuminate\Support\Facades\Config;
 use TestCase;
 
 class RegisterForAgendaItemTest extends TestCase
@@ -20,7 +21,7 @@ class RegisterForAgendaItemTest extends TestCase
 
     private $user;
 
-    protected function setUp() : void
+    protected function setUp(): void
     {
         parent::setUp();
         $this->user = $user = factory(User::class)->create();
@@ -30,43 +31,47 @@ class RegisterForAgendaItemTest extends TestCase
         session()->start();
     }
 
-    protected function tearDown()  : void
+    protected function tearDown(): void
     {
         Artisan::call('migrate:reset');
         parent::tearDown();
     }
 
     /** @test */
-    public function show_event_registration_form_for_not_existing_agenda_item() {
+    public function show_event_registration_form_for_not_existing_agenda_item()
+    {
         $response = $this->get($this->url . 3424);
 
         $response->assertStatus(404);
     }
 
     /** @test */
-    public function show_event_registration_form_for_agenda_item_without_registration_form() {
+    public function show_event_registration_form_for_agenda_item_without_registration_form()
+    {
         $agendaItem = factory(AgendaItem::class)->create();
         $agendaItem->subscription_endDate = Carbon::now()->addWeek();
         $agendaItem->save();
         $response = $this->get($this->url . $agendaItem->id);
 
         $response->assertStatus(200);
-        $response->assertViewHas('error', trans("forms.form_not_available"));
+        $response->assertViewHas('error', 'ERROR: No registration form available for this activity.');
     }
 
     /** @test */
-    public function show_event_registration_form_for_agenda_item_with_past_subscription_date() {
+    public function show_event_registration_form_for_agenda_item_with_past_subscription_date()
+    {
         $agendaItem = factory(AgendaItem::class)->create();
         $agendaItem->subscription_endDate = Carbon::now()->subWeek();
         $agendaItem->save();
         $response = $this->get($this->url . $agendaItem->id);
 
         $response->assertStatus(200);
-        $response->assertViewHas('error', trans("forms.signupexpired"));
+        $response->assertViewHas('error', 'The registration date has expired, so you can no longer subscribe.');
     }
 
     /** @test */
-    public function show_event_registration_form_for_agenda_item_where_user_is_already_registered() {
+    public function show_event_registration_form_for_agenda_item_where_user_is_already_registered()
+    {
         $agendaItem = factory(AgendaItem::class)->create();
         $applicationForm = factory(ApplicationForm::class)->create();
 
@@ -77,17 +82,18 @@ class RegisterForAgendaItemTest extends TestCase
         ApplicationResponse::create([
             'user_id' => $this->user->id,
             'agenda_id' => $agendaItem->id,
-            'inschrijf_form_id' => $applicationForm->id
+            'inschrijf_form_id' => $applicationForm->id,
         ]);
 
         $response = $this->get($this->url . $agendaItem->id);
 
         $response->assertStatus(200);
-        $response->assertViewHas('error', trans("forms.duplicatesignup"));
+        $response->assertViewHas('error', 'You have already signed up for this event.');
     }
 
     /** @test */
-    public function register_for_agenda_item(): void {
+    public function register_for_agenda_item(): void
+    {
         $agendaItem = factory(AgendaItem::class)->create();
         $applicationForm = factory(ApplicationForm::class)->create();
 
@@ -96,16 +102,16 @@ class RegisterForAgendaItemTest extends TestCase
         $agendaItem->save();
 
         $applicationFormRowNumber = factory(ApplicationFormRow::class)->create([
-           'application_form_id' => $applicationForm->id,
-           'type' => ApplicationFormRow::FORM_TYPE_NUMBER
+            'application_form_id' => $applicationForm->id,
+            'type' => ApplicationFormRow::FORM_TYPE_NUMBER,
         ]);
         $applicationFormRowText = factory(ApplicationFormRow::class)->create([
-           'application_form_id' => $applicationForm->id,
-           'type' => ApplicationFormRow::FORM_TYPE_TEXT
+            'application_form_id' => $applicationForm->id,
+            'type' => ApplicationFormRow::FORM_TYPE_TEXT,
         ]);
         $applicationFormRowTextBox = factory(ApplicationFormRow::class)->create([
-           'application_form_id' => $applicationForm->id,
-           'type' => ApplicationFormRow::FORM_TYPE_TEXT_BOX
+            'application_form_id' => $applicationForm->id,
+            'type' => ApplicationFormRow::FORM_TYPE_TEXT_BOX,
         ]);
 
         $body = [
@@ -134,7 +140,8 @@ class RegisterForAgendaItemTest extends TestCase
     }
 
     /** @test */
-    public function register_user_for_agenda_item_as_normale_member_should_not_be_allowed(): void {
+    public function register_user_for_agenda_item_as_normale_member_should_not_be_allowed(): void
+    {
         $userToRegister = factory(User::class)->create();
         $agendaItem = factory(AgendaItem::class)->create();
         $applicationForm = factory(ApplicationForm::class)->create();
@@ -144,16 +151,16 @@ class RegisterForAgendaItemTest extends TestCase
         $agendaItem->save();
 
         $applicationFormRowNumber = factory(ApplicationFormRow::class)->create([
-           'application_form_id' => $applicationForm->id,
-           'type' => ApplicationFormRow::FORM_TYPE_NUMBER
+            'application_form_id' => $applicationForm->id,
+            'type' => ApplicationFormRow::FORM_TYPE_NUMBER,
         ]);
         $applicationFormRowText = factory(ApplicationFormRow::class)->create([
-           'application_form_id' => $applicationForm->id,
-           'type' => ApplicationFormRow::FORM_TYPE_TEXT
+            'application_form_id' => $applicationForm->id,
+            'type' => ApplicationFormRow::FORM_TYPE_TEXT,
         ]);
         $applicationFormRowTextBox = factory(ApplicationFormRow::class)->create([
-           'application_form_id' => $applicationForm->id,
-           'type' => ApplicationFormRow::FORM_TYPE_TEXT_BOX
+            'application_form_id' => $applicationForm->id,
+            'type' => ApplicationFormRow::FORM_TYPE_TEXT_BOX,
         ]);
 
         $body = [
@@ -169,8 +176,9 @@ class RegisterForAgendaItemTest extends TestCase
     }
 
     /** @test */
-    public function register_user_for_agenda_item_as_administrator(): void {
-        $this->user->roles()->attach(\Config::get('constants.Content_administrator'));
+    public function register_user_for_agenda_item_as_administrator(): void
+    {
+        $this->user->roles()->attach(Config::get('constants.Content_administrator'));
         $userToRegister = factory(User::class)->create();
         $agendaItem = factory(AgendaItem::class)->create();
         $applicationForm = factory(ApplicationForm::class)->create();
@@ -180,16 +188,16 @@ class RegisterForAgendaItemTest extends TestCase
         $agendaItem->save();
 
         $applicationFormRowNumber = factory(ApplicationFormRow::class)->create([
-           'application_form_id' => $applicationForm->id,
-           'type' => ApplicationFormRow::FORM_TYPE_NUMBER
+            'application_form_id' => $applicationForm->id,
+            'type' => ApplicationFormRow::FORM_TYPE_NUMBER,
         ]);
         $applicationFormRowText = factory(ApplicationFormRow::class)->create([
-           'application_form_id' => $applicationForm->id,
-           'type' => ApplicationFormRow::FORM_TYPE_TEXT
+            'application_form_id' => $applicationForm->id,
+            'type' => ApplicationFormRow::FORM_TYPE_TEXT,
         ]);
         $applicationFormRowTextBox = factory(ApplicationFormRow::class)->create([
-           'application_form_id' => $applicationForm->id,
-           'type' => ApplicationFormRow::FORM_TYPE_TEXT_BOX
+            'application_form_id' => $applicationForm->id,
+            'type' => ApplicationFormRow::FORM_TYPE_TEXT_BOX,
         ]);
 
         $body = [

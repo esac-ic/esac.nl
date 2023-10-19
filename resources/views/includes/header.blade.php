@@ -21,58 +21,58 @@
 <script>
 var headerHome = [{
     background: 'header-img1.jpeg',
-    heading: '{{trans('front-end/home.headerMessages.stunt_title')}}',
-    message: '{{trans('front-end/home.headerMessages.stunt_desc')}}',
+    heading: '{{'Stunts and more'}}',
+    message: '{{'With the Stuntcommittee we organize stunts during events such as abseiling, zip lining and climbing.'}}',
     buttonUrl: '{{url('stunt')}}',
-    buttonText: '{{trans('front-end/home.moreInfo')}}'
+    buttonText: '{{'More Information'}}'
 }, {
     background: 'header-img2.jpeg',
-    heading: '{{trans('front-end/home.headerMessages.tourskiecursus_title')}}',
-    message: '{{trans('front-end/home.headerMessages.tourskiecursus_desc')}}',
+    heading: '{{'Ski mountaineering introduction'}}',
+    message: '{{'Regularly, an introductory course to the ski mountaineering is organized during the winter week.'}}',
     buttonUrl: '{{url('courses')}}',
-    buttonText: '{{trans('front-end/home.moreInfo')}}'
+    buttonText: '{{'More Information'}}'
 }, {
     background: 'header-img3.jpeg',
-    heading: '{{trans('front-end/home.headerMessages.klimweekend_title')}}',
-    message: '{{trans('front-end/home.headerMessages.klimweekend_desc')}}',
+    heading: '{{'Climbing weekends in Belgium'}}',
+    message: '{{'The ESAC annually organizes about 12 climbing weekends to Belgium, Germany or beyond.'}}',
     buttonUrl: '{{url('klimweekenden')}}',
-    buttonText: '{{trans('front-end/home.moreInfo')}}'
+    buttonText: '{{'More Information'}}'
 }, {
     background: 'header-img4.jpeg',
-    heading: '{{trans('front-end/home.headerMessages.eplakka_title')}}',
-    message: '{{trans('front-end/home.headerMessages.eplakka_desc')}}',
+    heading: '{{'Climbing competition'}}',
+    message: '{{'The EPlaKKa is held every year to determine who is the best climber of the ESAC.'}}',
     buttonUrl: '{{url('eplakka')}}',
-    buttonText: '{{trans('front-end/home.moreInfo')}}'
+    buttonText: '{{'More Information'}}'
 }, {
     background: 'header-img5.jpeg',
-    heading: '{{trans('front-end/home.headerMessages.ski_title')}}',
-    message: '{{trans('front-end/home.headerMessages.ski_desc')}}',
+    heading: '{{'Ski in the Alps'}}',
+    message: '{{'During the carnival holiday the ESAC leaves travels a week to the Alps to enjoy the snow.'}}',
     buttonUrl: '{{url('courses')}}',
-    buttonText: '{{trans('front-end/home.moreInfo')}}'
+    buttonText: '{{'More Information'}}'
 },  {
     background: 'header-img7.jpeg',
-    heading: '{{trans('front-end/home.headerMessages.alpinecursus_title')}}',
-    message: '{{trans('front-end/home.headerMessages.alpinecursus_desc')}}',
+    heading: '{{'Mountaineering courses'}}',
+    message: '{{'The NSAC offers courses at various levels with the ultimate goal of making alpine trips independently.'}}',
     buttonUrl: '{{url('courses')}}',
-    buttonText: '{{trans('front-end/home.moreInfo')}}'
+    buttonText: '{{'More Information'}}'
 }, {
     background: 'header-img8.jpeg',
-    heading: '{{trans('front-end/home.headerMessages.alpine_title')}}',
-    message: '{{trans('front-end/home.headerMessages.alpine_desc')}}',
+    heading: '{{'Mountaineering'}}',
+    message: '{{'Mountaineering is the king discipline in mountain sports where all facets come together.'}}',
     buttonUrl: '{{url('courses')}}',
-    buttonText: '{{trans('front-end/home.moreInfo')}}'
+    buttonText: '{{'More Information'}}'
 }, {
     background: 'header-img9.jpeg',
-    heading: '{{trans('front-end/home.headerMessages.sociability_title')}}',
-    message: '{{trans('front-end/home.headerMessages.sociability_desc')}}',
+    heading: '{{'Fun!'}}',
+    message: '{{'During and after climbing there is of course also place for good food and social activities.'}}',
     buttonUrl: '{{url('agenda')}}',
-    buttonText: '{{trans('front-end/home.moreInfo')}}'
+    buttonText: '{{'More Information'}}'
 }, {
     background: 'header-img10.jpeg',
-    heading: '{{trans('front-end/home.headerMessages.bouldering_title')}}',
-    message: '{{trans('front-end/home.headerMessages.bouldering_desc')}}',
+    heading: '{{'Bouldering'}}',
+    message: '{{'In addition to sports climbing, we also do a lot of bouldering, including in Fontainebleau.'}}',
     buttonUrl: '{{url('agenda')}}',
-    buttonText: '{{trans('front-end/home.moreInfo')}}'
+    buttonText: '{{'More Information'}}'
     }
 ];
 

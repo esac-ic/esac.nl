@@ -1,11 +1,11 @@
 <?php
 
 namespace Tests\Feature\News;
-use Config;
-use Illuminate\Foundation\Testing\DatabaseMigrations;
 use App\NewsItem;
 use App\User;
-use Artisan;
+use Illuminate\Foundation\Testing\DatabaseMigrations;
+use Illuminate\Support\Facades\Artisan;
+use Illuminate\Support\Facades\Config;
 use TestCase;
 
 class DeleteNewsItemTest extends TestCase
@@ -14,6 +14,7 @@ class DeleteNewsItemTest extends TestCase
 
     private $url = 'newsItems';
     private $newsItem;
+    private $user;
 
     protected function setUp(): void
     {

@@ -3,7 +3,6 @@
 namespace Tests\Feature\Pages;
 
 use App\MenuItem;
-use App\Rol;
 use App\User;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Support\Facades\Artisan;
@@ -51,11 +50,9 @@ class CreatePageTest extends TestCase
             'itemType' => 'subItem',
             'parentItem' => 0,
             'afterItem' => 0,
-            'NL_text' => 'Test titel',
-            'EN_text' => 'Test title',
-            'content_nl' => 'Hele leuke test inhoud.',
-            'content_en' => 'Very cool test content.',
-            '_token'  => csrf_token(),
+            'name' => 'Test titel',
+            'content' => 'Hele leuke test inhoud.',
+            '_token' => csrf_token(),
         ];
 
         $response = $this->post($this->url, $body);
@@ -68,7 +65,7 @@ class CreatePageTest extends TestCase
         // Check whether a new page has been added to DB, other test will make sure content is actually correct.
         $menuItem = MenuItem::all()->last();
 
-        $this->assertEquals($body['content_nl'], $menuItem->content->NL_text);
+        $this->assertEquals($body['content'], $menuItem->content);
     }
 
     public function admin_can_create_page_with_emoji()
@@ -78,11 +75,9 @@ class CreatePageTest extends TestCase
             'itemType' => 'subItem',
             'parentItem' => 0,
             'afterItem' => 0,
-            'NL_text' => 'Test titel 😀',
-            'EN_text' => 'Test title 😀',
-            'content_nl' => 'Hele leuke test inhoud. 😀',
-            'content_en' => 'Very cool test content. 😀',
-            '_token'  => csrf_token(),
+            'name' => 'Test title 😀',
+            'content' => 'Hele leuke test inhoud. 😀',
+            '_token' => csrf_token(),
         ];
 
         $response = $this->post($this->url, $body);
@@ -95,7 +90,7 @@ class CreatePageTest extends TestCase
         // Check whether a new page has been added to DB, other test will make sure content is actually correct.
         $menuItem = MenuItem::all()->last();
 
-        $this->assertEquals($body['content_nl'], $menuItem->content->NL_text);
+        $this->assertEquals($body['content'], $menuItem->content);
     }
 
     /**
@@ -108,11 +103,9 @@ class CreatePageTest extends TestCase
             'itemType' => 'subItem',
             'parentItem' => 0,
             'afterItem' => 0,
-            'NL_text' => 'Test titel',
-            'EN_text' => 'Test title',
-            'content_nl' => 'Hele leuke test inhoud.',
-            'content_en' => 'Very cool test content.',
-            '_token'  => csrf_token(),
+            'name' => 'Test titel',
+            'content' => 'Very cool test content.',
+            '_token' => csrf_token(),
         ];
 
         // Give the user all roles except for content admin.
@@ -139,11 +132,9 @@ class CreatePageTest extends TestCase
             'itemType' => 'subItem',
             'parentItem' => 0,
             'afterItem' => 0,
-            'NL_text' => 'Test titel',
-            'EN_text' => 'Test title',
-            'content_nl' => 'Hele leuke test inhoud.',
-            'content_en' => 'Very cool test content.',
-            '_token'  => csrf_token(),
+            'name' => 'Test title',
+            'content' => 'Very cool test content.',
+            '_token' => csrf_token(),
         ];
 
         $response = $this->post($this->url, $body);
@@ -155,10 +146,8 @@ class CreatePageTest extends TestCase
         $this->assertEquals($menuItem->parent_id, $body['parentItem']);
         $this->assertEquals($menuItem->urlName, $body['urlName']);
         $this->assertEquals($menuItem->after, $body['afterItem']);
-        $this->assertEquals($menuItem->text->NL_text, $body['NL_text']);
-        $this->assertEquals($menuItem->text->EN_text, $body['EN_text']);
-        $this->assertEquals($menuItem->content->NL_text, $body['content_nl']);
-        $this->assertEquals($menuItem->content->EN_text, $body['content_en']);
+        $this->assertEquals($menuItem->name, $body['name']);
+        $this->assertEquals($menuItem->content, $body['content']);
     }
 
     /**
@@ -170,11 +159,9 @@ class CreatePageTest extends TestCase
             'urlName' => 'test',
             'itemType' => 'standAlone',
             'afterItem' => 0,
-            'NL_text' => 'Test titel',
-            'EN_text' => 'Test title',
-            'content_nl' => 'Hele leuke test inhoud.',
-            'content_en' => 'Very cool test content.',
-            '_token'  => csrf_token(),
+            'name' => 'Test title',
+            'content' => 'Very cool test content.',
+            '_token' => csrf_token(),
         ];
 
         $response = $this->post($this->url, $body);
@@ -186,10 +173,8 @@ class CreatePageTest extends TestCase
         $this->assertNull($menuItem->parent_id);
         $this->assertEquals($menuItem->urlName, $body['urlName']);
         $this->assertEquals($menuItem->after, $body['afterItem']);
-        $this->assertEquals($menuItem->text->NL_text, $body['NL_text']);
-        $this->assertEquals($menuItem->text->EN_text, $body['EN_text']);
-        $this->assertEquals($menuItem->content->NL_text, $body['content_nl']);
-        $this->assertEquals($menuItem->content->EN_text, $body['content_en']);
+        $this->assertEquals($menuItem->name, $body['name']);
+        $this->assertEquals($menuItem->content, $body['content']);
     }
 
     /**
@@ -202,11 +187,9 @@ class CreatePageTest extends TestCase
             'itemType' => 'subItem',
             'parentItem' => 0,
             'afterItem' => 0,
-            'NL_text' => 'Test titel',
-            'EN_text' => 'Test title',
-            'content_nl' => 'Hele leuke test inhoud.',
-            'content_en' => 'Very cool test content.',
-            '_token'  => csrf_token(),
+            'name' => 'Test title',
+            'content' => 'Very cool test content.',
+            '_token' => csrf_token(),
         ];
 
         $response = $this->post($this->url, $body);
@@ -215,7 +198,7 @@ class CreatePageTest extends TestCase
         $menuItem = MenuItem::all()->last();
 
         $response->assertSessionHasNoErrors();
-        $this->assertFalse((bool)$menuItem->login);
+        $this->assertFalse((bool) $menuItem->login);
 
         $body['urlName'] = 'test2';
         $body['login'] = true;
@@ -225,7 +208,7 @@ class CreatePageTest extends TestCase
         $menuItem = MenuItem::all()->last();
 
         $response->assertSessionHasNoErrors();
-        $this->assertTrue((bool)$menuItem->login);
+        $this->assertTrue((bool) $menuItem->login);
     }
 
     /**
@@ -238,11 +221,9 @@ class CreatePageTest extends TestCase
             'itemType' => 'subItem',
             'parentItem' => 0,
             'afterItem' => -1,
-            'NL_text' => 'Test titel',
-            'EN_text' => 'Test title',
-            'content_nl' => 'Hele leuke test inhoud.',
-            'content_en' => 'Very cool test content.',
-            '_token'  => csrf_token(),
+            'name' => 'Test title',
+            'content' => 'Very cool test content.',
+            '_token' => csrf_token(),
         ];
 
         $response = $this->post($this->url, $body);
@@ -261,7 +242,7 @@ class CreatePageTest extends TestCase
         $menuItem = MenuItem::all()->last();
 
         $response->assertSessionHasNoErrors();
-        $this->assertTrue((bool)$menuItem->login);
+        $this->assertTrue((bool) $menuItem->login);
     }
 
     /**
@@ -271,7 +252,7 @@ class CreatePageTest extends TestCase
     public function empty_body_meaningful_error()
     {
         $body = [
-            '_token'  => csrf_token(),
+            '_token' => csrf_token(),
         ];
 
         $response = $this->post($this->url, $body);
@@ -284,10 +265,8 @@ class CreatePageTest extends TestCase
             'urlName',
             'itemType',
             'afterItem',
-            'NL_text',
-            'EN_text',
-            'content_nl',
-            'content_en',
+            'name',
+            'content',
         ]);
 
         // No pages should be created.
@@ -303,11 +282,9 @@ class CreatePageTest extends TestCase
             'urlName' => 'test',
             'itemType' => 'subItem',
             'afterItem' => 0,
-            'NL_text' => 'Test titel',
-            'EN_text' => 'Test title',
-            'content_nl' => 'Hele leuke test inhoud.',
-            'content_en' => 'Very cool test content.',
-            '_token'  => csrf_token(),
+            'name' => 'Test title',
+            'content' => 'Very cool test content.',
+            '_token' => csrf_token(),
         ];
 
         $response = $this->post($this->url, $body);

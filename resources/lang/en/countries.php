@@ -6,7 +6,7 @@
  * Time: 16:59
  */
 
-return array (
+return array(
     'AF' => 'Afghanistan',
     'AX' => 'Åland Islands',
     'AL' => 'Albania',

@@ -2,19 +2,12 @@
 
 namespace Tests\Feature\Agenda;
 
+use App\AgendaItem;
+use App\User;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
-use Artisan;
-use Carbon\Carbon;
+use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Config;
 use TestCase;
-use Illuminate\Foundation\Testing\WithFaker;
-use Illuminate\Foundation\Testing\RefreshDatabase;
-use App\Rol;
-use App\User;
-use App\Text;
-use App\AgendaItem;
-use App\AgendaItemCategorie;
-use App\ApplicationForm;
 
 class DeleteAgendaItemTest extends TestCase
 {
@@ -27,8 +20,8 @@ class DeleteAgendaItemTest extends TestCase
      * @var
      */
     private $user;
-    
-    protected function setUp() : void
+
+    protected function setUp(): void
     {
         parent::setUp();
         $this->user = $user = factory(User::class)->create();
@@ -38,13 +31,14 @@ class DeleteAgendaItemTest extends TestCase
         session()->start();
     }
 
-    protected function tearDown() : void
+    protected function tearDown(): void
     {
         Artisan::call('migrate:reset');
         parent::tearDown();
     }
     /** @test */
-    public function DeleteAgendaItem(){
+    public function DeleteAgendaItem()
+    {
         $agendaItem = factory(AgendaItem::class)->create();
 
         $response = $this->delete($this->url . '/' . $agendaItem->id);

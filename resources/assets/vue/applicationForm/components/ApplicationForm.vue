@@ -2,7 +2,7 @@
     <div class="card">
         <div class="card-header">
             <h3>
-                Formulier rijen
+                Form rows
                 <span v-on:click="addRow()" class="float-right" style="cursor: pointer">
                     <i class="ion-plus"></i>
                 </span>
@@ -11,30 +11,17 @@
         <div class="card-body">
             <div v-for="(row, index) in applicationRows" :key="index" class="application-form-row">
                 <div class="row">
-                    <div class="col-md-5">
-                        <label>Naam (NL)</label>
-                        <input type="text"
-                               class="form-control"
-                               v-model="row.nameNL"
-                               :name="'rows[' + index + '][nl_name]'"
-                               required>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label>Name</label>
+                            <input type="text"
+                                class="form-control"
+                                v-model="row.name"
+                                :name="'rows[' + index + '][name]'"
+                                required>
+                        </div>
                     </div>
-                    <div class="col-md-5">
-                        <label>Naam (EN)</label>
-                        <input type="text"
-                               class="form-control"
-                               v-model="row.nameEN"
-                               :name="'rows[' + index + '][en_name]'"
-                               required>
-                    </div>
-                    <div class="col-md-1">
-                        <button type="button" class="btn btn-danger" v-on:click="deleteRow(index)">
-                            <i class="ion-trash-a"></i>
-                        </button>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-md-5">
+                    <div class="col-md-2">
                         <div class="form-group">
                             <label>Type</label>
                             <select class="form-control" :name="'rows[' + index + '][type]'" v-model="row.type" required>
@@ -42,13 +29,21 @@
                             </select>
                         </div>
                     </div>
-                    <div class="col-md-5">
+                    <div class="col-md-2">
                         <div class="form-group">
-                            <label>Verplicht</label>
+                            <label>Mandatory</label>
                             <input type="checkbox"
                                    v-model="row.required"
                                    :name="'rows[' + index + '][required]'"
                                    class="form-control">
+                        </div>
+                    </div>
+                    <div class="col-md-1">
+                        <div class="form-group pl-4 pr-4">
+                            <label>Delete</label>
+                            <button type="button" class="btn btn-danger form-control" v-on:click="deleteRow(index)">
+                                <i class="ion-trash-a"></i>
+                            </button>
                         </div>
                     </div>
                 </div>
@@ -62,8 +57,8 @@
 </template>
 
 <script>
-    import {FORM_TYPES, ROW_OPTION_FORM_TYPE} from '../constants';
-    import ApplicationFormRowOptions from "./ApplicationFormRowOptions";
+    import { FORM_TYPES, ROW_OPTION_FORM_TYPE } from '../constants';
+import ApplicationFormRowOptions from "./ApplicationFormRowOptions";
 
     export default {
         name: "ApplicationForm",
@@ -79,8 +74,7 @@
         methods:{
             addRow(){
                 this.applicationRows.push({
-                    'nameNl' : "",
-                    'nameEn' : "",
+                    'name' : "",
                     'type' : "",
                     'required' : false,
                     'id' : undefined

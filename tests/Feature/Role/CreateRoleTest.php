@@ -4,9 +4,9 @@ namespace Tests\Feature\Role;
 
 use App\Rol;
 use App\User;
-use Config;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Support\Facades\Artisan;
+use Illuminate\Support\Facades\Config;
 use TestCase;
 
 class CreateRoleTest extends TestCase
@@ -41,11 +41,11 @@ class CreateRoleTest extends TestCase
     }
 
     /** @test */
-    public function an_admin_can_create_a_role(){
+    public function an_admin_can_create_a_role()
+    {
         $body = [
-            'NL_text' => 'test role',
-            'EN_text' => 'test role',
-            '_token' => csrf_token()
+            'name' => 'test role',
+            '_token' => csrf_token(),
         ];
 
         $response = $this->post($this->url, $body);
@@ -54,15 +54,15 @@ class CreateRoleTest extends TestCase
 
         $role = Rol::all()->last();
 
-        $this->assertEquals($body['NL_text'], $role->text->text());
+        $this->assertEquals($body['name'], $role->name);
     }
 
     /** @test */
-    public function a_role_can_not_create_a_role(){
+    public function a_role_can_not_create_a_role()
+    {
         $body = [
-            'NL_text' => 'test role',
-            'EN_text' => 'test role',
-            '_token' => csrf_token()
+            'name' => 'test role',
+            '_token' => csrf_token(),
         ];
 
         $this->user->roles()->detach();
@@ -73,9 +73,10 @@ class CreateRoleTest extends TestCase
     }
 
     /** @test */
-    public function a_role_can_not_be_created_without_required_fields(){
+    public function a_role_can_not_be_created_without_required_fields()
+    {
         $body = [
-            '_token' => csrf_token()
+            '_token' => csrf_token(),
         ];
 
         $response = $this->post($this->url, $body);
@@ -83,9 +84,8 @@ class CreateRoleTest extends TestCase
         $response->assertStatus(302);
 
         $errors = session('errors');
-        $this->count(2,$errors);
 
-        $this->assertEquals("Veld n l text moet ingevuld zijn", $errors->get('NL_text')[0]);
-        $this->assertEquals("Veld e n text moet ingevuld zijn", $errors->get('EN_text')[0]);
+        $this->assertCount(1, $errors);
+        $this->assertEquals("Field name is required", $errors->get('name')[0]);
     }
 }

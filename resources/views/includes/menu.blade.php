@@ -22,30 +22,22 @@
                         @php($menu = app()->make(\App\CustomClasses\MenuSingleton::MENUSINGLETON)) @foreach($menu->getMenuItems() as $menuItem) @if(count($menu->getSubMenuItem($menuItem->id)) > 0) {{--has submenu items so it wil be a dropdown menu--}}
                         <li class="nav-item dropdown">
                             <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                {{$menuItem->text->text()}}
+                                {{$menuItem->name}}
                             </a>
                             <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
                                 @foreach($menu->getSubMenuItem($menuItem->id) as $subItem)
-                                    <a class="dropdown-item" href="{{url('/'. $subItem->urlName)}}">{{$subItem->text->text()}}</a>
+                                    <a class="dropdown-item" href="{{url('/'. $subItem->urlName)}}">{{$subItem->name}}</a>
                                 @endforeach
                             </div>
                         </li>
                         @else
                         <li class="nav-item">
-                            <a class="nav-link" href="{{url('/'. $menuItem->urlName)}}">{{$menuItem->text->text()}}</a>
+                            <a class="nav-link" href="{{url('/'. $menuItem->urlName)}}">{{$menuItem->name}}</a>
                         </li>
                         @endif @endforeach
                     </ul>
 
                     <ul class="navbar-nav">
-                        <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                <img id="selected_lang" src="{{asset('img/lang_icons/flag-the-netherlands.png')}}">
-                            </a>
-                            <div id="other_lang" class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-                                <a href="#" class="dropdown-item" id="set_lang" data-lang="en"><img class="align-middle" src="{{asset('img/lang_icons/flag-united-kingdom.png')}}"> {{trans('menu.en')}}</a>
-                            </div>
-                        </li>
                         @if (Auth::guest())
                         <li class="nav-item mr-2">
                             <a class="nav-link" href="{{ url('/login') }}" class="nav-link">
@@ -55,7 +47,7 @@
                         @else @if(Auth::user()->hasBackendRigths())
                         <li class="nav-item">
                             <a class="nav-link" href="{{ url('beheer/home') }}" class="nav-link">
-                                {{trans('menu.beheer')}}
+                                {{'Management'}}
                             </a>
                         </li>
                         @endif
@@ -64,7 +56,7 @@
                                 {{ Auth::user()->firstname }}
                             </a>
                             <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-                                <a class="dropdown-item" href="{{ url('/users/'. Auth::user()->id) . '?back=false'}}">{{ trans('menu.account_overview') }}</a>
+                                <a class="dropdown-item" href="{{ url('/users/'. Auth::user()->id) . '?back=false'}}">{{ 'Account overview' }}</a>
                                 <a class="dropdown-item" href="{{ url('/logout') }}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">Logout</a>
                                 <form id="logout-form" action="{{ url('/logout') }}" method="POST" style="display: none;">
                                     {{ csrf_field() }}
@@ -73,7 +65,7 @@
                         </li>
                         @endif @if (Auth::guest())
                         <li class="nav-item d-flex align-items-center">
-                            <a class="btn btn-info text-dark" href="/lidworden">{{ trans('menu.become_member') }}</a>
+                            <a class="btn btn-info text-dark" href="/signup">{{ 'Become a member' }}</a>
                         </li>
                         @endif
                     </ul>

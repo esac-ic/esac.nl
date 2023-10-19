@@ -8,7 +8,6 @@
 
 namespace App\CustomClasses\MailList;
 
-
 class MailList
 {
     private $id;
@@ -103,7 +102,7 @@ class MailList
      */
     public function addMember(MailListMember $member): MailList
     {
-        array_push($this->members,$member);
+        array_push($this->members, $member);
         return $this;
     }
 }

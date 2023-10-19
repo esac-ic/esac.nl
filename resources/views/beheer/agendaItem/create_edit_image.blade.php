@@ -3,7 +3,7 @@
         <h3>{{$fields['title_image']}}</h3>
     </div>
     <div class="card-body">
-        <span>{{trans("AgendaItems.tumpnailImage")}}</span>
+        <span>{{'Thumbnail image'}}</span>
         <div class="form-group mt-2">
             <div class="custom-file">
               <input type="file" class="custom-file-input" id="thumbnail" name="thumbnail" @if($agendaItem == NULL)required="required"@endif>

@@ -30,6 +30,6 @@ $factory->define(User::class, function (Faker $faker) {
         'IBAN' => $faker->iban(),
         'BIC' => $faker->bankAccountNumber,
         'incasso' => $faker->boolean,
-        'remark' => $faker->sentence
+        'remark' => $faker->sentence,
     ];
 });

@@ -1,7 +1,7 @@
 @extends('layouts.beheer')
 
 @section('title')
-{{trans('AgendaItems.info')}}
+{{'Event general information'}}
 @endsection
 
 @section('content')
@@ -13,63 +13,63 @@
         <div class="col-md-6">
             <div class="btn-group mt-2 float-md-right" role="group" aria-label="Actions">
                 <a href="{{url('/agendaItems/'.$agendaItem->id . '/edit' )}}" class="btn btn-primary">
-                    <em class="ion-edit"></em> {{trans("menu.edit")}}
+                    <em class="ion-edit"></em> {{'Edit'}}
                 </a>
                 @if(app('request')->input('back') != 'false')
                     <a href="{{url('/agendaItems/')}}" class="btn btn-primary">
-                        <em class="ion-android-arrow-back"></em> {{trans("menu.back")}}
+                        <em class="ion-android-arrow-back"></em> {{'Back'}}
                     </a>
                 @endif
                 {{ Form::open(array('url' => 'agendaItems/' . $agendaItem->id, 'method' => 'delete')) }}
-                <button type="submit" class="btn btn-danger"><em class="ion-trash-a"></em> {{trans('menu.delete')}}</button>
+                <button type="submit" class="btn btn-danger"><em class="ion-trash-a"></em> {{'Remove'}}</button>
                 {{ Form::close() }}
             </div>
         </div>
     </div>
     <div class="card mt-4">
         <div class="card-header">
-            <h3>{{trans('AgendaItems.info')}}</h3>
+            <h3>{{'Event general information'}}</h3>
         </div>
         <div class="card-body">
             <table class="table table-striped" style="width:100%">
                 <tr>
-                    <td>{{trans('AgendaItems.title')}}</td>
-                    <td>{{$agendaItem->agendaItemTitle->text()}}</td>
+                    <td>{{'Title'}}</td>
+                    <td>{{$agendaItem->title}}</td>
                 </tr>
                 <tr>
-                    <td>{{trans('AgendaItems.shortDescription')}}</td>
-                    <td>{{$agendaItem->agendaItemShortDescription->text()}}</td>
+                    <td>{{'Short description'}}</td>
+                    <td>{{$agendaItem->shortDescription}}</td>
                 </tr>
                 <tr>
-                    <td>{{trans('AgendaItems.startDate')}}</td>
+                    <td>{{'Start date'}}</td>
                     <td>{{\Carbon\Carbon::parse($agendaItem->startDate)->format('d-m-Y h:i')}}</td>
                 </tr>
                 <tr>
-                    <td>{{trans('AgendaItems.endDate')}}</td>
+                    <td>{{'End date'}}</td>
                     <td>{{\Carbon\Carbon::parse($agendaItem->endDate)->format('d-m-Y h:i')}}</td>
                 </tr>
                 <tr>
-                    <td>{{trans('AgendaItems.endDateSubscription')}}</td>
+                    <td>{{'Last possible registration date'}}</td>
                     <td>{{($agendaItem->subscription_endDate !=null)? \Carbon\Carbon::parse($agendaItem->subscription_endDate)->format('d-m-Y h:i') : ""}}</td>
                 </tr>
                 <tr>
-                    <td>{{trans('AgendaItems.category')}}</td>
-                    <td>{{$agendaItem->agendaItemCategory->categorieName->text()}}</td>
+                    <td>{{'Category'}}</td>
+                    <td>{{$agendaItem->agendaItemCategory->name}}</td>
                 </tr>
                 <tr>
-                    <td>{{trans('AgendaItems.climbingActivity')}}</td>
-                    <td>{{$agendaItem->climbing_activity ? trans('menu.yes') : trans('menu.no')}}</td>
+                    <td>{{'Show certificates in the event item'}}</td>
+                    <td>{{$agendaItem->climbing_activity ? 'Yes' : 'No'}}</td>
                 </tr>
                 <tr>
-                    <td>{{trans('AgendaItems.createdBy')}}</td>
+                    <td>{{'Created by'}}</td>
                     <td>{{$agendaItem->getCreatedBy->getName()}}</td>
                 </tr>
                 <tr>
-                    <td>{{trans("AgendaItems.applicationForm")}}</td>
-                    <td>{{($agendaItem->application_form_id !=null)? $agendaItem->getApplicationForm->applicationFormName->text():""}}</td>
+                    <td>{{'Application form'}}</td>
+                    <td>{{($agendaItem->application_form_id !=null)? $agendaItem->getApplicationForm->name:""}}</td>
                 </tr>
                 <tr>
-                    <td>{{trans("AgendaItems.tumpnailImage")}}</td>
+                    <td>{{'Thumbnail image'}}</td>
                     <td><img src="{{$agendaItem->getImageUrl()}}" style="max-width: 240px" class="img-fluid"></td>
                 </tr>
             </table>
@@ -77,10 +77,10 @@
     </div>
     <div class="card my-4">
         <div class="card-header">
-            <h3>{{trans('AgendaItems.content') }}</h3>
+            <h3>{{'Event item content' }}</h3>
         </div>
         <div class="card-body">
-            {!! $agendaItem->agendaItemText->text() !!}
+            {!! $agendaItem->text !!}
         </div>
     </div>
 @endsection

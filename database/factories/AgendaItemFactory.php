@@ -2,23 +2,19 @@
 
 namespace Database\Factories;
 
-use App\User;
-use App\Text;
 use App\AgendaItem;
-use App\AgendaItemCategorie;
+use App\AgendaItemCategory;
+use App\User;
 use Faker\Generator as Faker;
 
 $factory->define(AgendaItem::class, function (Faker $faker) {
-    $title = factory(Text::class)->create();
-    $text = factory(Text::class)->create();
-    $shortDescription = factory(Text::class)->create();
     $user = factory(User::class)->create();
-    $category = factory(AgendaItemCategorie::class)->create();
+    $category = factory(AgendaItemCategory::class)->create();
 
     return [
-        'title' => $title->id,
-        'text'=> $text->id,
-        'shortDescription' => $shortDescription->id,
+        'title' => $faker->word,
+        'text'=> $faker->text,
+        'shortDescription' => $faker->word,
         'createdBy' => $user->id,
         'category' => $category->id,
         'startDate' => $faker->date,

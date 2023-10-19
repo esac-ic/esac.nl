@@ -9,9 +9,9 @@
             <span class="card-date position-absolute bg-light py-1 px-3 rounded">{{\Carbon\Carbon::parse($newsItem->created_at)->format('d M')}}</span>
         </div>
         <div class="card-body">
-            <h4 class="card-title">{{$newsItem->newsItemTitle->text()}}</h4>
+            <h4 class="card-title">{{$newsItem->title}}</h4>
             <p class="card-text text-body">
-                {!! $newsItem->newsItemText->text() !!}
+                {!! $newsItem->text !!}
             </p>
         </div>
         <div class="card-footer bg-white p-3">

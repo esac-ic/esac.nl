@@ -4,17 +4,17 @@ namespace App\Http\Controllers\ApplicationForm;
 
 use App\AgendaItem;
 use App\Exports\AgendaRegistrationExport;
+use App\Http\Controllers\Controller;
 use App\Http\Resources\ApplicationFormRowVueResource;
 use App\Models\ApplicationForm\ApplicationResponse;
 use App\Repositories\ApplicationFormRepositories\ApplicationFormRegistrationRepository;
-use App\Repositories\InschrijvenRepository;
 use App\Repositories\UserRepository;
 use App\Services\AgendaApplicationFormService;
-use App\Http\Controllers\Controller;
 use App\User;
-use Auth;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Config;
 use Illuminate\View\View;
 use Maatwebsite\Excel\Facades\Excel;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
@@ -27,7 +27,7 @@ class AgendaApplicationFormController extends Controller
     public function __construct()
     {
         $this->middleware('auth');
-        $this->middleware('authorize:' . \Config::get('constants.Content_administrator') . ',' . \Config::get('constants.Activity_administrator'))->except('destroy');
+        $this->middleware('authorize:' . Config::get('constants.Content_administrator') . ',' . Config::get('constants.Activity_administrator'))->except('destroy');
     }
 
     /**
@@ -37,7 +37,7 @@ class AgendaApplicationFormController extends Controller
      */
     public function index(AgendaItem $agendaItem, AgendaApplicationFormService $agendaApplicationFormService): View
     {
-        $users    = $agendaApplicationFormService->getRegisteredUsers($agendaItem);
+        $users = $agendaApplicationFormService->getRegisteredUsers($agendaItem);
         $agendaId = $agendaItem->id;
 
         return view("forms.inschrijven_show", compact('users', 'agendaId'));
@@ -47,8 +47,8 @@ class AgendaApplicationFormController extends Controller
     {
         //retrieves all the rows of the form
         $applicationForm = $agendaItem->getApplicationForm;
-        $rows            = ApplicationFormRowVueResource::collection($applicationForm->applicationFormRows);
-        $users           = [];
+        $rows = ApplicationFormRowVueResource::collection($applicationForm->applicationFormRows);
+        $users = [];
         $registeredUsers = [];
 
         foreach ($agendaItem->getApplicationFormResponses as $registeredUser) {
@@ -88,7 +88,7 @@ class AgendaApplicationFormController extends Controller
     public function show(User $user, AgendaItem $agendaItem, ApplicationFormRegistrationRepository $repository): View
     {
         $applicationDataRows = $repository->getApplicationInformation($agendaItem->id, $user->id);
-        $agendaId            = $agendaItem->id;
+        $agendaId = $agendaItem->id;
 
         return view('forms.inschrijven_details', compact('agendaId', 'applicationDataRows'));
     }
@@ -103,7 +103,7 @@ class AgendaApplicationFormController extends Controller
     public function destroy($Agenda_id, $applicationResponseId): RedirectResponse
     {
         $applicationReponse = ApplicationResponse::find($applicationResponseId);
-        if (!Auth::user()->hasRole(\Config::get('constants.Activity_administrator'))) {
+        if (!Auth::user()->hasRole(Config::get('constants.Activity_administrator'))) {
             if (Auth::user()->id != $applicationReponse->user_id) {
                 abort(401);
             }
@@ -125,7 +125,7 @@ class AgendaApplicationFormController extends Controller
         $agendaItem = AgendaItem::findOrFail($agendaId);
         return Excel::download(
             new AgendaRegistrationExport($agendaApplicationFormService, $agendaItem),
-            preg_replace('/[^a-zA-Z0-9]+/', '-', $agendaItem->agendaItemTitle->text()) . '.xlsx'
+            preg_replace('/[^a-zA-Z0-9]+/', '-', $agendaItem->title) . '.xlsx'
         );
 
     }

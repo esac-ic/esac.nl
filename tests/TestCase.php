@@ -1,7 +1,7 @@
 <?php
 
 use App\Rol;
-use Illuminate\Validation\ValidationException;
+use Illuminate\Support\Facades\Config;
 
 abstract class TestCase extends Illuminate\Foundation\Testing\TestCase
 {
@@ -19,13 +19,12 @@ abstract class TestCase extends Illuminate\Foundation\Testing\TestCase
      */
     public function createApplication()
     {
-        $app = require __DIR__.'/../bootstrap/app.php';
+        $app = require __DIR__ . '/../bootstrap/app.php';
 
         $app->make(Illuminate\Contracts\Console\Kernel::class)->bootstrap();
 
         return $app;
     }
-
 
     protected function setUp(): void
     {
@@ -36,8 +35,9 @@ abstract class TestCase extends Illuminate\Foundation\Testing\TestCase
     /**
      * @return void
      */
-    private function createRoles(): void {
-        foreach(Config::get('constants') as $key => $value) {
+    private function createRoles(): void
+    {
+        foreach (Config::get('constants') as $key => $value) {
             factory(Rol::class)->create([
                 'id' => $value,
             ]);
