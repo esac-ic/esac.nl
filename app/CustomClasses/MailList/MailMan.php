@@ -8,7 +8,6 @@
 
 namespace App\CustomClasses\MailList;
 
-
 use GuzzleHttp\Client;
 
 class MailMan
@@ -22,25 +21,29 @@ class MailMan
         $this->_client = new Client();
     }
 
-    public function get(string $url){
-        return $this->call("GET",$url);
+    public function get(string $url)
+    {
+        return $this->call("GET", $url);
     }
 
-    public function post(string $url,array $body){
-        return $this->call("POST",$url,$body);
+    public function post(string $url, array $body)
+    {
+        return $this->call("POST", $url, $body);
     }
 
-    public function delete(string $url){
-        return $this->call("DELETE",$url);
+    public function delete(string $url)
+    {
+        return $this->call("DELETE", $url);
     }
 
-    private function call(string $method,string $url,array $body = []){
-        $response = $this->_client->request($method,$this->_baseUrl . $url,[
+    private function call(string $method, string $url, array $body = [])
+    {
+        $response = $this->_client->request($method, $this->_baseUrl . $url, [
             "form_params" => $body,
             "auth" => [
                 env('MAIL_MAN_USERNAME'),
-                env('MAIL_MAN_PASSWORD')
-            ]
+                env('MAIL_MAN_PASSWORD'),
+            ],
         ]);
 
         return json_decode($response->getBody()->getContents());

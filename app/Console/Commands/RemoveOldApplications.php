@@ -40,7 +40,7 @@ class RemoveOldApplications extends Command
     public function handle()
     {
         ApplicationResponse::query()
-            ->where('created_at','<',Carbon::now()->subYear(config('custom.application_response_save_period')))
+            ->where('created_at', '<', Carbon::now()->subYears(config('custom.application_response_save_period')))
             ->forceDelete();
     }
 }

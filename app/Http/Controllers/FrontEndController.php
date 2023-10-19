@@ -12,7 +12,6 @@ use App\Repositories\MenuRepository;
 use App\Repositories\NewsItemRepository;
 use App\Repositories\UserRepository;
 use App\Services\AgendaApplicationFormService;
-use App\Setting;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Redirect;
 
@@ -90,8 +89,7 @@ class FrontEndController extends Controller
         $menuItem = $this->_menuItemRepository->findby('urlName', MenuItem::SUBSCRIBEURL);
         $content = $menuItem->content;
         $curPageName = 'Subscribe as member';
-        $showIntroPackageForm = app(Setting::SINGELTONNAME)->getsetting(Setting::SETTING_SHOW_INTRO_OPTION);
-        return view("front-end.subscribe", compact('curPageName', 'content', 'showIntroPackageForm'));
+        return view("front-end.subscribe", compact('curPageName', 'content'));
     }
 
     public function news()

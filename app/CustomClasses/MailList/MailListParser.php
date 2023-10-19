@@ -21,7 +21,8 @@ class MailListParser
      * @param $object
      * @return MailList
      */
-    public function parseMailManMailList($object) : MailList{
+    public function parseMailManMailList($object): MailList
+    {
         $mailList = new MailList();
         $mailList
             ->setId($object->list_id)
@@ -36,7 +37,8 @@ class MailListParser
      * @param $object
      * @return MailListMember
      */
-    public function parseMailManMember($object) : MailListMember{
+    public function parseMailManMember($object): MailListMember
+    {
         $member = new MailListMember();
         $member
             ->setAddress($object->email)
