@@ -16,6 +16,7 @@ class AgendaController extends Controller
     {
         $agendaItemQuery = AgendaItem::with([
             'getApplicationForm',
+            'getApplicationFormResponses',
             'agendaItemCategory',
         ]);
 
@@ -57,7 +58,6 @@ class AgendaController extends Controller
             ->map(function ($agendaItem) {
                 $agendaApplicationFormService = new AgendaApplicationFormService();
                 $currentUserSignedUp = false;
-                $registeredUserIds = [];
 
                 if ($agendaItem->application_form_id && $agendaItem->canRegister()) {
                     $registeredUserIds = $agendaApplicationFormService->getRegisteredUserIds($agendaItem);
@@ -76,7 +76,7 @@ class AgendaController extends Controller
                     'formId' => $agendaItem->getApplicationForm,
                     'canRegister' => $agendaItem->canRegister(),
                     'application_form_id' => $agendaItem->application_form_id,
-                    'amountOfPeopleRegisterd' => count($registeredUserIds),
+                    'amountOfPeopleRegisterd' => count($agendaItem->getApplicationFormResponses),
                     'currentUserSignedUp' => $currentUserSignedUp,
                 ];
             });
