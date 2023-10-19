@@ -60,7 +60,7 @@ class Handler extends ExceptionHandler
         if (method_exists($exception, "getStatusCode")) {
             $menu = $this->_menu;
             $curPageName = 'Error';
-            switch ($exception->getSatusCode()) {
+            switch ($exception->getStatusCode()) {
                 case 403:
                     return response()->view('errors.403', compact('menu', 'curPageName'), 403);
                 case 404:
