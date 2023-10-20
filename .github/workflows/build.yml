@@ -6,91 +6,106 @@ on:
   push:
     branches: [ master ]
 
+env:
+  DB_DATABASE: esac
+  DB_USERNAME: mysql
+  DB_PASSWORD: mysql
+
 jobs:
   laravel-tests:
     runs-on: ubuntu-latest
     environment: Build
     steps:
-#     - name: Setup Chrome
-#       uses: browser-actions/setup-chrome@v0.0.0
-    - name: Docker Login
-      uses: docker/login-action@v1.14.1
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Cache PHP dependencies
+      uses: actions/cache@v3
       with:
-        # Username used to login to the Docker registry
+        path: vendor
+        key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.lock') }}
+        restore-keys: |
+          ${{ runner.os }}-composer-
+
+    - name: Cache Node dependencies
+      uses: actions/cache@v3
+      with:
+        path: node_modules
+        key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+        restore-keys: |
+          ${{ runner.os }}-node-
+
+    - name: Docker Login
+      uses: docker/login-action@v3
+      with:
         username: esacci
-        # Password or personal access token used to login to the Docker registry
         password: ${{ secrets.DOCKER_ACCESS_TOKEN }}
-    - uses: shivammathur/setup-php@2.17.1
+
+    - name: Setup PHP
+      uses: shivammathur/setup-php@v2
       with:
         php-version: '8.1'
-    - uses: actions/checkout@v2
+
     - name: Setup MySQL
       uses: mirromutth/mysql-action@v1.1
       with:
-        # The port of host
         host port: 3306
-        # The port of container
         container port: 3306
-        # Version of MySQL to use
-        mysql version: 5.7
-        mysql database: esac
-        mysql user: mysql
-        mysql password: mysql
+        mysql version: 8.0
+        mysql database: ${{ env.DB_DATABASE }}
+        mysql user: ${{ env.DB_USERNAME }}
+        mysql password: ${{ env.DB_PASSWORD }}
+
     - name: Setup Node.js environment
-      uses: actions/setup-node@v3.0.0
+      uses: actions/setup-node@v3
       with:
-        node-version: 16
+        node-version: 18
+
     - name: Copy .env
       run: php -r "file_exists('.env') || copy('.env.example', '.env');"
+
     - name: Install Dependencies
       run: |
-        composer install -q --no-ansi --no-interaction --no-scripts --no-progress --prefer-dist
-        npm install
-        npm install -g @lhci/cli@0.3.x
-    - name: PHP artisan meuk
+        composer install --prefer-dist --no-progress --no-suggest
+        npm ci
+
+    - name: PHP artisan setup
       run: |
-        export CHROME_VERSION=$(/usr/bin/google-chrome --version | cut -c15-17)
-        echo $CHROME_VERSION
-        echo "php artisan dusk:chrome-driver $CHROME_VERSION"
-        php -r "putenv('DB_DATABASE=esac');"
         php artisan key:generate
         php artisan storage:link
-        php artisan dusk:chrome-driver $CHROME_VERSION
-        php artisan migrate
-        php artisan db:seed
+        php artisan migrate --seed
         php artisan serve &
-      env:
-        DB_DATABASE: esac
-        DB_USERNAME: mysql
-        DB_PASSWORD: mysql
+
     - name: NPM build
       run: npm run prod
+
     - name: Directory Permissions
       run: chmod -R 777 storage bootstrap/cache
+
     - name: Execute tests (Unit and Feature tests) via PHPUnit
-      env:
-        DB_DATABASE: esac
-        DB_USERNAME: mysql
-        DB_PASSWORD: mysql
-        CHROMIUM_BIN: $(which chrome)
       run: vendor/bin/phpunit -c phpunit.xml --coverage-clover=coverage.xml
+
     - name: Upload to codecov
-      run: bash <(curl -s https://codecov.io/bash)
+      uses: codecov/codecov-action@v3
+      with:
+        file: coverage.xml
+        fail_ci_if_error: true
+
     - name: Build and push Docker images
-      uses: docker/build-push-action@v2.9.0
+      uses: docker/build-push-action@v5
       with:
         push: true
         tags: esac/website:${{ github.run_number }}
+
   deploy:
     runs-on: ubuntu-latest
     needs: laravel-tests
-    # Only execute deploy when a push to master is made.
     if: github.event_name == 'push' && github.ref == 'refs/heads/master'
     steps:
-    - name: SSH Command
-      uses: D3rHase/ssh-command-action@v0.2.1
+    - name: Deploy via SSH
+      uses: D3rHase/ssh-command-action@v0.2.2
       with:
         HOST: ${{ secrets.SSH_HOST }}
         USER: ic
         PRIVATE_SSH_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
-        COMMAND: ./update.sh website "${{ github.run_number }}" "${{ github.event.pusher.name }}" "${{ github.event.head_commit.message }}" "${{ github.event.head_commit.timestamp }}" "${{ github.ref }}"
+        COMMAND: ./update.sh website "${{ github.run_number }}" "${{ github.actor }}" "${{ github.event.head_commit.message }}" "${{ github.event.head_commit.timestamp }}" "${{ github.ref }}"
