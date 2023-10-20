@@ -14,7 +14,7 @@ class AgendaApplicationFormService
     public function getRegisteredUsers(AgendaItem $agendaItem): array
     {
         // Eager load necessary relationships
-        $agendaItem->load('getApplicationForm.applicationFormRows', 'getApplicationFormResponses.getApplicationResponseUser', 'getApplicationFormResponses.getApplicationFormResponseRows.getApplicationFormRow');
+        $agendaItem->load('getApplicationFormResponses.getApplicationResponseUser');
 
         // Retrieve necessary objects
         $applicationForm = $agendaItem->getApplicationForm;
@@ -22,27 +22,16 @@ class AgendaApplicationFormService
 
         if (is_null($applicationForm)) {
             return [
-                "agendaitem" => $agendaItem->title,
-                "agendaId" => $agendaItem->id,
+                "agendaItemTitle" => $agendaItem->title,
+                "agendaItemId" => $agendaItem->id,
                 "userdata" => [],
-                "customfields" => [],
             ];
         }
-
-        // Map custom fields
-        $customfields = $applicationForm->applicationFormRows
-            ->pluck('name')
-            ->all();
 
         // Map user data
         $userdata = $applicationResponses->map(function ($response) use ($agendaItem) {
             $user = $response->getApplicationResponseUser;
             $user["_signupId"] = $response->id;
-
-            $response->getApplicationFormResponseRows->each(function ($responseRow) use (&$user) {
-                $columnname = $responseRow->getApplicationFormRow->name;
-                $user[$columnname] = $responseRow->value;
-            });
 
             if ($agendaItem->climbing_activity) {
                 $user['certificate_names'] = $user->getCertificationsAbbreviations();
@@ -52,10 +41,9 @@ class AgendaApplicationFormService
 
         // Build the final array to return
         return [
-            "agendaitem" => $agendaItem->title,
-            "agendaId" => $agendaItem->id,
+            "agendaItemTitle" => $agendaItem->title,
+            "agendaItemId" => $agendaItem->id,
             "userdata" => $userdata,
-            "customfields" => $customfields,
         ];
     }
 

@@ -8,30 +8,29 @@ use App\Http\Controllers\Controller;
 use App\Services\AgendaApplicationFormService;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 
 class AgendaController extends Controller
 {
+    protected $agendaApplicationFormService;
+
+    public function __construct(AgendaApplicationFormService $agendaApplicationFormService)
+    {
+        $this->agendaApplicationFormService = $agendaApplicationFormService;
+    }
+
     public function getAgenda(Request $request)
     {
-        $agendaItemQuery = AgendaItem::with([
-            'getApplicationForm',
-            'getApplicationFormResponses',
-            'agendaItemCategory',
-        ]);
+        $agendaItemQuery = AgendaItem::with(['agendaItemCategory']);
 
-        // Set limit and page
-        $limit = $request->has('limit') ? $request->get('limit') : 9;
-        $start = $request->has('start') ? $request->get('start') : 0;
+        $limit = $request->input('limit', 9);
+        $start = $request->input('start', 0);
 
         // Apply filters
-        $category = $request->input('category');
-        if ($category) {
+        if ($category = $request->input('category')) {
             $agendaItemQuery->where('category', intval($category));
         }
 
-        $startDate = $request->input('startDate');
-        if ($startDate) {
+        if ($startDate = $request->input('startDate')) {
             $startDate = Carbon::createFromFormat('d-m-Y', $startDate)->startOfDay();
             $agendaItemQuery->where(function ($query) use ($startDate) {
                 $query->where('startDate', '>=', $startDate)
@@ -39,30 +38,26 @@ class AgendaController extends Controller
             });
         }
 
-        $endDate = $request->input('endDate');
-        if ($endDate) {
-            $endDate = Carbon::createFromFormat('d-m-Y', $endDate)->startOfDay();
+        if ($endDate = $request->input('endDate')) {
+            $endDate = Carbon::createFromFormat('d-m-Y', $endDate)->endOfDay();
             $agendaItemQuery->where('startDate', '<=', $endDate);
         }
 
         $agendaItemQuery->orderBy('startDate', 'asc');
 
-        // Get total count for pagination
         $agendaItemCount = $agendaItemQuery->count();
 
-        // Get paginated agenda items
         $agendaItems = $agendaItemQuery
             ->skip($start)
             ->take($limit)
             ->get()
-            ->map(function ($agendaItem) {
-                $agendaApplicationFormService = new AgendaApplicationFormService();
-                $currentUserSignedUp = false;
+            ->map(function ($agendaItem) use ($request) {
+                $registeredUserIds = $agendaItem->application_form_id
+                ? $this->agendaApplicationFormService->getRegisteredUserIds($agendaItem)
+                : [];
 
-                if ($agendaItem->application_form_id && $agendaItem->canRegister()) {
-                    $registeredUserIds = $agendaApplicationFormService->getRegisteredUserIds($agendaItem);
-                    $currentUserSignedUp = in_array(Auth::id(), $registeredUserIds);
-                }
+                $currentUser = $request->user();
+                $currentUserSignedUp = $currentUser ? in_array($currentUser->id, $registeredUserIds) : false;
 
                 return [
                     'id' => $agendaItem->id,
@@ -76,15 +71,15 @@ class AgendaController extends Controller
                     'formId' => $agendaItem->getApplicationForm,
                     'canRegister' => $agendaItem->canRegister(),
                     'application_form_id' => $agendaItem->application_form_id,
-                    'amountOfPeopleRegisterd' => count($agendaItem->getApplicationFormResponses),
+                    'amountOfPeopleRegisterd' => count($registeredUserIds),
                     'currentUserSignedUp' => $currentUserSignedUp,
                 ];
             });
 
-        return [
+        return response()->json([
             'agendaItemCount' => $agendaItemCount,
             'agendaItems' => $agendaItems,
-        ];
+        ]);
     }
 
     public function getCategories()

@@ -11,7 +11,7 @@ class ZekeringController extends Controller
 {
     public function __construct()
     {
-        $this->middleware('auth');
+        #$this->middleware('auth');
         $this->middleware('authorize:' . Config::get('constants.Activity_administrator'))->only('destroy');
     }
 
