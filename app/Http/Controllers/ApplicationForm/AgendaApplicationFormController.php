@@ -38,9 +38,9 @@ class AgendaApplicationFormController extends Controller
     public function index(AgendaItem $agendaItem, AgendaApplicationFormService $agendaApplicationFormService): View
     {
         $users = $agendaApplicationFormService->getRegisteredUsers($agendaItem);
-        $agendaId = $agendaItem->id;
+        $agendaItemId = $agendaItem->id;
 
-        return view("forms.inschrijven_show", compact('users', 'agendaId'));
+        return view("forms.inschrijven_show", compact('users', 'agendaItemId'));
     }
 
     public function registerUser(AgendaItem $agendaItem, UserRepository $userRepository): View
