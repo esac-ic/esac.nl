@@ -1,8 +1,5 @@
 FROM php:8.2-fpm
 
-# Node.js major version
-NODE_MAJOR=18
-
 # Install system dependencies, PHP extensions and Node.js
 RUN apt-get update && \
     docker-php-ext-install opcache && \
@@ -16,7 +13,7 @@ RUN apt-get update && \
     docker-php-ext-install zip && \
     mkdir -p /etc/apt/keyrings && \
     curl -fsSL https://deb.nodesource.com/gpgkey/nodesource.gpg.key | gpg --dearmor -o /etc/apt/keyrings/nodesource.gpg && \
-    echo "deb [signed-by=/etc/apt/keyrings/nodesource.gpg] https://deb.nodesource.com/node_$NODE_MAJOR.x nodistro main" | tee /etc/apt/sources.list.d/nodesource.list && \
+    echo "deb [signed-by=/etc/apt/keyrings/nodesource.gpg] https://deb.nodesource.com/node_18.x nodistro main" | tee /etc/apt/sources.list.d/nodesource.list && \
     apt-get update && \
     apt-get install nodejs -y && \
     rm -rf /var/lib/apt/lists/*
