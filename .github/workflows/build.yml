@@ -106,7 +106,7 @@ jobs:
     - name: Deploy via SSH
       uses: D3rHase/ssh-command-action@v0.2.2
       with:
-        HOST: ${{ secrets.SSH_HOST }}
-        USER: ic
-        PRIVATE_SSH_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
-        COMMAND: ./update.sh website "${{ github.run_number }}" "${{ github.actor }}" "${{ github.event.head_commit.message }}" "${{ github.event.head_commit.timestamp }}" "${{ github.ref }}"
+        host: ${{ secrets.SSH_HOST }}
+        user: ic
+        private_key: ${{ secrets.SSH_PRIVATE_KEY }}
+        command: ./update.sh website "${{ github.run_number }}" "${{ github.actor }}" "${{ github.event.head_commit.message }}" "${{ github.event.head_commit.timestamp }}" "${{ github.ref }}"
