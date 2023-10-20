@@ -1,7 +1,7 @@
 @extends('layouts.beheer')
 
 @section('title')
-{{'Subscriptions' . ": " . $users["agendaitem"]}}
+{{'Subscriptions' . ": " . $users["agendaItemTitle"]}}
 @endsection
 
 @section('content')
@@ -14,15 +14,15 @@
 
     <div class="row mb-3">
         <div class="col-md-6">
-            <h1>{{'Subscriptions' . ": " . $users["agendaitem"]}}</h1>
+            <h1>{{'Subscriptions' . ": " . $users["agendaItemTitle"]}}</h1>
         </div>
 
         <div class="col-md-6">
             <div class="btn-group mt-2 float-md-right" role="group" aria-label="Actions">
-                <a href="{{url('forms/admin/' . $agendaId)}}" class="btn btn-primary">
+                <a href="{{url('forms/admin/' . $agendaItemId)}}" class="btn btn-primary">
                     <em class="ion-person-add"></em> {{'New subscription'}}
                 </a>
-                <a href="{{url('forms/users/'.$users["agendaId"].'/export')}}" class="btn btn-primary">
+                <a href="{{url('forms/users/'.$users["agendaItemId"].'/export')}}" class="btn btn-primary">
                     <em class="ion-android-download"></em> {{'Export'}}
                 </a>
                 <a href="{{url('/agendaItems/')}}" class="btn btn-primary">
@@ -48,8 +48,8 @@
                 <td>{{$user->getAdress()}}</td>
 
                 <td>
-                    <a href="{{url('/forms/users/'. $user->id . '/detail/'. $agendaId)}}"><span title="{{'Show entered information'}}" class="ion-eye" aria-hidden="true"></span></a>
-                    <a href="#" id="delete_button" data-url="{{url('/forms/'.$users["agendaId"].'/remove/'.$user["_signupId"])}}"><span  class="ion-trash-a"></span></a>
+                    <a href="{{url('/forms/users/'. $user->id . '/detail/'. $agendaItemId)}}"><span title="{{'Show entered information'}}" class="ion-eye" aria-hidden="true"></span></a>
+                    <a href="#" id="delete_button" data-url="{{url('/forms/'.$users["agendaItemId"].'/remove/'.$user["_signupId"])}}"><span  class="ion-trash-a"></span></a>
                 </td>
             </tr>
         @endforeach
