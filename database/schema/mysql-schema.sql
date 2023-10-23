@@ -9,13 +9,11 @@ DROP TABLE IF EXISTS `agenda_item_categories`;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `agenda_item_categories` (
   `id` int unsigned NOT NULL AUTO_INCREMENT,
-  `name` int unsigned NOT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
   `deleted_at` timestamp NULL DEFAULT NULL,
-  PRIMARY KEY (`id`),
-  KEY `agenda_item_categories_name_foreign` (`name`),
-  CONSTRAINT `agenda_item_categories_name_foreign` FOREIGN KEY (`name`) REFERENCES `texts` (`id`)
+  `name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `agenda_items`;
@@ -23,9 +21,6 @@ DROP TABLE IF EXISTS `agenda_items`;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `agenda_items` (
   `id` int unsigned NOT NULL AUTO_INCREMENT,
-  `title` int unsigned NOT NULL,
-  `text` int unsigned NOT NULL,
-  `shortDescription` int unsigned NOT NULL,
   `createdBy` int unsigned NOT NULL,
   `category` int unsigned NOT NULL,
   `startDate` datetime NOT NULL,
@@ -36,19 +31,16 @@ CREATE TABLE `agenda_items` (
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
   `climbing_activity` tinyint(1) NOT NULL DEFAULT '1',
+  `title` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `text` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci,
+  `shortDescription` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   PRIMARY KEY (`id`),
-  KEY `agenda_items_title_foreign` (`title`),
-  KEY `agenda_items_text_foreign` (`text`),
-  KEY `agenda_items_shortdescription_foreign` (`shortDescription`),
   KEY `agenda_items_createdby_foreign` (`createdBy`),
   KEY `agenda_items_category_foreign` (`category`),
   KEY `agenda_items_application_form_id_foreign` (`application_form_id`),
   CONSTRAINT `agenda_items_application_form_id_foreign` FOREIGN KEY (`application_form_id`) REFERENCES `application_forms` (`id`),
   CONSTRAINT `agenda_items_category_foreign` FOREIGN KEY (`category`) REFERENCES `agenda_item_categories` (`id`),
-  CONSTRAINT `agenda_items_createdby_foreign` FOREIGN KEY (`createdBy`) REFERENCES `users` (`id`),
-  CONSTRAINT `agenda_items_shortdescription_foreign` FOREIGN KEY (`shortDescription`) REFERENCES `texts` (`id`),
-  CONSTRAINT `agenda_items_text_foreign` FOREIGN KEY (`text`) REFERENCES `texts` (`id`),
-  CONSTRAINT `agenda_items_title_foreign` FOREIGN KEY (`title`) REFERENCES `texts` (`id`)
+  CONSTRAINT `agenda_items_createdby_foreign` FOREIGN KEY (`createdBy`) REFERENCES `users` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `application_form_row_options`;
@@ -57,16 +49,14 @@ DROP TABLE IF EXISTS `application_form_row_options`;
 CREATE TABLE `application_form_row_options` (
   `id` int unsigned NOT NULL AUTO_INCREMENT,
   `value` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `name_id` int unsigned NOT NULL,
   `application_form_row_id` int unsigned NOT NULL,
   `deleted_at` timestamp NULL DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
+  `name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   PRIMARY KEY (`id`),
-  KEY `application_form_row_options_name_id_foreign` (`name_id`),
   KEY `application_form_row_options_application_form_row_id_foreign` (`application_form_row_id`),
-  CONSTRAINT `application_form_row_options_application_form_row_id_foreign` FOREIGN KEY (`application_form_row_id`) REFERENCES `application_form_rows` (`id`),
-  CONSTRAINT `application_form_row_options_name_id_foreign` FOREIGN KEY (`name_id`) REFERENCES `texts` (`id`)
+  CONSTRAINT `application_form_row_options_application_form_row_id_foreign` FOREIGN KEY (`application_form_row_id`) REFERENCES `application_form_rows` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `application_form_rows`;
@@ -74,18 +64,16 @@ DROP TABLE IF EXISTS `application_form_rows`;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `application_form_rows` (
   `id` int unsigned NOT NULL AUTO_INCREMENT,
-  `name` int unsigned NOT NULL,
   `application_form_id` int unsigned NOT NULL,
   `type` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `required` tinyint(1) NOT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
   `deleted_at` timestamp NULL DEFAULT NULL,
+  `name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   PRIMARY KEY (`id`),
-  KEY `application_form_rows_name_foreign` (`name`),
   KEY `application_form_rows_application_form_id_foreign` (`application_form_id`),
-  CONSTRAINT `application_form_rows_application_form_id_foreign` FOREIGN KEY (`application_form_id`) REFERENCES `application_forms` (`id`),
-  CONSTRAINT `application_form_rows_name_foreign` FOREIGN KEY (`name`) REFERENCES `texts` (`id`)
+  CONSTRAINT `application_form_rows_application_form_id_foreign` FOREIGN KEY (`application_form_id`) REFERENCES `application_forms` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `application_forms`;
@@ -93,13 +81,11 @@ DROP TABLE IF EXISTS `application_forms`;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `application_forms` (
   `id` int unsigned NOT NULL AUTO_INCREMENT,
-  `name` int unsigned NOT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
   `deleted_at` timestamp NULL DEFAULT NULL,
-  PRIMARY KEY (`id`),
-  KEY `application_forms_name_foreign` (`name`),
-  CONSTRAINT `application_forms_name_foreign` FOREIGN KEY (`name`) REFERENCES `texts` (`id`)
+  `name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `application_response_rows`;
@@ -109,7 +95,7 @@ CREATE TABLE `application_response_rows` (
   `id` int unsigned NOT NULL AUTO_INCREMENT,
   `application_response_id` int unsigned NOT NULL,
   `application_form_row_id` int unsigned NOT NULL,
-  `value` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `value` longtext COLLATE utf8mb4_unicode_ci NOT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
   `deleted_at` timestamp NULL DEFAULT NULL,
@@ -162,7 +148,6 @@ DROP TABLE IF EXISTS `certificate_user`;
 CREATE TABLE `certificate_user` (
   `certificate_id` int unsigned NOT NULL,
   `user_id` int unsigned NOT NULL,
-  `startDate` datetime NOT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`certificate_id`,`user_id`)
@@ -173,32 +158,13 @@ DROP TABLE IF EXISTS `certificates`;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `certificates` (
   `id` int unsigned NOT NULL AUTO_INCREMENT,
-  `name` int unsigned NOT NULL,
   `duration` int DEFAULT NULL,
   `abbreviation` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
   `deleted_at` timestamp NULL DEFAULT NULL,
-  PRIMARY KEY (`id`),
-  KEY `certificates_name_foreign` (`name`),
-  CONSTRAINT `certificates_name_foreign` FOREIGN KEY (`name`) REFERENCES `texts` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
-DROP TABLE IF EXISTS `intro_packages`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `intro_packages` (
-  `id` int unsigned NOT NULL AUTO_INCREMENT,
-  `name` int unsigned NOT NULL,
-  `deadline` date NOT NULL,
-  `application_form_id` int unsigned NOT NULL,
-  `created_at` timestamp NULL DEFAULT NULL,
-  `updated_at` timestamp NULL DEFAULT NULL,
-  PRIMARY KEY (`id`),
-  KEY `intro_packages_name_foreign` (`name`),
-  KEY `intro_packages_application_form_id_foreign` (`application_form_id`),
-  CONSTRAINT `intro_packages_application_form_id_foreign` FOREIGN KEY (`application_form_id`) REFERENCES `application_forms` (`id`),
-  CONSTRAINT `intro_packages_name_foreign` FOREIGN KEY (`name`) REFERENCES `texts` (`id`)
+  `name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `menu_items`;
@@ -207,7 +173,6 @@ DROP TABLE IF EXISTS `menu_items`;
 CREATE TABLE `menu_items` (
   `id` int unsigned NOT NULL AUTO_INCREMENT,
   `parent_id` int unsigned DEFAULT NULL,
-  `name` int unsigned NOT NULL,
   `deletable` tinyint(1) NOT NULL,
   `editable` tinyint(1) NOT NULL,
   `after` int unsigned DEFAULT NULL,
@@ -217,12 +182,9 @@ CREATE TABLE `menu_items` (
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
   `deleted_at` timestamp NULL DEFAULT NULL,
-  `content_id` int unsigned NOT NULL DEFAULT '1',
-  PRIMARY KEY (`id`),
-  KEY `menu_items_name_foreign` (`name`),
-  KEY `menu_items_content_id_foreign` (`content_id`),
-  CONSTRAINT `menu_items_content_id_foreign` FOREIGN KEY (`content_id`) REFERENCES `texts` (`id`),
-  CONSTRAINT `menu_items_name_foreign` FOREIGN KEY (`name`) REFERENCES `texts` (`id`)
+  `name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `content` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci,
+  PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `migrations`;
@@ -240,19 +202,15 @@ DROP TABLE IF EXISTS `news_items`;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `news_items` (
   `id` int unsigned NOT NULL AUTO_INCREMENT,
-  `title` int unsigned NOT NULL,
-  `text` int unsigned NOT NULL,
   `image_url` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
   `deleted_at` timestamp NULL DEFAULT NULL,
   `author` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `thumbnail_url` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  PRIMARY KEY (`id`),
-  KEY `news_items_title_foreign` (`title`),
-  KEY `news_items_text_foreign` (`text`),
-  CONSTRAINT `news_items_text_foreign` FOREIGN KEY (`text`) REFERENCES `texts` (`id`),
-  CONSTRAINT `news_items_title_foreign` FOREIGN KEY (`title`) REFERENCES `texts` (`id`)
+  `title` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `text` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci,
+  PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `password_resets`;
@@ -279,13 +237,26 @@ DROP TABLE IF EXISTS `rols`;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `rols` (
   `id` int unsigned NOT NULL AUTO_INCREMENT,
-  `name` int unsigned NOT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
   `deleted_at` timestamp NULL DEFAULT NULL,
+  `name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+DROP TABLE IF EXISTS `sessions`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `sessions` (
+  `id` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `user_id` bigint unsigned DEFAULT NULL,
+  `ip_address` varchar(45) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `user_agent` text COLLATE utf8mb4_unicode_ci,
+  `payload` longtext COLLATE utf8mb4_unicode_ci NOT NULL,
+  `last_activity` int NOT NULL,
   PRIMARY KEY (`id`),
-  KEY `rols_name_foreign` (`name`),
-  CONSTRAINT `rols_name_foreign` FOREIGN KEY (`name`) REFERENCES `texts` (`id`)
+  KEY `sessions_user_id_index` (`user_id`),
+  KEY `sessions_last_activity_index` (`last_activity`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `settings`;
@@ -351,23 +322,6 @@ CREATE TABLE `texts` (
   `updated_at` timestamp NULL DEFAULT NULL,
   `deleted_at` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
-DROP TABLE IF EXISTS `user_registration_info`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `user_registration_info` (
-  `id` int unsigned NOT NULL AUTO_INCREMENT,
-  `user_id` int unsigned NOT NULL,
-  `package_type` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
-  `shirt_size` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
-  `intro_weekend` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
-  `created_at` timestamp NULL DEFAULT NULL,
-  `updated_at` timestamp NULL DEFAULT NULL,
-  `deleted_at` timestamp NULL DEFAULT NULL,
-  PRIMARY KEY (`id`),
-  KEY `user_registration_info_user_id_foreign` (`user_id`),
-  CONSTRAINT `user_registration_info_user_id_foreign` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `users`;
@@ -487,3 +441,16 @@ INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (50,'2023_10_03_114
 INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (51,'2023_10_03_133039_fix_self_referencing_zekering_records',1);
 INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (52,'2023_10_08_095128_remove_gender_from_users_table',1);
 INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (53,'2023_10_10_171243_remove_photo_albums',1);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (54,'2023_10_09_144100_set_english_text_default_agenda',2);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (55,'2023_10_09_151123_set_english_text_default_agenda_categories',2);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (56,'2023_10_09_223615_set_english_text_default_application_form',2);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (57,'2023_10_09_223615_set_english_text_default_application_form_row',2);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (58,'2023_10_09_223615_set_english_text_default_application_form_row_options',2);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (59,'2023_10_09_223615_set_english_text_default_certificates',2);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (60,'2023_10_09_223615_set_english_text_default_news',2);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (61,'2023_10_09_223615_set_english_text_default_page',2);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (62,'2023_10_09_223615_set_english_text_default_role',2);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (63,'2023_10_11_143010_remove_certificate_start_date',2);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (64,'2023_10_18_083938_create_sessions_table',2);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (65,'2023_10_18_164902_remove_intro_packages',2);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (66,'2023_10_18_172952_application_form_response_row_longtext',2);
