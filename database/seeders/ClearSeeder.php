@@ -11,7 +11,6 @@ use App\Models\ApplicationForm\ApplicationForm;
 use App\Models\ApplicationForm\ApplicationFormRow;
 use App\NewsItem;
 use App\Rol;
-use App\Text;
 use App\User;
 use App\Zekering;
 use Illuminate\Database\Seeder;
@@ -33,7 +32,6 @@ class ClearSeeder extends Seeder
         AgendaItemCategory::getQuery()->delete();
         ApplicationFormRow::getQuery()->delete();
         NewsItem::getQuery()->delete();
-        Text::getQuery()->delete();
         Book::getQuery()->delete();
         ApplicationForm::getQuery()->delete();
         User::getQuery()->delete();
