@@ -26,7 +26,7 @@
                         :name="'rows[' + applicationFormIndex + '][options][' + index + '][value]'">
             </div>
             <div class="col-md-1">
-                <div class="form-group pl-4 pr-4">
+                <div class="form-group">
                     <label>Delete</label>
                     <button type="button" class="btn btn-danger form-control" v-on:click="deleteRow(index)">
                         <i class="ion-trash-a"></i>

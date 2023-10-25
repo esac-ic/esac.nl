@@ -3,9 +3,9 @@
         <div class="card-header">
             <h3>
                 Form rows
-                <span v-on:click="addRow()" class="float-right" style="cursor: pointer">
-                    <i class="ion-plus"></i>
-                </span>
+                <button type="button" class="btn btn-primary float-right" v-on:click="addRow()">
+                    <i class="ion-plus"></i> Add row
+                </button>
             </h3>
         </div>
         <div class="card-body">
@@ -39,7 +39,7 @@
                         </div>
                     </div>
                     <div class="col-md-1">
-                        <div class="form-group pl-4 pr-4">
+                        <div class="form-group">
                             <label>Delete</label>
                             <button type="button" class="btn btn-danger form-control" v-on:click="deleteRow(index)">
                                 <i class="ion-trash-a"></i>
