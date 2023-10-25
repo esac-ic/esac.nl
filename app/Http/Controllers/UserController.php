@@ -107,13 +107,23 @@ class UserController extends Controller
     public function update(Request $request, User $user, MailListFacade $mailListFacade)
     {
         if (!Auth::user()->hasRole(Config::get('constants.Administrator'))) {
-            if (Auth::user()->id != $user->id || $request->has('kind_of_member')) {
+            if (Auth::user()->id != $user->id) {
                 abort(403, 'You do not have sufficient access to view this page');
             }
+
+            // If not an admin, set the fields that are not allowed to be changed to the current values.
+            $request = $request->merge([
+                'firstname' => $user->firstname,
+                'preposition' => $user->preposition,
+                'lastname' => $user->lastname,
+                'remarks' => $user->remarks,
+                'kind_of_member' => $user->kind_of_member,
+            ]);
         }
+
+        $this->validateInput($request, $user->id);
+
         if ($user->email != $request['email']) {
-            //check if email is unique
-            $this->validateInput($request);
             $mailListFacade->updateUserEmailFormAllMailList($user, $user->email, $request['email']);
         }
 
@@ -156,14 +166,14 @@ class UserController extends Controller
         return redirect('/users/' . $user->id);
     }
 
-    private function validateInput(Request $request)
+    private function validateInput(Request $request, int $userId = null)
     {
         $this->validate($request, [
             'email' => [
                 'required',
                 'email',
                 'max:255',
-                'unique:users',
+                'unique:users,email,' . $userId, // Exclude the user being edited's email
                 new EmailDomainValidator(),
             ],
             'firstname' => 'required|max:255',

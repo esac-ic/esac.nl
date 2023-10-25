@@ -35,19 +35,32 @@
             <div class="form-row">
                 <div class="form-group col-md-5">
                     {!! Form::label('firstname', 'First name') !!}
-                    {!! Form::text('firstname', ($user != null) ? $user->firstname : "", ['class' => 'form-control','required' => 'required']) !!}                    </div>
+                    @if(\Illuminate\Support\Facades\Auth::user()->hasRole(Config::get('constants.Administrator')))
+                        {!! Form::text('firstname', ($user != null) ? $user->firstname : "", ['class' => 'form-control','required' => 'required']) !!}
+                    @else
+                        {!! Form::text('firstname', ($user != null) ? $user->firstname : "", ['class' => 'form-control','required' => 'required', 'disabled' => 'disabled']) !!}
+                    @endif
+                </div>
                 <div class="form-group col-md-2">
                     {!! Form::label('preposition', 'Preposition') !!}
-                    {!! Form::text('preposition', ($user != null) ? $user->preposition : "", ['class' => 'form-control']) !!}
+                    @if(\Illuminate\Support\Facades\Auth::user()->hasRole(Config::get('constants.Administrator')))
+                        {!! Form::text('preposition', ($user != null) ? $user->preposition : "", ['class' => 'form-control']) !!}
+                    @else
+                        {!! Form::text('preposition', ($user != null) ? $user->preposition : "", ['class' => 'form-control', 'disabled' => 'disabled']) !!}
+                    @endif
                 </div>
                 <div class="form-group col-md-5">
                     {!! Form::label('lastname', 'Last name') !!}
-                    {!! Form::text('lastname', ($user != null) ? $user->lastname : "", ['class' => 'form-control','required' => 'required']) !!}
+                    @if(\Illuminate\Support\Facades\Auth::user()->hasRole(Config::get('constants.Administrator')))
+                        {!! Form::text('lastname', ($user != null) ? $user->lastname : "", ['class' => 'form-control','required' => 'required']) !!}
+                    @else
+                        {!! Form::text('lastname', ($user != null) ? $user->lastname : "", ['class' => 'form-control','required' => 'required', 'disabled' => 'disabled']) !!}
+                    @endif
                 </div>
             </div>
             <div class="form-row">
                 <div class="form-group col-md-6">
-                    {!! Form::label('emaillbl', 'Email address') !!}
+                    {!! Form::label('email', 'Email address') !!}
                     {!! Form::text('email', ($user != null) ? $user->email : "", ['class' => 'form-control','required' => 'required']) !!}
                 </div>
                 <div class="form-group col-md-6">
@@ -99,16 +112,22 @@
                         </div>
                     </div>
                 </div>
-                @if(\Illuminate\Support\Facades\Auth::user()->hasRole(Config::get('constants.Administrator')))
-                    <div class="form-group col-md-6">
-                        {!! Form::label('kind_of_member', 'Type of member') !!}
+                <div class="form-group col-md-6">
+                    {!! Form::label('kind_of_member', 'Type of member') !!}
+                    @if(\Illuminate\Support\Facades\Auth::user()->hasRole(Config::get('constants.Administrator')))
                         {!! Form::select('kind_of_member',trans('kind_of_member'), ($user != null) ? $user->kind_of_member : "", ['class' => 'form-control','required' => 'required','id' => 'kind_of_member']) !!}
-                    </div>
-                @endif
+                    @else
+                        {!! Form::select('kind_of_member',trans('kind_of_member'), ($user != null) ? $user->kind_of_member : "", ['class' => 'form-control','required' => 'required','id' => 'kind_of_member', 'disabled' => 'disabled']) !!}
+                    @endif
+                </div>
             </div>
             <div class="form-group">
                 {{Form::label('remark',  'Remarks')}}
-                {{Form::textarea('remark',($user != null) ? $user->remark : "",array('class' => 'form-control'))}}
+                @if(\Illuminate\Support\Facades\Auth::user()->hasRole(Config::get('constants.Administrator')))
+                    {{Form::text('remark',($user != null) ? $user->remark : "",array('class' => 'form-control'))}}
+                @else
+                    {{Form::text('remark',($user != null) ? $user->remark : "",array('class' => 'form-control', 'disabled' => 'disabled'))}}
+                @endif
             </div>
         </div>
     </div>
@@ -168,27 +187,27 @@
             </div>
         </div>
     </div>
-    <div class="card mt-4">
-        <div class="card-header">
-            <h3>{{ 'Roles' }}</h3>
-        </div>
-        <div class="card-body">
-            <div class="form-group">
-                @if(\Illuminate\Support\Facades\Auth::user()->hasRole(Config::get('constants.Administrator')))
-                    @foreach($roles as $role)
-                        <div class="form-check">
-                            @if($ownedRoles->contains($role->id))
-                                <input class="form-check-input" type="checkbox" name="roles[]" value="{{$role->id}}" id="{{$role->id}}" checked>
-                            @else
-                                <input class="form-check-input" type="checkbox" name="roles[]" value="{{$role->id}}" id="{{$role->id}}">
-                            @endif
-                            <label class="form-check-label" for="{{$role->id}}">{{$role->name}}</label>
-                        </div>
-                    @endforeach
-                @endif
+    @if(\Illuminate\Support\Facades\Auth::user()->hasRole(Config::get('constants.Administrator')))
+        <div class="card mt-4">
+            <div class="card-header">
+                <h3>{{ 'Roles' }}</h3>
+            </div>
+            <div class="card-body">
+                <div class="form-group">
+                        @foreach($roles as $role)
+                            <div class="form-check">
+                                @if($ownedRoles->contains($role->id))
+                                    <input class="form-check-input" type="checkbox" name="roles[]" value="{{$role->id}}" id="{{$role->id}}" checked>
+                                @else
+                                    <input class="form-check-input" type="checkbox" name="roles[]" value="{{$role->id}}" id="{{$role->id}}">
+                                @endif
+                                <label class="form-check-label" for="{{$role->id}}">{{$role->name}}</label>
+                            </div>
+                        @endforeach
+                </div>
             </div>
         </div>
-    </div>
+    @endif
     <div class="my-4">
         {!! Form::submit('Save', ['class'=> 'btn btn-primary'] ) !!}
         <a class="btn btn-danger" href="{{ ($user == null) ? ('/users') : ('/users/' . $user->id)}}">{{'Cancel'}}</a>
