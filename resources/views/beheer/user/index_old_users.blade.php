@@ -19,10 +19,16 @@
             <h1>{{'Old members'}}</h1>
         </div>
 
+        @if(\Illuminate\Support\Facades\Auth::user()->hasRole(Config::get('constants.Administrator')))
         <div class="col-md-6">
             <div class="btn-group mt-2 float-md-right" role="group" aria-label="Actions">
+                <a href="{{url('users/exportOldUsers')}}" class="btn btn-primary">
+                    <span title="{{'New user'}}" class="ion-android-download" aria-hidden="true"></span>
+                    {{'Export old members'}}
+                </a>
             </div>
         </div>
+        @endif
     </div>
     <table id="users" class="table table-striped dt-responsive nowrap" style="width:100%">
         <thead>

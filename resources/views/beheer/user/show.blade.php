@@ -159,12 +159,18 @@
                         </tr>
                         <tr>
                             <td>{{'User created at'}}</td>
-                            <td>{{trans(\Carbon\Carbon::parse($user->created_at)->format('d-m-Y'))}}</td>
+                            <td>{{\Carbon\Carbon::parse($user->created_at)->format('d-m-Y')}}</td>
                         </tr>
                         <tr>
                             <td>{{'User updated at'}}</td>
-                            <td>{{trans(\Carbon\Carbon::parse($user->updated_at)->format('d-m-Y'))}}</td>
+                            <td>{{\Carbon\Carbon::parse($user->updated_at)->format('d-m-Y')}}</td>
                         </tr>
+                        @isset($user->lid_af)
+                        <tr>
+                            <td>User removed as active member at</td>
+                            <td>{{\Carbon\Carbon::parse($user->lid_af)->format('d-m-Y')}}</td>
+                        </tr>
+                        @endisset
                     </table>
                 </div>
                 <div class="tab-pane fade" id="tab2-content" role="tabpanel" aria-labelledby="tab2-content">
