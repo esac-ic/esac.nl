@@ -29,8 +29,8 @@
                 </p>
             </div>
             <div class="col-12 col-md-9">
-                <span class="h5">Dé studenten klim- en bergsportvereniging van Eindhoven.</span>
-                <h6>Ondersteund door</h6>
+                <span class="h5">The student climbing and mountaineering association of Eindhoven.</span>
+                <h6>Supported by</h6>
                 <div class="row">
                     <div class="col-6 col-lg-3">
                         <a href="https://venusp.tue.nl/sci-cgi/index.opl"><img class="img-fluid" src="{{asset('img/ssc.png')}}"></a>
