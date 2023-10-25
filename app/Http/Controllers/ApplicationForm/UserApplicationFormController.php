@@ -80,7 +80,7 @@ class UserApplicationFormController extends Controller
             $error = 'You have already signed up for this event.';
             $curPageName = $error;
 
-            return view("forms.inschrijven_error", compact('menu', 'error', 'curPageName'));
+            return view("forms.inschrijven_error", compact('error', 'curPageName'));
         }
 
         $repository->storeRegistration($request->except(['_token']), $agendaItem, Auth::user()->id);
