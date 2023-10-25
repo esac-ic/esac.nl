@@ -68,7 +68,7 @@
                         <td>{{$member->getAddress()}}</td>
                         <td>{{$member->getName()}}</td>
                         <td>
-                            <a href="#" id="deleteMemebr" data-mailList-id="{{$mailList->getId()}}" data-member-email="{{$member->getAddress()}}"><em class="ion-trash-a"></em></a>
+                            <a href="#" id="deleteMember" data-mailList-id="{{$mailList->getId()}}" data-member-email="{{$member->getAddress()}}"><em class="ion-trash-a"></em></a>
                         </td>
                     </tr>
                 @endforeach
@@ -92,26 +92,23 @@
             $('#maillistMembers').dataTable();
         });
 
-        $(document).on('click','#addMeber',function(){
-           console.log('add member');
+        $(document).on('click', '#addMember', function() {
         });
-        $(document).on('click','#deleteMemebr',function(){
-           if(confirm('{{'Are you sure you want to delete this?'}}')){
-               //delete user from maillist
-               var mailListId = $(this).attr('data-mailList-id');
-               var memberEmail = $(this).attr('data-member-email');
-               $.ajax({
-                   url: '/mailList/' + mailListId + '/member/' + memberEmail,
-                   data : {
-                       _token : window.Laravel.csrfToken
-                   },
-                   type: 'DELETE',
-                   success : function(){
-                       window.location.reload();
-                   }
-               });
-           }
 
+        $(document).on('click', '#deleteMember', function() {
+            const mailListId = $(this).attr('data-mailList-id');
+            const memberEmail = $(this).attr('data-member-email');
+
+            $.ajax({
+                url: '/mailList/' + mailListId + '/member/' + memberEmail,
+                data: {
+                    _token: window.Laravel.csrfToken
+                },
+                type: 'DELETE',
+                success: function() {
+                    window.location.reload();
+                }
+            });
         });
     </script>
 @endpush
