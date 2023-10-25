@@ -33,48 +33,61 @@
 @section('modal_javascript')
     <script>
         var datatable;
-        $(document).ready(function () {
+        var selectedUserIds = [];
+
+        function initializeDataTable() {
             datatable = $('#maillistUserList').DataTable({
-                buttons: [
-                    'pageLength'
-                ],
-                "ajax": '/api/users',
-                "columns": [
+                buttons: ['pageLength'],
+                ajax: '/api/users',
+                columns: [
                     {
-                        "data": "id",
-                        "render": function( data, type, row, meta ) {
-                            return "<input type='checkbox' value='" + data + "' class='user-checkbox'>";
+                        data: "id",
+                        render: function(data) {
+                            let isChecked = selectedUserIds.includes(data.toString()) ? 'checked' : '';
+                            return `<input type='checkbox' value='${data}' class='user-checkbox' ${isChecked}>`;
                         }
                     },
-                    {"data": "name"},
-                    {"data": "email"},
+                    {data: "name"},
+                    {data: "email"},
                 ],
-                "lengthMenu": [[10, 25, 50, -1], [10, 25, 50, "Alles"]]
+                lengthMenu: [[10, 25, 50, -1], [10, 25, 50, "Alles"]]
             });
-        });
+        }
 
-        $(document).on('click', '#addUsers', function () {
-            let userIds = [];
+        function toggleUserIdInList(userId) {
+            if (selectedUserIds.includes(userId)) {
+                selectedUserIds.splice(selectedUserIds.indexOf(userId), 1);
+            } else {
+                selectedUserIds.push(userId);
+            }
+        }
 
-            $.each($(".user-checkbox:checked"), function(){
-                userIds.push($(this).val());
-            });
-
+        function addUsersToMailList() {
             var mailListId = '{{$mailList->getId()}}';
             $.ajax({
                 url: '/mailList/' + mailListId + '/member',
                 data: {
-                    userIds: userIds,
+                    userIds: selectedUserIds,
                     _token: window.Laravel.csrfToken
                 },
                 type: 'POST',
-                success: function () {
+                success: function() {
                     window.location.reload();
                 },
-                error: function () {
+                error: function() {
                     window.location.reload();
                 }
             });
+        }
+
+        $(document).ready(function() {
+            initializeDataTable();
+
+            $(document).on('change', '.user-checkbox', function() {
+                toggleUserIdInList($(this).val());
+            });
+
+            $(document).on('click', '#addUsers', addUsersToMailList);
         });
     </script>
 @endsection

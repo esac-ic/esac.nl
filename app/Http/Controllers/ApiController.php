@@ -3,14 +3,17 @@
 namespace App\Http\Controllers;
 
 use App\MenuItem;
-use App\User;
+use App\Repositories\UserRepository;
 use Illuminate\Http\Request;
 
 class ApiController extends Controller
 {
-    public function __construct()
+    private $_userRepository;
+
+    public function __construct(UserRepository $userRepository)
     {
-        $this->middleware('auth')->except('getAgenda', 'getZekeringen');
+        $this->middleware('auth');
+        $this->_userRepository = $userRepository;
     }
 
     public function getMenuItems(Request $request)
@@ -36,9 +39,8 @@ class ApiController extends Controller
 
     public function getUsers()
     {
-        $users = array();
-
-        foreach (User::all() as $user) {
+        $users = [];
+        foreach ($this->_userRepository->getCurrentUsers(['id', 'email', 'firstname', 'preposition', 'lastname']) as $user) {
             array_push($users, [
                 'id' => $user->id,
                 'name' => $user->getName(),
@@ -48,5 +50,4 @@ class ApiController extends Controller
 
         return ['aaData' => $users];
     }
-
 }
