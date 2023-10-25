@@ -77,11 +77,11 @@ class User extends Authenticatable
 
     public function getCertificationsAbbreviations()
     {
-        $certificates = "";
+        $abbreviations = [];
         foreach ($this->certificates as $certificate) {
-            $certificates .= $certificate->abbreviation . ", ";
+            $abbreviations[] = $certificate->abbreviation;
         }
-        return trim($certificates, ", ");
+        return implode(', ', $abbreviations);
     }
 
     //checks if a user has role like admin or content administrator
@@ -92,11 +92,13 @@ class User extends Authenticatable
 
     public function getName()
     {
-        $name = $this->firstname;
-        $name .= ($this->preposition == null) ? ' ' : ' ' . $this->preposition . ' ';
-        $name .= $this->lastname;
+        $nameParts = [
+            $this->firstname,
+            $this->preposition,
+            $this->lastname,
+        ];
 
-        return $name;
+        return implode(' ', array_filter($nameParts));
     }
 
     public function isOldMember()
@@ -134,9 +136,9 @@ class User extends Authenticatable
         }
     }
 
-    public function getAdress()
+    public function getAddress()
     {
-        return $this->street . " " . $this->houseNumber;
+        return "{$this->street} {$this->houseNumber}";
     }
 
     public function applicationResponses()
