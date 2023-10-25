@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\CustomClasses\MailList\MailListFacade;
+use App\Exports\OldUsersExport;
 use App\Exports\UsersExport;
 use App\Repositories\UserRepository;
 use App\Rol;
@@ -141,6 +142,11 @@ class UserController extends Controller
     public function exportUsers(UsersExport $usersExport)
     {
         return Excel::download($usersExport, 'Members' . '.xlsx');
+    }
+
+    public function exportOldUsers(OldUsersExport $oldUsersExport)
+    {
+        return Excel::download($oldUsersExport, 'Old members' . '.xlsx');
     }
 
     public function makeActiveMember(Request $request, User $user)

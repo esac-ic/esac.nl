@@ -93,12 +93,6 @@
                     {!! Form::text('phonenumber', '', ['class' => 'form-control','required' => 'required']) !!}
                 </div>
                 <div class="form-group col-md-6">
-                    {!! Form::label('phonenumber_alt', 'Alternative phone number') !!}
-                    {!! Form::text('phonenumber_alt', '', ['class' => 'form-control']) !!}
-                </div>
-            </div>
-            <div class="form-row">
-                <div class="form-group col-md-6">
                     {!! Form::label('birthDay', 'Birthdate') !!}
                     <div class="input-group date" id="birthDayBox" data-target-input="nearest">
                         <input type='text' class="form-control datetimepicker-input" id="birthDay" name="birthDay" data-target="#birthDayBox" value="" required="required">
@@ -106,10 +100,6 @@
                             <div class="input-group-text"><i class="ion-calendar"></i></div>
                         </div>
                     </div>
-                </div>
-                <div class="form-group col-md-6">
-                    {!! Form::label('kind_of_member', 'Type of member') !!}
-                    {!! Form::select('kind_of_member', trans("kind_of_member"), 'member', ['class' => 'form-control', 'required' => 'required', 'readonly' => 'readonly']) !!}
                 </div>
             </div>
         </div>
