@@ -45,7 +45,7 @@
             <tr>
                 <td>{{$user->getName()}}</td>
                 <td>{{$user->email}}</td>
-                <td>{{$user->getAdress()}}</td>
+                <td>{{$user->getAddress()}}</td>
 
                 <td>
                     <a href="{{url('/forms/users/'. $user->id . '/detail/'. $agendaItemId)}}"><span title="{{'Show entered information'}}" class="ion-eye" aria-hidden="true"></span></a>
