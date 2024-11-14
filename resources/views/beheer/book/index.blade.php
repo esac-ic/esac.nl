@@ -25,6 +25,12 @@
                     <span title="{{'New user'}}" class="ion-plus" aria-hidden="true"></span>
                     {{'New book'}}
                 </a>
+                
+                <a href="{{url('books/exportLibrary')}}" class="btn btn-primary">
+                    <span title="{{'New user'}}" class="ion-android-download" aria-hidden="true"></span>
+                    {{'Export books'}}
+                </a>
+                
             </div>
         </div>
     </div>

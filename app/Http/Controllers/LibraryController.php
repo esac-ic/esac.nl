@@ -7,6 +7,8 @@ use App\Repositories\BookRepository;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Session;
+use Maatwebsite\Excel\Facades\Excel;
+use App\Exports\LibraryExport;
 
 class LibraryController extends Controller
 {
@@ -73,6 +75,11 @@ class LibraryController extends Controller
         $this->_bookRepository->delete($book->id);
         Session::flash("message", 'Book removed');
         return redirect()->route('books.index');
+    }
+    
+    public function exportLibrary(LibraryExport $libraryExport)
+    {
+        return Excel::download($libraryExport, 'Library' . '.xlsx');
     }
 
     private function validateInput(Request $request)

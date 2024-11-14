@@ -49,6 +49,9 @@ Route::post('users/{user}/addCertificate', 'UserCertificateController@saveCertif
 Route::patch('users/{user}/addCertificate/{certificate}', 'UserCertificateController@updateUserCertificate');
 Route::delete('users/{user}/addCertificate/{certificate}', 'UserCertificateController@deleteUserCertificate');
 
+//library routes
+Route::get('books/exportLibrary', 'LibraryController@exportLibrary');
+
 //crud routes
 Route::resource('users', 'UserController');
 Route::resource('rols', 'RolController');
