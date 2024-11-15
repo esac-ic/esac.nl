@@ -22,12 +22,12 @@
         <div class="col-md-6">
             <div class="btn-group mt-2 float-md-right" role="group" aria-label="Actions">
                 <a href="{{url('books/create')}}" class="btn btn-primary">
-                    <span title="{{'New user'}}" class="ion-plus" aria-hidden="true"></span>
+                    <span title="{{'New book'}}" class="ion-plus" aria-hidden="true"></span>
                     {{'New book'}}
                 </a>
                 
                 <a href="{{url('books/exportLibrary')}}" class="btn btn-primary">
-                    <span title="{{'New user'}}" class="ion-android-download" aria-hidden="true"></span>
+                    <span title="{{'Export library'}}" class="ion-android-download" aria-hidden="true"></span>
                     {{'Export books'}}
                 </a>
                 
