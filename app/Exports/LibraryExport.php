@@ -60,7 +60,6 @@ class LibraryExport implements FromCollection, WithTitle, WithHeadings, ShouldAu
     public function map($book): array
     {
         $properties = array_keys(LibraryExport::PROPERTY_LABELS);
-        $temp = $book->only($properties);
-        return $temp;
+        return $book->only($properties);
     }
 }
