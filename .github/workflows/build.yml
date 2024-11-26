@@ -81,8 +81,16 @@ jobs:
     - name: Execute tests (Unit and Feature tests) via PHPUnit
       run: vendor/bin/phpunit -c phpunit.xml --coverage-clover=coverage.xml
 
+    - name: Upload to Codecov
+      uses: codecov/codecov-action@v3
+      if: env.HAS_CODECOV_TOKEN
+      with:
+        token: ${{ secrets.CODECOV_TOKEN }}
+        file: coverage.xml
+        fail_ci_if_error: true
+
   publish:
-    name: Build and push Docker image & publish Codecov report
+    name: Build and push Docker image
     runs-on: ubuntu-latest
     environment: Build
     needs: tests
@@ -95,18 +103,10 @@ jobs:
         password: ${{ secrets.DOCKER_ACCESS_TOKEN }}
 
     - name: Build and push Docker image
-      uses: docker/build-push-action@v5
+      uses: docker/build-push-action@v6
       with:
         push: true
         tags: esac/website:${{ github.run_number }}
-
-    - name: Upload to Codecov
-      uses: codecov/codecov-action@v3
-      if: env.HAS_CODECOV_TOKEN
-      with:
-        token: ${{ secrets.CODECOV_TOKEN }}
-        file: coverage.xml
-        fail_ci_if_error: true
 
   deploy:
     name: Deploy to production
