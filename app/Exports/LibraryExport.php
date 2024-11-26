@@ -3,19 +3,31 @@
 namespace App\Exports;
 
 use APP\Repositories\BookRepository;
-// use DebugBar\DebugBar;
 use Barryvdh\Debugbar\Facades\Debugbar;
-use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\Log;
 use Maatwebsite\Excel\Concerns\FromCollection;
 use Maatwebsite\Excel\Concerns\WithHeadings;
+use Maatwebsite\Excel\Concerns\WithMapping;
 use Maatwebsite\Excel\Concerns\WithTitle;
 use Maatwebsite\Excel\Concerns\ShouldAutoSize;
-use Illuminate\Support\Facades\Log;
 
-class LibraryExport implements FromCollection, WithTitle, WithHeadings, ShouldAutoSize
+class LibraryExport implements FromCollection, WithTitle, WithHeadings, ShouldAutoSize, WithMapping
 {
     
-    private $bookRepository;
+    private BookRepository $bookRepository;
+    
+    /**
+     * All properties to be included in the export. Maps model property to header label.
+     * Note: the keys should be the same as the model attributes
+     */
+    private const PROPERTY_LABELS = [
+        "id" => "#",
+        "title" => "Title",
+        "year" => "Year",
+        "type" => "Type",
+        "country" => "Country",
+        "code" => "Code",
+    ];
 
     public function __construct(BookRepository $bookRepository)
     {
@@ -25,18 +37,22 @@ class LibraryExport implements FromCollection, WithTitle, WithHeadings, ShouldAu
     /**
     * @return \Illuminate\Support\Collection
     */
+    // public function collection()
+    // {
+    //     $books = $this->bookRepository->all(['*']);
+    //     $exportData = [];
+    //     foreach($books as $book) {
+    //         //possible here to do some data filtering and manipulation etc, but isn't necesary at time of writing
+    //         $book->makeHidden('updated_at', 'deleted_at', 'created_at');
+    //         $data = $book->toArray();
+            
+    //         array_push($exportData, $data);
+    //     }
+    //     return new Collection($exportData);
+    // }
     public function collection()
     {
-        $books = $this->bookRepository->all(['*']);
-        $exportData = [];
-        foreach($books as $book) {
-            //possible here to do some data filtering and manipulation etc, but isn't necesary at time of writing
-            $book->makeHidden('updated_at', 'deleted_at', 'created_at');
-            $data = $book->toArray();
-            
-            array_push($exportData, $data);
-        }
-        return new Collection($exportData);
+        return $this->bookRepository->all(["*"]);
     }
     
     public function title(): String
@@ -46,13 +62,28 @@ class LibraryExport implements FromCollection, WithTitle, WithHeadings, ShouldAu
     
     public function headings(): array
     {
-        return [
-            '#',
-            'Title',
-            'Year',
-            'Type',
-            'Country',
-            'Code',
-        ];
+        return array_values(LibraryExport::PROPERTY_LABELS);
+        // return [
+        //     '#',
+        //     'Title',
+        //     'Year',
+        //     'Type',
+        //     'Country',
+        //     'Code',
+        // ];
+    }
+    
+    /**
+     * Map a single book (row) to an array of cell values.
+     * Note: The order of these values must match the order of the headings
+     * 
+     * @param \APP\Book $book
+     * @return array
+     */
+    public function map($book): array
+    {
+        $properties = array_keys(LibraryExport::PROPERTY_LABELS);
+        $temp = $book->only($properties);
+        return $temp;
     }
 }
