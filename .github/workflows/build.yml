@@ -10,6 +10,7 @@ env:
   DB_DATABASE: esac
   DB_USERNAME: mysql
   DB_PASSWORD: mysql
+  HAS_CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN != '' }}
 
 jobs:
   tests:
@@ -98,7 +99,7 @@ jobs:
 
     - name: Upload to codecov
       uses: codecov/codecov-action@v3
-      if: secrets.CODECOV_TOKEN
+      if: env.HAS_CODECOV_TOKEN
       with:
         token: ${{ secrets.CODECOV_TOKEN }}
         file: coverage.xml
