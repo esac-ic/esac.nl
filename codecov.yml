@@ -7,4 +7,4 @@ coverage:
 
     patch: # Applies to the contents of a single PR or commit only.
       default:
-        informational: false
+        informational: true
