@@ -42,7 +42,7 @@ DB\_HOST, DB\_PORT, DB\_DATABASE, DB\_USERNAME and DB\_PASSWORD
 	```
 	sudo service mysql start
 	sudo mysql
-	ALTER USER 'root'@'localhost' IDENTIFIED WITH mysql_native_password BY 'PASSWORD_HERE';
+	ALTER USER 'root'@'localhost' IDENTIFIED WITH mysql_native_password BY 'YOUR_PASSWORD_HERE';
 	CREATE DATABASE esac;
 	exit
 	sudo update-rc.d mysql defaults
@@ -63,8 +63,12 @@ DB\_HOST, DB\_PORT, DB\_DATABASE, DB\_USERNAME and DB\_PASSWORD
 	```
 	nano .env
 	```
-10. As of now, the only thing you need to change is DB_PASSWORD. If you mindlessly copied the commands in step 4, the DB_PASSWORD should be set to "PASSWORD_HERE". Then Press Ctrl X and follow instructions.
-11. Make sure you've enabled the following extensions in your php.ini file. To find the location, use ```php --ini``` and note down the "Loaded Configuration File" path. You can use ```sudo nano [path]``` to then edit it. Make sure that these lines are uncommented (use Ctrl+W to search if you wish):
+   Alternatively, you can open the repository in VScode and use the IDE to edit the .env file
+	```
+ 	code .
+  	```
+10. As of now, the only thing you need to change is DB_PASSWORD. If you mindlessly copied the commands in step 4, the DB_PASSWORD should be set to "YOUR_PASSWORD_HERE". If you're using nano, press Ctrl X and follow instructions. If you're using vscode, just save the file.
+11. Make sure you've enabled the following extensions in your php.ini file. To find the location, use `php --ini` and note down the "Loaded Configuration File" path. You can use `sudo nano [path]` to then edit it. Make sure that these lines are uncommented (use Ctrl+W to search if you wish):
 	```
 	extension=pdo_mysql
 	```
@@ -96,6 +100,25 @@ DB\_HOST, DB\_PORT, DB\_DATABASE, DB\_USERNAME and DB\_PASSWORD
 	php artisan serve
 	```
 15. You can then go to localhost:8000 in your favorite browser and view your own version of the esac website!
+
+If you get errors that you cannot access the database or that the database is down, you can start mysql using `sudo service mysql start`. If you want you can check if mysql is running with `sudo service mysql status`.
+
+#### Starting up the development environment again later
+1. Open ubuntu
+2. Navigate to the repository root using `cd esac.nl`
+4. Run either `npm run dev` or `npm run watch` to start the javascript development server
+6. Open a new terminal instance and run `code .` from the repository root to open VScode
+7. Then run `php artisan serve` to start up the laravel development server.
+8. Go to localhost:8000 in your favorite browser to view your own version of the ESAC website
+
+#### Reseeding the database
+If you want to reseed the database because, for example, you want to regenerate the agenda items, run the following commands:
+WARNING: don't use the first command if there is any important data in your database that isn't backed up.
+```
+php artisan migrate:fresh
+php artisan db:seed
+```
+The first command will drop all your tables and rerun all migrations and the second command will seed the database with data again. 
 
 ### Development environment (Windows)
 1. you need the following programs to run the code on your local environment:
@@ -139,6 +162,7 @@ DB\_HOST, DB\_PORT, DB\_DATABASE, DB\_USERNAME and DB\_PASSWORD
 
 ### Production environment
 When you update the server make sure you run the following commands
-
-    php artisan migrate
-    npm run production
+```
+php artisan migrate
+npm run production
+```
