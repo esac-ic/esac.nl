@@ -113,7 +113,8 @@ If you get errors that you cannot access the database or that the database is do
 
 #### Reseeding the database
 If you want to reseed the database because, for example, you want to regenerate the agenda items, run the following commands:
-WARNING: don't use the first command if there is any important data in your database that isn't backed up.
+
+**WARNING:** don't use the first command if there is any important data in your database that isn't backed up.
 ```
 php artisan migrate:fresh
 php artisan db:seed
