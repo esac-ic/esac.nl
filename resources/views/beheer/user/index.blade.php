@@ -27,7 +27,7 @@
                     {{'New user'}}
                 </a>
                 <a href="{{url('users/exportUsers')}}" class="btn btn-primary">
-                    <span title="{{'New user'}}" class="ion-android-download" aria-hidden="true"></span>
+                    <span title="{{'Export members'}}" class="ion-android-download" aria-hidden="true"></span>
                     {{'Export members'}}
                 </a>
             </div>
