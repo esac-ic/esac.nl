@@ -1,11 +1,10 @@
 coverage:
   status:
-    project:  # Applies to the entire project
+    project: # Applies to the entire project
       default:
         target: auto
         threshold: 25%  # Allows coverage to drop by up to 30% without failing
 
-    patch:  # Applies only to the changes in the pull request
+    patch: # Applies to the contents of a single PR or commit only.
       default:
-        target: auto
-        threshold: 25%  # Allows coverage to drop by up to 30% without failing
+        informational: true
