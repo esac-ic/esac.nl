@@ -10,7 +10,6 @@ env:
   DB_DATABASE: esac
   DB_USERNAME: mysql
   DB_PASSWORD: mysql
-  HAS_CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN != '' }}
 
 jobs:
   tests:
@@ -83,11 +82,13 @@ jobs:
 
     - name: Upload to Codecov
       uses: codecov/codecov-action@v3
-      if: env.HAS_CODECOV_TOKEN
+      env:
+        codecov_token: ${{ secrets.CODECOV_TOKEN }}
       with:
-        token: ${{ secrets.CODECOV_TOKEN }}
+        token: ${{ env.codecov_token }}
         file: coverage.xml
         fail_ci_if_error: true
+      if: ${{ env.codecov_token != '' }}
 
   publish:
     name: Build and push Docker image
