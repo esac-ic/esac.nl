@@ -8,6 +8,7 @@ use App\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Session;
+use App\Jobs\AddUserToMailList;
 
 class PendingUserController extends Controller
 {
@@ -56,6 +57,10 @@ class PendingUserController extends Controller
     public function approveAsPendingMember(Request $request, User $user)
     {
         $user->approveAsPendingMember();
+        
+        //add users to mail lists here
+        \Log::info("approved user");
+        dispatch(new AddUserToMailList($user));
 
         return redirect('users/pending_members');
     }
