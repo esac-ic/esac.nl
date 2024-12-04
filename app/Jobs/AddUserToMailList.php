@@ -34,6 +34,7 @@ class AddUserToMailList implements ShouldQueue
      */
     public function handle()
     {
-        \Log::info($this->user->firstname);
+        $currentMemberMailLists = app(\App\Setting::SINGELTONNAME)->getSetting(\App\Setting::SETTING_CURRENT_MEMBER_MAIL_LISTS);
+        \Log::info("add " . $this->user->firstname . " to mailists: " . $currentMemberMailLists);
     }
 }
