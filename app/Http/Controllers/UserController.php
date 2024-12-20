@@ -7,6 +7,8 @@ use App\Exports\OldUsersExport;
 use App\Exports\UsersExport;
 use App\Jobs\AddUserToCurrentMemberMailLists;
 use App\Jobs\AddUserToOldMemberMaillists;
+use App\Jobs\RemoveUserFromOldMemberMaillists;
+use App\Jobs\RemoveUserFromPendingMemberMaillists;
 use App\Repositories\UserRepository;
 use App\Rol;
 use App\Rules\EmailDomainValidator;
@@ -168,6 +170,7 @@ class UserController extends Controller
         $user->makeActiveMember();
         
         //add to active member mail lists here
+        dispatch(new RemoveUserFromOldMemberMaillists($user));
         dispatch(new AddUserToCurrentMemberMailLists($user));
 
         return redirect('/users/' . $user->id);
