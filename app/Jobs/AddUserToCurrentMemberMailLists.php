@@ -38,23 +38,16 @@ class AddUserToCurrentMemberMailLists implements ShouldQueue
     {
         //get the value of the setting
         $currentMemberMailLists = explode(";", app(\App\Setting::SINGELTONNAME)->getSetting(\App\Setting::SETTING_CURRENT_MEMBER_MAIL_LISTS));
+        $mailLists = array();
         
-        //get all mail lists to check if 
-        $allMailLists = $mailListFacade->getAllMailListIds();
-                
-        //for each of the active member lists: add as a member if it exists
+        
+        //another option is to make the settings follow the maillist id format
         foreach ($currentMemberMailLists as $mailList) {
             $mailList = $mailList . env("MAIL_MAN_DOMAIN");
-
-            //check if the mailist exists and then add the user to the mail list
-            if (in_array($mailList, $allMailLists)) {
-                $mailListFacade->addMember($mailList, $this->user->email, $this->user->getName());
-                \Log::info("add " . $this->user->firstname . " to mailists: " . $mailList);
-            } else {
-                //TODO: possibly display an error in the gui here somehow
-                \Log::error("tried adding user to maillist that doesn't exist");
-            }
+            
+            array_push($mailLists, str_replace("@", ".", $mailList)); //change the @ to a . to fit the maillist id format
         }
         
+        $mailListFacade->addUserToSpecifiedMailLists($this->user->email, $this->user->getName(), $mailLists);
     }
 }

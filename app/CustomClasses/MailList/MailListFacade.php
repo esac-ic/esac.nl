@@ -121,5 +121,29 @@ class MailListFacade
 
         }
     }
+    
+    /**
+     * Adds a user to an array of maillists
+     * 
+     * @param string $email the email address of the user
+     * @param string $name the name of the user
+     * @param array $mailLists an array of mailist to add the user to
+     * 
+     * @return void
+     */
+    public function addUserToSpecifiedMailLists(string $email, string $name, Array $mailLists) {
+        $allMailLists = $this->getAllMailListIds();
+        
+        foreach ($mailLists as $mailList) {
+            //check if the mailist exists and then add the user to the mail list
+            if (in_array($mailList, $allMailLists)) {
+                $this->addMember($mailList, $email, $name);
+                \Log::info("added user " . $name . " to mailists: " . $mailList);
+            } else {
+                //TODO: possibly display an error in the gui here somehow
+                \Log::error("tried adding user to maillist " . $mailList . " while this list doesn't exist");
+            }
+        }
+    }
 
 }
