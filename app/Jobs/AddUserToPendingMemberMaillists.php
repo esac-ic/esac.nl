@@ -36,24 +36,24 @@ class AddUserToPendingMemberMaillists implements ShouldQueue
     {
         
         //get the value of the setting
-        $currentMemberMailLists = trim(app(\App\Setting::SINGELTONNAME)->getSetting(\App\Setting::SETTING_PENDING_MEMBER_MAIL_LISTS));
+        $pendingMemberMailLists = trim(app(\App\Setting::SINGELTONNAME)->getSetting(\App\Setting::SETTING_PENDING_MEMBER_MAIL_LISTS));
         
         //check if there are mailists specified
-        if ($currentMemberMailLists == "") {
+        if ($pendingMemberMailLists == "") {
             return;
         }
         
         //split the list of maillists
-        $currentMemberMailLists = explode(";", $currentMemberMailLists);
+        $pendingMemberMailLists = explode(";", $pendingMemberMailLists);
                 
         //another option besides transforming the setting here is to make the settings follow the maillist id format
         
         //transform the maillist strings to the correct format
-        foreach ($currentMemberMailLists as &$mailList) {
+        foreach ($pendingMemberMailLists as &$mailList) {
             $mailList = str_replace("@", ".", $mailList . env("MAIL_MAN_DOMAIN")); //change the @ to a . to fit the maillist id format
         }
         unset($mailList);//break the reference after the last element
         
-        $mailListFacade->addUserToSpecifiedMailLists($this->user->email, $this->user->getName(), $currentMemberMailLists);
+        $mailListFacade->addUserToSpecifiedMailLists($this->user->email, $this->user->getName(), $pendingMemberMailLists);
     }
 }
