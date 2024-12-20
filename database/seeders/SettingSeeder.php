@@ -24,7 +24,7 @@ class SettingSeeder extends Seeder
         $setting->save();
         $setting = new Setting(['name' => Setting::SETTING_FOOTER_PHONE_NR, 'type' => Setting::TYPE_STRING, 'value' => '06-12345678']);
         $setting->save();
-        $setting = new Setting(['name' => Setting::SETTING_CURRENT_MEMBER_MAIL_LISTS, 'type' => Setting::TYPE_STRING, 'value' => 'actieve-leden']);
+        $setting = new Setting(['name' => Setting::SETTING_CURRENT_MEMBER_MAIL_LISTS, 'type' => Setting::TYPE_STRING, 'value' => 'alle-leden.;nieuwsbrief.']);
         $setting->save();
         $setting = new Setting(['name' => Setting::SETTING_OLD_MEMBER_MAIL_LISTS, 'type' => Setting::TYPE_STRING, 'value' => 'reunisten']);
         $setting->save();
