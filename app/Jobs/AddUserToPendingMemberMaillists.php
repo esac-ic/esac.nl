@@ -11,7 +11,7 @@ use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 
-class AddUserToCurrentMemberMailLists implements ShouldQueue
+class AddUserToPendingMemberMaillists implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
@@ -21,9 +21,11 @@ class AddUserToCurrentMemberMailLists implements ShouldQueue
      * @return void
      */
     public function __construct(
-        public User $user    
-    ) 
-    {}
+        public User $user
+    )
+    {
+        //
+    }
 
     /**
      * Execute the job.
@@ -32,8 +34,9 @@ class AddUserToCurrentMemberMailLists implements ShouldQueue
      */
     public function handle(MailListFacade $mailListFacade)
     {
+        
         //get the value of the setting
-        $currentMemberMailLists = trim(app(\App\Setting::SINGELTONNAME)->getSetting(\App\Setting::SETTING_CURRENT_MEMBER_MAIL_LISTS));
+        $currentMemberMailLists = trim(app(\App\Setting::SINGELTONNAME)->getSetting(\App\Setting::SETTING_PENDING_MEMBER_MAIL_LISTS));
         
         //check if there are mailists specified
         if ($currentMemberMailLists == "") {
