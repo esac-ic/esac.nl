@@ -6,6 +6,7 @@ use App\CustomClasses\MailList\MailListFacade;
 use App\Exports\OldUsersExport;
 use App\Exports\UsersExport;
 use App\Jobs\AddUserToCurrentMemberMailLists;
+use App\Jobs\AddUserToOldMemberMaillists;
 use App\Repositories\UserRepository;
 use App\Rol;
 use App\Rules\EmailDomainValidator;
@@ -146,6 +147,8 @@ class UserController extends Controller
     {
         $user->removeAsActiveMember();
         $mailListFacade->deleteUserFormAllMailList($user);
+        
+        dispatch(new AddUserToOldMemberMaillists($user));
 
         return redirect('/users/' . $user->id);
     }

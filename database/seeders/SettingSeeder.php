@@ -26,7 +26,7 @@ class SettingSeeder extends Seeder
         $setting->save();
         $setting = new Setting(['name' => Setting::SETTING_CURRENT_MEMBER_MAIL_LISTS, 'type' => Setting::TYPE_STRING, 'value' => 'alle-leden;nieuwsbrief']);
         $setting->save();
-        $setting = new Setting(['name' => Setting::SETTING_OLD_MEMBER_MAIL_LISTS, 'type' => Setting::TYPE_STRING, 'value' => 'reunisten']);
+        $setting = new Setting(['name' => Setting::SETTING_OLD_MEMBER_MAIL_LISTS, 'type' => Setting::TYPE_STRING, 'value' => '']);
         $setting->save();
         $setting = new Setting(['name' => Setting::SETTING_PENDING_MEMBER_MAIL_LISTS, 'type' => Setting::TYPE_STRING, 'value' => '']);
         $setting->save();

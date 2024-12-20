@@ -148,5 +148,23 @@ class MailListFacade
             }
         }
     }
+    
+    public function removeUserFromSpecifiedMailLists(string $email, Array $mailLists) 
+    {
+        if ($mailLists && $mailLists != [""]) { //check if mailLists is not empty
+            $allMailLists = $this->getAllMailListIds();
+            
+            foreach ($mailLists as $mailList) {
+                //check if the mailist exists and then add the user to the mail list
+                if (in_array($mailList, $allMailLists)) {
+                    $this->deleteMemberFromMailList($mailList, $email);
+                    \Log::info("removed user from mailists: " . $mailList);
+                } else {
+                    //TODO: possibly display an error in the gui here somehow
+                    \Log::error("tried removing user from maillist " . $mailList . " while this list doesn't exist");
+                }
+            }
+        }
+    }
 
 }
