@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use App\CustomClasses\MailList\MailListFacade;
 use App\Exports\OldUsersExport;
 use App\Exports\UsersExport;
-use App\Jobs\AddUserToMailList;
+use App\Jobs\AddUserToCurrentMemberMailLists;
 use App\Repositories\UserRepository;
 use App\Rol;
 use App\Rules\EmailDomainValidator;
@@ -165,7 +165,7 @@ class UserController extends Controller
         $user->makeActiveMember();
         
         //add to active member mail lists here
-        dispatch(new AddUserToMailList($user));
+        dispatch(new AddUserToCurrentMemberMailLists($user));
 
         return redirect('/users/' . $user->id);
     }

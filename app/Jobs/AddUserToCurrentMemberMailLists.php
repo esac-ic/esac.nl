@@ -11,7 +11,7 @@ use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 
-class AddUserToMailList implements ShouldQueue
+class AddUserToCurrentMemberMailLists implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
@@ -34,6 +34,7 @@ class AddUserToMailList implements ShouldQueue
      */
     public function handle()
     {
+        //get the value of the setting
         $currentMemberMailLists = app(\App\Setting::SINGELTONNAME)->getSetting(\App\Setting::SETTING_CURRENT_MEMBER_MAIL_LISTS);
         \Log::info("add " . $this->user->firstname . " to mailists: " . $currentMemberMailLists);
     }

@@ -8,7 +8,7 @@ use App\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Session;
-use App\Jobs\AddUserToMailList;
+use App\Jobs\AddUserToCurrentMemberMailLists;
 
 class PendingUserController extends Controller
 {
@@ -60,7 +60,7 @@ class PendingUserController extends Controller
         
         //add users to mail lists here
         \Log::info("approved user");
-        dispatch(new AddUserToMailList($user));
+        dispatch(new AddUserToCurrentMemberMailLists($user));
 
         return redirect('users/pending_members');
     }
