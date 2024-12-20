@@ -124,6 +124,36 @@ class UserController extends Controller
                 'kind_of_member' => $user->kind_of_member,
             ]);
         }
+        
+        //TODO: If there's a change in the type of member, update the maillists
+        
+        //check if the kind of member changed
+        if ($request['kind_of_member'] != $user->kind_of_member) {
+            \Log::info("kind of member changed");
+            switch ($request["kind_of_member"]) {
+                case \Lang::get("member"):
+                    \Log::info("became member");
+                    break;
+                case \Lang::get("extraordinary_member"):
+                    \Log::info("became extraordinary_member");
+                    break;
+                case \Lang::get("reunist"):
+                    \Log::info("became reunist");
+                    break;
+                case \Lang::get("honorary_member"):
+                    \Log::info("became honorary_member");
+                    break;
+                case \Lang::get("member_of_merit"):
+                    \Log::info("became member_of_merit");
+                    break;
+                case \Lang::get("trainer"):
+                    \Log::info("became trainer");
+                    break;
+                case \Lang::get("relationship"):
+                    \Log::info("became relationship");
+                    break;
+            }
+        }
 
         $this->validateInput($request, $user->id);
 
