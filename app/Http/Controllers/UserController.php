@@ -7,6 +7,7 @@ use App\Exports\OldUsersExport;
 use App\Exports\UsersExport;
 use App\Jobs\AddUserToCurrentMemberMailLists;
 use App\Jobs\AddUserToOldMemberMaillists;
+use App\Jobs\RemoveUserFromCurrentMemberMaillists;
 use App\Jobs\RemoveUserFromOldMemberMaillists;
 use App\Jobs\RemoveUserFromPendingMemberMaillists;
 use App\Repositories\UserRepository;
@@ -125,43 +126,50 @@ class UserController extends Controller
             ]);
         }
         
+        
+        $this->validateInput($request, $user->id);
+        
+        //TODO: check if email change doesn't fuck stuff up because concurrency or something
+        if ($user->email != $request['email']) {
+            $mailListFacade->updateUserEmailFormAllMailList($user, $user->email, $request['email']);
+        }
+        
+        if ($request['kind_of_member'] != $user->kind_of_member) dispatch(new RemoveUserFromCurrentMemberMaillists($user));
+        
+        $this->_userRepository->update($user->id, $request->all());
+        
         //TODO: If there's a change in the type of member, update the maillists
         
         //check if the kind of member changed
         if ($request['kind_of_member'] != $user->kind_of_member) {
             \Log::info("kind of member changed");
-            switch ($request["kind_of_member"]) {
-                case \Lang::get("member"):
-                    \Log::info("became member");
-                    break;
-                case \Lang::get("extraordinary_member"):
-                    \Log::info("became extraordinary_member");
-                    break;
-                case \Lang::get("reunist"):
-                    \Log::info("became reunist");
-                    break;
-                case \Lang::get("honorary_member"):
-                    \Log::info("became honorary_member");
-                    break;
-                case \Lang::get("member_of_merit"):
-                    \Log::info("became member_of_merit");
-                    break;
-                case \Lang::get("trainer"):
-                    \Log::info("became trainer");
-                    break;
-                case \Lang::get("relationship"):
-                    \Log::info("became relationship");
-                    break;
-            }
+            
+            dispatch(new AddUserToCurrentMemberMailLists($user));
+            // switch ($request["kind_of_member"]) {
+            //     case \Lang::get("member"):
+            //         \Log::info("became member");
+            //         break;
+            //     case \Lang::get("extraordinary_member"):
+            //         \Log::info("became extraordinary_member");
+            //         break;
+            //     case \Lang::get("reunist"):
+            //         \Log::info("became reunist");
+            //         break;
+            //     case \Lang::get("honorary_member"):
+            //         \Log::info("became honorary_member");
+            //         break;
+            //     case \Lang::get("member_of_merit"):
+            //         \Log::info("became member_of_merit");
+            //         break;
+            //     case \Lang::get("trainer"):
+            //         \Log::info("became trainer");
+            //         break;
+            //     case \Lang::get("relationship"):
+            //         \Log::info("became relationship");
+            //         break;
+            // }
         }
-
-        $this->validateInput($request, $user->id);
-
-        if ($user->email != $request['email']) {
-            $mailListFacade->updateUserEmailFormAllMailList($user, $user->email, $request['email']);
-        }
-
-        $this->_userRepository->update($user->id, $request->all());
+        
         if (Auth::user()->hasRole(Config::get('constants.Administrator'))) {
             $this->_userRepository->addRols($user->id, $request->get('roles', []));
         }
