@@ -23,7 +23,7 @@
     "lodash": "^4.17.21",
     "moment": "^2.29.3",
     "popper.js": "^1.16.1",
-    "sass": "^1.52.1",
+    "sass": "^1.83.1",
     "sass-loader": "^13.0.0",
     "summernote": "^0.8.20",
     "tempusdominus-bootstrap-4": "^5.39.2",
