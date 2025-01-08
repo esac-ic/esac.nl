@@ -8,6 +8,9 @@
 
 namespace App\CustomClasses\MailList;
 
+use \Exception;
+use \Session;
+
 class MailListFacade
 {
     private $_mailListParser;
@@ -78,7 +81,17 @@ class MailListFacade
 
     public function deleteMemberFromMailList($mailListId, $memberEmail)
     {
-        $this->_mailManHandler->delete("/lists/" . $mailListId . "/member/" . $memberEmail);
+        try {
+            $this->_mailManHandler->delete("/lists/" . $mailListId . "/member/" . $memberEmail);
+        } catch(Exception $e) {
+            //check if there are other errors already and elsewise append the maillist
+            if (Session::has("mailListRemovalError")) {
+                Session::flash("mailListRemovalError", Session::get("mailListRemovalError") . ", " . $mailListId);
+            } else {
+                Session::flash("mailListRemovalError", "Something went wrong with removing a member from the following maillists:". $mailListId );
+            }
+            \Log::error($e->getMessage());
+        }
     }
 
     public function addMember($mailListId, $email, $name)
