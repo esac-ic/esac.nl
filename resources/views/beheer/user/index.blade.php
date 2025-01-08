@@ -13,6 +13,24 @@
             </button>
         </div>
     @endif
+    
+    {{-- Error messages --}}
+    @if(Session::has('mailListAddNonExistent'))
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+            {{Session::get('mailListAddNonExistent')}}
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+    @endif
+    @if(Session::has('mailListRemoveNonExistent'))
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+            {{Session::get('mailListRemoveNonExistent')}}
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+    @endif
     @if(Session::has('mailListRemovalError'))
         <div class="alert alert-danger alert-dismissible fade show" role="alert">
             {{Session::get('mailListRemovalError')}}

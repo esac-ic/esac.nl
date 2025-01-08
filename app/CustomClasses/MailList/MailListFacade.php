@@ -133,7 +133,7 @@ class MailListFacade
                 //we used try to delete the user from the mail list wihout checken if he is in the list because
                 //that take to much time
                 $this->deleteMemberFromMailList($mailList->getId(), $user->email);
-            } catch (\Exception $e) {
+            } catch (Exception $e) {
             }
         }
     }
@@ -170,10 +170,14 @@ class MailListFacade
                 //check if the mailist exists and then add the user to the mail list
                 if (in_array($mailList, $allMailLists)) {
                     $this->addMember($mailList, $email, $name);
-                    \Log::info("added user " . $name . " to mailists: " . $mailList);
+                    //\Log::info("added user " . $name . " to mailists: " . $mailList);
                 } else {
-                    //TODO: possibly display an error in the gui here somehow
-                    \Log::error("tried adding user to maillist " . $mailList . " while this list doesn't exist");
+                    if (Session::has("mailListAddNonExistent")) {
+                        Session::flash("mailListAddNonExistent", Session::get("mailListAddNonExistent") . ", " . $mailList);
+                    } else {
+                        Session::flash("mailListAddNonExistent", "Tried adding user to non-existent maillists: " . $mailList);
+                    }
+                    \Log::error("Tried adding user to maillist " . $mailList . " while this list doesn't exist");
                 }
             }
         }
@@ -190,8 +194,12 @@ class MailListFacade
                     $this->deleteMemberFromMailList($mailList, $email);
                     \Log::info("removed user from mailists: " . $mailList);
                 } else {
-                    //TODO: possibly display an error in the gui here somehow
-                    \Log::error("tried removing user from maillist " . $mailList . " while this list doesn't exist");
+                    if (Session::has("mailListRemoveNonExistent")) {
+                        Session::flash("mailListRemoveNonExistent", Session::get("mailListRemoveNonExistent") . ", " . $mailList);
+                    } else {
+                        Session::flash("mailListRemoveNonExistent", "Tried removing user from non-existent maillists: " . $mailList);
+                    }
+                    \Log::error("Tried removing user from maillist " . $mailList . " while this list doesn't exist");
                 }
             }
         }
