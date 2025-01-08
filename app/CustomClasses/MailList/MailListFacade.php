@@ -88,7 +88,7 @@ class MailListFacade
             if (Session::has("mailListRemovalError")) {
                 Session::flash("mailListRemovalError", Session::get("mailListRemovalError") . ", " . $mailListId);
             } else {
-                Session::flash("mailListRemovalError", "Something went wrong with removing a member from the following maillists:". $mailListId );
+                Session::flash("mailListRemovalError", "An error occurred when removing a member from the following maillists:". $mailListId );
             }
             \Log::error($e->getMessage());
         }
