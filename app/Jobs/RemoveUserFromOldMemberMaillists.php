@@ -34,7 +34,7 @@ class RemoveUserFromOldMemberMaillists implements ShouldQueue
     {
         //get the value of the setting
         $oldMemberMailLists = trim(app(\App\Setting::SINGELTONNAME)->getSetting(\App\Setting::SETTING_OLD_MEMBER_MAIL_LISTS));
-        \Log::debug($oldMemberMailLists);
+        
         //check if there are mailists specified
         if ($oldMemberMailLists == "") {
             return;
