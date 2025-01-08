@@ -84,11 +84,15 @@ class MailListFacade
         try {
             $this->_mailManHandler->delete("/lists/" . $mailListId . "/member/" . $memberEmail);
         } catch(Exception $e) {
-            //check if there are other errors already and elsewise append the maillist
-            if (Session::has("mailListRemovalError")) {
-                Session::flash("mailListRemovalError", Session::get("mailListRemovalError") . ", " . $mailListId);
+            if ($e->getCode() == 404) {
+                //check if there are other errors already and elsewise append the maillist
+                if (Session::has("mailListRemovalError")) {
+                    Session::flash("mailListRemovalError", Session::get("mailListRemovalError") . ", " . $mailListId);
+                } else {
+                    Session::flash("mailListRemovalError", "An error occurred when removing a member from the following maillists: ". $mailListId );
+                }
             } else {
-                Session::flash("mailListRemovalError", "An error occurred when removing a member from the following maillists:". $mailListId );
+                Session::flash("error", "Got error " . $e->getCode() . " when trying to remove member from maillist");
             }
             \Log::error($e->getMessage());
         }
@@ -96,17 +100,30 @@ class MailListFacade
 
     public function addMember($mailListId, $email, $name)
     {
-        $this->_mailManHandler->post(
-            "/members",
-            [
-                "list_id" => $mailListId,
-                "subscriber" => $email,
-                "display_name" => $name,
-                "pre_verified" => true,
-                "pre_confirmed" => true,
-                "pre_approved" => true,
-            ]
-        );
+        try {
+            $this->_mailManHandler->post(
+                "/members",
+                [
+                    "list_id" => $mailListId,
+                    "subscriber" => $email,
+                    "display_name" => $name,
+                    "pre_verified" => true,
+                    "pre_confirmed" => true,
+                    "pre_approved" => true,
+                ]
+            );
+        } catch (Exception $e) {
+            if ($e->getCode() == 409) {
+                if (Session::has("mailListAddError")) {
+                    Session::flash("mailListAddError", Session::get("mailListAddError") . ", " . $mailListId);
+                } else {
+                    Session::flash("mailListAddError", "User is already added to the following maillists: " . $mailListId);
+                }
+            } else {
+                Session::flash("error", "Got error " . $e->getCode() . " when trying to add user to maillist");
+            }
+            \Log::error($e->getMessage());
+        }
     }
 
     public function deleteUserFormAllMailList($user)
