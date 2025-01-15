@@ -3,6 +3,7 @@
 namespace App;
 
 use App\Models\ApplicationForm\ApplicationResponse;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Carbon\Carbon;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
@@ -52,6 +53,10 @@ class User extends Authenticatable
     protected $hidden = [
         'password', 'remember_token',
     ];
+    
+    protected $casts = [
+        'birthDay' => 'date',
+    ];
 
     public function roles()
     {
@@ -62,6 +67,18 @@ class User extends Authenticatable
     {
         return $this->belongsToMany('App\Certificate', 'certificate_user')
             ->withTimestamps()->withTrashed();
+    }
+    
+    /**
+     * Format birthday
+     * 
+     * @return \Illuminate\Database\Eloquent\Casts\Attribute
+     */
+    public function birthDayFormatted(): Attribute
+    {
+        return Attribute::make(
+            get: fn () => $this->birthDay->format('d-m-Y'),
+        );
     }
 
     public function hasRole(...$rols)

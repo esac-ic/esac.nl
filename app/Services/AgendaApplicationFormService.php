@@ -131,8 +131,10 @@ class AgendaApplicationFormService
             "street",
             "houseNumber",
             "city",
+            "zipcode",
             "email",
             "phonenumber",
+            "birthDayFormatted",
         );
         $selectedElements = array_merge($selectedElements, $users["customfields"]);
 
@@ -142,6 +144,7 @@ class AgendaApplicationFormService
             foreach ($selectedElements as $element) {
                 $userline[$element] = $user[$element];
             }
+            
             array_push($activeUsers, $userline);
         }
 
