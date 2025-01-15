@@ -120,6 +120,125 @@ php artisan db:seed
 ```
 The first command will drop all your tables and rerun all migrations and the second command will seed the database with data again. 
 
+### Installing mailman locally
+
+This guide is based loosely on https://docs.mailman3.org/en/latest/install/virtualenv.html
+
+1. Run `sudo apt install python3-dev python3-venv sassc lynx` to install the dependencies
+
+#### Set up the database:
+login to mysql using `mysql -p`
+
+run `CREATE DATABASE mailman;`
+
+run `CREATE USER 'mailman'@'localhost' IDENTIFIED BY 'mailman';`
+
+run `GRANT ALL PRIVILEGES ON mailman.* TO 'mailman'@'localhost' WITH GRANT OPTION;`
+
+Exit mysql by running `exit`
+
+#### setup mailman user
+run the following commands:
+1. `sudo useradd -m -d /opt/mailman -s /usr/bin/bash mailman`
+2. `sudo passwd mailman` and choose `mailman` as the password
+2. `sudo chown mailman:mailman /opt/mailman`
+3. `sudo chmod 755 /opt/mailman`
+4. This command switches the user `sudo su mailman`
+
+You can switch back to your normal user using `su YOUR_USERNAME`
+
+#### venv stuff
+set up and start venv ON THE MAILMAN USER
+`cd ~`
+
+`python3 -m venv venv`
+
+`source /opt/mailman/venv/bin/activate`
+
+Now your terminal should look like `(venv) something@something:~$`
+
+`echo 'source /opt/mailman/venv/bin/activate' >> /opt/mailman/.bashrc` to switch to venv on start of mailman
+
+install mailman core by running
+`pip install wheel mailman PyMySQL cryptography`
+
+Switch to your admin user by either opening a new terminal or running `su USERNAME`
+
+run `cd /etc`
+run `mkdir mailman3`
+run 'nano /etc/mailman3/mailman.cfg'
+Copy the following text into the file:
+```
+# /etc/mailman3/mailman.cfg
+[paths.here]
+var_dir: /opt/mailman/mm/var
+
+[mailman]
+layout: here
+# This address is the "site owner" address.  Certain messages which must be
+# delivered to a human, but which can't be delivered to a list owner (e.g. a
+# bounce from a list owner), will be sent to this address.  It should point to
+# a human.
+site_owner: YOUR_OWN_EMAIL_ADRESS
+
+[database]
+class: mailman.database.MySQLDatabase
+url: mysql+pymysql://mailman:mailman@localhost/mailman?charset=utf8mb4&use_unicode=1 
+
+[archiver.prototype]
+enable: yes
+
+# For the HyperKitty archiver.
+[archiver.hyperkitty]
+class: mailman_hyperkitty.Archiver
+enable: yes
+configuration: /etc/mailman3/mailman-hyperkitty.cfg
+
+[shell]
+history_file: $var_dir/history.py
+
+[mta]
+verp_confirmations: yes
+verp_personalized_deliveries: yes
+verp_delivery_interval: 1
+```
+And then save the file
+
+run `nano /etc/mailman3/mailman-hyperkitty.cfg` and paste the following text in the file:
+
+```
+[general]
+base_url: http://127.0.0.1:8000/archives/
+api_key: Secret_Hyperkitty_API_Key
+```
+
+and save the file
+
+#### setup MTA
+
+Still run this as your superuser account
+
+Run `sudo apt install postfix`
+If you have a tue laptop the default hostname should look like "S12345678.campus.tue.nl" and you don't need to change anything, elsewise you need to make sure the hostname looks like "something.something", this way you won't actually be able to receive emails to the lists, but this shouldn't be an issue for local testing.
+
+now run `nano /etc/postfix/main.cf` and add the following lines to the bottom of the file
+```
+
+unknown_local_recipient_reject_code = 550
+owner_request_special = no
+
+transport_maps =
+    hash:/opt/mailman/mm/var/data/postfix_lmtp
+local_recipient_maps =
+    hash:/opt/mailman/mm/var/data/postfix_lmtp
+relay_domains =
+    hash:/opt/mailman/mm/var/data/postfix_domains
+```
+
+#### Running mailman
+You can now mailman from the mailman user by running `mailman start`
+Create the first maillist by running `mailman create alle-leden@esac.nl`
+
 ### Development environment (Windows)
 1. you need the following programs to run the code on your local environment:
 	* A web serverXampp: https://www.apachefriends.org/index.html
