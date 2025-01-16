@@ -89,6 +89,7 @@ DB\_HOST, DB\_PORT, DB\_DATABASE, DB\_USERNAME and DB\_PASSWORD
 	```
 	npm run watch
 	```
+	If you get issues with npm, you can install [nvm](https://github.com/nvm-sh/nvm) and run `nvm install --lts` to install a version of node that should work.
 13. Open another Ubuntu (from Windows Start) and run, from the repository root
 	```
 	code .
