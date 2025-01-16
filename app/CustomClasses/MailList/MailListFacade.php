@@ -8,6 +8,9 @@
 
 namespace App\CustomClasses\MailList;
 
+use \Exception;
+use \Session;
+
 class MailListFacade
 {
     private $_mailListParser;
@@ -19,6 +22,11 @@ class MailListFacade
         $this->_mailManHandler = $mailMan;
     }
 
+    /**
+     * Returns an array of MailList objects for each maillist that exists in mailman
+     * 
+     * @return array mailLists
+     */
     public function getAllMailLists()
     {
         $mailLists = array();
@@ -27,6 +35,21 @@ class MailListFacade
             array_push($mailLists, $this->_mailListParser->parseMailManMailList($mailList));
         }
         return $mailLists;
+    }
+    
+    /**
+     * Returns the ids of all maillists
+     * 
+     * @return array mailListIds
+     */
+    public function getAllMailListIds()
+    {
+        $mailListIds = array();
+        $response = $this->_mailManHandler->get('/lists');
+        foreach ($response->entries as $mailList) {
+            array_push($mailListIds, $this->_mailListParser->parseMailManMailList($mailList)->getId());
+        }
+        return $mailListIds;
     }
 
     public function getMailList($id)
@@ -58,22 +81,49 @@ class MailListFacade
 
     public function deleteMemberFromMailList($mailListId, $memberEmail)
     {
-        $this->_mailManHandler->delete("/lists/" . $mailListId . "/member/" . $memberEmail);
+        try {
+            $this->_mailManHandler->delete("/lists/" . $mailListId . "/member/" . $memberEmail);
+        } catch(Exception $e) {
+            if ($e->getCode() == 404) {
+                //check if there are other errors already and elsewise append the maillist
+                if (Session::has("mailListRemovalError")) {
+                    Session::flash("mailListRemovalError", Session::get("mailListRemovalError") . ", " . $mailListId);
+                } else {
+                    Session::flash("mailListRemovalError", "An error occurred when removing a member from the following maillists: ". $mailListId );
+                }
+            } else {
+                Session::flash("error", "Got error " . $e->getCode() . " when trying to remove member from maillist");
+            }
+            \Log::error($e->getMessage());
+        }
     }
 
     public function addMember($mailListId, $email, $name)
     {
-        $this->_mailManHandler->post(
-            "/members",
-            [
-                "list_id" => $mailListId,
-                "subscriber" => $email,
-                "display_name" => $name,
-                "pre_verified" => true,
-                "pre_confirmed" => true,
-                "pre_approved" => true,
-            ]
-        );
+        try {
+            $this->_mailManHandler->post(
+                "/members",
+                [
+                    "list_id" => $mailListId,
+                    "subscriber" => $email,
+                    "display_name" => $name,
+                    "pre_verified" => true,
+                    "pre_confirmed" => true,
+                    "pre_approved" => true,
+                ]
+            );
+        } catch (Exception $e) {
+            if ($e->getCode() == 409) {
+                if (Session::has("mailListAddError")) {
+                    Session::flash("mailListAddError", Session::get("mailListAddError") . ", " . $mailListId);
+                } else {
+                    Session::flash("mailListAddError", "User is already added to the following maillists: " . $mailListId);
+                }
+            } else {
+                Session::flash("error", "Got error " . $e->getCode() . " when trying to add user to maillist");
+            }
+            \Log::error($e->getMessage());
+        }
     }
 
     public function deleteUserFormAllMailList($user)
@@ -83,7 +133,7 @@ class MailListFacade
                 //we used try to delete the user from the mail list wihout checken if he is in the list because
                 //that take to much time
                 $this->deleteMemberFromMailList($mailList->getId(), $user->email);
-            } catch (\Exception $e) {
+            } catch (Exception $e) {
             }
         }
     }
@@ -99,6 +149,59 @@ class MailListFacade
                 }
             }
 
+        }
+    }
+    
+    /**
+     * Adds a user to an array of maillists
+     * 
+     * @param string $email the email address of the user
+     * @param string $name the name of the user
+     * @param array $mailLists an array of mailist to add the user to
+     * 
+     * @return void
+     */
+    public function addUserToSpecifiedMailLists(string $email, string $name, Array $mailLists) 
+    {
+        if ($mailLists && $mailLists != [""]) { //check if mailLists is not empty
+            $allMailLists = $this->getAllMailListIds();
+            
+            foreach ($mailLists as $mailList) {
+                //check if the mailist exists and then add the user to the mail list
+                if (in_array($mailList, $allMailLists)) {
+                    $this->addMember($mailList, $email, $name);
+                    //\Log::info("added user " . $name . " to mailists: " . $mailList);
+                } else {
+                    if (Session::has("mailListAddNonExistent")) {
+                        Session::flash("mailListAddNonExistent", Session::get("mailListAddNonExistent") . ", " . $mailList);
+                    } else {
+                        Session::flash("mailListAddNonExistent", "Tried adding user to non-existent maillists: " . $mailList);
+                    }
+                    \Log::error("Tried adding user to maillist " . $mailList . " while this list doesn't exist");
+                }
+            }
+        }
+    }
+    
+    public function removeUserFromSpecifiedMailLists(string $email, Array $mailLists) 
+    {
+        if ($mailLists && $mailLists != [""]) { //check if mailLists is not empty
+            $allMailLists = $this->getAllMailListIds();
+            
+            foreach ($mailLists as $mailList) {
+                //check if the mailist exists and then add the user to the mail list
+                if (in_array($mailList, $allMailLists)) {
+                    $this->deleteMemberFromMailList($mailList, $email);
+                    \Log::info("removed user from mailists: " . $mailList);
+                } else {
+                    if (Session::has("mailListRemoveNonExistent")) {
+                        Session::flash("mailListRemoveNonExistent", Session::get("mailListRemoveNonExistent") . ", " . $mailList);
+                    } else {
+                        Session::flash("mailListRemoveNonExistent", "Tried removing user from non-existent maillists: " . $mailList);
+                    }
+                    \Log::error("Tried removing user from maillist " . $mailList . " while this list doesn't exist");
+                }
+            }
         }
     }
 

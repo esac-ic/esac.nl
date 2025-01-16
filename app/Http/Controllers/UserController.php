@@ -5,6 +5,11 @@ namespace App\Http\Controllers;
 use App\CustomClasses\MailList\MailListFacade;
 use App\Exports\OldUsersExport;
 use App\Exports\UsersExport;
+use App\Jobs\AddUserToCurrentMemberMailLists;
+use App\Jobs\AddUserToOldMemberMaillists;
+use App\Jobs\RemoveUserFromCurrentMemberMaillists;
+use App\Jobs\RemoveUserFromOldMemberMaillists;
+use App\Jobs\RemoveUserFromPendingMemberMaillists;
 use App\Repositories\UserRepository;
 use App\Rol;
 use App\Rules\EmailDomainValidator;
@@ -120,14 +125,26 @@ class UserController extends Controller
                 'kind_of_member' => $user->kind_of_member,
             ]);
         }
-
+        
+        
         $this->validateInput($request, $user->id);
-
+        
+        //TODO: check if email change doesn't fuck stuff up because concurrency or something
         if ($user->email != $request['email']) {
             $mailListFacade->updateUserEmailFormAllMailList($user, $user->email, $request['email']);
         }
-
+        
+        if ($request['kind_of_member'] != $user->kind_of_member) dispatch(new RemoveUserFromCurrentMemberMaillists($user));
+        
         $this->_userRepository->update($user->id, $request->all());
+                
+        //check if the kind of member changed
+        if ($request['kind_of_member'] != $user->kind_of_member) {
+            \Log::info("kind of member changed");
+            
+            dispatch(new AddUserToCurrentMemberMailLists($user));
+        }
+        
         if (Auth::user()->hasRole(Config::get('constants.Administrator'))) {
             $this->_userRepository->addRols($user->id, $request->get('roles', []));
         }
@@ -145,6 +162,8 @@ class UserController extends Controller
     {
         $user->removeAsActiveMember();
         $mailListFacade->deleteUserFormAllMailList($user);
+        
+        dispatch(new AddUserToOldMemberMaillists($user));
 
         return redirect('/users/' . $user->id);
     }
@@ -162,6 +181,10 @@ class UserController extends Controller
     public function makeActiveMember(Request $request, User $user)
     {
         $user->makeActiveMember();
+        
+        //add to active member mail lists here
+        dispatch(new RemoveUserFromOldMemberMaillists($user));
+        dispatch(new AddUserToCurrentMemberMailLists($user));
 
         return redirect('/users/' . $user->id);
     }
