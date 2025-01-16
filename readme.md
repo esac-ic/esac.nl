@@ -89,6 +89,7 @@ DB\_HOST, DB\_PORT, DB\_DATABASE, DB\_USERNAME and DB\_PASSWORD
 	```
 	npm run watch
 	```
+	If you get issues with npm, you can install [nvm](https://github.com/nvm-sh/nvm) and run `nvm install --lts` to install a version of node that should work.
 13. Open another Ubuntu (from Windows Start) and run, from the repository root
 	```
 	code .
@@ -100,9 +101,8 @@ DB\_HOST, DB\_PORT, DB\_DATABASE, DB\_USERNAME and DB\_PASSWORD
 	```
 15. You can then go to localhost:8000 in your favorite browser and view your own version of the esac website!
 
-If you get errors that you cannot access the database or that the database is down, you can start mysql using `sudo service mysql start`. If you want you can check if mysql is running with `sudo service mysql status`.
 
-#### Starting up the development environment again later
+### Starting up the development environment again later
 1. Open ubuntu
 2. Navigate to the repository root using `cd esac.nl`
 4. Run either `npm run dev` or `npm run watch` to start the javascript development server
@@ -110,15 +110,163 @@ If you get errors that you cannot access the database or that the database is do
 7. Then run `php artisan serve` to start up the laravel development server.
 8. Go to localhost:8000 in your favorite browser to view your own version of the ESAC website
 
-#### Reseeding the database
+If you get errors that you cannot access the database or that the database is down, you can start mysql using `sudo service mysql start`. If you want to, you can check if mysql is running with `sudo service mysql status`.
+
+### Reseeding the database
 If you want to reseed the database because, for example, you want to regenerate the agenda items, run the following commands:
 
-**WARNING:** don't use the first command if there is any important data in your database that isn't backed up.
+>**WARNING:** don't use the first command if there is any important data in your database that isn't backed up.
 ```
 php artisan migrate:fresh
 php artisan db:seed
 ```
 The first command will drop all your tables and rerun all migrations and the second command will seed the database with data again. 
+
+### Installing mailman locally
+
+This guide is based on https://docs.mailman3.org/en/latest/install/virtualenv.html but adapted to using mysql. 
+The guide also assumes you're using wsl.
+
+1. Run `sudo apt install python3-dev python3-venv sassc lynx` to install the dependencies
+
+2. Log in to mysql using `mysql -u root -p` and fill in the password of your root mysql user (should be in your .env).
+
+3. Run the following SQL commands:
+```
+CREATE DATABASE mailman;
+CREATE USER 'mailman'@'localhost' IDENTIFIED BY 'mailman';
+GRANT ALL PRIVILEGES ON mailman.* TO 'mailman'@'localhost' WITH GRANT OPTION;
+exit
+```
+This creates a mailman database and mysql user with username and password `mailman` that has all rights for that database.
+
+4. Set up a mailman user by running the following commands from a terminal with root access (the terminal you get when you open wsl should work)
+
+```
+sudo useradd -m -d /opt/mailman -s /usr/bin/bash mailman
+sudo chown mailman:mailman /opt/mailman
+sudo chmod 755 /opt/mailman
+```
+>You can give your mailman user a password by running `sudo passwrd mailman`
+
+4. Switch to the mailman user by running `su mailman`
+
+5. Set up and start a venv by running the following commands FROM YOUR MAILMAN USER
+```
+cd ~
+python3 -m venv venv
+source /opt/mailman/venv/bin/activate
+echo 'source /opt/mailman/venv/bin/activate' >> /opt/mailman/.bashrc
+```
+> Now your terminal should look like `(venv) something@something:~$`
+
+The last command makes it so that the venv is started automatically when you switch to your mailman user.
+
+6. Install mailman core and some dependencies by running
+```
+pip install wheel mailman PyMySQL cryptography
+```
+
+7. Switch to your admin user by either opening a new terminal or running `su USERNAME`
+
+8. Make and open the mailman config file by running the following commands:
+```
+cd /etc
+mkdir mailman3
+nano /etc/mailman3/mailman.cfg
+```
+
+9. Copy the following text into the config file and then save the file:
+```
+# /etc/mailman3/mailman.cfg
+[paths.here]
+var_dir: /opt/mailman/mm/var
+
+[mailman]
+layout: here
+# This address is the "site owner" address.  Certain messages which must be
+# delivered to a human, but which can't be delivered to a list owner (e.g. a
+# bounce from a list owner), will be sent to this address.  It should point to
+# a human.
+site_owner: YOUR_OWN_EMAIL_ADRESS
+
+[database]
+class: mailman.database.MySQLDatabase
+url: mysql+pymysql://mailman:mailman@localhost/mailman?charset=utf8mb4&use_unicode=1 
+
+[archiver.prototype]
+enable: yes
+
+# For the HyperKitty archiver.
+[archiver.hyperkitty]
+class: mailman_hyperkitty.Archiver
+enable: yes
+configuration: /etc/mailman3/mailman-hyperkitty.cfg
+
+[shell]
+history_file: $var_dir/history.py
+
+[mta]
+verp_confirmations: yes
+verp_personalized_deliveries: yes
+verp_delivery_interval: 1
+```
+> Make sure you change `site_owner` to your own email address. You shouldn't receive any emails here, but better safe than sorry.
+
+10. Run `nano /etc/mailman3/mailman-hyperkitty.cfg` and paste the following text in the file and then save:
+
+```
+[general]
+base_url: http://127.0.0.1:8000/archives/
+api_key: Secret_Hyperkitty_API_Key
+```
+
+11. From your admin/superuser run to install postfix
+```
+sudo apt install postfix
+```
+12. Choose "Internet site" when prompted during installation
+
+13. Next you should be prompted for your system mail name. 
+
+>If you have a tue laptop the default hostname should look something like "S12345678.campus.tue.nl" and you don't need to change anything.
+>Elsewise you need to make sure the hostname looks like "something.something". This way you won't actually be able to receive emails to the lists, but this shouldn't be an issue for local testing.
+
+14. Run `nano /etc/postfix/main.cf` and add the following lines to the bottom of the file
+```
+
+unknown_local_recipient_reject_code = 550
+owner_request_special = no
+
+transport_maps =
+    hash:/opt/mailman/mm/var/data/postfix_lmtp
+local_recipient_maps =
+    hash:/opt/mailman/mm/var/data/postfix_lmtp
+relay_domains =
+    hash:/opt/mailman/mm/var/data/postfix_domains
+```
+
+15. Switch to your mailman user (`su mailman`) and run `mailman info` to check if everything works correctly. As of writing, your output should look like:
+```
+GNU Mailman 3.3.10(Tom Sawyer)
+Python 3.10.12 (main, Nov 20 2023, 15:14:05) [GCC 11.4.0]
+config file: /etc/mailman3/mailman.cfg
+db url: mysql+pymysql://mailman:mailman@localhost/mailman?charset=utf8mb4&use_unicode=1
+devmode: DISABLED
+REST root url: http://localhost:8001/3.1/
+REST credentials: restadmin:restpass 
+```
+
+16. Add some essential maillists by running the following commands:
+```
+mailman create alle-leden@esac.nl
+mailman create lid@esac.nl
+mailman create nieuwsbrief@esac.nl
+mailman create reunist@esac.nl
+mailman create pending@esac.nl
+```
+
+17. You can now run mailman by running `mailman start` from the "mailman" user.
 
 ### Development environment (Windows)
 1. you need the following programs to run the code on your local environment:
