@@ -33,7 +33,7 @@
         </ul>
     @endif
 
-    {!! Form::open(['url' => 'signup']) !!}
+    {{ html()->form('POST', 'signup')->open() }}
     <div class="card mt-4" id="personal-info">
         <div class="card-header">
             <h3>{{'Personal'}}</h3>
@@ -41,59 +41,59 @@
         <div class="card-body">
             <div class="form-row">
                 <div class="form-group col-md-5">
-                    {!! Form::label('firstname', 'First name') !!}
-                    {!! Form::text('firstname', '', ['class' => 'form-control','required' => 'required']) !!}
+                    {{ html()->label('First name', 'firstname') }}
+                    {{ html()->text('firstname')->class('form-control')->required() }}
                 </div>
                 <div class="form-group col-md-2">
-                    {!! Form::label('preposition', 'Preposition') !!}
-                    {!! Form::text('preposition', '', ['class' => 'form-control']) !!}
+                    {{ html()->label('Preposition', 'preposition') }}
+                    {{ html()->text('preposition')->class('form-control') }}
                 </div>
                 <div class="form-group col-md-5">
-                    {!! Form::label('lastname', 'Last name') !!}
-                    {!! Form::text('lastname', '', ['class' => 'form-control','required' => 'required']) !!}
+                    {{ html()->label('Last name', 'lastname') }}
+                    {{ html()->text('lastname')->class('form-control')->required() }}
                 </div>
             </div>
             <div class="form-row">
                 <div class="form-group col-md-6">
-                    {!! Form::label('emaillbl', 'Email address') !!}
-                    {!! Form::text('email', '', ['class' => 'form-control','required' => 'required']) !!}
+                    {{ html()->label('Email address', 'emaillbl') }}
+                    {{ html()->text('email')->class('form-control')->required() }}
                 </div>
                 <div class="form-group col-md-6">
-                    {!! Form::label('password', 'Password') !!}
-                    {!! Form::password('password',  ['class' => 'form-control','required' => 'required', 'minlength' => 8]) !!}
+                    {{ html()->label('Password', 'password') }}
+                    {{ html()->password('password')->class('form-control')->required()->attribute('minlength', 8) }}
                 </div>
             </div>
             <div class="form-row">
                 <div class="form-group col-md-6">
-                    {!! Form::label('street', 'Street') !!}
-                    {!! Form::text('street', '', ['class' => 'form-control','required' => 'required']) !!}
+                    {{ html()->label('Street', 'street') }}
+                    {{ html()->text('street')->class('form-control')->required() }}
                 </div>
                 <div class="form-group col-md-6">
-                    {!! Form::label('houseNumber', 'House number') !!}
-                    {!! Form::text('houseNumber', '', ['class' => 'form-control','required' => 'required']) !!}
+                    {{ html()->label('House number', 'houseNumber') }}
+                    {{ html()->text('houseNumber')->class('form-control')->required() }}
                 </div>
             </div>
             <div class="form-row">
                 <div class="form-group col-md-4">
-                    {!! Form::label('zipcode', 'Postal code') !!}
-                    {!! Form::text('zipcode', '', ['class' => 'form-control','required' => 'required']) !!}
+                    {{ html()->label('Postal code', 'zipcode') }}
+                    {{ html()->text('zipcode')->class('form-control')->required() }}
                 </div>
                 <div class="form-group col-md-4">
-                    {!! Form::label('city', 'City') !!}
-                    {!! Form::text('city', '', ['class' => 'form-control','required' => 'required']) !!}
+                    {{ html()->label('City', 'city') }}
+                    {{ html()->text('city')->class('form-control')->required() }}
                 </div>
                 <div class="form-group col-md-4">
-                    {!! Form::label('country', 'Country') !!}
-                    {!! Form::select('country', trans("countries"), 'NL', ['class' => 'form-control','required' => 'required']) !!}
+                    {{ html()->label('Country', 'country') }}
+                    {{ html()->select('country', trans("countries"))->value('NL')->class('form-control')->required() }}
                 </div>
             </div>
             <div class="form-row">
                 <div class="form-group col-md-6">
-                    {!! Form::label('phonenumber', 'Phone number') !!}
-                    {!! Form::text('phonenumber', '', ['class' => 'form-control','required' => 'required']) !!}
+                    {{ html()->label('Phone number', 'phonenumber') }}
+                    {{ html()->text('phonenumber')->class('form-control')->required() }}
                 </div>
                 <div class="form-group col-md-6">
-                    {!! Form::label('birthDay', 'Birthdate') !!}
+                    {{ html()->label('Birthdate', 'birthDay') }}
                     <div class="input-group date" id="birthDayBox" data-target-input="nearest">
                         <input type='text' class="form-control datetimepicker-input" id="birthDay" name="birthDay" data-target="#birthDayBox" value="" required="required">
                         <div class="input-group-append" data-target="#birthDayBox" data-toggle="datetimepicker">
@@ -111,12 +111,12 @@
         <div class="card-body">
             <div class="form-row">
                 <div class="form-group col-md-4">
-                    {!! Form::label('BIC', 'BIC') !!}
-                    {!! Form::text('BIC', '', ['class' => 'form-control']) !!}
+                    {{ html()->label('BIC', 'BIC') }}
+                    {{ html()->text('BIC')->class('form-control') }}
                 </div>
                 <div class="form-group col-md-8">
-                    {!! Form::label('IBAN', 'IBAN') !!}
-                    {!! Form::text('IBAN', '', ['class' => 'form-control','required' => 'required']) !!}
+                    {{ html()->label('IBAN', 'IBAN') }}
+                    {{ html()->text('IBAN')->class('form-control')->required() }}
                 </div>
             </div>
         </div>
@@ -128,31 +128,31 @@
         <div class="card-body">
             <div class="form-row">
                 <div class="form-group col-md-6">
-                    {!! Form::label('emergencystreet', 'Emergency address street') !!}
-                    {!! Form::text('emergencystreet', '', ['class' => 'form-control','required' => 'required']) !!}
+                    {{ html()->label('Emergency address street', 'emergencystreet') }}
+                    {{ html()->text('emergencystreet')->class('form-control')->required() }}
                 </div>
                 <div class="form-group col-md-6">
-                    {!! Form::label('emergencyHouseNumber', 'Emergency address house number') !!}
-                    {!! Form::text('emergencyHouseNumber', '', ['class' => 'form-control','required' => 'required']) !!}
+                    {{ html()->label('Emergency address house number', 'emergencyHouseNumber') }}
+                    {{ html()->text('emergencyHouseNumber')->class('form-control')->required() }}
                 </div>
             </div>
             <div class="form-row">
                 <div class="form-group col-md-4">
-                    {!! Form::label('emergencyzipcode', 'Emergency zip code') !!}
-                    {!! Form::text('emergencyzipcode', '', ['class' => 'form-control','required' => 'required']) !!}
+                    {{ html()->label('Emergency zip code', 'emergencyzipcode') }}
+                    {{ html()->text('emergencyzipcode')->class('form-control')->required() }}
                 </div>
                 <div class="form-group col-md-4">
-                    {!! Form::label('emergencycity', 'Emergency city') !!}
-                    {!! Form::text('emergencycity', '', ['class' => 'form-control','required' => 'required']) !!}
+                    {{ html()->label('Emergency city', 'emergencycity') }}
+                    {{ html()->text('emergencycity')->class('form-control')->required() }}
                 </div>
                 <div class="form-group col-md-4">
-                    {!! Form::label('emergencycountry', 'Emergency country') !!}
-                    {!! Form::select('emergencycountry', trans("countries"), 'NL', ['class' => 'form-control','required' => 'required']) !!}
+                    {{ html()->label('Emergency country', 'emergencycountry') }}
+                    {{ html()->select('emergencycountry', trans("countries"))->value('NL')->class('form-control')->required() }}
                 </div>
             </div>
             <div class="form-group">
-                {!! Form::label('emergencyNumber', 'Emergency phone number') !!}
-                {!! Form::text('emergencyNumber', '', ['class' => 'form-control','required' => 'required']) !!}
+                {{ html()->label('Emergency phone number', 'emergencyNumber') }}
+                {{ html()->text('emergencyNumber')->class('form-control')->required() }}
             </div>
         </div>
     </div>
@@ -211,25 +211,25 @@
 
             <div class="form-group">
                 <div class="form-check">
-                    {!! Form::checkbox("privacy_policy",true,'',["class" => "form-check-input", "id" => "privacy_policy"]) !!}
-                    {!! Form::label("privacy_policy", 'Accept the Privacy Policy', ["class" => "form-check-label"]) !!}
+                    {{ html()->checkbox('privacy_policy', true)->class('form-check-input')->id('privacy_policy') }}
+                    {{ html()->label('Accept the Privacy Policy', 'privacy_policy')->class('form-check-label') }}
                 </div>
                 <div class="form-check">
-                    {!! Form::checkbox("incasso",true,'',["class" => "form-check-input", "id" => "incasso"]) !!}
-                    {!! Form::label("incasso", 'Accept Automatic Collection', ["class" => "form-check-label"]) !!}
+                    {{ html()->checkbox('incasso', true)->class('form-check-input')->id('incasso') }}
+                    {{ html()->label('Accept Automatic Collection', 'incasso')->class('form-check-label') }}
                 </div>
                 <div class="form-check">
-                    {!! Form::checkbox("termsconditions",true,'',["class" => "form-check-input", "id" => "termsconditions"]) !!}
-                    {!! Form::label("termsconditions", 'Accept the Terms and Conditions', ["class" => "form-check-label"]) !!}
+                    {{ html()->checkbox('termsconditions', true)->class('form-check-input')->id('termsconditions') }}
+                    {{ html()->label('Accept the Terms and Conditions', 'termsconditions')->class('form-check-label') }}
                 </div>
-                <div class="g-recaptcha" data-sitekey="{{config('custom.google_recaptcha_key')}}"></div>
+                <div class="g-recaptcha" data-sitekey="{{ config('custom.google_recaptcha_key') }}"></div>
             </div>
         </div>
     </div>
     <div class="my-4">
-        {!! Form::submit('Submit', ['class'=> 'btn btn-primary'] ) !!}
+        {{ html()->submit('Submit')->class('btn btn-primary') }}
     </div>
-    {!! Form::close() !!}
+    {{ html()->form()->close() }}
 </div>
 @endsection
 

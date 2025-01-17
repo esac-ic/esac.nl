@@ -8,11 +8,13 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Storage;
-use Intervention\Image\ImageManagerStatic as Image;
+use Intervention\Image\ImageManager;
+use Intervention\Image\Drivers\Gd\Driver;
 
 class NewsItemController extends Controller
 {
     private $_newsItemRepository;
+    private $_imageManager;
 
     public function __construct(NewsItemRepository $newsItemRepository)
     {
@@ -20,6 +22,7 @@ class NewsItemController extends Controller
         $this->middleware('authorize:' . Config::get('constants.Content_administrator') . ',' . Config::get('constants.Activity_administrator'));
 
         $this->_newsItemRepository = $newsItemRepository;
+        $this->_imageManager = new ImageManager(new Driver());
     }
 
     public function index()
@@ -92,7 +95,7 @@ class NewsItemController extends Controller
         $newsItem->thumbnail_url = 'newsItems/' . $thumbnailFileName;
         $newsItem->save();
 
-        //resize both images
+        // Resize both images
         $this->resizeImage($newsItem->image_url, 1200, 500);
         $this->resizeImage($newsItem->thumbnail_url, 400, 300);
     }
@@ -100,7 +103,9 @@ class NewsItemController extends Controller
     private function resizeImage(string $path, int $width, int $height)
     {
         $imagePath = Storage::path('public/' . $path);
-        Image::make($imagePath)->fit($width, $height)->save($imagePath);
+        $image = $this->_imageManager->read($imagePath);
+        $image->cover($width, $height);
+        $image->save();
     }
 
     private function validateInput(Request $request)

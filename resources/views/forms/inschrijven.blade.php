@@ -2,8 +2,7 @@
 
 @section('content')
 <div class="container intro-container" id="app">
-    {!! Form::open(['method' => 'POST', 'url' => $route]) !!}
-    {{ csrf_field() }}
+    {{ html()->form('POST', $route)->open() }}
         <div class="card">
             <div class="card-header">
                 <h3>{{ $applicationForm->name }}</h3>
@@ -14,9 +13,9 @@
         </div>
 
         <div class="my-4">
-            {!! Form::submit('Submit', ['class'=> 'btn btn-primary'] ) !!}
+            {{ html()->submit('Submit')->class('btn btn-primary') }}
             <a class="btn btn-danger btn-close" href="{{url($cancleRoute)}}">{{'Cancel'}}</a>
         </div>
-    {!! Form::close() !!}
+    {{ html()->form()->close() }}
 </div>
 @endsection
