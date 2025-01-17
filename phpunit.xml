@@ -3,20 +3,22 @@
          xsi:noNamespaceSchemaLocation="https://schema.phpunit.de/11.5/phpunit.xsd"
          backupGlobals="false"
          backupStaticAttributes="false"
-         bootstrap="bootstrap/autoload.php"
+         bootstrap="vendor/autoload.php"
          colors="true"
          convertErrorsToExceptions="true"
          convertNoticesToExceptions="true"
          convertWarningsToExceptions="true"
          processIsolation="false"
          stopOnFailure="false">
+    <source>
+        <include>
+            <directory>app</directory>
+        </include>
+    </source>
     <coverage>
         <report>
             <clover outputFile="coverage.xml"/>
         </report>
-        <include>
-            <directory suffix=".php">./app</directory>
-        </include>
     </coverage>
     <testsuites>
         <testsuite name="Application Test Suite">
