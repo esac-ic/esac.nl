@@ -24,17 +24,20 @@
             <h3>{{$fields['title']}}</h3>
         </div>
         <div class="card-body">
-            {!! Form::open(['method' => $fields['method'], 'url' => $fields['url']]) !!}
+            {{ html()->form($fields['method'], $fields['url'])->open() }}
             <div class="form-group">
-                {!! Form::label('name', 'Name') !!}
-                {!! Form::text('name', ($agendaItemCategory != null) ? $agendaItemCategory->name : "", ['class' => 'form-control','required' => 'required']) !!}
+                {{ html()->label('Name', 'name') }}
+                {{ html()->text('name')
+                    ->value(($agendaItemCategory != null) ? $agendaItemCategory->name : '')
+                    ->class('form-control')
+                    ->required() }}
             </div>
         </div>
     </div>
 
     <div class="my-4">
-        {!! Form::submit('Save', ['class'=> 'btn btn-primary'] ) !!}
-        {!! Form::close() !!}
+        {{ html()->button('Save', 'submit')->class('btn btn-primary') }}
+        {{ html()->form()->close() }}
         <a class="btn btn-danger btn-close" href="{{ ($agendaItemCategory == null) ? ('/agendaItemCategories') : ('/agendaItemCategories/' . $agendaItemCategory->id)}}">{{'Cancel'}}</a>
     </div>
 @endsection

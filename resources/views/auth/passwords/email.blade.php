@@ -26,21 +26,27 @@
                                 {{ session('status') }}
                             </div>
                             @endif
-                            <form class="text-left col-lg-8" role="form" method="POST" action="/password/email">
-                                {{ csrf_field() }}
+                            {{ html()->form('POST', '/password/email')->class('text-left col-lg-8')->open() }}
                                 <div class="form-group {{ $errors->has('email') ? ' has-error' : '' }}">
-                                    <label for="email">{{'Email adress'}}</label>
-                                    <input class="form-control form-control-lg" id="email" type="email" name="email" placeholder="{{'Email adress'}}" value="{{ old('email') }}" required autofocus>
+                                    {{ html()->label('Email adress')->for('email') }}
+                                    {{ html()->email('email')
+                                        ->class('form-control form-control-lg')
+                                        ->placeholder('Email adress')
+                                        ->required()
+                                        ->autofocus() }}
+                                    
                                     @if ($errors->has('email'))
                                     <span class="help-block">
-                                    <strong>{{ 'Email address not known' }}</strong>
+                                        <strong>{{ 'Email address not known' }}</strong>
                                     </span>
                                     @endif
                                 </div>
                                 <div class="text-center mt-3">
-                                    <button type="submit" class="btn btn-lg btn-primary">{{'Send password reset link'}}</button>
+                                    {{ html()->button('Send password reset link')
+                                        ->type('submit')
+                                        ->class('btn btn-lg btn-primary') }}
                                 </div>
-                            </form>
+                            {{ html()->form()->close() }}
                         </div>
                     </div>
                 </div>

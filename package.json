@@ -25,7 +25,7 @@
     "popper.js": "^1.16.1",
     "sass": "^1.52.1",
     "sass-loader": "^13.0.0",
-    "summernote": "^0.8.20",
+    "summernote": "^0.9.1",
     "tempusdominus-bootstrap-4": "^5.39.2",
     "tempusdominus-core": "^5.19.3",
     "vue-loader": "^15.9.7",
