@@ -16,7 +16,7 @@
     "browser-sync": "^2.27.10",
     "browser-sync-webpack-plugin": "^2.3.0",
     "datatables.net": "^1.12.1",
-    "datatables.net-bs4": "^1.12.1",
+    "datatables.net-bs4": "^1.13.11",
     "datatables.net-responsive-bs4": "^2.3.0",
     "jquery": "^3.6.0",
     "laravel-mix": "^6.0.44",
