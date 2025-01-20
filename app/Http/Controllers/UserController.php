@@ -168,6 +168,9 @@ class UserController extends Controller
         $user->removeAsActiveMember();
         $mailListFacade->deleteUserFormAllMailList($user);
         
+        \Log::channel('membershipstatus')->info('MEMBERSHIP_DEACTIVATED: ' . $user->getName() . ' became an old member');
+
+        
         dispatch(new AddUserToOldMemberMaillists($user));
 
         return redirect('/users/' . $user->id);
@@ -186,6 +189,8 @@ class UserController extends Controller
     public function makeActiveMember(Request $request, User $user)
     {
         $user->makeActiveMember();
+        
+        \Log::channel('membershipstatus')->info('MEMBERSHIP_REACTIVATED: ' . $user->getName() . ' became a member again. Their member type is ' . $user->kind_of_member);
         
         //add to active member mail lists here
         dispatch(new RemoveUserFromOldMemberMaillists($user));
