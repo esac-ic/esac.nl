@@ -64,5 +64,10 @@ return [
             'driver' => 'errorlog',
             'level' => 'debug',
         ],
+        'membershipstatus' => [
+            'driver' => 'single',
+            'path' => storage_path('logs/membershipstatus.log'),
+            'level' => 'debug',
+        ],
     ],
 ];

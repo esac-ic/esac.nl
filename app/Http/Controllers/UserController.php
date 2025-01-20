@@ -134,14 +134,19 @@ class UserController extends Controller
             $mailListFacade->updateUserEmailFormAllMailList($user, $user->email, $request['email']);
         }
         
-        if ($request['kind_of_member'] != $user->kind_of_member) dispatch(new RemoveUserFromCurrentMemberMaillists($user));
+        if ($request['kind_of_member'] != $user->kind_of_member) 
+        {
+            //first remove the member from all of the maillists associated with their current member type to make sure
+            //the lists stay properly synchronized 
+            dispatch(new RemoveUserFromCurrentMemberMaillists($user));
+        }
         
         $this->_userRepository->update($user->id, $request->all());
                 
-        //check if the kind of member changed
         if ($request['kind_of_member'] != $user->kind_of_member) {
-            \Log::info("kind of member changed");
+            $this->logMemberShipTypeChanged($user, $request['kind_of_member'], $user->kind_of_member);
             
+            //readd the user to all the correct member status related lists
             dispatch(new AddUserToCurrentMemberMailLists($user));
         }
         
@@ -223,5 +228,17 @@ class UserController extends Controller
                 'kind_of_member' => 'required',
             ]);
         }
+    }
+    
+    /**
+     * Log a change in membership type to the membershipstatus event log.
+     * 
+     * @param \App\User $user
+     * @param string $old old membership type
+     * @param string $new new membership type
+     * @return void
+     */
+    private function logMemberShipTypeChanged(User $user, string $old, string $new) {
+        \Log::channel('membershipstatus')->info('MEMBERSHIP_TYPE_CHANGE: ' . $user->getName() . ' changed member type from ' . $old . ' to ' . $new);
     }
 }
