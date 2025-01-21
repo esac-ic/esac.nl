@@ -57,7 +57,7 @@ class UserApplicationFormController extends Controller
 
         //retrieves all the rows of the form
         $rows = ApplicationFormRowVueResource::collection($applicationForm->applicationFormRows);
-        $route = 'forms/' . $agendaItem->id; //route for the form sign up
+        $route = url('forms/' . $agendaItem->id);
         $cancleRoute = 'agenda/' . $agendaItem->id; //route for the form sign up
 
         $curPageName = $applicationForm->name;
