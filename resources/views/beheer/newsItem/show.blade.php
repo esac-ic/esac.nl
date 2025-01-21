@@ -20,9 +20,9 @@
                         <em class="ion-android-arrow-back"></em> {{'Back'}}
                     </a>
                 @endif
-                {{ Form::open(array('url' => 'newsItems/' . $newsItem->id, 'method' => 'delete')) }}
+                {{ html()->form('DELETE', url('newsItems/' . $newsItem->id))->open() }}
                     <button type="submit" class="btn btn-danger"><em class="ion-trash-a"></em> {{'Remove'}}</button>
-                {{ Form::close() }}
+                {{ html()->form()->close() }}
             </div>
         </div>
     </div>

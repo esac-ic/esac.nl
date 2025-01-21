@@ -24,35 +24,50 @@
             <h3>{{$fields['title']}}</h3>
         </div>
         <div class="card-body">
-            {!! Form::open(['method' => $fields['method'], 'url' => $fields['url']]) !!}
+            {{ html()->form($fields['method'], $fields['url'])->open() }}
             <div class="form-group">
-                {!! Form::label('title', 'Title') !!}
-                {!! Form::text('title', ($book != null) ? $book->title : "", ['class' => 'form-control','required' => 'required']) !!}
+                {{ html()->label('Title', 'title') }}
+                {{ html()->text('title')
+                    ->value(($book != null) ? $book->title : '')
+                    ->class('form-control')
+                    ->required() }}
             </div>
             <div class="form-row">
                 <div class="form-group col-md-3">
-                    {!! Form::label('year', 'Year') !!}
-                    {!! Form::number('year', ($book != null) ? $book->year : "", ['class' => 'form-control','required' => 'required']) !!}
+                    {{ html()->label('Year', 'year') }}
+                    {{ html()->number('year')
+                        ->value(($book != null) ? $book->year : '')
+                        ->class('form-control')
+                        ->required() }}
                 </div>
                 <div class="form-group col-md-3">
-                    {!! Form::label('country', 'Country') !!}
-                    {!! Form::text('country', ($book != null) ? $book->country : "", ['class' => 'form-control','required' => 'required']) !!}
+                    {{ html()->label('Country', 'country') }}
+                    {{ html()->text('country')
+                        ->value(($book != null) ? $book->country : '')
+                        ->class('form-control')
+                        ->required() }}
                 </div>
                 <div class="form-group col-md-3">
-                    {!! Form::label('type', 'Type') !!}
-                    {!! Form::text('type', ($book != null) ? $book->type : "", ['class' => 'form-control','required' => 'required']) !!}
+                    {{ html()->label('Type', 'type') }}
+                    {{ html()->text('type')
+                        ->value(($book != null) ? $book->type : '')
+                        ->class('form-control')
+                        ->required() }}
                 </div>
                 <div class="form-group col-md-3">
-                    {!! Form::label('code', 'Code') !!}
-                    {!! Form::text('code', ($book != null) ? $book->code : "", ['class' => 'form-control','required' => 'required']) !!}
+                    {{ html()->label('Code', 'code') }}
+                    {{ html()->text('code')
+                        ->value(($book != null) ? $book->code : '')
+                        ->class('form-control')
+                        ->required() }}
                 </div>
             </div>
         </div>
     </div>
 
     <div class="my-4">
-        {!! Form::submit('Save', ['class'=> 'btn btn-primary'] ) !!}
-        {!! Form::close() !!}
+        {{ html()->submit('Save')->class('btn btn-primary') }}
+        {{ html()->form()->close() }}
         <a class="btn btn-danger btn-close" href="{{ ($book == null) ? ('/books') : ('/books/' . $book->id)}}">{{'Cancel'}}</a>
     </div>
 @endsection

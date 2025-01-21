@@ -3,59 +3,55 @@
     <div class="card-body">
         <div class="form-row">
             <div class="form-group col-md-6">
-                {!! Form::label('name', 'Name') !!}
-                {!! Form::text('name', ($page != null) ? $page->name : "", ['class' => 'form-control','required' => 'required']) !!}
+                {{ html()->label('Name', 'name') }}
+                {{ html()->text('name', ($page != null) ? $page->name : "")->class('form-control')->required() }}
             </div>
             @if($page === null || $page->editable)
                 <div class="form-group col-md-6">
-                    {!! Form::label('urlName', 'URL name') !!}
-                    {!! Form::text('urlName', ($page != null) ? $page->urlName : "", ['class' => 'form-control','required' => 'required']) !!}
+                    {{ html()->label('URL name', 'urlName') }}
+                    {{ html()->text('urlName', ($page != null) ? $page->urlName : "")->class('form-control')->required() }}
                 </div>
             @endif
         </div>
         <div class="form-row">
             <div class="col-md-6">
                 <div class="form-group form-check">
-                    {!! Form::checkbox("menuItem",0,($page != null) ? ($page->menuItem) ? "checked" : "" : "",["class" => "form-check-input","id" => "menuItem"]) !!}
-                    {!! Form::label("menuItem", 'Show page in menu', ["class" => "form-check-label"]) !!}
+                    {{ html()->checkbox('menuItem', ($page != null && $page->menuItem), 0)->class('form-check-input')->id('menuItem') }}
+                    {{ html()->label('Show page in menu', 'menuItem')->class('form-check-label') }}
                 </div>
                 <div class="form-group form-check">
-                    {!! Form::checkbox("login",0,($page != null) ? ($page->login) ? "checked" : "" : "",["class" => "form-check-input", "id" => "login"]) !!}
-                    {!! Form::label("login", 'User needs to be logged in to view the page', ["class" => "form-check-label"]) !!}
+                    {{ html()->checkbox('login', ($page != null && $page->login), 0)->class('form-check-input')->id('login') }}
+                    {{ html()->label('User needs to be logged in to view the page', 'login')->class('form-check-label') }}
                 </div>
             </div>
         </div>
         <div class="form-row mt-2" id="menuSettingRow1">
             <div class="form-group col-md-6">
-                <label for="itemType"> {{'Item type: '}} </label>
-                <select class="form-control" name="itemType" id="menuType">
-                    @if($page != null  &&$page->parent_id != null)
-                        <option value="standAlone">{{'Standalone menu item'}}</option>
-                        <option value="subItem" selected>{{'Sub menu item'}}</option>
-                    @else
-                        <option value="standAlone" selected>{{'Standalone menu item'}}</option>
-                        <option value="subItem">{{'Sub menu item'}}</option>
-                    @endif
-                </select>
+                {{ html()->label('Item type: ', 'itemType') }}
+                {{ html()->select('itemType')
+                    ->class('form-control')
+                    ->id('menuType')
+                    ->options([
+                        'standAlone' => 'Standalone menu item',
+                        'subItem' => 'Sub menu item'
+                    ])
+                    ->value($page != null && $page->parent_id != null ? 'subItem' : 'standAlone') }}
             </div>
             <div id="parentItemBox" class="col-md-6 hidden">
-                <label for="parentItem"> {{'If page is a sub page, who is the parent?'}} </label>
-                <select class="form-control" name="parentItem" id="parentItem">
-                    @foreach($pages as $item)
-                        @if($page != null  && $item->id === $page->parent_id)
-                            <option value="{{$item->id}}" selected >{{$item->name}}</option>
-                        @else
-                            <option value="{{$item->id}}">{{$item->name}}</option>
-                        @endif
-                    @endforeach
-                </select>
+                {{ html()->label('If page is a sub page, who is the parent?', 'parentItem') }}
+                {{ html()->select('parentItem')
+                    ->class('form-control')
+                    ->id('parentItem')
+                    ->options($pages->pluck('name', 'id'))
+                    ->value($page?->parent_id) }}
             </div>
         </div>
         <div class="form-row" id="menuSettingRow2">
             <div class="form-group col-md-6">
-                <label for="afterItem"> {{'After which menu item'}} </label>
-                <select class="form-control" name="afterItem" id="afterItem">
-                </select>
+                {{ html()->label('After which menu item', 'afterItem') }}
+                {{ html()->select('afterItem')
+                    ->class('form-control')
+                    ->id('afterItem') }}
             </div>
         </div>
     </div>

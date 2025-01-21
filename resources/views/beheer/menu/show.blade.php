@@ -21,9 +21,9 @@ Page
                     {{'Back'}}
                 </a>
                 @if($page->deletable)
-                    {{ Form::open(array('url' => 'pages/' .$page->id, 'method' => 'delete')) }}
+                    {{ html()->form('DELETE', url('pages/' . $page->id))->open() }}
                     <button type="submit" class="btn btn-danger"><span class="ion-trash-a"></span> Remove</button>
-                    {{ Form::close() }}
+                    {{ html()->form()->close() }}
                 @endif
             </div>
         </div>

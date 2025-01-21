@@ -8,13 +8,15 @@ use App\Repositories\AgendaItemRepository;
 use App\Repositories\ApplicationFormRepositories\ApplicationFormRepository;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Session;
-use Intervention\Image\ImageManagerStatic as Image;
+use Intervention\Image\ImageManager;
+use Intervention\Image\Drivers\Gd\Driver;
 
 class AgendaItemController extends Controller
 {
     private $_agendaItemRepository;
     private $_agendaItemCategoryRepository;
     private $_applicationFormRepository;
+    private $_imageManager;
 
     public function __construct(
         AgendaItemRepository $agendaItemRepository,
@@ -27,6 +29,7 @@ class AgendaItemController extends Controller
         $this->_agendaItemRepository = $agendaItemRepository;
         $this->_agendaItemCategoryRepository = $agendaItemCategoryRepository;
         $this->_applicationFormRepository = $applicationFormRepository;
+        $this->_imageManager = new ImageManager(new Driver());
     }
 
     public function index()
@@ -140,8 +143,11 @@ class AgendaItemController extends Controller
             $request->file('thumbnail')->storeAs('agendaItem', $name, 'public');
             $agendaItem->image_url = 'agendaItem/' . $name;
             $agendaItem->save();
+            
             $img_path = "../storage/app/public/" . $agendaItem->image_url;
-            Image::make($img_path)->fit(400, 300)->save($img_path);
+            $image = $this->_imageManager->read($img_path);
+            $image->cover(400, 300);
+            $image->save();
         }
     }
 }

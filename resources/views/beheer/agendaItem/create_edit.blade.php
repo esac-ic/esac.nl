@@ -23,14 +23,14 @@
         </ul>
     @endif
 
-    {!! Form::open(['method' => $fields['method'], 'url' => $fields['url'], 'enctype' => 'multipart/form-data'])  !!}
+    {{ html()->form($fields['method'], $fields['url'])->acceptsFiles()->open() }}
     @include('beheer.agendaItem.create_edit_default_info')
     @include('beheer.agendaItem.create_edit_image')
     @include('beheer.agendaItem.create_edit_content')
 
     <div class="my-4">
-        {!! Form::submit('Save', ['class'=> 'btn btn-primary'] ) !!}
-        {!! Form::close() !!}
+        {{ html()->submit('Save')->class('btn btn-primary') }}
+        {{ html()->form()->close() }}
         <a class="btn btn-danger btn-close" href="{{ ($agendaItem == null) ? ('/agendaItems') : ('/agendaItems/' . $agendaItem->id)}}">{{'Cancel'}}</a>
     </div>
 @endsection

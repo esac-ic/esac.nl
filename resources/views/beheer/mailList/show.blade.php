@@ -18,9 +18,9 @@
                 <a href="{{url('/mailList/')}}" class="btn btn-primary">
                     <em class="ion-android-arrow-back"></em>  {{'Back'}}
                 </a>
-                {{ Form::open(array('url' => 'mailList/' . $mailList->getId(), 'method' => 'delete')) }}
+                {{ html()->form('DELETE', url('mailList/' . $mailList->getId()))->open() }}
                     <button type="submit" class="btn btn-danger btn-primary"><em class="ion-trash-a"></em> {{'Remove'}}</button>
-                {{ Form::close() }}
+                {{ html()->form()->close() }}
             </div>
         </div>
     </div>

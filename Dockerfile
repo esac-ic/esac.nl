@@ -1,5 +1,5 @@
 # Use the specified image as the base
-FROM php:8.2-fpm
+FROM php:8.4-fpm
 
 # Install system dependencies, PHP extensions, and Node.js
 RUN apt-get update && apt-get install -y \
