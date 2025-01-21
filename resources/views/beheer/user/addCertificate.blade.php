@@ -23,20 +23,17 @@
     <div class="card">
         <div class="card-header"><h3>{{$fields['title']}}</h3></div>
         <div class="card-body">
-            {{ html()->form($fields['method'], $fields['url'])->open() }}
+            {!! Form::open(['method' => $fields['method'], 'url' => $fields['url']]) !!}
             <div class="form-group">
-                {{ html()->label('Certificate', 'certificate_id') }}
-                {{ html()->select('certificate_id', $certificates)
-                    ->value(($userCertificate != null) ? $userCertificate->certificate_id : "")
-                    ->class('form-control')
-                    ->required() }}
+                {!! Form::label('certificate_id', 'Certificate') !!}
+                {!! Form::select('certificate_id',$certificates, ($userCertificate != null) ? $userCertificate->certificate_id : "", ['class' => 'form-control','required' => 'required']) !!}
             </div>
         </div>
     </div>
 
     <div class="my-4">
-        {{ html()->submit('Save')->class('btn btn-primary') }}
-        {{ html()->form()->close() }}
+        {!! Form::submit('Save', ['class'=> 'btn btn-primary'] ) !!}
+        {!! Form::close() !!}
         <a class="btn btn-danger btn-close" href="{{ URL::previous() }}">{{'Cancel'}}</a>
     </div>
 </div>

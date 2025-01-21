@@ -19,16 +19,12 @@
             <h3>{{$fields['title']}}</h3>
         </div>
         <div class="card-body">
-            {{ html()->form($fields['method'], $fields['url'])->open() }}
-            {{ html()->hidden('id')->value(($mailList != null) ? $mailList->getAddress() : '') }}
+            {!! Form::open(['method' => $fields['method'], 'url' => $fields['url']]) !!}
+            <input type="hidden" name="id" value="{{($mailList != null) ? $mailList->getAddress() : ""}}">
             <div class="form-group">
-                {{ html()->label('Email', 'address') }}
+                {!! Form::label('address', 'Email') !!}
                 <div class="input-group">
-                    {{ html()->text('address')
-                        ->value(($mailList != null) ? explode('@',$mailList->getAddress())[0] : '')
-                        ->class('form-control')
-                        ->required()
-                        ->attribute('aria-describedby', 'basic-addon3') }}
+                    {!! Form::text('address', ($mailList != null) ? explode('@',$mailList->getAddress())[0] : "", ['class' => 'form-control','required' => 'required','aria-describedby' => 'basic-addon3']) !!}
                     <div class="input-group-append">
                         <span class="input-group-text" id="basic-addon3">{{env("MAIL_MAN_DOMAIN")}}</span>
                     </div>
@@ -38,8 +34,8 @@
     </div>
 
     <div class="my-4">
-        {{ html()->button('Save')->type('submit')->class('btn btn-primary') }}
-        {{ html()->form()->close() }}
+        {!! Form::submit('Save', ['class'=> 'btn btn-primary'] ) !!}
+        {!! Form::close() !!}
         <a class="btn btn-danger btn-close" href="{{ ($mailList == null) ? ('/mailList') : ('/mailList/' . $mailList->address)}}">{{'Cancel'}}</a>
     </div>
 @endsection

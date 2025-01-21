@@ -6,11 +6,8 @@
         <span>{{'Thumbnail image'}}</span>
         <div class="form-group mt-2">
             <div class="custom-file">
-                {{ html()->file('thumbnail')
-                    ->class('custom-file-input')
-                    ->id('thumbnail')
-                    ->attributeIf($agendaItem == NULL, 'required', 'required') }}
-                {{ html()->label('Choose file', 'customFile')->class('custom-file-label') }}
+              <input type="file" class="custom-file-input" id="thumbnail" name="thumbnail" @if($agendaItem == NULL)required="required"@endif>
+              <label class="custom-file-label" for="customFile">Choose file</label>
             </div>
         </div>
     </div>

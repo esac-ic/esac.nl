@@ -26,7 +26,7 @@
 
     <h1>{{$fields['title']}}</h1>
 
-    {{ html()->form($fields['method'], $fields['url'])->open() }}
+    {!! Form::open(['method' => $fields['method'], 'url' => $fields['url']]) !!}
     <div class="card mt-4" id="personal-info">
         <div class="card-header">
             <h3>{{'Personal'}}</h3>
@@ -34,82 +34,77 @@
         <div class="card-body">
             <div class="form-row">
                 <div class="form-group col-md-5">
-                    {{ html()->label('First name', 'firstname') }}
+                    {!! Form::label('firstname', 'First name') !!}
                     @if(\Illuminate\Support\Facades\Auth::user()->hasRole(Config::get('constants.Administrator')))
-                        {{ html()->text('firstname')->value($user ? $user->firstname : "")->class('form-control')->required() }}
+                        {!! Form::text('firstname', ($user != null) ? $user->firstname : "", ['class' => 'form-control','required' => 'required']) !!}
                     @else
-                        {{ html()->text('firstname')->value($user ? $user->firstname : "")->class('form-control')->required()->disabled() }}
+                        {!! Form::text('firstname', ($user != null) ? $user->firstname : "", ['class' => 'form-control','required' => 'required', 'disabled' => 'disabled']) !!}
                     @endif
                 </div>
                 <div class="form-group col-md-2">
-                    {{ html()->label('Preposition', 'preposition') }}
+                    {!! Form::label('preposition', 'Preposition') !!}
                     @if(\Illuminate\Support\Facades\Auth::user()->hasRole(Config::get('constants.Administrator')))
-                        {{ html()->text('preposition')->value($user ? $user->preposition : "")->class('form-control') }}
+                        {!! Form::text('preposition', ($user != null) ? $user->preposition : "", ['class' => 'form-control']) !!}
                     @else
-                        {{ html()->text('preposition')->value($user ? $user->preposition : "")->class('form-control')->disabled() }}
+                        {!! Form::text('preposition', ($user != null) ? $user->preposition : "", ['class' => 'form-control', 'disabled' => 'disabled']) !!}
                     @endif
                 </div>
                 <div class="form-group col-md-5">
-                    {{ html()->label('Last name', 'lastname') }}
+                    {!! Form::label('lastname', 'Last name') !!}
                     @if(\Illuminate\Support\Facades\Auth::user()->hasRole(Config::get('constants.Administrator')))
-                        {{ html()->text('lastname')->value($user ? $user->lastname : "")->class('form-control')->required() }}
+                        {!! Form::text('lastname', ($user != null) ? $user->lastname : "", ['class' => 'form-control','required' => 'required']) !!}
                     @else
-                        {{ html()->text('lastname')->value($user ? $user->lastname : "")->class('form-control')->required()->disabled() }}
+                        {!! Form::text('lastname', ($user != null) ? $user->lastname : "", ['class' => 'form-control','required' => 'required', 'disabled' => 'disabled']) !!}
                     @endif
                 </div>
             </div>
             <div class="form-row">
                 <div class="form-group col-md-6">
-                    {{ html()->label('Email address', 'email') }}
-                    {{ html()->text('email')->value($user ? $user->email : "")->class('form-control')->required() }}
+                    {!! Form::label('email', 'Email address') !!}
+                    {!! Form::text('email', ($user != null) ? $user->email : "", ['class' => 'form-control','required' => 'required']) !!}
                 </div>
                 <div class="form-group col-md-6">
-                    {{ html()->label('Password', 'password') }}
-                    {{ html()->password('password')
-                        ->class('form-control')
-                        ->attributes($fields['method'] === "POST" ? ['required' => 'required', 'minlength' => 8] : []) }}
+                    {!! Form::label('password', 'Password') !!}
+                    {!! Form::password('password', $fields['method'] === "POST" ? array('class'=>'form-control','required' => 'required', 'minlength' => 8): array('class'=>'form-control')) !!}
                 </div>
             </div>
             <div class="form-row">
                 <div class="form-group col-md-6">
-                    {{ html()->label('Street', 'street') }}
-                    {{ html()->text('street')->value($user ? $user->street : "")->class('form-control')->required() }}
+                    {!! Form::label('street', 'Street') !!}
+                    {!! Form::text('street', ($user != null) ? $user->street : "", ['class' => 'form-control','required' => 'required']) !!}
                 </div>
                 <div class="form-group col-md-6">
-                    {{ html()->label('House number', 'houseNumber') }}
-                    {{ html()->text('houseNumber')->value($user ? $user->houseNumber : "")->class('form-control')->required() }}
+                    {!! Form::label('houseNumber', 'House number') !!}
+                    {!! Form::text('houseNumber', ($user != null) ? $user->houseNumber : "", ['class' => 'form-control','required' => 'required']) !!}
                 </div>
             </div>
             <div class="form-row">
                 <div class="form-group col-md-4">
-                    {{ html()->label('Postal code', 'zipcode') }}
-                    {{ html()->text('zipcode')->value($user ? $user->zipcode : "")->class('form-control')->required() }}
+                    {!! Form::label('zipcode', 'Postal code') !!}
+                    {!! Form::text('zipcode', ($user != null) ? $user->zipcode : "", ['class' => 'form-control','required' => 'required']) !!}
                 </div>
                 <div class="form-group col-md-4">
-                    {{ html()->label('City', 'city') }}
-                    {{ html()->text('city')->value($user ? $user->city : "")->class('form-control')->required() }}
+                    {!! Form::label('city', 'City') !!}
+                    {!! Form::text('city', ($user != null) ? $user->city : "", ['class' => 'form-control','required' => 'required']) !!}
                 </div>
                 <div class="form-group col-md-4">
-                    {{ html()->label('Country', 'country') }}
-                    {{ html()->select('country', trans("countries"))
-                        ->value($user ? $user->country : "NL")
-                        ->class('form-control')
-                        ->required() }}
+                    {!! Form::label('country', 'Country') !!}
+                    {!! Form::select('country',trans("countries"), ($user != null) ? $user->country : "NL", ['class' => 'form-control','required' => 'required']) !!}
                 </div>
             </div>
             <div class="form-row">
                 <div class="form-group col-md-6">
-                    {{ html()->label('Phone number', 'phonenumber') }}
-                    {{ html()->text('phonenumber')->value($user ? $user->phonenumber : "")->class('form-control')->required() }}
+                    {!! Form::label('phonenumber', 'Phone number') !!}
+                    {!! Form::text('phonenumber', ($user != null) ? $user->phonenumber : "", ['class' => 'form-control','required' => 'required']) !!}
                 </div>
                 <div class="form-group col-md-6">
-                    {{ html()->label('Alternative phone number', 'phonenumber_alt') }}
-                    {{ html()->text('phonenumber_alt')->value($user ? $user->phonenumber_alt : "")->class('form-control') }}
+                    {!! Form::label('phonenumber_alt', 'Alternative phone number') !!}
+                    {!! Form::text('phonenumber_alt', ($user != null) ? $user->phonenumber_alt : "", ['class' => 'form-control']) !!}
                 </div>
             </div>
             <div class="form-row">
                 <div class="form-group col-md-6">
-                    {{ html()->label('Birthdate', 'birthDay') }}
+                    {!! Form::label('birthDay', 'Birthdate') !!}
                     <div class="input-group date" id="birthDayBox" data-target-input="nearest">
                         <input type='text' class="form-control datetimepicker-input" id="birthDay" name="birthDay" data-target="#birthDayBox" value="{{($user != null) ? \Carbon\Carbon::parse($user->birthDay)->format('d-m-Y') : \Carbon\Carbon::now()->format('d-m-Y')}}" required="required">
                         <div class="input-group-append" data-target="#birthDayBox" data-toggle="datetimepicker">
@@ -118,29 +113,20 @@
                     </div>
                 </div>
                 <div class="form-group col-md-6">
-                    {{ html()->label('Type of member', 'kind_of_member') }}
+                    {!! Form::label('kind_of_member', 'Type of member') !!}
                     @if(\Illuminate\Support\Facades\Auth::user()->hasRole(Config::get('constants.Administrator')))
-                        {{ html()->select('kind_of_member', trans('kind_of_member'))
-                            ->value($user ? $user->kind_of_member : "")
-                            ->class('form-control')
-                            ->id('kind_of_member')
-                            ->required() }}
+                        {!! Form::select('kind_of_member',trans('kind_of_member'), ($user != null) ? $user->kind_of_member : "", ['class' => 'form-control','required' => 'required','id' => 'kind_of_member']) !!}
                     @else
-                        {{ html()->select('kind_of_member', trans('kind_of_member'))
-                            ->value($user ? $user->kind_of_member : "")
-                            ->class('form-control')
-                            ->id('kind_of_member')
-                            ->required()
-                            ->disabled() }}
+                        {!! Form::select('kind_of_member',trans('kind_of_member'), ($user != null) ? $user->kind_of_member : "", ['class' => 'form-control','required' => 'required','id' => 'kind_of_member', 'disabled' => 'disabled']) !!}
                     @endif
                 </div>
             </div>
             <div class="form-group">
-                {{ html()->label('Remarks', 'remark') }}
+                {{Form::label('remark',  'Remarks')}}
                 @if(\Illuminate\Support\Facades\Auth::user()->hasRole(Config::get('constants.Administrator')))
-                    {{ html()->text('remark')->value($user ? $user->remark : "")->class('form-control') }}
+                    {{Form::text('remark',($user != null) ? $user->remark : "",array('class' => 'form-control'))}}
                 @else
-                    {{ html()->text('remark')->value($user ? $user->remark : "")->class('form-control')->disabled() }}
+                    {{Form::text('remark',($user != null) ? $user->remark : "",array('class' => 'form-control', 'disabled' => 'disabled'))}}
                 @endif
             </div>
         </div>
@@ -152,20 +138,17 @@
         <div class="card-body">
             <div class="form-row">
                 <div class="form-group col-md-4">
-                    {{ html()->label('BIC', 'BIC') }}
-                    {{ html()->text('BIC')->value($user ? $user->BIC : "")->class('form-control') }}
+                    {!! Form::label('BIC', 'BIC') !!}
+                    {!! Form::text('BIC', ($user != null) ? $user->BIC : "", ['class' => 'form-control']) !!}
                 </div>
                 <div class="form-group col-md-8">
-                    {{ html()->label('IBAN', 'IBAN') }}
-                    {{ html()->text('IBAN')->value($user ? $user->IBAN : "")->class('form-control')->required() }}
+                    {!! Form::label('IBAN', 'IBAN') !!}
+                    {!! Form::text('IBAN', ($user != null) ? $user->IBAN : "", ['class' => 'form-control','required' => 'required']) !!}
                 </div>
             </div>
             <div class="form-check">
-                {{ html()->checkbox('incasso')
-                    ->checked($user ? $user->incasso === 1 : false)
-                    ->class('form-check-input')
-                    ->id('incasso') }}
-                {{ html()->label('Accept Automatic Collection', 'incasso')->class('form-check-label') }}
+                {!! Form::checkbox("incasso",true,($user != null)? $user->incasso === 1 : false,["class" => "form-check-input", "id" => "incasso"]) !!}
+                {!! Form::label("incasso", 'Accept Automatic Collection', ["class" => "form-check-label"]) !!}
             </div>
         </div>
     </div>
@@ -176,34 +159,31 @@
         <div class="card-body">
             <div class="form-row">
                 <div class="form-group col-md-6">
-                    {{ html()->label('Emergency address street', 'emergencystreet') }}
-                    {{ html()->text('emergencystreet')->value($user ? $user->emergencystreet : "")->class('form-control')->required() }}
+                    {!! Form::label('emergencystreet', 'Emergency address street') !!}
+                    {!! Form::text('emergencystreet', ($user != null) ? $user->emergencystreet : "", ['class' => 'form-control','required' => 'required']) !!}
                 </div>
                 <div class="form-group col-md-6">
-                    {{ html()->label('Emergency address house number', 'emergencyHouseNumber') }}
-                    {{ html()->text('emergencyHouseNumber')->value($user ? $user->emergencyHouseNumber : "")->class('form-control')->required() }}
+                    {!! Form::label('emergencyHouseNumber', 'Emergency address house number') !!}
+                    {!! Form::text('emergencyHouseNumber', ($user != null) ? $user->emergencyHouseNumber : "", ['class' => 'form-control','required' => 'required']) !!}
                 </div>
             </div>
             <div class="form-row">
                 <div class="form-group col-md-4">
-                    {{ html()->label('Emergency postal code', 'emergencyzipcode') }}
-                    {{ html()->text('emergencyzipcode')->value($user ? $user->emergencyzipcode : "")->class('form-control')->required() }}
+                    {!! Form::label('emergencyzipcode', 'Emergency postal code') !!}
+                    {!! Form::text('emergencyzipcode', ($user != null) ? $user->emergencyzipcode : "", ['class' => 'form-control','required' => 'required']) !!}
                 </div>
                 <div class="form-group col-md-4">
-                    {{ html()->label('Emergency city', 'emergencycity') }}
-                    {{ html()->text('emergencycity')->value($user ? $user->emergencycity : "")->class('form-control')->required() }}
+                    {!! Form::label('emergencycity', 'Emergency city') !!}
+                    {!! Form::text('emergencycity', ($user != null) ? $user->emergencycity : "", ['class' => 'form-control','required' => 'required']) !!}
                 </div>
                 <div class="form-group col-md-4">
-                    {{ html()->label('Emergency country', 'emergencycountry') }}
-                    {{ html()->select('emergencycountry', trans("countries"))
-                        ->value($user ? $user->emergencycountry : "NL")
-                        ->class('form-control')
-                        ->required() }}
+                    {!! Form::label('emergencycountry', 'Emergency country') !!}
+                    {!! Form::select('emergencycountry',trans("countries"), ($user != null) ? $user->emergencycountry : "NL", ['class' => 'form-control','required' => 'required']) !!}
                 </div>
             </div>
             <div class="form-group">
-                {{ html()->label('Emergency phone number', 'emergencyNumber') }}
-                {{ html()->text('emergencyNumber')->value($user ? $user->emergencyNumber : "")->class('form-control')->required() }}
+                {!! Form::label('emergencyNumber', 'Emergency phone number') !!}
+                {!! Form::text('emergencyNumber', ($user != null) ? $user->emergencyNumber : "", ['class' => 'form-control','required' => 'required']) !!}
             </div>
         </div>
     </div>
@@ -214,26 +194,26 @@
             </div>
             <div class="card-body">
                 <div class="form-group">
-                    @foreach($roles as $role)
-                        <div class="form-check">
-                            {{ html()->checkbox('roles[]')
-                                ->value($role->id)
-                                ->checked($ownedRoles->contains($role->id))
-                                ->class('form-check-input')
-                                ->id($role->id) }}
-                            {{ html()->label($role->name, $role->id)->class('form-check-label') }}
-                        </div>
-                    @endforeach
+                        @foreach($roles as $role)
+                            <div class="form-check">
+                                @if($ownedRoles->contains($role->id))
+                                    <input class="form-check-input" type="checkbox" name="roles[]" value="{{$role->id}}" id="{{$role->id}}" checked>
+                                @else
+                                    <input class="form-check-input" type="checkbox" name="roles[]" value="{{$role->id}}" id="{{$role->id}}">
+                                @endif
+                                <label class="form-check-label" for="{{$role->id}}">{{$role->name}}</label>
+                            </div>
+                        @endforeach
                 </div>
             </div>
         </div>
     @endif
     <div class="my-4">
-        {{ html()->submit('Save')->class('btn btn-primary') }}
+        {!! Form::submit('Save', ['class'=> 'btn btn-primary'] ) !!}
         <a class="btn btn-danger" href="{{ ($user == null) ? ('/users') : ('/users/' . $user->id)}}">{{'Cancel'}}</a>
     </div>
 
-    {{ html()->form()->close() }}
+    {!! Form::close() !!}
 @endsection
 
 @push('scripts')

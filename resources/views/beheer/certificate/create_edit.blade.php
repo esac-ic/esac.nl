@@ -24,27 +24,21 @@
             <h3>{{$fields['title']}}</h3>
         </div>
         <div class="card-body">
-            {{ html()->form($fields['method'], $fields['url'])->open() }}
+            {!! Form::open(['method' => $fields['method'], 'url' => $fields['url']]) !!}
             <div class="form-group">
-                {{ html()->label('Name', 'name') }}
-                {{ html()->text('name')
-                    ->value(($certificate != null) ? $certificate->name : "")
-                    ->class('form-control')
-                    ->required() }}
+                {!! Form::label('name', 'Name') !!}
+                {!! Form::text('name', ($certificate != null) ? $certificate->name : "", ['class' => 'form-control','required' => 'required']) !!}
             </div>
             <div class="form-group">
-                {{ html()->label('Abbreviation', 'abbreviation') }}
-                {{ html()->text('abbreviation')
-                    ->value(($certificate != null) ? $certificate->abbreviation : "")
-                    ->class('form-control')
-                    ->required() }}
+                {!! Form::label('abbreviation', 'Abbreviation') !!}
+                {!! Form::text('abbreviation', ($certificate != null) ? $certificate->abbreviation : "", ['class' => 'form-control','required' => 'required']) !!}
             </div>
         </div>
     </div>
 
     <div class="my-4">
-        {{ html()->submit('Save')->class('btn btn-primary') }}
-        {{ html()->form()->close() }}
+        {!! Form::submit('Save', ['class'=> 'btn btn-primary'] ) !!}
+        {!! Form::close() !!}
         <a class="btn btn-danger btn-close" href="{{ ($certificate == null) ? ('/certificates') : ('/certificates/' . $certificate->id)}}">{{'Cancel'}}</a>
     </div>
 @endsection

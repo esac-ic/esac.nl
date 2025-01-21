@@ -20,21 +20,18 @@
     @endif
 
     <div id="app">
-        {{ html()->form($fields['method'], $fields['url'])->open() }}
+        {!! Form::open(['method' => $fields['method'], 'url' => $fields['url']]) !!}
             <div class="card">
                 <div class="card-header">
                     <h3>{{$fields['title']}}</h3>
                 </div>
                 <div class="card-body">
                     {{--hidden field with the amount of formrows--}}
-                    {{ html()->input('hidden')->name('amount_of_formrows')->id('amount_of_formrows')->value('0') }}
+                    <input name="amount_of_formrows" type="hidden" id="amount_of_formrows" value="0">
                     <div class="form-row">
                         <div class="form-group col-md-6">
-                            {{ html()->label('Name', 'name') }}
-                            {{ html()->text('name')
-                                ->value(($applicationForm != null) ? $applicationForm->name : '')
-                                ->class('form-control')
-                                ->required() }}
+                            {!! Form::label('name', 'Name') !!}
+                            {!! Form::text('name', ($applicationForm != null) ? $applicationForm->name : "", ['class' => 'form-control','required' => 'required']) !!}
                         </div>
                     </div>
                 </div>
@@ -42,11 +39,11 @@
             <application-form :rows="{{ json_encode($rows) }}"></application-form>
 
             <div class="my-4">
-                {{ html()->submit('Save')->class('btn btn-primary') }}
+                {!! Form::submit('Save', ['class'=> 'btn btn-primary'] ) !!}
                 <a class="btn btn-danger btn-close" href="{{ ($applicationForm == null) ? route('beheer.applicationForms.index') : route('beheer.applicationForms.show', $applicationForm->id)}}">
                     {{'Cancel'}}
                 </a>
             </div>
-        {{ html()->form()->close() }}
+        {!! Form::close() !!}
     </div>
 @endsection

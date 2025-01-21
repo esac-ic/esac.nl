@@ -1,7 +1,7 @@
 @extends('layouts.master')
 
 @section('title')
-    {{'Reset password'}}
+{{'Reset password'}}
 @endsection
 
 @component('includes.menu')
@@ -26,30 +26,40 @@
                                 {{ session('status') }}
                             </div>
                             @endif
-                            <div class="text-left col-lg-8">
-                                {{ html()->form('POST', '/password/email')->open() }}
-                                    <div class="form-group {{ $errors->has('email') ? ' has-error' : '' }}">
-                                        {{ html()->label('Email adress')->for('email') }}
-                                        {{ html()->email('email')
-                                            ->class('form-control form-control-lg')
-                                            ->placeholder('Email adress')
-                                            ->value(old('email'))
-                                            ->required()
-                                            ->autofocus() }}
-                                        
-                                        @if ($errors->has('email'))
-                                        <span class="help-block">
-                                            <strong>{{ 'Email address not known' }}</strong>
-                                        </span>
-                                        @endif
-                                    </div>
-                                    <div class="text-center mt-3">
-                                        {{ html()->button('Send password reset link')
-                                            ->type('submit')
-                                            ->class('btn btn-lg btn-primary') }}
-                                    </div>
-                                {{ html()->form()->close() }}
-                            </div>
+                            <form class="text-left col-lg-8" role="form" method="POST" action="{{ url('/password/reset') }}">
+                                {{ csrf_field() }}
+                                <input type="hidden" name="token" value="{{ $token }}">
+                                <div class="form-group {{ $errors->has('email') ? ' has-error' : '' }}">
+                                    <label for="email">{{'Email adress'}}</label>
+                                    <input class="form-control form-control-lg" id="email" type="email" name="email" placeholder="{{'Email adress'}}" value="{{ $email ?? old('email') }}" required autofocus>
+                                    @if ($errors->has('email'))
+                                    <span class="help-block">
+                                    <strong>{{ $errors->first('email') }}</strong>
+                                    </span>
+                                    @endif
+                                </div>
+                                <div class="form-group {{ $errors->has('password') ? ' has-error' : '' }}">
+                                    <label for="password">{{'Password'}}</label>
+                                    <input class="form-control form-control-lg" id="password" type="password" name="password" placeholder="{{'Password'}}" required>
+                                    @if ($errors->has('password'))
+                                    <span class="help-block">
+                                    <strong>{{ $errors->first('password') }}</strong>
+                                    </span>
+                                    @endif
+                                </div>
+                                <div class="form-group {{ $errors->has('password_confirmation') ? ' has-error' : '' }}">
+                                    <label for="password-confirm">{{'Confirm password'}}</label>
+                                    <input class="form-control form-control-lg" placeholder="{{'Confirm password'}}" id="password-confirm" type="password" name="password_confirmation" required>
+                                    @if ($errors->has('password'))
+                                    <span class="help-block">
+                                    <strong>{{ $errors->first('password') }}</strong>
+                                    </span>
+                                    @endif
+                                </div>
+                                <div class="text-center mt-3">
+                                    <button type="submit" class="btn btn-lg btn-primary">{{'Reset password'}}</button>
+                                </div>
+                            </form>
                         </div>
                     </div>
                 </div>

@@ -18,9 +18,9 @@
                 <a href="{{url('/books/')}}" class="btn btn-block btn-primary">
                     <em class="ion-android-arrow-back"></em> {{'Back'}}
                 </a>
-                {{ html()->form('DELETE', url('books/' . $book->id))->open() }}
-                    {{ html()->button('<em class="ion-trash-a"></em> ' . __('Remove'), 'submit')->class('btn btn-danger') }}
-                {{ html()->form()->close() }}
+                {{ Form::open(array('url' => 'books/' . $book->id, 'method' => 'delete')) }}
+                <button type="submit" class="btn btn-danger"><em class="ion-trash-a"></em> {{'Remove'}}</button>
+                {{ Form::close() }}
             </div>
         </div>
     </div>
