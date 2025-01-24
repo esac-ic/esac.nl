@@ -172,8 +172,8 @@ pip install wheel mailman PyMySQL cryptography
 8. Make and open the mailman config file by running the following commands:
 ```
 cd /etc
-mkdir mailman3
-nano /etc/mailman3/mailman.cfg
+sudo mkdir mailman3
+sudo nano /etc/mailman3/mailman.cfg
 ```
 
 9. Copy the following text into the config file and then save the file:
@@ -191,7 +191,7 @@ layout: here
 site_owner: YOUR_OWN_EMAIL_ADRESS
 
 [database]
-class: mailman.database.MySQLDatabase
+class: mailman.database.mysql.MySQLDatabase
 url: mysql+pymysql://mailman:mailman@localhost/mailman?charset=utf8mb4&use_unicode=1 
 
 [archiver.prototype]
@@ -213,7 +213,7 @@ verp_delivery_interval: 1
 ```
 > Make sure you change `site_owner` to your own email address. You shouldn't receive any emails here, but better safe than sorry.
 
-10. Run `nano /etc/mailman3/mailman-hyperkitty.cfg` and paste the following text in the file and then save:
+10. Run `sudo nano /etc/mailman3/mailman-hyperkitty.cfg` and paste the following text in the file and then save:
 
 ```
 [general]
@@ -232,7 +232,7 @@ sudo apt install postfix
 >If you have a tue laptop the default hostname should look something like "S12345678.campus.tue.nl" and you don't need to change anything.
 >Elsewise you need to make sure the hostname looks like "something.something". This way you won't actually be able to receive emails to the lists, but this shouldn't be an issue for local testing.
 
-14. Run `nano /etc/postfix/main.cf` and add the following lines to the bottom of the file
+14. Run `sudo nano /etc/postfix/main.cf` and add the following lines to the bottom of the file
 ```
 
 unknown_local_recipient_reject_code = 550
