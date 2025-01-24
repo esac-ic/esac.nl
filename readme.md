@@ -147,7 +147,7 @@ sudo useradd -m -d /opt/mailman -s /usr/bin/bash mailman
 sudo chown mailman:mailman /opt/mailman
 sudo chmod 755 /opt/mailman
 ```
->You can give your mailman user a password by running `sudo passwrd mailman`
+>You can give your mailman user a password by running `sudo passwd mailman`
 
 4. Switch to the mailman user by running `su mailman`
 
