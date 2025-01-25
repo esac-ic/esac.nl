@@ -25,6 +25,13 @@ class UserEventLogEntry extends Model
         return $this->hasOne(User::class);
     }
     
+    protected function casts(): array
+    {
+        return [
+            'eventType' => UserEventTypes::class,
+        ];
+    }
+    
     /**
      * Checks if the entry has a valid event type
      * 
