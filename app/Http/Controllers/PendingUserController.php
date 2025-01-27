@@ -40,14 +40,13 @@ class PendingUserController extends Controller
     //store pending user
     public function storePendingUser(Request $request)
     {
-
-        Session::flash("message", 'Your membership request is pending, we will get back to you as soon as possible');
+        $this->validateInput($request);
 
         $user = $this->_userRepository->createPendingUser($request->all());
 
         Mail::to($user['email'])->send(new PendingUserMail($user));
 
-        $this->validateInput($request);
+        Session::flash("message", 'Your membership request is pending, we will get back to you as soon as possible');
 
         return redirect('/signup');
     }
