@@ -4,10 +4,13 @@ namespace App\Http\Controllers;
 
 use App\Repositories\UserRepository;
 use App\Rules\EmailDomainValidator;
+use App\Mail\PendingUserMail;
 use App\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Session;
+use Illuminate\Support\Facades\Mail;
+
 
 class PendingUserController extends Controller
 {
@@ -37,11 +40,14 @@ class PendingUserController extends Controller
     //store pending user
     public function storePendingUser(Request $request)
     {
-        $this->validateInput($request);
+
+        Session::flash("message", 'Your membership request is pending, we will get back to you as soon as possible');
 
         $user = $this->_userRepository->createPendingUser($request->all());
 
-        Session::flash("message", 'Your membership request is pending, we will get back to you as soon as possible');
+        Mail::to($user['email'])->send(new PendingUserMail($user));
+
+        $this->validateInput($request);
 
         return redirect('/signup');
     }
