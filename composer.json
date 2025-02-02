@@ -24,7 +24,7 @@
         "spatie/laravel-blade-javascript": "^2.7"
     },
     "require-dev": {
-        "laravel/dusk": "^7.8",
+        "laravel/dusk": "^8.2",
         "phpunit/phpunit": "^10.0",
         "barryvdh/laravel-debugbar": "^3.6",
         "fakerphp/faker": "^1.23",
