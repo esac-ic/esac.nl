@@ -23,6 +23,7 @@
         </ul>
     @endif
 
+    <!-- TODO: Why is this unescaped data? -->
     {!! Form::open(['method' => $fields['method'], 'url' => $fields['url'], 'enctype' => 'multipart/form-data'])  !!}
     @include('beheer.agendaItem.create_edit_default_info')
     @include('beheer.agendaItem.create_edit_image')
