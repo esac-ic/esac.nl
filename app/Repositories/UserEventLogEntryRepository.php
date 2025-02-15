@@ -59,14 +59,7 @@ class UserEventLogEntryRepository implements IRepository
      */
     public function findLogs(Array | null $eventTypes, Array | null $names, \Carbon\Carbon $startDate, \Carbon\Carbon $endDate)
     {
-        // $query = DB::table('user_event_log_entries')
-        // ->join('users', 'users.id', '=', 'user_event_log_entries.user_id')
-        // ->select('users.get_name', 'user_event_log_entries.*')
         $query = UserEventLogEntry::query()
-        // ->where(function (Builder $query) use ($startDate, $endDate) { //AND ((updated_at BETWEEN start and end) OR (created_at BETWEEN start and end))
-        //     $query->whereBetween('created_at', array($startDate, $endDate));
-        //     // ->orWhereBetween('updated_at', array($startDate, $endDate));
-        // });
         ->whereBetween('created_at', array($startDate, $endDate));
                 
         //todo add name filtering
