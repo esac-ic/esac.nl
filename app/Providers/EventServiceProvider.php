@@ -26,9 +26,13 @@ class EventServiceProvider extends ServiceProvider
         ],
         \App\Events\MemberTypeChanged::class => [
             \App\Listeners\LogMemberTypeChanged::class,
-            \App\Listeners\UpdateMemberTypeMaillists::class,
+            // \App\Listeners\UpdateMemberTypeMaillists::class,
         ]
         
+    ];
+    
+    protected $subscribe = [
+        \App\Listeners\UpdateMemberTypeMaillists::class,
     ];
 
     /**
