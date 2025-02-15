@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Events\PendingUserApproved;
+use App\Events\PendingUserRemoved;
 use App\Jobs\AddUserToPendingMemberMaillists;
 use App\Jobs\RemoveUserFromPendingMemberMaillists;
 use App\Repositories\UserRepository;
@@ -49,7 +51,6 @@ class PendingUserController extends Controller
         
         \Log::channel('membershipstatus')->info('PENDING_MEMBER_NEW: ' . $user->getName() . ' became a pending member');
 
-
         Session::flash("message", 'Your membership request is pending, we will get back to you as soon as possible');
 
         return redirect('/signup');
@@ -57,12 +58,13 @@ class PendingUserController extends Controller
 
     public function removeAsPendingMember(Request $request, User $user)
     {
+        PendingUserRemoved::dispatch($user, $user->getName());
         $user->removeAsPendingMember();
         
         //remove the user from the pending member mail lists
-        dispatch(new RemoveUserFromPendingMemberMaillists($user));
+        // dispatch(new RemoveUserFromPendingMemberMaillists($user));
         
-        \Log::channel('membershipstatus')->info('PENDING_MEMBER_DELETED: ' . $user->getName() . ' was deleted as a pending member');
+        // \Log::channel('membershipstatus')->info('PENDING_MEMBER_DELETED: ' . $user->getName() . ' was deleted as a pending member');
 
         return redirect('users/pending_members');
     }
@@ -76,6 +78,8 @@ class PendingUserController extends Controller
         dispatch(new AddUserToCurrentMemberMailLists($user));
         
         \Log::channel('membershipstatus')->info('PENDING_MEMBER_APPROVED: ' . $user->getName() . ' was approved as a member');
+        PendingUserApproved::dispatch($user);
+
         
         return redirect('users/pending_members');
     }

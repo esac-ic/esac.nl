@@ -19,6 +19,9 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Session;
 use Maatwebsite\Excel\Facades\Excel;
+use App\Events\MemberTypeChanged;
+use App\Events\MemberBecameOldMember;
+use App\Events\OldMemberBecameMember;
 
 class UserController extends Controller
 {
@@ -139,6 +142,8 @@ class UserController extends Controller
             //first remove the member from all of the maillists associated with their current member type to make sure
             //the lists stay properly synchronized 
             dispatch(new RemoveUserFromCurrentMemberMaillists($user));
+            
+            MemberTypeChanged::dispatch($user, $user->kind_of_member, $request['kind_of_member']);
         }
         
         $this->_userRepository->update($user->id, $request->all());
@@ -172,6 +177,7 @@ class UserController extends Controller
 
         
         dispatch(new AddUserToOldMemberMaillists($user));
+        MemberBecameOldMember::dispatch($user);
 
         return redirect('/users/' . $user->id);
     }
@@ -190,6 +196,7 @@ class UserController extends Controller
     {
         $user->makeActiveMember();
         
+        OldMemberBecameMember::dispatch($user);
         \Log::channel('membershipstatus')->info('MEMBERSHIP_REACTIVATED: ' . $user->getName() . ' became a member again. Their member type is ' . $user->kind_of_member);
         
         //add to active member mail lists here
