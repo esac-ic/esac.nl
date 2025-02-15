@@ -59,3 +59,7 @@
     
     @include("beheer.userEventLog.export_dialog")
 @endsection
+
+@push('scripts')
+    @yield('modal_javascript')
+@endpush
