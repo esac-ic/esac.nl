@@ -105,9 +105,9 @@ class UsersTableSeeder extends Seeder
         
         //random fake users
         \App\User::factory()->count(10)->create();
-        \App\User::factory()->member()->count(30)->create();
-        \App\User::factory()->reunist()->count(30)->create();
-        \App\User::factory()->lidAf()->count(30)->create();
+        \App\User::factory()->member()->count(10)->create();
+        \App\User::factory()->reunist()->count(10)->create();
+        \App\User::factory()->lidAf()->count(10)->create();
         \App\User::factory()->pending()->count(10)->create();
     }
 }
