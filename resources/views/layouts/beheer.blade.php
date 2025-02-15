@@ -101,12 +101,17 @@
                         @if(\Illuminate\Support\Facades\Auth::user()->hasRole(Config::get('constants.Administrator')))
                             <li class="nav-item">
                                 <a href="{{ url('mailList') }}" class="nav-link">
-                                {{'Mailing lists'}}
+                                    {{'Mailing lists'}}
+                                </a>
+                            </li>
+                            <li class="nav-tiem">
+                                <a href="{{ url('userEventLog') }}" class="nav-link">
+                                    {{'User event log'}}
                                 </a>
                             </li>
                             <li class="nav-item">
                                 <a href="{{ url('beheer/settings') }}" class="nav-link">
-                                {{'Setting'}}
+                                    {{'Setting'}}
                                 </a>
                             </li>
                         @endif
