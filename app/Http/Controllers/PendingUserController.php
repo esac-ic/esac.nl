@@ -5,15 +5,12 @@ namespace App\Http\Controllers;
 use App\Events\NewPendingUser;
 use App\Events\PendingUserApproved;
 use App\Events\PendingUserRemoved;
-use App\Jobs\AddUserToPendingMemberMaillists;
-use App\Jobs\RemoveUserFromPendingMemberMaillists;
 use App\Repositories\UserRepository;
 use App\Rules\EmailDomainValidator;
 use App\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Session;
-use App\Jobs\AddUserToCurrentMemberMailLists;
 
 class PendingUserController extends Controller
 {
@@ -46,9 +43,7 @@ class PendingUserController extends Controller
         $this->validateInput($request);
 
         $user = $this->_userRepository->createPendingUser($request->all());
-                
-        //TODO: can't test because I don't have Chapta set up locally
-        // dispatch(new AddUserToPendingMemberMaillists($user));
+ 
         NewPendingUser::dispatch($user);
         
         Session::flash("message", 'Your membership request is pending, we will get back to you as soon as possible');

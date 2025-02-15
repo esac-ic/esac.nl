@@ -27,7 +27,6 @@ class UserEventLogEntryController extends Controller
     public function index() 
     {
         $events = $this->repository->all(['*']);
-        // $events = $this->repository->all(array('eventType', 'eventDetails', 'user', 'created_at'));
         return view('beheer.userEventLog.index', compact('events'));
     }
     
@@ -39,11 +38,6 @@ class UserEventLogEntryController extends Controller
         return redirect('/userEventLog');
     }
     
-    // public function exportDialog(Request $request)
-    // {
-    //     return view('beheer.userEventLog.export_dialog');
-    // }
-    
     public function export(Request $request, Excel $excel, UserEventLogEntryRepository $repo)
     {
         Log::debug($request);
@@ -53,7 +47,6 @@ class UserEventLogEntryController extends Controller
         if ($eventTypes == null) //if no event type was selected, default is to select all
         {
             $eventTypes = \App\Enums\UserEventTypes::values();
-            // Log::debug($eventTypes);
         }
         
         $names = $request->names;
@@ -62,11 +55,6 @@ class UserEventLogEntryController extends Controller
         
         $export = new UserEventLogExport($repo, $eventTypes, $names, $startDate, $endDate);
         return $excel->download($export, $export->fileName() . '.xlsx');
-        
-        // $events = $this->repository->findLogs($eventTypes, $names, $startDate, $endDate);
-        // $events->downloadExcel('userEventLog.xlsx', Excel::XLSX, true);
-        // Session::flash("message", "Downloaded event log");
-        // return redirect('/userEventLog');
     }
     
     public function validateInput(Request $request)

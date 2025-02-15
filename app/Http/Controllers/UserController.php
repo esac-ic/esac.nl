@@ -5,11 +5,6 @@ namespace App\Http\Controllers;
 use App\CustomClasses\MailList\MailListFacade;
 use App\Exports\OldUsersExport;
 use App\Exports\UsersExport;
-use App\Jobs\AddUserToCurrentMemberMailLists;
-use App\Jobs\AddUserToOldMemberMaillists;
-use App\Jobs\RemoveUserFromCurrentMemberMaillists;
-use App\Jobs\RemoveUserFromOldMemberMaillists;
-use App\Jobs\RemoveUserFromPendingMemberMaillists;
 use App\Repositories\UserRepository;
 use App\Rol;
 use App\Rules\EmailDomainValidator;
@@ -138,22 +133,12 @@ class UserController extends Controller
         }
         
         if ($request['kind_of_member'] != $user->kind_of_member) 
-        {
-            //first remove the member from all of the maillists associated with their current member type to make sure
-            //the lists stay properly synchronized 
-            // dispatch(new RemoveUserFromCurrentMemberMaillists($user));
-            
+        {   
             MemberTypeChanged::dispatch($user, $user->kind_of_member, $request['kind_of_member']);
         }
         
         $this->_userRepository->update($user->id, $request->all());
                 
-        // if ($request['kind_of_member'] != $user->kind_of_member) {
-        //     // $this->logMemberShipTypeChanged($user, $request['kind_of_member'], $user->kind_of_member);
-            
-        //     //readd the user to all the correct member status related lists
-        //     // dispatch(new AddUserToCurrentMemberMailLists($user));
-        // }
         
         if (Auth::user()->hasRole(Config::get('constants.Administrator'))) {
             $this->_userRepository->addRols($user->id, $request->get('roles', []));
@@ -173,10 +158,6 @@ class UserController extends Controller
         $user->removeAsActiveMember();
         $mailListFacade->deleteUserFormAllMailList($user);
         
-        // \Log::channel('membershipstatus')->info('MEMBERSHIP_DEACTIVATED: ' . $user->getName() . ' became an old member');
-
-        
-        // dispatch(new AddUserToOldMemberMaillists($user));
         MemberBecameOldMember::dispatch($user);
 
         return redirect('/users/' . $user->id);
@@ -197,12 +178,7 @@ class UserController extends Controller
         $user->makeActiveMember();
         
         OldMemberBecameMember::dispatch($user);
-        // \Log::channel('membershipstatus')->info('MEMBERSHIP_REACTIVATED: ' . $user->getName() . ' became a member again. Their member type is ' . $user->kind_of_member);
         
-        //add to active member mail lists here
-        // dispatch(new RemoveUserFromOldMemberMaillists($user));
-        // dispatch(new AddUserToCurrentMemberMailLists($user));
-
         return redirect('/users/' . $user->id);
     }
 
@@ -241,16 +217,4 @@ class UserController extends Controller
             ]);
         }
     }
-    
-    // /**
-    //  * Log a change in membership type to the membershipstatus event log.
-    //  * 
-    //  * @param \App\User $user
-    //  * @param string $old old membership type
-    //  * @param string $new new membership type
-    //  * @return void
-    //  */
-    // private function logMemberShipTypeChanged(User $user, string $old, string $new) {
-    //     \Log::channel('membershipstatus')->info('MEMBERSHIP_TYPE_CHANGE: ' . $user->getName() . ' changed member type from ' . $old . ' to ' . $new);
-    // }
 }
