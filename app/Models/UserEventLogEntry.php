@@ -11,7 +11,7 @@ use App\User;
 
 class UserEventLogEntry extends Model
 {
-    // use HasFactory;
+    use HasFactory;
     
     protected $fillable = [
         'eventType',

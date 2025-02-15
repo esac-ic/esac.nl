@@ -14,13 +14,8 @@ class UserEventLogEntrySeeder extends Seeder
      */
     public function run(): void
     {   
-        for ($i = 0; $i < 10; $i++)
-        {
-            $entry = new \App\Models\UserEventLogEntry();
-            $entry->eventType = UserEventTypes::MemberTypeChanged;
-            $entry->user_id = 1;
-            $entry->eventDetails = "changed to reunist " . $i;
-            $entry->save();
-        }     
+        // \App\Models\UserEventLogEntry::factory()->count(10)->for(User::factory()->member())->create();
+        $nrOfUsers = User::count();
+        \App\Models\UserEventLogEntry::factory()->randomUser($nrOfUsers)->count(10)->create();
     }
 }
