@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Events\NewPendingUser;
 use App\Events\PendingUserApproved;
 use App\Events\PendingUserRemoved;
 use App\Jobs\AddUserToPendingMemberMaillists;
@@ -48,9 +49,8 @@ class PendingUserController extends Controller
                 
         //TODO: can't test because I don't have Chapta set up locally
         // dispatch(new AddUserToPendingMemberMaillists($user));
+        NewPendingUser::dispatch($user);
         
-        // \Log::channel('membershipstatus')->info('PENDING_MEMBER_NEW: ' . $user->getName() . ' became a pending member');
-
         Session::flash("message", 'Your membership request is pending, we will get back to you as soon as possible');
 
         return redirect('/signup');
@@ -60,11 +60,6 @@ class PendingUserController extends Controller
     {
         PendingUserRemoved::dispatch($user, $user->getName());
         $user->removeAsPendingMember();
-        
-        //remove the user from the pending member mail lists
-        // dispatch(new RemoveUserFromPendingMemberMaillists($user));
-        
-        // \Log::channel('membershipstatus')->info('PENDING_MEMBER_DELETED: ' . $user->getName() . ' was deleted as a pending member');
 
         return redirect('users/pending_members');
     }
@@ -73,11 +68,6 @@ class PendingUserController extends Controller
     {
         $user->approveAsPendingMember();
         
-        //add and remove user from mail lists
-        // dispatch(new RemoveUserFromPendingMemberMaillists($user));
-        // dispatch(new AddUserToCurrentMemberMailLists($user));
-        
-        // \Log::channel('membershipstatus')->info('PENDING_MEMBER_APPROVED: ' . $user->getName() . ' was approved as a member');
         PendingUserApproved::dispatch($user);
 
         
