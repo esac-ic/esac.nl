@@ -20,7 +20,13 @@ class UpdateMemberTypeMaillists implements ShouldQueue
         $this->mailListFacade = $mailListFacade;
     }
     
-    private function addUserToMailLists($user, $memberType)
+    /**
+     * Add user to the maillists for their kind of member specified in the settings table
+     * @param \App\User $user
+     * @param string $memberType
+     * @return void
+     */
+    private function addUserToMailLists(\App\User $user, string $memberType)
     {
         //check member type and fetch the maillists
         switch ($memberType) {
@@ -73,7 +79,13 @@ class UpdateMemberTypeMaillists implements ShouldQueue
         $this->mailListFacade->addUserToSpecifiedMailLists($user->email, $user->getName(), $mailLists);
     }
     
-    private function removeUserFromMailLists($user, $memberType)
+    /**
+     * Remove user from the maillists for their kind of member specified in the settings table
+     * @param \App\User $user
+     * @param string $memberType
+     * @return void
+     */
+    private function removeUserFromMailLists(\App\User $user, string $memberType)
     {
         //check member type and fetch the maillists
         switch ($memberType) {
