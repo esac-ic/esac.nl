@@ -47,9 +47,9 @@ class PendingUserController extends Controller
         $user = $this->_userRepository->createPendingUser($request->all());
                 
         //TODO: can't test because I don't have Chapta set up locally
-        dispatch(new AddUserToPendingMemberMaillists($user));
+        // dispatch(new AddUserToPendingMemberMaillists($user));
         
-        \Log::channel('membershipstatus')->info('PENDING_MEMBER_NEW: ' . $user->getName() . ' became a pending member');
+        // \Log::channel('membershipstatus')->info('PENDING_MEMBER_NEW: ' . $user->getName() . ' became a pending member');
 
         Session::flash("message", 'Your membership request is pending, we will get back to you as soon as possible');
 
@@ -74,10 +74,10 @@ class PendingUserController extends Controller
         $user->approveAsPendingMember();
         
         //add and remove user from mail lists
-        dispatch(new RemoveUserFromPendingMemberMaillists($user));
-        dispatch(new AddUserToCurrentMemberMailLists($user));
+        // dispatch(new RemoveUserFromPendingMemberMaillists($user));
+        // dispatch(new AddUserToCurrentMemberMailLists($user));
         
-        \Log::channel('membershipstatus')->info('PENDING_MEMBER_APPROVED: ' . $user->getName() . ' was approved as a member');
+        // \Log::channel('membershipstatus')->info('PENDING_MEMBER_APPROVED: ' . $user->getName() . ' was approved as a member');
         PendingUserApproved::dispatch($user);
 
         
