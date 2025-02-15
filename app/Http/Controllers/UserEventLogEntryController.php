@@ -61,7 +61,6 @@ class UserEventLogEntryController extends Controller
         $endDate = Carbon::parse($request->endDate);
         
         $export = new UserEventLogExport($repo, $eventTypes, $names, $startDate, $endDate);
-        \Log::debug($export->fileName());
         return $excel->download($export, $export->fileName() . '.xlsx');
         
         // $events = $this->repository->findLogs($eventTypes, $names, $startDate, $endDate);
