@@ -26,7 +26,7 @@ class LogPendingUserRemoved implements ShouldQueue
         $logEntry = new UserEventLogEntry();
         $logEntry->user()->associate(null);
         $logEntry->eventType = UserEventTypes::PendingUserRemoved;
-        $logEntry->eventDetails = $event->userName . " was removed as a pending user";
+        $logEntry->eventDetails = $event->userName . " was removed as a pending member";
         $logEntry->save();
     }
 }
