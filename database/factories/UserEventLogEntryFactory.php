@@ -2,7 +2,7 @@
 
 namespace Database\Factories;
 
-use App\Models\UserEventLogEntry;
+use App\Enums\UserEventTypes;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -17,9 +17,34 @@ class UserEventLogEntryFactory extends Factory
      */
     public function definition(): array
     {
+        $eventType = fake()->randomElement(UserEventTypes::cases());
+        switch ($eventType) {
+            case UserEventTypes::MemberTypeChanged:
+                $eventDetails = "User changed from ... to ...";
+                break;
+            case UserEventTypes::MemberBecameOldMember:
+                $eventDetails = "User became old member";
+                break;
+            case UserEventTypes::NewPendingUser:
+                $eventDetails = "New pending user: ...";
+                break;
+            case UserEventTypes::OldMemberBecameMember:
+                $eventDetails = "User became a member again";
+                break;
+            case UserEventTypes::PendingUserApproved:
+                $eventDetails = "User was approved as a member";
+                break;
+            case UserEventTypes::PendingUserRemoved:
+                $eventDetails = "User was removed as a pending member";
+                break;
+            default:
+                $eventDetails = "Unknown event type";
+                break;
+        }
+                    
         return [
-            'eventType' => fake()->randomElement(\App\Enums\UserEventTypes::values()),
-            'eventDetails' => fake()->sentence(5),
+            'eventType' => $eventType,
+            'eventDetails' => $eventDetails,
             'created_at' => fake()->dateTimeThisYear(),
         ];
     }
