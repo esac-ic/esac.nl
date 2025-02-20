@@ -30,7 +30,7 @@
             <tr>
                 <th>Event type</th>
                 <th>Time</th>
-                <th>User</th>
+                <!-- <th>User</th> -->
                 <th>Event details</th>
                 <th>Management</th>
             </tr>
@@ -40,11 +40,11 @@
             <tr>
                 <td>{{$entry->eventType}}</td>
                 <td>{{$entry->created_at}}</td>
-                @if ($entry->user != null)
+                <!-- @if ($entry->user != null)
                     <td>{{$entry->user->getName()}}</td>
                 @else
                     <td>{{"Deleted User"}}</td>
-                @endif
+                @endif -->
                 <td>{{$entry->eventDetails}}</td>
                 
                 <td>
