@@ -8,10 +8,10 @@ namespace App\Enums;
 enum UserEventTypes:string {
     case PendingUserApproved = "PENDING_USER_APPROVED";
     case PendingUserRemoved = "PENDING_USER_REMOVED";
+    case NewPendingUser = "NEW_PENDING_USER";
     case MemberBecameOldMember = "MEMBER_BECAME_OLD_MEMBER";
     case OldMemberBecameMember = "OLD_MEMBER_BECAME_MEMBER";
     case MemberTypeChanged = "MEMBER_TYPE_CHANGED"; //eg lid -> reunist
-    case NewPendingUser = "NEW_PENDING_USER";
     
     /**
      * Returns an array of the values of the cases.
