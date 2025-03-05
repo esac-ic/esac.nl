@@ -2,15 +2,15 @@
 
 namespace App\Http\Controllers;
 
-use App\Jobs\AddUserToPendingMemberMaillists;
-use App\Jobs\RemoveUserFromPendingMemberMaillists;
+use App\Events\NewPendingUser;
+use App\Events\PendingUserApproved;
+use App\Events\PendingUserRemoved;
 use App\Repositories\UserRepository;
 use App\Rules\EmailDomainValidator;
 use App\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Session;
-use App\Jobs\AddUserToCurrentMemberMailLists;
 
 class PendingUserController extends Controller
 {
@@ -43,12 +43,9 @@ class PendingUserController extends Controller
         $this->validateInput($request);
 
         $user = $this->_userRepository->createPendingUser($request->all());
+ 
+        NewPendingUser::dispatch($user);
         
-        //add to pending member mail lists
-        
-        //TODO: can't test because I don't have Chapta set up locally
-        dispatch(new AddUserToPendingMemberMaillists($user));
-
         Session::flash("message", 'Your membership request is pending, we will get back to you as soon as possible');
 
         return redirect('/signup');
@@ -56,11 +53,8 @@ class PendingUserController extends Controller
 
     public function removeAsPendingMember(Request $request, User $user)
     {
+        PendingUserRemoved::dispatch($user, $user->getName());
         $user->removeAsPendingMember();
-        
-        //remove the user from the pending member mail lists
-        dispatch(new RemoveUserFromPendingMemberMaillists($user));
-
 
         return redirect('users/pending_members');
     }
@@ -69,10 +63,9 @@ class PendingUserController extends Controller
     {
         $user->approveAsPendingMember();
         
-        //add and remove user from mail lists
-        dispatch(new RemoveUserFromPendingMemberMaillists($user));
-        dispatch(new AddUserToCurrentMemberMailLists($user));
+        PendingUserApproved::dispatch($user);
 
+        
         return redirect('users/pending_members');
     }
 

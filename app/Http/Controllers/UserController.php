@@ -5,11 +5,6 @@ namespace App\Http\Controllers;
 use App\CustomClasses\MailList\MailListFacade;
 use App\Exports\OldUsersExport;
 use App\Exports\UsersExport;
-use App\Jobs\AddUserToCurrentMemberMailLists;
-use App\Jobs\AddUserToOldMemberMaillists;
-use App\Jobs\RemoveUserFromCurrentMemberMaillists;
-use App\Jobs\RemoveUserFromOldMemberMaillists;
-use App\Jobs\RemoveUserFromPendingMemberMaillists;
 use App\Repositories\UserRepository;
 use App\Rol;
 use App\Rules\EmailDomainValidator;
@@ -19,6 +14,9 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Session;
 use Maatwebsite\Excel\Facades\Excel;
+use App\Events\MemberTypeChanged;
+use App\Events\MemberBecameOldMember;
+use App\Events\OldMemberBecameMember;
 
 class UserController extends Controller
 {
@@ -134,16 +132,13 @@ class UserController extends Controller
             $mailListFacade->updateUserEmailFormAllMailList($user, $user->email, $request['email']);
         }
         
-        if ($request['kind_of_member'] != $user->kind_of_member) dispatch(new RemoveUserFromCurrentMemberMaillists($user));
+        if ($request['kind_of_member'] != $user->kind_of_member) 
+        {   
+            MemberTypeChanged::dispatch($user, $user->kind_of_member, $request['kind_of_member']);
+        }
         
         $this->_userRepository->update($user->id, $request->all());
                 
-        //check if the kind of member changed
-        if ($request['kind_of_member'] != $user->kind_of_member) {
-            \Log::info("kind of member changed");
-            
-            dispatch(new AddUserToCurrentMemberMailLists($user));
-        }
         
         if (Auth::user()->hasRole(Config::get('constants.Administrator'))) {
             $this->_userRepository->addRols($user->id, $request->get('roles', []));
@@ -163,7 +158,7 @@ class UserController extends Controller
         $user->removeAsActiveMember();
         $mailListFacade->deleteUserFormAllMailList($user);
         
-        dispatch(new AddUserToOldMemberMaillists($user));
+        MemberBecameOldMember::dispatch($user);
 
         return redirect('/users/' . $user->id);
     }
@@ -182,10 +177,8 @@ class UserController extends Controller
     {
         $user->makeActiveMember();
         
-        //add to active member mail lists here
-        dispatch(new RemoveUserFromOldMemberMaillists($user));
-        dispatch(new AddUserToCurrentMemberMailLists($user));
-
+        OldMemberBecameMember::dispatch($user);
+        
         return redirect('/users/' . $user->id);
     }
 
