@@ -38,9 +38,9 @@ class SettingSeeder extends Seeder
         $setting->save();
         $setting = new Setting(['name' => Setting::SETTING_RELATIONSHIP_MEMBER_MAIL_LISTS, 'type' => Setting::TYPE_STRING, 'value' => '']);
         $setting->save();
-        $setting = new Setting(['name' => Setting::SETTING_OLD_MEMBER_MAIL_LISTS, 'type' => Setting::TYPE_STRING, 'value' => '']);
-        $setting->save();
-        $setting = new Setting(['name' => Setting::SETTING_PENDING_MEMBER_MAIL_LISTS, 'type' => Setting::TYPE_STRING, 'value' => '']);
-        $setting->save();
+        // $setting = new Setting(['name' => Setting::SETTING_OLD_MEMBER_MAIL_LISTS, 'type' => Setting::TYPE_STRING, 'value' => '']);
+        // $setting->save();
+        // $setting = new Setting(['name' => Setting::SETTING_PENDING_MEMBER_MAIL_LISTS, 'type' => Setting::TYPE_STRING, 'value' => '']);
+        // $setting->save();
     }
 }
