@@ -31,9 +31,9 @@ class MailMan
         return $this->call("POST", $url, $body);
     }
 
-    public function delete(string $url)
+    public function delete(string $url, array $body = [])
     {
-        return $this->call("DELETE", $url);
+        return $this->call("DELETE", $url, $body);
     }
 
     private function call(string $method, string $url, array $body = [])
