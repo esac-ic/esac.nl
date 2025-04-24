@@ -10,12 +10,19 @@ class UserFactory extends Factory
 {
     public function definition(): array
     {
+        //generate sensible matching email, name pairs
+        $firstName = fake()->firstName();
+        $preposition = fake()->randomElement(["", "van", "ten", "van de", "de"]);
+        $lastName = fake()->lastName();
+        $domain = fake()->freeEmailDomain();
+        $email = str_replace(" ", "", $firstName . $preposition . $lastName . "@" . $domain);
+        
         return [
-            'email' => fake()->unique()->safeEmail(),
+            'email' => $email,
             'password' => bcrypt(fake()->password()),
-            'firstname' => fake()->firstName(),
-            'lastname' => fake()->lastName(),
-            'preposition' => fake()->word(),
+            'firstname' => $firstName,
+            'lastname' => $lastName,
+            'preposition' => $preposition,
             'street' => fake()->streetName(),
             'houseNumber' => fake()->randomNumber(),
             'city' => fake()->city(),
