@@ -130,8 +130,8 @@ class MailListFacade
     {
         foreach ($this->getAllMailLists() as $mailList) {
             try {
-                //we used try to delete the user from the mail list wihout checken if he is in the list because
-                //that take to much time
+                //we used try{} to delete the user from the mail list without checking if they are in the list because
+                //that takes too much time
                 $this->deleteMemberFromMailList($mailList->getId(), $user->email);
             } catch (Exception $e) {
             }
@@ -204,5 +204,65 @@ class MailListFacade
             }
         }
     }
-
+    
+    /**
+     * Deletes all users from a specified mail list.
+     * 
+     * @param string $mailListId the Id of the maillist that is to be emptied
+     * @param array|null $allMailListIds optional parameter that can be used to prevent multiple API calls to get all maillist ids when the function is called repeatedly
+     * 
+     * @return void
+     */
+    public function deleteAllUsersFromMailList(string $mailListId, array|null $allMailListIds = null)
+    {
+        if ($mailListId)
+        {
+            if ($allMailListIds == null)
+            {
+                $allMailListIds = $this->getAllMailListIds();
+            }
+            
+            if (in_array($mailListId, $allMailListIds))
+            {
+                try {
+                    //get all members of the maillist
+                    $members = $this->getMailList($mailListId)->getMemberEmails();
+                    
+                    foreach ($members as $member)
+                    {
+                        //TODO this is a somewhat hacky and inefficient way to do it, but the "nicer" way below isn't working properly for some reason.
+                        $this->deleteMemberFromMailList($mailListId, $member);
+                    }
+                    
+                    //The below code could be used to call the mass unsubscription api function from mailman, but it's not really working for some reason.
+                    // if ($members != [])
+                    // {
+                    //     //delete all members
+                    //     $this->_mailManHandler->delete(
+                    //         "/lists/" . $mailListId . "/roster/member",
+                    //         [
+                    //             'emails' => json_encode($members),//array("member@esac.nl","test@esac.nl"),//$members, //not sure if this already works since it's including names
+                    //             ]
+                    //         );
+                    //     }     
+                        
+                        
+                    } catch(Exception $e) {
+                        if ($e->getCode() == 404) {
+                            //check if there are other errors already and elsewise append the maillist
+                            if (Session::has("mailListRemovalError")) {
+                                Session::flash("mailListRemovalError", Session::get("mailListRemovalError") . ", " . $mailListId);
+                            } else {
+                                Session::flash("mailListRemovalError", "An error occurred when removing a member from the following maillists: ". $mailListId );
+                            }
+                        } else {
+                            Session::flash("error", "Got error " . $e->getCode() . " when trying to remove member from maillist");
+                    }
+                    \Log::error($e->getMessage());
+                }
+            }
+        }
+    }
+    
+    
 }

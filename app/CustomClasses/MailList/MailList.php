@@ -105,4 +105,14 @@ class MailList
         array_push($this->members, $member);
         return $this;
     }
+    
+    public function getMemberEmails(): array
+    {
+        $emails = array();
+        foreach($this->members as $member)
+        {
+            array_push($emails, $member->getAddress());
+        }
+        return $emails;
+    }
 }

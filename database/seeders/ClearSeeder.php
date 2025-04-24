@@ -6,6 +6,7 @@ use App\AgendaItem;
 use App\AgendaItemCategory;
 use App\Book;
 use App\Certificate;
+use App\CustomClasses\MailList\MailListFacade;
 use App\MenuItem;
 use App\Models\ApplicationForm\ApplicationForm;
 use App\Models\ApplicationForm\ApplicationFormRow;
@@ -15,6 +16,7 @@ use App\Rol;
 use App\User;
 use App\Zekering;
 use Illuminate\Database\Seeder;
+Use Exception;
 
 //emptys data from database
 class ClearSeeder extends Seeder
@@ -24,8 +26,25 @@ class ClearSeeder extends Seeder
      *
      * @return void
      */
-    public function run()
+    public function run(MailListFacade $mailListFacade)
     {
+        //clean out the maillists
+        if (env("APP_DEBUG")) //extra safety check to make sure the maillists can't accidentally be deleted
+        {
+            try 
+            {
+                $allMailLists = $mailListFacade->getAllMailListIds();
+                foreach ($allMailLists as $mailList)
+                {
+                    $mailListFacade->deleteAllUsersFromMailList($mailList, $allMailLists);
+                }
+            }
+            catch (Exception $e)
+            {
+                \Log::error($e->getMessage());
+            }
+        }
+        
         Zekering::getQuery()->delete();
         Certificate::getQuery()->delete();
         MenuItem::getQuery()->delete();
@@ -38,5 +57,6 @@ class ClearSeeder extends Seeder
         User::getQuery()->delete();
         Rol::getQuery()->delete();
         UserEventLogEntry::getQuery()->delete();
+        
     }
 }
