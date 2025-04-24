@@ -5,6 +5,7 @@ namespace App\Listeners;
 use App\CustomClasses\MailList\MailListFacade;
 use App\Events\MemberTypeChanged;
 use App\Events\OldMemberBecameMember;
+use App\Events\PendingUserApproved;
 use Illuminate\Events\Dispatcher;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Queue\InteractsWithQueue;
@@ -146,12 +147,18 @@ class UpdateMemberTypeMaillists implements ShouldQueue
         $this->removeUserFromMailLists($event->user, $event->oldMemberType);
         $this->addUserToMailLists($event->user, $event->newMemberType);
     }
+    
+    public function handlePendingUserApproved(PendingUserApproved $event)
+    {
+        $this->addUserToMailLists($event->user, $event->user->kind_of_member);
+    }
 
     public function subscribe(Dispatcher $events): array
     {
         return [
             OldMemberBecameMember::class => 'handleOldMemberBecameMember',
             MemberTypeChanged::class => 'handleMemberTypeChanged',
+            PendingUserApproved::class => 'handlePendingUserApproved',
         ];
     }
 }
