@@ -104,7 +104,7 @@
                                     {{'Mailing lists'}}
                                 </a>
                             </li>
-                            <li class="nav-tiem">
+                            <li class="nav-item">
                                 <a href="{{ url('userEventLog') }}" class="nav-link">
                                     {{'User event log'}}
                                 </a>
