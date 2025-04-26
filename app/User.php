@@ -69,7 +69,8 @@ class User extends Authenticatable
         "member_of_merit",
         "trainer",
         "relationship",
-
+    ];
+    
     protected $casts = [
         'birthDay' => 'date',
     ];
