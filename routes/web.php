@@ -55,8 +55,7 @@ Route::get('books/exportLibrary', 'LibraryController@exportLibrary');
 //mailist routes
 Route::delete('/mailList/{mailistid}/member/{memberid}', 'MailListController@deleteMeberOfMailList');
 Route::post('/mailList/{mailistid}/member', 'MailListController@addMember');
-//todo Not sure if a get request would be fitting here, but <a> always sends a get request.
-Route::get('/mailList/massSync', 'MailListController@massMemberMailListSync');
+Route::post('/mailList/massSync', 'MailListController@massMemberMailListSync');
 
 //crud routes
 Route::resource('users', 'UserController');
