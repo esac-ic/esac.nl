@@ -52,6 +52,12 @@ Route::delete('users/{user}/addCertificate/{certificate}', 'UserCertificateContr
 //library routes
 Route::get('books/exportLibrary', 'LibraryController@exportLibrary');
 
+//mailist routes
+Route::delete('/mailList/{mailistid}/member/{memberid}', 'MailListController@deleteMeberOfMailList');
+Route::post('/mailList/{mailistid}/member', 'MailListController@addMember');
+//todo Not sure if a get request would be fitting here, but <a> always sends a get request.
+Route::get('/mailList/massSync', 'MailListController@massMemberMailListSync');
+
 //crud routes
 Route::resource('users', 'UserController');
 Route::resource('rols', 'RolController');
@@ -72,21 +78,18 @@ Route::post('userEventLog/export', 'UserEventLogEntryController@export');
 Route::delete('userEventLog/{entry}', 'UserEventLogEntryController@destroy');
 
 //inschrijf routes
-Route::get('forms/{agendaItem}', array('as' => 'editSchedule', 'uses' => 'ApplicationForm\UserApplicationFormController@showRegistrationForm'));
+Route::get('forms/{agendaItem}', array(/*'as' => 'editSchedule', */'uses' => 'ApplicationForm\UserApplicationFormController@showRegistrationForm'));
 Route::get('forms/{agendaItem}/unregister/{fromAgendaItem?}', 'ApplicationForm\UserApplicationFormController@unregister');
-Route::post('forms/{agendaItem}', array('as' => 'editSchedule', 'uses' => 'ApplicationForm\UserApplicationFormController@store'));
+Route::post('forms/{agendaItem}', array(/*'as' => 'editSchedule', */ 'uses' => 'ApplicationForm\UserApplicationFormController@store'));
 Route::get('forms/admin/{agendaItem}', 'ApplicationForm\AgendaApplicationFormController@registerUser');
 Route::post('forms/admin/{agendaItem}', 'ApplicationForm\AgendaApplicationFormController@saveRegistration');
-Route::get('forms/users/{agendaItem}', array('as' => 'editSchedule', 'uses' => 'ApplicationForm\AgendaApplicationFormController@index'));
+Route::get('forms/users/{agendaItem}', array(/*'as' => 'editSchedule', */'uses' => 'ApplicationForm\AgendaApplicationFormController@index'));
 Route::get("forms/users/{user}/detail/{agendaItem}", "ApplicationForm\AgendaApplicationFormController@show");
-Route::get('forms/users/{inschrijfId}/export', array('as' => 'editSchedule', 'uses' => 'ApplicationForm\AgendaApplicationFormController@exportData'));
+Route::get('forms/users/{inschrijfId}/export', array(/*'as' => 'editSchedule', */'uses' => 'ApplicationForm\AgendaApplicationFormController@exportData'));
 Route::delete('forms/{agenda_id}/remove/{applicationResponseId}', 'ApplicationForm\AgendaApplicationFormController@destroy');
 
-Route::resource('forms', 'InschrijfController');
+// Route::resource('forms', 'InschrijfController');
 
-//mailist routes
-Route::delete('/mailList/{mailistid}/member/{memberid}', 'MailListController@deleteMeberOfMailList');
-Route::post('/mailList/{mailistid}/member', 'MailListController@addMember');
 
 //front-end routes
 Route::get('/zekeringen', 'FrontEndController@zekeringen');

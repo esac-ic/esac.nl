@@ -3,6 +3,7 @@
 namespace App\Listeners;
 
 use App\CustomClasses\MailList\MailListFacade;
+use App\Events\MemberMassMailListSync;
 use App\Events\MemberTypeChanged;
 use App\Events\OldMemberBecameMember;
 use App\Events\PendingUserApproved;
@@ -152,6 +153,14 @@ class UpdateMemberTypeMaillists implements ShouldQueue
     {
         $this->addUserToMailLists($event->user, $event->user->kind_of_member);
     }
+    
+    public function handleMemberMassMailListSync(MemberMassMailListSync $event)
+    {
+        foreach ($event->users as $user)
+        {
+            $this->addUserToMailLists($user, $user->kind_of_member);
+        }
+    }
 
     public function subscribe(Dispatcher $events): array
     {
@@ -159,6 +168,7 @@ class UpdateMemberTypeMaillists implements ShouldQueue
             OldMemberBecameMember::class => 'handleOldMemberBecameMember',
             MemberTypeChanged::class => 'handleMemberTypeChanged',
             PendingUserApproved::class => 'handlePendingUserApproved',
+            MemberMassMailListSync::class => 'handleMemberMassMailListSync',
         ];
     }
 }

@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\CustomClasses\MailList\MailListFacade;
+use App\Events\MemberMassMailListSync;
+use App\Repositories\UserRepository;
 use App\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Config;
@@ -12,17 +14,19 @@ class MailListController extends Controller
 {
 
     private $_mailListFacade;
+    private $userRepository;
 
     /**
      * Create a new controller instance.
      *
      * @return void
      */
-    public function __construct(MailListFacade $mailListFacade)
+    public function __construct(MailListFacade $mailListFacade, UserRepository $userRepository)
     {
         $this->_mailListFacade = $mailListFacade;
         $this->middleware('auth');
         $this->middleware('authorize:' . Config::get('constants.Administrator'));
+        $this->userRepository = $userRepository;
     }
 
     //gives the mail list views
@@ -82,4 +86,11 @@ class MailListController extends Controller
         return;
     }
 
+    
+    public function massMemberMailListSync()
+    {
+        $users = $this->userRepository->getCurrentUsers(); //should give user objects
+        \Log::debug(print_r($users, true));
+        //MemberMassMailListSync::dispatch($users);
+    }
 }

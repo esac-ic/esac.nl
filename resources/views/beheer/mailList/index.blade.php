@@ -21,8 +21,13 @@
 
         <div class="col-md-6">
             <div class="btn-group mt-2 float-md-right" role="group" aria-label="Actions">
+                <a onclick="return confirm('Are you sure?\nThis action adds users to all maillists associated with their membership type.\nThis may cause people who have unsubscribed from a maillist to be readded.')" 
+                    href="{{action([App\Http\Controllers\MailListController::class, 'massMemberMailListSync'])}}" class="btn btn-primary">
+                    <span title="{{'Sync member mail lists'}}" class="ion-loop" aria-hidden="true"></span>
+                    {{'Sync member mail lists'}}
+                </a>
                 <a href="{{url('mailList/create')}}" class="btn btn-primary">
-                    <span title="{{'New user'}}" class="ion-plus" aria-hidden="true"></span>
+                    <span title="{{'New mailing list'}}" class="ion-plus" aria-hidden="true"></span>
                     {{'New mailing list'}}
                 </a>
             </div>
