@@ -19,7 +19,7 @@ class MemberMassMailListSync
      * 
      * @param array $users array of \App\User objects.
      */
-    public function __construct(public array $users)
+    public function __construct(public \Illuminate\Database\Eloquent\Collection $users)
     {
         //
     }

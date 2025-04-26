@@ -90,7 +90,7 @@ class MailListController extends Controller
     public function massMemberMailListSync()
     {
         $users = $this->userRepository->getCurrentUsers(); //should give user objects
-        \Log::debug(print_r($users, true));
-        //MemberMassMailListSync::dispatch($users);
+        MemberMassMailListSync::dispatch($users);
+        return redirect('/mailList');
     }
 }
