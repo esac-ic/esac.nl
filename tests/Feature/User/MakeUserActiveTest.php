@@ -21,12 +21,14 @@ class MakeUserActiveTest extends TestCase
     protected function setUp(): void
     {
         parent::setUp();
-        $this->admin = $admin = factory(User::class)->create();
+        // $this->admin = $admin = factory(User::class)->create();
+        $this->admin = $admin = User::factory()->create();
 
         $admin->roles()->attach(Config::get('constants.Administrator'));
         $this->be($admin);
 
-        $this->user = $user = factory(User::class)->create();
+        // $this->user = $user = factory(User::class)->create();
+        $this->user = $user = User::factory()->create();
         $this->user->lid_af = Carbon::Now();
         session()->start();
     }
