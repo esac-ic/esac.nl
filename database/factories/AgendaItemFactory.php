@@ -8,7 +8,7 @@ use App\User;
 use Faker\Generator as Faker;
 
 $factory->define(AgendaItem::class, function (Faker $faker) {
-    $user = factory(User::class)->create();
+    // $user = factory(User::class)->create();
     $user = User::factory()->create();
     $category = factory(AgendaItemCategory::class)->create();
 
