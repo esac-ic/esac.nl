@@ -2,7 +2,7 @@
 
 namespace App\Repositories;
 
-use App\AgendaItem;
+use App\Models\AgendaItem;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;

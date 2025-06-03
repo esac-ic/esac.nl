@@ -27,7 +27,11 @@
         <link rel="stylesheet" type="text/css" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
         @stack('styles')
         <link rel="stylesheet" type="text/css" href="{{mix("css/app.css")}}">
-
+        <script rel="stylesheet" type="text/css">
+            body {
+                background-color: red;
+            }
+        </script>
         @php
             // This code allows for css changes based on the current timestamp.
             $startTime = 1740517200; // Tue Feb 25 2025 22:00:00 GMT+0100 (Central European Standard Time)
@@ -69,4 +73,3 @@
         <script src="{{mix("/js/app.js")}}"></script>
     </body>
 </html>
-

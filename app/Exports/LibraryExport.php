@@ -4,10 +4,10 @@ namespace App\Exports;
 
 use APP\Repositories\BookRepository;
 use Maatwebsite\Excel\Concerns\FromCollection;
+use Maatwebsite\Excel\Concerns\ShouldAutoSize;
 use Maatwebsite\Excel\Concerns\WithHeadings;
 use Maatwebsite\Excel\Concerns\WithMapping;
 use Maatwebsite\Excel\Concerns\WithTitle;
-use Maatwebsite\Excel\Concerns\ShouldAutoSize;
 
 class LibraryExport implements FromCollection, WithTitle, WithHeadings, ShouldAutoSize, WithMapping
 {
@@ -53,8 +53,8 @@ class LibraryExport implements FromCollection, WithTitle, WithHeadings, ShouldAu
     /**
      * Map a single book (row) to an array of cell values.
      * Note: The order of these values must match the order of the headings
-     * 
-     * @param \APP\Book $book
+     *
+     * @param  \App\Models\Book  $book
      * @return array
      */
     public function map($book): array

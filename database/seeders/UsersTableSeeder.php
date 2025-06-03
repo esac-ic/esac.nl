@@ -15,7 +15,7 @@ class UsersTableSeeder extends Seeder
     public function run()
     {
         //inserting test data
-        $user = new \App\User();
+        $user = new \App\Models\User();
         $user->email = "test@esac.nl";
         $user->password = bcrypt("test");
         $user->firstname = "Piet";
@@ -47,7 +47,7 @@ class UsersTableSeeder extends Seeder
         $user->save();
 
         //inserting test data
-        $user = new \App\User();
+        $user = new \App\Models\User();
         $user->email = "member@esac.nl";
         $user->password = bcrypt("test");
         $user->firstname = "Piet1";
@@ -75,7 +75,7 @@ class UsersTableSeeder extends Seeder
         $user->save();
 
         //inserting test data
-        $user = new \App\User();
+        $user = new \App\Models\User();
         $user->email = "pending@esac.nl";
         $user->password = bcrypt("test");
         $user->firstname = "Piet1";

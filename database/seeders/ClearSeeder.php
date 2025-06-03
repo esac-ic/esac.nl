@@ -2,17 +2,17 @@
 
 namespace Database\Seeders;
 
-use App\AgendaItem;
-use App\AgendaItemCategory;
-use App\Book;
-use App\Certificate;
-use App\MenuItem;
+use App\Models\AgendaItem;
+use App\Models\AgendaItemCategory;
 use App\Models\ApplicationForm\ApplicationForm;
 use App\Models\ApplicationForm\ApplicationFormRow;
-use App\NewsItem;
-use App\Rol;
-use App\User;
-use App\Zekering;
+use App\Models\Book;
+use App\Models\Certificate;
+use App\Models\MenuItem;
+use App\Models\NewsItem;
+use App\Models\Rol;
+use App\Models\User;
+use App\Models\Zekering;
 use Illuminate\Database\Seeder;
 
 //emptys data from database
