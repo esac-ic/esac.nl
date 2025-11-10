@@ -24,7 +24,6 @@ class DeleteAgendaItemTest extends TestCase
     protected function setUp(): void
     {
         parent::setUp();
-        // $this->user = $user = factory(User::class)->create();
         $this->user = $user = User::factory()->create();
         $user->roles()->attach(Config::get('constants.Activity_administrator'));
         $this->be($user);

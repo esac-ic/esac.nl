@@ -26,7 +26,6 @@ class DeleteAgendaRegistrationTest extends TestCase
     protected function setUp(): void
     {
         parent::setUp();
-        // $this->user = $user = factory(User::class)->create();
         $this->user = $user = User::factory()->create();
 
         $this->be($user);

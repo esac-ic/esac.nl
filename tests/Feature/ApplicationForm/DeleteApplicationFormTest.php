@@ -36,7 +36,6 @@ class DeleteApplicationFormTest extends TestCase
     {
         parent::setUp();
         $this->applicationForm = factory(ApplicationForm::class)->create();
-        // $this->user = $user = factory(User::class)->create();
         $this->user = $user = User::factory()->create();
         $this->url .= "/" . $this->applicationForm->id;
 
