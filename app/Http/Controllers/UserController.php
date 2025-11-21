@@ -127,7 +127,6 @@ class UserController extends Controller
         
         $this->validateInput($request, $user->id);
         
-        //TODO: check if email change doesn't fuck stuff up because concurrency or something
         if ($user->email != $request['email']) {
             $mailListFacade->updateUserEmailFormAllMailList($user, $user->email, $request['email']);
         }
