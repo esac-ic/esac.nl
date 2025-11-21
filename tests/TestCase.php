@@ -38,9 +38,12 @@ abstract class TestCase extends Illuminate\Foundation\Testing\TestCase
     private function createRoles(): void
     {
         foreach (Config::get('constants') as $key => $value) {
-            factory(Rol::class)->create([
-                'id' => $value,
-            ]);
+            if (!Rol::find($value))
+            {
+                factory(Rol::class)->create([
+                    'id' => $value,
+                ]);
+            }
         }
     }
 }
