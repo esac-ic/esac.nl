@@ -191,7 +191,7 @@ class UpdateUserTest extends \TestCase
             'emergencycountry' => 'Second',
             'birthDay' => '1990-02-02',
             'IBAN' =>  '234567891',
-            'kind_of_member' => 'member',
+            'kind_of_member' => 'reunist',
         ];
         
         Event::fake(); //make sure event listeners are not called
@@ -199,11 +199,13 @@ class UpdateUserTest extends \TestCase
             $mock->shouldReceive('updateUserEmailFormAllMailList');
         });
         
+        $this->assertNotEquals($this->member->kind_of_member, $updateData['kind_of_member']); //sanity check that we update the member type as well
+        
         $response = $this->actingAs($this->admin)->patch('/users/' . $this->member->id, $updateData);
         
         $response->assertRedirect('/users');
         
-        Event::assertNotDispatched(MemberTypeChanged::class);
+        Event::assertDispatched(MemberTypeChanged::class);
         
         $newMember = User::find($this->member->id);
         
