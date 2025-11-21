@@ -119,7 +119,7 @@ class UserController extends Controller
                 'firstname' => $user->firstname,
                 'preposition' => $user->preposition,
                 'lastname' => $user->lastname,
-                'remarks' => $user->remarks,
+                'remark' => $user->remark,
                 'kind_of_member' => $user->kind_of_member,
             ]);
         }
