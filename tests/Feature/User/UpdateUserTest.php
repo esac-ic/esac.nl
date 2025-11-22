@@ -251,7 +251,7 @@ class UpdateUserTest extends \TestCase
             'birthDay' => '1990-02-02',
             'IBAN' =>  '234567891',
             'kind_of_member' => $this->member->kind_of_member,
-            'remark' => $this->member->remarks,
+            'remark' => $this->member->remark,
         ];
         
         Event::fake(); //make sure event listeners are not called
