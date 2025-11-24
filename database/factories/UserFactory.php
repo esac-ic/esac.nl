@@ -5,6 +5,7 @@ namespace Database\Factories;
 use App\User;
 use Faker\Generator as Faker;
 use Illuminate\Database\Eloquent\Factories\Factory;
+use Illuminate\Support\Facades\Lang;
 
 class UserFactory extends Factory
 {
@@ -51,7 +52,7 @@ class UserFactory extends Factory
     {
         return $this->state(function (array $attributes) {
             return [
-                'kind_of_member' => "member",
+                'kind_of_member' => Lang::get('member'),
             ];
         });
     }
@@ -60,7 +61,52 @@ class UserFactory extends Factory
     {
         return $this->state(function (array $attributes) {
             return [
-                'kind_of_member' => "reunist",
+                'kind_of_member' => Lang::get('reunist'),
+            ];
+        });
+    }
+    
+    public function extraordinary_participant(): Factory
+    {
+        return $this->state(function (array $attributes) {
+            return [
+                'kind_of_member' => Lang::get('extraordinary_member'),
+            ];
+        });
+    }
+    
+    public function honorary_member(): Factory
+    {
+        return $this->state(function (array $attributes) {
+            return [
+                'kind_of_member' => Lang::get('honorary_member'),
+            ];
+        });
+    }
+    
+    public function member_of_merit(): Factory
+    {
+        return $this->state(function (array $attributes) {
+            return [
+                'kind_of_member' => Lang::get('member_of_merit'),
+            ];
+        });
+    }
+    
+    public function trainer(): Factory
+    {
+        return $this->state(function (array $attributes) {
+            return [
+                'kind_of_member' => Lang::get('trainer'),
+            ];
+        });
+    }
+    
+    public function relationship(): Factory
+    {
+        return $this->state(function (array $attributes) {
+            return [
+                'kind_of_member' => Lang::get('relationship'),
             ];
         });
     }
