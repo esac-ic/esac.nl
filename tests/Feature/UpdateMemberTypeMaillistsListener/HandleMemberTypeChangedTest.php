@@ -60,12 +60,14 @@ class HandleMemberTypeChangedTest extends \TestCase
         $reunistSetting->value = 'first-reunist;second-reunist;third-reunist;fourth-reunist';
         $reunistSetting->save();
         
-        $this->mockedMailListFacade->shouldReceive('addUserToSpecifiedMailLists')
-            ->with($this->user->email, $this->user->getName(), ['first-reunist.esac.nl', 'second-reunist.esac.nl', 'third-reunist.esac.nl', 'fourth-reunist.esac.nl'])
-            ->once();
         $this->mockedMailListFacade->shouldReceive('removeUserFromSpecifiedMailLists')
             ->with($this->user->email, ['first-member.esac.nl', 'second-member.esac.nl', 'third-member.esac.nl',  'fourth-member.esac.nl'])
-            ->once();
+            ->once()
+            ->ordered(); //should remove people from maillists before adding them to the new ones in case there is overlap
+        $this->mockedMailListFacade->shouldReceive('addUserToSpecifiedMailLists')
+            ->with($this->user->email, $this->user->getName(), ['first-reunist.esac.nl', 'second-reunist.esac.nl', 'third-reunist.esac.nl', 'fourth-reunist.esac.nl'])
+            ->once()
+            ->ordered();
         
         $event = new MemberTypeChanged($this->user, Lang::get('member'), Lang::get('reunist'));
         
@@ -83,12 +85,14 @@ class HandleMemberTypeChangedTest extends \TestCase
     
     public function test_mail_lists_updated_member_to_reunist()
     {
-        $this->mockedMailListFacade->shouldReceive('addUserToSpecifiedMailLists')
-            ->with($this->user->email, $this->user->getName(), [$this->mailLists['reunist']])
-            ->once();
         $this->mockedMailListFacade->shouldReceive('removeUserFromSpecifiedMailLists')
             ->with($this->user->email, [$this->mailLists['member']])
-            ->once();
+            ->once()
+            ->ordered();
+        $this->mockedMailListFacade->shouldReceive('addUserToSpecifiedMailLists')
+            ->with($this->user->email, $this->user->getName(), [$this->mailLists['reunist']])
+            ->once()
+            ->ordered();
 
         $this->user->kind_of_member = Lang::get('member');
         $this->user->save();
@@ -101,12 +105,14 @@ class HandleMemberTypeChangedTest extends \TestCase
     
     public function test_mail_lists_updated_member_to_extraordinary()
     {
-        $this->mockedMailListFacade->shouldReceive('addUserToSpecifiedMailLists')
-            ->with($this->user->email, $this->user->getName(), [$this->mailLists['extraordinary']])
-            ->once();
         $this->mockedMailListFacade->shouldReceive('removeUserFromSpecifiedMailLists')
             ->with($this->user->email, [$this->mailLists['member']])
-            ->once();
+            ->once()
+            ->ordered();
+        $this->mockedMailListFacade->shouldReceive('addUserToSpecifiedMailLists')
+            ->with($this->user->email, $this->user->getName(), [$this->mailLists['extraordinary']])
+            ->once()
+            ->ordered();
         
         $this->user->kind_of_member = Lang::get('member');
         $this->user->save();
@@ -119,12 +125,14 @@ class HandleMemberTypeChangedTest extends \TestCase
     
     public function test_mail_lists_updated_member_to_honorary()
     {
-        $this->mockedMailListFacade->shouldReceive('addUserToSpecifiedMailLists')
-            ->with($this->user->email, $this->user->getName(), [$this->mailLists['honorary']])
-            ->once();
         $this->mockedMailListFacade->shouldReceive('removeUserFromSpecifiedMailLists')
             ->with($this->user->email, [$this->mailLists['member']])
-            ->once();
+            ->once()
+            ->ordered();
+        $this->mockedMailListFacade->shouldReceive('addUserToSpecifiedMailLists')
+            ->with($this->user->email, $this->user->getName(), [$this->mailLists['honorary']])
+            ->once()
+            ->ordered();
         
         $this->user->kind_of_member = Lang::get('member');
         $this->user->save();
@@ -137,12 +145,14 @@ class HandleMemberTypeChangedTest extends \TestCase
     
     public function test_mail_lists_updated_member_to_merit()
     {
-        $this->mockedMailListFacade->shouldReceive('addUserToSpecifiedMailLists')
-            ->with($this->user->email, $this->user->getName(), [$this->mailLists['merit']])
-            ->once();
         $this->mockedMailListFacade->shouldReceive('removeUserFromSpecifiedMailLists')
             ->with($this->user->email, [$this->mailLists['member']])
-            ->once();
+            ->once()
+            ->ordered();
+        $this->mockedMailListFacade->shouldReceive('addUserToSpecifiedMailLists')
+            ->with($this->user->email, $this->user->getName(), [$this->mailLists['merit']])
+            ->once()
+            ->ordered();
         
         $this->user->kind_of_member = Lang::get('member');
         $this->user->save();
@@ -155,12 +165,14 @@ class HandleMemberTypeChangedTest extends \TestCase
     
     public function test_mail_lists_updated_member_to_trainer()
     {
-        $this->mockedMailListFacade->shouldReceive('addUserToSpecifiedMailLists')
-            ->with($this->user->email, $this->user->getName(), [$this->mailLists['trainer']])
-            ->once();
         $this->mockedMailListFacade->shouldReceive('removeUserFromSpecifiedMailLists')
             ->with($this->user->email, [$this->mailLists['member']])
-            ->once();
+            ->once()
+            ->ordered();
+        $this->mockedMailListFacade->shouldReceive('addUserToSpecifiedMailLists')
+            ->with($this->user->email, $this->user->getName(), [$this->mailLists['trainer']])
+            ->once()
+            ->ordered();
         
         $this->user->kind_of_member = Lang::get('member');
         $this->user->save();
@@ -173,12 +185,14 @@ class HandleMemberTypeChangedTest extends \TestCase
     
     public function test_mail_lists_updated_member_to_relationship()
     {
-        $this->mockedMailListFacade->shouldReceive('addUserToSpecifiedMailLists')
-            ->with($this->user->email, $this->user->getName(), [$this->mailLists['relationship']])
-            ->once();
         $this->mockedMailListFacade->shouldReceive('removeUserFromSpecifiedMailLists')
             ->with($this->user->email, [$this->mailLists['member']])
-            ->once();
+            ->once()
+            ->ordered();
+        $this->mockedMailListFacade->shouldReceive('addUserToSpecifiedMailLists')
+            ->with($this->user->email, $this->user->getName(), [$this->mailLists['relationship']])
+            ->once()
+            ->ordered();
         
         $this->user->kind_of_member = Lang::get('member');
         $this->user->save();
@@ -195,12 +209,14 @@ class HandleMemberTypeChangedTest extends \TestCase
     
     public function test_mail_lists_updated_reunist_to_member()
     {
-        $this->mockedMailListFacade->shouldReceive('addUserToSpecifiedMailLists')
-            ->with($this->user->email, $this->user->getName(), [$this->mailLists['member']])
-            ->once();
         $this->mockedMailListFacade->shouldReceive('removeUserFromSpecifiedMailLists')
             ->with($this->user->email, [$this->mailLists['reunist']])
-            ->once();
+            ->once()
+            ->ordered();
+        $this->mockedMailListFacade->shouldReceive('addUserToSpecifiedMailLists')
+            ->with($this->user->email, $this->user->getName(), [$this->mailLists['member']])
+            ->once()
+            ->ordered();
         
         $this->user->kind_of_member = Lang::get('reunist');
         $this->user->save();
@@ -213,12 +229,14 @@ class HandleMemberTypeChangedTest extends \TestCase
     
     public function test_mail_lists_updated_reunist_to_extraordinary()
     {
-        $this->mockedMailListFacade->shouldReceive('addUserToSpecifiedMailLists')
-            ->with($this->user->email, $this->user->getName(), [$this->mailLists['extraordinary']])
-            ->once();
         $this->mockedMailListFacade->shouldReceive('removeUserFromSpecifiedMailLists')
             ->with($this->user->email, [$this->mailLists['reunist']])
-            ->once();
+            ->once()
+            ->ordered();
+        $this->mockedMailListFacade->shouldReceive('addUserToSpecifiedMailLists')
+            ->with($this->user->email, $this->user->getName(), [$this->mailLists['extraordinary']])
+            ->once()
+            ->ordered();
         
         $this->user->kind_of_member = Lang::get('reunist');
         $this->user->save();
@@ -231,12 +249,14 @@ class HandleMemberTypeChangedTest extends \TestCase
     
     public function test_mail_lists_updated_reunist_to_honorary()
     {
-        $this->mockedMailListFacade->shouldReceive('addUserToSpecifiedMailLists')
-            ->with($this->user->email, $this->user->getName(), [$this->mailLists['honorary']])
-            ->once();
         $this->mockedMailListFacade->shouldReceive('removeUserFromSpecifiedMailLists')
             ->with($this->user->email, [$this->mailLists['reunist']])
-            ->once();
+            ->once()
+            ->ordered();
+        $this->mockedMailListFacade->shouldReceive('addUserToSpecifiedMailLists')
+            ->with($this->user->email, $this->user->getName(), [$this->mailLists['honorary']])
+            ->once()
+            ->ordered();
         
         $this->user->kind_of_member = Lang::get('reunist');
         $this->user->save();
@@ -249,12 +269,14 @@ class HandleMemberTypeChangedTest extends \TestCase
     
     public function test_mail_lists_updated_reunist_to_merit()
     {
-        $this->mockedMailListFacade->shouldReceive('addUserToSpecifiedMailLists')
-            ->with($this->user->email, $this->user->getName(), [$this->mailLists['merit']])
-            ->once();
         $this->mockedMailListFacade->shouldReceive('removeUserFromSpecifiedMailLists')
             ->with($this->user->email, [$this->mailLists['reunist']])
-            ->once();
+            ->once()
+            ->ordered();
+        $this->mockedMailListFacade->shouldReceive('addUserToSpecifiedMailLists')
+            ->with($this->user->email, $this->user->getName(), [$this->mailLists['merit']])
+            ->once()
+            ->ordered();
         
         $this->user->kind_of_member = Lang::get('reunist');
         $this->user->save();
@@ -267,12 +289,14 @@ class HandleMemberTypeChangedTest extends \TestCase
     
     public function test_mail_lists_updated_reunist_to_trainer()
     {
-        $this->mockedMailListFacade->shouldReceive('addUserToSpecifiedMailLists')
-            ->with($this->user->email, $this->user->getName(), [$this->mailLists['trainer']])
-            ->once();
         $this->mockedMailListFacade->shouldReceive('removeUserFromSpecifiedMailLists')
             ->with($this->user->email, [$this->mailLists['reunist']])
-            ->once();
+            ->once()
+            ->ordered();
+        $this->mockedMailListFacade->shouldReceive('addUserToSpecifiedMailLists')
+            ->with($this->user->email, $this->user->getName(), [$this->mailLists['trainer']])
+            ->once()
+            ->ordered();
         
         $this->user->kind_of_member = Lang::get('reunist');
         $this->user->save();
@@ -285,12 +309,14 @@ class HandleMemberTypeChangedTest extends \TestCase
     
     public function test_mail_lists_updated_reunist_to_relationship()
     {
-        $this->mockedMailListFacade->shouldReceive('addUserToSpecifiedMailLists')
-            ->with($this->user->email, $this->user->getName(), [$this->mailLists['relationship']])
-            ->once();
         $this->mockedMailListFacade->shouldReceive('removeUserFromSpecifiedMailLists')
             ->with($this->user->email, [$this->mailLists['reunist']])
-            ->once();
+            ->once()
+            ->ordered();
+        $this->mockedMailListFacade->shouldReceive('addUserToSpecifiedMailLists')
+            ->with($this->user->email, $this->user->getName(), [$this->mailLists['relationship']])
+            ->once()
+            ->ordered();
         
         $this->user->kind_of_member = Lang::get('reunist');
         $this->user->save();
@@ -307,12 +333,14 @@ class HandleMemberTypeChangedTest extends \TestCase
     
     public function test_mail_lists_updated_extraordinary_to_member()
     {
-        $this->mockedMailListFacade->shouldReceive('addUserToSpecifiedMailLists')
-            ->with($this->user->email, $this->user->getName(), [$this->mailLists['member']])
-            ->once();
         $this->mockedMailListFacade->shouldReceive('removeUserFromSpecifiedMailLists')
             ->with($this->user->email, [$this->mailLists['extraordinary']])
-            ->once();
+            ->once()
+            ->ordered();
+        $this->mockedMailListFacade->shouldReceive('addUserToSpecifiedMailLists')
+            ->with($this->user->email, $this->user->getName(), [$this->mailLists['member']])
+            ->once()
+            ->ordered();
         
         $this->user->kind_of_member = Lang::get('extraordinary_member');
         $this->user->save();
@@ -325,12 +353,14 @@ class HandleMemberTypeChangedTest extends \TestCase
     
     public function test_mail_lists_updated_extraordinary_to_reunist()
     {
-        $this->mockedMailListFacade->shouldReceive('addUserToSpecifiedMailLists')
-            ->with($this->user->email, $this->user->getName(), [$this->mailLists['reunist']])
-            ->once();
         $this->mockedMailListFacade->shouldReceive('removeUserFromSpecifiedMailLists')
             ->with($this->user->email, [$this->mailLists['extraordinary']])
-            ->once();
+            ->once()
+            ->ordered();
+        $this->mockedMailListFacade->shouldReceive('addUserToSpecifiedMailLists')
+            ->with($this->user->email, $this->user->getName(), [$this->mailLists['reunist']])
+            ->once()
+            ->ordered();
         
         $this->user->kind_of_member = Lang::get('extraordinary_member');
         $this->user->save();
@@ -343,12 +373,14 @@ class HandleMemberTypeChangedTest extends \TestCase
     
     public function test_mail_lists_updated_extraordinary_to_honorary()
     {
-        $this->mockedMailListFacade->shouldReceive('addUserToSpecifiedMailLists')
-            ->with($this->user->email, $this->user->getName(), [$this->mailLists['honorary']])
-            ->once();
         $this->mockedMailListFacade->shouldReceive('removeUserFromSpecifiedMailLists')
             ->with($this->user->email, [$this->mailLists['extraordinary']])
-            ->once();
+            ->once()
+            ->ordered();
+        $this->mockedMailListFacade->shouldReceive('addUserToSpecifiedMailLists')
+            ->with($this->user->email, $this->user->getName(), [$this->mailLists['honorary']])
+            ->once()
+            ->ordered();
         
         $this->user->kind_of_member = Lang::get('extraordinary_member');
         $this->user->save();
@@ -361,12 +393,14 @@ class HandleMemberTypeChangedTest extends \TestCase
     
     public function test_mail_lists_updated_extraordinary_to_merit()
     {
-        $this->mockedMailListFacade->shouldReceive('addUserToSpecifiedMailLists')
-            ->with($this->user->email, $this->user->getName(), [$this->mailLists['merit']])
-            ->once();
         $this->mockedMailListFacade->shouldReceive('removeUserFromSpecifiedMailLists')
             ->with($this->user->email, [$this->mailLists['extraordinary']])
-            ->once();
+            ->once()
+            ->ordered();
+        $this->mockedMailListFacade->shouldReceive('addUserToSpecifiedMailLists')
+            ->with($this->user->email, $this->user->getName(), [$this->mailLists['merit']])
+            ->once()
+            ->ordered();
         
         $this->user->kind_of_member = Lang::get('extraordinary_member');
         $this->user->save();
@@ -379,12 +413,14 @@ class HandleMemberTypeChangedTest extends \TestCase
     
     public function test_mail_lists_updated_extraordinary_to_trainer()
     {
-        $this->mockedMailListFacade->shouldReceive('addUserToSpecifiedMailLists')
-            ->with($this->user->email, $this->user->getName(), [$this->mailLists['trainer']])
-            ->once();
         $this->mockedMailListFacade->shouldReceive('removeUserFromSpecifiedMailLists')
             ->with($this->user->email, [$this->mailLists['extraordinary']])
-            ->once();
+            ->once()
+            ->ordered();
+        $this->mockedMailListFacade->shouldReceive('addUserToSpecifiedMailLists')
+            ->with($this->user->email, $this->user->getName(), [$this->mailLists['trainer']])
+            ->once()
+            ->ordered();
         
         $this->user->kind_of_member = Lang::get('extraordinary_member');
         $this->user->save();
@@ -397,12 +433,14 @@ class HandleMemberTypeChangedTest extends \TestCase
     
     public function test_mail_lists_updated_extraordinary_to_relationship()
     {
-        $this->mockedMailListFacade->shouldReceive('addUserToSpecifiedMailLists')
-            ->with($this->user->email, $this->user->getName(), [$this->mailLists['relationship']])
-            ->once();
         $this->mockedMailListFacade->shouldReceive('removeUserFromSpecifiedMailLists')
             ->with($this->user->email, [$this->mailLists['extraordinary']])
-            ->once();
+            ->once()
+            ->ordered();
+        $this->mockedMailListFacade->shouldReceive('addUserToSpecifiedMailLists')
+            ->with($this->user->email, $this->user->getName(), [$this->mailLists['relationship']])
+            ->once()
+            ->ordered();
         
         $this->user->kind_of_member = Lang::get('extraordinary_member');
         $this->user->save();
@@ -419,12 +457,14 @@ class HandleMemberTypeChangedTest extends \TestCase
     
     public function test_mail_lists_updated_honorary_to_member()
     {
-        $this->mockedMailListFacade->shouldReceive('addUserToSpecifiedMailLists')
-            ->with($this->user->email, $this->user->getName(), [$this->mailLists['member']])
-            ->once();
         $this->mockedMailListFacade->shouldReceive('removeUserFromSpecifiedMailLists')
             ->with($this->user->email, [$this->mailLists['honorary']])
-            ->once();
+            ->once()
+            ->ordered();
+        $this->mockedMailListFacade->shouldReceive('addUserToSpecifiedMailLists')
+            ->with($this->user->email, $this->user->getName(), [$this->mailLists['member']])
+            ->once()
+            ->ordered();
         
         $this->user->kind_of_member = Lang::get('honorary_member');
         $this->user->save();
@@ -437,12 +477,14 @@ class HandleMemberTypeChangedTest extends \TestCase
     
     public function test_mail_lists_updated_honorary_to_reunist()
     {
-        $this->mockedMailListFacade->shouldReceive('addUserToSpecifiedMailLists')
-            ->with($this->user->email, $this->user->getName(), [$this->mailLists['reunist']])
-            ->once();
         $this->mockedMailListFacade->shouldReceive('removeUserFromSpecifiedMailLists')
             ->with($this->user->email, [$this->mailLists['honorary']])
-            ->once();
+            ->once()
+            ->ordered();
+        $this->mockedMailListFacade->shouldReceive('addUserToSpecifiedMailLists')
+            ->with($this->user->email, $this->user->getName(), [$this->mailLists['reunist']])
+            ->once()
+            ->ordered();
         
         $this->user->kind_of_member = Lang::get('honorary_member');
         $this->user->save();
@@ -455,12 +497,14 @@ class HandleMemberTypeChangedTest extends \TestCase
     
     public function test_mail_lists_updated_honorary_to_extraordinary()
     {
-        $this->mockedMailListFacade->shouldReceive('addUserToSpecifiedMailLists')
-            ->with($this->user->email, $this->user->getName(), [$this->mailLists['extraordinary']])
-            ->once();
         $this->mockedMailListFacade->shouldReceive('removeUserFromSpecifiedMailLists')
             ->with($this->user->email, [$this->mailLists['honorary']])
-            ->once();
+            ->once()
+            ->ordered();
+        $this->mockedMailListFacade->shouldReceive('addUserToSpecifiedMailLists')
+            ->with($this->user->email, $this->user->getName(), [$this->mailLists['extraordinary']])
+            ->once()
+            ->ordered();
         
         $this->user->kind_of_member = Lang::get('honorary_member');
         $this->user->save();
@@ -473,12 +517,14 @@ class HandleMemberTypeChangedTest extends \TestCase
     
     public function test_mail_lists_updated_honorary_to_merit()
     {
-        $this->mockedMailListFacade->shouldReceive('addUserToSpecifiedMailLists')
-            ->with($this->user->email, $this->user->getName(), [$this->mailLists['merit']])
-            ->once();
         $this->mockedMailListFacade->shouldReceive('removeUserFromSpecifiedMailLists')
             ->with($this->user->email, [$this->mailLists['honorary']])
-            ->once();
+            ->once()
+            ->ordered();
+        $this->mockedMailListFacade->shouldReceive('addUserToSpecifiedMailLists')
+            ->with($this->user->email, $this->user->getName(), [$this->mailLists['merit']])
+            ->once()
+            ->ordered();
         
         $this->user->kind_of_member = Lang::get('honorary_member');
         $this->user->save();
@@ -491,12 +537,14 @@ class HandleMemberTypeChangedTest extends \TestCase
     
     public function test_mail_lists_updated_honorary_to_trainer()
     {
-        $this->mockedMailListFacade->shouldReceive('addUserToSpecifiedMailLists')
-            ->with($this->user->email, $this->user->getName(), [$this->mailLists['trainer']])
-            ->once();
         $this->mockedMailListFacade->shouldReceive('removeUserFromSpecifiedMailLists')
             ->with($this->user->email, [$this->mailLists['honorary']])
-            ->once();
+            ->once()
+            ->ordered();
+        $this->mockedMailListFacade->shouldReceive('addUserToSpecifiedMailLists')
+            ->with($this->user->email, $this->user->getName(), [$this->mailLists['trainer']])
+            ->once()
+            ->ordered();
         
         $this->user->kind_of_member = Lang::get('honorary_member');
         $this->user->save();
@@ -509,12 +557,14 @@ class HandleMemberTypeChangedTest extends \TestCase
     
     public function test_mail_lists_updated_honorary_to_relationship()
     {
-        $this->mockedMailListFacade->shouldReceive('addUserToSpecifiedMailLists')
-            ->with($this->user->email, $this->user->getName(), [$this->mailLists['relationship']])
-            ->once();
         $this->mockedMailListFacade->shouldReceive('removeUserFromSpecifiedMailLists')
             ->with($this->user->email, [$this->mailLists['honorary']])
-            ->once();
+            ->once()
+            ->ordered();
+        $this->mockedMailListFacade->shouldReceive('addUserToSpecifiedMailLists')
+            ->with($this->user->email, $this->user->getName(), [$this->mailLists['relationship']])
+            ->once()
+            ->ordered();
         
         $this->user->kind_of_member = Lang::get('honorary_member');
         $this->user->save();
@@ -531,12 +581,14 @@ class HandleMemberTypeChangedTest extends \TestCase
     
     public function test_mail_lists_updated_merit_to_member()
     {
-        $this->mockedMailListFacade->shouldReceive('addUserToSpecifiedMailLists')
-            ->with($this->user->email, $this->user->getName(), [$this->mailLists['member']])
-            ->once();
         $this->mockedMailListFacade->shouldReceive('removeUserFromSpecifiedMailLists')
             ->with($this->user->email, [$this->mailLists['merit']])
-            ->once();
+            ->once()
+            ->ordered();
+        $this->mockedMailListFacade->shouldReceive('addUserToSpecifiedMailLists')
+            ->with($this->user->email, $this->user->getName(), [$this->mailLists['member']])
+            ->once()
+            ->ordered();
         
         $this->user->kind_of_member = Lang::get('member_of_merit');
         $this->user->save();
@@ -549,12 +601,14 @@ class HandleMemberTypeChangedTest extends \TestCase
     
     public function test_mail_lists_updated_merit_to_reunist()
     {
-        $this->mockedMailListFacade->shouldReceive('addUserToSpecifiedMailLists')
-            ->with($this->user->email, $this->user->getName(), [$this->mailLists['reunist']])
-            ->once();
         $this->mockedMailListFacade->shouldReceive('removeUserFromSpecifiedMailLists')
             ->with($this->user->email, [$this->mailLists['merit']])
-            ->once();
+            ->once()
+            ->ordered();
+        $this->mockedMailListFacade->shouldReceive('addUserToSpecifiedMailLists')
+            ->with($this->user->email, $this->user->getName(), [$this->mailLists['reunist']])
+            ->once()
+            ->ordered();
         
         $this->user->kind_of_member = Lang::get('member_of_merit');
         $this->user->save();
@@ -567,12 +621,14 @@ class HandleMemberTypeChangedTest extends \TestCase
     
     public function test_mail_lists_updated_merit_to_extraordinary()
     {
-        $this->mockedMailListFacade->shouldReceive('addUserToSpecifiedMailLists')
-            ->with($this->user->email, $this->user->getName(), [$this->mailLists['extraordinary']])
-            ->once();
         $this->mockedMailListFacade->shouldReceive('removeUserFromSpecifiedMailLists')
             ->with($this->user->email, [$this->mailLists['merit']])
-            ->once();
+            ->once()
+            ->ordered();
+        $this->mockedMailListFacade->shouldReceive('addUserToSpecifiedMailLists')
+            ->with($this->user->email, $this->user->getName(), [$this->mailLists['extraordinary']])
+            ->once()
+            ->ordered();
         
         $this->user->kind_of_member = Lang::get('member_of_merit');
         $this->user->save();
@@ -585,12 +641,14 @@ class HandleMemberTypeChangedTest extends \TestCase
     
     public function test_mail_lists_updated_merit_to_honorary()
     {
-        $this->mockedMailListFacade->shouldReceive('addUserToSpecifiedMailLists')
-            ->with($this->user->email, $this->user->getName(), [$this->mailLists['honorary']])
-            ->once();
         $this->mockedMailListFacade->shouldReceive('removeUserFromSpecifiedMailLists')
             ->with($this->user->email, [$this->mailLists['merit']])
-            ->once();
+            ->once()
+            ->ordered();
+        $this->mockedMailListFacade->shouldReceive('addUserToSpecifiedMailLists')
+            ->with($this->user->email, $this->user->getName(), [$this->mailLists['honorary']])
+            ->once()
+            ->ordered();
         
         $this->user->kind_of_member = Lang::get('member_of_merit');
         $this->user->save();
@@ -603,12 +661,14 @@ class HandleMemberTypeChangedTest extends \TestCase
     
     public function test_mail_lists_updated_merit_to_trainer()
     {
-        $this->mockedMailListFacade->shouldReceive('addUserToSpecifiedMailLists')
-            ->with($this->user->email, $this->user->getName(), [$this->mailLists['trainer']])
-            ->once();
         $this->mockedMailListFacade->shouldReceive('removeUserFromSpecifiedMailLists')
             ->with($this->user->email, [$this->mailLists['merit']])
-            ->once();
+            ->once()
+            ->ordered();
+        $this->mockedMailListFacade->shouldReceive('addUserToSpecifiedMailLists')
+            ->with($this->user->email, $this->user->getName(), [$this->mailLists['trainer']])
+            ->once()
+            ->ordered();
         
         $this->user->kind_of_member = Lang::get('member_of_merit');
         $this->user->save();
@@ -621,12 +681,14 @@ class HandleMemberTypeChangedTest extends \TestCase
     
     public function test_mail_lists_updated_merit_to_relationship()
     {
-        $this->mockedMailListFacade->shouldReceive('addUserToSpecifiedMailLists')
-            ->with($this->user->email, $this->user->getName(), [$this->mailLists['relationship']])
-            ->once();
         $this->mockedMailListFacade->shouldReceive('removeUserFromSpecifiedMailLists')
             ->with($this->user->email, [$this->mailLists['merit']])
-            ->once();
+            ->once()
+            ->ordered();
+        $this->mockedMailListFacade->shouldReceive('addUserToSpecifiedMailLists')
+            ->with($this->user->email, $this->user->getName(), [$this->mailLists['relationship']])
+            ->once()
+            ->ordered();
         
         $this->user->kind_of_member = Lang::get('member_of_merit');
         $this->user->save();
@@ -643,12 +705,14 @@ class HandleMemberTypeChangedTest extends \TestCase
     
     public function test_mail_lists_updated_trainer_to_member()
     {
-        $this->mockedMailListFacade->shouldReceive('addUserToSpecifiedMailLists')
-            ->with($this->user->email, $this->user->getName(), [$this->mailLists['member']])
-            ->once();
         $this->mockedMailListFacade->shouldReceive('removeUserFromSpecifiedMailLists')
             ->with($this->user->email, [$this->mailLists['trainer']])
-            ->once();
+            ->once()
+            ->ordered();
+        $this->mockedMailListFacade->shouldReceive('addUserToSpecifiedMailLists')
+            ->with($this->user->email, $this->user->getName(), [$this->mailLists['member']])
+            ->once()
+            ->ordered();
         
         $this->user->kind_of_member = Lang::get('trainer');
         $this->user->save();
@@ -661,12 +725,14 @@ class HandleMemberTypeChangedTest extends \TestCase
     
     public function test_mail_lists_updated_trainer_to_reunist()
     {
-        $this->mockedMailListFacade->shouldReceive('addUserToSpecifiedMailLists')
-            ->with($this->user->email, $this->user->getName(), [$this->mailLists['reunist']])
-            ->once();
         $this->mockedMailListFacade->shouldReceive('removeUserFromSpecifiedMailLists')
             ->with($this->user->email, [$this->mailLists['trainer']])
-            ->once();
+            ->once()
+            ->ordered();
+        $this->mockedMailListFacade->shouldReceive('addUserToSpecifiedMailLists')
+            ->with($this->user->email, $this->user->getName(), [$this->mailLists['reunist']])
+            ->once()
+            ->ordered();
         
         $this->user->kind_of_member = Lang::get('trainer');
         $this->user->save();
@@ -679,12 +745,14 @@ class HandleMemberTypeChangedTest extends \TestCase
     
     public function test_mail_lists_updated_trainer_to_extraordinary()
     {
-        $this->mockedMailListFacade->shouldReceive('addUserToSpecifiedMailLists')
-            ->with($this->user->email, $this->user->getName(), [$this->mailLists['extraordinary']])
-            ->once();
         $this->mockedMailListFacade->shouldReceive('removeUserFromSpecifiedMailLists')
             ->with($this->user->email, [$this->mailLists['trainer']])
-            ->once();
+            ->once()
+            ->ordered();
+        $this->mockedMailListFacade->shouldReceive('addUserToSpecifiedMailLists')
+            ->with($this->user->email, $this->user->getName(), [$this->mailLists['extraordinary']])
+            ->once()
+            ->ordered();
         
         $this->user->kind_of_member = Lang::get('trainer');
         $this->user->save();
@@ -697,12 +765,14 @@ class HandleMemberTypeChangedTest extends \TestCase
     
     public function test_mail_lists_updated_trainer_to_honorary()
     {
-        $this->mockedMailListFacade->shouldReceive('addUserToSpecifiedMailLists')
-            ->with($this->user->email, $this->user->getName(), [$this->mailLists['honorary']])
-            ->once();
         $this->mockedMailListFacade->shouldReceive('removeUserFromSpecifiedMailLists')
             ->with($this->user->email, [$this->mailLists['trainer']])
-            ->once();
+            ->once()
+            ->ordered();
+        $this->mockedMailListFacade->shouldReceive('addUserToSpecifiedMailLists')
+            ->with($this->user->email, $this->user->getName(), [$this->mailLists['honorary']])
+            ->once()
+            ->ordered();
         
         $this->user->kind_of_member = Lang::get('trainer');
         $this->user->save();
@@ -715,12 +785,14 @@ class HandleMemberTypeChangedTest extends \TestCase
     
     public function test_mail_lists_updated_trainer_to_merit()
     {
-        $this->mockedMailListFacade->shouldReceive('addUserToSpecifiedMailLists')
-            ->with($this->user->email, $this->user->getName(), [$this->mailLists['merit']])
-            ->once();
         $this->mockedMailListFacade->shouldReceive('removeUserFromSpecifiedMailLists')
             ->with($this->user->email, [$this->mailLists['trainer']])
-            ->once();
+            ->once()
+            ->ordered();
+        $this->mockedMailListFacade->shouldReceive('addUserToSpecifiedMailLists')
+            ->with($this->user->email, $this->user->getName(), [$this->mailLists['merit']])
+            ->once()
+            ->ordered();
         
         $this->user->kind_of_member = Lang::get('trainer');
         $this->user->save();
@@ -733,12 +805,14 @@ class HandleMemberTypeChangedTest extends \TestCase
     
     public function test_mail_lists_updated_trainer_to_relationship()
     {
-        $this->mockedMailListFacade->shouldReceive('addUserToSpecifiedMailLists')
-            ->with($this->user->email, $this->user->getName(), [$this->mailLists['relationship']])
-            ->once();
         $this->mockedMailListFacade->shouldReceive('removeUserFromSpecifiedMailLists')
             ->with($this->user->email, [$this->mailLists['trainer']])
-            ->once();
+            ->once()
+            ->ordered();
+        $this->mockedMailListFacade->shouldReceive('addUserToSpecifiedMailLists')
+            ->with($this->user->email, $this->user->getName(), [$this->mailLists['relationship']])
+            ->once()
+            ->ordered();
         
         $this->user->kind_of_member = Lang::get('trainer');
         $this->user->save();
@@ -755,12 +829,14 @@ class HandleMemberTypeChangedTest extends \TestCase
     
     public function test_mail_lists_updated_relation_to_member()
     {
-        $this->mockedMailListFacade->shouldReceive('addUserToSpecifiedMailLists')
-            ->with($this->user->email, $this->user->getName(), [$this->mailLists['member']])
-            ->once();
         $this->mockedMailListFacade->shouldReceive('removeUserFromSpecifiedMailLists')
             ->with($this->user->email, [$this->mailLists['relationship']])
-            ->once();
+            ->once()
+            ->ordered();
+        $this->mockedMailListFacade->shouldReceive('addUserToSpecifiedMailLists')
+            ->with($this->user->email, $this->user->getName(), [$this->mailLists['member']])
+            ->once()
+            ->ordered();
         
         $this->user->kind_of_member = Lang::get('relationship');
         $this->user->save();
@@ -773,12 +849,14 @@ class HandleMemberTypeChangedTest extends \TestCase
     
     public function test_mail_lists_updated_relation_to_reunist()
     {
-        $this->mockedMailListFacade->shouldReceive('addUserToSpecifiedMailLists')
-            ->with($this->user->email, $this->user->getName(), [$this->mailLists['reunist']])
-            ->once();
         $this->mockedMailListFacade->shouldReceive('removeUserFromSpecifiedMailLists')
             ->with($this->user->email, [$this->mailLists['relationship']])
-            ->once();
+            ->once()
+            ->ordered();
+        $this->mockedMailListFacade->shouldReceive('addUserToSpecifiedMailLists')
+            ->with($this->user->email, $this->user->getName(), [$this->mailLists['reunist']])
+            ->once()
+            ->ordered();
         
         $this->user->kind_of_member = Lang::get('relationship');
         $this->user->save();
@@ -791,12 +869,14 @@ class HandleMemberTypeChangedTest extends \TestCase
     
     public function test_mail_lists_updated_relation_to_extraordinary()
     {
-        $this->mockedMailListFacade->shouldReceive('addUserToSpecifiedMailLists')
-            ->with($this->user->email, $this->user->getName(), [$this->mailLists['extraordinary']])
-            ->once();
         $this->mockedMailListFacade->shouldReceive('removeUserFromSpecifiedMailLists')
             ->with($this->user->email, [$this->mailLists['relationship']])
-            ->once();
+            ->once()
+            ->ordered();
+        $this->mockedMailListFacade->shouldReceive('addUserToSpecifiedMailLists')
+            ->with($this->user->email, $this->user->getName(), [$this->mailLists['extraordinary']])
+            ->once()
+            ->ordered();
         
         $this->user->kind_of_member = Lang::get('relationship');
         $this->user->save();
@@ -809,12 +889,14 @@ class HandleMemberTypeChangedTest extends \TestCase
     
     public function test_mail_lists_updated_relation_to_honorary()
     {
-        $this->mockedMailListFacade->shouldReceive('addUserToSpecifiedMailLists')
-            ->with($this->user->email, $this->user->getName(), [$this->mailLists['honorary']])
-            ->once();
         $this->mockedMailListFacade->shouldReceive('removeUserFromSpecifiedMailLists')
             ->with($this->user->email, [$this->mailLists['relationship']])
-            ->once();
+            ->once()
+            ->ordered();
+        $this->mockedMailListFacade->shouldReceive('addUserToSpecifiedMailLists')
+            ->with($this->user->email, $this->user->getName(), [$this->mailLists['honorary']])
+            ->once()
+            ->ordered();
         
         $this->user->kind_of_member = Lang::get('relationship');
         $this->user->save();
@@ -827,12 +909,14 @@ class HandleMemberTypeChangedTest extends \TestCase
     
     public function test_mail_lists_updated_relation_to_merit()
     {
-        $this->mockedMailListFacade->shouldReceive('addUserToSpecifiedMailLists')
-            ->with($this->user->email, $this->user->getName(), [$this->mailLists['merit']])
-            ->once();
         $this->mockedMailListFacade->shouldReceive('removeUserFromSpecifiedMailLists')
             ->with($this->user->email, [$this->mailLists['relationship']])
-            ->once();
+            ->once()
+            ->ordered();
+        $this->mockedMailListFacade->shouldReceive('addUserToSpecifiedMailLists')
+            ->with($this->user->email, $this->user->getName(), [$this->mailLists['merit']])
+            ->once()
+            ->ordered();
         
         $this->user->kind_of_member = Lang::get('relationship');
         $this->user->save();
@@ -845,12 +929,14 @@ class HandleMemberTypeChangedTest extends \TestCase
     
     public function test_mail_lists_updated_relation_to_trainer()
     {
-        $this->mockedMailListFacade->shouldReceive('addUserToSpecifiedMailLists')
-            ->with($this->user->email, $this->user->getName(), [$this->mailLists['trainer']])
-            ->once();
         $this->mockedMailListFacade->shouldReceive('removeUserFromSpecifiedMailLists')
             ->with($this->user->email, [$this->mailLists['relationship']])
-            ->once();
+            ->once()
+            ->ordered();
+        $this->mockedMailListFacade->shouldReceive('addUserToSpecifiedMailLists')
+            ->with($this->user->email, $this->user->getName(), [$this->mailLists['trainer']])
+            ->once()
+            ->ordered();
         
         $this->user->kind_of_member = Lang::get('relationship');
         $this->user->save();
