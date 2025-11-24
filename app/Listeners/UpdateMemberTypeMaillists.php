@@ -14,6 +14,7 @@ use Illuminate\Queue\InteractsWithQueue;
 class UpdateMemberTypeMaillists implements ShouldQueue
 {
     private MailListFacade $mailListFacade;
+    
     /**
      * Create the event listener.
      */
@@ -22,7 +23,67 @@ class UpdateMemberTypeMaillists implements ShouldQueue
         $this->mailListFacade = $mailListFacade;
     }
     
+    /**
+     * Removes the member from the maillists associated with their old member type
+     * and then adds them to the maillists for their new member type.
+     *
+     * @param MemberTypeChanged $event
+     * @return void
+     */
+    public function handleMemberTypeChanged(MemberTypeChanged $event): void
+    {
+        $this->removeUserFromMailLists($event->user, $event->oldMemberType);
+        $this->addUserToMailLists($event->user, $event->newMemberType);
+    }
     
+    /**
+     * Add the member to their membership type mail lists.
+     *
+     * @param OldMemberBecameMember $event
+     * @return void
+     */
+    public function handleOldMemberBecameMember(OldMemberBecameMember $event): void
+    {
+        $this->addUserToMailLists($event->user, $event->user->kind_of_member);
+    }
+    
+    
+    /**
+     * Adds a pending user to their member type maillists
+     * (In practice this would always be the normal member maillists)
+     *
+     * @param PendingUserApproved $event
+     * @return void
+     */
+    public function handlePendingUserApproved(PendingUserApproved $event): void
+    {
+        $this->addUserToMailLists($event->user, $event->user->kind_of_member);
+    }
+    
+    /**
+     * Add all members in the collection the event to the maillists corresponding to their membership types.
+     * This function is mostly for use when mail lists are accidentally removed. (kuch kuch LNA and peppy)
+     *
+     * @param MemberMassMailListSync $event
+     * @return void
+     */
+    public function handleMemberMassMailListSync(MemberMassMailListSync $event): void
+    {
+        foreach ($event->users as $user)
+        {
+            $this->addUserToMailLists($user, $user->kind_of_member);
+        }
+    }
+
+    public function subscribe(Dispatcher $events): array
+    {
+        return [
+            OldMemberBecameMember::class => 'handleOldMemberBecameMember',
+            MemberTypeChanged::class => 'handleMemberTypeChanged',
+            PendingUserApproved::class => 'handlePendingUserApproved',
+            MemberMassMailListSync::class => 'handleMemberMassMailListSync',
+        ];
+    }
     
     /**
      * Add user to the maillists for their kind of member specified in the settings table
@@ -54,41 +115,9 @@ class UpdateMemberTypeMaillists implements ShouldQueue
         }
     }
     
-    public function handleOldMemberBecameMember(OldMemberBecameMember $event): void
-    {
-        $this->addUserToMailLists($event->user, $event->user->kind_of_member);
-    }
-    
-    public function handleMemberTypeChanged(MemberTypeChanged $event): void
-    {
-        $this->removeUserFromMailLists($event->user, $event->oldMemberType);
-        $this->addUserToMailLists($event->user, $event->newMemberType);
-    }
-    
-    public function handlePendingUserApproved(PendingUserApproved $event): void
-    {
-        $this->addUserToMailLists($event->user, $event->user->kind_of_member);
-    }
-    
-    public function handleMemberMassMailListSync(MemberMassMailListSync $event): void
-    {
-        foreach ($event->users as $user)
-        {
-            $this->addUserToMailLists($user, $user->kind_of_member);
-        }
-    }
-
-    public function subscribe(Dispatcher $events): array
-    {
-        return [
-            OldMemberBecameMember::class => 'handleOldMemberBecameMember',
-            MemberTypeChanged::class => 'handleMemberTypeChanged',
-            PendingUserApproved::class => 'handlePendingUserApproved',
-            MemberMassMailListSync::class => 'handleMemberMassMailListSync',
-        ];
-    }
-    
     /**
+     * Fetch and process the maillists associated with a membership type in the settings.
+     *
      * @param string $memberType
      * @return string[]|string
      */
@@ -124,7 +153,7 @@ class UpdateMemberTypeMaillists implements ShouldQueue
                 break;
         }
         
-        //check if there are mailists specified
+        //check if there are maillists specified
         if ($mailLists == "") {
             return $mailLists;
         }
