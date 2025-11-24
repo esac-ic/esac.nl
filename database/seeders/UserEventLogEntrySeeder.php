@@ -14,7 +14,6 @@ class UserEventLogEntrySeeder extends Seeder
      */
     public function run(): void
     {   
-        // \App\Models\UserEventLogEntry::factory()->count(10)->for(User::factory()->member())->create();
         $nrOfUsers = User::count();
         \App\Models\UserEventLogEntry::factory()->randomUser($nrOfUsers)->count(10)->create();
     }
