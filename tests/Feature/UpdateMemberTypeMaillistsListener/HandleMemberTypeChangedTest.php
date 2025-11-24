@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Feature;
+namespace Tests\Feature\UpdateMemberTypeMaillistsListener;
 
 use App\CustomClasses\MailList\MailListFacade;
 use App\Events\MemberTypeChanged;
@@ -8,10 +8,10 @@ use App\Listeners\UpdateMemberTypeMaillists;
 use App\Setting;
 use App\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Mockery;
 use Illuminate\Support\Facades\Lang;
+use Mockery;
 
-class UpdateMemberTypeMaillistsListenerTest extends \TestCase
+class HandleMemberTypeChangedTest extends \TestCase
 {
     use RefreshDatabase;
     
