@@ -61,7 +61,7 @@ class UpdateMemberTypeMaillistsListenerTest extends \TestCase
         $reunistSetting->save();
         
         $this->mockedMailListFacade->shouldReceive('addUserToSpecifiedMailLists')
-            ->with($this->user->email, $this->user->getName(), ['first-reunist.esac.nl', 'second-reunist.esac.nl',  'third-reunist.esac.nl',  'fourth-reunist.esac.nl'])
+            ->with($this->user->email, $this->user->getName(), ['first-reunist.esac.nl', 'second-reunist.esac.nl', 'third-reunist.esac.nl', 'fourth-reunist.esac.nl'])
             ->once();
         $this->mockedMailListFacade->shouldReceive('removeUserFromSpecifiedMailLists')
             ->with($this->user->email, ['first-member.esac.nl', 'second-member.esac.nl', 'third-member.esac.nl',  'fourth-member.esac.nl'])
