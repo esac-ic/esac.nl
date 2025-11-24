@@ -1,10 +1,9 @@
 <?php
 
-namespace Tests\Feature;
+namespace Tests\Feature\UpdateMemberTypeMaillistsListener;
 
 use App\CustomClasses\MailList\MailListFacade;
 use App\Events\MemberMassMailListSync;
-use App\Events\OldMemberBecameMember;
 use App\Listeners\UpdateMemberTypeMaillists;
 use App\Setting;
 use App\User;

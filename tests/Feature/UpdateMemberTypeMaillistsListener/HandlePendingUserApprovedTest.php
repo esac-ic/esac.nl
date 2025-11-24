@@ -1,9 +1,8 @@
 <?php
 
-namespace Tests\Feature;
+namespace Tests\Feature\UpdateMemberTypeMaillistsListener;
 
 use App\CustomClasses\MailList\MailListFacade;
-use App\Events\OldMemberBecameMember;
 use App\Events\PendingUserApproved;
 use App\Listeners\UpdateMemberTypeMaillists;
 use App\Setting;
