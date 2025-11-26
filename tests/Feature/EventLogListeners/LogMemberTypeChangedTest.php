@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Feature\EventLogListeners\EventLogListeners;
+namespace Tests\Feature\EventLogListeners;
 
 use App\Enums\UserEventTypes;
 use App\Events\MemberTypeChanged;
