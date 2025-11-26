@@ -3,7 +3,6 @@
 namespace Tests\Feature\UpdateMemberTypeMaillistsListener;
 
 use App\CustomClasses\MailList\MailListFacade;
-use App\Events\MemberTypeChanged;
 use App\Events\OldMemberBecameMember;
 use App\Listeners\UpdateMemberTypeMaillists;
 use App\Setting;
