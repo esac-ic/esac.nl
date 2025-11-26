@@ -14,11 +14,17 @@ class RemoveAsActiveMemberTest extends \TestCase
 {
     use RefreshDatabase;
     
+    private User $admin;
+    protected function setUp(): void
+    {
+        parent::setUp();
+        
+        $this->admin = User::factory()->create();
+        $this->admin->roles()->attach(Config::get('constants.Administrator'));
+    }
+    
     public function test_remove_as_active_member()
     {
-        $admin = User::factory()->create();
-        $admin->roles()->attach(Config::get('constants.Administrator'));
-        
         $user = User::factory()->create();
         $userId = $user->id;
         
@@ -32,7 +38,7 @@ class RemoveAsActiveMemberTest extends \TestCase
             $mock->shouldReceive('deleteUserFormAllMailList')->once(); //the method is a typo :/
         });
         
-        $response = $this->actingAs($admin)->patch(route('users.removeAsActiveMember', $user));
+        $response = $this->actingAs($this->admin)->patch(route('users.removeAsActiveMember', $user));
         
         $response->assertRedirect(route('users.show', $user));
         Event::assertDispatched(MemberBecameOldMember::class);
