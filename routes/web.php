@@ -34,7 +34,7 @@ Route::group(['as' => 'beheer.', 'prefix' => 'beheer/', 'middleware' => 'auth'],
 
 //extra user routes
 Route::get('users/old_members', 'UserController@indexOldMembers');
-Route::get('users/pending_members', 'PendingUserController@indexPendingMembers');
+Route::get('users/pending_members', 'PendingUserController@indexPendingMembers')->name('users.indexPendingMembers');
 Route::get('users/exportUsers', 'UserController@exportUsers');
 Route::get('users/exportOldUsers', 'UserController@exportOldUsers');
 Route::patch('users/{user}/removeAsActiveMember', 'UserController@removeAsActiveMember')->name('users.removeAsActiveMember');;
@@ -66,7 +66,7 @@ Route::resource('agendaItems', 'AgendaItemController');
 Route::resource('agendaItemCategories', 'AgendaItemCategoryController');
 Route::resource('newsItems', 'NewsItemController');
 Route::resource('mailList', 'MailListController');
-Route::post('/signup', 'PendingUserController@storePendingUser');
+Route::post('/signup', 'PendingUserController@storePendingUser')->name('user.signup');
 Route::resource('books', 'LibraryController');
 Route::post('images/upload', 'StorageController@uploadImage');
 Route::delete('images/delete', 'StorageController@deleteImage');
@@ -88,17 +88,16 @@ Route::get('forms/users/{inschrijfId}/export', array('uses' => 'ApplicationForm\
 Route::delete('forms/{agenda_id}/remove/{applicationResponseId}', 'ApplicationForm\AgendaApplicationFormController@destroy');
 
 //front-end routes
-Route::get('/zekeringen', 'FrontEndController@zekeringen');
-Route::get('/library', 'FrontEndController@library');
-Route::get('/library', 'FrontEndController@library');
-Route::get('/agenda', 'FrontEndController@agenda');
+Route::get('/zekeringen', 'FrontEndController@zekeringen')->name('frontEnd.zekeringen');
+Route::get('/library', 'FrontEndController@library')->name('front.library');
+Route::get('/agenda', 'FrontEndController@agenda')->name('frontEnd.agenda');
 Route::get('/agenda/{agendaItem}', 'FrontEndController@agendaDetailView')->name('agenda.detail');
-Route::get('/signup', 'FrontEndController@publicSubscribe');
-Route::get('/home', 'FrontEndController@home');
-Route::get('/news', 'FrontEndController@news');
-Route::get('/news/{newsItem}', 'FrontEndController@newsDetailView');
-Route::get('/memberlist', 'FrontEndController@memberList');
-Route::get("/ical", "ICalController@getAgendaItemsICalObject");
+Route::get('/signup', 'FrontEndController@publicSubscribe')->name('front-end.signup');
+Route::get('/home', 'FrontEndController@home')->name('front-end.home');
+Route::get('/news', 'FrontEndController@news')->name("front-end.news");
+Route::get('/news/{newsItem}', 'FrontEndController@newsDetailView')->name('front-end.news.detail');
+Route::get('/memberlist', 'FrontEndController@memberList')->name('front-end.memberlist');
+Route::get("/ical", "ICalController@getAgendaItemsICalObject")->name("front-end.ical");
 Route::get('/{menuItem}', 'FrontEndController@showPage');
 
 //setting routes
