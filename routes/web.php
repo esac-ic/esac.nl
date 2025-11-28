@@ -72,9 +72,9 @@ Route::post('images/upload', 'StorageController@uploadImage');
 Route::delete('images/delete', 'StorageController@deleteImage');
 Route::get('agendaItems/{agendaItem}/copy', 'AgendaItemController@copy')->name('copyAgendaItem');
 
-Route::get('userEventLog', 'UserEventLogEntryController@index');
-Route::post('userEventLog/export', 'UserEventLogEntryController@export');
-Route::delete('userEventLog/{entry}', 'UserEventLogEntryController@destroy');
+Route::get('userEventLog', 'UserEventLogEntryController@index')->name('user-event-log-entry.index');
+Route::post('userEventLog/export', 'UserEventLogEntryController@export')->name('user-event-log-entry.export');
+Route::delete('userEventLog/{entry}', 'UserEventLogEntryController@destroy')->name('user-event-log-entry.destroy');
 
 //inschrijf routes
 Route::get('forms/{agendaItem}', array('uses' => 'ApplicationForm\UserApplicationFormController@showRegistrationForm'));
