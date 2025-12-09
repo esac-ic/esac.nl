@@ -127,7 +127,21 @@ class ApplicationFormController extends Controller
         int $id,
         ApplicationFormRepository $applicationFormRepository
     ): RedirectResponse {
-        $applicationFormRepository->update($id, $request->all());
+        $requestData = $request->all();
+
+        // Validate request
+        foreach ($requestData['rows'] as $rowKey => $row) {
+            if ($row['type'] == 'select') {
+                foreach($row['options'] as $optionKey => $option) {
+                    // Set the value=name if no value specified
+                    if (empty($option['value'])) {
+                        $requestData['rows'][$rowKey]['options'][$optionKey]['value'] = $option['name'];
+                    }
+                }
+            }
+        }
+
+        $applicationFormRepository->update($id, $requestData);
 
         Session::flash("message", 'Application form edited');
         return redirect()->route('beheer.applicationForms.index');
