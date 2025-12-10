@@ -19,4 +19,22 @@ class ApplicationFormStoreRequest extends FormRequest
             'rows.*.type' => 'required',
         ];
     }
+
+    /**
+     * Makes sure that rows.*.value isn't empty, uses rows.*.name as a fallback
+     * 
+     * @return void
+     */
+    protected function passedValidation(): void
+    {
+        $rows = $this->all()['rows'];
+        foreach ($rows as $rowKey => $row) {
+            if ($row['type'] != 'select') continue;
+            foreach($row['options'] as $optionKey => $option) {
+                if (!empty($option['value'])) continue;
+                $rows[$rowKey]['options'][$optionKey]['value'] = $option['name'];
+            }
+        }
+        $this->replace(['rows' => $rows]);
+    }
 }
