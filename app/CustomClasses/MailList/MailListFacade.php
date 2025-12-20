@@ -26,12 +26,15 @@ class MailListFacade
     /**
      * Returns an array of MailList objects for each maillist that exists in mailman
      * 
-     * @return array mailLists
+     * @return MailList[] mailLists
      */
-    public function getAllMailLists()
+    public function getAllMailLists(): array
     {
         $mailLists = array();
         $response = $this->_mailManHandler->get('/lists');
+        
+        if ($response->total_size == 0) return [];
+        
         foreach ($response->entries as $mailList) {
             array_push($mailLists, $this->_mailListParser->parseMailManMailList($mailList));
         }
@@ -47,6 +50,9 @@ class MailListFacade
     {
         $mailListIds = array();
         $response = $this->_mailManHandler->get('/lists');
+        
+        if ($response->total_size == 0) return [];
+        
         foreach ($response->entries as $mailList) {
             array_push($mailListIds, $this->_mailListParser->parseMailManMailList($mailList)->getId());
         }
