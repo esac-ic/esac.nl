@@ -6,6 +6,7 @@ use App\CustomClasses\MailList\MailListFacade;
 use App\Events\MemberMassMailListSync;
 use App\Repositories\UserRepository;
 use App\User;
+use GuzzleHttp\Exception\ClientException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Session;
@@ -50,9 +51,19 @@ class MailListController extends Controller
     //store maillist
     public function store(Request $request)
     {
-        $this->_mailListFacade->storeMailList($request->all());
+        try {
+            $this->_mailListFacade->storeMailList($request->all());
+            Session::flash("message", 'Mailing list added');
+        } catch (ClientException $e) {
+            if ($e->getCode() == 400 && json_decode($e->getResponse()->getBody())->description == "Mailing list exists") {
+                Session::flash("error", "Error: mailing list already exists");
+                \Log::error($e->getMessage());
+            } else {
+                Session::flash("error", "Some error occurred: " . $e->getCode());
+                \Log::error($e->getMessage());
+            }
+        }
 
-        Session::flash("message", 'Mailing list added');
         return redirect('/mailList');
     }
 
