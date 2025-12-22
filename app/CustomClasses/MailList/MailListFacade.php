@@ -45,9 +45,9 @@ class MailListFacade
     /**
      * Returns the ids of all maillists
      * 
-     * @return array mailListIds
+     * @return string[] mailListIds
      */
-    public function getAllMailListIds()
+    public function getAllMailListIds(): array
     {
         $mailListIds = array();
         $response = $this->_mailManHandler->get('/lists');
@@ -80,19 +80,19 @@ class MailListFacade
         }
     }
 
-    public function storeMailList(array $data)
+    public function storeMailList(array $data): void
     {
         $this->_mailManHandler->post("/lists", [
             'fqdn_listname' => $data['address'] . env("MAIL_MAN_DOMAIN"),
         ]);
     }
 
-    public function deleteMailList($id)
+    public function deleteMailList($id): void
     {
         $this->_mailManHandler->delete("/lists/" . $id);
     }
 
-    public function deleteMemberFromMailList($mailListId, $memberEmail, $suppressErrors = false)
+    public function deleteMemberFromMailList($mailListId, $memberEmail, $suppressErrors = false): void
     {
         try {
             $this->_mailManHandler->delete("/lists/" . $mailListId . "/member/" . $memberEmail);
@@ -104,7 +104,7 @@ class MailListFacade
         }
     }
 
-    public function addMember($mailListId, $email, $name)
+    public function addMember($mailListId, $email, $name): void
     {
         try {
             $this->_mailManHandler->post(
@@ -123,7 +123,7 @@ class MailListFacade
         }
     }
 
-    public function deleteUserFormAllMailList($user)
+    public function deleteUserFormAllMailList($user): void
     {
         foreach ($this->getAllMailListIds() as $mailListId) {
             try {
@@ -135,7 +135,7 @@ class MailListFacade
         }
     }
 
-    public function updateUserEmailFormAllMailList($user, $oldEmail, $newEmail)
+    public function updateUserEmailFormAllMailList($user, $oldEmail, $newEmail): void
     {
         foreach ($this->getAllMailLists() as $mailList) {
             $mailList = $this->getMailList($mailList->getAddress());
@@ -158,7 +158,7 @@ class MailListFacade
      * 
      * @return void
      */
-    public function addUserToSpecifiedMailLists(string $email, string $name, Array $mailLists) 
+    public function addUserToSpecifiedMailLists(string $email, string $name, Array $mailLists): void
     {
         if ($mailLists && $mailLists != [""]) { //check if mailLists is not empty
             $allMailLists = $this->getAllMailListIds();
@@ -174,7 +174,7 @@ class MailListFacade
         }
     }
     
-    public function removeUserFromSpecifiedMailLists(string $email, Array $mailLists) 
+    public function removeUserFromSpecifiedMailLists(string $email, Array $mailLists): void
     {
         if ($mailLists && $mailLists != [""]) { //check if mailLists is not empty
             $allMailLists = $this->getAllMailListIds();
@@ -198,7 +198,7 @@ class MailListFacade
      * 
      * @return void
      */
-    public function deleteAllUsersFromMailList(string $mailListId, array|null $allMailListIds = null)
+    public function deleteAllUsersFromMailList(string $mailListId, array|null $allMailListIds = null): void
     {
         if ($mailListId)
         {
