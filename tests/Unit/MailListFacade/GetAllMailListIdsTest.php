@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Feature;
+namespace Tests\Unit\MailListFacade;
 
 use App\CustomClasses\MailList\MailListFacade;
 use App\CustomClasses\MailList\MailMan;

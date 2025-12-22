@@ -125,7 +125,6 @@ class GetAllMailListsTest extends \TestCase
                 ->andReturn(json_decode(json_encode([
                     'start' => 0,
                     'total_size' => 0,
-                    'entries' => [],
                     'http_etag' => "9573fac7ddf920034d94e469e4232c22fc8dd4ad"
                 ])));
         });
