@@ -9,6 +9,7 @@
 namespace App\CustomClasses\MailList;
 
 use \Exception;
+use GuzzleHttp\Exception\RequestException;
 use Illuminate\Support\Facades\Log;
 use \Session;
 
@@ -59,19 +60,24 @@ class MailListFacade
         return $mailListIds;
     }
 
-    public function getMailList($id)
+    public function getMailList($id): ?MailList
     {
-        $mailList = $this->_mailListParser->parseMailManMailList($this->_mailManHandler->get('/lists/' . $id));
-        $members = $this->_mailManHandler->get('/lists/' . $id . '/roster/member');
-
-        if (property_exists($members, "entries")) {
-            foreach ($members->entries as $member) {
-                $parsedMember = $this->_mailListParser->parseMailManMember($member);
-                $mailList->addMember($parsedMember);
+        try {
+            $response = $this->_mailManHandler->get('/lists/' . $id);
+            $mailList = $this->_mailListParser->parseMailManMailList($response);
+            $members = $this->_mailManHandler->get('/lists/' . $id . '/roster/member');
+            
+            if (property_exists($members, "entries")) {
+                foreach ($members->entries as $member) {
+                    $parsedMember = $this->_mailListParser->parseMailManMember($member);
+                    $mailList->addMember($parsedMember);
+                }
             }
+            return $mailList;
+        } catch (RequestException $e) {
+            Log::error($e->getMessage());
+            return null;
         }
-
-        return $mailList;
     }
 
     public function storeMailList(array $data)
