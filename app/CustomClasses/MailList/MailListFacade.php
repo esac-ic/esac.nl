@@ -9,6 +9,7 @@
 namespace App\CustomClasses\MailList;
 
 use \Exception;
+use GuzzleHttp\Exception\ClientException;
 use GuzzleHttp\Exception\RequestException;
 use Illuminate\Support\Facades\Log;
 use \Session;
@@ -79,7 +80,14 @@ class MailListFacade
             return null;
         }
     }
-
+    
+    /**
+     * Stores a mail list in mailman.
+     *
+     * @param array $data the data containing the address of the mail list
+     * @return void
+     * @throws ClientException When the mail list already exists
+     */
     public function storeMailList(array $data): void
     {
         $this->_mailManHandler->post("/lists", [
