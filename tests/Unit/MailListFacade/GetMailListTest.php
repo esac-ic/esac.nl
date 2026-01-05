@@ -5,6 +5,8 @@ namespace Tests\Unit\MailListFacade;
 use App\CustomClasses\MailList\MailListFacade;
 use App\CustomClasses\MailList\MailMan;
 use GuzzleHttp\Exception\ClientException;
+use GuzzleHttp\Psr7\Request;
+use GuzzleHttp\Psr7\Response;
 use Mockery\MockInterface;
 
 class GetMailListTest extends \TestCase
@@ -258,12 +260,13 @@ class GetMailListTest extends \TestCase
     
     function test_non_existent_mail_list()
     {
-        $this->mock(MailMan::class, function (MockInterface $mock) {
+        $exception = ClientException::create(new Request("GET", "http://localhost:8001/3.1/lists/nonexistent.esac.nl"), new Response(404, [], '{"title": "404 Not Found", "description": "404 Not Found"}'));
+        
+        $this->mock(MailMan::class, function (MockInterface $mock) use ($exception) {
             $mock->shouldReceive('get')
                 ->with('/lists/nonexistent.esac.nl')
                 ->once()
-                //a bit funky because I can't figure out how to throw a proper 404 response exception, but at least this triggers the catch branch
-                ->andThrow(ClientException::create(new \GuzzleHttp\Psr7\Request('GET', '/lists/nonexistent.esac.nl')));
+                ->andThrow($exception);
         });
         
         $facade = $this->app->make(MailListFacade::class);
