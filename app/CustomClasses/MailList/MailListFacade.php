@@ -99,15 +99,24 @@ class MailListFacade
     {
         $this->_mailManHandler->delete("/lists/" . $id);
     }
-
-    public function deleteMemberFromMailList($mailListId, $memberEmail, $suppressErrors = false): void
+    
+    /**
+     * Deletes/removes a member from a mail list.
+     *
+     * @param string $mailListId id of the maillist
+     * @param string $memberEmail email of the member to be deleted
+     * @param bool $suppressErrors option to suppress errors when they are encountered
+     *
+     * @throws ClientException when member or list doesn't exist
+     */
+    public function deleteMemberFromMailList(string $mailListId, string $memberEmail, bool $suppressErrors = false): void
     {
         try {
             $this->_mailManHandler->delete("/lists/" . $mailListId . "/member/" . $memberEmail);
-        } catch(Exception $e) {
+        } catch(ClientException $e) {
             if (!$suppressErrors)
             {
-                Log::error($e->getMessage());
+                throw $e;
             }
         }
     }
