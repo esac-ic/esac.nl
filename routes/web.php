@@ -30,6 +30,8 @@ Route::group(['as' => 'beheer.', 'prefix' => 'beheer/', 'middleware' => 'auth'],
     Route::get('/settings', 'SettingsController@index');
     Route::put('/settings', 'SettingsController@update');
     Route::get('/settings/edit', 'SettingsController@edit');
+
+    Route::resource('committees', 'CommitteeController');
 });
 
 //extra user routes

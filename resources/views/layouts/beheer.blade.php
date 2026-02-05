@@ -105,6 +105,11 @@
                                 </a>
                             </li>
                             <li class="nav-item">
+                                <a href="{{ route("beheer.committees.index") }}" class="nav-link">
+                                    {{'Committees'}}
+                                </a>
+                            </li>
+                            <li class="nav-item">
                                 <a href="{{ url('userEventLog') }}" class="nav-link">
                                     {{'User event log'}}
                                 </a>
