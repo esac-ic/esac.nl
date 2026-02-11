@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests;
 
+use App\Models\ApplicationForm\ApplicationFormRow;
 use Illuminate\Foundation\Http\FormRequest;
 
 class ApplicationFormStoreRequest extends FormRequest
@@ -27,14 +28,20 @@ class ApplicationFormStoreRequest extends FormRequest
      */
     protected function passedValidation(): void
     {
-        $rows = $this->all()['rows'];
+        $rows = $this->only(['rows'])['rows'];
         foreach ($rows as $rowKey => $row) {
-            if ($row['type'] != 'select') continue;
+            if (
+                $row['type'] !== ApplicationFormRow::FORM_TYPE_SELECT &&
+                $row['type'] !== ApplicationFormRow::FORM_TYPE_RADIO &&
+                $row['type'] !== ApplicationFormRow::FORM_TYPE_MULTI_CHECK_BOX
+            ) continue;
+            if(!isset($row['options'])) continue;
+
             foreach($row['options'] as $optionKey => $option) {
                 if (!empty($option['value'])) continue;
                 $rows[$rowKey]['options'][$optionKey]['value'] = $option['name'];
             }
         }
-        $this->replace(['rows' => $rows]);
+        $this->merge(['rows' => $rows]);
     }
 }
