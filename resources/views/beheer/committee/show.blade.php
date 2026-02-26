@@ -12,7 +12,7 @@
 
         <div class="col-md-6">
             <div class="btn-group mt-2 float-md-right" role="group" aria-label="Actions">
-                <a href="#" id="addMember" class="btn btn-primary" data-toggle="modal" data-target="#addUserModal">
+                <a href="#" id="addMember" class="btn btn-primary" data-toggle="modal" data-target="#addMemberModal">
                     <em class="ion-plus"></em> {{'Add members'}}
                 </a>
                 <a href="{{route('beheer.committees.index')}}" class="btn btn-primary">
@@ -27,9 +27,6 @@
         </div>
     </div>
     <div class="card mt-4">
-{{--        <div class="card-header">--}}
-{{--            <h3>{{'Committee'}}</h3>--}}
-{{--        </div>--}}
         <div class="card-body">
             <table class="table table-striped dt-responsive nowrap border">
                 <tr>
@@ -73,18 +70,17 @@
             <h4 class="mt-4"> {{'Members'}}</h4>
             <table id="committeeMembers" class="table table-striped dt-responsive nowrap">
                 <thead>
-                    <td><strong>{{'Email'}}</strong></td>
                     <td><strong>{{'Name'}}</strong></td>
+                    <td><strong>{{'Email'}}</strong></td>
                     <td><strong>{{'Management'}}</strong></td>
                 </thead>
                 <tbody>
                 @foreach($committee->members as $member)
                     <tr>
-                        <td>{{$member->getAddress()}}</td>
                         <td>{{$member->getName()}}</td>
+                        <td>{{$member->email}}</td>
                         <td>
-                            <a id="removeMember"><em class="ion-trash-a"></em></a>
-{{--                            <a href="#" id="deleteMember" data-committee-id="{{$committee->id}}" data-member-email="{{$member->getAddress()}}"><em class="ion-trash-a"></em></a>--}}
+                            <a href="#" id="removeMember" data-member-id="{{$member->id}}"><em class="ion-trash-a"></em></a>
                         </td>
                     </tr>
                 @endforeach
@@ -92,7 +88,7 @@
             </table>
         </div>
     </div>
-{{--    @include('beheer.mailList.adduser')--}}
+    @include('beheer.committee.addMemberModal')
 @endsection
 @push('styles')
     <style>
@@ -110,24 +106,27 @@
         $(document).ready(function() {
             $('#committeeMembers').dataTable();
         });
-
-        $(document).on('click', '#addMember', function() {
-        });
-
+        
         $(document).on('click', '#removeMember', function() {
-            // const mailListId = $(this).attr('data-mailList-id');
-            // const memberEmail = $(this).attr('data-member-email');
-            //
-            // $.ajax({
-            //     url: '/mailList/' + mailListId + '/member/' + memberEmail,
-            //     data: {
-            //         _token: window.Laravel.csrfToken
-            //     },
-            //     type: 'DELETE',
-            //     success: function() {
-            //         window.location.reload();
-            //     }
-            // });
+            const memberId = $(this).attr('data-member-id');
+            $.ajax({
+                url: '/beheer/committees/' + '{{$committee->id}}' + '/removeMember/' + memberId, //can't just use route('beheer.committees.removeMember', $committee, $member) because the member id is not know when loading the page
+                data: {
+                    _token: window.Laravel.csrfToken
+                },
+                type: 'DELETE',
+                success: function() {
+                    console.log('success');
+                    window.location.reload();
+                },
+                error: function() {
+                    console.log('error');
+                    console.log('memberId: ' + memberId);
+                    console.log('/beheer/committees/' + '{{$committee->id}}' + '/removeMember/' + memberId);
+                    
+                    window.location.reload();
+                }
+            });
         });
     </script>
 @endpush

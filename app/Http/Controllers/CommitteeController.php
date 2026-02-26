@@ -4,8 +4,10 @@ namespace App\Http\Controllers;
 
 use App\Models\Committee;
 use App\Repositories\CommitteeRepository;
+use App\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Config;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Session;
 
 class CommitteeController extends Controller
@@ -91,13 +93,16 @@ class CommitteeController extends Controller
         return redirect()->route('beheer.committees.index');
     }
     
-    public function removeMember(Request $request, Committee $committee)
+    public function removeMember(Request $request, Committee $committee, User $member)
     {
-    
+        $this->repository->removeMember($committee->id, $member->id);
     }
     
-    public function addMember(Request $request, Committee $committee)
+    public function addMembers(Request $request, Committee $committee)
     {
-    
+        $request->validate([
+            'userIds' => ['required'],
+        ]);
+        $this->repository->addMembers($committee->id, $request->userIds);
     }
 }

@@ -31,6 +31,8 @@ Route::group(['as' => 'beheer.', 'prefix' => 'beheer/', 'middleware' => 'auth'],
     Route::put('/settings', 'SettingsController@update');
     Route::get('/settings/edit', 'SettingsController@edit');
 
+    Route::post('committees/{committee}/addMembers', 'CommitteeController@addMembers')->name('committees.addMembers');
+    Route::delete('committees/{committee}/removeMember/{member}', 'CommitteeController@removeMember')->name('committees.removeMember');
     Route::resource('committees', 'CommitteeController');
 });
 
