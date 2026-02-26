@@ -69,7 +69,6 @@ class StorePendingUserTest extends \TestCase
         $this->assertEquals('123456789', $user->IBAN);
         
         $this->assertEquals(new Carbon('1990-01-01'), $user->birthDay);
-        Log::debug($user->incasso);
         $this->assertEquals(1, $user->incasso);
         
     }
