@@ -61,6 +61,15 @@
                         {{$committee->getMemberCount()}}
                     </td>
                 </tr>
+                <tr>
+                    <td>
+                        {{'Chairperson'}}
+                    </td>
+                    <td class="">
+                        {{$committee->chair->getName()}}
+                        <a class="ml-2"><em class="ion-edit"></em></a>
+                    </td>
+                </tr>
                 
             </table>
             
