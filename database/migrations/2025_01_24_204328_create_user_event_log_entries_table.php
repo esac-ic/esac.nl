@@ -20,7 +20,6 @@ return new class extends Migration
             $table->string('eventDetails');
             $table->unsignedInteger('user_id')->nullable(); //nullable because users can be deleted and we don't want to also delete the log entry
             $table->foreign('user_id')->references('id')->on('users')->onDelete('set null')->onUpdate('cascade');
-            // $table->foreignId('user_id')->constrained()->cascadeOnUpdate()->nullOnDelete();
             
             $table->timestamps();
         });

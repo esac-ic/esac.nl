@@ -4,8 +4,6 @@ namespace App\Repositories;
 
 use App\Models\UserEventLogEntry;
 use Illuminate\Database\Eloquent\Builder;
-// use Illuminate\Database\Query\Builder;
-use Illuminate\Support\Facades\DB;
 
 class UserEventLogEntryRepository implements IRepository
 {
@@ -48,25 +46,18 @@ class UserEventLogEntryRepository implements IRepository
     }
     
     /**
-     * Fina all user event logs that fulfill certain criterea
+     * Find all user event logs that fulfill certain criteria
      * 
      * @param array|null $eventTypes the selected event types to be filtered on
-     * @param array|null $names TODO the names of users to be filtered on
      * @param \Carbon\Carbon $startDate start datetime of the selection
      * @param \Carbon\Carbon $endDate end datetime of the selection
      * 
      * @return Builder[]|\Illuminate\Database\Eloquent\Collection
      */
-    public function findLogs(Array | null $eventTypes, Array | null $names, \Carbon\Carbon $startDate, \Carbon\Carbon $endDate)
+    public function findLogs(Array | null $eventTypes, \Carbon\Carbon $startDate, \Carbon\Carbon $endDate)
     {
         $query = UserEventLogEntry::query()
         ->whereBetween('created_at', array($startDate, $endDate));
-                
-        //todo add name filtering
-        if ($names != null && false) 
-        { 
-            $query = $query->whereIn('user.getName', $names);
-        }
         
         if ($eventTypes != null)
         {
@@ -74,9 +65,6 @@ class UserEventLogEntryRepository implements IRepository
         }
         
         
-        return $query
-        // ->dump()//debug
-        ->get()
-        ->makeHidden(['updated_at']);
+        return $query->get()->makeHidden(['updated_at']);
     }
 }

@@ -20,7 +20,7 @@
                             <label>{{"Event types"}}</label>
                             @foreach (\App\Enums\UserEventTypes::values() as $eventType)
                             <div class="form-check">
-                                <input class="form-check-input" type="checkbox" name="eventTypes[]" value="{{$eventType}}" id={{$eventType . "Check"}}>
+                                <input class="form-check-input" type="checkbox" checked name="eventTypes[]" value="{{$eventType}}" id={{$eventType . "Check"}}>
                                 <label class="form-check-label" for={{$eventType . "Check"}}>{{$eventType}}</label>
                             </div>
                             @endforeach

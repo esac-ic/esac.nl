@@ -232,26 +232,10 @@ class MailListFacade
                     
                     foreach ($members as $member)
                     {
-                        //TODO this is a somewhat hacky and inefficient way to do it,
-                        // but the "nicer" way below isn't working properly for some reason.
+                        //there might be a more efficient way to do this, but it's fine for now
                         $this->deleteMemberFromMailList($mailListId, $member);
                     }
-                    
-                    //The below code could be used to call the mass unsubscription api function from mailman,
-                    // but it's not really working for some reason as of october 2025.
-                    // if ($members != [])
-                    // {
-                    //     //delete all members
-                    //     $this->_mailManHandler->delete(
-                    //         "/lists/" . $mailListId . "/roster/member",
-                    //         [
-                    //             'emails' => json_encode($members),//array("member@esac.nl","test@esac.nl"),//$members, //not sure if this already works since it's including names
-                    //             ]
-                    //         );
-                    //     }     
-                        
-                        
-                    } catch(Exception $e) {
+                } catch(Exception $e) {
                     \Log::error($e->getMessage());
                 }
             }

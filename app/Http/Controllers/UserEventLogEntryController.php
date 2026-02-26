@@ -40,9 +40,6 @@ class UserEventLogEntryController extends Controller
     
     public function export(Request $request, Excel $excel, UserEventLogEntryRepository $repo)
     {
-        Log::debug($request);
-        
-        
         $eventTypes = $request->eventTypes;
         if ($eventTypes == null) //if no event type was selected, default is to select all
         {

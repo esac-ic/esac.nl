@@ -41,7 +41,7 @@ class UserEventLogExport implements FromCollection, WithTitle, WithHeadings, Sho
     
     public function collection()
     {
-        $collection = $this->repository->findLogs($this->eventTypes, $this->names, $this->startDate, $this->endDate);
+        $collection = $this->repository->findLogs($this->eventTypes, $this->startDate, $this->endDate);
         return $collection;
     }
     
@@ -68,8 +68,6 @@ class UserEventLogExport implements FromCollection, WithTitle, WithHeadings, Sho
     
     public function map($event): array
     {
-        Log::info($event);
-        Log::debug($event->user);
         if ($event->user == null || $event->user() == null) {
             return [
                 $event->created_at,
