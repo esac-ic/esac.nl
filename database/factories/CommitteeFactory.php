@@ -14,7 +14,7 @@ class CommitteeFactory extends Factory
     public function definition(): array
     {
         return [
-            'name' => $this->faker->name(),
+            'name' => $this->faker->word(),
             'abbreviation' => $this->faker->word(),
             'description' => $this->faker->text(),
             'email' => $this->faker->unique()->safeEmail(),
