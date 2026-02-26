@@ -3,12 +3,11 @@
 namespace Tests\Feature\PendingUser;
 
 use App\Events\NewPendingUser;
-use App\Events\PendingUserApproved;
 use App\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Carbon;
-use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Event;
+use Illuminate\Support\Facades\Log;
 
 class StorePendingUserTest extends \TestCase
 {
@@ -48,7 +47,6 @@ class StorePendingUserTest extends \TestCase
         
         $response->assertRedirect(route('front-end.signup'));
         Event::assertDispatched(NewPendingUser::class);
-        
         $this->assertEquals(1, User::all()->count());
         
         $user =  User::first();
@@ -71,7 +69,8 @@ class StorePendingUserTest extends \TestCase
         $this->assertEquals('123456789', $user->IBAN);
         
         $this->assertEquals(new Carbon('1990-01-01'), $user->birthDay);
-        $this->assertTrue($user->incasso);
+        Log::debug($user->incasso);
+        $this->assertEquals(1, $user->incasso);
         
     }
 }
