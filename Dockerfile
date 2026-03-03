@@ -15,6 +15,7 @@ RUN apt-get update && apt-get install -y \
     ca-certificates \
     curl \
     nodejs \
+    npm \
     && docker-php-ext-install opcache pdo_mysql zip \
     && docker-php-ext-configure gd --with-freetype --with-jpeg \
     && docker-php-ext-install gd \
