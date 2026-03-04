@@ -5,9 +5,11 @@ namespace Tests\Feature\User;
 use App\CustomClasses\MailList\MailListFacade;
 use App\Events\MemberBecameOldMember;
 use App\User;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Event;
+use Illuminate\Support\Facades\Log;
 use Mockery\MockInterface;
 
 class RemoveAsActiveMemberTest extends \TestCase
@@ -30,16 +32,21 @@ class RemoveAsActiveMemberTest extends \TestCase
         
         $this->assertNull($user->lid_af); //sanity check in case the factory breaks
         
+        //fake events, but make sure the model events are handled normally
+        $initialDispenser = Event::getFacadeRoot();
         Event::fake();
+        Model::setEventDispatcher($initialDispenser);
         
-        $this->mock(MailListFacade::class, function (MockInterface $mock) use ($userId) {
-            //TODO possibly figure out how to check if the function is called with the same user as the request
-            //as of writing the test this gives errors :/
-            $mock->shouldReceive('deleteUserFormAllMailList')->once(); //the method is a typo :/
+        $this->mock(MailListFacade::class, function (MockInterface $mock) use ($user) {
+            $mock->shouldReceive('deleteUserFormAllMailList')
+                ->with(\Mockery::type(User::class))
+                ->with(\Mockery::on(function ($arg) use ($user) { //custom validator to check if the correct argument is passed
+                    return $user->is($arg);
+                }))
+                ->once();
         });
         
         $response = $this->actingAs($this->admin)->patch(route('users.removeAsActiveMember', $user));
-        
         $response->assertRedirect(route('users.show', $user));
         Event::assertDispatched(MemberBecameOldMember::class);
         
