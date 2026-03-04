@@ -28,21 +28,18 @@ class ClearSeeder extends Seeder
      */
     public function run(MailListFacade $mailListFacade)
     {
-        //clean out the maillists
-        if (env("APP_DEBUG")) //extra safety check to make sure the maillists can't accidentally be deleted
+        //clean out the maillists (because without this each local reseed keeps cluttering the maillists with non-existent users)
+        try
         {
-            try 
+            $allMailLists = $mailListFacade->getAllMailListIds();
+            foreach ($allMailLists as $mailList)
             {
-                $allMailLists = $mailListFacade->getAllMailListIds();
-                foreach ($allMailLists as $mailList)
-                {
-                    $mailListFacade->deleteAllUsersFromMailList($mailList, $allMailLists);
-                }
+                $mailListFacade->deleteAllUsersFromMailList($mailList, $allMailLists);
             }
-            catch (Exception $e)
-            {
-                \Log::error($e->getMessage());
-            }
+        }
+        catch (Exception $e)
+        {
+            \Log::error($e->getMessage());
         }
         
         Zekering::getQuery()->delete();

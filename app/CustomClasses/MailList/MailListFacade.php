@@ -8,6 +8,7 @@
 
 namespace App\CustomClasses\MailList;
 
+use App\User;
 use \Exception;
 use GuzzleHttp\Exception\ClientException;
 use GuzzleHttp\Exception\RequestException;
@@ -139,8 +140,8 @@ class MailListFacade
             \Log::error($e->getMessage());
         }
     }
-
-    public function deleteUserFormAllMailList($user): void
+    
+    public function deleteUserFormAllMailList(User $user): void
     {
         foreach ($this->getAllMailListIds() as $mailListId) {
             try {
@@ -224,15 +225,13 @@ class MailListFacade
                 $allMailListIds = $this->getAllMailListIds();
             }
             
-            if (in_array($mailListId, $allMailListIds))
+            if (in_array($mailListId, $allMailListIds)) //check if the maillist actually exists before making a request
             {
                 try {
-                    //get all members of the maillist
                     $members = $this->getMailList($mailListId)->getMemberEmails();
                     
                     foreach ($members as $member)
                     {
-                        //there might be a more efficient way to do this, but it's fine for now
                         $this->deleteMemberFromMailList($mailListId, $member);
                     }
                 } catch(Exception $e) {
