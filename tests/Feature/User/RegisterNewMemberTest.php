@@ -65,7 +65,7 @@ class RegisterNewMemberTest extends TestCase
 
         $response->assertStatus(302);
 
-        $user = \App\User::all()->last();
+        $user = \App\Models\User::all()->last();
 
         $this->assertEquals($body['email'], $user->email);
         $this->assertEquals($body['firstname'], $user->firstname);

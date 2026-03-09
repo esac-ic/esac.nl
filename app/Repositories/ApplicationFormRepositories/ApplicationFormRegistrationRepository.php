@@ -2,7 +2,7 @@
 
 namespace App\Repositories\ApplicationFormRepositories;
 
-use App\AgendaItem;
+use App\Models\AgendaItem;
 use App\Models\ApplicationForm\ApplicationResponse;
 use App\Models\ApplicationForm\ApplicationResponseRow;
 use Illuminate\Database\Eloquent\Collection;
