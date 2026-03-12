@@ -388,6 +388,11 @@ CREATE TABLE `zekerings` (
 /*!40014 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
+INSERT INTO `settings` (`id`, `name`, `type`, `value`, `created_at`, `updated_at`) VALUES (1, 'SETTING_FOOTER_PHONE_NR', 'TYPE_STRING', '+31 6 83994645', '2026-03-12 16:48:23', '2026-03-12 16:48:23');
+INSERT INTO `settings` (`id`, `name`, `type`, `value`, `created_at`, `updated_at`) VALUES (2, 'SETTING_BLOCKED_EMAIL_DOMAINS', 'TYPE_STRING', 'student.tue.nl;.student.fontys.nl', '2026-03-12 16:48:23','2026-03-12 16:48:23');
+INSERT INTO `settings` (`id`, `name`, `type`, `value`, `created_at`, `updated_at`) VALUES (3, 'SETTING_KILLSWITCH', 'TYPE_BOOLEAN', '0', '2026-03-12 16:48:23', '2026-03-12 16:48:23');
+INSERT INTO `settings` (`id`, `name`, `type`, `value`, `created_at`, `updated_at`) VALUES (4, 'SETTING_SHOW_INTRO_OPTION', 'TYPE_BOOLEAN', '0', '2026-03-12 16:48:23', '2026-03-12 16:48:23');
+
 INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (1,'2011_01_11_194012_create_text_table',1);
 INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (2,'2014_10_12_000000_create_users_table',1);
 INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (3,'2014_10_12_100000_create_password_resets_table',1);
