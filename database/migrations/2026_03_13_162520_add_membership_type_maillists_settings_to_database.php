@@ -1,29 +1,13 @@
 <?php
 
-namespace Database\Seeders;
-
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
-use Illuminate\Database\Seeder;
 use App\Setting;
+use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
 
-class SettingSeeder extends Seeder
-{
-    /**
-     * Run the database seeds.
-     *
-     * @return void
-     */
-    public function run()
+return new class extends Migration {
+    public function up(): void
     {
-        //standard settings from the production site
-        $setting = new Setting(['name' => Setting::SETTING_BLOCKED_EMAIL_DOMAINS, 'type' => Setting::TYPE_STRING, 'value' => 'student.tue.nl;student.fontys.nl;tue.nl']);
-        $setting->save();
-        $setting = new Setting(['name' => Setting::SETTING_KILLSWITCH, 'type' => Setting::TYPE_BOOLEAN, 'value' => false]);
-        $setting->save();
-        $setting = new Setting(['name' => Setting::SETTING_SHOW_INTRO_OPTION, 'type' => Setting::TYPE_BOOLEAN, 'value' => false]);
-        $setting->save();
-        $setting = new Setting(['name' => Setting::SETTING_FOOTER_PHONE_NR, 'type' => Setting::TYPE_STRING, 'value' => '06-12345678']);
-        $setting->save();
         $setting = new Setting(['name' => Setting::SETTING_NORMAL_MEMBER_MAIL_LISTS, 'type' => Setting::TYPE_STRING, 'value' => 'alle-leden;nieuwsbrief']);
         $setting->save();
         $setting = new Setting(['name' => Setting::SETTING_EXTRAORDINARY_MEMBER_MAIL_LISTS, 'type' => Setting::TYPE_STRING, 'value' => 'reunist;alle-leden;nieuwsbrief']);
@@ -39,4 +23,4 @@ class SettingSeeder extends Seeder
         $setting = new Setting(['name' => Setting::SETTING_RELATIONSHIP_MEMBER_MAIL_LISTS, 'type' => Setting::TYPE_STRING, 'value' => '']);
         $setting->save();
     }
-}
+};

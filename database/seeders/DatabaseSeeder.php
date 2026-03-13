@@ -25,7 +25,6 @@ class DatabaseSeeder extends Seeder
         $this->call(ZekeringenSeeder::class);
         $this->call(ApplicationResponseSeeder::class);
         $this->call(BooksTableSeeder::class);
-        $this->call(SettingSeeder::class);
         $this->call(UserEventLogEntrySeeder::class);
     }
 }
