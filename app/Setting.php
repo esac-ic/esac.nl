@@ -7,6 +7,13 @@ use Illuminate\Support\Facades\Log;
 
 class Setting extends Model
 {
+    /*
+     * IMPORTANT INFO
+     * The specific settings are initialized through migrations (so not via a seeder or ui)
+     * This note is here because as of writing this (laravel 10), squashing the migrations removes the INSERT operations
+     */
+    
+    
     //setting names
     const SETTING_BLOCKED_EMAIL_DOMAINS = 'SETTING_BLOCKED_EMAIL_DOMAINS';
     const SETTING_KILLSWITCH = 'SETTING_KILLSWITCH';
