@@ -6,8 +6,9 @@ use App\CustomClasses\MailList\MailListFacade;
 use App\CustomClasses\MailList\MailMan;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Mockery\MockInterface;
+use TestCase;
 
-class GetAllMailListIdsTest extends \TestCase
+class GetAllMailListIdsTest extends TestCase
 {
     use RefreshDatabase;
     
@@ -17,11 +18,11 @@ class GetAllMailListIdsTest extends \TestCase
             $mock->shouldReceive('get')
                 ->once()
                 ->with('/lists')
-                ->andReturn(json_decode(json_encode([
+                ->andReturn(collect([
                     "start" => 0,
                     "total_size" => 0,
                     "http_etag" => "32223434a0f3af4cdc4673d1fbc5bac1f6d98fd3"
-                ])));
+                ]));
         });
         
         $facade = $this->app->make(MailListFacade::class);
@@ -37,7 +38,7 @@ class GetAllMailListIdsTest extends \TestCase
             $mock->shouldReceive('get')
                 ->once()
                 ->with('/lists')
-                ->andReturn(json_decode(json_encode([
+                ->andReturn(collect([
                     "start" => 0,
                     "total_size" => 1,
                     "entries" => [
@@ -56,7 +57,7 @@ class GetAllMailListIdsTest extends \TestCase
                         ]
                     ],
                     "http_etag" => "32223434a0f3af4cdc4673d1fbc5bac1f6d98fd3"
-                ])));
+                ]));
         });
         
         $facade = $this->app->make(MailListFacade::class);
@@ -73,7 +74,7 @@ class GetAllMailListIdsTest extends \TestCase
             $mock->shouldReceive('get')
                 ->once()
                 ->with('/lists')
-                ->andReturn(json_decode(json_encode([
+                ->andReturn(collect([
                     "start" => 0,
                     "total_size" => 4,
                     "entries" => [
@@ -118,7 +119,7 @@ class GetAllMailListIdsTest extends \TestCase
                         ],
                     ],
                     "http_etag" => "32223434a0f3af4cdc4673d1fbc5bac1f6d98fd3"
-                ])));
+                ]));
         });
         
         $facade = $this->app->make(MailListFacade::class);

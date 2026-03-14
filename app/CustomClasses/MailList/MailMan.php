@@ -8,44 +8,49 @@
 
 namespace App\CustomClasses\MailList;
 
-use GuzzleHttp\Client;
+use Illuminate\Http\Client\PendingRequest;
+use Illuminate\Http\Client\RequestException;
+use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\Config;
+use Illuminate\Support\Facades\Http;
 
 class MailMan
 {
-    private $_client;
-    private $_baseUrl;
+    private string $_baseUrl;
 
     public function __construct()
     {
-        $this->_baseUrl = env('MAIL_MAN_URL');
-        $this->_client = new Client();
+        $this->_baseUrl = Config::get('mailman.url');
     }
 
-    public function get(string $url)
+    protected function http(): PendingRequest
     {
-        return $this->call("GET", $url);
+        return Http::baseUrl($this->_baseUrl)->withBasicAuth(
+            config('mailman.credentials.username'), config('mailman.credentials.password'),
+        );
     }
 
-    public function post(string $url, array $body)
+    /**
+     * @throws RequestException
+     */
+    public function get(string $url): Collection
     {
-        return $this->call("POST", $url, $body);
+        return $this->http()->get($url)->throw()->collect();
     }
 
-    public function delete(string $url, array $body = [])
+    /**
+     * @throws RequestException
+     */
+    public function post(string $url, array $body): Collection
     {
-        return $this->call("DELETE", $url, $body);
+        return $this->http()->asJson()->post($url, $body)->throw()->collect();
     }
 
-    private function call(string $method, string $url, array $body = [])
+    /**
+     * @throws RequestException
+     */
+    public function delete(string $url, array $body = []): Collection
     {
-        $response = $this->_client->request($method, $this->_baseUrl . $url, [
-            "form_params" => $body,
-            "auth" => [
-                env('MAIL_MAN_USERNAME'),
-                env('MAIL_MAN_PASSWORD'),
-            ],
-        ]);
-
-        return json_decode($response->getBody()->getContents());
+        return $this->http()->asJson()->delete($url, $body)->throw()->collect();
     }
 }

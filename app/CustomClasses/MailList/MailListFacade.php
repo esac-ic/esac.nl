@@ -1,85 +1,73 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: Niekh
- * Date: 9-9-2017
- * Time: 18:59
- */
 
 namespace App\CustomClasses\MailList;
 
 use App\User;
-use \Exception;
-use GuzzleHttp\Exception\ClientException;
-use GuzzleHttp\Exception\RequestException;
+use Exception;
+use Illuminate\Contracts\Support\Arrayable;
+use Illuminate\Http\Client\RequestException;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Log;
-use \Session;
 
 class MailListFacade
 {
-    private $_mailListParser;
-    private $_mailManHandler;
+    private MailListParser $_mailListParser;
+    private MailMan $_mailManHandler;
+    private string $_domain;
 
     public function __construct(MailListParser $mailListParser, MailMan $mailMan)
     {
         $this->_mailListParser = $mailListParser;
         $this->_mailManHandler = $mailMan;
+        $this->_domain = config('mailman.domain');
     }
 
     /**
-     * Returns an array of MailList objects for each maillist that exists in mailman
-     * 
-     * @return MailList[] mailLists
+     * Returns an array of MailList objects for each mail list that exists in mailman
+     *
+     * @return Collection mailLists
+     * @throws RequestException
      */
-    public function getAllMailLists(): array
+    public function getAllMailLists(): Collection
     {
-        $mailLists = array();
-        $response = $this->_mailManHandler->get('/lists');
-        
-        if ($response->total_size == 0) return [];
-        
-        foreach ($response->entries as $mailList) {
-            array_push($mailLists, $this->_mailListParser->parseMailManMailList($mailList));
-        }
-        return $mailLists;
+        $entries = $this->_mailManHandler->get('/lists')->get('entries', []);
+        return collect($entries)->map($this->_mailListParser->parseMailManMailList(...));
     }
     
     /**
-     * Returns the ids of all maillists
+     * Returns the ids of all mail lists
      * 
      * @return string[] mailListIds
+     * @throws RequestException
      */
     public function getAllMailListIds(): array
     {
-        $mailListIds = array();
-        $response = $this->_mailManHandler->get('/lists');
-        
-        if ($response->total_size == 0) return [];
-        
-        foreach ($response->entries as $mailList) {
-            array_push($mailListIds, $this->_mailListParser->parseMailManMailList($mailList)->getId());
-        }
-        return $mailListIds;
+        return $this->getAllMailLists()
+            ->map(fn (MailList $list) => $list->getId())
+            ->all();
     }
 
     public function getMailList($id): ?MailList
     {
         try {
-            $response = $this->_mailManHandler->get('/lists/' . $id);
-            $mailList = $this->_mailListParser->parseMailManMailList($response);
-            $members = $this->_mailManHandler->get('/lists/' . $id . '/roster/member');
-            
-            if (property_exists($members, "entries")) {
-                foreach ($members->entries as $member) {
-                    $parsedMember = $this->_mailListParser->parseMailManMember($member);
-                    $mailList->addMember($parsedMember);
-                }
-            }
+            $mailList = $this->_mailListParser->parseMailManMailList($this->_mailManHandler->get('/lists/' . $id));
+            $entries = $this->_mailManHandler->get('/lists/' . $id . '/roster/member')->get('entries', []);
+            collect($entries)
+                ->map($this->_mailListParser->parseMailManMember(...))
+                ->each(fn ($member) => $mailList->addMember($member));
+
             return $mailList;
         } catch (RequestException $e) {
             Log::error($e->getMessage());
             return null;
         }
+    }
+
+    /** @throws RequestException */
+    public function getMailListsForMember(string $member): Collection
+    {
+        $entries = $this->_mailManHandler->post('/lists/find', ['subscriber' => $member])->get('entries', []);
+        return collect($entries)->map($this->_mailListParser->parseMailManMailList(...));
     }
     
     /**
@@ -87,15 +75,18 @@ class MailListFacade
      *
      * @param array $data the data containing the address of the mail list
      * @return void
-     * @throws ClientException When the mail list already exists
+     * @throws RequestException When the mail list already exists
      */
     public function storeMailList(array $data): void
     {
         $this->_mailManHandler->post("/lists", [
-            'fqdn_listname' => $data['address'] . env("MAIL_MAN_DOMAIN"),
+            'fqdn_listname' => $data['address'] . $this->_domain,
         ]);
     }
 
+    /**
+     * @throws RequestException When the mail list couldn't be deleted.
+     */
     public function deleteMailList($id): void
     {
         $this->_mailManHandler->delete("/lists/" . $id);
@@ -104,17 +95,17 @@ class MailListFacade
     /**
      * Deletes/removes a member from a mail list.
      *
-     * @param string $mailListId id of the maillist
+     * @param string $mailListId id of the mail list
      * @param string $memberEmail email of the member to be deleted
      * @param bool $suppressErrors option to suppress errors when they are encountered
      *
-     * @throws ClientException when member or list doesn't exist
+     * @throws RequestException when the member or list doesn't exist
      */
     public function deleteMemberFromMailList(string $mailListId, string $memberEmail, bool $suppressErrors = false): void
     {
         try {
             $this->_mailManHandler->delete("/lists/" . $mailListId . "/member/" . $memberEmail);
-        } catch(ClientException $e) {
+        } catch(RequestException $e) {
             if (!$suppressErrors)
             {
                 throw $e;
@@ -141,104 +132,88 @@ class MailListFacade
         }
     }
     
+    /** @throws RequestException */
     public function deleteUserFormAllMailList(User $user): void
     {
-        foreach ($this->getAllMailListIds() as $mailListId) {
-            try {
-                //we used try{} to delete the user from the mail list without checking if they are in the list because
-                //that takes too much time
-                $this->deleteMemberFromMailList($mailListId, $user->email, $suppressErrors = true);
-            } catch (Exception $e) {
-            }
-        }
+        $this->getMailListsForMember($user->email)
+            ->each(fn (MailList $list) => $this->deleteMemberFromMailList($list->getId(), $user->email));
     }
 
+    /** @throws RequestException */
     public function updateUserEmailFormAllMailList($user, $oldEmail, $newEmail): void
     {
-        foreach ($this->getAllMailLists() as $mailList) {
-            $mailList = $this->getMailList($mailList->getAddress());
-            foreach ($mailList->getMembers() as $member) {
-                if ($oldEmail === $member->getAddress()) {
-                    $this->deleteMemberFromMailList($mailList->getId(), $member->getAddress());
-                    $this->addMember($mailList->getId(), $newEmail, $user->getName());
-                }
-            }
+        $listIds = $this->getMailListsForMember($oldEmail)->map(fn (MailList $list) => $list->getId());
 
-        }
+        $listIds->each(fn($id) => $this->deleteMemberFromMailList($id, $oldEmail));
+        $this->addUserToSpecifiedMailLists($newEmail, $user->getName(), $listIds);
     }
     
     /**
-     * Adds a user to an array of maillists
+     * Adds a user to an array of mail lists
      * 
      * @param string $email the email address of the user
      * @param string $name the name of the user
-     * @param array $mailLists an array of mailist to add the user to
+     * @param array|Arrayable $mailListIds an array of mail list to add the user to
      * 
      * @return void
+     * @throws RequestException
      */
-    public function addUserToSpecifiedMailLists(string $email, string $name, Array $mailLists): void
+    public function addUserToSpecifiedMailLists(string $email, string $name, array|Arrayable $mailListIds): void
     {
-        if ($mailLists && $mailLists != [""]) { //check if mailLists is not empty
-            $allMailLists = $this->getAllMailListIds();
-            
-            foreach ($mailLists as $mailList) {
-                //check if the mailist exists and then add the user to the mail list
-                if (in_array($mailList, $allMailLists)) {
-                    $this->addMember($mailList, $email, $name);
-                } else {
-                    \Log::error("Error: tried to add user " . $email . " to nonexistent maillist " . $mailList);
-                }
-            }
+        $mailListIds = collect($mailListIds)->filter();
+        if ($mailListIds->isEmpty()) {
+            return;
         }
+
+        $allListIds = $this->getAllMailListIds();
+        if ($mailListIds->diff($allListIds)->isNotEmpty()) {
+            \Log::warning('Warning: tried to add user '.$email.' to nonexistent mail list(s): ',
+                ['list_ids' => $mailListIds->diff($allListIds)->all()]);
+        }
+
+        collect($mailListIds)
+            ->intersect($allListIds)
+            ->each(fn ($listId) => $this->addMember($listId, $email, $name));
     }
-    
-    public function removeUserFromSpecifiedMailLists(string $email, Array $mailLists): void
+
+    /** @throws RequestException */
+    public function removeUserFromSpecifiedMailLists(string $email, array|Arrayable $mailListIds): void
     {
-        if ($mailLists && $mailLists != [""]) { //check if mailLists is not empty
-            $allMailLists = $this->getAllMailListIds();
-            
-            foreach ($mailLists as $mailList) {
-                //check if the mail list exists and then remove the user from the mail list
-                if (in_array($mailList, $allMailLists)) {
-                    $this->deleteMemberFromMailList($mailList, $email);
-                } else {
-                    \Log::error("Error: tried to remove user " . $email . " from nonexistent maillist " . $mailList);
-                }
-            }
+        $mailListIds = collect($mailListIds)->filter();
+        if ($mailListIds->isEmpty()) {
+            return;
         }
+
+        $allListIds = $this->getAllMailListIds();
+        if (collect($mailListIds)->diff($allListIds)->isNotEmpty()) {
+            \Log::warning('Warning: tried to remove user '.$email.' from nonexistent mail list(s): ',
+                ['list_ids' => collect($mailListIds)->diff($allListIds)->all()]);
+        }
+
+        collect($mailListIds)
+            ->intersect($allListIds)
+            ->each(fn($listId) => $this->deleteMemberFromMailList($listId, $email));
     }
-    
+
     /**
      * Deletes all users from a specified mail list.
-     * 
-     * @param string $mailListId the Id of the maillist that is to be emptied
-     * @param array|null $allMailListIds optional parameter that can be used to prevent multiple API calls to get all maillist ids when the function is called repeatedly
-     * 
+     *
+     * @param  string  $mailListId  the ID of the mail list that is to be emptied
      * @return void
+     * @throws RequestException
      */
-    public function deleteAllUsersFromMailList(string $mailListId, array|null $allMailListIds = null): void
+    public function deleteAllUsersFromMailList(string $mailListId): void
     {
-        if ($mailListId)
-        {
-            if ($allMailListIds == null)
-            {
-                $allMailListIds = $this->getAllMailListIds();
+        try {
+            $this->_mailManHandler->delete('/lists/'.$mailListId.'/roster/member', [
+                'emails' => $this->getMailList($mailListId)->getMemberEmails(),
+            ]);
+        } catch (RequestException $e) {
+            if ($e->getCode() === 404) {
+                Log::warning("Tried to delete all users from mail list that doesn't exist: $mailListId");
+                return;
             }
-            
-            if (in_array($mailListId, $allMailListIds)) //check if the maillist actually exists before making a request
-            {
-                try {
-                    $members = $this->getMailList($mailListId)->getMemberEmails();
-                    
-                    foreach ($members as $member)
-                    {
-                        $this->deleteMemberFromMailList($mailListId, $member);
-                    }
-                } catch(Exception $e) {
-                    \Log::error($e->getMessage());
-                }
-            }
+            throw $e;
         }
     }
-    
 }

@@ -18,7 +18,7 @@ use App\Zekering;
 use Illuminate\Database\Seeder;
 Use Exception;
 
-//emptys data from database
+/** Empties data from database */
 class ClearSeeder extends Seeder
 {
     /**
@@ -28,17 +28,10 @@ class ClearSeeder extends Seeder
      */
     public function run(MailListFacade $mailListFacade)
     {
-        //clean out the maillists (because without this each local reseed keeps cluttering the maillists with non-existent users)
-        try
-        {
-            $allMailLists = $mailListFacade->getAllMailListIds();
-            foreach ($allMailLists as $mailList)
-            {
-                $mailListFacade->deleteAllUsersFromMailList($mailList, $allMailLists);
-            }
-        }
-        catch (Exception $e)
-        {
+        // Clean out the mail lists (because without this each local re-seed keeps cluttering the mail lists with non-existent users)
+        try {
+            collect($mailListFacade->getAllMailListIds())->each($mailListFacade->deleteAllUsersFromMailList(...));
+        } catch (Exception $e) {
             \Log::error($e->getMessage());
         }
         

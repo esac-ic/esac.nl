@@ -33,7 +33,7 @@ class MailListController extends Controller
     //gives the mail list views
     public function index()
     {
-        $mailLists = $this->_mailListFacade->getAllMailLists();
+        $mailLists = $this->_mailListFacade->getAllMailLists()->all();
 
         return view('beheer.mailList.index', compact('mailLists'));
     }

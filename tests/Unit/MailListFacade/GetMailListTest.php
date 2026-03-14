@@ -4,20 +4,26 @@ namespace Tests\Unit\MailListFacade;
 
 use App\CustomClasses\MailList\MailListFacade;
 use App\CustomClasses\MailList\MailMan;
-use GuzzleHttp\Exception\ClientException;
-use GuzzleHttp\Psr7\Request;
-use GuzzleHttp\Psr7\Response;
+use Illuminate\Support\Facades\Config;
+use Illuminate\Support\Facades\Http;
 use Mockery\MockInterface;
+use TestCase;
 
-class GetMailListTest extends \TestCase
+class GetMailListTest extends TestCase
 {
+    protected function setUp(): void
+    {
+        parent::setUp();
+        Config::set('mailman.url', 'http://localhost:8001/3.1');
+    }
+
     public function test_happy_flow_multiple_members()
     {
         $this->mock(MailMan::class, function (MockInterface $mock) {
             $mock->shouldReceive('get')
                 ->with('/lists/lid.esac.nl')
                 ->once()
-                ->andReturn(json_decode(json_encode([
+                ->andReturn(collect([
                     "advertised" => 1,
                     "display_name" => "Lid",
                     "fqdn_listname" => "lid@esac.nl",
@@ -29,12 +35,12 @@ class GetMailListTest extends \TestCase
                     "description" => "",
                     "self_link" => "http://localhost:8001/3.1/lists/lid.esac.nl",
                     "http_etag" => "07bdc22d9deccfad6c5f97f4d985088774e851c2",
-                ])));
+                ]));
             
             $mock->shouldReceive('get')
                 ->with('/lists/lid.esac.nl/roster/member')
                 ->once()
-                ->andReturn(json_decode(json_encode([
+                ->andReturn(collect([
                     "start" => 0,
                     "total_size" => 5,
                     "entries" => [
@@ -120,7 +126,7 @@ class GetMailListTest extends \TestCase
                         ],
                     ],
                     "http_etag" => "32223434a0f3af4cdc4673d1fbc5bac1f6d98fd3",
-                ])));
+                ]));
         });
         
         $facade = $this->app->make(MailListFacade::class);
@@ -156,7 +162,7 @@ class GetMailListTest extends \TestCase
             $mock->shouldReceive('get')
                 ->with('/lists/lid.esac.nl')
                 ->once()
-                ->andReturn(json_decode(json_encode([
+                ->andReturn(collect([
                     "advertised" => 1,
                     "display_name" => "Lid",
                     "fqdn_listname" => "lid@esac.nl",
@@ -168,12 +174,12 @@ class GetMailListTest extends \TestCase
                     "description" => "",
                     "self_link" => "http://localhost:8001/3.1/lists/lid.esac.nl",
                     "http_etag" => "07bdc22d9deccfad6c5f97f4d985088774e851c2",
-                ])));
+                ]));
             
             $mock->shouldReceive('get')
                 ->with('/lists/lid.esac.nl/roster/member')
                 ->once()
-                ->andReturn(json_decode(json_encode([
+                ->andReturn(collect([
                     "start" => 0,
                     "total_size" => 1,
                     "entries" => [
@@ -195,7 +201,7 @@ class GetMailListTest extends \TestCase
                         ],
                     ],
                     "http_etag" => "32223434a0f3af4cdc4673d1fbc5bac1f6d98fd3",
-                ])));
+                ]));
         });
         
         $facade = $this->app->make(MailListFacade::class);
@@ -221,7 +227,7 @@ class GetMailListTest extends \TestCase
             $mock->shouldReceive('get')
                 ->with('/lists/lid.esac.nl')
                 ->once()
-                ->andReturn(json_decode(json_encode([
+                ->andReturn(collect([
                     "advertised" => 1,
                     "display_name" => "Lid",
                     "fqdn_listname" => "lid@esac.nl",
@@ -233,16 +239,16 @@ class GetMailListTest extends \TestCase
                     "description" => "",
                     "self_link" => "http://localhost:8001/3.1/lists/lid.esac.nl",
                     "http_etag" => "07bdc22d9deccfad6c5f97f4d985088774e851c2",
-                ])));
+                ]));
             
             $mock->shouldReceive('get')
                 ->with('/lists/lid.esac.nl/roster/member')
                 ->once()
-                ->andReturn(json_decode(json_encode([
+                ->andReturn(collect([
                     "start" => 0,
                     "total_size" => 0,
                     "http_etag" => "32223434a0f3af4cdc4673d1fbc5bac1f6d98fd3",
-                ])));
+                ]));
         });
         
         $facade = $this->app->make(MailListFacade::class);
@@ -260,15 +266,11 @@ class GetMailListTest extends \TestCase
     
     function test_non_existent_mail_list()
     {
-        $exception = ClientException::create(new Request("GET", "http://localhost:8001/3.1/lists/nonexistent.esac.nl"), new Response(404, [], '{"title": "404 Not Found", "description": "404 Not Found"}'));
-        
-        $this->mock(MailMan::class, function (MockInterface $mock) use ($exception) {
-            $mock->shouldReceive('get')
-                ->with('/lists/nonexistent.esac.nl')
-                ->once()
-                ->andThrow($exception);
-        });
-        
+
+        Http::fake([
+            'http://localhost:8001/3.1/lists/nonexistent.esac.nl' => Http::response('Not Found', 404),
+        ]);
+
         $facade = $this->app->make(MailListFacade::class);
         
         $response = $facade->getMailList("nonexistent.esac.nl");

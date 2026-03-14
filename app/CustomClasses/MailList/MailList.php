@@ -14,7 +14,9 @@ class MailList
     private $address;
     private $members_count;
     private $name;
-    private $members = array();
+
+    /** @var MailListMember[] */
+    private array $members = array();
 
     /**
      * @return mixed
@@ -89,7 +91,7 @@ class MailList
     }
 
     /**
-     * @return array
+     * @return MailListMember[]
      */
     public function getMembers(): array
     {
@@ -97,22 +99,17 @@ class MailList
     }
 
     /**
-     * @param MailListMember $members
+     * @param MailListMember $member
      * @return MailList
      */
     public function addMember(MailListMember $member): MailList
     {
-        array_push($this->members, $member);
+        $this->members[] = $member;
         return $this;
     }
     
     public function getMemberEmails(): array
     {
-        $emails = array();
-        foreach($this->members as $member)
-        {
-            array_push($emails, $member->getAddress());
-        }
-        return $emails;
+        return collect($this->members)->map(fn (MailListMember $member) => $member->getAddress())->all();
     }
 }

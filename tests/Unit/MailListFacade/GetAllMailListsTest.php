@@ -21,7 +21,7 @@ class GetAllMailListsTest extends \TestCase
             $mock->shouldReceive('get')
                 ->with('/lists')
                 ->once()
-                ->andReturn(json_decode(json_encode([
+                ->andReturn(collect([
                     'start' => 0,
                     'total_size' => 4,
                     'entries' => [
@@ -79,7 +79,7 @@ class GetAllMailListsTest extends \TestCase
                         ],
                     ],
                     'http_etag' => "9573fac7ddf920034d94e469e4232c22fc8dd4ad"
-                ])));
+                ]));
         });
         
         //make the object via the service container
@@ -122,11 +122,11 @@ class GetAllMailListsTest extends \TestCase
             $mock->shouldReceive('get')
                 ->with('/lists')
                 ->once()
-                ->andReturn(json_decode(json_encode([
+                ->andReturn(collect([
                     'start' => 0,
                     'total_size' => 0,
                     'http_etag' => "9573fac7ddf920034d94e469e4232c22fc8dd4ad"
-                ])));
+                ]));
         });
         
         //make the object via the service container
@@ -136,6 +136,6 @@ class GetAllMailListsTest extends \TestCase
         
         
         $this->assertCount(0, $response);
-        $this->assertEquals(array(), $response);
+        $this->assertEquals(collect(), $response);
     }
 }
