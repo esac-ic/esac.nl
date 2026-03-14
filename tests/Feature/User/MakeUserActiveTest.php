@@ -7,6 +7,7 @@ use Carbon\Carbon;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Config;
+use Illuminate\Support\Facades\Http;
 use TestCase;
 
 class MakeUserActiveTest extends TestCase
@@ -33,13 +34,17 @@ class MakeUserActiveTest extends TestCase
 
     protected function tearDown(): void
     {
-        Artisan::call('migrate:refresh');
+        Artisan::call('migrate:fresh');
         parent::tearDown();
     }
 
     /** @test */
     public function make_user_active_test()
     {
+        Http::fake([
+            config('mailman.url') . "/*" => Http::response('', 204),
+        ]);
+
         $response = $this->patch('users/' . $this->user->id . '/makeActiveMember');
 
         $response->assertStatus(302);

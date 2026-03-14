@@ -19,7 +19,7 @@ class MailListFacade
     {
         $this->_mailListParser = $mailListParser;
         $this->_mailManHandler = $mailMan;
-        $this->_domain = config('mailman.domain');
+        $this->_domain = config('mailman.domain') ?? '';
     }
 
     /**

@@ -50,7 +50,7 @@ class DeleteApplicationFormTest extends TestCase
      */
     protected function tearDown(): void
     {
-        Artisan::call('migrate:refresh');
+        Artisan::call('migrate:fresh');
         parent::tearDown();
     }
 

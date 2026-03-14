@@ -165,7 +165,7 @@ class UpdateMemberTypeMaillists implements ShouldQueue
         
         //change the @ to a . to fit the maillist id format
         foreach ($mailLists as &$mailList) {
-            $mailList = str_replace("@", ".", $mailList . env("MAIL_MAN_DOMAIN"));
+            $mailList = str_replace("@", ".", $mailList);
         }
         unset($mailList);//break the reference after the last element
         

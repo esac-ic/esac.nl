@@ -18,13 +18,34 @@ class HandlePendingUserApprovedTest extends \TestCase
     private $mockedMailListFacade;
     private User  $user;
     private array $mailLists = [
-        'member' => 'member.esac.nl',
-        'reunist' => 'reunist.esac.nl',
-        'extraordinary_member' => 'extraordinary.esac.nl',
-        'honorary_member' => 'honorary.esac.nl',
-        'member_of_merit' => 'merit.esac.nl',
-        'trainer' => 'trainer.esac.nl',
-        'relationship' => 'relationship.esac.nl',
+        'member' => [
+            'key' => Setting::SETTING_NORMAL_MEMBER_MAIL_LISTS,
+            'value' => 'member.esac.nl',
+        ],
+        'extraordinary_member' => [
+            'key' => Setting::SETTING_EXTRAORDINARY_MEMBER_MAIL_LISTS,
+            'value' => 'extraordinary.esac.nl',
+        ],
+        'reunist' => [
+            'key' => Setting::SETTING_REUNIST_MEMBER_MAIL_LISTS,
+            'value' => 'reunist.esac.nl',
+        ],
+        'honorary_member' => [
+            'key' => Setting::SETTING_HONORARY_MEMBER_MAIL_LISTS,
+            'value' => 'honorary.esac.nl',
+        ],
+        'member_of_merit' => [
+            'key' => Setting::SETTING_MERIT_MEMBER_MAIL_LISTS,
+            'value' => 'merit.esac.nl',
+        ],
+        'trainer' => [
+            'key' => Setting::SETTING_TRAINER_MEMBER_MAIL_LISTS,
+            'value' => 'trainer.esac.nl',
+        ],
+        'relationship' => [
+            'key' => Setting::SETTING_RELATIONSHIP_MEMBER_MAIL_LISTS,
+            'value' => 'relationship.esac.nl',
+        ],
     ];
     
     protected function setUp(): void
@@ -33,21 +54,13 @@ class HandlePendingUserApprovedTest extends \TestCase
         
         $this->mockedMailListFacade = Mockery::mock(MailListFacade::class);
         $this->user = User::factory()->member()->create();
-        
-        $setting = new Setting(['name' => Setting::SETTING_NORMAL_MEMBER_MAIL_LISTS, 'type' => Setting::TYPE_STRING, 'value' => 'member']);
-        $setting->save();
-        $setting = new Setting(['name' => Setting::SETTING_EXTRAORDINARY_MEMBER_MAIL_LISTS, 'type' => Setting::TYPE_STRING, 'value' => 'extraordinary']);
-        $setting->save();
-        $setting = new Setting(['name' => Setting::SETTING_REUNIST_MEMBER_MAIL_LISTS, 'type' => Setting::TYPE_STRING, 'value' => 'reunist']);
-        $setting->save();
-        $setting = new Setting(['name' => Setting::SETTING_HONORARY_MEMBER_MAIL_LISTS, 'type' => Setting::TYPE_STRING, 'value' => 'honorary']);
-        $setting->save();
-        $setting = new Setting(['name' => Setting::SETTING_MERIT_MEMBER_MAIL_LISTS, 'type' => Setting::TYPE_STRING, 'value' => 'merit']);
-        $setting->save();
-        $setting = new Setting(['name' => Setting::SETTING_TRAINER_MEMBER_MAIL_LISTS, 'type' => Setting::TYPE_STRING, 'value' => 'trainer']);
-        $setting->save();
-        $setting = new Setting(['name' => Setting::SETTING_RELATIONSHIP_MEMBER_MAIL_LISTS, 'type' => Setting::TYPE_STRING, 'value' => 'relationship']);
-        $setting->save();
+
+        Setting::truncate();
+        Setting::insert(collect($this->mailLists)->map(fn ($set) => new Setting([
+            'name' => $set['key'],
+            'type' => Setting::TYPE_STRING,
+            'value' => $set['value'],
+        ]))->values()->toArray());
     }
     
     /*
@@ -58,7 +71,7 @@ class HandlePendingUserApprovedTest extends \TestCase
         $this->mockedMailListFacade->shouldNotReceive('removeUserFromSpecifiedMailLists');
         
         $this->mockedMailListFacade->shouldReceive('addUserToSpecifiedMailLists')
-            ->with($this->user->email, $this->user->getName(), [$this->mailLists['member']])
+            ->with($this->user->email, $this->user->getName(), [$this->mailLists['member']['value']])
             ->once();
         
         $this->user->kind_of_member = Lang::get('member');
@@ -75,7 +88,7 @@ class HandlePendingUserApprovedTest extends \TestCase
         $this->mockedMailListFacade->shouldNotReceive('removeUserFromSpecifiedMailLists');
         
         $this->mockedMailListFacade->shouldReceive('addUserToSpecifiedMailLists')
-            ->with($this->user->email, $this->user->getName(), [$this->mailLists['reunist']])
+            ->with($this->user->email, $this->user->getName(), [$this->mailLists['reunist']['value']])
             ->once();
         
         $this->user->kind_of_member = Lang::get('reunist');
@@ -92,7 +105,7 @@ class HandlePendingUserApprovedTest extends \TestCase
         $this->mockedMailListFacade->shouldNotReceive('removeUserFromSpecifiedMailLists');
         
         $this->mockedMailListFacade->shouldReceive('addUserToSpecifiedMailLists')
-            ->with($this->user->email, $this->user->getName(), [$this->mailLists['extraordinary_member']])
+            ->with($this->user->email, $this->user->getName(), [$this->mailLists['extraordinary_member']['value']])
             ->once();
         
         $this->user->kind_of_member = Lang::get('extraordinary_member');
@@ -109,7 +122,7 @@ class HandlePendingUserApprovedTest extends \TestCase
         $this->mockedMailListFacade->shouldNotReceive('removeUserFromSpecifiedMailLists');
         
         $this->mockedMailListFacade->shouldReceive('addUserToSpecifiedMailLists')
-            ->with($this->user->email, $this->user->getName(), [$this->mailLists['honorary_member']])
+            ->with($this->user->email, $this->user->getName(), [$this->mailLists['honorary_member']['value']])
             ->once();
         
         $this->user->kind_of_member = Lang::get('honorary_member');
@@ -126,7 +139,7 @@ class HandlePendingUserApprovedTest extends \TestCase
         $this->mockedMailListFacade->shouldNotReceive('removeUserFromSpecifiedMailLists');
         
         $this->mockedMailListFacade->shouldReceive('addUserToSpecifiedMailLists')
-            ->with($this->user->email, $this->user->getName(), [$this->mailLists['member_of_merit']])
+            ->with($this->user->email, $this->user->getName(), [$this->mailLists['member_of_merit']['value']])
             ->once();
         
         $this->user->kind_of_member = Lang::get('member_of_merit');
@@ -143,7 +156,7 @@ class HandlePendingUserApprovedTest extends \TestCase
         $this->mockedMailListFacade->shouldNotReceive('removeUserFromSpecifiedMailLists');
         
         $this->mockedMailListFacade->shouldReceive('addUserToSpecifiedMailLists')
-            ->with($this->user->email, $this->user->getName(), [$this->mailLists['trainer']])
+            ->with($this->user->email, $this->user->getName(), [$this->mailLists['trainer']['value']])
             ->once();
         
         $this->user->kind_of_member = Lang::get('trainer');
@@ -160,7 +173,7 @@ class HandlePendingUserApprovedTest extends \TestCase
         $this->mockedMailListFacade->shouldNotReceive('removeUserFromSpecifiedMailLists');
         
         $this->mockedMailListFacade->shouldReceive('addUserToSpecifiedMailLists')
-            ->with($this->user->email, $this->user->getName(), [$this->mailLists['relationship']])
+            ->with($this->user->email, $this->user->getName(), [$this->mailLists['relationship']['value']])
             ->once();
         
         $this->user->kind_of_member = Lang::get('relationship');

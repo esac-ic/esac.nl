@@ -20,7 +20,7 @@ class MailMan
 
     public function __construct()
     {
-        $this->_baseUrl = Config::get('mailman.url');
+        $this->_baseUrl = Config::get('mailman.url') ?? '';
     }
 
     protected function http(): PendingRequest
