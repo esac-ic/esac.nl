@@ -34,13 +34,13 @@ Route::group(['as' => 'beheer.', 'prefix' => 'beheer/', 'middleware' => 'auth'],
 
 //extra user routes
 Route::get('users/old_members', 'UserController@indexOldMembers');
-Route::get('users/pending_members', 'PendingUserController@indexPendingMembers');
+Route::get('users/pending_members', 'PendingUserController@indexPendingMembers')->name('users.indexPendingMembers');
 Route::get('users/exportUsers', 'UserController@exportUsers');
 Route::get('users/exportOldUsers', 'UserController@exportOldUsers');
-Route::patch('users/{user}/removeAsActiveMember', 'UserController@removeAsActiveMember');
-Route::patch('users/{user}/makeActiveMember', 'UserController@makeActiveMember');
-Route::patch('users/{user}/removeAsPendingMember', 'PendingUserController@removeAsPendingMember');
-Route::patch('users/{user}/approveAsPendingMember', 'PendingUserController@approveAsPendingMember');
+Route::patch('users/{user}/removeAsActiveMember', 'UserController@removeAsActiveMember')->name('users.removeAsActiveMember');;
+Route::patch('users/{user}/makeActiveMember', 'UserController@makeActiveMember')->name('users.makeActiveMember');
+Route::patch('users/{user}/removeAsPendingMember', 'PendingUserController@removeAsPendingMember')->name('users.removeAsPendingMember');
+Route::patch('users/{user}/approveAsPendingMember', 'PendingUserController@approveAsPendingMember')->name('users.approveAsPendingMember');
 
 //user certification routes
 Route::get('users/{user}/addCertificate', 'UserCertificateController@addCertificate');
@@ -52,6 +52,11 @@ Route::delete('users/{user}/addCertificate/{certificate}', 'UserCertificateContr
 //library routes
 Route::get('books/exportLibrary', 'LibraryController@exportLibrary');
 
+//mailist routes
+Route::delete('/mailList/{mailistid}/member/{memberid}', 'MailListController@deleteMeberOfMailList');
+Route::post('/mailList/{mailistid}/member', 'MailListController@addMember');
+Route::post('/mailList/massSync', 'MailListController@massMemberMailListSync');
+
 //crud routes
 Route::resource('users', 'UserController');
 Route::resource('rols', 'RolController');
@@ -61,41 +66,38 @@ Route::resource('agendaItems', 'AgendaItemController');
 Route::resource('agendaItemCategories', 'AgendaItemCategoryController');
 Route::resource('newsItems', 'NewsItemController');
 Route::resource('mailList', 'MailListController');
-Route::post('/signup', 'PendingUserController@storePendingUser');
+Route::post('/signup', 'PendingUserController@storePendingUser')->name('user.signup');
 Route::resource('books', 'LibraryController');
 Route::post('images/upload', 'StorageController@uploadImage');
 Route::delete('images/delete', 'StorageController@deleteImage');
 Route::get('agendaItems/{agendaItem}/copy', 'AgendaItemController@copy')->name('copyAgendaItem');
 
+Route::get('userEventLog', 'UserEventLogEntryController@index')->name('user-event-log-entry.index');
+Route::post('userEventLog/export', 'UserEventLogEntryController@export')->name('user-event-log-entry.export');
+Route::delete('userEventLog/{entry}', 'UserEventLogEntryController@destroy')->name('user-event-log-entry.destroy');
+
 //inschrijf routes
-Route::get('forms/{agendaItem}', array('as' => 'editSchedule', 'uses' => 'ApplicationForm\UserApplicationFormController@showRegistrationForm'));
+Route::get('forms/{agendaItem}', array('uses' => 'ApplicationForm\UserApplicationFormController@showRegistrationForm'));
 Route::get('forms/{agendaItem}/unregister/{fromAgendaItem?}', 'ApplicationForm\UserApplicationFormController@unregister');
-Route::post('forms/{agendaItem}', array('as' => 'editSchedule', 'uses' => 'ApplicationForm\UserApplicationFormController@store'));
+Route::post('forms/{agendaItem}', array('uses' => 'ApplicationForm\UserApplicationFormController@store'));
 Route::get('forms/admin/{agendaItem}', 'ApplicationForm\AgendaApplicationFormController@registerUser');
 Route::post('forms/admin/{agendaItem}', 'ApplicationForm\AgendaApplicationFormController@saveRegistration');
-Route::get('forms/users/{agendaItem}', array('as' => 'editSchedule', 'uses' => 'ApplicationForm\AgendaApplicationFormController@index'));
+Route::get('forms/users/{agendaItem}', array('uses' => 'ApplicationForm\AgendaApplicationFormController@index'));
 Route::get("forms/users/{user}/detail/{agendaItem}", "ApplicationForm\AgendaApplicationFormController@show");
-Route::get('forms/users/{inschrijfId}/export', array('as' => 'editSchedule', 'uses' => 'ApplicationForm\AgendaApplicationFormController@exportData'));
+Route::get('forms/users/{inschrijfId}/export', array('uses' => 'ApplicationForm\AgendaApplicationFormController@exportData'));
 Route::delete('forms/{agenda_id}/remove/{applicationResponseId}', 'ApplicationForm\AgendaApplicationFormController@destroy');
 
-Route::resource('forms', 'InschrijfController');
-
-//mailist routes
-Route::delete('/mailList/{mailistid}/member/{memberid}', 'MailListController@deleteMeberOfMailList');
-Route::post('/mailList/{mailistid}/member', 'MailListController@addMember');
-
 //front-end routes
-Route::get('/zekeringen', 'FrontEndController@zekeringen');
-Route::get('/library', 'FrontEndController@library');
-Route::get('/library', 'FrontEndController@library');
-Route::get('/agenda', 'FrontEndController@agenda');
+Route::get('/zekeringen', 'FrontEndController@zekeringen')->name('frontEnd.zekeringen');
+Route::get('/library', 'FrontEndController@library')->name('front.library');
+Route::get('/agenda', 'FrontEndController@agenda')->name('frontEnd.agenda');
 Route::get('/agenda/{agendaItem}', 'FrontEndController@agendaDetailView')->name('agenda.detail');
-Route::get('/signup', 'FrontEndController@publicSubscribe');
-Route::get('/home', 'FrontEndController@home');
-Route::get('/news', 'FrontEndController@news');
-Route::get('/news/{newsItem}', 'FrontEndController@newsDetailView');
-Route::get('/memberlist', 'FrontEndController@memberList');
-Route::get("/ical", "ICalController@getAgendaItemsICalObject");
+Route::get('/signup', 'FrontEndController@publicSubscribe')->name('front-end.signup');
+Route::get('/home', 'FrontEndController@home')->name('front-end.home');
+Route::get('/news', 'FrontEndController@news')->name("front-end.news");
+Route::get('/news/{newsItem}', 'FrontEndController@newsDetailView')->name('front-end.news.detail');
+Route::get('/memberlist', 'FrontEndController@memberList')->name('front-end.memberlist');
+Route::get("/ical", "ICalController@getAgendaItemsICalObject")->name("front-end.ical");
 Route::get('/{menuItem}', 'FrontEndController@showPage');
 
 //setting routes

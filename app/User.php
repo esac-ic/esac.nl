@@ -8,11 +8,12 @@ use Carbon\Carbon;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class User extends Authenticatable
 {
-    use Notifiable;
-
+    use Notifiable, HasFactory;
+    
     /**
      * The attributes that are mass assignable.
      *
@@ -52,6 +53,22 @@ class User extends Authenticatable
      */
     protected $hidden = [
         'password', 'remember_token',
+    ];
+    
+    /**
+     * All possible member types.
+     * use trans('key') for nicely formatted string
+     * 
+     * @var array
+     */
+    public const KINDS_OF_MEMBER = [
+        "member",
+        "extraordinary_member",
+        "reunist",
+        "honorary_member",
+        "member_of_merit",
+        "trainer",
+        "relationship",
     ];
     
     protected $casts = [

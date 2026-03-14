@@ -102,5 +102,12 @@ class UsersTableSeeder extends Seeder
         $user->remark = "Ik ben een test gebruiker";
         $user->pending_user = Carbon::now();
         $user->save();
+        
+        //random fake users
+        \App\User::factory()->count(10)->create();
+        \App\User::factory()->member()->count(10)->create();
+        \App\User::factory()->reunist()->count(10)->create();
+        \App\User::factory()->lidAf()->count(10)->create();
+        \App\User::factory()->pending()->count(10)->create();
     }
 }
