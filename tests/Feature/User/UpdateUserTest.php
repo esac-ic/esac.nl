@@ -140,7 +140,7 @@ class UpdateUserTest extends \TestCase
         Event::fake(); //make sure event listeners are not called
         
         $mock = $this->mock(MailListFacade::class, function (MockInterface $mock) {
-            $mock->shouldReceive('updateUserEmailFormAllMailList')->once();
+            $mock->shouldReceive('updateUserEmailForAllMailList')->once();
         });
         
         $response = $this->actingAs($this->admin)->patch('/users/' . $this->admin->id, $updateData);
@@ -196,7 +196,7 @@ class UpdateUserTest extends \TestCase
         
         Event::fake(); //make sure event listeners are not called
         $mock = $this->mock(MailListFacade::class, function (MockInterface $mock) {
-            $mock->shouldReceive('updateUserEmailFormAllMailList');
+            $mock->shouldReceive('updateUserEmailForAllMailList');
         });
         
         $this->assertNotEquals($this->member->kind_of_member, $updateData['kind_of_member']); //sanity check that we update the member type as well
@@ -257,7 +257,7 @@ class UpdateUserTest extends \TestCase
         Event::fake(); //make sure event listeners are not called
         
         $mock = $this->mock(MailListFacade::class, function (MockInterface $mock) {
-            $mock->shouldReceive('updateUserEmailFormAllMailList')->once();
+            $mock->shouldReceive('updateUserEmailForAllMailList')->once();
         });
         
         $response = $this->actingAs($this->member)->patch('/users/' . $this->member->id, $updateData);
@@ -325,7 +325,7 @@ class UpdateUserTest extends \TestCase
         Event::fake(); //make sure event listeners are not called
         
         $mock = $this->mock(MailListFacade::class, function (MockInterface $mock) {
-            $mock->shouldReceive('updateUserEmailFormAllMailList')->once();
+            $mock->shouldReceive('updateUserEmailForAllMailList')->once();
         });
         
         $response = $this->actingAs($this->member)->patch('/users/' . $this->member->id, $updateData);

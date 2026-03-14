@@ -38,7 +38,7 @@ class RemoveAsActiveMemberTest extends \TestCase
         Model::setEventDispatcher($initialDispenser);
         
         $this->mock(MailListFacade::class, function (MockInterface $mock) use ($user) {
-            $mock->shouldReceive('deleteUserFormAllMailList')
+            $mock->shouldReceive('deleteUserForAllMailList')
                 ->with(\Mockery::type(User::class))
                 ->with(\Mockery::on(function ($arg) use ($user) { //custom validator to check if the correct argument is passed
                     return $user->is($arg);

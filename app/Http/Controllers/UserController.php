@@ -128,7 +128,7 @@ class UserController extends Controller
         $this->validateInput($request, $user->id);
         
         if ($user->email != $request['email']) {
-            $mailListFacade->updateUserEmailFormAllMailList($user, $user->email, $request['email']);
+            $mailListFacade->updateUserEmailForAllMailList($user, $user->email, $request['email']);
         }
         
         if ($request['kind_of_member'] != $user->kind_of_member) 
@@ -155,7 +155,7 @@ class UserController extends Controller
     public function removeAsActiveMember(Request $request, User $user, MailListFacade $mailListFacade)
     {
         $user->removeAsActiveMember();
-        $mailListFacade->deleteUserFormAllMailList($user);
+        $mailListFacade->deleteUserForAllMailList($user);
         
         MemberBecameOldMember::dispatch($user);
 

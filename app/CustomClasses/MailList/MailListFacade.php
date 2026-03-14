@@ -133,14 +133,14 @@ class MailListFacade
     }
     
     /** @throws RequestException */
-    public function deleteUserFormAllMailList(User $user): void
+    public function deleteUserForAllMailList(User $user): void
     {
         $this->getMailListsForMember($user->email)
             ->each(fn (MailList $list) => $this->deleteMemberFromMailList($list->getId(), $user->email));
     }
 
     /** @throws RequestException */
-    public function updateUserEmailFormAllMailList($user, $oldEmail, $newEmail): void
+    public function updateUserEmailForAllMailList($user, $oldEmail, $newEmail): void
     {
         $listIds = $this->getMailListsForMember($oldEmail)->map(fn (MailList $list) => $list->getId());
 
