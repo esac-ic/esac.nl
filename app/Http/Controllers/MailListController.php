@@ -3,7 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\CustomClasses\MailList\MailListFacade;
+use App\Events\MemberMassMailListSync;
+use App\Repositories\UserRepository;
 use App\User;
+use GuzzleHttp\Exception\ClientException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Session;
@@ -12,23 +15,25 @@ class MailListController extends Controller
 {
 
     private $_mailListFacade;
+    private $userRepository;
 
     /**
      * Create a new controller instance.
      *
      * @return void
      */
-    public function __construct(MailListFacade $mailListFacade)
+    public function __construct(MailListFacade $mailListFacade, UserRepository $userRepository)
     {
         $this->_mailListFacade = $mailListFacade;
         $this->middleware('auth');
         $this->middleware('authorize:' . Config::get('constants.Administrator'));
+        $this->userRepository = $userRepository;
     }
 
     //gives the mail list views
     public function index()
     {
-        $mailLists = $this->_mailListFacade->getAllMailLists();
+        $mailLists = $this->_mailListFacade->getAllMailLists()->all();
 
         return view('beheer.mailList.index', compact('mailLists'));
     }
@@ -46,9 +51,19 @@ class MailListController extends Controller
     //store maillist
     public function store(Request $request)
     {
-        $this->_mailListFacade->storeMailList($request->all());
+        try {
+            $this->_mailListFacade->storeMailList($request->all());
+            Session::flash("message", 'Mailing list added');
+        } catch (ClientException $e) {
+            if ($e->getCode() == 400 && json_decode($e->getResponse()->getBody())->description == "Mailing list exists") {
+                Session::flash("error", "Error: mailing list already exists");
+                \Log::error($e->getMessage());
+            } else {
+                Session::flash("error", "Some error occurred: " . $e->getCode());
+                \Log::error($e->getMessage());
+            }
+        }
 
-        Session::flash("message", 'Mailing list added');
         return redirect('/mailList');
     }
 
@@ -82,4 +97,11 @@ class MailListController extends Controller
         return;
     }
 
+    
+    public function massMemberMailListSync()
+    {
+        $users = $this->userRepository->getCurrentUsers(); //should give user objects
+        MemberMassMailListSync::dispatch($users); //add all these users to the maillists corresponding to their member types.
+        return redirect('/mailList');
+    }
 }

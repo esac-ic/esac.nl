@@ -8,6 +8,8 @@
 
 namespace App\CustomClasses\MailList;
 
+use ArrayAccess;
+
 /**
  * Class contains function to parse object to MailList object
  * Class MailListParser
@@ -17,32 +19,29 @@ class MailListParser
 {
 
     /**
-     * Parses the json mailList object from the mailman api to MailList object
-     * @param $object
-     * @return MailList
+     * Parses a raw mail list payload from the mailman api to a MailList object.
      */
-    public function parseMailManMailList($object): MailList
+    public function parseMailManMailList(array|ArrayAccess $raw): MailList
     {
         $mailList = new MailList();
         $mailList
-            ->setId($object->list_id)
-            ->setAddress($object->fqdn_listname)
-            ->setMembersCount($object->member_count)
-            ->setName($object->display_name);
+            ->setId($raw['list_id'])
+            ->setAddress($raw['fqdn_listname'])
+            ->setMembersCount($raw['member_count'])
+            ->setName($raw['display_name']);
 
         return $mailList;
     }
 
     /**
-     * @param $object
-     * @return MailListMember
+     * Parses a raw mailman member payload from the mailman api to a MailListMember object.
      */
-    public function parseMailManMember($object): MailListMember
+    public function parseMailManMember(array|ArrayAccess $raw): MailListMember
     {
         $member = new MailListMember();
         $member
-            ->setAddress($object->email)
-            ->setName($object->display_name);
+            ->setAddress($raw['email'])
+            ->setName($raw['display_name']);
 
         return $member;
     }
