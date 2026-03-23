@@ -13,6 +13,7 @@ use Illuminate\Http\Client\RequestException;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Log;
 
 class MailMan
 {
@@ -43,7 +44,11 @@ class MailMan
      */
     public function post(string $url, array $body): Collection
     {
-        return $this->http()->asJson()->post($url, $body)->throw()->collect();
+        if ($body){
+            return $this->http()->asJson()->post($url, $body)->throw()->collect();
+        } else {
+            return $this->http()->post($url)->throw()->collect();
+        }
     }
 
     /**
@@ -51,6 +56,10 @@ class MailMan
      */
     public function delete(string $url, array $body = []): Collection
     {
-        return $this->http()->asJson()->delete($url, $body)->throw()->collect();
+        if ($body){
+            return $this->http()->asJson()->delete($url, $body)->throw()->collect();
+        } else {
+            return $this->http()->delete($url, $body)->throw()->collect();
+        }
     }
 }
