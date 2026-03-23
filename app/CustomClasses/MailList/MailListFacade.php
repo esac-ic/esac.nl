@@ -66,8 +66,17 @@ class MailListFacade
     /** @throws RequestException */
     public function getMailListsForMember(string $member): Collection
     {
-        $entries = $this->_mailManHandler->post('/lists/find', ['subscriber' => $member])->get('entries', []);
-        return collect($entries)->map($this->_mailListParser->parseMailManMailList(...));
+        try {
+            $entries = $this->_mailManHandler->post('/lists/find', ['subscriber' => $member])->get('entries', []);
+            return collect($entries)->map($this->_mailListParser->parseMailManMailList(...));
+        } catch (RequestException $e) {
+            //mailman throws a 404 exception when a member is in no mail lists, so we don't want to catch this.
+            if ($e->getCode() === 404) {
+                return collect();
+            } else {
+                throw $e;
+            }
+        }
     }
     
     /**
@@ -192,7 +201,8 @@ class MailListFacade
 
         collect($mailListIds)
             ->intersect($allListIds)
-            ->each(fn($listId) => $this->deleteMemberFromMailList($listId, $email));
+            //suppress errors so we don't break when a member is no longer part of a mail list
+            ->each(fn($listId) => $this->deleteMemberFromMailList($listId, $email, true));
     }
 
     /**
