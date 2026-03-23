@@ -30,14 +30,6 @@ class UserEventLogEntryController extends Controller
         return view('beheer.userEventLog.index', compact('events'));
     }
     
-    public function destroy(Request $request, UserEventLogEntry $entry)
-    {
-        $this->repository->delete($entry->id);
-
-        Session::flash("message", 'Entry removed');
-        return redirect('/userEventLog');
-    }
-    
     public function export(Request $request, Excel $excel, UserEventLogEntryRepository $repo)
     {
         $eventTypes = $request->eventTypes;

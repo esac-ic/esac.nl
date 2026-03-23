@@ -25,13 +25,12 @@
             </div>
         </div>
     </div>
-    <table id="users" class="table table-striped dt-responsive nowrap" style="width:100%">
+    <table id="eventLog" class="table table-striped dt-responsive nowrap" style="width:100%">
         <thead>
             <tr>
                 <th>Event type</th>
                 <th>Time</th>
                 <th>Event details</th>
-                <th>Management</th>
             </tr>
         </thead>
         <tbody>
@@ -40,12 +39,6 @@
                 <td>{{$entry->eventType}}</td>
                 <td>{{$entry->created_at}}</td>
                 <td>{{$entry->eventDetails}}</td>
-                
-                <td>
-                    {{ Form::open(array('url' => 'userEventLog/' . $entry->id, 'method' => 'delete')) }}
-                    <button type="submit" class="btn p-0"><span title="Delete entry" class="ion-trash-a font-size-120 text-primary" aria-hidden="true"></span></button>
-                    {{ Form::close() }}
-                </td>
             </tr>
         @endforeach
         </tbody>
@@ -55,5 +48,11 @@
 @endsection
 
 @push('scripts')
+    <script src="{{mix("js/vendor/datatables.js")}}"></script>
     @yield('modal_javascript')
+    <script>
+        $('#eventLog').DataTable({
+            order: [[1, 'desc']],
+        });
+    </script>
 @endpush

@@ -74,7 +74,6 @@ Route::get('agendaItems/{agendaItem}/copy', 'AgendaItemController@copy')->name('
 
 Route::get('userEventLog', 'UserEventLogEntryController@index')->name('user-event-log-entry.index');
 Route::post('userEventLog/export', 'UserEventLogEntryController@export')->name('user-event-log-entry.export');
-Route::delete('userEventLog/{entry}', 'UserEventLogEntryController@destroy')->name('user-event-log-entry.destroy');
 
 //inschrijf routes
 Route::get('forms/{agendaItem}', array('uses' => 'ApplicationForm\UserApplicationFormController@showRegistrationForm'));

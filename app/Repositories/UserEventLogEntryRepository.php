@@ -3,6 +3,7 @@
 namespace App\Repositories;
 
 use App\Models\UserEventLogEntry;
+use http\Exception\BadMethodCallException;
 use Illuminate\Database\Eloquent\Builder;
 
 class UserEventLogEntryRepository implements IRepository
@@ -23,11 +24,14 @@ class UserEventLogEntryRepository implements IRepository
         $event->save();
         return $event;
     }
-
+    
+    /**
+     * NOT implemented, we don't want to delete logs, so this method is not available.
+     * @deprecated
+     */
     public function delete($id)
     {
-        $event = $this->find($id);
-        $event->delete();
+        throw new BadMethodCallException('Not implemented');
     }
 
     public function find($id, $columns = array('*'))
