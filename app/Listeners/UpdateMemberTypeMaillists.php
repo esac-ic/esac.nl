@@ -159,16 +159,6 @@ class UpdateMemberTypeMaillists implements ShouldQueue
         }
         
         //split the list of maillists
-        $mailLists = explode(";", $mailLists);
-        
-        //NOTE: another option besides transforming the setting here is to make the settings follow the maillist id format
-        
-        //change the @ to a . to fit the maillist id format
-        foreach ($mailLists as &$mailList) {
-            $mailList = str_replace("@", ".", $mailList);
-        }
-        unset($mailList);//break the reference after the last element
-        
-        return $mailLists;
+        return explode(";", $mailLists);
     }
 }
