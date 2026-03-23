@@ -7,6 +7,7 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Queue\InteractsWithQueue;
 use App\Models\UserEventLogEntry;
 use App\Enums\UserEventTypes;
+use ReflectionClass;
 
 class LogPendingUserRemoved implements ShouldQueue
 {
@@ -25,7 +26,7 @@ class LogPendingUserRemoved implements ShouldQueue
     {
         $logEntry = new UserEventLogEntry();
         $logEntry->user()->associate(null);
-        $logEntry->eventType = UserEventTypes::PendingUserRemoved;
+        $logEntry->eventType = (new ReflectionClass($event))->getShortName();
         $logEntry->eventDetails = $event->userName . " was removed as a pending member";
         $logEntry->save();
     }

@@ -8,6 +8,7 @@ use App\Models\UserEventLogEntry;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Support\Facades\Log;
+use ReflectionClass;
 
 class LogMemberTypeChanged implements ShouldQueue
 {
@@ -26,7 +27,7 @@ class LogMemberTypeChanged implements ShouldQueue
     {
         $logEntry = new UserEventLogEntry();
         $logEntry->user()->associate($event->user);
-        $logEntry->eventType = UserEventTypes::MemberTypeChanged;
+        $logEntry->eventType = (new ReflectionClass($event))->getShortName();
         $logEntry->eventDetails = $event->user->getName() . " changed from " . $event->oldMemberType . " to " . $event->newMemberType;
         $logEntry->save();
     }

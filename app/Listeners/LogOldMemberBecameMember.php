@@ -7,6 +7,7 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Queue\InteractsWithQueue;
 use App\Models\UserEventLogEntry;
 use App\Enums\UserEventTypes;
+use ReflectionClass;
 
 class LogOldMemberBecameMember implements ShouldQueue
 {
@@ -25,7 +26,7 @@ class LogOldMemberBecameMember implements ShouldQueue
     {
         $logEntry = new UserEventLogEntry();
         $logEntry->user()->associate($event->user);
-        $logEntry->eventType = UserEventTypes::OldMemberBecameMember;
+        $logEntry->eventType = (new ReflectionClass($event))->getShortName();
         $logEntry->eventDetails = $event->user->getName() . " became a member again";
         $logEntry->save();
     }

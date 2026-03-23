@@ -7,6 +7,7 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Queue\InteractsWithQueue;
 use App\Models\UserEventLogEntry;
 use App\Enums\UserEventTypes;
+use ReflectionClass;
 
 class LogPendingUserApproved implements ShouldQueue
 {
@@ -25,7 +26,7 @@ class LogPendingUserApproved implements ShouldQueue
     {
         $logEntry = new UserEventLogEntry();
         $logEntry->user()->associate($event->user);
-        $logEntry->eventType = UserEventTypes::PendingUserApproved;
+        $logEntry->eventType = (new ReflectionClass($event))->getShortName();
         $logEntry->eventDetails = $event->user->getName() . " was approved as a member";
         $logEntry->save();
     }

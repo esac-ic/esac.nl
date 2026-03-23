@@ -7,6 +7,7 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Queue\InteractsWithQueue;
 use App\Models\UserEventLogEntry;
 use App\Enums\UserEventTypes;
+use ReflectionClass;
 
 class LogNewPendingUser
 {
@@ -25,7 +26,7 @@ class LogNewPendingUser
     {
         $logEntry = new UserEventLogEntry();
         $logEntry->user()->associate($event->user);
-        $logEntry->eventType = UserEventTypes::NewPendingUser;
+        $logEntry->eventType = (new ReflectionClass($event))->getShortName();
         $logEntry->eventDetails = "New pending user: " . $event->user->getName();
         $logEntry->save();
     }
