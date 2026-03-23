@@ -10,7 +10,7 @@ class Setting extends Model
     /*
      * IMPORTANT INFO
      * The specific settings are initialized through migrations (so not via a seeder or ui)
-     * This note is here because as of writing this (laravel 10), squashing the migrations removes the INSERT operations
+     * This note is here because squashing the migrations removed the INSERT operations.
      */
     
     
