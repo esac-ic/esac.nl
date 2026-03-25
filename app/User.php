@@ -56,6 +56,7 @@ class User extends Authenticatable
     
     protected $casts = [
         'birthDay' => 'date',
+        'IBAN' =>  \App\Casts\IbanCast::class,
     ];
 
     public function roles()
@@ -172,5 +173,6 @@ class User extends Authenticatable
     {
         $this->delete();
     }
+
 
 }
