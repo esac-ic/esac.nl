@@ -156,79 +156,118 @@
             </div>
         </div>
     </div>
-
     <div class="card mt-4">
-        <div class="card-header">
-            <h3>{{'Privacy Policy and Automatic Collection'}}</h3>
-        </div>
-        <div class="card-body">
-            <div class="accordion" id="accordion-1" data-children=".accordion-item">
-                <div class="accordion-item">
-                    <a data-toggle="collapse" data-parent="#accordion-1" href="#accordion-panel-1" aria-expanded="false" aria-controls="accordion-1">
-                        <h5>Terms and Conditions</h5>
-                        <i class="h5 ion-chevron-right"></i>
-                    </a>
-                    <div id="accordion-panel-1" class="collapse" role="tabpanel">
-                        <p>By signing this form, you subscribe to the ESAC up until termination of your membership. Without notice, your membership of the ESAC is continued annually. Termination of membership should happen before the 1st of January by sending a letter to the address mentioned above or by sending an email to secretaris@esac.nl.</p>
-                        <p>The annual contribution will be taken from your bank account via direct debit. The amount of the contribution is determined by the general members’ assembly (GMA / ALV). If you subscribe on or after the 1st of August, you have to pay a reduced contribution (of which the amount is also determined by the GMA) for the rest of that calendar year.</p>
-                        <p>Being a student and being in the possession of a sports card of the Student Sports Centre Eindhoven are mandatory for all new members of the ESAC.</p>
-                        <p>If you participate in mountain sports activities, having an insurance which covers (extreme) mountain sports is mandatory. NKBV membership and insurance are strongly recommended. Other insurances are also possible, but you should thoroughly check the policy. You can’t hold the ESAC liable for any possible damage or injuries.</p>
-                    </div>
-                </div>
-                <div class="accordion-item">
-                    <a data-toggle="collapse" data-parent="#accordion-1" href="#accordion-panel-2" aria-expanded="false" aria-controls="accordion-1">
-                        <h5>Privacy Policy</h5>
-                        <i class="h5 ion-chevron-right"></i>
-                    </a>
-                    <div id="accordion-panel-2" class="collapse" role="tabpanel">
-                        @include('includes.privacyPolicy')
-                    </div>
-                </div>
-                <div class="accordion-item">
-                    <a data-toggle="collapse" data-parent="#accordion-1" href="#accordion-panel-3" aria-expanded="false" aria-controls="accordion-1">
-                    <h5>Agreement Direct Debit SEPA</h5>
-                    <i class="h5 ion-chevron-right"></i>
-                    </a>
-                    <div id="accordion-panel-3" class="collapse" role="tabpanel">
-                        <p>
-                        Collector: Eindhovense Studenten Alpen Club<br>
-                        Collector ID: NL75ZZZ402360760000</span>
-                        </p>
-                        <p>
-                            The ESAC has a direct debit agreement with Rabobank. This way, the ESAC and its members can easily handle payments of contribution and other activities, such as climbing weekends. Cash payments or manual transfers won’t be necessary, since the amount can now be automatically cashed with your written or verbal permission. The rules are listed below. These primarily contain the rights of the payee and the obligations for the ESAC.
-                        </p>
-                        <ul>
-                            <li>You can always retain your money without giving a reason if you do not agree with the deduction from your bank account. You have 56 days (8 weeks) to order your bank office to refund the money.</li>
-                            <li>The treasurer will announce the collection at least two weeks and up to two months before the money is deducted from your account.</li>
-                            <li>The ESAC may only deduct an amount other than the annual subscription from your account after you have given oral or written permission.</li>
-                            <li>No money will be deducted if the funds in your account are not sufficient.</li>
-                            <li>If you want to terminate the contract, report this to the treasurer by sending a letter to the address included at the top of the page or by sending an email to penningmeester@esac.nl.</li>
-                        </ul>
-                        <p>By signing this form you authorise your bank to debit your account in accordance with the instructions from the ESAC. As is part of your rights, you are entitled to a refund from your bank under the terms and conditions with your bank. A refund must be claimed within 8 weeks starting from the date your account was debited.</p>
-                    </div>
-                </div>
+            <div class="card-header">
+                <h3>{{'Privacy Policy, Automatic Collection and Code of Conduct'}}</h3>
             </div>
+            <div class="card-body">
+                <div class="accordion" id="accordion-1" data-children=".accordion-item">
+                    
+                    <div class="accordion-item">
+                        <a data-toggle="collapse" data-parent="#accordion-1" href="#accordion-panel-1" aria-expanded="false" aria-controls="accordion-1">
+                            <h5>Terms and Conditions</h5>
+                            <i class="h5 ion-chevron-right"></i>
+                        </a>
+                        <div id="accordion-panel-1" class="collapse" role="tabpanel">
+                            <p>By signing this form, you subscribe to the ESAC up until termination of your membership. Without notice, your membership of the ESAC is continued annually. Termination of membership should happen before the 1st of January by sending a letter to the address mentioned above or by sending an email to secretaris@esac.nl.</p>
+                            <p>The annual contribution will be taken from your bank account via direct debit. The amount of the contribution is determined by the general members’ assembly (GMA / ALV). If you subscribe on or after the 1st of August, you have to pay a reduced contribution (of which the amount is also determined by the GMA) for the rest of that calendar year.</p>
+                            <p>Being a student and being in the possession of a sports card of the Student Sports Centre Eindhoven are mandatory for all new members of the ESAC.</p>
+                            <p>If you participate in mountain sports activities, having an insurance which covers (extreme) mountain sports is mandatory. NKBV membership and insurance are strongly recommended. Other insurances are also possible, but you should thoroughly check the policy. You can’t hold the ESAC liable for any possible damage or injuries.</p>
+                        </div>
+                    </div>
+                    
+                    <div class="accordion-item">
+                        <a data-toggle="collapse" data-parent="#accordion-1" href="#accordion-panel-2" aria-expanded="false" aria-controls="accordion-1">
+                            <h5>Privacy Policy</h5>
+                            <i class="h5 ion-chevron-right"></i>
+                        </a>
+                        <div id="accordion-panel-2" class="collapse" role="tabpanel">
+                            @include('includes.privacyPolicy')
+                        </div>
+                    </div>
+                    
+                    <div class="accordion-item">
+                        <a data-toggle="collapse" data-parent="#accordion-1" href="#accordion-panel-3" aria-expanded="false" aria-controls="accordion-1">
+                            <h5>Agreement Direct Debit SEPA</h5>
+                            <i class="h5 ion-chevron-right"></i>
+                        </a>
+                        <div id="accordion-panel-3" class="collapse" role="tabpanel">
+                            <p>
+                                Collector: Eindhovense Studenten Alpen Club<br>
+                                Collector ID: NL75ZZZ402360760000
+                            </p>
+                            <p>
+                                The ESAC has a direct debit agreement with Rabobank. This way, the ESAC and its members can easily handle payments of contribution and other activities, such as climbing weekends. Cash payments or manual transfers won’t be necessary, since the amount can now be automatically cashed with your written or verbal permission. The rules are listed below. These primarily contain the rights of the payee and the obligations for the ESAC.
+                            </p>
+                            <ul>
+                                <li>You can always retain your money without giving a reason if you do not agree with the deduction from your bank account. You have 56 days (8 weeks) to order your bank office to refund the money.</li>
+                                <li>The treasurer will announce the collection at least two weeks and up to two months before the money is deducted from your account.</li>
+                                <li>The ESAC may only deduct an amount other than the annual subscription from your account after you have given oral or written permission.</li>
+                                <li>No money will be deducted if the funds in your account are not sufficient.</li>
+                                <li>If you want to terminate the contract, report this to the treasurer by sending a letter to the address included at the top of the page or by sending an email to penningmeester@esac.nl.</li>
+                            </ul>
+                            <p>By signing this form you authorise your bank to debit your account in accordance with the instructions from the ESAC. As is part of your rights, you are entitled to a refund from your bank under the terms and conditions with your bank. A refund must be claimed within 8 weeks starting from the date your account was debited.</p>
+                        </div>
+                    </div>
 
-            <div class="form-group">
-                <div class="form-check">
-                    {!! Form::checkbox("privacy_policy",true,'',["class" => "form-check-input", "id" => "privacy_policy"]) !!}
-                    {!! Form::label("privacy_policy", 'Accept the Privacy Policy', ["class" => "form-check-label"]) !!}
+                    <div class="accordion-item">
+                        <a data-toggle="collapse" data-parent="#accordion-1" href="#accordion-panel-4" aria-expanded="false" aria-controls="accordion-1">
+                            <h5>Code of Conduct</h5>
+                            <i class="h5 ion-chevron-right"></i>
+                        </a>
+                        <div id="accordion-panel-4" class="collapse" role="tabpanel">
+                            <ul>
+                                <li>We are an association together and with each other we ensure that everything stays fun. We treat each other respectfully, everybody can join in and be themselves. That is why this code of conduct has been established, and everyone has to comply with it </li>    
+                                <li>For more information about social safety in ESAC can be found <a href="https://esac.nl/Socialeveiligheid" target="_blank"> here </a>.</li>
+                            </ul>
+                            <p><strong>An ESAC'er:</strong> </p>
+                            <ol>
+                                <li><strong>Respects others.</strong> You have respect for everyone. Watch your language and how you present yourself to others. Try to give everyone the feeling that they can move freely and think about the safety of others. Respect others' boundaries.</li>
+                                <li><strong>Does not discriminate.</strong> Do not discriminate based on religion, beliefs, political opinions, gender, sexual orientation, cultural background, or other characteristics.</li>
+                                <li><strong>Does not violate anyone's dignity.</strong> Refrain from discriminating, belittling or intimidating remarks and behaviour. Do not exclude anyone and be tolerant, also whilst using social media.</li>
+                                <li><strong>Respects agreements.</strong> Be on time, decline attendance (on time), listen to instructions and keep to the agreements.</li>
+                                <li><strong>Treats the surroundings with respect.</strong> Do not break anything, respect everyone's property. Keep the climbing/boulderhalls and the (climbing)areas neat. Tidy up the materials. Throw waste into the bins and respect nature. Keep routes free if you are not climbing.</li>
+                                <li><strong>Does not touch others.</strong> Do not touch anyone against their will. Refrain from any form of emotional abuse or physical transgressive behavior, including sexually suggestive comments, touching and/or sexual abuse.</li>
+                                <li><strong>Sticks to the rules.</strong> Follow the regulations, the house rules of the climbing/bouldering gym or climbing area, this code of conduct and all other agreements.</li>
+                                <li><strong>Is wise with intoxicating substances.</strong> Does not use intoxicating substances during risk sports such as climbing, bouldering or alpinism. Keep to the legal rules.</li>
+                                <li><strong>Does not climb without a valid license</strong> for this kind of climbing, unless supervised by qualified kader. Climb responsibly and hold responsibility for the safety and behaviour of yourself, your climbing partner and direct surroundings. Act within and according to your own level of competence and that of your climbing partner. Speak up to other climbers when observing unsafe behaviour.</li>
+                                <li><strong>Is open.</strong> If you are asked to do something that goes against your own feelings, norms and values, open up conversation about this. For example with the confidential contact persons (CCPs) or the board.</li>
+                                <li><strong>Reports any violations of this code of conduct.</strong> If possible, report any violations of this code to the board or the Confidential Contact Persons of the ESAC, NSAC, NKBV or the SSC. For questions or reporting you can also reach out to CVSN, the Centrum for Safe Sports of the Netherlands.</li>
+                                <li><strong>Also respects this code of conduct online.</strong> Do not share (video) material of others without explicit consent and do not engage in cyber bullying.</li>
+                            </ol>
+                        </div>
+                    </div>
+
                 </div>
-                <div class="form-check">
-                    {!! Form::checkbox("incasso",true,'',["class" => "form-check-input", "id" => "incasso"]) !!}
-                    {!! Form::label("incasso", 'Accept Automatic Collection', ["class" => "form-check-label"]) !!}
-                </div>
-                <div class="form-check">
-                    {!! Form::checkbox("termsconditions",true,'',["class" => "form-check-input", "id" => "termsconditions"]) !!}
-                    {!! Form::label("termsconditions", 'Accept the Terms and Conditions', ["class" => "form-check-label"]) !!}
-                </div>
-                <div class="g-recaptcha" data-sitekey="{{config('custom.google_recaptcha_key')}}"></div>
             </div>
         </div>
-    </div>
-    <div class="my-4">
-        {!! Form::submit('Submit', ['class'=> 'btn btn-primary'] ) !!}
-    </div>
+
+            <div class="mt-4">
+                <div class="form-group">
+                    <div class="form-check">
+                        {!! Form::checkbox("privacy_policy",true,'',["class" => "form-check-input", "id" => "privacy_policy"]) !!}
+                        {!! Form::label("privacy_policy", 'Accept the Privacy Policy', ["class" => "form-check-label"]) !!}
+                    </div>
+                    <div class="form-check">
+                        {!! Form::checkbox("incasso",true,'',["class" => "form-check-input", "id" => "incasso"]) !!}
+                        {!! Form::label("incasso", 'Accept Automatic Collection', ["class" => "form-check-label"]) !!}
+                    </div>
+                    <div class="form-check">
+                        {!! Form::checkbox("termsconditions",true,'',["class" => "form-check-input", "id" => "termsconditions"]) !!}
+                        {!! Form::label("termsconditions", 'Accept the Terms and Conditions', ["class" => "form-check-label"]) !!}
+                    </div>
+                    <div class="form-check">
+                        {!! Form::checkbox("codeOfConduct",true,'',["class" => "form-check-input", "id" => "codeOfConduct"]) !!}
+                        {!! Form::label("codeOfConduct", 'Accept the Code of Conduct', ["class" => "form-check-label"]) !!}
+                    </div>
+                    
+                <div class="g-recaptcha mt-3" data-sitekey="{{config('custom.google_recaptcha_key')}}"></div>
+            </div>
+        </div>
+
+        <div class="my-4">
+            {!! Form::submit('Submit', ['class'=> 'btn btn-primary'] ) !!}
+        </div>
     {!! Form::close() !!}
 </div>
 @endsection
