@@ -3,8 +3,8 @@
 namespace App\Exports;
 
 use App\Repositories\UserRepository;
-use DateInterval;
-use DateTime;
+use App\User;
+use Carbon\Carbon;
 use Maatwebsite\Excel\Concerns\FromCollection;
 use Maatwebsite\Excel\Concerns\ShouldAutoSize;
 use Maatwebsite\Excel\Concerns\WithHeadings;
@@ -12,15 +12,14 @@ use Maatwebsite\Excel\Concerns\WithTitle;
 
 class PennoExport implements FromCollection, WithTitle, WithHeadings, ShouldAutoSize
 {
-    private $userRepository;
-    private $fromDay;
+    private UserRepository $userRepository;
+    private Carbon $fromDate;
 
     public function __construct(UserRepository $userRepository, int $daysAgo)
     {
         $this->userRepository = $userRepository;
         // Transform daysAgo to a mysql timestamp format:
-        $now = (new DateTime('NOW'/*, new DateTimeZone('Europe/Amsterdam')*/))->setTime(0,0,0);
-        $this->fromDay = $now->sub(DateInterval::createFromDateString("$daysAgo day"))->format('Y-m-d H:i:s');
+        $this->fromDate = Carbon::today()->subDays($daysAgo);
     }
 
     /**
@@ -28,13 +27,13 @@ class PennoExport implements FromCollection, WithTitle, WithHeadings, ShouldAuto
      */
     public function collection()
     {
-        $users = $this->userRepository->getCurrentUsersAfterSignupDate($this->columns(), $this->fromDay);
+        $users = $this->userRepository->getCurrentUsersAfterSignupDate($this->columns(), $this->fromDate);
 
-        return $users->map(function ($user) {
+        return $users->map(function (User $user) {
             $export = $user->toArray();
             $export['IBAN'] = str_replace(' ', '', $export['IBAN']);
             // Remove the time component of the created_at field:
-            $export['created_at'] = str_replace(' ', '', strtok($export['created_at'], 'T'));
+            $export['created_at'] = $user->created_at->toDateString();
             return $export;
         });
     }

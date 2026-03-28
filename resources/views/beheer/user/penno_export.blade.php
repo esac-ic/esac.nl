@@ -26,8 +26,8 @@
         <div class="card-body">
             {!! Form::open(['method' => 'GET', 'url' => '/users/pennoExport']) !!}
             <div class="form-group">
-                {!! Form::label('daysAgo', 'Amount of days in the past') !!}
-                {!! Form::number('daysAgo', 5, ['class' => 'form-control','required' => 'required']) !!}
+                {!! Form::label('days_ago', 'Amount of days in the past') !!}
+                {!! Form::number('days_ago', 7, ['class' => 'form-control','required' => 'required']) !!}
             </div>
         </div>
     </div>
