@@ -26,6 +26,10 @@
                     <span title="{{'New user'}}" class="ion-person-add" aria-hidden="true"></span>
                     {{'New user'}}
                 </a>
+                <a href="{{url('users/pennoExportView')}}" class="btn btn-primary">
+                    <span title="{{'Penno export'}}" class="ion-android-download" aria-hidden="true"></span>
+                    {{'Penno export'}}
+                </a>
                 <a href="{{url('users/exportUsers')}}" class="btn btn-primary">
                     <span title="{{'Export members'}}" class="ion-android-download" aria-hidden="true"></span>
                     {{'Export members'}}
