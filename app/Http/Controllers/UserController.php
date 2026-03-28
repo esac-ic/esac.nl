@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\CustomClasses\MailList\MailListFacade;
 use App\Exports\OldUsersExport;
+use App\Exports\PennoExport;
 use App\Exports\UsersExport;
 use App\Repositories\UserRepository;
 use App\Rol;
@@ -151,12 +152,23 @@ class UserController extends Controller
 
     public function exportUsers(UsersExport $usersExport)
     {
-        return Excel::download($usersExport, 'Members' . '.xlsx');
+        return Excel::download($usersExport, 'Members.xlsx');
+    }
+    public function pennoExportSelect(Request $request)
+    {
+        return view('beheer.user.penno_export');
+    }
+    public function pennoExport(Request $request, UserRepository $userRepository)
+    {
+        $request->validate([
+            'daysAgo' => 'required|integer:strict|min:0'
+        ]);
+        return Excel::download(new PennoExport($userRepository, $request->get('daysAgo')), 'Members.xlsx');
     }
 
     public function exportOldUsers(OldUsersExport $oldUsersExport)
     {
-        return Excel::download($oldUsersExport, 'Old members' . '.xlsx');
+        return Excel::download($oldUsersExport, 'Old members.xlsx');
     }
 
     public function makeActiveMember(Request $request, User $user)
