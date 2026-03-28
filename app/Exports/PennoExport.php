@@ -33,6 +33,8 @@ class PennoExport implements FromCollection, WithTitle, WithHeadings, ShouldAuto
         return $users->map(function ($user) {
             $export = $user->toArray();
             $export['IBAN'] = str_replace(' ', '', $export['IBAN']);
+            // Remove the time component of the created_at field:
+            $export['created_at'] = str_replace(' ', '', strtok($export['created_at'], 'T'));
             return $export;
         });
     }
