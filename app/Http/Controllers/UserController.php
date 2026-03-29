@@ -163,7 +163,9 @@ class UserController extends Controller
         $request->validate([
             'days_ago' => 'required|integer:strict|min:0'
         ]);
-        return Excel::download(new PennoExport($userRepository, $request->get('day_ago')), 'Members.xlsx');
+        $export = new PennoExport($userRepository, $request->get('day_ago'));
+        $exportDate = $export->getFromDate()->toFormattedDateString();
+        return Excel::download($export, "Members (created_at >= $exportDate).xlsx");
     }
 
     public function exportOldUsers(OldUsersExport $oldUsersExport)

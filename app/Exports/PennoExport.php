@@ -18,8 +18,7 @@ class PennoExport implements FromCollection, WithTitle, WithHeadings, ShouldAuto
     public function __construct(UserRepository $userRepository, int $daysAgo)
     {
         $this->userRepository = $userRepository;
-        // Transform daysAgo to a mysql timestamp format:
-        $this->fromDate = Carbon::today()->subDays($daysAgo);
+        $this->fromDate = Carbon::today()->subDays($daysAgo)->setTime(0,0,0,0);// (setting time to make sure the whole day is included)
     }
 
     /**
@@ -86,5 +85,10 @@ class PennoExport implements FromCollection, WithTitle, WithHeadings, ShouldAuto
             'Accept Automatic Collection',
             'User created at'
         ];
+    }
+
+    public function getFromDate(): Carbon
+    {
+        return $this->fromDate;
     }
 }
