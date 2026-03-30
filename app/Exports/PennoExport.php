@@ -18,7 +18,7 @@ class PennoExport implements FromCollection, WithTitle, WithHeadings, ShouldAuto
     public function __construct(UserRepository $userRepository, int $daysAgo)
     {
         $this->userRepository = $userRepository;
-        $this->fromDate = Carbon::today()->subDays($daysAgo)->setTime(0,0,0,0);// (setting time to make sure the whole day is included)
+        $this->fromDate = Carbon::today()->subDays($daysAgo);
     }
 
     /**
