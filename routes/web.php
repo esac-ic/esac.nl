@@ -35,9 +35,9 @@ Route::group(['as' => 'beheer.', 'prefix' => 'beheer/', 'middleware' => 'auth'],
 //extra user routes
 Route::get('users/old_members', 'UserController@indexOldMembers');
 Route::get('users/pending_members', 'PendingUserController@indexPendingMembers');
-Route::get('users/exportUsers', 'UserController@exportUsers');
-Route::get('users/pennoExportView', 'UserController@pennoExportSelect');
-Route::get('users/pennoExport', 'UserController@pennoExport');
+Route::get('users/exportUsers', 'UserController@exportUsers')->name('users.exportUsers');
+Route::get('users/pennoMemberExportView', 'UserController@pennoMemberExportSelect')->name('users.pennoMemberExportView');
+Route::get('users/pennoMemberExport', 'UserController@pennoMemberExport')->name('users.pennoMemberExport');
 Route::get('users/exportOldUsers', 'UserController@exportOldUsers');
 Route::patch('users/{user}/removeAsActiveMember', 'UserController@removeAsActiveMember');
 Route::patch('users/{user}/makeActiveMember', 'UserController@makeActiveMember');

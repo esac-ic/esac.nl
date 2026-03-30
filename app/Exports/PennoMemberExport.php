@@ -10,7 +10,7 @@ use Maatwebsite\Excel\Concerns\ShouldAutoSize;
 use Maatwebsite\Excel\Concerns\WithHeadings;
 use Maatwebsite\Excel\Concerns\WithTitle;
 
-class PennoExport implements FromCollection, WithTitle, WithHeadings, ShouldAutoSize
+class PennoMemberExport implements FromCollection, WithTitle, WithHeadings, ShouldAutoSize
 {
     private UserRepository $userRepository;
     private Carbon $fromDate;
@@ -33,6 +33,7 @@ class PennoExport implements FromCollection, WithTitle, WithHeadings, ShouldAuto
             $export['IBAN'] = str_replace(' ', '', $export['IBAN']);
             // Remove the time component of the created_at field:
             $export['created_at'] = $user->created_at->toDateString();
+            $export['incasso'] = $user->incasso ? "Yes" : "No";
             return $export;
         });
     }
