@@ -16,11 +16,10 @@ return new class extends Migration
             $table->id();
             
             //custom fields corresponding to the UserEventLogEntry model
-            $table->string('eventType')->default(UserEventTypes::MemberTypeChanged);
-            $table->string('eventDetails');
-            $table->unsignedInteger('user_id')->nullable(); //nullable because users can be deleted and we don't want to also delete the log entry
-            $table->foreign('user_id')->references('id')->on('users')->onDelete('set null')->onUpdate('cascade');
-            
+            $table->string('event_type');
+            $table->string('event_details');
+            $table->unsignedInteger('user_id');
+            $table->foreign('user_id')->references('id')->on('users');
             $table->timestamps();
         });
     }
@@ -30,9 +29,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::table('user_event_log_entries', function (Blueprint $table) {
-            $table->dropForeign(['user_id']);
-        });
         Schema::dropIfExists('user_event_log_entries');
     }
 };

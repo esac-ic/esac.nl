@@ -43,8 +43,8 @@ class UserEventLogEntryFactory extends Factory
         }
                     
         return [
-            'eventType' => $eventType,
-            'eventDetails' => $eventDetails,
+            'event_type' => $eventType,
+            'event_details' => $eventDetails,
             'created_at' => fake()->dateTimeThisYear(),
         ];
     }
