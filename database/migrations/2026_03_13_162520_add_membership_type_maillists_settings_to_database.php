@@ -18,4 +18,15 @@ return new class extends Migration {
             ['name' => Setting::SETTING_RELATIONSHIP_MEMBER_MAIL_LISTS, 'type' => Setting::TYPE_STRING, 'value' => ''],
         ]);
     }
+    
+    public function down(): void
+    {
+        Setting::where('name', Setting::SETTING_NORMAL_MEMBER_MAIL_LISTS)->delete();
+        Setting::where('name', Setting::SETTING_EXTRAORDINARY_MEMBER_MAIL_LISTS)->delete();
+        Setting::where('name', Setting::SETTING_REUNIST_MEMBER_MAIL_LISTS)->delete();
+        Setting::where('name', Setting::SETTING_HONORARY_MEMBER_MAIL_LISTS)->delete();
+        Setting::where('name', Setting::SETTING_MERIT_MEMBER_MAIL_LISTS)->delete();
+        Setting::where('name', Setting::SETTING_TRAINER_MEMBER_MAIL_LISTS)->delete();
+        Setting::where('name', Setting::SETTING_RELATIONSHIP_MEMBER_MAIL_LISTS)->delete();
+    }
 };
