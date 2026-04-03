@@ -9,7 +9,7 @@
 namespace App\Repositories;
 
 
-use App\Zekering;
+use App\Models\Zekering;
 use Illuminate\Support\Facades\Auth;
 
 class ZekeringenRepository implements IRepository

@@ -2,7 +2,7 @@
 
 namespace App\Http\Middleware;
 
-use App\Setting;
+use App\Models\Setting;
 use Closure;
 
 class CheckKillswitch

@@ -1,10 +1,10 @@
 <?php
 
-namespace App;
+namespace App\Models;
 
 use App\Models\ApplicationForm\ApplicationResponse;
-use Illuminate\Database\Eloquent\Casts\Attribute;
 use Carbon\Carbon;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Facades\Auth;
@@ -60,12 +60,12 @@ class User extends Authenticatable
 
     public function roles()
     {
-        return $this->belongsToMany('App\Rol', 'rol_user');
+        return $this->belongsToMany('App\Models\Rol', 'rol_user');
     }
 
     public function certificates()
     {
-        return $this->belongsToMany('App\Certificate', 'certificate_user')
+        return $this->belongsToMany('App\Models\Certificate', 'certificate_user')
             ->withTimestamps()->withTrashed();
     }
     

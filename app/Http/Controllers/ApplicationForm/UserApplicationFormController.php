@@ -2,9 +2,9 @@
 
 namespace App\Http\Controllers\ApplicationForm;
 
-use App\AgendaItem;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\ApplicationFormRowVueResource;
+use App\Models\AgendaItem;
 use App\Models\ApplicationForm\ApplicationResponse;
 use App\Repositories\ApplicationFormRepositories\ApplicationFormRegistrationRepository;
 use Carbon\Carbon;
