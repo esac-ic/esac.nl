@@ -217,8 +217,8 @@
                         </a>
                         <div id="accordion-panel-4" class="collapse" role="tabpanel">
                             <ul>
-                                <li>We are an association together and with each other we ensure that everything stays fun. We treat each other respectfully, everybody can join in and be themselves. That is why this code of conduct has been established, and everyone has to comply with it </li>    
-                                <li>For more information about social safety in ESAC can be found <a href="https://esac.nl/Socialeveiligheid" target="_blank"> here </a>.</li>
+                                <li>We are an association together and with each other we ensure that everything stays fun. We treat each other respectfully, everybody can join in and be themselves. That is why this code of conduct has been established, and everyone has to comply with it.</li>    
+                                <li>For more information about social safety in ESAC can be found <a href="/Socialeveiligheid" target="_blank"> here </a>.</li>
                             </ul>
                             <p><strong>An ESAC'er:</strong> </p>
                             <ol>
@@ -257,8 +257,8 @@
                         {!! Form::label("termsconditions", 'Accept the Terms and Conditions', ["class" => "form-check-label"]) !!}
                     </div>
                     <div class="form-check">
-                        {!! Form::checkbox("codeOfConduct",true,'',["class" => "form-check-input", "id" => "codeOfConduct"]) !!}
-                        {!! Form::label("codeOfConduct", 'Accept the Code of Conduct', ["class" => "form-check-label"]) !!}
+                        {!! Form::checkbox("code_of_conduct",true,'',["class" => "form-check-input", "id" => "code_of_conduct"]) !!}
+                        {!! Form::label("code_of_conduct", 'Accept the Code of Conduct', ["class" => "form-check-label"]) !!}
                     </div>
                     
                 <div class="g-recaptcha mt-3" data-sitekey="{{config('custom.google_recaptcha_key')}}"></div>
