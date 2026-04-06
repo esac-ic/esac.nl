@@ -218,7 +218,11 @@
                         <div id="accordion-panel-4" class="collapse" role="tabpanel">
                             <ul>
                                 <li>We are an association together and with each other we ensure that everything stays fun. We treat each other respectfully, everybody can join in and be themselves. That is why this code of conduct has been established, and everyone has to comply with it.</li>    
+<<<<<<< HEAD
                                 <li>For more information about social safety in ESAC can be found <a href="/Socialeveiligheid" target="_blank"> here </a>.</li>
+=======
+                                <li>For more information about social safety in ESAC can be found <a href="/Socialeveiligheid" target="_blank">here</a>.</li>
+>>>>>>> fad61a121c5868f4f660718f08ccea909f6bb509
                             </ul>
                             <p><strong>An ESAC'er:</strong> </p>
                             <ol>
