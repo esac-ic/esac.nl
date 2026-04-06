@@ -257,8 +257,8 @@
                         {!! Form::label("termsconditions", 'Accept the Terms and Conditions', ["class" => "form-check-label"]) !!}
                     </div>
                     <div class="form-check">
-                        {!! Form::checkbox("codeOfConduct",true,'',["class" => "form-check-input", "id" => "codeOfConduct"]) !!}
-                        {!! Form::label("codeOfConduct", 'Accept the Code of Conduct', ["class" => "form-check-label"]) !!}
+                        {!! Form::checkbox("code_of_conduct",true,'',["class" => "form-check-input", "id" => "code_of_conduct"]) !!}
+                        {!! Form::label("code_of_conduct", 'Accept the Code of Conduct', ["class" => "form-check-label"]) !!}
                     </div>
                     
                 <div class="g-recaptcha mt-3" data-sitekey="{{config('custom.google_recaptcha_key')}}"></div>
