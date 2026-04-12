@@ -23,7 +23,8 @@
                         type="text"
                         class="form-control"
                         v-model="row.value"
-                        :name="'rows[' + applicationFormIndex + '][options][' + index + '][value]'">
+                        :name="'rows[' + applicationFormIndex + '][options][' + index + '][value]'"
+                        :placeholder="row.name">
             </div>
             <div class="col-md-1">
                 <div class="form-group">
