@@ -17,6 +17,8 @@ class LogPendingUserApproved implements ShouldQueue
     
     /**
      * Create the event listener.
+     *
+     * @param UserEventLogEntryRepository $logEntryRepository
      */
     public function __construct(UserEventLogEntryRepository $logEntryRepository)
     {
@@ -33,10 +35,5 @@ class LogPendingUserApproved implements ShouldQueue
             'event_details' => $event->user->getName() . " was approved as a member",
             'user_id' => $event->user,
         ]);
-//        $logEntry = new UserEventLogEntry();
-//        $logEntry->user()->associate($event->user);
-//        $logEntry->event_type = (new ReflectionClass($event))->getShortName();
-//        $logEntry->event_details = $event->user->getName() . " was approved as a member";
-//        $logEntry->save();
     }
 }

@@ -4,7 +4,7 @@ namespace Tests\Feature\EventLogListeners;
 
 use App\Enums\UserEventTypes;
 use App\Events\MemberKindChanged;
-use App\Listeners\LogMemberTypeChanged;
+use App\Listeners\LogMemberKindChanged;
 use App\Models\UserEventLogEntry;
 use App\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -57,7 +57,7 @@ class LogMemberTypeChangedTest extends \TestCase
         
         $this->assertEquals(0, UserEventLogEntry::all()->count());
         
-        $listener = new LogMemberTypeChanged();
+        $listener = new LogMemberKindChanged();
         $listener->handle($event);
         
         $this->assertEquals(1, UserEventLogEntry::all()->count());

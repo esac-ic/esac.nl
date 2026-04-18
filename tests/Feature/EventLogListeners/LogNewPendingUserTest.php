@@ -4,7 +4,7 @@ namespace Tests\Feature\EventLogListeners;
 
 use App\Enums\UserEventTypes;
 use App\Events\PendingUserCreated;
-use App\Listeners\LogNewPendingUser;
+use App\Listeners\LogPendingUserCreated;
 use App\Models\UserEventLogEntry;
 use App\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -21,7 +21,7 @@ class LogNewPendingUserTest extends \TestCase
         
         $this->assertEquals(0, UserEventLogEntry::all()->count());
         
-        $listener = new LogNewPendingUser();
+        $listener = new LogPendingUserCreated();
         $listener->handle($event);
         
         $this->assertEquals(1, UserEventLogEntry::all()->count());

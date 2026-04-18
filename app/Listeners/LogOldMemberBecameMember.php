@@ -3,6 +3,8 @@
 namespace App\Listeners;
 
 use App\Events\OldMemberBecameMember;
+use App\Events\PendingUserApproved;
+use App\Repositories\UserEventLogEntryRepository;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Queue\InteractsWithQueue;
 use App\Models\UserEventLogEntry;
@@ -11,23 +13,27 @@ use ReflectionClass;
 
 class LogOldMemberBecameMember implements ShouldQueue
 {
+    private UserEventLogEntryRepository $logEntryRepository;
+    
     /**
      * Create the event listener.
+     *
+     * @param UserEventLogEntryRepository $logEntryRepository
      */
-    public function __construct()
+    public function __construct(UserEventLogEntryRepository $logEntryRepository)
     {
-        //
+        $this->logEntryRepository = $logEntryRepository;
     }
-
+    
     /**
      * Handle the event.
      */
     public function handle(OldMemberBecameMember $event): void
     {
-        $logEntry = new UserEventLogEntry();
-        $logEntry->user()->associate($event->user);
-        $logEntry->event_type = (new ReflectionClass($event))->getShortName();
-        $logEntry->event_details = $event->user->getName() . " became a member again";
-        $logEntry->save();
+        $this->logEntryRepository->create([
+            'event_type' => (new ReflectionClass($event))->getShortName(),
+            'event_details' => $event->user->getName() . " became a member again",
+            'user_id' => $event->user,
+        ]);
     }
 }

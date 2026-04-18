@@ -2,8 +2,9 @@
 
 namespace App\Listeners;
 
-use App\Events\MemberBecameOldMember;
-use App\Events\MemberKindChanged;
+use App\Events\NewPendingUser;
+use App\Events\PendingUserApproved;
+use App\Events\PendingUserCreated;
 use App\Repositories\UserEventLogEntryRepository;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Queue\InteractsWithQueue;
@@ -11,7 +12,7 @@ use App\Models\UserEventLogEntry;
 use App\Enums\UserEventTypes;
 use ReflectionClass;
 
-class LogMemberBecameOldMember implements ShouldQueue
+class LogPendingUserCreated
 {
     private UserEventLogEntryRepository $logEntryRepository;
     
@@ -28,11 +29,11 @@ class LogMemberBecameOldMember implements ShouldQueue
     /**
      * Handle the event.
      */
-    public function handle(MemberBecameOldMember $event): void
+    public function handle(PendingUserCreated $event): void
     {
         $this->logEntryRepository->create([
             'event_type' => (new ReflectionClass($event))->getShortName(),
-            'event_details' => $event->user->getName() . " became an old member",
+            'event_details' => "New pending user: " . $event->user->getName(),
             'user_id' => $event->user,
         ]);
     }

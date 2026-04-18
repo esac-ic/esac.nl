@@ -4,6 +4,7 @@ namespace App\Listeners;
 
 use App\Events\LoggableUserEventInterface;
 use App\Events\PendingUserRemoved;
+use App\Repositories\UserEventLogEntryRepository;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Queue\InteractsWithQueue;
 use App\Models\UserEventLogEntry;
@@ -12,12 +13,16 @@ use ReflectionClass;
 
 class LogPendingUserRemoved implements ShouldQueue
 {
+    private UserEventLogEntryRepository $logEntryRepository;
+    
     /**
      * Create the event listener.
+     *
+     * @param UserEventLogEntryRepository $logEntryRepository
      */
-    public function __construct()
+    public function __construct(UserEventLogEntryRepository $logEntryRepository)
     {
-        //
+        $this->logEntryRepository = $logEntryRepository;
     }
 
     /**
@@ -25,10 +30,10 @@ class LogPendingUserRemoved implements ShouldQueue
      */
     public function handle(PendingUserRemoved $event): void
     {
-        $logEntry = new UserEventLogEntry();
-        $logEntry->user()->associate(null);
-        $logEntry->event_type = (new ReflectionClass($event))->getShortName();
-        $logEntry->event_details = $event->userName . " was removed as a pending member";
-        $logEntry->save();
+        $this->logEntryRepository->create([
+            'event_type' => (new ReflectionClass($event))->getShortName(),
+            'event_details' => $event->userName . " was removed as a pending member",
+            'user_id' => null,
+        ]);
     }
 }
