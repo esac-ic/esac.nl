@@ -3,7 +3,7 @@
 namespace Tests\Feature\EventLogListeners;
 
 use App\Enums\UserEventTypes;
-use App\Events\MemberTypeChanged;
+use App\Events\MemberKindChanged;
 use App\Listeners\LogMemberTypeChanged;
 use App\Models\UserEventLogEntry;
 use App\User;
@@ -53,7 +53,7 @@ class LogMemberTypeChangedTest extends \TestCase
             throw new InvalidArgumentException("Error: user membership type didn't match from argument");
         }
         
-        $event = new MemberTypeChanged($user, $from, $to);
+        $event = new MemberKindChanged($user, $from, $to);
         
         $this->assertEquals(0, UserEventLogEntry::all()->count());
         

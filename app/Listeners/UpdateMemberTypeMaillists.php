@@ -4,7 +4,7 @@ namespace App\Listeners;
 
 use App\CustomClasses\MailList\MailListFacade;
 use App\Events\MemberMassMailListSync;
-use App\Events\MemberTypeChanged;
+use App\Events\MemberKindChanged;
 use App\Events\OldMemberBecameMember;
 use App\Events\PendingUserApproved;
 use Illuminate\Events\Dispatcher;
@@ -27,12 +27,12 @@ class UpdateMemberTypeMaillists implements ShouldQueue
      * Removes the member from the maillists associated with their old member type
      * and then adds them to the maillists for their new member type.
      *
-     * @param MemberTypeChanged $event
+     * @param MemberKindChanged $event
      * @return void
      */
-    public function handleMemberTypeChanged(MemberTypeChanged $event): void
+    public function handleMemberKindChanged(MemberKindChanged $event): void
     {
-        $this->removeUserFromMailLists($event->user, $event->oldMemberType);
+        $this->removeUserFromMailLists($event->user, $event->previousMemberType);
         $this->addUserToMailLists($event->user, $event->newMemberType);
     }
     
@@ -79,7 +79,7 @@ class UpdateMemberTypeMaillists implements ShouldQueue
     {
         return [
             OldMemberBecameMember::class => 'handleOldMemberBecameMember',
-            MemberTypeChanged::class => 'handleMemberTypeChanged',
+            MemberKindChanged::class => 'handleMemberKindChanged',
             PendingUserApproved::class => 'handlePendingUserApproved',
             MemberMassMailListSync::class => 'handleMemberMassMailListSync',
         ];

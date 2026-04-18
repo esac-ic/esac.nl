@@ -3,7 +3,7 @@
 namespace App\Listeners;
 
 use App\Enums\UserEventTypes;
-use App\Events\MemberTypeChanged;
+use App\Events\MemberKindChanged;
 use App\Models\UserEventLogEntry;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Queue\InteractsWithQueue;
@@ -23,12 +23,12 @@ class LogMemberTypeChanged implements ShouldQueue
     /**
      * Handle the event.
      */
-    public function handle(MemberTypeChanged $event): void
+    public function handle(MemberKindChanged $event): void
     {
         $logEntry = new UserEventLogEntry();
         $logEntry->user()->associate($event->user);
-        $logEntry->eventType = (new ReflectionClass($event))->getShortName();
-        $logEntry->eventDetails = $event->user->getName() . " changed from " . $event->oldMemberType . " to " . $event->newMemberType;
+        $logEntry->event_type = (new ReflectionClass($event))->getShortName();
+        $logEntry->event_details = $event->user->getName() . " changed from " . $event->previousMemberType . " to " . $event->newMemberType;
         $logEntry->save();
     }
 }

@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Events\NewPendingUser;
+use App\Events\PendingUserCreated;
 use App\Events\PendingUserApproved;
 use App\Events\PendingUserRemoved;
 use App\Repositories\UserRepository;
@@ -44,7 +44,7 @@ class PendingUserController extends Controller
 
         $user = $this->_userRepository->createPendingUser($request->all());
  
-        NewPendingUser::dispatch($user);
+        PendingUserCreated::dispatch($user);
         
         Session::flash("message", 'Your membership request is pending, we will get back to you as soon as possible');
 

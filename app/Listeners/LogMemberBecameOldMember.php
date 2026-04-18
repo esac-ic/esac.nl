@@ -26,8 +26,8 @@ class LogMemberBecameOldMember implements ShouldQueue
     {
         $logEntry = new UserEventLogEntry();
         $logEntry->user()->associate($event->user);
-        $logEntry->eventType = (new ReflectionClass($event))->getShortName();
-        $logEntry->eventDetails = $event->user->getName() . " became an old member";
+        $logEntry->event_type = (new ReflectionClass($event))->getShortName();
+        $logEntry->event_details = $event->user->getName() . " became an old member";
         $logEntry->save();
     }
 }

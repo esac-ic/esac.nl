@@ -3,26 +3,46 @@
 namespace App\Repositories;
 
 use App\Models\UserEventLogEntry;
-use http\Exception\BadMethodCallException;
+use BadMethodCallException;
 use Illuminate\Database\Eloquent\Builder;
 
 class UserEventLogEntryRepository implements IRepository
 {
-    public function create(array $data)
+    /**
+     * Not implemented, log entries should be made in the event listeners.
+     */
+    public function create(array $data): UserEventLogEntry
     {
-        $event = new UserEventLogEntry($data);
-        $event->save();
-        return $event;
+        $validator = \Validator::make($data, [
+            'event_type' => ['required', 'string'],
+            'event_details' => ['required', 'string'],
+            'user_id' => ['required'],
+        ]);
+        
+        if ($validator->fails()) {
+            throw new BadMethodCallException($validator->errors()->first());
+        }
+        
+        $logEntry = new UserEventLogEntry();
+        $logEntry->user()->associate($data['user_id']);
+        $logEntry->event_type = $data['event_type'];
+        $logEntry->event_details = $data['event_details'];
+        $logEntry->save();
+        return $logEntry;
     }
-
+    
+    /**
+     * Not implemented, logs should not be able to change after creation
+     */
     public function update($id, array $data)
     {
-        $event = $this->find($id);
-        $event->eventType = $data['eventType'];
-        $event->eventDetails = $data['eventDetails'];
-        $event->user_id = $data['user_id'];
-        $event->save();
-        return $event;
+        throw new BadMethodCallException('Not implemented');
+//        $event = $this->find($id);
+//        $event->event_type = $data['event_type'];
+//        $event->event_details = $data['event_details'];
+//        $event->user_id = $data['user_id'];
+//        $event->save();
+//        return $event;
     }
     
     /**
@@ -65,7 +85,7 @@ class UserEventLogEntryRepository implements IRepository
         
         if ($eventTypes != null)
         {
-            $query = $query->whereIn('eventType', $eventTypes);
+            $query = $query->whereIn('event_type', $eventTypes);
         }
         
         

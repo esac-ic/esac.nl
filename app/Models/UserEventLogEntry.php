@@ -13,9 +13,12 @@ class UserEventLogEntry extends Model
 {
     use HasFactory;
     
+    /**
+     * @var mixed|string
+     */
     protected $fillable = [
-        'eventType',
-        'eventDetails',
+        'event_type',
+        'event_details',
     ];
     
     /**
@@ -24,22 +27,5 @@ class UserEventLogEntry extends Model
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
-    }
-    
-    protected function casts(): array
-    {
-        return [
-            'eventType' => UserEventTypes::class,
-        ];
-    }
-    
-    /**
-     * Checks if the entry has a valid event type
-     * 
-     * @return bool
-     */
-    public function isValidEventType(): bool
-    {
-        return in_array($this->eventType, UserEventTypes::values());
     }
 }

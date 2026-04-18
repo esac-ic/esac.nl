@@ -14,7 +14,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Session;
 use Maatwebsite\Excel\Facades\Excel;
-use App\Events\MemberTypeChanged;
+use App\Events\MemberKindChanged;
 use App\Events\MemberBecameOldMember;
 use App\Events\OldMemberBecameMember;
 
@@ -133,7 +133,7 @@ class UserController extends Controller
         
         if ($request['kind_of_member'] != $user->kind_of_member) 
         {   
-            MemberTypeChanged::dispatch($user, $user->kind_of_member, $request['kind_of_member']);
+            MemberKindChanged::dispatch($user, $user->kind_of_member, $request['kind_of_member']);
         }
         
         $this->_userRepository->update($user->id, $request->all());

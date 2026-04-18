@@ -11,6 +11,7 @@ use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Carbon;
 use Illuminate\Http\Request;
 use Maatwebsite\Excel\Excel;
+use PhpOffice\PhpSpreadsheet\Exception;
 
 class UserEventLogEntryController extends Controller
 {
@@ -33,10 +34,6 @@ class UserEventLogEntryController extends Controller
     public function export(Request $request, Excel $excel, UserEventLogEntryRepository $repo)
     {
         $eventTypes = $request->eventTypes;
-        if ($eventTypes == null) //if no event type was selected, default is to select all
-        {
-            $eventTypes = \App\Enums\UserEventTypes::values();
-        }
         
         $names = $request->names;
         $startDate = Carbon::parse($request->startDate);
@@ -46,10 +43,10 @@ class UserEventLogEntryController extends Controller
         return $excel->download($export, $export->fileName() . '.xlsx');
     }
     
-    public function validateInput(Request $request)
-    {
-        $this->validate($request, [
-            "eventTypes" => "array:"
-        ]);
-    }
+//    public function validateInput(Request $request)
+//    {
+//        $this->validate($request, [
+//            "eventTypes" => "array:"
+//        ]);
+//    }
 }

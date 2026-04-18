@@ -18,7 +18,7 @@
                     <div class="form-row">
                         <div class="form-group">
                             <label>{{"Event types"}}</label>
-                            @foreach (\App\Enums\UserEventTypes::values() as $eventType)
+                            @foreach (\App\Models\UserEventLogEntry::distinct('event_type')->pluck('event_type')->sort() as $eventType)
                             <div class="form-check">
                                 <input class="form-check-input" type="checkbox" checked name="eventTypes[]" value="{{$eventType}}" id={{$eventType . "Check"}}>
                                 <label class="form-check-label" for={{$eventType . "Check"}}>{{$eventType}}</label>

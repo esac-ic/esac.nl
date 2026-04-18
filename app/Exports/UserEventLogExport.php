@@ -68,20 +68,11 @@ class UserEventLogExport implements FromCollection, WithTitle, WithHeadings, Sho
     
     public function map($event): array
     {
-        if ($event->user == null || $event->user() == null) {
-            return [
-                $event->created_at,
-                $event->eventType,
-                "User removed",
-                $event->eventDetails,
-            ];
-        } else {
-            return [
-                $event->created_at,
-                $event->eventType,
-                $event->user->getName(),
-                $event->eventDetails,
-            ];    
-        }
+        return [
+            $event->created_at,
+            $event->event_type,
+            $event->user?->getName() ?? "User removed",
+            $event->event_details,
+        ];
     }
 }

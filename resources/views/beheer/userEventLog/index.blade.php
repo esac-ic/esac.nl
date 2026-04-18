@@ -36,9 +36,9 @@
         <tbody>
         @foreach ($events as $entry)
             <tr>
-                <td>{{$entry->eventType}}</td>
+                <td>{{$entry->event_type}}</td>
                 <td>{{$entry->created_at}}</td>
-                <td>{{$entry->eventDetails}}</td>
+                <td>{{$entry->event_details}}</td>
             </tr>
         @endforeach
         </tbody>

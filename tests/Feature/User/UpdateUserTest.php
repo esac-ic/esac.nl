@@ -3,7 +3,7 @@
 namespace Tests\Feature\User;
 
 use App\CustomClasses\MailList\MailListFacade;
-use App\Events\MemberTypeChanged;
+use App\Events\MemberKindChanged;
 use App\User;
 use DateTime;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
@@ -87,7 +87,7 @@ class UpdateUserTest extends \TestCase
         
         $response->assertRedirect('/users/' . $this->admin->id . '?back=false');
         
-        Event::assertNotDispatched(MemberTypeChanged::class);
+        Event::assertNotDispatched(MemberKindChanged::class);
         
         $newAdmin = User::find($this->admin->id);
         
@@ -147,7 +147,7 @@ class UpdateUserTest extends \TestCase
         
         $response->assertRedirect('/users/' . $this->admin->id . '?back=false');
         
-        Event::assertNotDispatched(MemberTypeChanged::class);
+        Event::assertNotDispatched(MemberKindChanged::class);
         
         $newAdmin = User::find($this->admin->id);
         
@@ -205,7 +205,7 @@ class UpdateUserTest extends \TestCase
         
         $response->assertRedirect('/users');
         
-        Event::assertDispatched(MemberTypeChanged::class);
+        Event::assertDispatched(MemberKindChanged::class);
         
         $newMember = User::find($this->member->id);
         
@@ -264,7 +264,7 @@ class UpdateUserTest extends \TestCase
         
         $response->assertRedirect('/users/' . $this->member->id . '?back=false');
         
-        Event::assertNotDispatched(MemberTypeChanged::class);
+        Event::assertNotDispatched(MemberKindChanged::class);
         
         $newMember = User::find($this->member->id);
         
@@ -332,7 +332,7 @@ class UpdateUserTest extends \TestCase
         
         $response->assertRedirect('/users/' . $this->member->id . '?back=false');
         
-        Event::assertNotDispatched(MemberTypeChanged::class);
+        Event::assertNotDispatched(MemberKindChanged::class);
         
         $newMember = User::find($this->member->id);
         
@@ -399,7 +399,7 @@ class UpdateUserTest extends \TestCase
         
         $response->assertStatus(403);
         
-        Event::assertNotDispatched(MemberTypeChanged::class);
+        Event::assertNotDispatched(MemberKindChanged::class);
         $this->assertEquals(User::find($this->admin->id)->getAttributes(), $oldAdminAttributes); //assert the admin model is unchanged
     }
 }

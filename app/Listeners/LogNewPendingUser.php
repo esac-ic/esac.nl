@@ -2,7 +2,7 @@
 
 namespace App\Listeners;
 
-use App\Events\NewPendingUser;
+use App\Events\PendingUserCreated;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Queue\InteractsWithQueue;
 use App\Models\UserEventLogEntry;
@@ -22,12 +22,12 @@ class LogNewPendingUser
     /**
      * Handle the event.
      */
-    public function handle(NewPendingUser $event): void
+    public function handle(PendingUserCreated $event): void
     {
         $logEntry = new UserEventLogEntry();
         $logEntry->user()->associate($event->user);
-        $logEntry->eventType = (new ReflectionClass($event))->getShortName();
-        $logEntry->eventDetails = "New pending user: " . $event->user->getName();
+        $logEntry->event_type = (new ReflectionClass($event))->getShortName();
+        $logEntry->event_details = "New pending user: " . $event->user->getName();
         $logEntry->save();
     }
 }

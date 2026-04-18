@@ -3,7 +3,7 @@
 namespace Tests\Feature\EventLogListeners;
 
 use App\Enums\UserEventTypes;
-use App\Events\NewPendingUser;
+use App\Events\PendingUserCreated;
 use App\Listeners\LogNewPendingUser;
 use App\Models\UserEventLogEntry;
 use App\User;
@@ -17,7 +17,7 @@ class LogNewPendingUserTest extends \TestCase
     {
         $user = User::factory()->create();
         
-        $event = new NewPendingUser($user);
+        $event = new PendingUserCreated($user);
         
         $this->assertEquals(0, UserEventLogEntry::all()->count());
         

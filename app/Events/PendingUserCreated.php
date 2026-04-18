@@ -10,14 +10,14 @@ use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
 
-class MemberTypeChanged
+class PendingUserCreated implements LoggableUserEventInterface
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
     /**
      * Create a new event instance.
      */
-    public function __construct(public \App\User $user, public string $oldMemberType, public string $newMemberType)
+    public function __construct(public \App\User $user)
     {
         //
     }

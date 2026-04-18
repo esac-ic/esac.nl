@@ -3,7 +3,7 @@
 namespace Tests\Feature\UpdateMemberTypeMaillistsListener;
 
 use App\CustomClasses\MailList\MailListFacade;
-use App\Events\MemberTypeChanged;
+use App\Events\MemberKindChanged;
 use App\Listeners\UpdateMemberTypeMaillists;
 use App\Setting;
 use App\User;
@@ -82,10 +82,10 @@ class HandleMemberTypeChangedTest extends \TestCase
             ->once()
             ->ordered();
         
-        $event = new MemberTypeChanged($this->user, Lang::get('member'), Lang::get('reunist'));
+        $event = new MemberKindChanged($this->user, Lang::get('member'), Lang::get('reunist'));
         
         $listener = new UpdateMemberTypeMaillists($this->mockedMailListFacade);
-        $listener->handleMemberTypeChanged($event);
+        $listener->handleMemberKindChanged($event);
     }
     
     /*
@@ -111,9 +111,9 @@ class HandleMemberTypeChangedTest extends \TestCase
         $this->user->save();
 
         $listener = new UpdateMemberTypeMaillists($this->mockedMailListFacade);
-        $event = new MemberTypeChanged($this->user, Lang::get('member'), Lang::get('reunist'));
+        $event = new MemberKindChanged($this->user, Lang::get('member'), Lang::get('reunist'));
 
-        $listener->handleMemberTypeChanged($event);
+        $listener->handleMemberKindChanged($event);
     }
     
     public function test_mail_lists_updated_member_to_extraordinary()
@@ -131,9 +131,9 @@ class HandleMemberTypeChangedTest extends \TestCase
         $this->user->save();
         
         $listener = new UpdateMemberTypeMaillists($this->mockedMailListFacade);
-        $event = new MemberTypeChanged($this->user, Lang::get('member'), Lang::get('extraordinary_member'));
+        $event = new MemberKindChanged($this->user, Lang::get('member'), Lang::get('extraordinary_member'));
         
-        $listener->handleMemberTypeChanged($event);
+        $listener->handleMemberKindChanged($event);
     }
     
     public function test_mail_lists_updated_member_to_honorary()
@@ -151,9 +151,9 @@ class HandleMemberTypeChangedTest extends \TestCase
         $this->user->save();
         
         $listener = new UpdateMemberTypeMaillists($this->mockedMailListFacade);
-        $event = new MemberTypeChanged($this->user, Lang::get('member'), Lang::get('honorary_member'));
+        $event = new MemberKindChanged($this->user, Lang::get('member'), Lang::get('honorary_member'));
         
-        $listener->handleMemberTypeChanged($event);
+        $listener->handleMemberKindChanged($event);
     }
     
     public function test_mail_lists_updated_member_to_merit()
@@ -171,9 +171,9 @@ class HandleMemberTypeChangedTest extends \TestCase
         $this->user->save();
         
         $listener = new UpdateMemberTypeMaillists($this->mockedMailListFacade);
-        $event = new MemberTypeChanged($this->user, Lang::get('member'), Lang::get('member_of_merit'));
+        $event = new MemberKindChanged($this->user, Lang::get('member'), Lang::get('member_of_merit'));
         
-        $listener->handleMemberTypeChanged($event);
+        $listener->handleMemberKindChanged($event);
     }
     
     public function test_mail_lists_updated_member_to_trainer()
@@ -191,9 +191,9 @@ class HandleMemberTypeChangedTest extends \TestCase
         $this->user->save();
         
         $listener = new UpdateMemberTypeMaillists($this->mockedMailListFacade);
-        $event = new MemberTypeChanged($this->user, Lang::get('member'), Lang::get('trainer'));
+        $event = new MemberKindChanged($this->user, Lang::get('member'), Lang::get('trainer'));
         
-        $listener->handleMemberTypeChanged($event);
+        $listener->handleMemberKindChanged($event);
     }
     
     public function test_mail_lists_updated_member_to_relationship()
@@ -211,9 +211,9 @@ class HandleMemberTypeChangedTest extends \TestCase
         $this->user->save();
         
         $listener = new UpdateMemberTypeMaillists($this->mockedMailListFacade);
-        $event = new MemberTypeChanged($this->user, Lang::get('member'), Lang::get('relationship'));
+        $event = new MemberKindChanged($this->user, Lang::get('member'), Lang::get('relationship'));
         
-        $listener->handleMemberTypeChanged($event);
+        $listener->handleMemberKindChanged($event);
     }
     
     /*
@@ -235,9 +235,9 @@ class HandleMemberTypeChangedTest extends \TestCase
         $this->user->save();
         
         $listener = new UpdateMemberTypeMaillists($this->mockedMailListFacade);
-        $event = new MemberTypeChanged($this->user, Lang::get('reunist'), Lang::get('member'));
+        $event = new MemberKindChanged($this->user, Lang::get('reunist'), Lang::get('member'));
         
-        $listener->handleMemberTypeChanged($event);
+        $listener->handleMemberKindChanged($event);
     }
     
     public function test_mail_lists_updated_reunist_to_extraordinary()
@@ -255,9 +255,9 @@ class HandleMemberTypeChangedTest extends \TestCase
         $this->user->save();
         
         $listener = new UpdateMemberTypeMaillists($this->mockedMailListFacade);
-        $event = new MemberTypeChanged($this->user, Lang::get('reunist'), Lang::get('extraordinary_member'));
+        $event = new MemberKindChanged($this->user, Lang::get('reunist'), Lang::get('extraordinary_member'));
         
-        $listener->handleMemberTypeChanged($event);
+        $listener->handleMemberKindChanged($event);
     }
     
     public function test_mail_lists_updated_reunist_to_honorary()
@@ -275,9 +275,9 @@ class HandleMemberTypeChangedTest extends \TestCase
         $this->user->save();
         
         $listener = new UpdateMemberTypeMaillists($this->mockedMailListFacade);
-        $event = new MemberTypeChanged($this->user, Lang::get('reunist'), Lang::get('honorary_member'));
+        $event = new MemberKindChanged($this->user, Lang::get('reunist'), Lang::get('honorary_member'));
         
-        $listener->handleMemberTypeChanged($event);
+        $listener->handleMemberKindChanged($event);
     }
     
     public function test_mail_lists_updated_reunist_to_merit()
@@ -295,9 +295,9 @@ class HandleMemberTypeChangedTest extends \TestCase
         $this->user->save();
         
         $listener = new UpdateMemberTypeMaillists($this->mockedMailListFacade);
-        $event = new MemberTypeChanged($this->user, Lang::get('reunist'), Lang::get('member_of_merit'));
+        $event = new MemberKindChanged($this->user, Lang::get('reunist'), Lang::get('member_of_merit'));
         
-        $listener->handleMemberTypeChanged($event);
+        $listener->handleMemberKindChanged($event);
     }
     
     public function test_mail_lists_updated_reunist_to_trainer()
@@ -315,9 +315,9 @@ class HandleMemberTypeChangedTest extends \TestCase
         $this->user->save();
         
         $listener = new UpdateMemberTypeMaillists($this->mockedMailListFacade);
-        $event = new MemberTypeChanged($this->user, Lang::get('reunist'), Lang::get('trainer'));
+        $event = new MemberKindChanged($this->user, Lang::get('reunist'), Lang::get('trainer'));
         
-        $listener->handleMemberTypeChanged($event);
+        $listener->handleMemberKindChanged($event);
     }
     
     public function test_mail_lists_updated_reunist_to_relationship()
@@ -335,9 +335,9 @@ class HandleMemberTypeChangedTest extends \TestCase
         $this->user->save();
         
         $listener = new UpdateMemberTypeMaillists($this->mockedMailListFacade);
-        $event = new MemberTypeChanged($this->user, Lang::get('reunist'), Lang::get('relationship'));
+        $event = new MemberKindChanged($this->user, Lang::get('reunist'), Lang::get('relationship'));
         
-        $listener->handleMemberTypeChanged($event);
+        $listener->handleMemberKindChanged($event);
     }
     
     /*
@@ -359,9 +359,9 @@ class HandleMemberTypeChangedTest extends \TestCase
         $this->user->save();
         
         $listener = new UpdateMemberTypeMaillists($this->mockedMailListFacade);
-        $event = new MemberTypeChanged($this->user, Lang::get('extraordinary_member'), Lang::get('member'));
+        $event = new MemberKindChanged($this->user, Lang::get('extraordinary_member'), Lang::get('member'));
         
-        $listener->handleMemberTypeChanged($event);
+        $listener->handleMemberKindChanged($event);
     }
     
     public function test_mail_lists_updated_extraordinary_to_reunist()
@@ -379,9 +379,9 @@ class HandleMemberTypeChangedTest extends \TestCase
         $this->user->save();
         
         $listener = new UpdateMemberTypeMaillists($this->mockedMailListFacade);
-        $event = new MemberTypeChanged($this->user, Lang::get('extraordinary_member'), Lang::get('reunist'));
+        $event = new MemberKindChanged($this->user, Lang::get('extraordinary_member'), Lang::get('reunist'));
         
-        $listener->handleMemberTypeChanged($event);
+        $listener->handleMemberKindChanged($event);
     }
     
     public function test_mail_lists_updated_extraordinary_to_honorary()
@@ -399,9 +399,9 @@ class HandleMemberTypeChangedTest extends \TestCase
         $this->user->save();
         
         $listener = new UpdateMemberTypeMaillists($this->mockedMailListFacade);
-        $event = new MemberTypeChanged($this->user, Lang::get('extraordinary_member'), Lang::get('honorary_member'));
+        $event = new MemberKindChanged($this->user, Lang::get('extraordinary_member'), Lang::get('honorary_member'));
         
-        $listener->handleMemberTypeChanged($event);
+        $listener->handleMemberKindChanged($event);
     }
     
     public function test_mail_lists_updated_extraordinary_to_merit()
@@ -419,9 +419,9 @@ class HandleMemberTypeChangedTest extends \TestCase
         $this->user->save();
         
         $listener = new UpdateMemberTypeMaillists($this->mockedMailListFacade);
-        $event = new MemberTypeChanged($this->user, Lang::get('extraordinary_member'), Lang::get('member_of_merit'));
+        $event = new MemberKindChanged($this->user, Lang::get('extraordinary_member'), Lang::get('member_of_merit'));
         
-        $listener->handleMemberTypeChanged($event);
+        $listener->handleMemberKindChanged($event);
     }
     
     public function test_mail_lists_updated_extraordinary_to_trainer()
@@ -439,9 +439,9 @@ class HandleMemberTypeChangedTest extends \TestCase
         $this->user->save();
         
         $listener = new UpdateMemberTypeMaillists($this->mockedMailListFacade);
-        $event = new MemberTypeChanged($this->user, Lang::get('extraordinary_member'), Lang::get('trainer'));
+        $event = new MemberKindChanged($this->user, Lang::get('extraordinary_member'), Lang::get('trainer'));
         
-        $listener->handleMemberTypeChanged($event);
+        $listener->handleMemberKindChanged($event);
     }
     
     public function test_mail_lists_updated_extraordinary_to_relationship()
@@ -459,9 +459,9 @@ class HandleMemberTypeChangedTest extends \TestCase
         $this->user->save();
         
         $listener = new UpdateMemberTypeMaillists($this->mockedMailListFacade);
-        $event = new MemberTypeChanged($this->user, Lang::get('extraordinary_member'), Lang::get('relationship'));
+        $event = new MemberKindChanged($this->user, Lang::get('extraordinary_member'), Lang::get('relationship'));
         
-        $listener->handleMemberTypeChanged($event);
+        $listener->handleMemberKindChanged($event);
     }
     
     /*
@@ -483,9 +483,9 @@ class HandleMemberTypeChangedTest extends \TestCase
         $this->user->save();
         
         $listener = new UpdateMemberTypeMaillists($this->mockedMailListFacade);
-        $event = new MemberTypeChanged($this->user, Lang::get('honorary_member'), Lang::get('member'));
+        $event = new MemberKindChanged($this->user, Lang::get('honorary_member'), Lang::get('member'));
         
-        $listener->handleMemberTypeChanged($event);
+        $listener->handleMemberKindChanged($event);
     }
     
     public function test_mail_lists_updated_honorary_to_reunist()
@@ -503,9 +503,9 @@ class HandleMemberTypeChangedTest extends \TestCase
         $this->user->save();
         
         $listener = new UpdateMemberTypeMaillists($this->mockedMailListFacade);
-        $event = new MemberTypeChanged($this->user, Lang::get('honorary_member'), Lang::get('reunist'));
+        $event = new MemberKindChanged($this->user, Lang::get('honorary_member'), Lang::get('reunist'));
         
-        $listener->handleMemberTypeChanged($event);
+        $listener->handleMemberKindChanged($event);
     }
     
     public function test_mail_lists_updated_honorary_to_extraordinary()
@@ -523,9 +523,9 @@ class HandleMemberTypeChangedTest extends \TestCase
         $this->user->save();
         
         $listener = new UpdateMemberTypeMaillists($this->mockedMailListFacade);
-        $event = new MemberTypeChanged($this->user, Lang::get('honorary_member'), Lang::get('extraordinary_member'));
+        $event = new MemberKindChanged($this->user, Lang::get('honorary_member'), Lang::get('extraordinary_member'));
         
-        $listener->handleMemberTypeChanged($event);
+        $listener->handleMemberKindChanged($event);
     }
     
     public function test_mail_lists_updated_honorary_to_merit()
@@ -543,9 +543,9 @@ class HandleMemberTypeChangedTest extends \TestCase
         $this->user->save();
         
         $listener = new UpdateMemberTypeMaillists($this->mockedMailListFacade);
-        $event = new MemberTypeChanged($this->user, Lang::get('honorary_member'), Lang::get('member_of_merit'));
+        $event = new MemberKindChanged($this->user, Lang::get('honorary_member'), Lang::get('member_of_merit'));
         
-        $listener->handleMemberTypeChanged($event);
+        $listener->handleMemberKindChanged($event);
     }
     
     public function test_mail_lists_updated_honorary_to_trainer()
@@ -563,9 +563,9 @@ class HandleMemberTypeChangedTest extends \TestCase
         $this->user->save();
         
         $listener = new UpdateMemberTypeMaillists($this->mockedMailListFacade);
-        $event = new MemberTypeChanged($this->user, Lang::get('honorary_member'), Lang::get('trainer'));
+        $event = new MemberKindChanged($this->user, Lang::get('honorary_member'), Lang::get('trainer'));
         
-        $listener->handleMemberTypeChanged($event);
+        $listener->handleMemberKindChanged($event);
     }
     
     public function test_mail_lists_updated_honorary_to_relationship()
@@ -583,9 +583,9 @@ class HandleMemberTypeChangedTest extends \TestCase
         $this->user->save();
         
         $listener = new UpdateMemberTypeMaillists($this->mockedMailListFacade);
-        $event = new MemberTypeChanged($this->user, Lang::get('honorary_member'), Lang::get('relationship'));
+        $event = new MemberKindChanged($this->user, Lang::get('honorary_member'), Lang::get('relationship'));
         
-        $listener->handleMemberTypeChanged($event);
+        $listener->handleMemberKindChanged($event);
     }
     
     /*
@@ -607,9 +607,9 @@ class HandleMemberTypeChangedTest extends \TestCase
         $this->user->save();
         
         $listener = new UpdateMemberTypeMaillists($this->mockedMailListFacade);
-        $event = new MemberTypeChanged($this->user, Lang::get('member_of_merit'), Lang::get('member'));
+        $event = new MemberKindChanged($this->user, Lang::get('member_of_merit'), Lang::get('member'));
         
-        $listener->handleMemberTypeChanged($event);
+        $listener->handleMemberKindChanged($event);
     }
     
     public function test_mail_lists_updated_merit_to_reunist()
@@ -627,9 +627,9 @@ class HandleMemberTypeChangedTest extends \TestCase
         $this->user->save();
         
         $listener = new UpdateMemberTypeMaillists($this->mockedMailListFacade);
-        $event = new MemberTypeChanged($this->user, Lang::get('member_of_merit'), Lang::get('reunist'));
+        $event = new MemberKindChanged($this->user, Lang::get('member_of_merit'), Lang::get('reunist'));
         
-        $listener->handleMemberTypeChanged($event);
+        $listener->handleMemberKindChanged($event);
     }
     
     public function test_mail_lists_updated_merit_to_extraordinary()
@@ -647,9 +647,9 @@ class HandleMemberTypeChangedTest extends \TestCase
         $this->user->save();
         
         $listener = new UpdateMemberTypeMaillists($this->mockedMailListFacade);
-        $event = new MemberTypeChanged($this->user, Lang::get('member_of_merit'), Lang::get('extraordinary_member'));
+        $event = new MemberKindChanged($this->user, Lang::get('member_of_merit'), Lang::get('extraordinary_member'));
         
-        $listener->handleMemberTypeChanged($event);
+        $listener->handleMemberKindChanged($event);
     }
     
     public function test_mail_lists_updated_merit_to_honorary()
@@ -667,9 +667,9 @@ class HandleMemberTypeChangedTest extends \TestCase
         $this->user->save();
         
         $listener = new UpdateMemberTypeMaillists($this->mockedMailListFacade);
-        $event = new MemberTypeChanged($this->user, Lang::get('member_of_merit'), Lang::get('honorary_member'));
+        $event = new MemberKindChanged($this->user, Lang::get('member_of_merit'), Lang::get('honorary_member'));
         
-        $listener->handleMemberTypeChanged($event);
+        $listener->handleMemberKindChanged($event);
     }
     
     public function test_mail_lists_updated_merit_to_trainer()
@@ -687,9 +687,9 @@ class HandleMemberTypeChangedTest extends \TestCase
         $this->user->save();
         
         $listener = new UpdateMemberTypeMaillists($this->mockedMailListFacade);
-        $event = new MemberTypeChanged($this->user, Lang::get('member_of_merit'), Lang::get('trainer'));
+        $event = new MemberKindChanged($this->user, Lang::get('member_of_merit'), Lang::get('trainer'));
         
-        $listener->handleMemberTypeChanged($event);
+        $listener->handleMemberKindChanged($event);
     }
     
     public function test_mail_lists_updated_merit_to_relationship()
@@ -707,9 +707,9 @@ class HandleMemberTypeChangedTest extends \TestCase
         $this->user->save();
         
         $listener = new UpdateMemberTypeMaillists($this->mockedMailListFacade);
-        $event = new MemberTypeChanged($this->user, Lang::get('member_of_merit'), Lang::get('relationship'));
+        $event = new MemberKindChanged($this->user, Lang::get('member_of_merit'), Lang::get('relationship'));
         
-        $listener->handleMemberTypeChanged($event);
+        $listener->handleMemberKindChanged($event);
     }
     
     /*
@@ -731,9 +731,9 @@ class HandleMemberTypeChangedTest extends \TestCase
         $this->user->save();
         
         $listener = new UpdateMemberTypeMaillists($this->mockedMailListFacade);
-        $event = new MemberTypeChanged($this->user, Lang::get('trainer'), Lang::get('member'));
+        $event = new MemberKindChanged($this->user, Lang::get('trainer'), Lang::get('member'));
         
-        $listener->handleMemberTypeChanged($event);
+        $listener->handleMemberKindChanged($event);
     }
     
     public function test_mail_lists_updated_trainer_to_reunist()
@@ -751,9 +751,9 @@ class HandleMemberTypeChangedTest extends \TestCase
         $this->user->save();
         
         $listener = new UpdateMemberTypeMaillists($this->mockedMailListFacade);
-        $event = new MemberTypeChanged($this->user, Lang::get('trainer'), Lang::get('reunist'));
+        $event = new MemberKindChanged($this->user, Lang::get('trainer'), Lang::get('reunist'));
         
-        $listener->handleMemberTypeChanged($event);
+        $listener->handleMemberKindChanged($event);
     }
     
     public function test_mail_lists_updated_trainer_to_extraordinary()
@@ -771,9 +771,9 @@ class HandleMemberTypeChangedTest extends \TestCase
         $this->user->save();
         
         $listener = new UpdateMemberTypeMaillists($this->mockedMailListFacade);
-        $event = new MemberTypeChanged($this->user, Lang::get('trainer'), Lang::get('extraordinary_member'));
+        $event = new MemberKindChanged($this->user, Lang::get('trainer'), Lang::get('extraordinary_member'));
         
-        $listener->handleMemberTypeChanged($event);
+        $listener->handleMemberKindChanged($event);
     }
     
     public function test_mail_lists_updated_trainer_to_honorary()
@@ -791,9 +791,9 @@ class HandleMemberTypeChangedTest extends \TestCase
         $this->user->save();
         
         $listener = new UpdateMemberTypeMaillists($this->mockedMailListFacade);
-        $event = new MemberTypeChanged($this->user, Lang::get('trainer'), Lang::get('honorary_member'));
+        $event = new MemberKindChanged($this->user, Lang::get('trainer'), Lang::get('honorary_member'));
         
-        $listener->handleMemberTypeChanged($event);
+        $listener->handleMemberKindChanged($event);
     }
     
     public function test_mail_lists_updated_trainer_to_merit()
@@ -811,9 +811,9 @@ class HandleMemberTypeChangedTest extends \TestCase
         $this->user->save();
         
         $listener = new UpdateMemberTypeMaillists($this->mockedMailListFacade);
-        $event = new MemberTypeChanged($this->user, Lang::get('trainer'), Lang::get('member_of_merit'));
+        $event = new MemberKindChanged($this->user, Lang::get('trainer'), Lang::get('member_of_merit'));
         
-        $listener->handleMemberTypeChanged($event);
+        $listener->handleMemberKindChanged($event);
     }
     
     public function test_mail_lists_updated_trainer_to_relationship()
@@ -831,9 +831,9 @@ class HandleMemberTypeChangedTest extends \TestCase
         $this->user->save();
         
         $listener = new UpdateMemberTypeMaillists($this->mockedMailListFacade);
-        $event = new MemberTypeChanged($this->user, Lang::get('trainer'), Lang::get('relationship'));
+        $event = new MemberKindChanged($this->user, Lang::get('trainer'), Lang::get('relationship'));
         
-        $listener->handleMemberTypeChanged($event);
+        $listener->handleMemberKindChanged($event);
     }
     
     /*
@@ -855,9 +855,9 @@ class HandleMemberTypeChangedTest extends \TestCase
         $this->user->save();
         
         $listener = new UpdateMemberTypeMaillists($this->mockedMailListFacade);
-        $event = new MemberTypeChanged($this->user, Lang::get('relationship'), Lang::get('member'));
+        $event = new MemberKindChanged($this->user, Lang::get('relationship'), Lang::get('member'));
         
-        $listener->handleMemberTypeChanged($event);
+        $listener->handleMemberKindChanged($event);
     }
     
     public function test_mail_lists_updated_relation_to_reunist()
@@ -875,9 +875,9 @@ class HandleMemberTypeChangedTest extends \TestCase
         $this->user->save();
         
         $listener = new UpdateMemberTypeMaillists($this->mockedMailListFacade);
-        $event = new MemberTypeChanged($this->user, Lang::get('relationship'), Lang::get('reunist'));
+        $event = new MemberKindChanged($this->user, Lang::get('relationship'), Lang::get('reunist'));
         
-        $listener->handleMemberTypeChanged($event);
+        $listener->handleMemberKindChanged($event);
     }
     
     public function test_mail_lists_updated_relation_to_extraordinary()
@@ -895,9 +895,9 @@ class HandleMemberTypeChangedTest extends \TestCase
         $this->user->save();
         
         $listener = new UpdateMemberTypeMaillists($this->mockedMailListFacade);
-        $event = new MemberTypeChanged($this->user, Lang::get('relationship'), Lang::get('extraordinary_member'));
+        $event = new MemberKindChanged($this->user, Lang::get('relationship'), Lang::get('extraordinary_member'));
         
-        $listener->handleMemberTypeChanged($event);
+        $listener->handleMemberKindChanged($event);
     }
     
     public function test_mail_lists_updated_relation_to_honorary()
@@ -915,9 +915,9 @@ class HandleMemberTypeChangedTest extends \TestCase
         $this->user->save();
         
         $listener = new UpdateMemberTypeMaillists($this->mockedMailListFacade);
-        $event = new MemberTypeChanged($this->user, Lang::get('relationship'), Lang::get('honorary_member'));
+        $event = new MemberKindChanged($this->user, Lang::get('relationship'), Lang::get('honorary_member'));
         
-        $listener->handleMemberTypeChanged($event);
+        $listener->handleMemberKindChanged($event);
     }
     
     public function test_mail_lists_updated_relation_to_merit()
@@ -935,9 +935,9 @@ class HandleMemberTypeChangedTest extends \TestCase
         $this->user->save();
         
         $listener = new UpdateMemberTypeMaillists($this->mockedMailListFacade);
-        $event = new MemberTypeChanged($this->user, Lang::get('relationship'), Lang::get('member_of_merit'));
+        $event = new MemberKindChanged($this->user, Lang::get('relationship'), Lang::get('member_of_merit'));
         
-        $listener->handleMemberTypeChanged($event);
+        $listener->handleMemberKindChanged($event);
     }
     
     public function test_mail_lists_updated_relation_to_trainer()
@@ -955,8 +955,8 @@ class HandleMemberTypeChangedTest extends \TestCase
         $this->user->save();
         
         $listener = new UpdateMemberTypeMaillists($this->mockedMailListFacade);
-        $event = new MemberTypeChanged($this->user, Lang::get('relationship'), Lang::get('trainer'));
+        $event = new MemberKindChanged($this->user, Lang::get('relationship'), Lang::get('trainer'));
         
-        $listener->handleMemberTypeChanged($event);
+        $listener->handleMemberKindChanged($event);
     }
 }

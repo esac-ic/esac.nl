@@ -2,7 +2,7 @@
 
 namespace Tests\Feature\PendingUser;
 
-use App\Events\NewPendingUser;
+use App\Events\PendingUserCreated;
 use App\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Carbon;
@@ -46,7 +46,7 @@ class StorePendingUserTest extends \TestCase
         $response = $this->post(route('user.signup'), $requestData);
         
         $response->assertRedirect(route('front-end.signup'));
-        Event::assertDispatched(NewPendingUser::class);
+        Event::assertDispatched(PendingUserCreated::class);
         $this->assertEquals(1, User::all()->count());
         
         $user =  User::first();

@@ -24,10 +24,10 @@ class EventServiceProvider extends ServiceProvider
         \App\Events\OldMemberBecameMember::class => [
             \App\Listeners\LogOldMemberBecameMember::class,
         ],
-        \App\Events\MemberTypeChanged::class => [
+        \App\Events\MemberKindChanged::class => [
             \App\Listeners\LogMemberTypeChanged::class,
         ],
-        \App\Events\NewPendingUser::class => [
+        \App\Events\PendingUserCreated::class => [
             \App\Listeners\LogNewPendingUser::class,
         ],  
     ];

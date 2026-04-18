@@ -2,6 +2,7 @@
 
 namespace App\Listeners;
 
+use App\Events\LoggableUserEventInterface;
 use App\Events\PendingUserRemoved;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Queue\InteractsWithQueue;
@@ -26,8 +27,8 @@ class LogPendingUserRemoved implements ShouldQueue
     {
         $logEntry = new UserEventLogEntry();
         $logEntry->user()->associate(null);
-        $logEntry->eventType = (new ReflectionClass($event))->getShortName();
-        $logEntry->eventDetails = $event->userName . " was removed as a pending member";
+        $logEntry->event_type = (new ReflectionClass($event))->getShortName();
+        $logEntry->event_details = $event->userName . " was removed as a pending member";
         $logEntry->save();
     }
 }

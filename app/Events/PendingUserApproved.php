@@ -10,7 +10,7 @@ use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
 
-class PendingUserApproved
+class PendingUserApproved implements LoggableUserEventInterface
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 

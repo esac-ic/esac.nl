@@ -10,7 +10,7 @@ use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
 
-class MemberBecameOldMember
+class MemberBecameOldMember implements LoggableUserEventInterface
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
