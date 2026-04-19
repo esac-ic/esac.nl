@@ -9,7 +9,9 @@ use Illuminate\Database\Eloquent\Builder;
 class UserEventLogEntryRepository implements IRepository
 {
     /**
-     * Not implemented, log entries should be made in the event listeners.
+     * Create log entry.
+     *
+     * @param array $data array with the keys 'event_type', 'event_details' and 'user_id'
      */
     public function create(array $data): UserEventLogEntry
     {
@@ -37,12 +39,6 @@ class UserEventLogEntryRepository implements IRepository
     public function update($id, array $data)
     {
         throw new BadMethodCallException('Not implemented');
-//        $event = $this->find($id);
-//        $event->event_type = $data['event_type'];
-//        $event->event_details = $data['event_details'];
-//        $event->user_id = $data['user_id'];
-//        $event->save();
-//        return $event;
     }
     
     /**

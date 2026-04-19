@@ -42,11 +42,4 @@ class UserEventLogEntryController extends Controller
         $export = new UserEventLogExport($repo, $eventTypes, $names, $startDate, $endDate);
         return $excel->download($export, $export->fileName() . '.xlsx');
     }
-    
-//    public function validateInput(Request $request)
-//    {
-//        $this->validate($request, [
-//            "eventTypes" => "array:"
-//        ]);
-//    }
 }
