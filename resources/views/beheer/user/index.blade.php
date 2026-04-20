@@ -13,40 +13,6 @@
             </button>
         </div>
     @endif
-    
-    {{-- Error messages --}}
-    @if(Session::has('mailListAddNonExistent'))
-        <div class="alert alert-danger alert-dismissible fade show" role="alert">
-            {{Session::get('mailListAddNonExistent')}}
-            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                <span aria-hidden="true">&times;</span>
-            </button>
-        </div>
-    @endif
-    @if(Session::has('mailListRemoveNonExistent'))
-        <div class="alert alert-danger alert-dismissible fade show" role="alert">
-            {{Session::get('mailListRemoveNonExistent')}}
-            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                <span aria-hidden="true">&times;</span>
-            </button>
-        </div>
-    @endif
-    @if(Session::has('mailListRemovalError'))
-        <div class="alert alert-danger alert-dismissible fade show" role="alert">
-            {{Session::get('mailListRemovalError')}}
-            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                <span aria-hidden="true">&times;</span>
-            </button>
-        </div>
-    @endif
-    @if(Session::has('mailListAddError'))
-        <div class="alert alert-warning alert-dismissible fade show" role="alert">
-            {{Session::get('mailListAddError')}}
-            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                <span aria-hidden="true">&times;</span>
-            </button>
-        </div>
-    @endif
     @if(Session::has('error'))
         <div class="alert alert-danger alert-dismissible fade show" role="alert">
             {{Session::get('error')}}
@@ -102,7 +68,7 @@
         </tbody>
     </table>
 
-    <h5 class="mt-3 mb-0 bold">*{{'Roles'}}</h4>
+    <h5 class="mt-3 mb-0 bold">*{{'Roles'}}</h5>
     <ol>
     @for($i=0; $i<count($roles);$i++)
         <li>{{$roles[$i]->name}}</li>
