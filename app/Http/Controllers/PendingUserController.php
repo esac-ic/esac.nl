@@ -14,7 +14,7 @@ use Illuminate\Support\Facades\Session;
 class PendingUserController extends Controller
 {
 
-    private $_userRepository;
+    private UserRepository $_userRepository;
     /**
      * Create a new controller instance.
      *
@@ -50,7 +50,6 @@ class PendingUserController extends Controller
 
     public function removeAsPendingMember(Request $request, User $user)
     {
-        PendingUserRemoved::dispatch($user, $user->getName());
         $user->removeAsPendingMember();
 
         return redirect('users/pending_members');
@@ -59,9 +58,6 @@ class PendingUserController extends Controller
     public function approveAsPendingMember(Request $request, User $user)
     {
         $user->approveAsPendingMember();
-        
-        PendingUserApproved::dispatch($user);
-
         
         return redirect('users/pending_members');
     }

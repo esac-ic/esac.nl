@@ -21,7 +21,7 @@ use App\Events\OldMemberBecameMember;
 class UserController extends Controller
 {
 
-    private $_userRepository;
+    private UserRepository $_userRepository;
     /**
      * Create a new controller instance.
      *
@@ -124,20 +124,13 @@ class UserController extends Controller
             ]);
         }
         
-        
         $this->validateInput($request, $user->id);
         
         if ($user->email != $request['email']) {
             $mailListFacade->updateUserEmailForAllMailList($user, $user->email, $request['email']);
         }
         
-        if ($request['kind_of_member'] != $user->kind_of_member) 
-        {   
-            MemberKindChanged::dispatch($user, $user->kind_of_member, $request['kind_of_member']);
-        }
-        
         $this->_userRepository->update($user->id, $request->all());
-                
         
         if (Auth::user()->hasRole(Config::get('constants.Administrator'))) {
             $this->_userRepository->addRols($user->id, $request->get('roles', []));
@@ -156,8 +149,6 @@ class UserController extends Controller
     {
         $user->removeAsActiveMember();
         $mailListFacade->deleteUserForAllMailList($user);
-        
-        MemberBecameOldMember::dispatch($user);
 
         return redirect('/users/' . $user->id);
     }
@@ -175,8 +166,6 @@ class UserController extends Controller
     public function makeActiveMember(Request $request, User $user)
     {
         $user->makeActiveMember();
-        
-        OldMemberBecameMember::dispatch($user);
         
         return redirect('/users/' . $user->id);
     }

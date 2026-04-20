@@ -8,6 +8,7 @@
 
 namespace App\Repositories;
 
+use App\Events\MemberKindChanged;
 use App\Events\PendingUserCreated;
 use App\User;
 use Carbon\Carbon;
@@ -24,17 +25,32 @@ class UserRepository implements IRepository
 
         return $user;
     }
-
-    public function update($id, array $data)
+    
+    /**
+     * Update a user.
+     *
+     * @param mixed $id id of the user to be updated
+     * @param array $data array of mass assignable attributes to be updated on the user.
+     * @return User|null the updated user if the id could be found
+     * @throws \Exception if the birthday parsing fails
+     */
+    public function update(mixed $id, array $data): ?User
     {
-        $birthDay = new \DateTime($data['birthDay']);
         $user = $this->find($id);
-        $data['birthDay'] = Carbon::createFromFormat('d-m-Y H:i', $birthDay->format('d-m-Y') . ' ' . $birthDay->format('H:i'));
-        $data['incasso'] = array_key_exists("incasso", $data);
-        $data['password'] = ($data['password'] != "") ? bcrypt($data['password']) : $user->password;
-
-        $user->update($data);
-
+        
+        if ($user != null) {
+            $birthDay = new \DateTime($data['birthDay']);
+            $data['birthDay'] = Carbon::createFromFormat('d-m-Y H:i', $birthDay->format('d-m-Y') . ' ' . $birthDay->format('H:i'));
+            $data['incasso'] = array_key_exists("incasso", $data);
+            $data['password'] = ($data['password'] != "") ? bcrypt($data['password']) : $user->password;
+            
+            //fire a MemberKindChanged event when the kind_of_member field is updated
+            if ($data['kind_of_member'] != $user->kind_of_member) {
+                MemberKindChanged::dispatch($user, $user->kind_of_member, $data['kind_of_member']);
+            }
+            $user->update($data);
+        }
+        
         return $user;
     }
 
