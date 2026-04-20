@@ -6,16 +6,17 @@ use App\CustomClasses\MailList\MailListFacade;
 use App\Events\MemberMassMailListSync;
 use App\Repositories\UserRepository;
 use App\User;
-use GuzzleHttp\Exception\ClientException;
+use Illuminate\Http\Client\RequestException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Config;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Session;
 
 class MailListController extends Controller
 {
 
-    private $_mailListFacade;
-    private $userRepository;
+    private MailListFacade $_mailListFacade;
+    private UserRepository $userRepository;
 
     /**
      * Create a new controller instance.
@@ -54,14 +55,11 @@ class MailListController extends Controller
         try {
             $this->_mailListFacade->storeMailList($request->all());
             Session::flash("message", 'Mailing list added');
-        } catch (ClientException $e) {
-            if ($e->getCode() == 400 && json_decode($e->getResponse()->getBody())->description == "Mailing list exists") {
-                Session::flash("error", "Error: mailing list already exists");
-                \Log::error($e->getMessage());
-            } else {
-                Session::flash("error", "Some error occurred: " . $e->getCode());
-                \Log::error($e->getMessage());
-            }
+        } catch (RequestException $e) {
+            $code = $e->getCode();
+            $body = $e->getMessage() ?? 'An unknown error occurred';
+            Session::flash("error", $msg = "Error $code: $body");
+            Log::error($msg, ['exception' => $e]);
         }
 
         return redirect('/mailList');
@@ -91,10 +89,9 @@ class MailListController extends Controller
         return "";
     }
 
-    public function deleteMeberOfMailList($mailList, $member)
+    public function deleteMemberFromMailList($mailList, $member)
     {
         $this->_mailListFacade->deleteMemberFromMailList($mailList, $member);
-        return;
     }
 
     

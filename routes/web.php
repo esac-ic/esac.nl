@@ -53,7 +53,7 @@ Route::delete('users/{user}/addCertificate/{certificate}', 'UserCertificateContr
 Route::get('books/exportLibrary', 'LibraryController@exportLibrary');
 
 //mailist routes
-Route::delete('/mailList/{mailistid}/member/{memberid}', 'MailListController@deleteMeberOfMailList');
+Route::delete('/mailList/{mailistid}/member/{memberid}', 'MailListController@deleteMemberFromMailList');
 Route::post('/mailList/{mailistid}/member', 'MailListController@addMember');
 Route::post('/mailList/massSync', 'MailListController@massMemberMailListSync');
 
