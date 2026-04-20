@@ -39,10 +39,10 @@ Route::get('users/exportUsers', 'UserController@exportUsers')->name('users.expor
 Route::get('users/pennoMemberExportView', 'UserController@pennoMemberExportSelect')->name('users.pennoMemberExportView');
 Route::get('users/pennoMemberExport', 'UserController@pennoMemberExport')->name('users.pennoMemberExport');
 Route::get('users/exportOldUsers', 'UserController@exportOldUsers');
-Route::patch('users/{user}/removeAsActiveMember', 'UserController@removeAsActiveMember');
-Route::patch('users/{user}/makeActiveMember', 'UserController@makeActiveMember');
-Route::patch('users/{user}/removeAsPendingMember', 'PendingUserController@removeAsPendingMember');
-Route::patch('users/{user}/approveAsPendingMember', 'PendingUserController@approveAsPendingMember');
+Route::patch('users/{user}/removeAsActiveMember', 'UserController@removeAsActiveMember')->name('users.removeAsActiveMember');
+Route::patch('users/{user}/makeActiveMember', 'UserController@makeActiveMember')->name('users.makeActiveMember');
+Route::patch('users/{user}/removeAsPendingMember', 'PendingUserController@removeAsPendingMember')->name('users.removeAsPendingMember');
+Route::patch('users/{user}/approveAsPendingMember', 'PendingUserController@approveAsPendingMember')->name('users.approveAsPendingMember');
 
 //user certification routes
 Route::get('users/{user}/addCertificate', 'UserCertificateController@addCertificate');
