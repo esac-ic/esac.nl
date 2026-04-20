@@ -18,7 +18,7 @@ return new class extends Migration
             //custom fields corresponding to the UserEventLogEntry model
             $table->string('event_type');
             $table->string('event_details');
-            $table->unsignedInteger('user_id');
+            $table->unsignedInteger('user_id')->nullable();
             $table->foreign('user_id')->references('id')->on('users');
             $table->timestamps();
         });

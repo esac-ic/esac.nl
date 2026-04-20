@@ -18,15 +18,17 @@ class UserEventLogEntryRepository implements IRepository
         $validator = \Validator::make($data, [
             'event_type' => ['required', 'string'],
             'event_details' => ['required', 'string'],
-            'user_id' => ['required'],
+            'user_id' => [''],
         ]);
         
         if ($validator->fails()) {
-            throw new BadMethodCallException($validator->errors()->first());
+            throw new \ValueError($validator->errors()->first());
         }
         
         $logEntry = new UserEventLogEntry();
-        $logEntry->user()->associate($data['user_id']);
+        
+        if ($data['user_id'])
+            $logEntry->user()->associate($data['user_id']);
         $logEntry->event_type = $data['event_type'];
         $logEntry->event_details = $data['event_details'];
         $logEntry->save();
