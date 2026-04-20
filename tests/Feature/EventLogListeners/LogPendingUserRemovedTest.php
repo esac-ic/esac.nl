@@ -2,10 +2,10 @@
 
 namespace Tests\Feature\EventLogListeners;
 
-use App\Enums\UserEventTypes;
 use App\Events\PendingUserRemoved;
 use App\Listeners\LogPendingUserRemoved;
 use App\Models\UserEventLogEntry;
+use App\Repositories\UserEventLogEntryRepository;
 use App\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
@@ -21,7 +21,7 @@ class LogPendingUserRemovedTest extends \TestCase
         
         $this->assertEquals(0, UserEventLogEntry::all()->count());
         
-        $listener = new LogPendingUserRemoved();
+        $listener = new LogPendingUserRemoved($this->app->make(UserEventLogEntryRepository::class));
         $listener->handle($event);
         
         $this->assertEquals(1, UserEventLogEntry::all()->count());
@@ -29,7 +29,7 @@ class LogPendingUserRemovedTest extends \TestCase
         
         //assert correct event format
         $this->assertNull($logEntry->user);
-        $this->assertEquals(UserEventTypes::PendingUserRemoved->value,  $logEntry->eventType);
-        $this->assertEquals($user->getName() . " was removed as a pending member", $logEntry->eventDetails);
+        $this->assertEquals((new \ReflectionClass(PendingUserRemoved::class))->getShortName(),  $logEntry->event_type);
+        $this->assertEquals($user->getName() . " was removed as a pending member", $logEntry->event_details);
     }
 }

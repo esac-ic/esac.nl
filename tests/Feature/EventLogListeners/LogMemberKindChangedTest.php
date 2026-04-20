@@ -2,16 +2,16 @@
 
 namespace Tests\Feature\EventLogListeners;
 
-use App\Enums\UserEventTypes;
 use App\Events\MemberKindChanged;
 use App\Listeners\LogMemberKindChanged;
 use App\Models\UserEventLogEntry;
+use App\Repositories\UserEventLogEntryRepository;
 use App\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Lang;
 use InvalidArgumentException;
 
-class LogMemberTypeChangedTest extends \TestCase
+class LogMemberKindChangedTest extends \TestCase
 {
     use RefreshDatabase;
     
@@ -57,7 +57,7 @@ class LogMemberTypeChangedTest extends \TestCase
         
         $this->assertEquals(0, UserEventLogEntry::all()->count());
         
-        $listener = new LogMemberKindChanged();
+        $listener = new LogMemberKindChanged($this->app->make(UserEventLogEntryRepository::class));
         $listener->handle($event);
         
         $this->assertEquals(1, UserEventLogEntry::all()->count());
@@ -65,8 +65,8 @@ class LogMemberTypeChangedTest extends \TestCase
         
         //assert correct event format
         $this->assertTrue($user->is($logEntry->user));
-        $this->assertEquals(UserEventTypes::MemberTypeChanged->value,  $logEntry->eventType);
-        $this->assertEquals($user->getName() . " changed from " . $from . " to " . $to, $logEntry->eventDetails);
+        $this->assertEquals((new \ReflectionClass(MemberKindChanged::class))->getShortName(),  $logEntry->event_type);
+        $this->assertEquals($user->getName() . " changed from " . $from . " to " . $to, $logEntry->event_details);
     }
     
     

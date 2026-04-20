@@ -2,14 +2,14 @@
 
 namespace Tests\Feature\EventLogListeners;
 
-use App\Enums\UserEventTypes;
 use App\Events\PendingUserCreated;
 use App\Listeners\LogPendingUserCreated;
 use App\Models\UserEventLogEntry;
+use App\Repositories\UserEventLogEntryRepository;
 use App\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
-class LogNewPendingUserTest extends \TestCase
+class LogPendingUserCreatedTest extends \TestCase
 {
     use RefreshDatabase;
     
@@ -21,7 +21,7 @@ class LogNewPendingUserTest extends \TestCase
         
         $this->assertEquals(0, UserEventLogEntry::all()->count());
         
-        $listener = new LogPendingUserCreated();
+        $listener = new LogPendingUserCreated($this->app->make(UserEventLogEntryRepository::class));
         $listener->handle($event);
         
         $this->assertEquals(1, UserEventLogEntry::all()->count());
@@ -29,7 +29,7 @@ class LogNewPendingUserTest extends \TestCase
         
         //assert correct event format
         $this->assertTrue($user->is($logEntry->user));
-        $this->assertEquals(UserEventTypes::NewPendingUser->value,  $logEntry->eventType);
-        $this->assertEquals("New pending user: " . $user->getName(), $logEntry->eventDetails);
+        $this->assertEquals((new \ReflectionClass(PendingUserCreated::class))->getShortName(),  $logEntry->event_type);
+        $this->assertEquals("New pending user: " . $user->getName(), $logEntry->event_details);
     }
 }

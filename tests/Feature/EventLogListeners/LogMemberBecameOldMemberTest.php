@@ -2,10 +2,10 @@
 
 namespace Tests\Feature\EventLogListeners;
 
-use App\Enums\UserEventTypes;
 use App\Events\MemberBecameOldMember;
 use App\Listeners\LogMemberBecameOldMember;
 use App\Models\UserEventLogEntry;
+use App\Repositories\UserEventLogEntryRepository;
 use App\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
@@ -21,7 +21,7 @@ class LogMemberBecameOldMemberTest extends \TestCase
         
         $this->assertEquals(0, UserEventLogEntry::all()->count());
         
-        $listener = new LogMemberBecameOldMember();
+        $listener = new LogMemberBecameOldMember($this->app->make(UserEventLogEntryRepository::class));
         $listener->handle($event);
         
         $this->assertEquals(1, UserEventLogEntry::all()->count());
@@ -29,7 +29,7 @@ class LogMemberBecameOldMemberTest extends \TestCase
         
         //assert correct event format
         $this->assertTrue($user->is($logEntry->user));
-        $this->assertEquals(UserEventTypes::MemberBecameOldMember->value,  $logEntry->eventType);
-        $this->assertEquals($user->getName() . " became an old member", $logEntry->eventDetails);
+        $this->assertEquals((new \ReflectionClass(MemberBecameOldMember::class))->getShortName(),  $logEntry->event_type);
+        $this->assertEquals($user->getName() . " became an old member", $logEntry->event_details);
     }
 }
