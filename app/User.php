@@ -5,6 +5,8 @@ namespace App;
 use App\Models\ApplicationForm\ApplicationResponse;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Carbon\Carbon;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
@@ -76,21 +78,21 @@ class User extends Authenticatable
         'birthDay' => 'date',
     ];
 
-    public function roles()
+    public function roles(): BelongsToMany
     {
-        return $this->belongsToMany('App\Rol', 'rol_user');
+        return $this->belongsToMany(Rol::class);
     }
 
-    public function certificates()
+    public function certificates(): BelongsToMany
     {
-        return $this->belongsToMany('App\Certificate', 'certificate_user')
+        return $this->belongsToMany(Certificate::class)
             ->withTimestamps()->withTrashed();
     }
     
     /**
      * Format birthday
      * 
-     * @return \Illuminate\Database\Eloquent\Casts\Attribute
+     * @return Attribute formatted birthday model attribute
      */
     public function birthDayFormatted(): Attribute
     {
@@ -99,18 +101,17 @@ class User extends Authenticatable
         );
     }
 
-    public function hasRole(...$rols)
+    public function hasRole(...$roles): bool
     {
-        foreach ($rols as $rol) {
+        foreach ($roles as $rol) {
             if ($this->roles->contains($rol)) {
                 return true;
             }
         }
         return false;
-
     }
 
-    public function getCertificationsAbbreviations()
+    public function getCertificationsAbbreviations(): string
     {
         $abbreviations = [];
         foreach ($this->certificates as $certificate) {
@@ -120,12 +121,12 @@ class User extends Authenticatable
     }
 
     //checks if a user has role like admin or content administrator
-    public function hasBackendRigths()
+    public function hasBackendRights(): bool
     {
         return count($this->roles) > 0;
     }
 
-    public function getName()
+    public function getName(): string
     {
         $nameParts = [
             $this->firstname,
@@ -136,22 +137,22 @@ class User extends Authenticatable
         return implode(' ', array_filter($nameParts));
     }
 
-    public function isOldMember()
+    public function isOldMember(): bool
     {
         return $this->lid_af !== null;
     }
 
-    public function isPendingMember()
+    public function isPendingMember(): bool
     {
         return $this->pending_user !== null;
     }
 
-    public function isActiveMember()
+    public function isActiveMember(): bool
     {
         return ($this->lid_af === null && $this->pending_user === null);
     }
 
-    public function removeAsActiveMember()
+    public function removeAsActiveMember(): void
     {
         $this->lid_af = Carbon::now();
         $this->save();
@@ -163,7 +164,7 @@ class User extends Authenticatable
         }
     }
 
-    public function makeActiveMember()
+    public function makeActiveMember(): void
     {
         if ($this->email) {
             $this->lid_af = null;
@@ -171,22 +172,22 @@ class User extends Authenticatable
         }
     }
 
-    public function getAddress()
+    public function getAddress(): string
     {
         return "{$this->street} {$this->houseNumber}";
     }
 
-    public function applicationResponses()
+    public function applicationResponses(): HasMany
     {
-        return $this->hasMany(ApplicationResponse::class, 'user_id');
+        return $this->hasMany(ApplicationResponse::class);
     }
 
-    public function approveAsPendingMember()
+    public function approveAsPendingMember(): void
     {
         $this->pending_user = null;
         $this->save();
     }
-    public function removeAsPendingMember()
+    public function removeAsPendingMember(): void
     {
         $this->delete();
     }

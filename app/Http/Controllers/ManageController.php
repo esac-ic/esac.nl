@@ -14,7 +14,7 @@ class ManageController extends Controller
 
     public function index()
     {
-        if (Auth::guest() || !Auth::user()->hasBackendRigths()) {
+        if (Auth::guest() || !Auth::user()->hasBackendRights()) {
             abort(403, 'You do not have sufficient access to view this page');
         }
 

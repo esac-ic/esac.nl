@@ -393,7 +393,7 @@ class UpdateUserTest extends \TestCase
             $mock->shouldNotReceive('updateUserEmailFormAllMailList');
         });
         
-        $this->assertFalse($this->member->hasBackendRigths()); //double check that the member doesn't have rights
+        $this->assertFalse($this->member->hasBackendRights()); //double check that the member doesn't have rights
         
         $response = $this->actingAs($this->member)->patch('/users/' . $this->admin->id, $updateData);
         
