@@ -8,21 +8,18 @@
 
 namespace App\Repositories;
 
+use App\Events\PendingUserCreated;
 use App\User;
 use Carbon\Carbon;
 
 class UserRepository implements IRepository
 {
 
-    public function create(array $data)
+    public function create(array $data): User
     {
-
-        $user = new User($data);
-        $user->password = bcrypt($user->password);
-        $birthDay = new \DateTime($data['birthDay']);
-        $user->birthDay = Carbon::createFromFormat('d-m-Y H:i', $birthDay->format('d-m-Y') . ' ' . $birthDay->format('H:i'));
-        $user->incasso = array_key_exists("incasso", $data);
-
+        
+        $user = $this->createUserFromDataArray($data);
+        
         $user->save();
 
         return $user;
@@ -41,7 +38,7 @@ class UserRepository implements IRepository
         return $user;
     }
 
-    public function delete($id)
+    public function delete($id): void
     {
         $user = $this->find($id);
         $user->certificates()->detach();
@@ -81,14 +78,14 @@ class UserRepository implements IRepository
         return User::where('pending_user', '!=', null)->get($columns);
     }
 
-    public function addRols($id, array $rols = array())
+    public function addRols($id, array $rols = array()): void
     {
         $user = $this->find($id);
 
         $user->roles()->sync($rols);
     }
 
-    public function addCertificate($userid, $data)
+    public function addCertificate($userid, $data): void
     {
         $user = $this->find($userid);
 
@@ -100,23 +97,47 @@ class UserRepository implements IRepository
         $user = $this->find($userid);
         return $user->certificates;
     }
-
-    public function createPendingUser(array $data)
+    
+    /**
+     * Creates a new pending user.
+     * Dispatches a PendingUserCreated event
+     *
+     * @param array $data array with the mass assignable user attributes
+     * @return User the created pending user
+     * @throws \Exception if user birthday parsing fails
+     */
+    public function createPendingUser(array $data): User
     {
-        $user = new User($data);
-        $user->password = bcrypt($user->password);
-        $birthDay = new \DateTime($data['birthDay']);
-        $user->birthDay = Carbon::createFromFormat('d-m-Y H:i', $birthDay->format('d-m-Y') . ' ' . $birthDay->format('H:i'));
-        $user->incasso = array_key_exists("incasso", $data);
-
+        $user = $this->createUserFromDataArray($data);
+        
         //pending user specific
         $user->pending_user = Carbon::now();
         $user->kind_of_member = "member";
         $user->lid_af = null;
 
         $user->save();
+        
+        PendingUserCreated::dispatch($user);
 
         return $user;
     }
-
+    
+    /**
+     * Helper method to create a user object from a data array.
+     *
+     * @param array $data array of mass assignable attribute values
+     * @return User
+     * @throws \Exception if birthday parsing fails
+     */
+    private function createUserFromDataArray(array $data): User
+    {
+        $user = new User($data);
+        $user->password = bcrypt($user->password);
+        $birthDay = new \DateTime($data['birthDay']);
+        $user->birthDay = Carbon::createFromFormat('d-m-Y H:i', $birthDay->format('d-m-Y') . ' ' . $birthDay->format('H:i'));
+        $user->incasso = array_key_exists("incasso", $data);
+        
+        return $user;
+    }
+    
 }
