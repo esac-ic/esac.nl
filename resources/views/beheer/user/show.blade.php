@@ -166,6 +166,10 @@
                             <td>{{'User updated at'}}</td>
                             <td>{{\Carbon\Carbon::parse($user->updated_at)->format('d-m-Y')}}</td>
                         </tr>
+                        <tr>
+                            <td>{{'ID'}}</td>
+                            <td>{{ $user->id}}</td>
+                        </tr>
                         @isset($user->lid_af)
                         <tr>
                             <td>User removed as active member at</td>

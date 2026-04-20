@@ -1,9 +1,10 @@
 <template>
     <div>
         <div v-for="(row, index) in applicationFormRows" class="form-group" :key="index">
-            <label>{{getLabel(row)}}</label>
+            <label>{{getLabel(row)}}<span v-if="isRequired(row)">*</span></label>
             <component :is="getComponentName(row)" :row="row"></component>
         </div>
+        <span class="text-small text-muted">*Mandatory question</span>
     </div>
 </template>
 
@@ -40,6 +41,9 @@
             },
             getLabel(row) {
                 return row.name;
+            },
+            isRequired(row) {
+                return row.required;
             }
         },
         mounted(){
