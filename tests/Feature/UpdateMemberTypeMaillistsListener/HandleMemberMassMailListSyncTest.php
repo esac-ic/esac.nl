@@ -4,6 +4,7 @@ namespace Tests\Feature\UpdateMemberTypeMaillistsListener;
 
 use App\CustomClasses\MailList\MailListFacade;
 use App\Events\MemberMassMailListSync;
+use App\Jobs\MemberMassMailListSyncJob;
 use App\Listeners\UpdateMemberTypeMaillists;
 use App\Setting;
 use App\User;
@@ -71,10 +72,11 @@ class HandleMemberMassMailListSyncTest extends \TestCase
         $this->user->kind_of_member = Lang::get('member');
         $this->user->save();
 
-        $listener = new UpdateMemberTypeMaillists($this->mockedMailListFacade);
-        $event = new MemberMassMailListSync(User::all());
-
-        $listener->handleMemberMassMailListSync($event);
+//        $listener = new UpdateMemberTypeMaillists($this->mockedMailListFacade);
+//        $event = new MemberMassMailListSync(User::all());
+//
+//        $listener->handleMemberMassMailListSync($event);
+        MemberMassMailListSyncJob::dispatch(User::all());
     }
 
     //Reasonable order of magnitude for a big mail list

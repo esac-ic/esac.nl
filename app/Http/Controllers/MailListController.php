@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\CustomClasses\MailList\MailListFacade;
 use App\Events\MemberMassMailListSync;
+use App\Jobs\MemberMassMailListSyncJob;
 use App\Repositories\UserRepository;
 use App\User;
 use Illuminate\Http\Client\RequestException;
@@ -98,7 +99,9 @@ class MailListController extends Controller
     public function massMemberMailListSync()
     {
         $users = $this->userRepository->getCurrentUsers(); //should give user objects
-        MemberMassMailListSync::dispatch($users); //add all these users to the maillists corresponding to their member types.
+        
+        MemberMassMailListSyncJob::dispatch($users); //add all these users to the maillists corresponding to their member types.
+//        MemberMassMailListSync::dispatch($users);
         return redirect('/mailList');
     }
 }
