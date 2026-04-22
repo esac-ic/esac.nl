@@ -45,7 +45,7 @@ class MakeUserActiveTest extends TestCase
             config('mailman.url') . "/*" => Http::response('', 204),
         ]);
 
-        $response = $this->patch('users/' . $this->user->id . '/makeActiveMember');
+        $response = $this->patch(route('users.makeActiveMember', ['user' => $this->user->id]));
 
         $response->assertStatus(302);
 

@@ -90,7 +90,7 @@ class UpdateMemberTypeMaillists implements ShouldQueue
         $mailLists = collect(self::getMemberTypeMailLists($memberType));
         
         if ($mailLists->isNotEmpty()) {
-            $this->mailListFacade->addUserToSpecifiedMailLists($user->email, $user->getName(), $mailLists);
+            $this->mailListFacade->addUserToSpecifiedMailLists($user->email, $user->getName(), $mailLists->all());
         }
     }
     
