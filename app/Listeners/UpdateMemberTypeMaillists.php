@@ -3,7 +3,6 @@
 namespace App\Listeners;
 
 use App\CustomClasses\MailList\MailListFacade;
-use App\Events\MemberMassMailListSync;
 use App\Events\MemberKindChanged;
 use App\Events\OldMemberBecameMember;
 use App\Events\PendingUserApproved;

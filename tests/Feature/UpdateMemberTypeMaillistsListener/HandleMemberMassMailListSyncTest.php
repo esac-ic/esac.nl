@@ -3,7 +3,6 @@
 namespace Tests\Feature\UpdateMemberTypeMaillistsListener;
 
 use App\CustomClasses\MailList\MailListFacade;
-use App\Events\MemberMassMailListSync;
 use App\Jobs\MemberMassMailListSyncJob;
 use App\Listeners\UpdateMemberTypeMaillists;
 use App\Setting;
@@ -64,19 +63,15 @@ class HandleMemberMassMailListSyncTest extends \TestCase
     public function test_add_single_normal_member()
     {
         $this->mockedMailListFacade->shouldNotReceive('removeUserFromSpecifiedMailLists');
-        
         $this->mockedMailListFacade->shouldReceive('addUserToSpecifiedMailLists')
             ->with($this->user->email, $this->user->getName(), ['member.esac.nl'])
             ->once();
 
         $this->user->kind_of_member = Lang::get('member');
         $this->user->save();
-
-//        $listener = new UpdateMemberTypeMaillists($this->mockedMailListFacade);
-//        $event = new MemberMassMailListSync(User::all());
-//
-//        $listener->handleMemberMassMailListSync($event);
-        MemberMassMailListSyncJob::dispatch(User::all());
+        
+        $job = new MemberMassMailListSyncJob(User::all());
+        $job->handle($this->mockedMailListFacade);
     }
 
     //Reasonable order of magnitude for a big mail list
@@ -96,11 +91,9 @@ class HandleMemberMassMailListSyncTest extends \TestCase
                 ->once();
         }
         
+        $job = new MemberMassMailListSyncJob(User::all());
         
-        $listener = new UpdateMemberTypeMaillists($this->mockedMailListFacade);
-        $event = new MemberMassMailListSync(User::all());
-        
-        $listener->handleMemberMassMailListSync($event);
+        $job->handle($this->mockedMailListFacade);
     }
     
     public function test_add_mix_of_members()
@@ -127,9 +120,7 @@ class HandleMemberMassMailListSyncTest extends \TestCase
             })
             ->times(User::count());
 
-        $listener = new UpdateMemberTypeMaillists($this->mockedMailListFacade);
-        $event = new MemberMassMailListSync(User::all());
-        
-        $listener->handleMemberMassMailListSync($event);
+        $job = new MemberMassMailListSyncJob(User::all());
+        $job->handle($this->mockedMailListFacade);
     }
 }

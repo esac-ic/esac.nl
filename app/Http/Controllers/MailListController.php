@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\CustomClasses\MailList\MailListFacade;
-use App\Events\MemberMassMailListSync;
 use App\Jobs\MemberMassMailListSyncJob;
 use App\Repositories\UserRepository;
 use App\User;
