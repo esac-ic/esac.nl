@@ -39,10 +39,10 @@ class UpdateMemberTypeMaillists implements ShouldQueue
         $addToLists = $newLists->diff($oldLists);
         
         if ($removeFromLists->isNotEmpty()) {
-            $this->mailListFacade->removeUserFromSpecifiedMailLists($event->user->email, $removeFromLists);
+            $this->mailListFacade->removeUserFromSpecifiedMailLists($event->user->email, $removeFromLists->all());
         }
         if ($addToLists->isNotEmpty()) {
-            $this->mailListFacade->addUserToSpecifiedMailLists($event->user->email, $event->user->getName(), $addToLists);
+            $this->mailListFacade->addUserToSpecifiedMailLists($event->user->email, $event->user->getName(), $addToLists->all());
         }
     }
     
