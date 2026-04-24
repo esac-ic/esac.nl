@@ -2,11 +2,13 @@
 
 namespace Tests\Feature\User;
 
+use App\Events\OldMemberBecameMember;
 use App\User;
 use Carbon\Carbon;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Config;
+use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\Http;
 use TestCase;
 
@@ -29,6 +31,9 @@ class MakeUserActiveTest extends TestCase
 
         $this->user = $user = User::factory()->create();
         $this->user->lid_af = Carbon::Now();
+        
+        Event::fake();
+        
         session()->start();
     }
 
@@ -48,6 +53,7 @@ class MakeUserActiveTest extends TestCase
         $response = $this->patch(route('users.makeActiveMember', ['user' => $this->user->id]));
 
         $response->assertStatus(302);
+        Event::assertDispatched(OldMemberBecameMember::class);
 
         $this->assertNotNull($this->user->lid_af);
     }
