@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Events\PendingUserApproved;
+use App\Events\PendingUserRemoved;
 use App\Repositories\UserRepository;
 use App\Rules\EmailDomainValidator;
 use App\User;
@@ -12,7 +14,7 @@ use Illuminate\Support\Facades\Session;
 class PendingUserController extends Controller
 {
 
-    private $_userRepository;
+    private UserRepository $_userRepository;
     /**
      * Create a new controller instance.
      *
@@ -39,8 +41,8 @@ class PendingUserController extends Controller
     {
         $this->validateInput($request);
 
-        $user = $this->_userRepository->createPendingUser($request->all());
-
+        $this->_userRepository->createPendingUser($request->all());
+        
         Session::flash("message", 'Your membership request is pending, we will get back to you as soon as possible');
 
         return redirect('/signup');
@@ -56,7 +58,7 @@ class PendingUserController extends Controller
     public function approveAsPendingMember(Request $request, User $user)
     {
         $user->approveAsPendingMember();
-
+        
         return redirect('users/pending_members');
     }
 

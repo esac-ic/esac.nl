@@ -15,11 +15,14 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Session;
 use Maatwebsite\Excel\Facades\Excel;
+use App\Events\MemberKindChanged;
+use App\Events\MemberBecameOldMember;
+use App\Events\OldMemberBecameMember;
 
 class UserController extends Controller
 {
 
-    private $_userRepository;
+    private UserRepository $_userRepository;
     /**
      * Create a new controller instance.
      *
@@ -117,18 +120,19 @@ class UserController extends Controller
                 'firstname' => $user->firstname,
                 'preposition' => $user->preposition,
                 'lastname' => $user->lastname,
-                'remarks' => $user->remarks,
+                'remark' => $user->remark,
                 'kind_of_member' => $user->kind_of_member,
             ]);
         }
-
+        
         $this->validateInput($request, $user->id);
-
+        
         if ($user->email != $request['email']) {
-            $mailListFacade->updateUserEmailFormAllMailList($user, $user->email, $request['email']);
+            $mailListFacade->updateUserEmailForAllMailList($user, $user->email, $request['email']);
         }
-
+        
         $this->_userRepository->update($user->id, $request->all());
+        
         if (Auth::user()->hasRole(Config::get('constants.Administrator'))) {
             $this->_userRepository->addRols($user->id, $request->get('roles', []));
         }
@@ -145,7 +149,7 @@ class UserController extends Controller
     public function removeAsActiveMember(Request $request, User $user, MailListFacade $mailListFacade)
     {
         $user->removeAsActiveMember();
-        $mailListFacade->deleteUserFormAllMailList($user);
+        $mailListFacade->deleteUserForAllMailList($user);
 
         return redirect('/users/' . $user->id);
     }
@@ -176,7 +180,7 @@ class UserController extends Controller
     public function makeActiveMember(Request $request, User $user)
     {
         $user->makeActiveMember();
-
+        
         return redirect('/users/' . $user->id);
     }
 

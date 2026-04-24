@@ -2,17 +2,26 @@
 
 namespace App;
 
+use App\Events\MemberBecameOldMember;
+use App\Events\OldMemberBecameMember;
+use App\Events\PendingUserApproved;
+use App\Events\PendingUserRemoved;
 use App\Models\ApplicationForm\ApplicationResponse;
+use \RuntimeException;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Carbon\Carbon;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class User extends Authenticatable
 {
-    use Notifiable;
-
+    use Notifiable, HasFactory, SoftDeletes;
+    
     /**
      * The attributes that are mass assignable.
      *
@@ -54,25 +63,45 @@ class User extends Authenticatable
         'password', 'remember_token',
     ];
     
+    /**
+     * All possible member types.
+     * use trans('key') for nicely formatted string
+     * 
+     * @var array
+     */
+    public const KINDS_OF_MEMBER = [
+        "member",
+        "extraordinary_member",
+        "reunist",
+        "honorary_member",
+        "member_of_merit",
+        "trainer",
+        "relationship",
+    ];
+    
     protected $casts = [
         'birthDay' => 'date',
     ];
 
-    public function roles()
+    public function roles(): BelongsToMany
     {
-        return $this->belongsToMany('App\Rol', 'rol_user');
+        return $this->belongsToMany(Rol::class);
     }
 
-    public function certificates()
+    public function certificates(): BelongsToMany
     {
-        return $this->belongsToMany('App\Certificate', 'certificate_user')
+        return $this->belongsToMany(Certificate::class)
             ->withTimestamps()->withTrashed();
+    }
+    public function applicationResponses(): HasMany
+    {
+        return $this->hasMany(ApplicationResponse::class);
     }
     
     /**
      * Format birthday
-     * 
-     * @return \Illuminate\Database\Eloquent\Casts\Attribute
+     *
+     * @return Attribute formatted birthday model attribute
      */
     public function birthDayFormatted(): Attribute
     {
@@ -81,18 +110,21 @@ class User extends Authenticatable
         );
     }
 
-    public function hasRole(...$rols)
+    public function hasRole(...$roles): bool
     {
-        foreach ($rols as $rol) {
+        foreach ($roles as $rol) {
             if ($this->roles->contains($rol)) {
                 return true;
             }
         }
         return false;
-
     }
-
-    public function getCertificationsAbbreviations()
+    
+    /**
+     * Returns a string of the certificate abbreviations in the format "abbr, abbr, ..."
+     * @return string
+     */
+    public function getCertificationsAbbreviations(): string
     {
         $abbreviations = [];
         foreach ($this->certificates as $certificate) {
@@ -101,13 +133,20 @@ class User extends Authenticatable
         return implode(', ', $abbreviations);
     }
 
-    //checks if a user has role like admin or content administrator
-    public function hasBackendRigths()
+    /**
+     * Checks if a user has role like admin or content administrator
+     * @return bool
+     */
+    public function hasBackendRights(): bool
     {
         return count($this->roles) > 0;
     }
-
-    public function getName()
+    
+    /**
+     * Returns the name in the format "firstname preposition lastname".
+     * @return string
+     */
+    public function getName(): string
     {
         $nameParts = [
             $this->firstname,
@@ -117,23 +156,38 @@ class User extends Authenticatable
 
         return implode(' ', array_filter($nameParts));
     }
-
-    public function isOldMember()
+    
+    /**
+     * Returns the address of the user in the format "street house number".
+     * @return string
+     */
+    public function getAddress(): string
+    {
+        return "{$this->street} {$this->houseNumber}";
+    }
+    
+    public function isOldMember(): bool
     {
         return $this->lid_af !== null;
     }
 
-    public function isPendingMember()
+    public function isPendingMember(): bool
     {
         return $this->pending_user !== null;
     }
 
-    public function isActiveMember()
+    public function isActiveMember(): bool
     {
         return ($this->lid_af === null && $this->pending_user === null);
     }
-
-    public function removeAsActiveMember()
+    
+    /**
+     * Makes a member an inactive/old member.
+     * Dispatches a MemberBecameOldMember event.
+     *
+     * @return void
+     */
+    public function removeAsActiveMember(): void
     {
         $this->lid_af = Carbon::now();
         $this->save();
@@ -143,33 +197,53 @@ class User extends Authenticatable
         if (Auth::user()->id === $this->id) {
             Auth::logout();
         }
+        
+        MemberBecameOldMember::dispatch($this);
     }
-
-    public function makeActiveMember()
+    
+    /**
+     * Makes a member active.
+     * Dispatches an OldMemberBecameMember event when called on an inactive (old) member
+     *
+     * @return void
+     */
+    public function makeActiveMember(): void
     {
         if ($this->email) {
+            //only dispatch the event if the user was actually an inactive member
+            if ($this->lid_af === null) {
+                OldMemberBecameMember::dispatch($this);
+            }
             $this->lid_af = null;
             $this->save();
         }
     }
-
-    public function getAddress()
-    {
-        return "{$this->street} {$this->houseNumber}";
-    }
-
-    public function applicationResponses()
-    {
-        return $this->hasMany(ApplicationResponse::class, 'user_id');
-    }
-
-    public function approveAsPendingMember()
+    
+    /**
+     * Approves a pending member as a member.
+     * Dispatches a PendingUserApproved event.
+     * @return void
+     */
+    public function approveAsPendingMember(): void
     {
         $this->pending_user = null;
         $this->save();
+        PendingUserApproved::dispatch($this);
     }
-    public function removeAsPendingMember()
+    
+    /**
+     * Removes a pending member.
+     * Dispatches a PendingUserRemovedEvent
+     *
+     * @return void
+     * @throws RuntimeException when called on a non-pending member
+     */
+    public function removeAsPendingMember(): void
     {
+        if ($this->pending_user === null) {
+            throw new RuntimeException("User is not a pending member.");
+        }
+        PendingUserRemoved::dispatch($this, $this->getName());
         $this->delete();
     }
 

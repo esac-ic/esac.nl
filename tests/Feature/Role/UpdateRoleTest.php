@@ -26,7 +26,7 @@ class UpdateRoleTest extends TestCase
     protected function setUp(): void
     {
         parent::setUp();
-        $this->user = $user = factory(User::class)->create();
+        $this->user = $user = User::factory()->create();
 
         $user->roles()->attach(Config::get('constants.Administrator'));
         $this->be($user);

@@ -3,32 +3,38 @@
 namespace App\Http\Controllers;
 
 use App\CustomClasses\MailList\MailListFacade;
+use App\Jobs\MemberMassMailListSyncJob;
+use App\Repositories\UserRepository;
 use App\User;
+use Illuminate\Http\Client\RequestException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Config;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Session;
 
 class MailListController extends Controller
 {
 
-    private $_mailListFacade;
+    private MailListFacade $_mailListFacade;
+    private UserRepository $userRepository;
 
     /**
      * Create a new controller instance.
      *
      * @return void
      */
-    public function __construct(MailListFacade $mailListFacade)
+    public function __construct(MailListFacade $mailListFacade, UserRepository $userRepository)
     {
         $this->_mailListFacade = $mailListFacade;
         $this->middleware('auth');
         $this->middleware('authorize:' . Config::get('constants.Administrator'));
+        $this->userRepository = $userRepository;
     }
 
     //gives the mail list views
     public function index()
     {
-        $mailLists = $this->_mailListFacade->getAllMailLists();
+        $mailLists = $this->_mailListFacade->getAllMailLists()->all();
 
         return view('beheer.mailList.index', compact('mailLists'));
     }
@@ -46,9 +52,16 @@ class MailListController extends Controller
     //store maillist
     public function store(Request $request)
     {
-        $this->_mailListFacade->storeMailList($request->all());
+        try {
+            $this->_mailListFacade->storeMailList($request->all());
+            Session::flash("message", 'Mailing list added');
+        } catch (RequestException $e) {
+            $code = $e->getCode();
+            $body = $e->getMessage() ?? 'An unknown error occurred';
+            Session::flash("error", $msg = "Error $code: $body");
+            Log::error($msg, ['exception' => $e]);
+        }
 
-        Session::flash("message", 'Mailing list added');
         return redirect('/mailList');
     }
 
@@ -76,10 +89,18 @@ class MailListController extends Controller
         return "";
     }
 
-    public function deleteMeberOfMailList($mailList, $member)
+    public function deleteMemberFromMailList($mailList, $member)
     {
         $this->_mailListFacade->deleteMemberFromMailList($mailList, $member);
-        return;
     }
 
+    
+    public function massMemberMailListSync()
+    {
+        $users = $this->userRepository->getCurrentUsers(); //should give user objects
+        
+        MemberMassMailListSyncJob::dispatch($users); //add all these users to the maillists corresponding to their member types.
+//        MemberMassMailListSync::dispatch($users);
+        return redirect('/mailList');
+    }
 }
