@@ -100,7 +100,6 @@ class MailListController extends Controller
         $users = $this->userRepository->getCurrentUsers(); //should give user objects
         
         MemberMassMailListSyncJob::dispatch($users); //add all these users to the maillists corresponding to their member types.
-//        MemberMassMailListSync::dispatch($users);
         return redirect('/mailList');
     }
 }
