@@ -2,13 +2,9 @@
 
 namespace App\Listeners;
 
-use App\Events\LoggableUserEventInterface;
 use App\Events\PendingUserApproved;
 use App\Repositories\UserEventLogEntryRepository;
 use Illuminate\Contracts\Queue\ShouldQueue;
-use Illuminate\Queue\InteractsWithQueue;
-use App\Models\UserEventLogEntry;
-use App\Enums\UserEventTypes;
 use ReflectionClass;
 
 class LogPendingUserApproved implements ShouldQueue
@@ -33,7 +29,7 @@ class LogPendingUserApproved implements ShouldQueue
         $this->logEntryRepository->create([
             'event_type' => (new ReflectionClass($event))->getShortName(),
             'event_details' => $event->user->getName() . " was approved as a member",
-            'user_id' => $event->user,
+            'user_id' => $event->user->id,
         ]);
     }
 }

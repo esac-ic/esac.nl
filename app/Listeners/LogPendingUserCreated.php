@@ -2,17 +2,12 @@
 
 namespace App\Listeners;
 
-use App\Events\NewPendingUser;
-use App\Events\PendingUserApproved;
 use App\Events\PendingUserCreated;
 use App\Repositories\UserEventLogEntryRepository;
 use Illuminate\Contracts\Queue\ShouldQueue;
-use Illuminate\Queue\InteractsWithQueue;
-use App\Models\UserEventLogEntry;
-use App\Enums\UserEventTypes;
 use ReflectionClass;
 
-class LogPendingUserCreated
+class LogPendingUserCreated implements ShouldQueue
 {
     private UserEventLogEntryRepository $logEntryRepository;
     
@@ -34,7 +29,7 @@ class LogPendingUserCreated
         $this->logEntryRepository->create([
             'event_type' => (new ReflectionClass($event))->getShortName(),
             'event_details' => "New pending user: " . $event->user->getName(),
-            'user_id' => $event->user,
+            'user_id' => $event->user->id,
         ]);
     }
 }

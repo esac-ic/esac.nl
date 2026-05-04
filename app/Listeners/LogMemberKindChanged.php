@@ -33,7 +33,7 @@ class LogMemberKindChanged implements ShouldQueue
         $this->logEntryRepository->create([
             'event_type' => (new ReflectionClass($event))->getShortName(),
             'event_details' => $event->user->getName() . " changed from " . $event->previousMemberType . " to " . $event->newMemberType,
-            'user_id' => $event->user,
+            'user_id' => $event->user->id,
         ]);
     }
 }

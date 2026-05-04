@@ -3,12 +3,8 @@
 namespace App\Listeners;
 
 use App\Events\MemberBecameOldMember;
-use App\Events\MemberKindChanged;
 use App\Repositories\UserEventLogEntryRepository;
 use Illuminate\Contracts\Queue\ShouldQueue;
-use Illuminate\Queue\InteractsWithQueue;
-use App\Models\UserEventLogEntry;
-use App\Enums\UserEventTypes;
 use ReflectionClass;
 
 class LogMemberBecameOldMember implements ShouldQueue
@@ -33,7 +29,7 @@ class LogMemberBecameOldMember implements ShouldQueue
         $this->logEntryRepository->create([
             'event_type' => (new ReflectionClass($event))->getShortName(),
             'event_details' => $event->user->getName() . " became an old member",
-            'user_id' => $event->user,
+            'user_id' => $event->user->id,
         ]);
     }
 }

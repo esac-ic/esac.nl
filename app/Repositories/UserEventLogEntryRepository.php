@@ -15,15 +15,11 @@ class UserEventLogEntryRepository implements IRepository
      */
     public function create(array $data): UserEventLogEntry
     {
-        $validator = \Validator::make($data, [
+        \Validator::make($data, [
             'event_type' => ['required', 'string'],
             'event_details' => ['required', 'string'],
-            'user_id' => [''],
-        ]);
-        
-        if ($validator->fails()) {
-            throw new \ValueError($validator->errors()->first());
-        }
+            'user_id' => ['nullable', 'integer'],
+        ])->validate();
         
         $logEntry = new UserEventLogEntry();
         
