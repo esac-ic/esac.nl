@@ -29,12 +29,12 @@ class MemberMassMailListSyncJob implements ShouldQueue
         //get maillists for each member type
         $mailListsPerMemberKind = [];
         foreach (User::KINDS_OF_MEMBER as $kind_of_member) {
-            $mailListsPerMemberKind[\Lang::get($kind_of_member)] = UpdateMemberTypeMaillists::getMemberTypeMailLists(\Lang::get($kind_of_member));
+            $mailListsPerMemberKind[$kind_of_member] = UpdateMemberTypeMaillists::getMemberTypeMailLists($kind_of_member);
         }
         
         foreach ($this->users as $user)
         {
-            if ($mailListsPerMemberKind[\Lang::get($user->kind_of_member)] ?? false) {
+            if ($mailListsPerMemberKind[$user->kind_of_member] ?? false) {
                 $mailListFacade->addUserToSpecifiedMailLists($user->email, $user->getName(), $mailListsPerMemberKind[$user->kind_of_member]);
             }
         }

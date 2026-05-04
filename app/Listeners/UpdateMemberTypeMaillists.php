@@ -6,9 +6,8 @@ use App\CustomClasses\MailList\MailListFacade;
 use App\Events\MemberKindChanged;
 use App\Events\OldMemberBecameMember;
 use App\Events\PendingUserApproved;
-use Illuminate\Events\Dispatcher;
 use Illuminate\Contracts\Queue\ShouldQueue;
-use Illuminate\Queue\InteractsWithQueue;
+use Illuminate\Events\Dispatcher;
 
 class UpdateMemberTypeMaillists implements ShouldQueue
 {
@@ -104,25 +103,25 @@ class UpdateMemberTypeMaillists implements ShouldQueue
     {
         //check member type and fetch the maillists
         switch ($memberType) {
-            case \Lang::get("member"):
+            case "member":
                 $mailLists = trim(app(\App\Setting::SINGELTONNAME)->getSetting(\App\Setting::SETTING_NORMAL_MEMBER_MAIL_LISTS));
                 break;
-            case \Lang::get("extraordinary_member"):
+            case "extraordinary_member":
                 $mailLists = trim(app(\App\Setting::SINGELTONNAME)->getSetting(\App\Setting::SETTING_EXTRAORDINARY_MEMBER_MAIL_LISTS));
                 break;
-            case \Lang::get("reunist"):
+            case "reunist":
                 $mailLists = trim(app(\App\Setting::SINGELTONNAME)->getSetting(\App\Setting::SETTING_REUNIST_MEMBER_MAIL_LISTS));
                 break;
-            case \Lang::get("honorary_member"):
+            case "honorary_member":
                 $mailLists = trim(app(\App\Setting::SINGELTONNAME)->getSetting(\App\Setting::SETTING_HONORARY_MEMBER_MAIL_LISTS));
                 break;
-            case \Lang::get("member_of_merit"):
+            case "member_of_merit":
                 $mailLists = trim(app(\App\Setting::SINGELTONNAME)->getSetting(\App\Setting::SETTING_MERIT_MEMBER_MAIL_LISTS));
                 break;
-            case \Lang::get("trainer"):
+            case "trainer":
                 $mailLists = trim(app(\App\Setting::SINGELTONNAME)->getSetting(\App\Setting::SETTING_TRAINER_MEMBER_MAIL_LISTS));
                 break;
-            case \Lang::get("relationship"):
+            case "relationship":
                 $mailLists = trim(app(\App\Setting::SINGELTONNAME)->getSetting(\App\Setting::SETTING_RELATIONSHIP_MEMBER_MAIL_LISTS));
                 break;
             default:
@@ -134,7 +133,7 @@ class UpdateMemberTypeMaillists implements ShouldQueue
         
         //check if there are maillists specified
         if ($mailLists == "") {
-            return $mailLists;
+            return [];
         }
         
         //split the list of maillists
