@@ -7,6 +7,7 @@ use App\Events\OldMemberBecameMember;
 use App\Events\PendingUserApproved;
 use App\Events\PendingUserRemoved;
 use App\Models\ApplicationForm\ApplicationResponse;
+use Illuminate\Support\Facades\DB;
 use \RuntimeException;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Carbon\Carbon;
@@ -203,20 +204,21 @@ class User extends Authenticatable
     
     /**
      * Makes a member active.
-     * Dispatches an OldMemberBecameMember event when called on an inactive (old) member
+     * Dispatches an OldMemberBecameMember event
      *
      * @return void
      */
     public function makeActiveMember(): void
     {
-        if ($this->email) {
-            //only dispatch the event if the user was actually an inactive member
-            if ($this->lid_af === null) {
-                OldMemberBecameMember::dispatch($this);
-            }
+        if (! ($this->email || $this->isOldMember())) {
+            return;
+        }
+        
+        DB::transaction(function () {
             $this->lid_af = null;
             $this->save();
-        }
+            OldMemberBecameMember::dispatch($this);
+        });
     }
     
     /**
@@ -240,7 +242,7 @@ class User extends Authenticatable
      */
     public function removeAsPendingMember(): void
     {
-        if ($this->pending_user === null) {
+        if (! $this->isPendingMember()) {
             throw new RuntimeException("User is not a pending member.");
         }
         PendingUserRemoved::dispatch($this, $this->getName());
