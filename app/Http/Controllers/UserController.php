@@ -179,9 +179,15 @@ class UserController extends Controller
 
     public function makeActiveMember(Request $request, User $user)
     {
-        $user->makeActiveMember();
-        
-        return redirect('/users/' . $user->id);
+        if ($user->makeActiveMember()) //this should never fail unless some validation fails somewhere or the intended flow of the website breaks
+        {
+            return redirect('/users/' . $user->id);
+        }
+        else
+        {
+            Session::flash("error", 'Failed to make member active');
+            return redirect(route('users.index-old-members'));
+        }
     }
 
     private function validateInput(Request $request, int $userId = null)

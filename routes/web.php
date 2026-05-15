@@ -33,7 +33,7 @@ Route::group(['as' => 'beheer.', 'prefix' => 'beheer/', 'middleware' => 'auth'],
 });
 
 //extra user routes
-Route::get('users/old_members', 'UserController@indexOldMembers');
+Route::get('users/old_members', 'UserController@indexOldMembers')->name('users.index-old-members');
 Route::get('users/pending_members', 'PendingUserController@indexPendingMembers')->name('users.indexPendingMembers');
 Route::get('users/exportUsers', 'UserController@exportUsers')->name('users.exportUsers');
 Route::get('users/pennoMemberExportView', 'UserController@pennoMemberExportSelect')->name('users.pennoMemberExportView');
