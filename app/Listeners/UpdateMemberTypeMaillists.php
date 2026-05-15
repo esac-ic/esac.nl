@@ -97,9 +97,9 @@ class UpdateMemberTypeMaillists implements ShouldQueue
      * Fetch and process the maillists associated with a membership type in the settings.
      *
      * @param string $memberType
-     * @return string[]|string
+     * @return string[]|array
      */
-    public static function getMemberTypeMailLists(string $memberType): array|string
+    public static function getMemberTypeMailLists(string $memberType): array
     {
         //check member type and fetch the maillists
         switch ($memberType) {
