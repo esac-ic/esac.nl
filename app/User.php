@@ -210,7 +210,7 @@ class User extends Authenticatable
      */
     public function makeActiveMember(): void
     {
-        if (! ($this->email || $this->isOldMember())) {
+        if (!$this->email || $this->isActiveMember()) { //don't do anything if the member is already active or doesn't have an email address
             return;
         }
         
