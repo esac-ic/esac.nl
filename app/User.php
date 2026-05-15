@@ -206,12 +206,14 @@ class User extends Authenticatable
      * Makes a member active.
      * Dispatches an OldMemberBecameMember event
      *
-     * @return void
+     * @return bool True if operation succeeded
      */
-    public function makeActiveMember(): void
+    public function makeActiveMember(): bool
     {
         if (!$this->email || $this->isActiveMember()) { //don't do anything if the member is already active or doesn't have an email address
-            return;
+            if ($this->isActiveMember()) \Log::notice("User " . $this->getName() . " was attempted to made active, but is already active");
+            if (!$this->email) \Log::notice("User " . $this->getName() . " was attempted to made active, but doesn't have an email address");
+            return false;
         }
         
         DB::transaction(function () {
@@ -219,6 +221,7 @@ class User extends Authenticatable
             $this->save();
             OldMemberBecameMember::dispatch($this);
         });
+        return true;
     }
     
     /**
