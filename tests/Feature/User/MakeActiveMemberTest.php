@@ -26,6 +26,8 @@ class MakeActiveMemberTest extends \TestCase
     {
         $user = User::factory()->create();
         $user->lid_af = Carbon::now();
+        $user->save();
+        
         $userId = $user->id;
         
         Event::fake();
@@ -35,6 +37,51 @@ class MakeActiveMemberTest extends \TestCase
         $response->assertRedirect(route('users.show', $user));
         Event::assertDispatched(OldMemberBecameMember::class);
         
-        $this->assertNull(User::find($userId)->lid_af);
+        $this->assertNull(User::find($userId)->lid_af); //use User::find instead of $user to check if the user is properly updated in the db
+    }
+    
+    public function test_make_active_member_active()
+    {
+        $user = User::factory()->create();
+        $user->lid_af = null;
+        $user->save();
+        
+        Event::fake();
+        
+        $response = $this->actingAs($this->admin)->patch(route('users.makeActiveMember', $user));
+        $response->assertRedirect(route('users.index-old-members'));
+        Event::assertNotDispatched(OldMemberBecameMember::class);
+    }
+    
+    public function test_make_member_without_email_active()
+    {
+        $user = User::factory()->create();
+        $user->lid_af = Carbon::now();
+        $user->email = null;
+        $user->save();
+        
+        $userId = $user->id;
+        
+        Event::fake();
+        
+        $response = $this->actingAs($this->admin)->patch(route('users.makeActiveMember', $user));
+        $response->assertRedirect(route('users.index-old-members'));
+        Event::assertNotDispatched(OldMemberBecameMember::class);
+        
+        $this->assertNotNull(User::find($userId)->lid_af);
+    }
+    
+    public function test_make_active_member_without_email_active()
+    {
+        $user = User::factory()->create();
+        $user->lid_af = null;
+        $user->email = null;
+        $user->save();
+        
+        Event::fake();
+        
+        $response = $this->actingAs($this->admin)->patch(route('users.makeActiveMember', $user));
+        $response->assertRedirect(route('users.index-old-members'));
+        Event::assertNotDispatched(OldMemberBecameMember::class);
     }
 }
