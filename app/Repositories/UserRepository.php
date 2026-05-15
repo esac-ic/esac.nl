@@ -44,11 +44,14 @@ class UserRepository implements IRepository
             $data['incasso'] = array_key_exists("incasso", $data);
             $data['password'] = ($data['password'] != "") ? bcrypt($data['password']) : $user->password;
             
+            $oldKindOfMember = $user->kind_of_member;
+            
+            $user->update($data); //update before firing the events so mailman can't desync if kind_of_member and email are updated in the same request
+            
             //fire a MemberKindChanged event when the kind_of_member field is updated
-            if ($data['kind_of_member'] != $user->kind_of_member) {
-                MemberKindChanged::dispatch($user, $user->kind_of_member, $data['kind_of_member']);
+            if ($data['kind_of_member'] != $oldKindOfMember) {
+                MemberKindChanged::dispatch($user, $oldKindOfMember, $data['kind_of_member']);
             }
-            $user->update($data);
         }
         
         return $user;
