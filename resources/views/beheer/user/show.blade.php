@@ -28,6 +28,7 @@
                 {{ Form::open(array('url' => '/users/'.$user->id . '/approveAsPendingMember', 'method' => 'patch')) }}
                 <button type="submit" class="btn btn-success"><em class="ion-checkmark"></em> {{'Approve as member'}}</button>
                 {{ Form::close() }}
+                
                 {{ Form::open(array('url' => '/users/'.$user->id . '/removeAsPendingMember', 'method' => 'patch')) }}
                 <button type="submit" class="btn btn-danger"><em class="ion-trash-a"></em> {{'Remove as pending'}}</button>
                 {{ Form::close() }}

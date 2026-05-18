@@ -4,32 +4,130 @@ namespace Database\Factories;
 
 use App\User;
 use Faker\Generator as Faker;
+use Illuminate\Database\Eloquent\Factories\Factory;
+use Illuminate\Support\Facades\Lang;
 
-$factory->define(User::class, function (Faker $faker) {
-    return [
-        'email' => $faker->email,
-        'password' => bcrypt($faker->password),
-        'firstname' => $faker->firstName,
-        'lastname' => $faker->lastName,
-        'preposition' => $faker->word,
-        'street' => $faker->streetName,
-        'houseNumber' => $faker->randomNumber(),
-        'city' => $faker->city,
-        'zipcode' => $faker->postcode,
-        'country' => $faker->country,
-        'phonenumber' => $faker->phoneNumber,
-        'phonenumber_alt' => $faker->phoneNumber,
-        'emergencyNumber' => $faker->phoneNumber,
-        'emergencystreet' => $faker->streetName,
-        'emergencyHouseNumber' => $faker->randomNumber(),
-        'emergencycity' => $faker->city,
-        'emergencyzipcode' => $faker->postcode,
-        'emergencycountry' => $faker->country,
-        'birthday' => $faker->date(),
-        'kind_of_member' => 'member',
-        'IBAN' => $faker->iban(),
-        'BIC' => $faker->bankAccountNumber,
-        'incasso' => $faker->boolean,
-        'remark' => $faker->sentence,
-    ];
-});
+class UserFactory extends Factory
+{
+    public function definition(): array
+    {
+        //generate sensible matching email, name pairs
+        $firstName = fake()->firstName();
+        $preposition = fake()->randomElement(["", "van", "ten", "van de", "de"]);
+        $lastName = fake()->lastName();
+        $domain = fake()->freeEmailDomain();
+        $email = str_replace(" ", "", $firstName . $preposition . $lastName . "@" . $domain);
+        
+        return [
+            'email' => $email,
+            'password' => bcrypt(fake()->password()),
+            'firstname' => $firstName,
+            'lastname' => $lastName,
+            'preposition' => $preposition,
+            'street' => fake()->streetName(),
+            'houseNumber' => fake()->randomNumber(),
+            'city' => fake()->city(),
+            'zipcode' => fake()->postcode(),
+            'country' => fake()->country(),
+            'phonenumber' => fake()->unique()->phoneNumber(),
+            'phonenumber_alt' => fake()->phoneNumber(),
+            'emergencyNumber' => fake()->phoneNumber(),
+            'emergencystreet' => fake()->streetName(),
+            'emergencyHouseNumber' => fake()->randomNumber(),
+            'emergencycity' => fake()->city(),
+            'emergencyzipcode' => fake()->postcode(),
+            'emergencycountry' => fake()->country(),
+            'birthday' => fake()->date(),
+            'kind_of_member' => fake()->randomElement(User::KINDS_OF_MEMBER),
+            'IBAN' => fake()->iban(),
+            'BIC' => fake()->bankAccountNumber(),
+            'incasso' => fake()->boolean(),
+            'remark' => fake()->sentence(),
+        ];
+    }
+    
+    //member type variations
+    
+    public function member(): Factory
+    {
+        return $this->state(function (array $attributes) {
+            return [
+                'kind_of_member' => Lang::get('member'),
+            ];
+        });
+    }
+    
+    public function reunist(): Factory
+    {
+        return $this->state(function (array $attributes) {
+            return [
+                'kind_of_member' => Lang::get('reunist'),
+            ];
+        });
+    }
+    
+    public function extraordinary_participant(): Factory
+    {
+        return $this->state(function (array $attributes) {
+            return [
+                'kind_of_member' => Lang::get('extraordinary_member'),
+            ];
+        });
+    }
+    
+    public function honorary_member(): Factory
+    {
+        return $this->state(function (array $attributes) {
+            return [
+                'kind_of_member' => Lang::get('honorary_member'),
+            ];
+        });
+    }
+    
+    public function member_of_merit(): Factory
+    {
+        return $this->state(function (array $attributes) {
+            return [
+                'kind_of_member' => Lang::get('member_of_merit'),
+            ];
+        });
+    }
+    
+    public function trainer(): Factory
+    {
+        return $this->state(function (array $attributes) {
+            return [
+                'kind_of_member' => Lang::get('trainer'),
+            ];
+        });
+    }
+    
+    public function relationship(): Factory
+    {
+        return $this->state(function (array $attributes) {
+            return [
+                'kind_of_member' => Lang::get('relationship'),
+            ];
+        });
+    }
+    
+    public function lidAf(): Factory
+    {
+        return $this->state(function (array $attributes) {
+            return [
+                'lid_af' => fake()->dateTimeThisDecade(),
+            ];
+        });
+    }
+    
+    public function pending(): Factory
+    {
+        return $this->state(function (array $attributes) {
+            return [
+                'pending_user' => fake()->dateTimeThisMonth(),
+                'kind_of_member' => "member",
+            ];
+        });
+    }
+    
+}

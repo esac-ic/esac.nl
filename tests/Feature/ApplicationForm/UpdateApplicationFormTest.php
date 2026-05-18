@@ -37,7 +37,7 @@ class UpdateApplicationFormTest extends TestCase
     {
         parent::setUp();
         $this->applicationForm = factory(ApplicationForm::class)->create();
-        $this->user = $user = factory(User::class)->create();
+        $this->user = $user = User::factory()->create();
         $this->url .= "/" . $this->applicationForm->id;
 
         $user->roles()->attach(Config::get('constants.Content_administrator'));
@@ -51,7 +51,7 @@ class UpdateApplicationFormTest extends TestCase
      */
     protected function tearDown(): void
     {
-        Artisan::call('migrate:refresh');
+        Artisan::call('migrate:fresh');
         parent::tearDown();
     }
 

@@ -24,11 +24,11 @@
         "spatie/laravel-blade-javascript": "^2.7"
     },
     "require-dev": {
-        "laravel/dusk": "^7.8",
-        "phpunit/phpunit": "^10.0",
         "barryvdh/laravel-debugbar": "^3.6",
         "fakerphp/faker": "^1.23",
-        "mockery/mockery": "^1.6"
+        "laravel/dusk": "^7.8",
+        "mockery/mockery": "^1.6",
+        "phpunit/phpunit": "^10.5"
     },
     "config": {
         "optimize-autoloader": true,

@@ -2,9 +2,12 @@
 
 namespace Tests\Feature\User;
 
+use App\Events\PendingUserApproved;
+use App\Events\PendingUserCreated;
 use Carbon\Carbon;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Support\Facades\Artisan;
+use Illuminate\Support\Facades\Event;
 use TestCase;
 
 class RegisterNewMemberTest extends TestCase
@@ -24,6 +27,7 @@ class RegisterNewMemberTest extends TestCase
     protected function setUp(): void
     {
         parent::setUp();
+        Event::fake();
         session()->start();
     }
 
@@ -36,6 +40,7 @@ class RegisterNewMemberTest extends TestCase
     /** @test */
     public function a_guest_can_register_a_new_user()
     {
+        
         $body = [
             'email' => 'test@esac.nl',
             'firstname' => 'esac',
@@ -64,6 +69,7 @@ class RegisterNewMemberTest extends TestCase
         $response = $this->post($this->url, $body);
 
         $response->assertStatus(302);
+        Event::assertDispatched(PendingUserCreated::class);
 
         $user = \App\User::all()->last();
 
@@ -99,6 +105,7 @@ class RegisterNewMemberTest extends TestCase
         $response = $this->post($this->url, $body);
 
         $response->assertStatus(302);
+        Event::assertNotDispatched(PendingUserCreated::class);
 
         $errors = session('errors');
         $this->assertCount(21, $errors);
