@@ -22,19 +22,23 @@ RUN apt-get update && apt-get install -y \
     && docker-php-ext-enable opcache \
     && apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
+# Install Composer
+RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
+
 # Copy files and set the working directory
-COPY opcache.ini /usr/local/etc/php/conf.d/opcache.ini
 COPY . /var/www/
 WORKDIR "/var/www/"
 
-# Install Composer, PHP dependencies, and NPM dependencies
-RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer \
-    && composer install --no-dev \
+# Install PHP dependencies, and NPM dependencies
+RUN composer install --no-dev \
     && npm install \
     && npm run prod
 
+# Copy opcache.ini after builds to prevent CLI opcache issues on arm64
+COPY opcache.ini /usr/local/etc/php/conf.d/opcache.ini
+
 # Configure application
-RUN echo "listen = web:9000" >> /usr/local/etc/php-fpm.d/www.conf \
+RUN echo "listen = 0.0.0.0:9000" >> /usr/local/etc/php-fpm.d/www.conf \
     && php artisan storage:link \
     && php artisan config:clear \
     && cp -R public/. public_backup/ \
