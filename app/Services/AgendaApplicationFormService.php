@@ -2,7 +2,7 @@
 
 namespace App\Services;
 
-use App\AgendaItem;
+use App\Models\AgendaItem;
 use Illuminate\Support\Collection;
 
 class AgendaApplicationFormService
@@ -48,7 +48,7 @@ class AgendaApplicationFormService
     }
 
     /**
-     * @param AgendaItem $agendaItem
+     * @param \App\Models\AgendaItem $agendaItem
      * @return array
      */
     public function getRegisteredUsersWithResponses(AgendaItem $agendaItem): array

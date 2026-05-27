@@ -3,7 +3,7 @@
 namespace Tests\Feature\Agenda;
 
 
-use App\AgendaItem;
+use App\Models\AgendaItem;
 use App\Rol;
 use App\User;
 use Illuminate\Foundation\Testing\DatabaseMigrations;

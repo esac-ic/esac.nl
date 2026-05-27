@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers\ApplicationForm;
 
-use App\AgendaItem;
 use App\Exports\AgendaRegistrationExport;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\ApplicationFormRowVueResource;
+use App\Models\AgendaItem;
 use App\Models\ApplicationForm\ApplicationResponse;
 use App\Repositories\ApplicationFormRepositories\ApplicationFormRegistrationRepository;
 use App\Repositories\UserRepository;
@@ -31,7 +31,7 @@ class AgendaApplicationFormController extends Controller
     }
 
     /**
-     * @param AgendaItem $agendaItem
+     * @param \App\Models\AgendaItem $agendaItem
      * @param AgendaApplicationFormService $agendaApplicationFormService
      * @return \View
      */
@@ -81,7 +81,7 @@ class AgendaApplicationFormController extends Controller
 
     /**
      * @param User $user
-     * @param AgendaItem $agendaItem
+     * @param \App\Models\AgendaItem $agendaItem
      * @param ApplicationFormRegistrationRepository $repository
      * @return \Illuminate\Contracts\View\Factory|View
      */

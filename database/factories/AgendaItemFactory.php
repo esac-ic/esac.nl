@@ -2,8 +2,8 @@
 
 namespace Database\Factories;
 
-use App\AgendaItem;
 use App\AgendaItemCategory;
+use App\Models\AgendaItem;
 use App\User;
 use Faker\Generator as Faker;
 

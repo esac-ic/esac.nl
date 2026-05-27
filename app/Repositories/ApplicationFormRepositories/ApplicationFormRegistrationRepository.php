@@ -2,7 +2,7 @@
 
 namespace App\Repositories\ApplicationFormRepositories;
 
-use App\AgendaItem;
+use App\Models\AgendaItem;
 use App\Models\ApplicationForm\ApplicationResponse;
 use App\Models\ApplicationForm\ApplicationResponseRow;
 use Illuminate\Database\Eloquent\Collection;
@@ -15,7 +15,7 @@ class ApplicationFormRegistrationRepository
 {
     /**
      * @param array $data
-     * @param AgendaItem $agendaItem
+     * @param \App\Models\AgendaItem $agendaItem
      * @param int $userId
      */
     public function storeRegistration(array $data, AgendaItem $agendaItem, int $userId): void

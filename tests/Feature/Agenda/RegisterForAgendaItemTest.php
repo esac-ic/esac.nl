@@ -2,7 +2,7 @@
 
 namespace Tests\Feature\Agenda;
 
-use App\AgendaItem;
+use App\Models\AgendaItem;
 use App\Models\ApplicationForm\ApplicationForm;
 use App\Models\ApplicationForm\ApplicationFormRow;
 use App\Models\ApplicationForm\ApplicationResponse;

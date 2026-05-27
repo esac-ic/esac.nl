@@ -2,7 +2,7 @@
 
 namespace Database\Factories;
 
-use App\AgendaItem;
+use App\Models\AgendaItem;
 use App\Models\ApplicationForm\ApplicationForm;
 use App\Models\ApplicationForm\ApplicationResponse;
 use App\User;

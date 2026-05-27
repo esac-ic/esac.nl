@@ -2,7 +2,7 @@
 
 namespace App\Exports;
 
-use App\AgendaItem;
+use App\Models\AgendaItem;
 use App\Services\AgendaApplicationFormService;
 use Maatwebsite\Excel\Concerns\FromCollection;
 use Maatwebsite\Excel\Concerns\ShouldAutoSize;
@@ -21,14 +21,14 @@ class AgendaRegistrationExport implements FromCollection, WithTitle, WithHeading
     private AgendaApplicationFormService $agendaApplicationFormService;
 
     /**
-     * @var AgendaItem
+     * @var \App\Models\AgendaItem
      */
     private AgendaItem $agendaItem;
 
     /**
      * AgendaRegistrationExport constructor.
      * @param AgendaApplicationFormService $agendaApplicationFormService
-     * @param AgendaItem $agendaItem
+     * @param \App\Models\AgendaItem $agendaItem
      */
     public function __construct(AgendaApplicationFormService $agendaApplicationFormService, AgendaItem $agendaItem)
     {

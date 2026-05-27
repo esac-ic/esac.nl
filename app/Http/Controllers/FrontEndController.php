@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use App\AgendaItem;
 use App\MenuItem;
+use App\Models\AgendaItem;
 use App\NewsItem;
 use App\Repositories\AgendaItemCategoryRepository;
 use App\Repositories\AgendaItemRepository;

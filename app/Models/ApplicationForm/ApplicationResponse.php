@@ -2,7 +2,7 @@
 
 namespace App\Models\ApplicationForm;
 
-use App\AgendaItem;
+use App\Models\AgendaItem;
 use App\User;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;

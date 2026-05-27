@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\AgendaItem;
+use App\Models\AgendaItem;
 use App\Repositories\AgendaItemCategoryRepository;
 use App\Repositories\AgendaItemRepository;
 use App\Repositories\ApplicationFormRepositories\ApplicationFormRepository;

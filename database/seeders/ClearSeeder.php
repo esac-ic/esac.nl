@@ -2,12 +2,12 @@
 
 namespace Database\Seeders;
 
-use App\AgendaItem;
 use App\AgendaItemCategory;
 use App\Book;
 use App\Certificate;
 use App\CustomClasses\MailList\MailListFacade;
 use App\MenuItem;
+use App\Models\AgendaItem;
 use App\Models\ApplicationForm\ApplicationForm;
 use App\Models\ApplicationForm\ApplicationFormRow;
 use App\Models\UserEventLogEntry;
@@ -15,8 +15,8 @@ use App\NewsItem;
 use App\Rol;
 use App\User;
 use App\Zekering;
+use Exception;
 use Illuminate\Database\Seeder;
-Use Exception;
 
 /** Empties data from database */
 class ClearSeeder extends Seeder
