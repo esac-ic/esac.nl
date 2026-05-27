@@ -2,7 +2,7 @@
 
 namespace Tests\Feature\Pages;
 
-use App\MenuItem;
+use App\Models\MenuItem;
 use App\User;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Support\Facades\Artisan;

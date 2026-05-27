@@ -19,9 +19,9 @@ class MenuItemTableSeeder extends Seeder
                 <p class="card-text">Welkom bij de ESAC, dé studenten klim- en bergsportvereniging van Eindhoven. Op onze website vind je meer informatie over wat de ESAC te bieden heeft. Heb je vragen? Neem dan vooral contact op met het bestuur.</p>
 
                 <p class="card-text">De Eindhovense Studenten Alpen Club houdt zich in de breedste zin bezig met de bergsport. Met veel plezier en gezelligheid genieten we van de hoogteverschillen in het landschap of in de hal. Hieronder is actuele informatie te vinden, informatie over lid worden of contact opnemen zijn elders op de website te vinden.</p>';
-        $menuItem = new \App\MenuItem();
+        $menuItem = new \App\Models\MenuItem();
         $menuItem->name = 'Home';
-        $menuItem->urlName = \App\MenuItem::HOMEURL;
+        $menuItem->urlName = \App\Models\MenuItem::HOMEURL;
         $menuItem->login = false;
         $menuItem->deletable = false;
         $menuItem->editable = true;
@@ -30,9 +30,9 @@ class MenuItemTableSeeder extends Seeder
         $menuItem->save();
 
         //agenda
-        $menuItem = new \App\MenuItem();
+        $menuItem = new \App\Models\MenuItem();
         $menuItem->name = 'Agenda';
-        $menuItem->urlName = \App\MenuItem::AGENDAURL;
+        $menuItem->urlName = \App\Models\MenuItem::AGENDAURL;
         $menuItem->login = false;
         $menuItem->deletable = false;
         $menuItem->editable = true;
@@ -41,9 +41,9 @@ class MenuItemTableSeeder extends Seeder
         $menuItem->save();
 
         //memberlist
-        $menuItem = new \App\MenuItem();
+        $menuItem = new \App\Models\MenuItem();
         $menuItem->name = 'Members list';
-        $menuItem->urlName = \App\MenuItem::MEMBERLISTURL;
+        $menuItem->urlName = \App\Models\MenuItem::MEMBERLISTURL;
         $menuItem->login = true;
         $menuItem->deletable = false;
         $menuItem->editable = true;
@@ -52,9 +52,9 @@ class MenuItemTableSeeder extends Seeder
         $menuItem->save();
 
         //news
-        $menuItem = new \App\MenuItem();
+        $menuItem = new \App\Models\MenuItem();
         $menuItem->name = 'News';
-        $menuItem->urlName = \App\MenuItem::NEWSURL;
+        $menuItem->urlName = \App\Models\MenuItem::NEWSURL;
         $menuItem->login = false;
         $menuItem->deletable = false;
         $menuItem->editable = true;
@@ -63,9 +63,9 @@ class MenuItemTableSeeder extends Seeder
         $menuItem->save();
 
         //subscribe
-        $menuItem = new \App\MenuItem();
+        $menuItem = new \App\Models\MenuItem();
         $menuItem->name = 'Subscribe as member';
-        $menuItem->urlName = \App\MenuItem::SUBSCRIBEURL;
+        $menuItem->urlName = \App\Models\MenuItem::SUBSCRIBEURL;
         $menuItem->login = false;
         $menuItem->deletable = false;
         $menuItem->editable = true;
@@ -74,9 +74,9 @@ class MenuItemTableSeeder extends Seeder
         $menuItem->save();
 
         //library
-        $menuItem = new \App\MenuItem();
+        $menuItem = new \App\Models\MenuItem();
         $menuItem->name = 'Library';
-        $menuItem->urlName = \App\MenuItem::LIBRARYURL;
+        $menuItem->urlName = \App\Models\MenuItem::LIBRARYURL;
         $menuItem->login = false;
         $menuItem->deletable = false;
         $menuItem->editable = true;
@@ -85,9 +85,9 @@ class MenuItemTableSeeder extends Seeder
         $menuItem->save();
 
         //zekeringen page page
-        $menuItem = new \App\MenuItem();
+        $menuItem = new \App\Models\MenuItem();
         $menuItem->name = 'Zekeringen';
-        $menuItem->urlName = \App\MenuItem::ZEKERINGURL;
+        $menuItem->urlName = \App\Models\MenuItem::ZEKERINGURL;
         $menuItem->login = true;
         $menuItem->editable = true;
         $menuItem->deletable = false;
