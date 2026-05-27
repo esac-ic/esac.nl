@@ -14,7 +14,7 @@ use App\Models\NewsItem;
 use App\Models\Rol;
 use App\Models\User;
 use App\Models\UserEventLogEntry;
-use App\Zekering;
+use App\Models\Zekering;
 use Exception;
 use Illuminate\Database\Seeder;
 
