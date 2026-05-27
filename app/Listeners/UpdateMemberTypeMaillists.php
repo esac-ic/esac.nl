@@ -104,25 +104,25 @@ class UpdateMemberTypeMaillists implements ShouldQueue
         //check member type and fetch the maillists
         switch ($memberType) {
             case "member":
-                $mailLists = trim(app(\App\Setting::SINGELTONNAME)->getSetting(\App\Setting::SETTING_NORMAL_MEMBER_MAIL_LISTS));
+                $mailLists = trim(app(\App\Models\Setting::SINGELTONNAME)->getSetting(\App\Models\Setting::SETTING_NORMAL_MEMBER_MAIL_LISTS));
                 break;
             case "extraordinary_member":
-                $mailLists = trim(app(\App\Setting::SINGELTONNAME)->getSetting(\App\Setting::SETTING_EXTRAORDINARY_MEMBER_MAIL_LISTS));
+                $mailLists = trim(app(\App\Models\Setting::SINGELTONNAME)->getSetting(\App\Models\Setting::SETTING_EXTRAORDINARY_MEMBER_MAIL_LISTS));
                 break;
             case "reunist":
-                $mailLists = trim(app(\App\Setting::SINGELTONNAME)->getSetting(\App\Setting::SETTING_REUNIST_MEMBER_MAIL_LISTS));
+                $mailLists = trim(app(\App\Models\Setting::SINGELTONNAME)->getSetting(\App\Models\Setting::SETTING_REUNIST_MEMBER_MAIL_LISTS));
                 break;
             case "honorary_member":
-                $mailLists = trim(app(\App\Setting::SINGELTONNAME)->getSetting(\App\Setting::SETTING_HONORARY_MEMBER_MAIL_LISTS));
+                $mailLists = trim(app(\App\Models\Setting::SINGELTONNAME)->getSetting(\App\Models\Setting::SETTING_HONORARY_MEMBER_MAIL_LISTS));
                 break;
             case "member_of_merit":
-                $mailLists = trim(app(\App\Setting::SINGELTONNAME)->getSetting(\App\Setting::SETTING_MERIT_MEMBER_MAIL_LISTS));
+                $mailLists = trim(app(\App\Models\Setting::SINGELTONNAME)->getSetting(\App\Models\Setting::SETTING_MERIT_MEMBER_MAIL_LISTS));
                 break;
             case "trainer":
-                $mailLists = trim(app(\App\Setting::SINGELTONNAME)->getSetting(\App\Setting::SETTING_TRAINER_MEMBER_MAIL_LISTS));
+                $mailLists = trim(app(\App\Models\Setting::SINGELTONNAME)->getSetting(\App\Models\Setting::SETTING_TRAINER_MEMBER_MAIL_LISTS));
                 break;
             case "relationship":
-                $mailLists = trim(app(\App\Setting::SINGELTONNAME)->getSetting(\App\Setting::SETTING_RELATIONSHIP_MEMBER_MAIL_LISTS));
+                $mailLists = trim(app(\App\Models\Setting::SINGELTONNAME)->getSetting(\App\Models\Setting::SETTING_RELATIONSHIP_MEMBER_MAIL_LISTS));
                 break;
             default:
                 //in case something goes wrong don't add the member to any maillists

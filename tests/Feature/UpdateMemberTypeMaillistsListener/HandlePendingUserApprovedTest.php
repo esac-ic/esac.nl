@@ -5,7 +5,7 @@ namespace Tests\Feature\UpdateMemberTypeMaillistsListener;
 use App\CustomClasses\MailList\MailListFacade;
 use App\Events\PendingUserApproved;
 use App\Listeners\UpdateMemberTypeMaillists;
-use App\Setting;
+use App\Models\Setting;
 use App\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Lang;
