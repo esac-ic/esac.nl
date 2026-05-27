@@ -2,7 +2,7 @@
 
 namespace App\Repositories;
 
-use App\Certificate;
+use App\Models\Certificate;
 
 class CertificateRepository implements IRepository
 {

@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Certificate;
+use App\Models\Certificate;
 use App\Repositories\CertificateRepository;
 use App\Repositories\UserRepository;
 use App\User;

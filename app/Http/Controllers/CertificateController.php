@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Certificate;
+use App\Models\Certificate;
 use App\Repositories\CertificateRepository;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Config;

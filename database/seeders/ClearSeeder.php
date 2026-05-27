@@ -2,7 +2,6 @@
 
 namespace Database\Seeders;
 
-use App\Certificate;
 use App\CustomClasses\MailList\MailListFacade;
 use App\MenuItem;
 use App\Models\AgendaItem;
@@ -10,6 +9,7 @@ use App\Models\AgendaItemCategory;
 use App\Models\ApplicationForm\ApplicationForm;
 use App\Models\ApplicationForm\ApplicationFormRow;
 use App\Models\Book;
+use App\Models\Certificate;
 use App\Models\UserEventLogEntry;
 use App\NewsItem;
 use App\Rol;
