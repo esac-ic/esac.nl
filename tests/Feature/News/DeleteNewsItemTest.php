@@ -2,7 +2,7 @@
 
 namespace Tests\Feature\News;
 use App\Models\NewsItem;
-use App\User;
+use App\Models\User;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Config;

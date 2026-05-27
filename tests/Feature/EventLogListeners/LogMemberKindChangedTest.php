@@ -4,9 +4,9 @@ namespace Tests\Feature\EventLogListeners;
 
 use App\Events\MemberKindChanged;
 use App\Listeners\LogMemberKindChanged;
+use App\Models\User;
 use App\Models\UserEventLogEntry;
 use App\Repositories\UserEventLogEntryRepository;
-use App\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Lang;
 use InvalidArgumentException;
@@ -40,7 +40,7 @@ class LogMemberKindChangedTest extends \TestCase
     /**
      * Test for a user the log member type changed function.
      *
-     * @param User $user
+     * @param \App\Models\User $user
      * @param string $from must match $user membership type
      * @param string $to
      *

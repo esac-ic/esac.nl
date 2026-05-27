@@ -4,7 +4,7 @@ namespace Tests\Feature\ApplicationForm;
 
 use App\Models\ApplicationForm\ApplicationForm;
 use App\Models\ApplicationForm\ApplicationFormRow;
-use App\User;
+use App\Models\User;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Config;
@@ -19,7 +19,7 @@ class CreateApplicationFormTest extends TestCase
     use DatabaseMigrations;
 
     /**
-     * @var User
+     * @var \App\Models\User
      */
     private $user;
 

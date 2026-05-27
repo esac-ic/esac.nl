@@ -6,7 +6,7 @@ use App\CustomClasses\MailList\MailListFacade;
 use App\Events\PendingUserApproved;
 use App\Listeners\UpdateMemberTypeMaillists;
 use App\Models\Setting;
-use App\User;
+use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Lang;
 use Mockery;

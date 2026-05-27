@@ -39,7 +39,7 @@ class AgendaItem extends Model
 
     public function getCreatedBy()
     {
-        return $this->hasOne('App\User', 'id', 'createdBy');
+        return $this->hasOne('App\Models\User', 'id', 'createdBy');
     }
 
     public function getImageUrl()

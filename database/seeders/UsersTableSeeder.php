@@ -15,7 +15,7 @@ class UsersTableSeeder extends Seeder
     public function run()
     {
         //inserting test data
-        $user = new \App\User();
+        $user = new \App\Models\User();
         $user->email = "test@esac.nl";
         $user->password = bcrypt("test");
         $user->firstname = "Piet";
@@ -47,7 +47,7 @@ class UsersTableSeeder extends Seeder
         $user->save();
 
         //inserting test data
-        $user = new \App\User();
+        $user = new \App\Models\User();
         $user->email = "member@esac.nl";
         $user->password = bcrypt("test");
         $user->firstname = "Piet1";
@@ -75,7 +75,7 @@ class UsersTableSeeder extends Seeder
         $user->save();
 
         //inserting test data
-        $user = new \App\User();
+        $user = new \App\Models\User();
         $user->email = "pending@esac.nl";
         $user->password = bcrypt("test");
         $user->firstname = "Piet1";
@@ -104,10 +104,10 @@ class UsersTableSeeder extends Seeder
         $user->save();
         
         //random fake users
-        \App\User::factory()->count(10)->create();
-        \App\User::factory()->member()->count(10)->create();
-        \App\User::factory()->reunist()->count(10)->create();
-        \App\User::factory()->lidAf()->count(10)->create();
-        \App\User::factory()->pending()->count(10)->create();
+        \App\Models\User::factory()->count(10)->create();
+        \App\Models\User::factory()->member()->count(10)->create();
+        \App\Models\User::factory()->reunist()->count(10)->create();
+        \App\Models\User::factory()->lidAf()->count(10)->create();
+        \App\Models\User::factory()->pending()->count(10)->create();
     }
 }

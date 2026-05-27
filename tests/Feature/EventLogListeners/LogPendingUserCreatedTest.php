@@ -4,9 +4,9 @@ namespace Tests\Feature\EventLogListeners;
 
 use App\Events\PendingUserCreated;
 use App\Listeners\LogPendingUserCreated;
+use App\Models\User;
 use App\Models\UserEventLogEntry;
 use App\Repositories\UserEventLogEntryRepository;
-use App\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
 class LogPendingUserCreatedTest extends \TestCase

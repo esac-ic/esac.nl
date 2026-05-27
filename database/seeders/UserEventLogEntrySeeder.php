@@ -3,9 +3,8 @@
 namespace Database\Seeders;
 
 use App\Enums\UserEventTypes;
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
+use App\Models\User;
 use Illuminate\Database\Seeder;
-use App\User;
 
 class UserEventLogEntrySeeder extends Seeder
 {

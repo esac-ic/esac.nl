@@ -3,7 +3,7 @@
 namespace App\Models\ApplicationForm;
 
 use App\Models\AgendaItem;
-use App\User;
+use App\Models\User;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -40,7 +40,7 @@ class ApplicationResponse extends Model
      */
     public function getApplicationResponseUser(): HasOne
     {
-        return $this->hasOne('App\User', 'id', 'user_id');
+        return $this->hasOne('App\Models\User', 'id', 'user_id');
     }
 
     /**

@@ -2,7 +2,7 @@
 
 namespace App\CustomClasses\MailList;
 
-use App\User;
+use App\Models\User;
 use Exception;
 use Illuminate\Contracts\Support\Arrayable;
 use Illuminate\Http\Client\RequestException;

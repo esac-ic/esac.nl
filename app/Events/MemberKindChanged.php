@@ -13,7 +13,7 @@ class MemberKindChanged implements LoggableUserEventInterface
     /**
      * Create a new event instance.
      */
-    public function __construct(public \App\User $user, public string $previousMemberType, public string $newMemberType)
+    public function __construct(public \App\Models\User $user, public string $previousMemberType, public string $newMemberType)
     {
         //
     }

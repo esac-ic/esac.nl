@@ -5,7 +5,7 @@ namespace Tests\Feature\UpdateMemberTypeMaillistsListener;
 use App\CustomClasses\MailList\MailListFacade;
 use App\Jobs\MemberMassMailListSyncJob;
 use App\Models\Setting;
-use App\User;
+use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Lang;
 use Mockery;

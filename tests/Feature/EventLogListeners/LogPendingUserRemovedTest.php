@@ -4,9 +4,9 @@ namespace Tests\Feature\EventLogListeners;
 
 use App\Events\PendingUserRemoved;
 use App\Listeners\LogPendingUserRemoved;
+use App\Models\User;
 use App\Models\UserEventLogEntry;
 use App\Repositories\UserEventLogEntryRepository;
-use App\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
 class LogPendingUserRemovedTest extends \TestCase

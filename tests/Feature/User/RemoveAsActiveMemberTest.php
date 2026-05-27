@@ -4,12 +4,11 @@ namespace Tests\Feature\User;
 
 use App\CustomClasses\MailList\MailListFacade;
 use App\Events\MemberBecameOldMember;
-use App\User;
+use App\Models\User;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Event;
-use Illuminate\Support\Facades\Log;
 use Mockery\MockInterface;
 
 class RemoveAsActiveMemberTest extends \TestCase

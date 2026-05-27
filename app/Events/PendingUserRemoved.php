@@ -13,7 +13,7 @@ class PendingUserRemoved implements LoggableUserEventInterface
     /**
      * Create a new event instance.
      */
-    public function __construct(public \App\User $user, public string $userName)
+    public function __construct(public \App\Models\User $user, public string $userName)
     {
         //
     }

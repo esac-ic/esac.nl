@@ -80,11 +80,11 @@ class UpdateMemberTypeMaillists implements ShouldQueue
     
     /**
      * Add user to the maillists for their kind of member specified in the settings table
-     * @param \App\User $user
+     * @param \App\Models\User $user
      * @param string $memberType
      * @return void
      */
-    public function addUserToMailLists(\App\User $user, string $memberType): void
+    public function addUserToMailLists(\App\Models\User $user, string $memberType): void
     {
         $mailLists = collect(self::getMemberTypeMailLists($memberType));
         

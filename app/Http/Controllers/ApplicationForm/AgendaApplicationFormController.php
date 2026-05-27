@@ -7,10 +7,10 @@ use App\Http\Controllers\Controller;
 use App\Http\Resources\ApplicationFormRowVueResource;
 use App\Models\AgendaItem;
 use App\Models\ApplicationForm\ApplicationResponse;
+use App\Models\User;
 use App\Repositories\ApplicationFormRepositories\ApplicationFormRegistrationRepository;
 use App\Repositories\UserRepository;
 use App\Services\AgendaApplicationFormService;
-use App\User;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -80,7 +80,7 @@ class AgendaApplicationFormController extends Controller
     }
 
     /**
-     * @param User $user
+     * @param \App\Models\User $user
      * @param \App\Models\AgendaItem $agendaItem
      * @param ApplicationFormRegistrationRepository $repository
      * @return \Illuminate\Contracts\View\Factory|View
