@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\AgendaItem;
 use App\Models\MenuItem;
-use App\NewsItem;
+use App\Models\NewsItem;
 use App\Repositories\AgendaItemCategoryRepository;
 use App\Repositories\AgendaItemRepository;
 use App\Repositories\BookRepository;

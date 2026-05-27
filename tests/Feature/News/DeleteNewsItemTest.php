@@ -1,7 +1,7 @@
 <?php
 
 namespace Tests\Feature\News;
-use App\NewsItem;
+use App\Models\NewsItem;
 use App\User;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Support\Facades\Artisan;
