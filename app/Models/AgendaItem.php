@@ -34,7 +34,7 @@ class AgendaItem extends Model
 
     public function agendaItemCategory()
     {
-        return $this->hasOne('App\AgendaItemCategory', 'id', 'category')->withTrashed();
+        return $this->hasOne('App\Models\AgendaItemCategory', 'id', 'category')->withTrashed();
     }
 
     public function getCreatedBy()

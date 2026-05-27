@@ -2,12 +2,12 @@
 
 namespace Database\Seeders;
 
-use App\AgendaItemCategory;
 use App\Book;
 use App\Certificate;
 use App\CustomClasses\MailList\MailListFacade;
 use App\MenuItem;
 use App\Models\AgendaItem;
+use App\Models\AgendaItemCategory;
 use App\Models\ApplicationForm\ApplicationForm;
 use App\Models\ApplicationForm\ApplicationFormRow;
 use App\Models\UserEventLogEntry;

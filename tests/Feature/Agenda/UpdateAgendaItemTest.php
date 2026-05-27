@@ -2,8 +2,8 @@
 
 namespace Tests\Feature\Agenda;
 
-use App\AgendaItemCategory;
 use App\Models\AgendaItem;
+use App\Models\AgendaItemCategory;
 use App\Models\ApplicationForm\ApplicationForm;
 use App\User;
 use Carbon\Carbon;

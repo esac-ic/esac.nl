@@ -2,8 +2,8 @@
 
 namespace Tests\Feature\Agenda;
 
-use App\AgendaItemCategory;
 use App\Models\AgendaItem;
+use App\Models\AgendaItemCategory;
 use App\User;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Support\Facades\Artisan;
