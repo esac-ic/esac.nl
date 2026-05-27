@@ -8,6 +8,7 @@ use App\Events\PendingUserApproved;
 use App\Events\PendingUserRemoved;
 use App\Models\ApplicationForm\ApplicationResponse;
 use App\Models\Certificate;
+use App\Models\Rol;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;

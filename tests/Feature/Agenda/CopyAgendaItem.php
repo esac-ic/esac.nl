@@ -4,7 +4,7 @@ namespace Tests\Feature\Agenda;
 
 
 use App\Models\AgendaItem;
-use App\Rol;
+use App\Models\Rol;
 use App\User;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Support\Facades\Artisan;
