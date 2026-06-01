@@ -23,7 +23,7 @@ class ApplicationFormIndexTest extends TestCase
     private $applicationForm;
 
     /**
-     * @var \App\Models\User
+     * @var User
      */
     private $user;
 

@@ -129,7 +129,7 @@ class UserRepository implements IRepository
      * Dispatches a PendingUserCreated event
      *
      * @param array $data array with the mass assignable user attributes
-     * @return \App\Models\User the created pending user
+     * @return User the created pending user
      * @throws \Exception if user birthday parsing fails
      */
     public function createPendingUser(array $data): User

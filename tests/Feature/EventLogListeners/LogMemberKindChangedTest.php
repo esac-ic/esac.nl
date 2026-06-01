@@ -40,7 +40,7 @@ class LogMemberKindChangedTest extends \TestCase
     /**
      * Test for a user the log member type changed function.
      *
-     * @param \App\Models\User $user
+     * @param User $user
      * @param string $from must match $user membership type
      * @param string $to
      *

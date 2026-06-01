@@ -15,7 +15,7 @@ class ApplicationFormRegistrationRepository
 {
     /**
      * @param array $data
-     * @param \App\Models\AgendaItem $agendaItem
+     * @param AgendaItem $agendaItem
      * @param int $userId
      */
     public function storeRegistration(array $data, AgendaItem $agendaItem, int $userId): void

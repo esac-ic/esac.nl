@@ -48,7 +48,7 @@ class AgendaApplicationFormService
     }
 
     /**
-     * @param \App\Models\AgendaItem $agendaItem
+     * @param AgendaItem $agendaItem
      * @return array
      */
     public function getRegisteredUsersWithResponses(AgendaItem $agendaItem): array

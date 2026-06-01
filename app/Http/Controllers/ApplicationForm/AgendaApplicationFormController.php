@@ -31,9 +31,9 @@ class AgendaApplicationFormController extends Controller
     }
 
     /**
-     * @param \App\Models\AgendaItem $agendaItem
+     * @param AgendaItem $agendaItem
      * @param AgendaApplicationFormService $agendaApplicationFormService
-     * @return \View
+     * @return View
      */
     public function index(AgendaItem $agendaItem, AgendaApplicationFormService $agendaApplicationFormService): View
     {
@@ -80,10 +80,10 @@ class AgendaApplicationFormController extends Controller
     }
 
     /**
-     * @param \App\Models\User $user
-     * @param \App\Models\AgendaItem $agendaItem
+     * @param User $user
+     * @param AgendaItem $agendaItem
      * @param ApplicationFormRegistrationRepository $repository
-     * @return \Illuminate\Contracts\View\Factory|View
+     * @return View
      */
     public function show(User $user, AgendaItem $agendaItem, ApplicationFormRegistrationRepository $repository): View
     {

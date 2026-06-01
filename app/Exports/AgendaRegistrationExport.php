@@ -21,14 +21,14 @@ class AgendaRegistrationExport implements FromCollection, WithTitle, WithHeading
     private AgendaApplicationFormService $agendaApplicationFormService;
 
     /**
-     * @var \App\Models\AgendaItem
+     * @var AgendaItem
      */
     private AgendaItem $agendaItem;
 
     /**
      * AgendaRegistrationExport constructor.
      * @param AgendaApplicationFormService $agendaApplicationFormService
-     * @param \App\Models\AgendaItem $agendaItem
+     * @param AgendaItem $agendaItem
      */
     public function __construct(AgendaApplicationFormService $agendaApplicationFormService, AgendaItem $agendaItem)
     {

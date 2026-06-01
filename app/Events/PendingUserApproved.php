@@ -2,6 +2,7 @@
 
 namespace App\Events;
 
+use App\Models\User;
 use Illuminate\Broadcasting\InteractsWithSockets;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
@@ -13,7 +14,7 @@ class PendingUserApproved implements LoggableUserEventInterface
     /**
      * Create a new event instance.
      */
-    public function __construct(public \App\Models\User $user)
+    public function __construct(public User $user)
     {
         //
     }
