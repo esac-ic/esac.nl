@@ -12,4 +12,14 @@ class Certificate extends Model
         'name',
         'abbreviation',
     ];
+
+    public static function booted(){
+        static::deleted(function($certificate){
+            $certificate->users()->detach();
+        });
+    }
+
+    public function users(){
+        return $this->belongsToMany(User::class);
+    }
 }
