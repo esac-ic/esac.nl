@@ -31,12 +31,12 @@ class MenuItem extends Model
 
     public function partner()
     {
-        return $this->hasOne('App\Models\MenuItem', 'id', 'parent_id');
+        return $this->hasOne(MenuItem::class, 'id', 'parent_id');
     }
 
     public function afterItem()
     {
-        return $this->hasOne('App\Models\MenuItem', 'id', 'after');
+        return $this->hasOne(MenuItem::class, 'id', 'after');
     }
 
     //return the menu items wich aren't sub menus
