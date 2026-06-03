@@ -11,7 +11,7 @@ use Illuminate\Http\Request;
 
 class AgendaController extends Controller
 {
-    protected $agendaApplicationFormService;
+    protected AgendaApplicationFormService $agendaApplicationFormService;
 
     public function __construct(AgendaApplicationFormService $agendaApplicationFormService)
     {
