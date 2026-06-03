@@ -2,20 +2,23 @@
 
 namespace Database\Seeders;
 
-use App\AgendaItem;
-use App\AgendaItemCategory;
-use App\Book;
-use App\Certificate;
-use App\MenuItem;
+use App\CustomClasses\MailList\MailListFacade;
+use App\Models\AgendaItem;
+use App\Models\AgendaItemCategory;
 use App\Models\ApplicationForm\ApplicationForm;
 use App\Models\ApplicationForm\ApplicationFormRow;
-use App\NewsItem;
-use App\Rol;
-use App\User;
-use App\Zekering;
+use App\Models\Book;
+use App\Models\Certificate;
+use App\Models\MenuItem;
+use App\Models\NewsItem;
+use App\Models\Rol;
+use App\Models\User;
+use App\Models\UserEventLogEntry;
+use App\Models\Zekering;
+use Exception;
 use Illuminate\Database\Seeder;
 
-//emptys data from database
+/** Empties data from database */
 class ClearSeeder extends Seeder
 {
     /**
@@ -23,8 +26,15 @@ class ClearSeeder extends Seeder
      *
      * @return void
      */
-    public function run()
+    public function run(MailListFacade $mailListFacade)
     {
+        // Clean out the mail lists (because without this each local re-seed keeps cluttering the mail lists with non-existent users)
+        try {
+            collect($mailListFacade->getAllMailListIds())->each($mailListFacade->deleteAllUsersFromMailList(...));
+        } catch (Exception $e) {
+            \Log::error($e->getMessage());
+        }
+        
         Zekering::getQuery()->delete();
         Certificate::getQuery()->delete();
         MenuItem::getQuery()->delete();
@@ -36,5 +46,7 @@ class ClearSeeder extends Seeder
         ApplicationForm::getQuery()->delete();
         User::getQuery()->delete();
         Rol::getQuery()->delete();
+        UserEventLogEntry::getQuery()->delete();
+        
     }
 }

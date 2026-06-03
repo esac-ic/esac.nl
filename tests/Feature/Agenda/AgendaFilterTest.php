@@ -2,9 +2,9 @@
 
 namespace Tests\Feature\Agenda;
 
-use App\AgendaItem;
-use App\AgendaItemCategory;
-use App\User;
+use App\Models\AgendaItem;
+use App\Models\AgendaItemCategory;
+use App\Models\User;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Config;
@@ -27,7 +27,7 @@ class AgendaFilterTest extends TestCase
     protected function setUp(): void
     {
         parent::setUp();
-        $this->user = $user = factory(User::class)->create();
+        $this->user = $user = User::factory()->create();
 
         $user->roles()->attach(Config::get('constants.Administrator'));
         $this->be($user);
@@ -37,7 +37,7 @@ class AgendaFilterTest extends TestCase
 
     protected function tearDown(): void
     {
-        Artisan::call('migrate:refresh');
+        Artisan::call('migrate:fresh');
         parent::tearDown();
     }
 

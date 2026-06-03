@@ -2,8 +2,8 @@
 
 namespace Tests\Feature\Agenda;
 
-use App\AgendaItem;
-use App\User;
+use App\Models\AgendaItem;
+use App\Models\User;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Config;
@@ -24,7 +24,7 @@ class DeleteAgendaItemTest extends TestCase
     protected function setUp(): void
     {
         parent::setUp();
-        $this->user = $user = factory(User::class)->create();
+        $this->user = $user = User::factory()->create();
         $user->roles()->attach(Config::get('constants.Activity_administrator'));
         $this->be($user);
 

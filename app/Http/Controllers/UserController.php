@@ -4,11 +4,12 @@ namespace App\Http\Controllers;
 
 use App\CustomClasses\MailList\MailListFacade;
 use App\Exports\OldUsersExport;
+use App\Exports\PennoMemberExport;
 use App\Exports\UsersExport;
+use App\Models\Rol;
+use App\Models\User;
 use App\Repositories\UserRepository;
-use App\Rol;
 use App\Rules\EmailDomainValidator;
-use App\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Config;
@@ -18,7 +19,7 @@ use Maatwebsite\Excel\Facades\Excel;
 class UserController extends Controller
 {
 
-    private $_userRepository;
+    private UserRepository $_userRepository;
     /**
      * Create a new controller instance.
      *
@@ -116,18 +117,19 @@ class UserController extends Controller
                 'firstname' => $user->firstname,
                 'preposition' => $user->preposition,
                 'lastname' => $user->lastname,
-                'remarks' => $user->remarks,
+                'remark' => $user->remark,
                 'kind_of_member' => $user->kind_of_member,
             ]);
         }
-
+        
         $this->validateInput($request, $user->id);
-
+        
         if ($user->email != $request['email']) {
-            $mailListFacade->updateUserEmailFormAllMailList($user, $user->email, $request['email']);
+            $mailListFacade->updateUserEmailForAllMailList($user, $user->email, $request['email']);
         }
-
+        
         $this->_userRepository->update($user->id, $request->all());
+        
         if (Auth::user()->hasRole(Config::get('constants.Administrator'))) {
             $this->_userRepository->addRols($user->id, $request->get('roles', []));
         }
@@ -144,26 +146,45 @@ class UserController extends Controller
     public function removeAsActiveMember(Request $request, User $user, MailListFacade $mailListFacade)
     {
         $user->removeAsActiveMember();
-        $mailListFacade->deleteUserFormAllMailList($user);
+        $mailListFacade->deleteUserForAllMailList($user);
 
         return redirect('/users/' . $user->id);
     }
 
     public function exportUsers(UsersExport $usersExport)
     {
-        return Excel::download($usersExport, 'Members' . '.xlsx');
+        return Excel::download($usersExport, 'Members.xlsx');
+    }
+    public function pennoMemberExportSelect(Request $request)
+    {
+        return view('beheer.user.penno_member_export');
+    }
+    public function pennoMemberExport(Request $request, UserRepository $userRepository)
+    {
+        $request->validate([
+            'days_ago' => 'required|integer:strict|min:0'
+        ]);
+        $export = new PennoMemberExport($userRepository, $request->get('days_ago'));
+        $exportDate = $export->getFromDate()->toDateString();
+        return Excel::download($export, "Members (created after $exportDate).xlsx");
     }
 
     public function exportOldUsers(OldUsersExport $oldUsersExport)
     {
-        return Excel::download($oldUsersExport, 'Old members' . '.xlsx');
+        return Excel::download($oldUsersExport, 'Old members.xlsx');
     }
 
     public function makeActiveMember(Request $request, User $user)
     {
-        $user->makeActiveMember();
-
-        return redirect('/users/' . $user->id);
+        if ($user->makeActiveMember()) //this should never fail unless some validation fails somewhere or the intended flow of the website breaks
+        {
+            return redirect('/users/' . $user->id);
+        }
+        else
+        {
+            Session::flash("error", 'Failed to make member active');
+            return redirect(route('users.index-old-members'));
+        }
     }
 
     private function validateInput(Request $request, int $userId = null)

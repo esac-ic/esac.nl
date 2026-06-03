@@ -18,9 +18,11 @@
                 <a href="{{url('/mailList/')}}" class="btn btn-primary">
                     <em class="ion-android-arrow-back"></em>  {{'Back'}}
                 </a>
-                {{ Form::open(array('url' => 'mailList/' . $mailList->getId(), 'method' => 'delete')) }}
+                <form method="post" action="{{ url('mailList/' . $mailList->getId()) }}" onsubmit="return confirm('Are you sure you want to delete the maillist?');">
+                    @csrf
+                    @method('DELETE')
                     <button type="submit" class="btn btn-danger btn-primary"><em class="ion-trash-a"></em> {{'Remove'}}</button>
-                {{ Form::close() }}
+                </form>
             </div>
         </div>
     </div>

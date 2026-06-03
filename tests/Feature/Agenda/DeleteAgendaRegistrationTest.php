@@ -3,7 +3,7 @@
 namespace Tests\Feature\Agenda;
 
 use App\Models\ApplicationForm\ApplicationResponse;
-use App\User;
+use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Support\Facades\Artisan;
@@ -26,7 +26,7 @@ class DeleteAgendaRegistrationTest extends TestCase
     protected function setUp(): void
     {
         parent::setUp();
-        $this->user = $user = factory(User::class)->create();
+        $this->user = $user = User::factory()->create();
 
         $this->be($user);
 

@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\MenuItem;
+use App\Models\MenuItem;
 use App\Repositories\MenuRepository;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Session;

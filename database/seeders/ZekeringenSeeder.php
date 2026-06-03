@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Models\Zekering;
 use Illuminate\Database\Seeder;
 
 class ZekeringenSeeder extends Seeder
@@ -14,7 +15,7 @@ class ZekeringenSeeder extends Seeder
     public function run()
     {
         //inserting test data
-        $zekering = new \App\Zekering();
+        $zekering = new Zekering();
         $zekering->text = "dit is een dummy tekst voor een zekering";
         $zekering->createdBy = 1;
         $zekering->score = 1;
@@ -24,7 +25,7 @@ class ZekeringenSeeder extends Seeder
         //add zekering(en)
         $zekering->save();
 
-        $zekering = new \App\Zekering();
+        $zekering = new Zekering();
         $zekering->text = "dit is een dummy tekst 2 voor een zekering";
         $zekering->createdBy = 1;
         $zekering->score = 1;
@@ -34,7 +35,7 @@ class ZekeringenSeeder extends Seeder
         //add zekering(en)
         $zekering->save();
 
-        $zekering = new \App\Zekering();
+        $zekering = new Zekering();
         $zekering->text = "dit is een dummy tekst 2 voor een zekering met een parent";
         $zekering->createdBy = 1;
         $zekering->score = 1;

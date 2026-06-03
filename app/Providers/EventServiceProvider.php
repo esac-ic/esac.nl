@@ -12,9 +12,28 @@ class EventServiceProvider extends ServiceProvider
      * @var array
      */
     protected $listen = [
-        'App\Events\SomeEvent' => [
-            'App\Listeners\EventListener',
+        \App\Events\PendingUserApproved::class => [
+            \App\Listeners\LogPendingUserApproved::class,
         ],
+        \App\Events\PendingUserRemoved::class => [
+            \App\Listeners\LogPendingUserRemoved::class,
+        ],
+        \App\Events\MemberBecameOldMember::class => [
+            \App\Listeners\LogMemberBecameOldMember::class,
+        ],
+        \App\Events\OldMemberBecameMember::class => [
+            \App\Listeners\LogOldMemberBecameMember::class,
+        ],
+        \App\Events\MemberKindChanged::class => [
+            \App\Listeners\LogMemberKindChanged::class,
+        ],
+        \App\Events\PendingUserCreated::class => [
+            \App\Listeners\LogPendingUserCreated::class,
+        ],  
+    ];
+    
+    protected $subscribe = [
+        \App\Listeners\UpdateMemberTypeMaillists::class,
     ];
 
     /**

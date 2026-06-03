@@ -13,3 +13,8 @@ public/storage
 /public/mix-manifest.json
 composer.phar
 .phpunit.result.cache
+.devbox
+devbox.d
+devbox.json
+devbox.lock
+process-compose.yml

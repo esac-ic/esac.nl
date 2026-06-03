@@ -1,8 +1,8 @@
 <?php
 
 namespace Tests\Feature\News;
-use App\NewsItem;
-use App\User;
+use App\Models\NewsItem;
+use App\Models\User;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Config;
@@ -19,7 +19,7 @@ class DeleteNewsItemTest extends TestCase
     protected function setUp(): void
     {
         parent::setUp();
-        $this->user = $user = factory(User::class)->create();
+        $this->user = $user = User::factory()->create();
 
         $user->roles()->attach(Config::get('constants.Activity_administrator'));
         $this->be($user);

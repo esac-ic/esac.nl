@@ -2,13 +2,13 @@
 
 namespace Database\Factories;
 
-use App\AgendaItem;
-use App\AgendaItemCategory;
-use App\User;
+use App\Models\AgendaItem;
+use App\Models\AgendaItemCategory;
+use App\Models\User;
 use Faker\Generator as Faker;
 
 $factory->define(AgendaItem::class, function (Faker $faker) {
-    $user = factory(User::class)->create();
+    $user = User::factory()->create();
     $category = factory(AgendaItemCategory::class)->create();
 
     return [

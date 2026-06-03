@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Database\Seeder;
 
@@ -15,7 +16,7 @@ class UsersTableSeeder extends Seeder
     public function run()
     {
         //inserting test data
-        $user = new \App\User();
+        $user = new User();
         $user->email = "test@esac.nl";
         $user->password = bcrypt("test");
         $user->firstname = "Piet";
@@ -47,7 +48,7 @@ class UsersTableSeeder extends Seeder
         $user->save();
 
         //inserting test data
-        $user = new \App\User();
+        $user = new User();
         $user->email = "member@esac.nl";
         $user->password = bcrypt("test");
         $user->firstname = "Piet1";
@@ -75,7 +76,7 @@ class UsersTableSeeder extends Seeder
         $user->save();
 
         //inserting test data
-        $user = new \App\User();
+        $user = new User();
         $user->email = "pending@esac.nl";
         $user->password = bcrypt("test");
         $user->firstname = "Piet1";
@@ -102,5 +103,12 @@ class UsersTableSeeder extends Seeder
         $user->remark = "Ik ben een test gebruiker";
         $user->pending_user = Carbon::now();
         $user->save();
+        
+        //random fake users
+        User::factory()->count(10)->create();
+        User::factory()->member()->count(10)->create();
+        User::factory()->reunist()->count(10)->create();
+        User::factory()->lidAf()->count(10)->create();
+        User::factory()->pending()->count(10)->create();
     }
 }

@@ -2,10 +2,10 @@
 
 namespace Tests\Feature\Agenda;
 
-use App\AgendaItem;
-use App\AgendaItemCategory;
+use App\Models\AgendaItem;
+use App\Models\AgendaItemCategory;
 use App\Models\ApplicationForm\ApplicationForm;
-use App\User;
+use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Support\Facades\Artisan;
@@ -24,7 +24,7 @@ class CreateAgendaItemTest extends TestCase
     protected function setUp(): void
     {
         parent::setUp();
-        $this->user = $user = factory(User::class)->create();
+        $this->user = $user = User::factory()->create();
 
         $this->be($user);
 

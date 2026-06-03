@@ -28,6 +28,7 @@
                 {{ Form::open(array('url' => '/users/'.$user->id . '/approveAsPendingMember', 'method' => 'patch')) }}
                 <button type="submit" class="btn btn-success"><em class="ion-checkmark"></em> {{'Approve as member'}}</button>
                 {{ Form::close() }}
+                
                 {{ Form::open(array('url' => '/users/'.$user->id . '/removeAsPendingMember', 'method' => 'patch')) }}
                 <button type="submit" class="btn btn-danger"><em class="ion-trash-a"></em> {{'Remove as pending'}}</button>
                 {{ Form::close() }}
@@ -164,6 +165,10 @@
                         <tr>
                             <td>{{'User updated at'}}</td>
                             <td>{{\Carbon\Carbon::parse($user->updated_at)->format('d-m-Y')}}</td>
+                        </tr>
+                        <tr>
+                            <td>{{'ID'}}</td>
+                            <td>{{ $user->id}}</td>
                         </tr>
                         @isset($user->lid_af)
                         <tr>

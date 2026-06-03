@@ -2,11 +2,11 @@
 
 namespace Tests\Feature\Agenda;
 
-use App\AgendaItem;
+use App\Models\AgendaItem;
 use App\Models\ApplicationForm\ApplicationForm;
 use App\Models\ApplicationForm\ApplicationFormRow;
 use App\Models\ApplicationForm\ApplicationResponse;
-use App\User;
+use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Support\Facades\Artisan;
@@ -24,7 +24,7 @@ class RegisterForAgendaItemTest extends TestCase
     protected function setUp(): void
     {
         parent::setUp();
-        $this->user = $user = factory(User::class)->create();
+        $this->user = $user = User::factory()->create();
 
         $this->be($user);
 
@@ -142,7 +142,7 @@ class RegisterForAgendaItemTest extends TestCase
     /** @test */
     public function register_user_for_agenda_item_as_normale_member_should_not_be_allowed(): void
     {
-        $userToRegister = factory(User::class)->create();
+        $userToRegister = User::factory()->create();
         $agendaItem = factory(AgendaItem::class)->create();
         $applicationForm = factory(ApplicationForm::class)->create();
 
@@ -179,7 +179,7 @@ class RegisterForAgendaItemTest extends TestCase
     public function register_user_for_agenda_item_as_administrator(): void
     {
         $this->user->roles()->attach(Config::get('constants.Content_administrator'));
-        $userToRegister = factory(User::class)->create();
+        $userToRegister = User::factory()->create();
         $agendaItem = factory(AgendaItem::class)->create();
         $applicationForm = factory(ApplicationForm::class)->create();
 

@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Models\AgendaItemCategory;
 use Illuminate\Database\Seeder;
 
 class AgendaItemCategorySeeder extends Seeder
@@ -13,11 +14,11 @@ class AgendaItemCategorySeeder extends Seeder
      */
     public function run()
     {
-        $agendaItemCategory = new \App\AgendaItemCategory(['name' => 'Training']);
+        $agendaItemCategory = new AgendaItemCategory(['name' => 'Training']);
         $agendaItemCategory->save();
-        $agendaItemCategory = new \App\AgendaItemCategory(['name' => 'Climbing']);
+        $agendaItemCategory = new AgendaItemCategory(['name' => 'Climbing']);
         $agendaItemCategory->save();
-        $agendaItemCategory = new \App\AgendaItemCategory(['name' => 'Other activities']);
+        $agendaItemCategory = new AgendaItemCategory(['name' => 'Other activities']);
         $agendaItemCategory->save();
     }
 }

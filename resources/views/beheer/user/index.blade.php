@@ -13,6 +13,14 @@
             </button>
         </div>
     @endif
+    @if(Session::has('error'))
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+            {{Session::get('error')}}
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+    @endif
 
     <div class="row mb-3">
         <div class="col-md-6">
@@ -22,12 +30,16 @@
         @if(\Illuminate\Support\Facades\Auth::user()->hasRole(Config::get('constants.Administrator')))
         <div class="col-md-6">
             <div class="btn-group mt-2 float-md-right" role="group" aria-label="Actions">
-                <a href="{{url('users/create')}}" class="btn btn-primary">
-                    <span title="{{'New user'}}" class="ion-person-add" aria-hidden="true"></span>
+                <a href="{{route('users.create')}}" class="btn btn-primary" title="{{'New user'}}">
+                    <span class="ion-person-add" aria-hidden="true"></span>
                     {{'New user'}}
                 </a>
-                <a href="{{url('users/exportUsers')}}" class="btn btn-primary">
-                    <span title="{{'Export members'}}" class="ion-android-download" aria-hidden="true"></span>
+                <a href="{{route('users.pennoMemberExportView')}}" class="btn btn-primary" title="{{'Export only the fields needed for the financial administration'}}" >
+                    <span class="ion-android-download" aria-hidden="true"></span>
+                    {{'Penno export'}}
+                </a>
+                <a href="{{route('users.exportUsers')}}" class="btn btn-primary" title="{{'Export all active members'}}">
+                    <span class="ion-android-download" aria-hidden="true"></span>
                     {{'Export members'}}
                 </a>
             </div>
@@ -60,7 +72,7 @@
         </tbody>
     </table>
 
-    <h5 class="mt-3 mb-0 bold">*{{'Roles'}}</h4>
+    <h5 class="mt-3 mb-0 bold">*{{'Roles'}}</h5>
     <ol>
     @for($i=0; $i<count($roles);$i++)
         <li>{{$roles[$i]->name}}</li>

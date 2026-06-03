@@ -2,8 +2,8 @@
 
 namespace Tests\Feature\Pages;
 
-use App\MenuItem;
-use App\User;
+use App\Models\MenuItem;
+use App\Models\User;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Config;
@@ -26,7 +26,7 @@ class CreatePageTest extends TestCase
     protected function setUp(): void
     {
         parent::setUp();
-        $this->user = $user = factory(User::class)->create();
+        $this->user = $user = User::factory()->create();
 
         $user->roles()->attach(Config::get('constants.Content_administrator'));
         $this->be($user);

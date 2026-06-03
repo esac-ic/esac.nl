@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\AgendaItemCategory;
+use App\Models\AgendaItemCategory;
 use App\Repositories\AgendaItemCategoryRepository;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Config;

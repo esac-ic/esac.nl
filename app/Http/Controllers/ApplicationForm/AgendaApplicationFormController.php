@@ -2,15 +2,15 @@
 
 namespace App\Http\Controllers\ApplicationForm;
 
-use App\AgendaItem;
 use App\Exports\AgendaRegistrationExport;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\ApplicationFormRowVueResource;
+use App\Models\AgendaItem;
 use App\Models\ApplicationForm\ApplicationResponse;
+use App\Models\User;
 use App\Repositories\ApplicationFormRepositories\ApplicationFormRegistrationRepository;
 use App\Repositories\UserRepository;
 use App\Services\AgendaApplicationFormService;
-use App\User;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -33,7 +33,7 @@ class AgendaApplicationFormController extends Controller
     /**
      * @param AgendaItem $agendaItem
      * @param AgendaApplicationFormService $agendaApplicationFormService
-     * @return \View
+     * @return View
      */
     public function index(AgendaItem $agendaItem, AgendaApplicationFormService $agendaApplicationFormService): View
     {
@@ -83,7 +83,7 @@ class AgendaApplicationFormController extends Controller
      * @param User $user
      * @param AgendaItem $agendaItem
      * @param ApplicationFormRegistrationRepository $repository
-     * @return \Illuminate\Contracts\View\Factory|View
+     * @return View
      */
     public function show(User $user, AgendaItem $agendaItem, ApplicationFormRegistrationRepository $repository): View
     {

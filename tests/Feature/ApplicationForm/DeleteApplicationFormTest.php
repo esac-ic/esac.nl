@@ -4,7 +4,7 @@ namespace Tests\Feature\ApplicationForm;
 
 
 use App\Models\ApplicationForm\ApplicationForm;
-use App\User;
+use App\Models\User;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Config;
@@ -36,7 +36,7 @@ class DeleteApplicationFormTest extends TestCase
     {
         parent::setUp();
         $this->applicationForm = factory(ApplicationForm::class)->create();
-        $this->user = $user = factory(User::class)->create();
+        $this->user = $user = User::factory()->create();
         $this->url .= "/" . $this->applicationForm->id;
 
         $user->roles()->attach(Config::get('constants.Content_administrator'));
@@ -50,7 +50,7 @@ class DeleteApplicationFormTest extends TestCase
      */
     protected function tearDown(): void
     {
-        Artisan::call('migrate:refresh');
+        Artisan::call('migrate:fresh');
         parent::tearDown();
     }
 

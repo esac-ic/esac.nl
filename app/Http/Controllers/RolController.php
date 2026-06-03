@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Rol;
 use App\Repositories\RolRepository;
-use App\Rol;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Session;

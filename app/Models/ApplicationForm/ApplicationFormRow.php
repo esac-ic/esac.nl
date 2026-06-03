@@ -33,6 +33,10 @@ class ApplicationFormRow extends Model
      *  @var string
      */
     const FORM_TYPE_CHECK_BOX = 'checkbox';
+    /**
+     *  @var string
+     */
+    const FORM_TYPE_MULTI_CHECK_BOX = 'checkboxen';
 
     /**
      *  @var string

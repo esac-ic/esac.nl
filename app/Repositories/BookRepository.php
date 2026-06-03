@@ -2,7 +2,7 @@
 
 namespace App\Repositories;
 
-use App\Book;
+use App\Models\Book;
 
 class BookRepository implements IRepository
 {

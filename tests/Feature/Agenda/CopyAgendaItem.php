@@ -3,9 +3,9 @@
 namespace Tests\Feature\Agenda;
 
 
-use App\AgendaItem;
-use App\Rol;
-use App\User;
+use App\Models\AgendaItem;
+use App\Models\Rol;
+use App\Models\User;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Config;
@@ -22,7 +22,7 @@ class CopyAgendaItem extends TestCase
     protected function setUp() : void
     {
         parent::setUp();
-        $this->user = factory(User::class)->create();
+        $this->user = User::factory()->create();
 
         $this->role = factory(Rol::class)->create([
             'id' => 3
