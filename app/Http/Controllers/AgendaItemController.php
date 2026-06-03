@@ -12,9 +12,9 @@ use Intervention\Image\ImageManagerStatic as Image;
 
 class AgendaItemController extends Controller
 {
-    private $_agendaItemRepository;
-    private $_agendaItemCategoryRepository;
-    private $_applicationFormRepository;
+    private AgendaItemRepository $_agendaItemRepository;
+    private AgendaItemCategoryRepository $_agendaItemCategoryRepository;
+    private ApplicationFormRepository $_applicationFormRepository;
 
     public function __construct(
         AgendaItemRepository $agendaItemRepository,

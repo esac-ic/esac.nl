@@ -8,7 +8,7 @@ use Illuminate\Http\Request;
 
 class ApiController extends Controller
 {
-    private $_userRepository;
+    private UserRepository $_userRepository;
 
     public function __construct(UserRepository $userRepository)
     {

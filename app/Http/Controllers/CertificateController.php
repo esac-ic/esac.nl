@@ -10,7 +10,7 @@ use Illuminate\Support\Facades\Session;
 
 class CertificateController extends Controller
 {
-    private $_certificateRepository;
+    private CertificateRepository $_certificateRepository;
 
     public function __construct(CertificateRepository $certificateRepository)
     {

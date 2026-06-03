@@ -12,7 +12,7 @@ use Intervention\Image\ImageManagerStatic as Image;
 
 class NewsItemController extends Controller
 {
-    private $_newsItemRepository;
+    private NewsItemRepository $_newsItemRepository;
 
     public function __construct(NewsItemRepository $newsItemRepository)
     {

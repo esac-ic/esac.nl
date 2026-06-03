@@ -11,8 +11,8 @@ use Illuminate\Support\Facades\Config;
 
 class UserCertificateController extends Controller
 {
-    private $_userRepository;
-    private $_certificateRepository;
+    private UserRepository $_userRepository;
+    private CertificateRepository $_certificateRepository;
     /**
      * Create a new controller instance.
      *
