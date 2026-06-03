@@ -10,7 +10,7 @@ namespace App\Repositories;
 
 use App\Events\MemberKindChanged;
 use App\Events\PendingUserCreated;
-use App\User;
+use App\Models\User;
 use Carbon\Carbon;
 
 class UserRepository implements IRepository

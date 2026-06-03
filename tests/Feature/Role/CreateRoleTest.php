@@ -2,8 +2,8 @@
 
 namespace Tests\Feature\Role;
 
-use App\Rol;
-use App\User;
+use App\Models\Rol;
+use App\Models\User;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Config;

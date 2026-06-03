@@ -2,7 +2,7 @@
 
 namespace App\Exports;
 
-use App\AgendaItem;
+use App\Models\AgendaItem;
 use App\Services\AgendaApplicationFormService;
 use Maatwebsite\Excel\Concerns\FromCollection;
 use Maatwebsite\Excel\Concerns\ShouldAutoSize;

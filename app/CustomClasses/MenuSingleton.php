@@ -2,7 +2,7 @@
 
 namespace App\CustomClasses;
 
-use App\MenuItem;
+use App\Models\MenuItem;
 
 class MenuSingleton
 {

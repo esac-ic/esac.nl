@@ -9,11 +9,12 @@ use App\Events\OldMemberBecameMember;
 use App\Events\PendingUserApproved;
 use App\Events\PendingUserCreated;
 use App\Events\PendingUserRemoved;
+use App\Models\UserEventLogEntry;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use ReflectionClass;
 
 /**
- * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\UserEventLogEntry>
+ * @extends Factory<UserEventLogEntry>
  */
 class UserEventLogEntryFactory extends Factory
 {

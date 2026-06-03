@@ -2,7 +2,7 @@
 
 namespace Database\Seeders;
 
-use App\Certificate;
+use App\Models\Certificate;
 use Illuminate\Database\Seeder;
 
 class CertificaatSeeder extends Seeder

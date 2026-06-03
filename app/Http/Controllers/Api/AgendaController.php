@@ -2,9 +2,9 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\AgendaItem;
-use App\AgendaItemCategory;
 use App\Http\Controllers\Controller;
+use App\Models\AgendaItem;
+use App\Models\AgendaItemCategory;
 use App\Services\AgendaApplicationFormService;
 use Carbon\Carbon;
 use Illuminate\Http\Request;

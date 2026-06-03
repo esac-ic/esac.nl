@@ -2,7 +2,7 @@
 
 namespace App\Repositories;
 
-use App\Rol;
+use App\Models\Rol;
 
 class RolRepository implements IRepository
 {

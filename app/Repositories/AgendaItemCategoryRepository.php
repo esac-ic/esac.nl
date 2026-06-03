@@ -2,7 +2,7 @@
 
 namespace App\Repositories;
 
-use App\AgendaItemCategory;
+use App\Models\AgendaItemCategory;
 
 class AgendaItemCategoryRepository implements IRepository
 {

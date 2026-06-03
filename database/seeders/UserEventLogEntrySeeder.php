@@ -2,10 +2,9 @@
 
 namespace Database\Seeders;
 
-use App\Enums\UserEventTypes;
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
+use App\Models\User;
+use App\Models\UserEventLogEntry;
 use Illuminate\Database\Seeder;
-use App\User;
 
 class UserEventLogEntrySeeder extends Seeder
 {
@@ -15,6 +14,6 @@ class UserEventLogEntrySeeder extends Seeder
     public function run(): void
     {   
         $nrOfUsers = User::count();
-        \App\Models\UserEventLogEntry::factory()->randomUser($nrOfUsers)->count(10)->create();
+        UserEventLogEntry::factory()->randomUser($nrOfUsers)->count(10)->create();
     }
 }

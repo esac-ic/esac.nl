@@ -3,7 +3,7 @@
 namespace Tests\Feature\PendingUser;
 
 use App\Events\PendingUserApproved;
-use App\User;
+use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Event;

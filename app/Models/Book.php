@@ -1,15 +1,18 @@
 <?php
 
-namespace App;
+namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-class AgendaItemCategory extends Model
+class Book extends Model
 {
     use SoftDeletes;
-
     protected $fillable = [
-        'name',
+        'title',
+        'year',
+        'country',
+        'type',
+        'code',
     ];
 }

@@ -2,13 +2,13 @@
 
 namespace App\Http\Controllers;
 
-use App\Book;
+use App\Exports\LibraryExport;
+use App\Models\Book;
 use App\Repositories\BookRepository;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Session;
 use Maatwebsite\Excel\Facades\Excel;
-use App\Exports\LibraryExport;
 
 class LibraryController extends Controller
 {
