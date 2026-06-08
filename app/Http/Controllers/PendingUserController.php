@@ -90,6 +90,7 @@ class PendingUserController extends Controller
             'incasso' => 'required',
             'privacy_policy' => 'required',
             'termsconditions' => 'required',
+            'code_of_conduct' => 'required',
         ]);
     }
 }
