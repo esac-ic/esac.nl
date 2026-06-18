@@ -18,9 +18,17 @@
                 <a href="{{url('/rols/')}}" class="btn btn-block btn-primary">
                     <em class="ion-android-arrow-back"></em> {{'Back'}}
                 </a>
-                {{ Form::open(array('url' => 'rols/' . $rol->id, 'method' => 'delete')) }}
-                <button type="submit" class="btn btn-danger"><em class="ion-trash-a"></em> Remove</button>
-                {{ Form::close() }}
+                <form method="post"
+                      action="{{ route("rols.destroy", $rol) }}"
+                      onsubmit="return confirm('Are you sure you want to delete the role?');"
+                >
+                    @csrf
+                    @method('DELETE')
+                    <button type="submit" class="btn btn-danger"><em class="ion-trash-a"></em> {{'Remove'}}</button>
+                </form>
+{{--                {{ Form::open(array('url' => 'rols/' . $rol->id, 'method' => 'delete')) }}--}}
+{{--                <button type="submit" class="btn btn-danger"><em class="ion-trash-a"></em> Remove</button>--}}
+{{--                {{ Form::close() }}--}}
             </div>
         </div>
     </div>
