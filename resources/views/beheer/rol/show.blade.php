@@ -20,7 +20,7 @@
                 </a>
                 <form method="post"
                       action="{{ route("rols.destroy", $rol) }}"
-                      onsubmit="return confirm('Are you sure you want to delete the role?');"
+                      onsubmit="return confirm('Are you sure you want to delete this role?');"
                 >
                     @csrf
                     @method('DELETE')
