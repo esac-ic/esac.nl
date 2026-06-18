@@ -53,7 +53,10 @@
         ],
         methods: {
             deleteZekering(){
-                zekeringApi.deleteZekering(this.zekering.id, this.zekeringDeleted);
+                if (confirm("Are you sure you want to delete this zekering?"))
+                {
+                    zekeringApi.deleteZekering(this.zekering.id, this.zekeringDeleted);
+                }
             },
             zekeringDeleted(response) {
                 EventBus.$emit(constants.EVENT_RELOAD_ZEKERINGEN);

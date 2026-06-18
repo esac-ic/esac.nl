@@ -37,7 +37,7 @@ TODO: voeg toe moet gewoon plusje worden
                             {{ csrf_field() }}
                             {!! Form::close() !!}
                         @else
-                            {{'You need to be logdin to view the zekeringen'}}
+                            {{'You need to be logged in to view the zekeringen'}}
                         @endif
                     </div>
                 </div>
