@@ -26,9 +26,6 @@
                     @method('DELETE')
                     <button type="submit" class="btn btn-danger"><em class="ion-trash-a"></em> {{'Remove'}}</button>
                 </form>
-{{--                {{ Form::open(array('url' => 'rols/' . $rol->id, 'method' => 'delete')) }}--}}
-{{--                <button type="submit" class="btn btn-danger"><em class="ion-trash-a"></em> Remove</button>--}}
-{{--                {{ Form::close() }}--}}
             </div>
         </div>
     </div>
