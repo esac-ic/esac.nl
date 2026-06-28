@@ -16,8 +16,8 @@
 
     <div class="row mb-3">
         <div class="col-md-6">
-            <h1>{{'Roles'}}</h1>
-            <p>{{'Warning: don\'t add or remove roles without discussing with the IC'}}</p>
+            <h1>Roles</h1>
+            <p>Warning: don't add or remove roles without discussing with the IC</p>
         </div>
 
         <div class="col-md-6">
