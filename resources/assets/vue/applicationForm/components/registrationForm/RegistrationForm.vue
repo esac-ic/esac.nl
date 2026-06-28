@@ -17,11 +17,8 @@
             'rows',
         ],
         data(){
-            let hasMandatoryQuestions;
-            
             return {
                 applicationFormRows: [],
-                hasMandatoryQuestions,
             }
         },
         methods:{
@@ -49,14 +46,14 @@
                 return row.required;
             }
         },
+        computed: {
+            hasMandatoryQuestions()
+            {
+                return this.applicationFormRows.some(this.isRequired);
+            },
+        },
         mounted(){
             this.applicationFormRows = JSON.parse(this.rows);
-            
-            this.hasMandatoryQuestions = false;
-            for (const row of this.applicationFormRows)
-            {
-                this.hasMandatoryQuestions |= this.isRequired(row);
-            }
         }
     }
 </script>
