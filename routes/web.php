@@ -63,6 +63,7 @@ Route::resource('agendaItems', 'AgendaItemController');
 Route::resource('agendaItemCategories', 'AgendaItemCategoryController');
 Route::resource('newsItems', 'NewsItemController');
 Route::resource('mailList', 'MailListController');
+Route::resource('committees', 'CommitteeController');
 Route::post('/signup', 'PendingUserController@storePendingUser')->name('user.signup');
 Route::resource('books', 'LibraryController');
 Route::post('images/upload', 'StorageController@uploadImage');
@@ -72,6 +73,7 @@ Route::get('agendaItems/{agendaItem}/copy', 'AgendaItemController@copy')->name('
 Route::get('userEventLog', 'UserEventLogEntryController@index')->name('user-event-log-entry.index');
 Route::post('userEventLog/export', 'UserEventLogEntryController@export')->name('user-event-log-entry.export');
 
+Route::post('committees/{committee}/addMember', 'CommitteeController@addMember')->name('committees.addMember');
 //inschrijf routes
 Route::get('forms/{agendaItem}', array('uses' => 'ApplicationForm\UserApplicationFormController@showRegistrationForm'));
 Route::get('forms/{agendaItem}/unregister/{fromAgendaItem?}', 'ApplicationForm\UserApplicationFormController@unregister');

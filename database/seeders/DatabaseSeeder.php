@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Http\Controllers\CommitteeController;
 use Illuminate\Database\Seeder;
 
 class DatabaseSeeder extends Seeder
@@ -26,5 +27,6 @@ class DatabaseSeeder extends Seeder
         $this->call(ApplicationResponseSeeder::class);
         $this->call(BooksTableSeeder::class);
         $this->call(UserEventLogEntrySeeder::class);
+        $this->call(CommitteeSeeder::class);
     }
 }

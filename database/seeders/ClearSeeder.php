@@ -9,6 +9,7 @@ use App\Models\ApplicationForm\ApplicationForm;
 use App\Models\ApplicationForm\ApplicationFormRow;
 use App\Models\Book;
 use App\Models\Certificate;
+use App\Models\Committee;
 use App\Models\MenuItem;
 use App\Models\NewsItem;
 use App\Models\Rol;
@@ -47,6 +48,6 @@ class ClearSeeder extends Seeder
         User::getQuery()->delete();
         Rol::getQuery()->delete();
         UserEventLogEntry::getQuery()->delete();
-        
+        Committee::getQuery()->delete();
     }
 }
