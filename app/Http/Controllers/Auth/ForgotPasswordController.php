@@ -21,7 +21,7 @@ class ForgotPasswordController extends Controller
 
     use SendsPasswordResetEmails;
 
-    private $_menu;
+    private MenuSingleton $_menu;
 
     /**
      * Create a new controller instance.

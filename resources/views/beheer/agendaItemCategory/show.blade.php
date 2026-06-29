@@ -18,9 +18,14 @@
                 <a href="{{url('/agendaItemCategories/')}}" class="btn btn-block btn-primary">
                     <em class="ion-android-arrow-back"></em> Back
                 </a>
-                {{ Form::open(array('url' => 'agendaItemCategories/' . $agendaItemCategory->id, 'method' => 'delete')) }}
-                <button type="submit" class="btn btn-danger"><em class="ion-trash-a"></em> {{'Remove'}}</button>
-                {{ Form::close() }}
+                <form method="post"
+                      action="{{ route("agendaItemCategories.destroy", $agendaItemCategory) }}"
+                      onsubmit="return confirm('Are you sure you want to delete this agenda item category?');"
+                >
+                    @csrf
+                    @method('DELETE')
+                    <button type="submit" class="btn btn-danger"><em class="ion-trash-a"></em> {{'Remove'}}</button>
+                </form>
             </div>
         </div>
     </div>

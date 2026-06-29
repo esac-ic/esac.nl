@@ -18,9 +18,14 @@
                 <a href="{{route('beheer.applicationForms.index')}}" class="btn btn-block btn-primary">
                     <em class="ion-android-arrow-back"></em> {{'Back'}}
                 </a>
-                {{ Form::open(array('url' => route('beheer.applicationForms.destroy', $applicationForm->id), 'method' => 'delete')) }}
-                <button type="submit" class="btn btn-danger"><em class="ion-trash-a"></em> {{'Remove'}}</button>
-                {{ Form::close() }}
+                <form method="post"
+                      action="{{ route("beheer.applicationForms.destroy", $applicationForm) }}"
+                      onsubmit="return confirm('Are you sure you want to delete this application form?');"
+                >
+                    @csrf
+                    @method('DELETE')
+                    <button type="submit" class="btn btn-danger"><em class="ion-trash-a"></em> {{'Remove'}}</button>
+                </form>
             </div>
         </div>
     </div>

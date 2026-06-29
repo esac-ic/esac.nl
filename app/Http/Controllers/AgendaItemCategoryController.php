@@ -10,7 +10,7 @@ use Illuminate\Support\Facades\Session;
 
 class AgendaItemCategoryController extends Controller
 {
-    private $agendaItemCategoryRepository;
+    private AgendaItemCategoryRepository $agendaItemCategoryRepository;
 
     public function __construct(AgendaItemCategoryRepository $agendaItemCategoryRepository)
     {

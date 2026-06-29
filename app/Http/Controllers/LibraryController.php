@@ -12,7 +12,7 @@ use Maatwebsite\Excel\Facades\Excel;
 
 class LibraryController extends Controller
 {
-    private $_bookRepository;
+    private BookRepository $_bookRepository;
 
     public function __construct(BookRepository $bookRepository)
     {

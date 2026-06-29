@@ -11,7 +11,7 @@ use Illuminate\Support\Facades\Session;
 class RolController extends Controller
 {
 
-    private $_rolRepository;
+    private RolRepository $_rolRepository;
     /**
      * Create a new controller instance.
      *

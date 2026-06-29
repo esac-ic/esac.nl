@@ -20,9 +20,14 @@
                         <em class="ion-android-arrow-back"></em> {{'Back'}}
                     </a>
                 @endif
-                {{ Form::open(array('url' => 'newsItems/' . $newsItem->id, 'method' => 'delete')) }}
+                <form method="post"
+                      action="{{ route("newsItems.destroy", $newsItem) }}"
+                      onsubmit="return confirm('Are you sure you want to delete this news item?');"
+                >
+                    @csrf
+                    @method('DELETE')
                     <button type="submit" class="btn btn-danger"><em class="ion-trash-a"></em> {{'Remove'}}</button>
-                {{ Form::close() }}
+                </form>
             </div>
         </div>
     </div>

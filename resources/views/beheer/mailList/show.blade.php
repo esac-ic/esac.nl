@@ -18,7 +18,10 @@
                 <a href="{{url('/mailList/')}}" class="btn btn-primary">
                     <em class="ion-android-arrow-back"></em>  {{'Back'}}
                 </a>
-                <form method="post" action="{{ url('mailList/' . $mailList->getId()) }}" onsubmit="return confirm('Are you sure you want to delete the maillist?');">
+                <form method="post"
+                      action="{{ url('mailList/' . $mailList->getId()) }}"
+                      onsubmit="return confirm('Are you sure you want to delete the maillist?');"
+                >
                     @csrf
                     @method('DELETE')
                     <button type="submit" class="btn btn-danger btn-primary"><em class="ion-trash-a"></em> {{'Remove'}}</button>
@@ -70,7 +73,13 @@
                         <td>{{$member->getAddress()}}</td>
                         <td>{{$member->getName()}}</td>
                         <td>
-                            <a href="#" id="deleteMember" data-mailList-id="{{$mailList->getId()}}" data-member-email="{{$member->getAddress()}}"><em class="ion-trash-a"></em></a>
+                            <a href="#"
+                               id="deleteMember"
+                               data-mailList-id="{{$mailList->getId()}}"
+                               data-member-email="{{$member->getAddress()}}"
+                            >
+                                <em class="ion-trash-a"></em>
+                            </a>
                         </td>
                     </tr>
                 @endforeach
@@ -100,17 +109,20 @@
         $(document).on('click', '#deleteMember', function() {
             const mailListId = $(this).attr('data-mailList-id');
             const memberEmail = $(this).attr('data-member-email');
-
-            $.ajax({
-                url: '/mailList/' + mailListId + '/member/' + memberEmail,
-                data: {
-                    _token: window.Laravel.csrfToken
-                },
-                type: 'DELETE',
-                success: function() {
-                    window.location.reload();
-                }
-            });
+            
+            if (confirm('Are you sure you want to remove this member from {{$mailList->getAddress()}}?'))
+            {
+                $.ajax({
+                    url: '/mailList/' + mailListId + '/member/' + memberEmail,
+                    data: {
+                        _token: window.Laravel.csrfToken
+                    },
+                    type: 'DELETE',
+                    success: function() {
+                        window.location.reload();
+                    }
+                });
+            }
         });
     </script>
 @endpush

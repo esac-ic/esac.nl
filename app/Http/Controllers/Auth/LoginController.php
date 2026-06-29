@@ -28,8 +28,8 @@ class LoginController extends Controller
      *
      * @var string
      */
-    protected $redirectTo = '/home';
-    private $_menu;
+    protected string $redirectTo = '/home';
+    private MenuSingleton $_menu;
     /**
      * Create a new controller instance.
      *

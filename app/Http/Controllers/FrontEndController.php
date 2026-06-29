@@ -17,12 +17,12 @@ use Illuminate\Support\Facades\Redirect;
 
 class FrontEndController extends Controller
 {
-    private $_menuItemRepository;
-    private $_agendaCategoryRepository;
-    private $_newsItemRepository;
-    private $_agendaRepository;
-    private $_userRepository;
-    private $_bookRepository;
+    private MenuRepository $_menuItemRepository;
+    private AgendaItemCategoryRepository $_agendaCategoryRepository;
+    private NewsItemRepository $_newsItemRepository;
+    private AgendaItemRepository $_agendaRepository;
+    private UserRepository $_userRepository;
+    private BookRepository $_bookRepository;
 
     public function __construct(
         MenuRepository $menuItemRepository,

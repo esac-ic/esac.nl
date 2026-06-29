@@ -34,12 +34,12 @@ class AgendaItem extends Model
 
     public function agendaItemCategory()
     {
-        return $this->hasOne('App\Models\AgendaItemCategory', 'id', 'category')->withTrashed();
+        return $this->hasOne(AgendaItemCategory::class, 'id', 'category')->withTrashed();
     }
 
     public function getCreatedBy()
     {
-        return $this->hasOne('App\Models\User', 'id', 'createdBy');
+        return $this->hasOne(User::class, 'id', 'createdBy');
     }
 
     public function getImageUrl()
