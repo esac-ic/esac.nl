@@ -158,7 +158,7 @@
     </div>
     <div class="card mt-4">
         <div class="card-header">
-            <h3>{{'Privacy Policy, Automatic Collection and Code of Conduct'}}</h3>
+            <h3>{{'Policies, Terms, and Conditions'}}</h3>
         </div>
         <div class="card-body">
             <div class="accordion" id="accordion-1" data-children=".accordion-item">
