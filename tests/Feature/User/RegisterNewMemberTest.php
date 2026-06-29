@@ -64,6 +64,7 @@ class RegisterNewMemberTest extends TestCase
             'termsconditions' => 1,
             'g-recaptcha-response' => 'ikbenvalid',
             '_token' => csrf_token(),
+            'code_of_conduct' => 1,
         ];
 
         $response = $this->post($this->url, $body);
@@ -108,7 +109,7 @@ class RegisterNewMemberTest extends TestCase
         Event::assertNotDispatched(PendingUserCreated::class);
 
         $errors = session('errors');
-        $this->assertCount(21, $errors);
+        $this->assertCount(22, $errors);
 
         $this->assertEquals("Field email is required", $errors->get('email')[0]);
         $this->assertEquals("Field firstname is required", $errors->get('firstname')[0]);
@@ -127,5 +128,6 @@ class RegisterNewMemberTest extends TestCase
         $this->assertEquals("Field Automatic Collection is required", $errors->get('incasso')[0]);
         $this->assertEquals("Field Privacy Policy is required", $errors->get('privacy_policy')[0]);
         $this->assertEquals("Field Terms and Conditions is required", $errors->get('termsconditions')[0]);
+        $this->assertEquals("Field Code of Conduct is required", $errors->get('code_of_conduct')[0]);
     }
 }

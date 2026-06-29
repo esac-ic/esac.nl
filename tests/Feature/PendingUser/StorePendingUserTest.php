@@ -36,7 +36,8 @@ class StorePendingUserTest extends \TestCase
             'g-recaptcha-response' => 'True',
             'incasso' => 'True',
             'privacy_policy' => 'True',
-            'termsconditions' => 'True'
+            'termsconditions' => 'True',
+            'code_of_conduct' => 'True',
         ];
         
         Event::fake();
