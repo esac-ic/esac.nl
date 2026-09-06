@@ -57,6 +57,8 @@ class RegisterNewMemberTest extends TestCase
             'emergencycity' => 'dead',
             'emergencyzipcode' => '3473JP',
             'emergencycountry' => 'NL',
+            'emergencyname' => 'nsac',
+            'emergencyrelation' => 'umbrella association',
             'birthDay' => Carbon::now()->subCenturies(2)->format('d-m-Y'),
             'IBAN' => "BLNDj838474784848",
             'incasso' => 1,
@@ -88,6 +90,8 @@ class RegisterNewMemberTest extends TestCase
         $this->assertEquals($body['emergencycity'], $user->emergencycity);
         $this->assertEquals($body['emergencyzipcode'], $user->emergencyzipcode);
         $this->assertEquals($body['emergencycountry'], $user->emergencycountry);
+        $this->assertEquals($body['emergencyname'], $user->emergencyname);
+        $this->assertEquals($body['emergencyrelation'], $user->emergencyrelation);
         $this->assertEquals($body['birthDay'], Carbon::parse($user->birthDay)->format('d-m-Y'));
         $this->assertEquals('member', $user->kind_of_member);
         $this->assertEquals($body['IBAN'], $user->IBAN);
@@ -121,6 +125,8 @@ class RegisterNewMemberTest extends TestCase
         $this->assertEquals("Field emergencystreet is required", $errors->get('emergencystreet')[0]);
         $this->assertEquals("Field emergencyzipcode is required", $errors->get('emergencyzipcode')[0]);
         $this->assertEquals("Field emergencycountry is required", $errors->get('emergencycountry')[0]);
+        $this->assertEquals("Field emergencyname is required", $errors->get('emergencyname')[0]);
+        $this->assertEquals("Field emergencyrelation is required", $errors->get('emergencyrelation')[0]);
         $this->assertEquals("Field birth day is required", $errors->get('birthDay')[0]);
         $this->assertEquals("Field i b a n is required", $errors->get('IBAN')[0]);
         $this->assertEquals("'I'm not a robot' validation is required", $errors->get('g-recaptcha-response')[0]);
