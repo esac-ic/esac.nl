@@ -57,6 +57,8 @@ class RemoveOldUsers extends Command
                 'emergencycity' => null,
                 'emergencyzipcode' => null,
                 'emergencycountry' => null,
+                'emergencyname' => null,
+                'emergencyrelation' => null,
                 'birthDay' => null,
                 'kind_of_member' => null,
                 'IBAN' => null,

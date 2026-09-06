@@ -67,6 +67,8 @@ class UsersExport implements FromCollection, WithTitle, WithHeadings, ShouldAuto
             'Emergency city',
             'Emergency postal code',
             'Emergency country',
+            'Emergency contact name',
+            'Relation to emergency contact',
             'Birthdate',
             'Kind of member',
             'IBAN',
