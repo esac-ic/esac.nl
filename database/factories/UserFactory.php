@@ -36,6 +36,8 @@ class UserFactory extends Factory
             'emergencycity' => fake()->city(),
             'emergencyzipcode' => fake()->postcode(),
             'emergencycountry' => fake()->country(),
+            'emergencyname' => fake()->name(),
+            'emergencyrelation' => fake()->randomElement(["Parent", "Friend", "Cousin", "Guardian", "Grandparent"]),
             'birthday' => fake()->date(),
             'kind_of_member' => fake()->randomElement(User::KINDS_OF_MEMBER),
             'IBAN' => fake()->iban(),

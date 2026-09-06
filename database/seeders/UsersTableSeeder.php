@@ -35,6 +35,8 @@ class UsersTableSeeder extends Seeder
         $user->emergencycity = "Eindhoven";
         $user->emergencyzipcode = "3633IK";
         $user->emergencycountry = "NL";
+        $user->emergencyname = "Kees van Jansen";
+        $user->emergencyrelation = "Father";
         $user->birthDay = Carbon::now()->subYears(20);
         $user->kind_of_member = "member";
         $user->IBAN = "NL55 RABO 0107331020";
