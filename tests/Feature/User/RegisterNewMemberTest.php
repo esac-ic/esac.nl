@@ -112,7 +112,7 @@ class RegisterNewMemberTest extends TestCase
         Event::assertNotDispatched(PendingUserCreated::class);
 
         $errors = session('errors');
-        $this->assertCount(21, $errors);
+        $this->assertCount(23, $errors);
 
         $this->assertEquals("Field email is required", $errors->get('email')[0]);
         $this->assertEquals("Field firstname is required", $errors->get('firstname')[0]);
