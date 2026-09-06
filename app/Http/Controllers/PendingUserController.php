@@ -84,6 +84,8 @@ class PendingUserController extends Controller
             'emergencycity' => 'required|max:255',
             'emergencyzipcode' => 'required|max:255',
             'emergencycountry' => 'required|max:255',
+            'emergencyname' => 'required|max:255',
+            'emergencyrelation' => 'required|max:255',
             'birthDay' => 'required|date',
             'IBAN' => 'required|max:255',
             'g-recaptcha-response' => 'required',
