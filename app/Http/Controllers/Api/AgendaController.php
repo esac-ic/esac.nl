@@ -9,6 +9,7 @@ use App\Services\AgendaApplicationFormService;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Config;
 
 class AgendaController extends Controller
 {
@@ -43,15 +44,24 @@ class AgendaController extends Controller
             $endDate = Carbon::createFromFormat('d-m-Y', $endDate)->endOfDay();
             $agendaItemQuery->where('startDate', '<=', $endDate);
         }
+        
+        # If user is not an administrator, filter out the hidden agenda items
+        if (Auth::user() == null || !Auth::user()->hasBackendRights()) {
+            $agendaItemQuery->where('hidden', 0)
+                ->orWhere(function ($query) {
+                    $query->where('hidden', 1)->where('startDate', '<', Carbon::now()->addDays(8));
+                })
+                ->orWhere(function ($query) {
+                    $query->where('hidden', 2)->where('startDate', '<', Carbon::now()->addDays(15));
+                })
+                ->orWhere(function ($query) {
+                    $query->where('hidden', 3)->where('startDate', '<', Carbon::now()->addDays(22));
+                })
+                ->orWhere(function ($query) {
+                    $query->where('hidden', 4)->where('startDate', '<', Carbon::now()->addDays(29));
+                });
+        }
 
-        // if (!Auth::user()->hasRole(Config::get('constants.Administrator'))) {
-        //     $today = Carbon::createFromFormat('d-m-Y', Carbon::now())->startOfDay();
-        //     $agendaItemQuery->where(function ($query) use ($today) {
-        //         $query->where('hidden', '=', 0)
-        //             ->orWhere('startDate', '>=', $today->addDays());
-        //     });
-
-        // }
 
         $agendaItemQuery->orderBy('startDate', 'asc');
 
