@@ -57,7 +57,8 @@ class RegisterNewMemberTest extends TestCase
             'emergencycity' => 'dead',
             'emergencyzipcode' => '3473JP',
             'emergencycountry' => 'NL',
-            'emergencyname' => 'nsac',
+            'emergencyfirstname' => 'nsac',
+            'emergencylastname' => 'nsac last name',
             'emergencyrelation' => 'umbrella association',
             'birthDay' => Carbon::now()->subCenturies(2)->format('d-m-Y'),
             'IBAN' => "BLNDj838474784848",
@@ -90,7 +91,8 @@ class RegisterNewMemberTest extends TestCase
         $this->assertEquals($body['emergencycity'], $user->emergencycity);
         $this->assertEquals($body['emergencyzipcode'], $user->emergencyzipcode);
         $this->assertEquals($body['emergencycountry'], $user->emergencycountry);
-        $this->assertEquals($body['emergencyname'], $user->emergencyname);
+        $this->assertEquals($body['emergencyfirstname'], $user->emergencyfirstname);
+        $this->assertEquals($body['emergencylastname'], $user->emergencylastname);
         $this->assertEquals($body['emergencyrelation'], $user->emergencyrelation);
         $this->assertEquals($body['birthDay'], Carbon::parse($user->birthDay)->format('d-m-Y'));
         $this->assertEquals('member', $user->kind_of_member);
@@ -112,7 +114,7 @@ class RegisterNewMemberTest extends TestCase
         Event::assertNotDispatched(PendingUserCreated::class);
 
         $errors = session('errors');
-        $this->assertCount(23, $errors);
+        $this->assertCount(24, $errors);
 
         $this->assertEquals("Field email is required", $errors->get('email')[0]);
         $this->assertEquals("Field firstname is required", $errors->get('firstname')[0]);
@@ -125,7 +127,8 @@ class RegisterNewMemberTest extends TestCase
         $this->assertEquals("Field emergencystreet is required", $errors->get('emergencystreet')[0]);
         $this->assertEquals("Field emergencyzipcode is required", $errors->get('emergencyzipcode')[0]);
         $this->assertEquals("Field emergencycountry is required", $errors->get('emergencycountry')[0]);
-        $this->assertEquals("Field emergencyname is required", $errors->get('emergencyname')[0]);
+        $this->assertEquals("Field emergencyfirstname is required", $errors->get('emergencyfirstname')[0]);
+        $this->assertEquals("Field emergencylastname is required", $errors->get('emergencylastname')[0]);
         $this->assertEquals("Field emergencyrelation is required", $errors->get('emergencyrelation')[0]);
         $this->assertEquals("Field birth day is required", $errors->get('birthDay')[0]);
         $this->assertEquals("Field i b a n is required", $errors->get('IBAN')[0]);

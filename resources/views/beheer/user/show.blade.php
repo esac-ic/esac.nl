@@ -231,7 +231,7 @@
                         </tr>
                         <tr>
                             <td>{{'Relation to emergency contact'}}</td>
-                            <td>{{$user->emergencyrelation}}</td>
+                            <td>{{trans('relations.' . $user->emergencyrelation)}}</td>
                         </tr>
                     </table>
                 </div>

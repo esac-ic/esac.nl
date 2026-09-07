@@ -196,7 +196,7 @@
                 </div>
                 <div class="form-group col-md-4">
                     {!! Form::label('emergencyrelation', 'Relation to emergency contact') !!}
-                    {!! Form::select('emergencyrelation', ["Parent", "Sibling", "Partner", "Friend", "Other Family", "Other"], ($user != null) ? $user->emergencyrelation : "", ['class' => 'form-control','required' => 'required']) !!}
+                    {!! Form::select('emergencyrelation', trans("relations"), ($user != null) ? $user->emergencyrelation : "", ['class' => 'form-control','required' => 'required']) !!}
                 </div>
             </div>
         </div>
