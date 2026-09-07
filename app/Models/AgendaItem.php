@@ -21,6 +21,7 @@ class AgendaItem extends Model
         'image_url',
         'category',
         'climbing_activity',
+        'hidden',
     ];
 
     protected $casts = [

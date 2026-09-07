@@ -8,6 +8,7 @@ use App\Models\AgendaItemCategory;
 use App\Services\AgendaApplicationFormService;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class AgendaController extends Controller
 {
@@ -42,6 +43,15 @@ class AgendaController extends Controller
             $endDate = Carbon::createFromFormat('d-m-Y', $endDate)->endOfDay();
             $agendaItemQuery->where('startDate', '<=', $endDate);
         }
+
+        // if (!Auth::user()->hasRole(Config::get('constants.Administrator'))) {
+        //     $today = Carbon::createFromFormat('d-m-Y', Carbon::now())->startOfDay();
+        //     $agendaItemQuery->where(function ($query) use ($today) {
+        //         $query->where('hidden', '=', 0)
+        //             ->orWhere('startDate', '>=', $today->addDays());
+        //     });
+
+        // }
 
         $agendaItemQuery->orderBy('startDate', 'asc');
 

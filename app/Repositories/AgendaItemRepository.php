@@ -29,6 +29,7 @@ class AgendaItemRepository implements IRepository
         $agendaItem->image_url = "";
         $agendaItem->createdBy = Auth::user()->id;
         $agendaItem->climbing_activity = array_key_exists('climbing_activity', $data);
+        $agendaItem->hidden = $data['hidden'];
         $agendaItem->save();
 
         return $agendaItem;
@@ -56,6 +57,7 @@ class AgendaItemRepository implements IRepository
         }
 
         $agendaItem->climbing_activity = array_key_exists('climbing_activity', $data);
+        $agendaItem->hidden = $data['hidden'];
         $agendaItem->save();
 
         return $agendaItem;
