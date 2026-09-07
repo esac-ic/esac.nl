@@ -227,7 +227,7 @@
                         </tr>
                         <tr>
                             <td>{{'Emergency contact name'}}</td>
-                            <td>{{$user->emergencyname}}</td>
+                            <td>{{$user->emergencyfirstname . " " . $user->emergencylastname}}</td>
                         </tr>
                         <tr>
                             <td>{{'Relation to emergency contact'}}</td>

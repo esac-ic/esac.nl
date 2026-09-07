@@ -186,13 +186,17 @@
                 {!! Form::text('emergencyNumber', ($user != null) ? $user->emergencyNumber : "", ['class' => 'form-control','required' => 'required']) !!}
             </div>
             <div class="form-row">
-                <div class="form-group col-md-6">
-                    {!! Form::label('emergencyname', 'Emergency contact name') !!}
-                    {!! Form::text('emergencyname', ($user != null) ? $user->emergencyname : "", ['class' => 'form-control','required' => 'required']) !!}
+                <div class="form-group col-md-4">
+                    {!! Form::label('emergencyfirstname', 'Emergency contact first name') !!}
+                    {!! Form::text('emergencyfirstname', ($user != null) ? $user->emergencyfirstname : "", ['class' => 'form-control','required' => 'required']) !!}
                 </div>
-                <div class="form-group col-md-6">
+                <div class="form-group col-md-4">
+                    {!! Form::label('emergencylastname', 'Emergency contact last name') !!}
+                    {!! Form::text('emergencylastname', ($user != null) ? $user->emergencylastname : "", ['class' => 'form-control','required' => 'required']) !!}
+                </div>
+                <div class="form-group col-md-4">
                     {!! Form::label('emergencyrelation', 'Relation to emergency contact') !!}
-                    {!! Form::text('emergencyrelation', ($user != null) ? $user->emergencyrelation : "", ['class' => 'form-control','required' => 'required']) !!}
+                    {!! Form::select('emergencyrelation', ["Parent", "Sibling", "Partner", "Friend", "Other Family", "Other"], ($user != null) ? $user->emergencyrelation : "", ['class' => 'form-control','required' => 'required']) !!}
                 </div>
             </div>
         </div>
