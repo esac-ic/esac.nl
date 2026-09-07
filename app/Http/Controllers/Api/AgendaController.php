@@ -47,7 +47,7 @@ class AgendaController extends Controller
         
         # If user is not an administrator, filter out the hidden agenda items
         if (Auth::user() == null || !Auth::user()->hasBackendRights()) {
-            $agendaItemQuery->where('hidden', 0)
+            $agendaItemQuery->where('hidden', '<>', 404)->where('hidden', 0)
                 ->orWhere(function ($query) {
                     $query->where('hidden', 1)->where('startDate', '<', Carbon::now()->addDays(8));
                 })

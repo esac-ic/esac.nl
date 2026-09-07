@@ -22,6 +22,6 @@ $factory->define(AgendaItem::class, function (Faker $faker) {
         'subscription_endDate' => $faker->date,
         'image_url' => $faker->imageUrl,
         'climbing_activity' => $faker->boolean,
-        'hidden' => $faker->randomElement([0,1,2,3,4]),
+        'hidden' => $faker->randomElement([0,1,2,3,4,404]),
     ];
 });
