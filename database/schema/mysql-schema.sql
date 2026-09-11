@@ -31,7 +31,6 @@ CREATE TABLE `agenda_items` (
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
   `climbing_activity` tinyint(1) NOT NULL DEFAULT '1',
-  `hidden` int unsigned NOT NULL DEFAULT 0,
   `title` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `text` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci,
   `shortDescription` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,

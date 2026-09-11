@@ -50,6 +50,7 @@
             <th>{{'Start date'}}</th>
             <th>{{'End date'}}</th>
             <th>{{'Management'}}</th>
+            <th>{{'Hidden'}}</th>
         </tr>
         </thead>
         <tbody>
@@ -114,6 +115,11 @@
                         return getAgendaItemActions(data);
                     }
                 },
+                {
+                    "data": function (data) {
+                        return getHidden(data);
+                    }
+                },
             ]
         });
 
@@ -135,6 +141,14 @@
             }
             actions += '<a class="mr-1 ml-1" href="{{url('agendaItems')}}/' + data.id + '/copy"><span title="{{'Copy event'}}" class="ion-ios-copy font-size-120 icon" aria-hidden="true"></span></a>';
             return actions;
+        }
+
+        function getHidden(data) {
+            let hidden = false;
+            if (data.hidden == 5) hidden = true;
+            if (data.id == 7) console.log(data)
+            if (hidden) return '<a class="mr-1 ml-1" href="{{url('agendaItems')}}/' + data.id + '"><span title="{{'Show event'}}" class="ion-eye font-size-120 icon" aria-hidden="true"></span></a>';
+            else return "";
         }
 
         function getUrl() {

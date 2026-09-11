@@ -39,6 +39,7 @@ class AgendaItemSeeder extends Seeder
         $agendaItem->createdBy = 1;
         $agendaItem->category = 1;
         $agendaItem->application_form_id = 2;
+        $agendaItem->hidden = 5;
         $agendaItem->save();
 
         $agendaItem = new AgendaItem();
