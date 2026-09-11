@@ -43,7 +43,7 @@ class CopyAgendaItem extends TestCase
 
     /** @test */
     public function agenda_item_can_be_copied(){
-        $agendaItem = factory(AgendaItem::class)->create(['image_url' => ""]);
+        $agendaItem = AgendaItem::factory()->not_hidden()->create(['image_url' => ""]);
 
         $response = $this->get($this->url . $agendaItem->id . '/copy');
 

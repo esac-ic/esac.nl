@@ -11,6 +11,8 @@ use Illuminate\Support\Facades\Storage;
 
 class AgendaItem extends Model
 {
+    use HasFactory;
+
     protected $fillable = [
         'title',
         'text',
