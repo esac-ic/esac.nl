@@ -45,8 +45,8 @@ class AgendaController extends Controller
             $agendaItemQuery->where('startDate', '<=', $endDate);
         }
         
-        # If user is not an administrator, filter out the hidden agenda items
-        if (Auth::guest()) {
+        # If user is not an administrator, or not on the beheer page, filter out the hidden agenda items
+        if (Auth::guest() || $request->input('beheer') != true) {
             $agendaItemQuery->where('hidden', 0)
                 ->orWhere(function ($query) {
                     $query->where('hidden', 1)->where('startDate', '<=', Carbon::now()->addDays(7));
@@ -63,7 +63,7 @@ class AgendaController extends Controller
         }
         else if (!Auth::user()->hasRole(Config::get('constants.Administrator'))) {
             $agendaItemQuery->where('hidden', 0)
-                ->orWhere('createdBy', Auth::user()->id) # items made by user are not hidden
+                ->orWhere('createdBy', Auth::user()->id) # items made by user are not hidden on beheer page
                 ->orWhere(function ($query) {
                     $query->where('hidden', 1)->where('startDate', '<=', Carbon::now()->addDays(7));
                 })

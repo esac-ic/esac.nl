@@ -175,6 +175,7 @@
             if (datePicker.val() != "") {
                 params += "&startDate=" + datePicker.val();
             }
+            params += "&beheer=true"
 
             return "{{url("api/agenda")}}?" + params;
         }
