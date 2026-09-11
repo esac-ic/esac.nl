@@ -49,32 +49,32 @@ class AgendaController extends Controller
         if (Auth::guest() || $request->input('beheer') != true) {
             $agendaItemQuery->where('hidden', 0)
                 ->orWhere(function ($query) {
-                    $query->where('hidden', 1)->where('startDate', '<=', Carbon::now()->addDays(7));
+                    $query->where('hidden', 1)->where('startDate', '<=', Carbon::now('Europe/Amsterdam')->addDays(7));
                 })
                 ->orWhere(function ($query) {
-                    $query->where('hidden', 2)->where('startDate', '<=', Carbon::now()->addDays(14));
+                    $query->where('hidden', 2)->where('startDate', '<=', Carbon::now('Europe/Amsterdam')->addDays(14));
                 })
                 ->orWhere(function ($query) {
-                    $query->where('hidden', 3)->where('startDate', '<=', Carbon::now()->addDays(21));
+                    $query->where('hidden', 3)->where('startDate', '<=', Carbon::now('Europe/Amsterdam')->addDays(21));
                 })
                 ->orWhere(function ($query) {
-                    $query->where('hidden', 4)->where('startDate', '<=', Carbon::now()->addDays(28));
+                    $query->where('hidden', 4)->where('startDate', '<=', Carbon::now('Europe/Amsterdam')->addDays(28));
                 });
         }
         else if (!Auth::user()->hasRole(Config::get('constants.Administrator'))) {
             $agendaItemQuery->where('hidden', 0)
                 ->orWhere('createdBy', Auth::user()->id) # items made by user are not hidden on beheer page
                 ->orWhere(function ($query) {
-                    $query->where('hidden', 1)->where('startDate', '<=', Carbon::now()->addDays(7));
+                    $query->where('hidden', 1)->where('startDate', '<=', Carbon::now('Europe/Amsterdam')->addDays(7));
                 })
                 ->orWhere(function ($query) {
-                    $query->where('hidden', 2)->where('startDate', '<=', Carbon::now()->addDays(14));
+                    $query->where('hidden', 2)->where('startDate', '<=', Carbon::now('Europe/Amsterdam')->addDays(14));
                 })
                 ->orWhere(function ($query) {
-                    $query->where('hidden', 3)->where('startDate', '<=', Carbon::now()->addDays(21));
+                    $query->where('hidden', 3)->where('startDate', '<=', Carbon::now('Europe/Amsterdam')->addDays(21));
                 })
                 ->orWhere(function ($query) {
-                    $query->where('hidden', 4)->where('startDate', '<=', Carbon::now()->addDays(28));
+                    $query->where('hidden', 4)->where('startDate', '<=', Carbon::now('Europe/Amsterdam')->addDays(28));
                 });
         }
 
