@@ -4,6 +4,7 @@ namespace Database\Factories;
 
 use App\Models\AgendaItem;
 use App\Models\AgendaItemCategory;
+use Illuminate\Database\Eloquent\Factories\Factory;
 use App\Models\User;
 use Faker\Generator as Faker;
 
