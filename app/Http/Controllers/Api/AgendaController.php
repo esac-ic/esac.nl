@@ -50,16 +50,16 @@ class AgendaController extends Controller
             $agendaItemQuery->where('hidden', 0)
                 ->orWhere('createdBy', Auth::user()->id) # items made by user are not hidden
                 ->orWhere(function ($query) {
-                    $query->where('hidden', 1)->where('startDate', '<', Carbon::now()->addDays(8));
+                    $query->where('hidden', 1)->where('startDate', '<=', Carbon::now()->addDays(7));
                 })
                 ->orWhere(function ($query) {
-                    $query->where('hidden', 2)->where('startDate', '<', Carbon::now()->addDays(15));
+                    $query->where('hidden', 2)->where('startDate', '<=', Carbon::now()->addDays(14));
                 })
                 ->orWhere(function ($query) {
-                    $query->where('hidden', 3)->where('startDate', '<', Carbon::now()->addDays(22));
+                    $query->where('hidden', 3)->where('startDate', '<=', Carbon::now()->addDays(21));
                 })
                 ->orWhere(function ($query) {
-                    $query->where('hidden', 4)->where('startDate', '<', Carbon::now()->addDays(29));
+                    $query->where('hidden', 4)->where('startDate', '<=', Carbon::now()->addDays(28));
                 });
         }
 

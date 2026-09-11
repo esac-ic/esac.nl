@@ -107,9 +107,45 @@ class AgendaItemRepository implements IRepository
 
     public function getFirstXItems($limit)
     {
+        if (Auth::guest()) {
+            return AgendaItem::query()
+                ->with('getApplicationFormResponses')
+                ->whereDate('startDate', '>=', Carbon::now())
+                ->where('hidden', 0)
+                ->orWhere(function ($query) {
+                    $query->where('hidden', 1)->where('startDate', '<=', Carbon::now()->addDays(7));
+                })
+                ->orWhere(function ($query) {
+                    $query->where('hidden', 2)->where('startDate', '<=', Carbon::now()->addDays(14));
+                })
+                ->orWhere(function ($query) {
+                    $query->where('hidden', 3)->where('startDate', '<=', Carbon::now()->addDays(21));
+                })
+                ->orWhere(function ($query) {
+                    $query->where('hidden', 4)->where('startDate', '<=', Carbon::now()->addDays(28));
+                })
+                ->orderBy('startDate', 'ASC')
+                ->take($limit)
+                ->get();
+        }
+        
         return AgendaItem::query()
             ->with('getApplicationFormResponses')
             ->whereDate('startDate', '>=', Carbon::now())
+            ->where('hidden', 0)
+            ->orWhere('createdBy', Auth::user()->id) # items made by user are not hidden
+            ->orWhere(function ($query) {
+                $query->where('hidden', 1)->where('startDate', '<=', Carbon::now()->addDays(7));
+            })
+            ->orWhere(function ($query) {
+                $query->where('hidden', 2)->where('startDate', '<=', Carbon::now()->addDays(14));
+            })
+            ->orWhere(function ($query) {
+                $query->where('hidden', 3)->where('startDate', '<=', Carbon::now()->addDays(21));
+            })
+            ->orWhere(function ($query) {
+                $query->where('hidden', 4)->where('startDate', '<=', Carbon::now()->addDays(28));
+            })
             ->orderBy('startDate', 'ASC')
             ->take($limit)
             ->get();
