@@ -2,7 +2,6 @@
 
 namespace App\Models;
 
-use Database\Factories\AgendaItemFactory;
 use App\Models\ApplicationForm\ApplicationForm;
 use App\Models\ApplicationForm\ApplicationResponse;
 use Carbon\Carbon;
@@ -11,9 +10,10 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
-#[UseFactory(AgendaItemFactory::class)]
 class AgendaItem extends Model
 {
+    use HasFactory;
+
     protected $fillable = [
         'title',
         'text',
