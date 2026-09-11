@@ -46,11 +46,11 @@
     <table id="agenda-items" class="table table-striped dt-responsive nowrap" style="width:100%">
         <thead>
         <tr>
+            <th>{{''}}</th>
             <th>{{'Title'}}</th>
             <th>{{'Start date'}}</th>
             <th>{{'End date'}}</th>
             <th>{{'Management'}}</th>
-            <th>{{'Hidden'}}</th>
         </tr>
         </thead>
         <tbody>
@@ -95,10 +95,19 @@
                 "dataSrc": "agendaItems"
             },
             columnDefs: [
-                {type: 'de_datetime', targets: 1},
                 {type: 'de_datetime', targets: 2},
+                {type: 'de_datetime', targets: 3},
+                {width: '15%', targets: 4},
+                {width: '3%', targets: 0},
+                {orderable: false, targets: 0},
+                {orderable: false, targets: 4},
             ],
             "columns": [
+                {
+                    "data": function (data) {
+                        return getHidden(data);
+                    }
+                },
                 {"data": "title"},
                 {
                     "data": function (data) {
@@ -113,11 +122,6 @@
                 {
                     "data": function (data) {
                         return getAgendaItemActions(data);
-                    }
-                },
-                {
-                    "data": function (data) {
-                        return getHidden(data);
                     }
                 },
             ]
@@ -143,11 +147,25 @@
             return actions;
         }
 
+        // Helper for getHidden
+        function addDays(date, days) {
+            var result = new Date(date);
+            result.setDate(result.getDate() + days);
+            return result;
+        }
+
         function getHidden(data) {
             let hidden = false;
+            var now = new Date()
+            var startDate = moment(data.full_startDate)
+
             if (data.hidden == 5) hidden = true;
-            if (data.id == 7) console.log(data)
-            if (hidden) return '<a class="mr-1 ml-1" href="{{url('agendaItems')}}/' + data.id + '"><span title="{{'Show event'}}" class="ion-eye font-size-120 icon" aria-hidden="true"></span></a>';
+            else if (data.hidden == 1 && startDate > addDays(now, 7)) hidden = true;
+            else if (data.hidden == 2 && startDate > addDays(now, 14)) hidden = true;
+            else if (data.hidden == 3 && startDate > addDays(now, 21)) hidden = true;
+            else if (data.hidden == 4 && startDate > addDays(now, 28)) hidden = true;
+
+            if (hidden) return '<a><span title="{{'Event hidden'}}" class="ion-eye-disabled font-size-120 icon" aria-hidden="true"></span></a>';
             else return "";
         }
 

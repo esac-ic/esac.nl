@@ -93,6 +93,7 @@ class AgendaController extends Controller
                     'application_form_id' => $agendaItem->application_form_id,
                     'amountOfPeopleRegisterd' => count($registeredUserIds),
                     'currentUserSignedUp' => $currentUserSignedUp,
+                    'hidden' => $agendaItem->hidden,
                 ];
             });
 
