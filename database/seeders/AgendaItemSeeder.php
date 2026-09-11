@@ -36,7 +36,7 @@ class AgendaItemSeeder extends Seeder
         $agendaItem->text = 'Climbing at Neoliet North text';
         $agendaItem->shortDescription = 'Climbing at Neoliet North';
         $agendaItem->image_url = "";
-        $agendaItem->createdBy = 1;
+        $agendaItem->createdBy = 2;
         $agendaItem->category = 1;
         $agendaItem->application_form_id = 2;
         $agendaItem->hidden = 5;
