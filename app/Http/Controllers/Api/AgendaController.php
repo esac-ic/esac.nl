@@ -8,6 +8,8 @@ use App\Models\AgendaItemCategory;
 use App\Services\AgendaApplicationFormService;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Config;
 
 class AgendaController extends Controller
 {
@@ -42,6 +44,39 @@ class AgendaController extends Controller
             $endDate = Carbon::createFromFormat('d-m-Y', $endDate)->endOfDay();
             $agendaItemQuery->where('startDate', '<=', $endDate);
         }
+        
+        # If user is not an administrator, or not on the beheer page, filter out the hidden agenda items
+        if (Auth::guest() || $request->input('beheer') != true) {
+            $agendaItemQuery->where('hidden', 0)
+                ->orWhere(function ($query) {
+                    $query->where('hidden', 1)->where('startDate', '<=', Carbon::now('Europe/Amsterdam')->addDays(7));
+                })
+                ->orWhere(function ($query) {
+                    $query->where('hidden', 2)->where('startDate', '<=', Carbon::now('Europe/Amsterdam')->addDays(14));
+                })
+                ->orWhere(function ($query) {
+                    $query->where('hidden', 3)->where('startDate', '<=', Carbon::now('Europe/Amsterdam')->addDays(21));
+                })
+                ->orWhere(function ($query) {
+                    $query->where('hidden', 4)->where('startDate', '<=', Carbon::now('Europe/Amsterdam')->addDays(28));
+                });
+        }
+        else if (!Auth::user()->hasRole(Config::get('constants.Administrator'))) {
+            $agendaItemQuery->where('hidden', 0)
+                ->orWhere('createdBy', Auth::user()->id) # items made by user are not hidden on beheer page
+                ->orWhere(function ($query) {
+                    $query->where('hidden', 1)->where('startDate', '<=', Carbon::now('Europe/Amsterdam')->addDays(7));
+                })
+                ->orWhere(function ($query) {
+                    $query->where('hidden', 2)->where('startDate', '<=', Carbon::now('Europe/Amsterdam')->addDays(14));
+                })
+                ->orWhere(function ($query) {
+                    $query->where('hidden', 3)->where('startDate', '<=', Carbon::now('Europe/Amsterdam')->addDays(21));
+                })
+                ->orWhere(function ($query) {
+                    $query->where('hidden', 4)->where('startDate', '<=', Carbon::now('Europe/Amsterdam')->addDays(28));
+                });
+        }
 
         $agendaItemQuery->orderBy('startDate', 'asc');
 
@@ -73,6 +108,7 @@ class AgendaController extends Controller
                     'application_form_id' => $agendaItem->application_form_id,
                     'amountOfPeopleRegisterd' => count($registeredUserIds),
                     'currentUserSignedUp' => $currentUserSignedUp,
+                    'hidden' => $agendaItem->hidden,
                 ];
             });
 
