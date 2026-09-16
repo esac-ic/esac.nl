@@ -32,7 +32,7 @@ class AgendaItemSeeder extends Seeder
         $agendaItem->startDate = Carbon::now()->addDays(12)->addHours(12);
         $agendaItem->endDate = Carbon::now()->addDays(12)->addHours(15);
         $agendaItem->subscription_endDate = Carbon::now()->addDays(2)->addHours(15);
-        $agendaItem->title = 'Climbing Neoliet North';
+        $agendaItem->title = 'This item should be hidden';
         $agendaItem->text = 'Climbing at Neoliet North text';
         $agendaItem->shortDescription = 'Climbing at Neoliet North';
         $agendaItem->image_url = "";

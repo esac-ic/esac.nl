@@ -25,7 +25,7 @@ class AgendaItemFactory extends Factory
             'subscription_endDate' => fake()->date(),
             'image_url' => fake()->imageUrl(),
             'climbing_activity' => fake()->boolean(),
-            'hidden' => fake()->randomElement([0,1,2,3,4,5]),
+            'hidden' => 0,
         ];
     }
 

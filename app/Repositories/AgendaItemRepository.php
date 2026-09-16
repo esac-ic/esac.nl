@@ -110,18 +110,20 @@ class AgendaItemRepository implements IRepository
         return AgendaItem::query()
             ->with('getApplicationFormResponses')
             ->whereDate('startDate', '>=', Carbon::now('Europe/Amsterdam'))
-            ->where('hidden', 0)
-            ->orWhere(function ($query) {
-                $query->where('hidden', 1)->where('startDate', '<=', Carbon::now('Europe/Amsterdam')->addDays(7));
-            })
-            ->orWhere(function ($query) {
-                $query->where('hidden', 2)->where('startDate', '<=', Carbon::now('Europe/Amsterdam')->addDays(14));
-            })
-            ->orWhere(function ($query) {
-                $query->where('hidden', 3)->where('startDate', '<=', Carbon::now('Europe/Amsterdam')->addDays(21));
-            })
-            ->orWhere(function ($query) {
-                $query->where('hidden', 4)->where('startDate', '<=', Carbon::now('Europe/Amsterdam')->addDays(28));
+            ->where(function ($query) {
+                $query->where('hidden', 0)
+                ->orWhere(function ($query2) {
+                    $query2->where('hidden', 1)->where('startDate', '<=', Carbon::now('Europe/Amsterdam')->addWeeks(1));
+                })
+                ->orWhere(function ($query2) {
+                    $query2->where('hidden', 2)->where('startDate', '<=', Carbon::now('Europe/Amsterdam')->addWeeks(2));
+                })
+                ->orWhere(function ($query2) {
+                    $query2->where('hidden', 3)->where('startDate', '<=', Carbon::now('Europe/Amsterdam')->addWeeks(3));
+                })
+                ->orWhere(function ($query2) {
+                    $query2->where('hidden', 4)->where('startDate', '<=', Carbon::now('Europe/Amsterdam')->addWeeks(4));
+                });
             })
             ->orderBy('startDate', 'ASC')
             ->take($limit)

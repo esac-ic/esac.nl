@@ -89,7 +89,7 @@
         });
 
         let agendaTable = $('#agenda-items').DataTable({
-            "order": [[1, "asc"]],
+            "order": [[2, "asc"]],
             "ajax": {
                 'url': getUrl(),
                 "dataSrc": "agendaItems"

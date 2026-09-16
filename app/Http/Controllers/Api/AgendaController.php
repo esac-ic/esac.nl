@@ -45,37 +45,26 @@ class AgendaController extends Controller
             $agendaItemQuery->where('startDate', '<=', $endDate);
         }
         
-        # If user is not an administrator, or not on the beheer page, filter out the hidden agenda items
-        if (Auth::guest() || $request->input('beheer') != true) {
-            $agendaItemQuery->where('hidden', 0)
-                ->orWhere(function ($query) {
-                    $query->where('hidden', 1)->where('startDate', '<=', Carbon::now('Europe/Amsterdam')->addDays(7));
+        # If user is not an activity administrator, or not on the beheer page, filter out the hidden agenda items
+        if (Auth::guest() 
+            || !Auth::user()->hasRole(Config::get('constants.Activity_administrator')) 
+            || $request->input('beheer') != true
+        ) {
+            $agendaItemQuery->where(function ($query) {
+                $query->where('hidden', 0)
+                ->orWhere(function ($query2) {
+                    $query2->where('hidden', 1)->where('startDate', '<=', Carbon::now('Europe/Amsterdam')->addWeeks(1));
                 })
-                ->orWhere(function ($query) {
-                    $query->where('hidden', 2)->where('startDate', '<=', Carbon::now('Europe/Amsterdam')->addDays(14));
+                ->orWhere(function ($query2) {
+                    $query2->where('hidden', 2)->where('startDate', '<=', Carbon::now('Europe/Amsterdam')->addWeeks(2));
                 })
-                ->orWhere(function ($query) {
-                    $query->where('hidden', 3)->where('startDate', '<=', Carbon::now('Europe/Amsterdam')->addDays(21));
+                ->orWhere(function ($query2) {
+                    $query2->where('hidden', 3)->where('startDate', '<=', Carbon::now('Europe/Amsterdam')->addWeeks(3));
                 })
-                ->orWhere(function ($query) {
-                    $query->where('hidden', 4)->where('startDate', '<=', Carbon::now('Europe/Amsterdam')->addDays(28));
+                ->orWhere(function ($query2) {
+                    $query2->where('hidden', 4)->where('startDate', '<=', Carbon::now('Europe/Amsterdam')->addWeeks(4));
                 });
-        }
-        else if (!Auth::user()->hasRole(Config::get('constants.Administrator'))) {
-            $agendaItemQuery->where('hidden', 0)
-                ->orWhere('createdBy', Auth::user()->id) # items made by user are not hidden on beheer page
-                ->orWhere(function ($query) {
-                    $query->where('hidden', 1)->where('startDate', '<=', Carbon::now('Europe/Amsterdam')->addDays(7));
-                })
-                ->orWhere(function ($query) {
-                    $query->where('hidden', 2)->where('startDate', '<=', Carbon::now('Europe/Amsterdam')->addDays(14));
-                })
-                ->orWhere(function ($query) {
-                    $query->where('hidden', 3)->where('startDate', '<=', Carbon::now('Europe/Amsterdam')->addDays(21));
-                })
-                ->orWhere(function ($query) {
-                    $query->where('hidden', 4)->where('startDate', '<=', Carbon::now('Europe/Amsterdam')->addDays(28));
-                });
+            });
         }
 
         $agendaItemQuery->orderBy('startDate', 'asc');
