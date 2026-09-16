@@ -29,6 +29,7 @@ class AgendaItemRepository implements IRepository
         $agendaItem->image_url = "";
         $agendaItem->createdBy = Auth::user()->id;
         $agendaItem->climbing_activity = array_key_exists('climbing_activity', $data);
+        $agendaItem->hidden = array_key_exists('hidden', $data) ? $data['hidden'] : 0;
         $agendaItem->save();
 
         return $agendaItem;
@@ -56,6 +57,7 @@ class AgendaItemRepository implements IRepository
         }
 
         $agendaItem->climbing_activity = array_key_exists('climbing_activity', $data);
+        $agendaItem->hidden = array_key_exists('hidden', $data) ? $data['hidden'] : 0;
         $agendaItem->save();
 
         return $agendaItem;
@@ -104,10 +106,25 @@ class AgendaItemRepository implements IRepository
     }
 
     public function getFirstXItems($limit)
-    {
+    {   
         return AgendaItem::query()
             ->with('getApplicationFormResponses')
-            ->whereDate('startDate', '>=', Carbon::now())
+            ->whereDate('startDate', '>=', Carbon::now('Europe/Amsterdam'))
+            ->where(function ($query) {
+                $query->where('hidden', 0)
+                ->orWhere(function ($query2) {
+                    $query2->where('hidden', 1)->where('startDate', '<=', Carbon::now('Europe/Amsterdam')->addWeeks(1));
+                })
+                ->orWhere(function ($query2) {
+                    $query2->where('hidden', 2)->where('startDate', '<=', Carbon::now('Europe/Amsterdam')->addWeeks(2));
+                })
+                ->orWhere(function ($query2) {
+                    $query2->where('hidden', 3)->where('startDate', '<=', Carbon::now('Europe/Amsterdam')->addWeeks(3));
+                })
+                ->orWhere(function ($query2) {
+                    $query2->where('hidden', 4)->where('startDate', '<=', Carbon::now('Europe/Amsterdam')->addWeeks(4));
+                });
+            })
             ->orderBy('startDate', 'ASC')
             ->take($limit)
             ->get();
