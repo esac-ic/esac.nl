@@ -95,7 +95,7 @@
                         <td>{{$member->email}}</td>
                         <td>{{$member->getName()}}</td>
                         <td>
-                            <form method="post" action="{{ route('committees.removeMember', [$committee, $member]) }}">
+                            <form method="post" action="{{ route('beheer.committees.removeMember', [$committee, $member]) }}">
                                 @csrf
                                 @method('DELETE')
                                 <a href="javascript:void(0);" onclick="$(this).closest('form').submit()"><em class="ion-trash-a"></em></a>
@@ -109,13 +109,7 @@
     </div>
     @include('beheer.committee.adduser')
 @endsection
-@push('styles')
-    <style>
-        .marginbox {
-            margin: 20px;
-        }
-    </style>
-@endpush
+
 @push('scripts')
     @yield('modal_javascript')
     <script>
@@ -128,21 +122,5 @@
                 ]
             });
         });
-
-        // $(document).on('click', '#addMember', function() {
-        // });
-        //
-        {{--$(document).on('click', '#deleteMember', function() {--}}
-        {{--    $.ajax({--}}
-        {{--        data: {--}}
-        {{--            --}}
-        {{--            _token: window.Laravel.csrfToken--}}
-        {{--        },--}}
-        {{--        type: 'DELETE',--}}
-        {{--        // success: function() {--}}
-        {{--        //     window.location.reload();--}}
-        {{--        // }--}}
-        {{--    });--}}
-        {{--});--}}
     </script>
 @endpush

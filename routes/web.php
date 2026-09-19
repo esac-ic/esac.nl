@@ -30,6 +30,10 @@ Route::group(['as' => 'beheer.', 'prefix' => 'beheer/', 'middleware' => 'auth'],
     Route::get('/settings', 'SettingsController@index');
     Route::put('/settings', 'SettingsController@update');
     Route::get('/settings/edit', 'SettingsController@edit');
+    
+    Route::resource('committees', 'CommitteeController');
+    Route::post('committees/{committee}/add-members', 'CommitteeController@addMembers')->name('committees.addMembers');
+    Route::delete('committees/{committee}/remove-member/{member}', 'CommitteeController@removeMember')->name('committees.removeMember');
 });
 
 //extra user routes
@@ -63,7 +67,6 @@ Route::resource('agendaItems', 'AgendaItemController');
 Route::resource('agendaItemCategories', 'AgendaItemCategoryController');
 Route::resource('newsItems', 'NewsItemController');
 Route::resource('mailList', 'MailListController');
-Route::resource('committees', 'CommitteeController');
 Route::post('/signup', 'PendingUserController@storePendingUser')->name('user.signup');
 Route::resource('books', 'LibraryController');
 Route::post('images/upload', 'StorageController@uploadImage');
@@ -73,8 +76,6 @@ Route::get('agendaItems/{agendaItem}/copy', 'AgendaItemController@copy')->name('
 Route::get('userEventLog', 'UserEventLogEntryController@index')->name('user-event-log-entry.index');
 Route::post('userEventLog/export', 'UserEventLogEntryController@export')->name('user-event-log-entry.export');
 
-Route::post('committees/{committee}/add-members', 'CommitteeController@addMembers')->name('committees.addMembers');
-Route::delete('committees/{committee}/remove-member/{member}', 'CommitteeController@removeMember')->name('committees.removeMember');
 //inschrijf routes
 Route::get('forms/{agendaItem}', array('uses' => 'ApplicationForm\UserApplicationFormController@showRegistrationForm'));
 Route::get('forms/{agendaItem}/unregister/{fromAgendaItem?}', 'ApplicationForm\UserApplicationFormController@unregister');

@@ -71,7 +71,7 @@
             
             $.ajax({
                 {{--url: "/committees/" + {{$committee->id}} + "/addMembers",--}}
-                url: "{{ route('committees.addMembers', $committee) }}",
+                url: "{{ route('beheer.committees.addMembers', $committee) }}",
                 data: {
                     member_ids: selectedUserIds,
                     _token: window.Laravel.csrfToken
