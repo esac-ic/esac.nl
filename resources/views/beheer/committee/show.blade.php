@@ -6,7 +6,6 @@
 
 @section('content')
     @if ($errors->any())
-        <p>Hi</p>
     <div class="alert alert-danger">
         <ul>
             @foreach ($errors->all() as $error)
@@ -96,8 +95,11 @@
                         <td>{{$member->email}}</td>
                         <td>{{$member->getName()}}</td>
                         <td>
-                            todo
-{{--                            <a href="#" id="deleteMember" data-mailList-id="{{$mailList->getId()}}" data-member-email="{{$member->getAddress()}}"><em class="ion-trash-a"></em></a>--}}
+                            <form method="post" action="{{ route('committees.removeMember', [$committee, $member]) }}">
+                                @csrf
+                                @method('DELETE')
+                                <a href="javascript:void(0);" onclick="$(this).closest('form').submit()"><em class="ion-trash-a"></em></a>
+                            </form>
                         </td>
                     </tr>
                 @endforeach
@@ -130,20 +132,17 @@
         // $(document).on('click', '#addMember', function() {
         // });
         //
-        // $(document).on('click', '#deleteMember', function() {
-        //     const mailListId = $(this).attr('data-mailList-id');
-        //     const memberEmail = $(this).attr('data-member-email');
-        //
-        //     $.ajax({
-        //         url: '/mailList/' + mailListId + '/member/' + memberEmail,
-        //         data: {
-        //             _token: window.Laravel.csrfToken
-        //         },
-        //         type: 'DELETE',
-        //         success: function() {
-        //             window.location.reload();
-        //         }
-        //     });
-        // });
+        {{--$(document).on('click', '#deleteMember', function() {--}}
+        {{--    $.ajax({--}}
+        {{--        data: {--}}
+        {{--            --}}
+        {{--            _token: window.Laravel.csrfToken--}}
+        {{--        },--}}
+        {{--        type: 'DELETE',--}}
+        {{--        // success: function() {--}}
+        {{--        //     window.location.reload();--}}
+        {{--        // }--}}
+        {{--    });--}}
+        {{--});--}}
     </script>
 @endpush

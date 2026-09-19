@@ -3,7 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Models\Committee;
+use App\Models\User;
 use Illuminate\Http\Request;
+use InvalidArgumentException;
 
 class CommitteeController extends Controller
 {
@@ -59,6 +61,20 @@ class CommitteeController extends Controller
         
         $committee->members()->attach($newMemberIds);
         
+        return redirect()->route('committees.show', $committee);
+    }
+    
+    
+    public function removeMember(Committee $committee, User $member)
+    {
+        if ($committee->members()->find($member))
+        {
+            $committee->members()->detach($member->id);
+        }
+        else
+        {
+            throw new InvalidArgumentException("'$member->firstname' cannot be removed from '$committee->name' because they are not in the committee.");
+        }
         return redirect()->route('committees.show', $committee);
     }
 }

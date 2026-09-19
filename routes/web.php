@@ -73,7 +73,8 @@ Route::get('agendaItems/{agendaItem}/copy', 'AgendaItemController@copy')->name('
 Route::get('userEventLog', 'UserEventLogEntryController@index')->name('user-event-log-entry.index');
 Route::post('userEventLog/export', 'UserEventLogEntryController@export')->name('user-event-log-entry.export');
 
-Route::post('committees/{committee}/addMembers', 'CommitteeController@addMembers')->name('committees.addMembers');
+Route::post('committees/{committee}/add-members', 'CommitteeController@addMembers')->name('committees.addMembers');
+Route::delete('committees/{committee}/remove-member/{member}', 'CommitteeController@removeMember')->name('committees.removeMember');
 //inschrijf routes
 Route::get('forms/{agendaItem}', array('uses' => 'ApplicationForm\UserApplicationFormController@showRegistrationForm'));
 Route::get('forms/{agendaItem}/unregister/{fromAgendaItem?}', 'ApplicationForm\UserApplicationFormController@unregister');
