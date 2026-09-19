@@ -50,14 +50,14 @@ class CommitteeController extends Controller
     
     public function addMembers(Request $request, Committee $committee)
     {
-        \Log::info($request);
-        //TODO in progress
         $data = $request->validate([
             'member_ids' => ['required', 'array'],
         ]);
-        \Log::info(print_r($data, true));
-        \Log::info("i");
-        $committee->members()->attach($data['member_ids']);
+        
+        //make sure we don't add a member who is already in the committee
+        $newMemberIds = collect($data['member_ids'])->diff($committee->members()->allRelatedIds());
+        
+        $committee->members()->attach($newMemberIds);
         
         return redirect()->route('committees.show', $committee);
     }
