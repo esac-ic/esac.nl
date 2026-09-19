@@ -25,7 +25,7 @@ class CommitteeController extends Controller
     
     public function show(Committee $committee)
     {
-        return $committee;
+        return view('beheer.committee.show', compact('committee'));
     }
     
     public function update(Request $request, Committee $committee)
@@ -48,14 +48,16 @@ class CommitteeController extends Controller
         return response()->json();
     }
     
-    public function addMember(Request $request, Committee $committee)
+    public function addMembers(Request $request, Committee $committee)
     {
+        \Log::info($request);
         //TODO in progress
         $data = $request->validate([
-            'committee_id' => ['required'],
-            'member_id' => ['required'],
+            'member_ids' => ['required', 'array'],
         ]);
-        $committee->members()->attach($data['member_id']);
+        \Log::info(print_r($data, true));
+        \Log::info("i");
+        $committee->members()->attach($data['member_ids']);
         
         return redirect()->route('committees.show', $committee);
     }

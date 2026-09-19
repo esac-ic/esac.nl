@@ -36,4 +36,16 @@ class Committee extends Model
         }
         return $chairCol->first();
     }
+    
+    public function setChair(User $chair): void
+    {
+        if (!$this->members->containts($chair))
+        {
+            \Log::error("Tried to set " . $chair->getName() . " as chair, but isn't a member of " . $this->name);
+            throw new \RuntimeException("Tried to set " . $chair->getName() . " as chair, but isn't a member of " . $this->name);
+        }
+        
+        $this->members()->updateExistingPivot($this->chair()->id, ['is_chair' => false]); //reset the previous chair
+        $this->members()->updateExistingPivot($chair->id, ['is_chair' => true]); //set the new chair
+    }
 }

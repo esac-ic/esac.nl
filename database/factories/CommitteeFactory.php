@@ -12,10 +12,12 @@ class CommitteeFactory extends Factory
     
     public function definition(): array
     {
+        $name = $this->faker->word();
+        $abbr = strtoupper($name[0]) . "C";
         return [
-            'name' => $this->faker->name(),
-            'abbreviation' => $this->faker->word(),
-            'email' => $this->faker->unique()->safeEmail(),
+            'name' => $name,
+            'abbreviation' => $abbr,
+            'email' => strtolower($abbr) . '@esac.nl',
             'description' => $this->faker->text(),
             'created_at' => Carbon::now(),
             'updated_at' => Carbon::now(),
