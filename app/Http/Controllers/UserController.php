@@ -211,9 +211,9 @@ class UserController extends Controller
             'emergencycity' => 'required|max:255',
             'emergencyzipcode' => 'required|max:255',
             'emergencycountry' => 'required|max:255',
-            'emergencyfirstname' => 'max:255',
-            'emergencylastname' => 'max:255',
-            'emergencyrelation' => 'max:255',
+            'emergencyfirstname' => 'nullable|max:255',
+            'emergencylastname' => 'nullable|max:255',
+            'emergencyrelation' => 'nullable|max:255',
             'birthDay' => 'required|date',
             'IBAN' => 'required|max:255',
         ]);
