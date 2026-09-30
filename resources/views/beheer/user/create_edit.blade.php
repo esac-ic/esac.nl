@@ -185,6 +185,20 @@
                 {!! Form::label('emergencyNumber', 'Emergency phone number') !!}
                 {!! Form::text('emergencyNumber', ($user != null) ? $user->emergencyNumber : "", ['class' => 'form-control','required' => 'required']) !!}
             </div>
+            <div class="form-row">
+                <div class="form-group col-md-4">
+                    {!! Form::label('emergencyfirstname', 'Emergency contact first name') !!}
+                    {!! Form::text('emergencyfirstname', ($user != null) ? $user->emergencyfirstname : "", ['class' => 'form-control']) !!}
+                </div>
+                <div class="form-group col-md-4">
+                    {!! Form::label('emergencylastname', 'Emergency contact last name') !!}
+                    {!! Form::text('emergencylastname', ($user != null) ? $user->emergencylastname : "", ['class' => 'form-control']) !!}
+                </div>
+                <div class="form-group col-md-4">
+                    {!! Form::label('emergencyrelation', 'Relation to emergency contact') !!}
+                    {!! Form::select('emergencyrelation', trans("relations"), ($user != null) ? $user->emergencyrelation : "", ['class' => 'form-control']) !!}
+                </div>
+            </div>
         </div>
     </div>
     @if(\Illuminate\Support\Facades\Auth::user()->hasRole(Config::get('constants.Administrator')))

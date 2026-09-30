@@ -35,6 +35,9 @@ class UsersTableSeeder extends Seeder
         $user->emergencycity = "Eindhoven";
         $user->emergencyzipcode = "3633IK";
         $user->emergencycountry = "NL";
+        $user->emergencyfirstname = "Kees";
+        $user->emergencylastname = "van Jansen";
+        $user->emergencyrelation = "parent";
         $user->birthDay = Carbon::now()->subYears(20);
         $user->kind_of_member = "member";
         $user->IBAN = "NL55 RABO 0107331020";
@@ -67,6 +70,9 @@ class UsersTableSeeder extends Seeder
         $user->emergencycity = "Eindhoven";
         $user->emergencyzipcode = "3633IK";
         $user->emergencycountry = "NL";
+        $user->emergencyfirstname = "Kees";
+        $user->emergencylastname = "van Jansen";
+        $user->emergencyrelation = "parent";
         $user->birthDay = Carbon::now()->subYears(20);
         $user->kind_of_member = "member";
         $user->IBAN = "NL55 RABO 0107331020";
@@ -95,6 +101,9 @@ class UsersTableSeeder extends Seeder
         $user->emergencycity = "Eindhoven";
         $user->emergencyzipcode = "3633IK";
         $user->emergencycountry = "NL";
+        $user->emergencyfirstname = "Kees";
+        $user->emergencylastname = "van Jansen";
+        $user->emergencyrelation = "parent";
         $user->birthDay = Carbon::now()->subYears(20);
         $user->kind_of_member = "member";
         $user->IBAN = "NL55 RABO 0107331020";

@@ -225,6 +225,14 @@
                             <td>{{'Emergency phone number'}}</td>
                             <td>{{$user->emergencyNumber}}</td>
                         </tr>
+                        <tr>
+                            <td>{{'Emergency contact name'}}</td>
+                            <td>{{$user->emergencyfirstname . " " . $user->emergencylastname}}</td>
+                        </tr>
+                        <tr>
+                            <td>{{'Relation to emergency contact'}}</td>
+                            <td>{{trans('relations.' . $user->emergencyrelation)}}</td>
+                        </tr>
                     </table>
                 </div>
                 <div class="tab-pane fade" id="rols" role="tabpanel" aria-labelledby="tab3-content">
