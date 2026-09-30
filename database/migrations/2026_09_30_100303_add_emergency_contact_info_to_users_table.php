@@ -12,9 +12,9 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('users', function (Blueprint $table) {
-            $table->string('emergencyfirstname')->default("empty");
-            $table->string('emergencylastname')->default("empty");
-            $table->string('emergencyrelation')->default("empty");
+            $table->string('emergencyfirstname')->default("empty")->nullable();
+            $table->string('emergencylastname')->default("empty")->nullable();
+            $table->string('emergencyrelation')->default("empty")->nullable();
         });
     }
 
