@@ -38,6 +38,9 @@
                         <a href="https://www.neoliet.nl"><img class="img-fluid" src="{{asset('img/neoliet.png')}}"></a>
                     </div>
                     <div class="col-6 col-lg-3">
+                        <a href="https://boulderneoliet.nl/"><img class="img-fluid" src="{{asset('img/boulder.png')}}"></a>
+                    </div>
+                    <div class="col-6 col-lg-3">
                         <a href="https://www.klimwinkel.nl"><img class="img-fluid" src="{{asset('img/klimwinkel.png')}}"></a>
                     </div>
                 </div>
