@@ -31,16 +31,16 @@
                 <span class="h5">The student climbing and mountaineering association of Eindhoven.</span>
                 <h6>Supported by</h6>
                 <div class="row">
-                    <div class="col-6 col-lg-3">
+                    <div class="col-6 col-lg-3 text-center">
                         <a href="https://venusp.tue.nl/sci-cgi/index.opl"><img class="img-fluid" src="{{asset('img/ssc.png')}}"></a>
                     </div>
-                    <div class="col-6 col-lg-3">
+                    <div class="col-6 col-lg-3 text-center">
                         <a href="https://www.neoliet.nl"><img class="img-fluid" src="{{asset('img/neoliet.png')}}"></a>
                     </div>
-                    <div class="col-6 col-lg-3">
+                    <div class="col-6 col-lg-3 text-center">
                         <a href="https://boulderneoliet.nl/"><img class="img-fluid" src="{{asset('img/boulder.png')}}"></a>
                     </div>
-                    <div class="col-6 col-lg-3">
+                    <div class="col-6 col-lg-3 text-center">
                         <a href="https://www.klimwinkel.nl"><img class="img-fluid" src="{{asset('img/klimwinkel.png')}}"></a>
                     </div>
                 </div>
