@@ -98,7 +98,7 @@ class MarkAsTreasurerPendingTest extends \TestCase
         
         $newMember = User::find($this->member->id);
 
-        $this->assertEquals('["IBAN"]', $newMember->treasurer_pending);
+        $this->assertEquals(["IBAN"], json_decode($newMember->treasurer_pending));
     }
     
     public function test_bic_changes()
@@ -131,7 +131,7 @@ class MarkAsTreasurerPendingTest extends \TestCase
         
         $newMember = User::find($this->member->id);
 
-        $this->assertEquals('["BIC"]', $newMember->treasurer_pending);
+        $this->assertEquals(["BIC"], json_decode($newMember->treasurer_pending));
     }
     
     public function test_incasso_changes()
@@ -162,7 +162,7 @@ class MarkAsTreasurerPendingTest extends \TestCase
         
         $newMember = User::find($this->member->id);
 
-        $this->assertEquals('["incasso"]', $newMember->treasurer_pending);
+        $this->assertEquals(["incasso"], json_decode($newMember->treasurer_pending));
     }
 
     public function test_all_changes()
@@ -194,6 +194,6 @@ class MarkAsTreasurerPendingTest extends \TestCase
         
         $newMember = User::find($this->member->id);
 
-        $this->assertEquals('["IBAN","BIC","incasso"]', $newMember->treasurer_pending);
+        $this->assertEquals(["IBAN","BIC","incasso"], json_decode($newMember->treasurer_pending));
     }
 }
