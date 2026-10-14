@@ -58,7 +58,7 @@ class RegisterNewMemberTest extends TestCase
             'emergencyzipcode' => '3473JP',
             'emergencycountry' => 'NL',
             'birthDay' => Carbon::now()->subCenturies(2)->format('d-m-Y'),
-            'IBAN' => "BLNDj838474784848",
+            'IBAN' => "NL02ABNA0123456789",
             'incasso' => 1,
             'privacy_policy' => 1,
             'termsconditions' => 1,

@@ -34,5 +34,6 @@ class ApproveAsPendingMemberTest extends \TestCase
         Event::assertDispatched(PendingUserApproved::class);
         
         $this->assertNull(User::find($userId)->pending_user);
+        $this->assertEquals(User::find($userId)->treasurer_pending, '["new_member"]');
     }
 }

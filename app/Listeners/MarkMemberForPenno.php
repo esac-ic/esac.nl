@@ -28,7 +28,9 @@ class MarkMemberForPenno implements ShouldQueue
         $reasons = [];
 
         if($current->IBAN != $newData['IBAN']) array_push($reasons, 'IBAN');
-        if($current->BIC != $newData['BIC']) array_push($reasons, 'BIC');
+        if(array_key_exists('BIC', $newData)) {
+            if($current->BIC != $newData['BIC']) array_push($reasons, 'BIC');
+        }
         if($current->incasso != $newData['incasso']) array_push($reasons, 'incasso');
 
         if(!count($reasons)) return;

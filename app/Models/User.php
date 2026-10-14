@@ -238,7 +238,7 @@ class User extends Authenticatable
     public function approveAsPendingMember(): void
     {
         $this->pending_user = null;
-        $this->treasurer_pending = "['new_member']";
+        $this->treasurer_pending = '["new_member"]';
         $this->save();
         PendingUserApproved::dispatch($this);
     }
