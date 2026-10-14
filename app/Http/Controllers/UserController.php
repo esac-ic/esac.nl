@@ -14,6 +14,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Session;
+use Intervention\Validation\Rules\Bic;
+use Intervention\Validation\Rules\Iban;
 use Maatwebsite\Excel\Facades\Excel;
 
 class UserController extends Controller
@@ -51,6 +53,13 @@ class UserController extends Controller
         $users = $this->_userRepository->getOldUsers(array('id', 'firstname', 'lastname', 'email', 'preposition', 'kind_of_member'));
 
         return view('beheer.user.index_old_users', compact('users'));
+    }
+
+    public function indexTreasurerPending()
+    {
+        $users = $this->_userRepository->getTreasurerPendingUsers(array('id', 'firstname', 'lastname', 'email', 'preposition', 'kind_of_member', 'treasurer_pending'));
+
+        return view('beheer.user.index_treasurer_pending', compact('users'));
     }
 
     //show create screen
@@ -150,23 +159,23 @@ class UserController extends Controller
 
         return redirect('/users/' . $user->id);
     }
+    
+    public function approveAsTreasurerPending(Request $request, User $user)
+    {
+        $user->approveAsTreasurerPending();
+        
+        return redirect('users/treasurer_pending');
+    }
 
     public function exportUsers(UsersExport $usersExport)
     {
         return Excel::download($usersExport, 'Members.xlsx');
     }
-    public function pennoMemberExportSelect(Request $request)
-    {
-        return view('beheer.user.penno_member_export');
-    }
+
     public function pennoMemberExport(Request $request, UserRepository $userRepository)
     {
-        $request->validate([
-            'days_ago' => 'required|integer:strict|min:0'
-        ]);
-        $export = new PennoMemberExport($userRepository, $request->get('days_ago'));
-        $exportDate = $export->getFromDate()->toDateString();
-        return Excel::download($export, "Members (created after $exportDate).xlsx");
+        $export = new PennoMemberExport($userRepository);
+        return Excel::download($export, "Members in need of treasurer approval.xlsx");
     }
 
     public function exportOldUsers(OldUsersExport $oldUsersExport)
@@ -212,7 +221,8 @@ class UserController extends Controller
             'emergencyzipcode' => 'required|max:255',
             'emergencycountry' => 'required|max:255',
             'birthDay' => 'required|date',
-            'IBAN' => 'required|max:255',
+            'IBAN' => ['required','max:255', new Iban()],
+            'BIC' => ['max:255', new Bic()],
         ]);
 
         // These fields are only required for administrators.

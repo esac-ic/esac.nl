@@ -128,5 +128,14 @@ class UserFactory extends Factory
             ];
         });
     }
+    public function treasurerPending(): Factory
+    {
+        return $this->state(function (array $attributes) {
+            return [
+                'treasurer_pending' => json_encode(['new_member']),
+                'kind_of_member' => "member",
+            ];
+        });
+    }
     
 }

@@ -18,6 +18,22 @@
         </div>
     @endif
 
+    @if($user->isTreasurerPending() and \Illuminate\Support\Facades\Auth::user()->hasRole(Config::get('constants.Administrator')))
+        <div class="alert alert-success" role="alert">
+            @php($treasurer_pending = json_decode($user->treasurer_pending))
+            @if(count($treasurer_pending) == 1 && $treasurer_pending[0] == 'new_member')
+                Member needs approval because they are new to the ESAC.
+            @else
+                Member needs treasurer approval because of changes made to:
+                <ul>
+                    @foreach (json_decode($user->treasurer_pending) as $reason)    
+                        <li>{{ $reason}} </li>
+                    @endforeach
+                </ul>
+            @endif
+        </div>
+    @endif
+
     <div class="row mb-3">
         <div class="col-md-6">
             <h1>{{'View user'}}</h1>
@@ -58,6 +74,11 @@
                         <span title="{{'Back'}}" class="ion-android-arrow-back" aria-hidden="true"></span>
                         {{'Back'}}
                     </a>
+                @endif
+                @if($user->isTreasurerPending() and \Illuminate\Support\Facades\Auth::user()->hasRole(Config::get('constants.Administrator')))
+                    {{ Form::open(array('url' => '/users/'.$user->id . '/approveAsTreasurerPending', 'method' => 'patch')) }}
+                        <button type="submit" class="btn btn-success"><em class="ion-checkmark"></em> {{'Treasurer approval'}}</button>
+                    {{ Form::close() }}
                 @endif
                 @if(\Illuminate\Support\Facades\Auth::user()->hasRole(Config::get('constants.Administrator')))
                     @if($user->isActiveMember())

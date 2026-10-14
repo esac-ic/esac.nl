@@ -13,12 +13,10 @@ use Maatwebsite\Excel\Concerns\WithTitle;
 class PennoMemberExport implements FromCollection, WithTitle, WithHeadings, ShouldAutoSize
 {
     private UserRepository $userRepository;
-    private Carbon $fromDate;
 
-    public function __construct(UserRepository $userRepository, int $daysAgo)
+    public function __construct(UserRepository $userRepository)
     {
         $this->userRepository = $userRepository;
-        $this->fromDate = Carbon::today()->subDays($daysAgo);
     }
 
     /**
@@ -26,7 +24,7 @@ class PennoMemberExport implements FromCollection, WithTitle, WithHeadings, Shou
      */
     public function collection()
     {
-        $users = $this->userRepository->getCurrentUsersAfterSignupDate($this->columns(), $this->fromDate);
+        $users = $this->userRepository->getTreasurerPendingUsers($this->columns());
 
         return $users->map(function (User $user) {
             $export = $user->toArray();
@@ -63,7 +61,8 @@ class PennoMemberExport implements FromCollection, WithTitle, WithHeadings, Shou
             'IBAN',
             'BIC',
             'incasso',
-            'created_at'
+            'created_at',
+            'treasurer_pending',
         ];
     }
 
@@ -84,12 +83,8 @@ class PennoMemberExport implements FromCollection, WithTitle, WithHeadings, Shou
             'IBAN',
             'BIC',
             'Accept Automatic Collection',
-            'User created at'
+            'User created at',
+            'Neccesary approval (which fields changed/new member)',
         ];
-    }
-
-    public function getFromDate(): Carbon
-    {
-        return $this->fromDate;
     }
 }

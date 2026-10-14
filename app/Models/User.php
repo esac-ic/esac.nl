@@ -6,6 +6,7 @@ use App\Events\MemberBecameOldMember;
 use App\Events\OldMemberBecameMember;
 use App\Events\PendingUserApproved;
 use App\Events\PendingUserRemoved;
+use App\Events\TreasurerPendingApproved;
 use App\Models\ApplicationForm\ApplicationResponse;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Casts\Attribute;
@@ -181,6 +182,11 @@ class User extends Authenticatable
     {
         return ($this->lid_af === null && $this->pending_user === null);
     }
+
+    public function isTreasurerPending(): bool
+    {
+        return $this->treasurer_pending !== null;
+    }
     
     /**
      * Makes a member an inactive/old member.
@@ -232,6 +238,7 @@ class User extends Authenticatable
     public function approveAsPendingMember(): void
     {
         $this->pending_user = null;
+        $this->treasurer_pending = "['new_member']";
         $this->save();
         PendingUserApproved::dispatch($this);
     }
@@ -250,6 +257,30 @@ class User extends Authenticatable
         }
         PendingUserRemoved::dispatch($this, $this->getName());
         $this->delete();
+    }
+    
+    /**
+     * Mark this member as needing to be checked by the treasurer
+     * @return void
+     */
+    public function markAsTreasurerPending(array $reasons): void
+    {
+        if($this->treasurer_pending == null) $this->treasurer_pending = '[]';
+        $merged = array_merge(json_decode($this->treasurer_pending), $reasons);
+        $this->treasurer_pending = json_encode(array_unique($merged));
+        $this->save();
+    }
+
+    /**
+     * Approves a member that is maked as pending for the treasurer.
+     * Dispatches a TreasurerPendingApproved event.
+     * @return void
+     */
+    public function approveAsTreasurerPending(): void
+    {
+        $this->treasurer_pending = null;
+        $this->save();
+        TreasurerPendingApproved::dispatch($this);
     }
 
 }

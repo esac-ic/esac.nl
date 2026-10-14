@@ -110,5 +110,6 @@ class UsersTableSeeder extends Seeder
         User::factory()->reunist()->count(10)->create();
         User::factory()->lidAf()->count(10)->create();
         User::factory()->pending()->count(10)->create();
+        User::factory()->treasurerPending()->count(10)->create();
     }
 }
