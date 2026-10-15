@@ -34,10 +34,6 @@
                     <span class="ion-person-add" aria-hidden="true"></span>
                     {{'New user'}}
                 </a>
-                <a href="{{route('users.pennoMemberExportView')}}" class="btn btn-primary" title="{{'Export only the fields needed for the financial administration'}}" >
-                    <span class="ion-android-download" aria-hidden="true"></span>
-                    {{'Penno export'}}
-                </a>
                 <a href="{{route('users.exportUsers')}}" class="btn btn-primary" title="{{'Export all active members'}}">
                     <span class="ion-android-download" aria-hidden="true"></span>
                     {{'Export members'}}

@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Models\User;
 use App\Repositories\UserRepository;
 use App\Rules\EmailDomainValidator;
+use Intervention\Validation\Rules\Bic;
+use Intervention\Validation\Rules\Iban;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Session;
@@ -85,7 +87,8 @@ class PendingUserController extends Controller
             'emergencyzipcode' => 'required|max:255',
             'emergencycountry' => 'required|max:255',
             'birthDay' => 'required|date',
-            'IBAN' => 'required|max:255',
+            'IBAN' => ['required', 'max:255', new Iban()],
+            'BIC' => ['max:255', new Bic()],
             'g-recaptcha-response' => 'required',
             'incasso' => 'required',
             'privacy_policy' => 'required',

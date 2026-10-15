@@ -39,7 +39,7 @@ class UserFactory extends Factory
             'birthday' => fake()->date(),
             'kind_of_member' => fake()->randomElement(User::KINDS_OF_MEMBER),
             'IBAN' => fake()->iban(),
-            'BIC' => fake()->bankAccountNumber(),
+            'BIC' => fake()->swiftBicNumber(),
             'incasso' => fake()->boolean(),
             'remark' => fake()->sentence(),
         ];
@@ -124,6 +124,15 @@ class UserFactory extends Factory
         return $this->state(function (array $attributes) {
             return [
                 'pending_user' => fake()->dateTimeThisMonth(),
+                'kind_of_member' => "member",
+            ];
+        });
+    }
+    public function treasurer_pending(): Factory
+    {
+        return $this->state(function (array $attributes) {
+            return [
+                'treasurer_pending' => json_encode(['new_member']),
                 'kind_of_member' => "member",
             ];
         });
