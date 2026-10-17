@@ -34,6 +34,7 @@ Route::group(['as' => 'beheer.', 'prefix' => 'beheer/', 'middleware' => 'auth'],
     Route::resource('committees', 'CommitteeController');
     Route::post('committees/{committee}/add-members', 'CommitteeController@addMembers')->name('committees.addMembers');
     Route::delete('committees/{committee}/remove-member/{member}', 'CommitteeController@removeMember')->name('committees.removeMember');
+    Route::post('committees/{committee}/set-chair-persons', 'CommitteeController@setChairPersons')->name('committees.setChairPersons');
 });
 
 //extra user routes

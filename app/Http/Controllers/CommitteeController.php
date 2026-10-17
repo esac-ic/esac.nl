@@ -61,7 +61,7 @@ class CommitteeController extends Controller
         
         $committee->members()->attach($newMemberIds);
         
-        return redirect()->route('committees.show', $committee);
+        return redirect()->route('beheer.committees.show', $committee);
     }
     
     
@@ -75,6 +75,23 @@ class CommitteeController extends Controller
         {
             throw new InvalidArgumentException("'$member->firstname' cannot be removed from '$committee->name' because they are not in the committee.");
         }
-        return redirect()->route('committees.show', $committee);
+        return redirect()->route('beheer.committees.show', $committee);
+    }
+    
+    public function setChairPersons(Request $request, Committee $committee)
+    {
+        $validated = $request->validate([
+            'chair_persons' => ['array'],
+            'chair_persons.*' => ['integer', 'exists:users,id'],
+        ]);
+        
+        $chairPersonIds = collect($validated['chair_persons'])->intersect($committee->members()->allRelatedIds());
+        
+        foreach ($committee->members()->allRelatedIds() as $memberId)
+        {
+            $committee->members()->updateExistingPivot($memberId, ['is_chair' => $chairPersonIds->contains($memberId)]);
+        }
+        
+        return redirect()->route('beheer.committees.show', $committee);
     }
 }
