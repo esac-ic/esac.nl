@@ -49,5 +49,11 @@
                 {!! Form::checkbox('climbing_activity', 1, ($agendaItem != null) ? $agendaItem->climbing_activity : true, ['class' => 'form-control']) !!}
             </div>
         </div>
+        <div class="form-row">
+            <div class="form-group col-md-6">
+                {!! Form::label('hidden', 'Hide agenda item') !!}
+                {!! Form::select('hidden',trans("hide_agenda"), ($agendaItem != null) ? $agendaItem->hidden : "", ['class' => 'form-control','required' => 'required']) !!}
+            </div>
+        </div>
     </div>
 </div>
