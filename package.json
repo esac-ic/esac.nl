@@ -1,6 +1,7 @@
 {
   "private": true,
   "type": "module",
+  "name": "esac.nl",
   "scripts": {
     "dev": "vite",
     "build": "vite build"
