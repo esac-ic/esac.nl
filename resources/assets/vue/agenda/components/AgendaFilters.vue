@@ -9,48 +9,51 @@
         </div>
         <div class="form-group">
             <label>{{startDateText}}</label>
-            <datepicker v-model="startDate" input-class="form-control" :format="dateFormat" v-on:input="startDateChanged"></datepicker>
+            <input type="date" class="form-control" v-model="startDate" v-on:change="startDateChanged">
         </div>
     </div>
 </template>
 
 <script>
-    import Datepicker from 'vuejs-datepicker';
-import { mapActions, mapGetters } from 'vuex';
+    import { mapActions, mapState } from 'pinia';
+    import { useAgendaStore } from '../../store';
+
+    function toIsoDate(date) {
+        const pad = n => String(n).padStart(2, '0');
+        return `${date.getFullYear()}-${pad(date.getMonth() + 1)}-${pad(date.getDate())}`;
+    }
+
+    // "YYYY-MM-DD" "d-m-Y"
+    function isoDateToDMY(isoDate) {
+        const [year, month, day] = isoDate.split('-');
+        return `${day}-${month}-${year}`;
+    }
 
     export default {
         name: "AgendaFilters",
         data(){
             return {
                 selectedCategorie: "",
-                startDate:  new Date(),
+                startDate: toIsoDate(new Date()),
                 allCategoriesText: 'All',
                 categoriesText: 'Categories',
                 startDateText: 'Start date'
             }
         },
-        components: {
-            Datepicker
-        },
         computed: {
-            ...mapGetters({
-                categories : "categories"
-            })
+            ...mapState(useAgendaStore, ['categories'])
         },
         methods: {
-            ...mapActions([
+            ...mapActions(useAgendaStore, [
                 'fetchAgendaCategories',
                 'setSelectedCategory',
                 'setStartDate',
             ]),
-            dateFormat(date) {
-                return (new Date(date)).toLocaleDateString('nl',{ year: 'numeric', month: 'numeric', day: 'numeric' });
-            },
             categorieChanged(){
                 this.setSelectedCategory(this.selectedCategorie);
             },
             startDateChanged(){
-                this.setStartDate((new Date(this.startDate)).toLocaleDateString('nl',{ year: 'numeric', month: 'numeric', day: 'numeric' }));
+                this.setStartDate(isoDateToDMY(this.startDate));
             }
         },
         mounted () {

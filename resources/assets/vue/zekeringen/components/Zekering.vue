@@ -33,7 +33,7 @@
 
 <script>
     import zekeringApi from '../api/zekering';
-    import subZekering from './SubZekering';
+    import subZekering from './SubZekering.vue';
     import EventBus from '../event-bus';
     import * as constants from "../constants";
 
@@ -59,7 +59,7 @@
                 }
             },
             zekeringDeleted(response) {
-                EventBus.$emit(constants.EVENT_RELOAD_ZEKERINGEN);
+                EventBus.emit(constants.EVENT_RELOAD_ZEKERINGEN);
             },
             togleForm(){
                 this.showForm = !this.showForm;
@@ -70,7 +70,7 @@
             subZekeringAdded() {
                 this.subZekering = "";
                 this.showForm = false;
-                EventBus.$emit(constants.EVENT_RELOAD_ZEKERINGEN);
+                EventBus.emit(constants.EVENT_RELOAD_ZEKERINGEN);
             }
         },
         mounted(){

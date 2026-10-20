@@ -1,6 +1,15 @@
-Vue.component('application-form', require('./components/ApplicationForm').default);
-Vue.component('registration-form', require('./components/registrationForm/RegistrationForm').default);
-Vue.component('registration-input-field', require('./components/registrationForm/Elements/RegistrationInputField').default);
-Vue.component('registration-text-area-field', require('./components/registrationForm/Elements/RegistrationTextAreaField').default);
-Vue.component('registration-select-field', require('./components/registrationForm/Elements/RegistrationSelectField').default);
-Vue.component('registration-radio-checkbox-field', require('./components/registrationForm/Elements/RegistrationRadioCheckboxField').default);
+import ApplicationForm from './components/ApplicationForm.vue';
+import RegistrationForm from './components/registrationForm/RegistrationForm.vue';
+import RegistrationInputField from './components/registrationForm/Elements/RegistrationInputField.vue';
+import RegistrationTextAreaField from './components/registrationForm/Elements/RegistrationTextAreaField.vue';
+import RegistrationSelectField from './components/registrationForm/Elements/RegistrationSelectField.vue';
+import RegistrationRadioCheckboxField from './components/registrationForm/Elements/RegistrationRadioCheckboxField.vue';
+
+export default {
+    'application-form': ApplicationForm,
+    'registration-form': RegistrationForm,
+    'registration-input-field': RegistrationInputField,
+    'registration-text-area-field': RegistrationTextAreaField,
+    'registration-select-field': RegistrationSelectField,
+    'registration-radio-checkbox-field': RegistrationRadioCheckboxField,
+};
