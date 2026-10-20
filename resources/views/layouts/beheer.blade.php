@@ -1,10 +1,5 @@
 @extends('layouts.master')
 
-@push('styles')
-    <link rel="stylesheet" type="text/css" href="{{mix("css/vendor/datatables.css")}}">
-    <link rel="stylesheet" type="text/css" href="{{mix("css/vendor/summernote.css")}}">
-@endpush
-
 @section('main')
 
 @component('includes.menu')
@@ -130,9 +125,8 @@
 @endsection
 
 @push('scripts')
-<script src="{{mix("js/vendor/datatables.js")}}"></script>
-<script src="{{mix("js/vendor/summernote.js")}}"></script>
-<script>
+@vite(['resources/assets/js/vendor/datatables.js', 'resources/assets/js/vendor/summernote.js'])
+<script type="module">
     $('#users').DataTable();
 
     $(document).ready(function() {
