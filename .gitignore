@@ -7,10 +7,7 @@
 _ide_helper.php
 .phpstorm.meta.php
 public/storage
-/public/js
-/public/css
-/public/img
-/public/mix-manifest.json
+/public/build
 composer.phar
 .phpunit.result.cache
 .devbox
