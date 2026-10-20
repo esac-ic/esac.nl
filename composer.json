@@ -27,6 +27,7 @@
         "barryvdh/laravel-debugbar": "^3.6",
         "fakerphp/faker": "^1.23",
         "laravel/dusk": "^7.8",
+        "laravel/sail": "^1.69",
         "mockery/mockery": "^1.6",
         "phpunit/phpunit": "^10.5"
     },
