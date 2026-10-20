@@ -24,6 +24,78 @@ Create an .env file from .env.example, with your local values for
 DB\_HOST, DB\_PORT, DB\_DATABASE, DB\_USERNAME and DB\_PASSWORD
 **Note**: When running your local environment on a certain port, let's say 3000, modify your `APP_URL` in the file to reflect that port, else the api's won't work
 
+### Development environment (Docker / Laravel Sail, easiest and works on any os)
+The easiest method is with Laravel Sail, using docker [Docker Desktop](https://www.docker.com/products/docker-desktop/). No local PHP, Composer, Node or MySQL required and no problems with pining php version.
+
+On windows: use WSL and clone it on a WSL native path (otherwise the performace is shit)
+
+1. Clone the project repository and cd into it
+	```
+	git clone https://github.com/esac-ic/esac.nl.git
+	cd esac.nl
+	```
+2. Copy `.env.sail.example` to `.env`
+<details>
+<summary>2.1. To keep you own .env, change these variables:</summary>
+
+ONLY APPLICABLE IF YOU DIDNT COPY `.env.sail.example`
+```
+APP_PORT=8000
+
+DB_HOST=mysql
+DB_USERNAME=sail
+DB_PASSWORD=password
+
+MAIL_DRIVER=smtp
+MAIL_HOST=mailpit
+MAIL_PORT=1025
+MAIL_ENCRYPTION=null
+
+MAIL_MAN_URL=http://mailman:8001/3.1
+
+WWWGROUP=1000
+WWWUSER=1000
+MAIL_FROM_ADDRESS=dev@esac.nl
+MAIL_FROM_NAME="ESAC Dev"
+```
+</details>
+
+3. Install PHP dependencies, 2 options:
+	- Use local PHP instance: ```composer install```
+    - Use throwaway docker container
+       ```
+       docker run --rm -v "$(pwd):/var/www/html" -w /var/www/html laravelsail/php82-composer:latest composer install --ignore-platform-req=ext-gd
+       ```
+4. Build and start the containers (first run takes a few minutes)
+	```
+	docker compose up -d --build
+	```
+5. Setup commands to get the local dev instance set up.
+	```
+	docker compose exec -u sail laravel.test php artisan key:generate
+	docker compose exec -u sail laravel.test php artisan migrate --force
+	docker compose exec -u sail laravel.test php artisan db:seed --force
+	docker compose exec -u sail laravel.test php artisan storage:link
+	docker compose exec -u sail laravel.test npm install
+	docker compose exec -u sail laravel.test npm run dev
+	```
+6. Configure `mailman` once, otherwise mail list sync will error:
+	```
+	curl -u restadmin:restpass -X POST http://localhost:8001/3.1/domains -d mail_host=esac.nl
+	curl -u restadmin:restpass -X POST http://localhost:8001/3.1/lists -d "fqdn_listname=alle-leden@esac.nl"
+	curl -u restadmin:restpass -X POST http://localhost:8001/3.1/lists -d "fqdn_listname=nieuwsbrief@esac.nl"
+	curl -u restadmin:restpass -X POST http://localhost:8001/3.1/lists -d "fqdn_listname=reunist@esac.nl"
+	```
+7. Visit http://localhost:8000
+
+To start it back up later, just run `docker compose up -d` from the repository root. 
+Outgoing mails will go to mailpit (http://localhost:8025).
+
+On macOS/Linux/WSL2 you can use `./vendor/bin/sail` instead of `docker compose exec -u sail laravel.test` (e.g. `./vendor/bin/sail artisan migrate`), you can also configure an [alias](https://laravel.com/framework/docs/13.x/sail#configuring-a-shell-alias), so you can just run `sail` instead of `./vendor/bin/sail`
+
+For more info on sail visit:
+- https://laravel.com/framework/docs/13.x/sail#executing-sail-commands
+
 ### Development environment (Ubuntu on Windows + Visual Studio Code, prevents having to install a lot on Windows)
 1. Install the following:
 	* Visual Studio Code: https://code.visualstudio.com/
