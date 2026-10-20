@@ -31,7 +31,7 @@
 </div>
 
 @section('modal_javascript')
-    <script>
+    <script type="module">
         var datatable;
         var selectedUserIds = [];
 
