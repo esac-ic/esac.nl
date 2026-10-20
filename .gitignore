@@ -8,6 +8,7 @@ _ide_helper.php
 .phpstorm.meta.php
 public/storage
 /public/build
+/public/hot
 composer.phar
 .phpunit.result.cache
 .devbox
