@@ -25,4 +25,7 @@ export default defineConfig({
             { find: /^moment$/, replacement: fileURLToPath(new URL('./node_modules/moment/moment.js', import.meta.url)) },
         ],
     },
+    optimizeDeps: {
+        exclude: ['axios'],
+    },
 });
