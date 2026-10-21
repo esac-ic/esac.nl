@@ -3,10 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Enums\Role;
+use App\Http\Requests\StorePendingUserRequest;
 use App\Models\User;
 use App\Repositories\UserRepository;
-use App\Rules\EmailDomainValidator;
-use App\Rules\Recaptcha;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controllers\HasMiddleware;
 use Illuminate\Routing\Controllers\Middleware;
@@ -42,10 +41,8 @@ class PendingUserController extends Controller implements HasMiddleware
     }
 
     //store pending user
-    public function storePendingUser(Request $request)
+    public function storePendingUser(StorePendingUserRequest $request)
     {
-        $this->validateInput($request);
-
         $this->_userRepository->createPendingUser($request->all());
         
         Session::flash("message", 'Your membership request is pending, we will get back to you as soon as possible');
@@ -65,38 +62,5 @@ class PendingUserController extends Controller implements HasMiddleware
         $user->approveAsPendingMember();
         
         return redirect('users/pending_members');
-    }
-
-    private function validateInput(Request $request)
-    {
-        $request->validate([
-            'email' => [
-                'required',
-                'email',
-                'max:255',
-                'unique:users',
-                new EmailDomainValidator(),
-            ],
-            'firstname' => 'required|max:255',
-            'lastname' => 'required|max:255',
-            'street' => 'required|max:255',
-            'houseNumber' => 'required|max:255',
-            'city' => 'required|max:255',
-            'zipcode' => 'required|max:255',
-            'country' => 'required|max:255',
-            'phonenumber' => 'required|max:255',
-            'emergencyNumber' => 'required|max:255',
-            'emergencyHouseNumber' => 'required|max:255',
-            'emergencystreet' => 'required|max:255',
-            'emergencycity' => 'required|max:255',
-            'emergencyzipcode' => 'required|max:255',
-            'emergencycountry' => 'required|max:255',
-            'birthDay' => 'required|date',
-            'IBAN' => 'required|max:255',
-            'g-recaptcha-response' => ['required', new Recaptcha()],
-            'incasso' => 'required',
-            'privacy_policy' => 'required',
-            'termsconditions' => 'required',
-        ]);
     }
 }
