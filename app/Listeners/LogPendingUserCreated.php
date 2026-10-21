@@ -9,16 +9,13 @@ use ReflectionClass;
 
 class LogPendingUserCreated implements ShouldQueue
 {
-    private UserEventLogEntryRepository $logEntryRepository;
-    
     /**
      * Create the event listener.
      *
      * @param UserEventLogEntryRepository $logEntryRepository
      */
-    public function __construct(UserEventLogEntryRepository $logEntryRepository)
+    public function __construct(private readonly UserEventLogEntryRepository $logEntryRepository)
     {
-        $this->logEntryRepository = $logEntryRepository;
     }
     
     /**
@@ -27,7 +24,7 @@ class LogPendingUserCreated implements ShouldQueue
     public function handle(PendingUserCreated $event): void
     {
         $this->logEntryRepository->create([
-            'event_type' => (new ReflectionClass($event))->getShortName(),
+            'event_type' => new ReflectionClass($event)->getShortName(),
             'event_details' => "New pending user: " . $event->user->getName(),
             'user_id' => $event->user->id,
         ]);

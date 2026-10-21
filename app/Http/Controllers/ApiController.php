@@ -8,26 +8,23 @@ use Illuminate\Http\Request;
 
 class ApiController extends Controller
 {
-    private UserRepository $_userRepository;
-
-    public function __construct(UserRepository $userRepository)
+    public function __construct(private readonly UserRepository $_userRepository)
     {
         $this->middleware('auth');
-        $this->_userRepository = $userRepository;
     }
 
-    public function getMenuItems(Request $request)
+    public function getMenuItems(Request $request): array
     {
         $menuItemQeury = MenuItem::query();
         if ($request->has('type')) {
-            if ($request->get('type') === "subItem") {
-                $menuItemQeury->where('parent_id', '=', intval($request->get('parentId')));
+            if ($request->input('type') === "subItem") {
+                $menuItemQeury->where('parent_id', '=', intval($request->input('parentId')));
             } else {
                 $menuItemQeury->where('parent_id', '=', null);
             }
         }
         $entries = $menuItemQeury->get();
-        $menuItems = array();
+        $menuItems = [];
         foreach ($entries as $menuItem) {
             array_push($menuItems, [
                 "id" => $menuItem->id,
@@ -37,7 +34,7 @@ class ApiController extends Controller
         return $menuItems;
     }
 
-    public function getUsers()
+    public function getUsers(): array
     {
         $users = [];
         foreach ($this->_userRepository->getCurrentUsers(['id', 'email', 'firstname', 'preposition', 'lastname']) as $user) {

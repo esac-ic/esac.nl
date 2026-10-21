@@ -4,6 +4,7 @@ namespace App\Http\Middleware;
 
 use App\Models\Setting;
 use Closure;
+use Illuminate\Http\Request;
 
 class CheckKillswitch
 {
@@ -15,11 +16,10 @@ class CheckKillswitch
     /**
      * Handle an incoming request.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param Request $request
      * @param  \Closure  $next
      * @return mixed
      */
-
     public function handle($request, Closure $next)
     {
         if (app(Setting::SINGELTONNAME)->getsetting(Setting::SETTING_KILLSWITCH) && !$request->is($this->excludedRoutes)) {

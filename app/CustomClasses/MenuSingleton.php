@@ -7,7 +7,7 @@ use App\Models\MenuItem;
 class MenuSingleton
 {
     private $_menuItems; //a list of the menu items wich aren't sub menu items.
-    private $_subMenuItems = array(); // containts the submenu items from a menu item
+    private array $_subMenuItems = []; // containts the submenu items from a menu item
     const MENUSINGLETON = "MenuSingleton";
 
     public function __construct()
@@ -29,7 +29,7 @@ class MenuSingleton
         if (array_key_exists($menuId, $this->_subMenuItems)) {
             return $this->_subMenuItems[$menuId];
         } else {
-            return array();
+            return [];
         }
     }
 }

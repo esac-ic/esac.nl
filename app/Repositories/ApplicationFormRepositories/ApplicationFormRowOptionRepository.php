@@ -29,7 +29,7 @@ class ApplicationFormRowOptionRepository
      * @param array $columns
      * @return mixed
      */
-    public function find($id, $columns = array('*'))
+    public function find($id, $columns = ['*'])
     {
         return $this->findBy('id', $id, $columns)->first();
     }
@@ -40,7 +40,7 @@ class ApplicationFormRowOptionRepository
      * @param array $columns
      * @return mixed
      */
-    public function findBy($field, $value, $columns = array('*'))
+    public function findBy($field, $value, $columns = ['*'])
     {
         return ApplicationFormRowOption::where($field, '=', $value)->get($columns);
     }

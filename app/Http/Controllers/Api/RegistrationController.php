@@ -18,7 +18,7 @@ class RegistrationController extends Controller
 
     public function registrationsByUser(Request $request)
     {
-        $userId = $request->get('user_id', -1);
+        $userId = $request->input('user_id', -1);
 
         if (!Auth::user()->hasRole(Config::get('constants.Administrator'))) {
             if (Auth::user()->id != $userId) {

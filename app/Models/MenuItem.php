@@ -2,10 +2,21 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Facades\Auth;
 
+#[Fillable([
+    'name',
+    'parent_id',
+    'urlName',
+    'after',
+    'menuItem',
+    'deletable',
+    'editable',
+    'content',
+])]
 class MenuItem extends Model
 {
     use SoftDeletes;
@@ -17,17 +28,6 @@ class MenuItem extends Model
     const MEMBERLISTURL = 'memberlist';
     const AGENDAURL = 'agenda';
     const LIBRARYURL = 'library';
-
-    protected $fillable = [
-        'name',
-        'parent_id',
-        'urlName',
-        'after',
-        'menuItem',
-        'deletable',
-        'editable',
-        'content',
-    ];
 
     public function partner()
     {
@@ -50,7 +50,7 @@ class MenuItem extends Model
         return MenuItem::query()->where('parent_id', '=', $id)->where('menuItem', '=', true)->get();
     }
 
-    public function show()
+    public function show(): bool
     {
         if ($this->login) {
             if (Auth::guest()) {
@@ -61,9 +61,12 @@ class MenuItem extends Model
         return true;
     }
 
-    public function sortMeunuList($menuList)
+    /**
+     * @return mixed[]
+     */
+    public function sortMeunuList($menuList): array
     {
-        $newList = array();
+        $newList = [];
         //get a menu item which is not after one
         $firstItem = $menuList->where('after', '=', null)->first();
         if ($firstItem == null) {

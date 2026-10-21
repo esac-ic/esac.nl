@@ -4,29 +4,27 @@ namespace App\Http\Controllers;
 
 use App\Models\Certificate;
 use App\Repositories\CertificateRepository;
+use Illuminate\Contracts\View\View;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Session;
 
 class CertificateController extends Controller
 {
-    private CertificateRepository $_certificateRepository;
-
-    public function __construct(CertificateRepository $certificateRepository)
+    public function __construct(private readonly CertificateRepository $_certificateRepository)
     {
         $this->middleware('auth');
         $this->middleware('authorize:' . Config::get('constants.Administrator') . ',' . Config::get('constants.Certificate_administrator'));
-
-        $this->_certificateRepository = $certificateRepository;
     }
 
-    public function index()
+    public function index(): View
     {
-        $certificates = $this->_certificateRepository->all(array("id", "name"));
+        $certificates = $this->_certificateRepository->all(["id", "name"]);
         return view("beheer.certificate.index", compact("certificates"));
     }
 
-    public function create()
+    public function create(): View
     {
         $fields = ['title' => 'Add a new certificate',
             'method' => 'POST',
@@ -35,7 +33,7 @@ class CertificateController extends Controller
         return view("beheer.certificate.create_edit", compact('certificate', 'fields'));
     }
 
-    public function store(Request $request)
+    public function store(Request $request): RedirectResponse
     {
         $this->validateData($request);
         $this->_certificateRepository->create($request->all());
@@ -44,12 +42,12 @@ class CertificateController extends Controller
         return redirect('/certificates');
     }
 
-    public function show(Certificate $certificate)
+    public function show(Certificate $certificate): View
     {
         return view('beheer.certificate.show', compact('certificate'));
     }
 
-    public function edit(Certificate $certificate)
+    public function edit(Certificate $certificate): View
     {
         $fields = ['title' => 'Add a new certificate',
             'method' => 'PATCH',
@@ -58,7 +56,7 @@ class CertificateController extends Controller
         return view("beheer.certificate.create_edit", compact('certificate', 'fields'));
     }
 
-    public function update(Request $request, Certificate $certificate)
+    public function update(Request $request, Certificate $certificate): RedirectResponse
     {
         $this->validateData($request);
         $this->_certificateRepository->update($certificate->id, $request->all());
@@ -67,7 +65,7 @@ class CertificateController extends Controller
         return redirect('/certificates');
     }
 
-    public function destroy(Certificate $certificate)
+    public function destroy(Certificate $certificate): RedirectResponse
     {
         $this->_certificateRepository->delete($certificate->id);
 
@@ -75,7 +73,7 @@ class CertificateController extends Controller
         return redirect('/certificates');
     }
 
-    private function validateData(Request $reqeust)
+    private function validateData(Request $reqeust): void
     {
         $this->validate($reqeust, [
             'name' => 'required|max:255',

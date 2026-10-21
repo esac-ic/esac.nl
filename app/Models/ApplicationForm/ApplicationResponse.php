@@ -4,6 +4,7 @@ namespace App\Models\ApplicationForm;
 
 use App\Models\AgendaItem;
 use App\Models\User;
+use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -15,18 +16,14 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * Class ApplicationResponse
  * @package App\Models\ApplicationForm
  */
+#[Fillable([
+    'agenda_id',
+    'inschrijf_form_id',
+    'user_id',
+])]
 class ApplicationResponse extends Model
 {
     use HasFactory, SoftDeletes;
-
-    /**
-     * @var array
-     */
-    protected $fillable = [
-        'agenda_id',
-        'inschrijf_form_id',
-        'user_id',
-    ];
 
     /**
      * retrieves the custom rows from the table

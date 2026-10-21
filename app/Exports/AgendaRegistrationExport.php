@@ -13,28 +13,16 @@ use Illuminate\Support\Collection;
 class AgendaRegistrationExport extends SpreadsheetExport
 {
     /**
-     * @var AgendaApplicationFormService
-     */
-    private AgendaApplicationFormService $agendaApplicationFormService;
-
-    /**
-     * @var AgendaItem
-     */
-    private AgendaItem $agendaItem;
-
-    /**
      * AgendaRegistrationExport constructor.
      * @param AgendaApplicationFormService $agendaApplicationFormService
      * @param AgendaItem $agendaItem
      */
-    public function __construct(AgendaApplicationFormService $agendaApplicationFormService, AgendaItem $agendaItem)
+    public function __construct(private readonly AgendaApplicationFormService $agendaApplicationFormService, private readonly AgendaItem $agendaItem)
     {
-        $this->agendaApplicationFormService = $agendaApplicationFormService;
-        $this->agendaItem = $agendaItem;
     }
 
     /**
-     * @return \Illuminate\Support\Collection
+     * @return Collection
      */
     public function collection(): Collection
     {

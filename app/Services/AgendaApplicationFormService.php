@@ -124,7 +124,7 @@ class AgendaApplicationFormService
     public function getExportData(AgendaItem $agendaItem): Collection
     {
         $users = $this->getRegisteredUsersWithResponses($agendaItem);
-        $selectedElements = array(
+        $selectedElements = [
             "firstname",
             "preposition",
             "lastname",
@@ -135,12 +135,12 @@ class AgendaApplicationFormService
             "email",
             "phonenumber",
             "birthDayFormatted",
-        );
+        ];
         $selectedElements = array_merge($selectedElements, $users["customfields"]);
 
         $activeUsers = [];
         foreach ($users["userdata"] as $user) {
-            $userline = array();
+            $userline = [];
             foreach ($selectedElements as $element) {
                 $userline[$element] = $user[$element];
             }
