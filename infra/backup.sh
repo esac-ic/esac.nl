@@ -9,10 +9,11 @@ set -a; . ./backup.env; set +a
 mkdir -p dump
 trap 'rm -f dump/esac.sql' EXIT
 
-# Sessions and cache are dumped without their rows.
+# Sessions and cache are dumped without their rows. MySQL 9's mysqldump also dumps masking policies, which the app user can't read.
 docker compose exec -T mysql sh -c '
   export MYSQL_PWD="$MYSQL_PASSWORD"
   options="--no-tablespaces --set-gtid-purged=OFF"
+  if mysqldump --help | grep -q -- --masking-policies; then options="$options --skip-masking-policies"; fi
   structure_only=$(mysql -u"$MYSQL_USER" -N -e "SELECT table_name FROM information_schema.tables
     WHERE table_schema = DATABASE() AND table_name IN (\"sessions\", \"cache\", \"cache_locks\")" "$MYSQL_DATABASE") &&
   mysqldump -u"$MYSQL_USER" $options --single-transaction --routines --triggers --events \
