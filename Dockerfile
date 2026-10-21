@@ -1,7 +1,5 @@
 # syntax=docker/dockerfile:1
 
-ARG FRANKENPHP_IMAGE=dunglas/frankenphp:1.13.1-php8.3.36-trixie@sha256:7f9618d4ab97c32b1d9bd74005a5131cccb3c04d9208cdad8ad58ecc611e76c8
-
 FROM composer:2 AS vendor
 WORKDIR /app
 COPY composer.json composer.lock ./
@@ -16,7 +14,7 @@ RUN npm ci --no-audit --no-fund
 COPY . .
 RUN npm run production
 
-FROM ${FRANKENPHP_IMAGE}
+FROM dunglas/frankenphp:1.13.1-php8.3.36-trixie@sha256:7f9618d4ab97c32b1d9bd74005a5131cccb3c04d9208cdad8ad58ecc611e76c8
 
 # The MySQL client loads database/schema/mysql-schema.sql when migrating an empty database.
 # MySQL's certificate is self-signed, so the client keeps TLS but doesn't verify it.

@@ -19,7 +19,7 @@ updates:
       default-days: 5
 
   - package-ecosystem: "docker-compose"
-    directory: "/infra"
+    directory: "/"
     schedule:
       interval: "weekly"
     cooldown:
