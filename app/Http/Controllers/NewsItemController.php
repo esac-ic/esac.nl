@@ -107,6 +107,7 @@ class NewsItemController extends Controller
         $this->validate($request, [
             'title' => 'required|max:255',
             'text' => 'required',
+            'author' => 'required|max:255',
         ]);
     }
 }
