@@ -1,48 +1,40 @@
-# Use the specified image as the base
-FROM php:8.2-fpm-bookworm
+# syntax=docker/dockerfile:1
 
-# Install system dependencies, PHP extensions, and Node.js
-RUN apt-get update && apt-get install -y \
-    zip \
-    libzip-dev \
-    libwebp-dev \
-    libjpeg62-turbo-dev \
-    libpng-dev \
-    libxpm-dev \
-    libfreetype6-dev \
-    zlib1g-dev \
-    gnupg \
-    ca-certificates \
-    curl \
-    nodejs \
-    npm \
-    && docker-php-ext-install opcache pdo_mysql zip \
-    && docker-php-ext-configure gd --with-freetype --with-jpeg \
-    && docker-php-ext-install gd \
-    && docker-php-ext-enable opcache \
-    && apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
+FROM composer:2 AS vendor
+WORKDIR /app
+COPY composer.json composer.lock ./
+RUN composer install --no-dev --no-scripts --no-autoloader --prefer-dist --no-interaction --ignore-platform-reqs
+COPY . .
+RUN composer dump-autoload --no-dev --optimize --no-scripts
 
-# Install Composer
-RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
+FROM node:24-trixie-slim AS assets
+WORKDIR /app
+COPY package.json package-lock.json ./
+RUN npm ci --no-audit --no-fund
+COPY . .
+RUN npm run build
 
-# Copy files and set the working directory
-COPY . /var/www/
-WORKDIR "/var/www/"
+FROM dunglas/frankenphp:1.13.1-php8.3.36-trixie@sha256:7f9618d4ab97c32b1d9bd74005a5131cccb3c04d9208cdad8ad58ecc611e76c8
 
-# Install PHP dependencies, and NPM dependencies
-RUN composer install --no-dev \
-    && npm install \
-    && npm run build
+# The MySQL client loads database/schema/mysql-schema.sql when migrating an empty database.
+# MySQL's certificate is self-signed, so the client keeps TLS but doesn't verify it.
+RUN apt-get update \
+    && apt-get install -y --no-install-recommends libcap2-bin default-mysql-client \
+    && rm -rf /var/lib/apt/lists/* \
+    && printf '[client]\nssl-verify-server-cert = off\n' > /etc/mysql/mariadb.conf.d/90-esac.cnf \
+    && install-php-extensions pdo_mysql gd zip opcache \
+    && cp "$PHP_INI_DIR/php.ini-production" "$PHP_INI_DIR/php.ini" \
+    && setcap CAP_NET_BIND_SERVICE=+eip /usr/local/bin/frankenphp
 
-# Copy opcache.ini after builds to prevent CLI opcache issues on arm64
-COPY opcache.ini /usr/local/etc/php/conf.d/opcache.ini
+COPY infra/php.ini "$PHP_INI_DIR/conf.d/zz-esac.ini"
 
-# Configure application
-RUN echo "listen = 0.0.0.0:9000" >> /usr/local/etc/php-fpm.d/www.conf \
+WORKDIR /app
+COPY . .
+COPY --from=vendor /app/vendor ./vendor
+COPY --from=assets /app/public ./public
+
+RUN php artisan package:discover --ansi \
     && php artisan storage:link \
-    && php artisan config:clear \
-    && cp -R public/. public_backup/ \
-    && rm -rf /var/lib/apt/lists/*
+    && chown -R www-data:www-data storage bootstrap/cache /data/caddy /config/caddy
 
-# Set the entrypoint
-ENTRYPOINT ["/bin/bash"]
+USER www-data

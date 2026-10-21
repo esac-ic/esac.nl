@@ -5,8 +5,13 @@ on:
     branches: [ master ]
   push:
     branches: [ master ]
+  workflow_dispatch:
+
+permissions:
+  contents: read
 
 env:
+  DB_HOST: 127.0.0.1
   DB_DATABASE: esac
   DB_USERNAME: mysql
   DB_PASSWORD: mysql
@@ -17,107 +22,134 @@ jobs:
     name: Build front-end & run tests
     runs-on: ubuntu-latest
     environment: Build
+    services:
+      mysql:
+        image: mysql:8.4
+        env:
+          MYSQL_DATABASE: ${{ env.DB_DATABASE }}
+          MYSQL_USER: ${{ env.DB_USERNAME }}
+          MYSQL_PASSWORD: ${{ env.DB_PASSWORD }}
+          MYSQL_RANDOM_ROOT_PASSWORD: "yes"
+        ports:
+          - 3306:3306
+        options: >-
+          --health-cmd="mysqladmin ping -h 127.0.0.1"
+          --health-interval=5s
+          --health-retries=20
     steps:
     - name: Checkout code
-      uses: actions/checkout@v4
-
-    - name: Cache PHP dependencies
-      uses: actions/cache@v3
+      uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
       with:
-        path: vendor
-        key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.lock') }}
-        restore-keys: |
-          ${{ runner.os }}-composer-
-
-    - name: Cache Node dependencies
-      uses: actions/cache@v3
-      with:
-        path: node_modules
-        key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
-        restore-keys: |
-          ${{ runner.os }}-node-
+        persist-credentials: false
 
     - name: Setup PHP
-      uses: shivammathur/setup-php@v2
+      uses: shivammathur/setup-php@eb7c497e18156a6bbabfef1d3a82760b9eda3962 # 2.40.0
       with:
-        php-version: '8.2'
+        php-version: '8.3'
 
-    - name: Setup MySQL
-      uses: mirromutth/mysql-action@v1.1
-      with:
-        host port: 3306
-        container port: 3306
-        mysql version: 8.0
-        mysql database: ${{ env.DB_DATABASE }}
-        mysql user: ${{ env.DB_USERNAME }}
-        mysql password: ${{ env.DB_PASSWORD }}
+    - name: Install PHP dependencies
+      run: composer install --prefer-dist --no-progress --no-interaction
 
-    - name: Setup Node.js environment
-      uses: actions/setup-node@v3
+    - name: Setup Node.js
+      uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
       with:
-        node-version: 18
+        node-version: 24
+        cache: npm
+
+    - name: Install Node dependencies
+      run: npm ci
 
     - name: Copy .env
       run: php -r "file_exists('.env') || copy('.env.example', '.env');"
-
-    - name: Install Dependencies
-      run: |
-        composer install --prefer-dist --no-progress --no-suggest
-        npm ci
 
     - name: PHP artisan setup
       run: |
         php artisan key:generate
         php artisan storage:link
         php artisan migrate --seed
-        php artisan serve &
 
     - name: NPM build
       run: npm run build
-
-    - name: Directory Permissions
-      run: chmod -R 777 storage bootstrap/cache
 
     - name: Execute tests (Unit and Feature tests) via PHPUnit
       run: vendor/bin/phpunit -c phpunit.xml --coverage-clover=coverage.xml
 
     - name: Upload to Codecov
-      uses: codecov/codecov-action@v3
+      uses: codecov/codecov-action@303a32d7a59b442fa8d48b6a1cc6825c09c847a5 # v7.1.1
       if: env.HAS_CODECOV_TOKEN == 'true'
       with:
         token: ${{ secrets.CODECOV_TOKEN }}
-        file: coverage.xml
+        files: coverage.xml
         fail_ci_if_error: true
 
   publish:
     name: Build and push Docker image
     runs-on: ubuntu-latest
-    environment: Build
     needs: tests
-    if: github.secret_source == 'Actions' || github.secret_source == 'Dependabot'
+    permissions:
+      contents: read
+      packages: write
     steps:
-    - name: Docker Login
-      uses: docker/login-action@v3
+    - name: Set up Docker Buildx
+      uses: docker/setup-buildx-action@f87e5991a6d7451dcb8d9637bfbc97413f497069 # v4.4.1
+
+    - name: Log in to GitHub Container Registry
+      if: github.event_name != 'pull_request'
+      uses: docker/login-action@dbcb813823bdd20940b903addbd779551569679f # v4.6.0
       with:
-        username: esacci
-        password: ${{ secrets.DOCKER_ACCESS_TOKEN }}
+        registry: ghcr.io
+        username: ${{ github.actor }}
+        password: ${{ secrets.GITHUB_TOKEN }}
+
+    - name: Image tags
+      id: meta
+      uses: docker/metadata-action@dc802804100637a589fabce1cb79ff13a1411302 # v6.2.0
+      with:
+        images: ghcr.io/${{ github.repository }}
+        tags: |
+          type=raw,value=${{ github.run_number }}
+          type=raw,value=latest,enable={{is_default_branch}}
 
     - name: Build and push Docker image
-      uses: docker/build-push-action@v6
+      uses: docker/build-push-action@c3c9e263c25d99ce0380d002d59b67737d91b0dc # v7.4.0
       with:
-        push: true
-        tags: esac/website:${{ github.run_number }}
+        push: ${{ github.event_name != 'pull_request' }}
+        pull: true
+        tags: ${{ steps.meta.outputs.tags }}
+        labels: ${{ steps.meta.outputs.labels }}
+        cache-from: type=gha
+        cache-to: ${{ github.event_name != 'pull_request' && 'type=gha,mode=max' || '' }}
 
   deploy:
     name: Deploy to production
     runs-on: ubuntu-latest
     needs: publish
-    if: github.event_name == 'push' && github.ref == 'refs/heads/master'
+    if: github.ref == 'refs/heads/master' && (github.event_name == 'push' || github.event_name == 'workflow_dispatch')
+    environment:
+      name: production
+      url: https://esac.nl
+    concurrency: production
     steps:
-    - name: Deploy via SSH
-      uses: D3rHase/ssh-command-action@v0.2.2
+    - name: Checkout code
+      uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
       with:
-        host: ${{ secrets.SSH_HOST }}
-        user: ic
-        private_key: ${{ secrets.SSH_PRIVATE_KEY }}
-        command: ./update.sh website "${{ github.run_number }}" "${{ github.actor }}" "${{ github.event.head_commit.message }}" "${{ github.event.head_commit.timestamp }}" "${{ github.ref }}"
+        persist-credentials: false
+
+    - name: Deploy via SSH
+      env:
+        SSH_HOST: ${{ secrets.SSH_HOST }}
+        SSH_KNOWN_HOSTS: ${{ secrets.SSH_KNOWN_HOSTS }}
+        SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
+        IMAGE: ghcr.io/${{ github.repository }}:${{ github.run_number }}
+      run: |
+        install -m 700 -d ~/.ssh
+        echo "$SSH_KNOWN_HOSTS" > ~/.ssh/known_hosts
+        echo "$SSH_PRIVATE_KEY" > ~/.ssh/id_ed25519 && chmod 600 ~/.ssh/id_ed25519
+        scp compose.yaml infra/backup.sh "ic@$SSH_HOST:/srv/esac/"
+        ssh "ic@$SSH_HOST" "set -e; cd /srv/esac
+          APP_IMAGE=$IMAGE docker compose pull app
+          sed -i 's|^APP_IMAGE=.*|APP_IMAGE=$IMAGE|' .env
+          ./backup.sh < /dev/null
+          docker compose up -d
+          docker compose exec -T app php artisan view:clear < /dev/null
+          docker compose exec -T app php artisan migrate --force < /dev/null"
