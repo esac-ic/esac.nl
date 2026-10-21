@@ -17,6 +17,12 @@ updates:
       interval: "weekly"
     cooldown:
       default-days: 5
+    ignore:
+      # Stay on LTS lines (MySQL 8.4, even-numbered Node)
+      - dependency-name: "mysql"
+        update-types: ["version-update:semver-major"]
+      - dependency-name: "node"
+        update-types: ["version-update:semver-major"]
 
   - package-ecosystem: "docker-compose"
     directory: "/"
@@ -24,6 +30,12 @@ updates:
       interval: "weekly"
     cooldown:
       default-days: 5
+    ignore:
+      # Stay on LTS lines (MySQL 8.4, even-numbered Node)
+      - dependency-name: "mysql"
+        update-types: ["version-update:semver-major"]
+      - dependency-name: "node"
+        update-types: ["version-update:semver-major"]
 
   - package-ecosystem: "composer"
     directory: "/"
@@ -36,6 +48,10 @@ updates:
         update-types:
           - "minor"
           - "patch"
+      composer-security:
+        applies-to: security-updates
+        patterns:
+          - "*"
 
   - package-ecosystem: "npm"
     directory: "/"
@@ -48,3 +64,7 @@ updates:
         update-types:
           - "minor"
           - "patch"
+      npm-security:
+        applies-to: security-updates
+        patterns:
+          - "*"
