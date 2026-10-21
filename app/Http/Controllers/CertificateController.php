@@ -8,14 +8,22 @@ use App\Repositories\CertificateRepository;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Routing\Controllers\HasMiddleware;
+use Illuminate\Routing\Controllers\Middleware;
 use Illuminate\Support\Facades\Session;
 
-class CertificateController extends Controller
+class CertificateController extends Controller implements HasMiddleware
 {
+    public static function middleware(): array
+    {
+        return [
+            'auth',
+            new Middleware('authorize:' . Role::Administrator->value . ',' . Role::CertificateAdministrator->value),
+        ];
+    }
+
     public function __construct(private readonly CertificateRepository $_certificateRepository)
     {
-        $this->middleware('auth');
-        $this->middleware('authorize:' . Role::Administrator->value . ',' . Role::CertificateAdministrator->value);
     }
 
     public function index(): View
@@ -75,7 +83,7 @@ class CertificateController extends Controller
 
     private function validateData(Request $reqeust): void
     {
-        $this->validate($reqeust, [
+        $reqeust->validate([
             'name' => 'required|max:255',
             'abbreviation' => 'required|max:255',
         ]);

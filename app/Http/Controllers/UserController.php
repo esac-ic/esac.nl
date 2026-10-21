@@ -12,11 +12,23 @@ use App\Models\User;
 use App\Repositories\UserRepository;
 use App\Rules\EmailDomainValidator;
 use Illuminate\Http\Request;
+use Illuminate\Routing\Controllers\HasMiddleware;
+use Illuminate\Routing\Controllers\Middleware;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Session;
 
-class UserController extends Controller
+class UserController extends Controller implements HasMiddleware
 {
+    public static function middleware(): array
+    {
+        // The edit, update, and show methods check the authorization themselves, so they get no role middleware.
+        // The index is open to both Administrators and Certificate administrators.
+        return [
+            'auth',
+            new Middleware('authorize:' . Role::Administrator->value, except: ['edit', 'update', 'show', 'index']),
+            new Middleware('authorize:' . Role::Administrator->value . ',' . Role::CertificateAdministrator->value, only: ['index']),
+        ];
+    }
 
     private UserRepository $_userRepository;
     /**
@@ -26,12 +38,6 @@ class UserController extends Controller
      */
     public function __construct(UserRepository $userRepository)
     {
-        $this->middleware('auth');
-        // The edit, update, and show methods check the authorization themselves, so we don't apply a role middleware there.
-        // Only the index method is accessible by both Administrators and Certificate admins, so we apply a different middleware there.
-        $this->middleware('authorize:' . Role::Administrator->value)->except(['edit', 'update', 'show', 'index']);
-        $this->middleware('authorize:' . Role::Administrator->value . ',' . Role::CertificateAdministrator->value)->only(['index']);
-
         $this->_userRepository = $userRepository;
     }
 
@@ -187,7 +193,7 @@ class UserController extends Controller
 
     private function validateInput(Request $request, ?int $userId = null)
     {
-        $this->validate($request, [
+        $request->validate([
             'email' => [
                 'required',
                 'email',
@@ -215,7 +221,7 @@ class UserController extends Controller
 
         // These fields are only required for administrators.
         if (Auth::user()->hasRole(Role::Administrator->value)) {
-            $this->validate($request, [
+            $request->validate([
                 'kind_of_member' => 'required',
             ]);
         }

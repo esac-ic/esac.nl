@@ -8,10 +8,19 @@ use App\Repositories\RolRepository;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Routing\Controllers\HasMiddleware;
+use Illuminate\Routing\Controllers\Middleware;
 use Illuminate\Support\Facades\Session;
 
-class RolController extends Controller
+class RolController extends Controller implements HasMiddleware
 {
+    public static function middleware(): array
+    {
+        return [
+            'auth',
+            new Middleware('authorize:' . Role::Administrator->value),
+        ];
+    }
 
     /**
      * Create a new controller instance.
@@ -20,8 +29,6 @@ class RolController extends Controller
      */
     public function __construct(private readonly RolRepository $_rolRepository)
     {
-        $this->middleware('auth');
-        $this->middleware('authorize:' . Role::Administrator->value);
     }
 
     //gives the rol views
@@ -88,7 +95,7 @@ class RolController extends Controller
 
     private function validateInput(Request $request): void
     {
-        $this->validate($request, [
+        $request->validate([
             'name' => 'required|max:255',
         ]);
     }

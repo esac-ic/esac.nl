@@ -10,20 +10,28 @@ use App\Repositories\ApplicationFormRepositories\ApplicationFormRepository;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Routing\Controllers\HasMiddleware;
+use Illuminate\Routing\Controllers\Middleware;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Storage;
 use Intervention\Image\Drivers\Gd\Driver;
 use Intervention\Image\ImageManager;
 
-class AgendaItemController extends Controller
+class AgendaItemController extends Controller implements HasMiddleware
 {
+    public static function middleware(): array
+    {
+        return [
+            'auth',
+            new Middleware('authorize:' . Role::ContentAdministrator->value . ',' . Role::ActivityAdministrator->value),
+        ];
+    }
+
     public function __construct(
         private readonly AgendaItemRepository $_agendaItemRepository,
         private readonly AgendaItemCategoryRepository $_agendaItemCategoryRepository,
         private readonly ApplicationFormRepository $_applicationFormRepository
     ) {
-        $this->middleware('auth');
-        $this->middleware('authorize:' . Role::ContentAdministrator->value . ',' . Role::ActivityAdministrator->value);
     }
 
     public function index(): View
@@ -81,7 +89,7 @@ class AgendaItemController extends Controller
 
     private function validateInput(Request $request): void
     {
-        $this->validate($request, [
+        $request->validate([
             'title' => 'required|max:255',
             'shortDescription' => 'required|max:100',
             'text' => 'required',

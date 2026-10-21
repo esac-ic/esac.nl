@@ -10,9 +10,19 @@ use App\Repositories\UserRepository;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Routing\Controllers\HasMiddleware;
+use Illuminate\Routing\Controllers\Middleware;
 
-class UserCertificateController extends Controller
+class UserCertificateController extends Controller implements HasMiddleware
 {
+    public static function middleware(): array
+    {
+        return [
+            'auth',
+            new Middleware('authorize:' . Role::Administrator->value . ',' . Role::CertificateAdministrator->value),
+        ];
+    }
+
     /**
      * Create a new controller instance.
      *
@@ -20,8 +30,6 @@ class UserCertificateController extends Controller
      */
     public function __construct(private readonly UserRepository $_userRepository, private readonly CertificateRepository $_certificateRepository)
     {
-        $this->middleware('auth');
-        $this->middleware('authorize:' . Role::Administrator->value . ',' . Role::CertificateAdministrator->value);
     }
 
     public function addCertificate(Request $request, User $user): View
@@ -87,7 +95,7 @@ class UserCertificateController extends Controller
 
     private function validateInput(Request $request): void
     {
-        $this->validate($request, [
+        $request->validate([
             'certificate_id' => 'required|numeric|min:0',
         ]);
     }

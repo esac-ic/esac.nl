@@ -8,13 +8,17 @@ use App\Repositories\ZekeringenRepository;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use Illuminate\Routing\Controllers\HasMiddleware;
+use Illuminate\Routing\Controllers\Middleware;
 
-class ZekeringController extends Controller
+class ZekeringController extends Controller implements HasMiddleware
 {
-    public function __construct()
+    public static function middleware(): array
     {
-        $this->middleware('auth');
-        $this->middleware('authorize:' . Role::ActivityAdministrator->value)->only('destroy');
+        return [
+            'auth',
+            new Middleware('authorize:' . Role::ActivityAdministrator->value, only: ['destroy']),
+        ];
     }
 
     public function getZekeringen(ZekeringenRepository $zekeringenRepository): array

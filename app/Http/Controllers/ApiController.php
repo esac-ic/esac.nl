@@ -5,12 +5,19 @@ namespace App\Http\Controllers;
 use App\Models\MenuItem;
 use App\Repositories\UserRepository;
 use Illuminate\Http\Request;
+use Illuminate\Routing\Controllers\HasMiddleware;
 
-class ApiController extends Controller
+class ApiController extends Controller implements HasMiddleware
 {
+    public static function middleware(): array
+    {
+        return [
+            'auth',
+        ];
+    }
+
     public function __construct(private readonly UserRepository $_userRepository)
     {
-        $this->middleware('auth');
     }
 
     public function getMenuItems(Request $request): array
