@@ -5,12 +5,9 @@ namespace App\Exports;
 use App\Models\User;
 use App\Repositories\UserRepository;
 use Carbon\Carbon;
-use Maatwebsite\Excel\Concerns\FromCollection;
-use Maatwebsite\Excel\Concerns\ShouldAutoSize;
-use Maatwebsite\Excel\Concerns\WithHeadings;
-use Maatwebsite\Excel\Concerns\WithTitle;
+use Illuminate\Support\Collection;
 
-class PennoMemberExport implements FromCollection, WithTitle, WithHeadings, ShouldAutoSize
+class PennoMemberExport extends SpreadsheetExport
 {
     private UserRepository $userRepository;
     private Carbon $fromDate;
@@ -24,7 +21,7 @@ class PennoMemberExport implements FromCollection, WithTitle, WithHeadings, Shou
     /**
      * @return \Illuminate\Support\Collection
      */
-    public function collection()
+    public function collection(): Collection
     {
         $users = $this->userRepository->getCurrentUsersAfterSignupDate($this->columns(), $this->fromDate);
 

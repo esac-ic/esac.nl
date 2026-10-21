@@ -8,7 +8,6 @@ use App\Repositories\BookRepository;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Session;
-use Maatwebsite\Excel\Facades\Excel;
 
 class LibraryController extends Controller
 {
@@ -79,7 +78,7 @@ class LibraryController extends Controller
     
     public function exportLibrary(LibraryExport $libraryExport)
     {
-        return Excel::download($libraryExport, 'Library' . '.xlsx');
+        return $libraryExport->download('Library.xlsx');
     }
 
     private function validateInput(Request $request)
