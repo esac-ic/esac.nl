@@ -14,11 +14,11 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register(): void
     {
-        $this->app->singleton(MenuSingleton::MENUSINGLETON, function () {
+        $this->app->scoped(MenuSingleton::MENUSINGLETON, function () {
             return new MenuSingleton();
         });
 
-        $this->app->singleton(Setting::SINGELTONNAME, function () {
+        $this->app->scoped(Setting::SINGELTONNAME, function () {
             $setting = new Setting();
             $setting->initialise();
             return $setting;

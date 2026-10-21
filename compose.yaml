@@ -1,10 +1,23 @@
 name: esac
 
+x-app: &app
+  image: ${APP_IMAGE:-ghcr.io/esac-ic/esac.nl:latest}
+  env_file: .env
+  environment: &app-environment
+    LOG_CHANNEL: stderr
+    SESSION_SECURE_COOKIE: "true"
+  volumes:
+    - app-storage:/app/storage
+  depends_on:
+    mysql:
+      condition: service_healthy
+  restart: unless-stopped
+
 services:
   app:
-    image: ${APP_IMAGE:-ghcr.io/esac-ic/esac.nl:latest}
-    env_file: .env
+    <<: *app
     environment:
+      <<: *app-environment
       SERVER_NAME: ${APP_DOMAIN:-esac.nl}
       CADDY_EXTRA_CONFIG: |
         www.${APP_DOMAIN:-esac.nl} {
@@ -21,10 +34,24 @@ services:
       - app-storage:/app/storage
       - caddy-data:/data/caddy
       - caddy-config:/config/caddy
-    depends_on:
-      mysql:
-        condition: service_healthy
-    restart: unless-stopped
+    healthcheck:
+      test: ["CMD-SHELL", "curl -fsSk --resolve \"$${SERVER_NAME}:443:127.0.0.1\" \"https://$${SERVER_NAME}/up\" > /dev/null"]
+      interval: 30s
+      retries: 3
+      start_period: 30s
+
+  worker:
+    <<: *app
+    command: ["php", "artisan", "queue:work"]
+    # The image's health check probes Caddy, which only runs in the app service
+    healthcheck:
+      disable: true
+
+  scheduler:
+    <<: *app
+    command: ["php", "artisan", "schedule:work"]
+    healthcheck:
+      disable: true
 
   mysql:
     image: mysql:8.4
