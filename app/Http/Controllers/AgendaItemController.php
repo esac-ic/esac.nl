@@ -6,6 +6,8 @@ use App\Models\AgendaItem;
 use App\Repositories\AgendaItemCategoryRepository;
 use App\Repositories\AgendaItemRepository;
 use App\Repositories\ApplicationFormRepositories\ApplicationFormRepository;
+use Illuminate\Contracts\View\View;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Storage;
@@ -14,24 +16,16 @@ use Intervention\Image\ImageManager;
 
 class AgendaItemController extends Controller
 {
-    private AgendaItemRepository $_agendaItemRepository;
-    private AgendaItemCategoryRepository $_agendaItemCategoryRepository;
-    private ApplicationFormRepository $_applicationFormRepository;
-
     public function __construct(
-        AgendaItemRepository $agendaItemRepository,
-        AgendaItemCategoryRepository $agendaItemCategoryRepository,
-        ApplicationFormRepository $applicationFormRepository
+        private readonly AgendaItemRepository $_agendaItemRepository,
+        private readonly AgendaItemCategoryRepository $_agendaItemCategoryRepository,
+        private readonly ApplicationFormRepository $_applicationFormRepository
     ) {
         $this->middleware('auth');
         $this->middleware('authorize:' . config('constants.Content_administrator') . ',' . config('constants.Activity_administrator'));
-
-        $this->_agendaItemRepository = $agendaItemRepository;
-        $this->_agendaItemCategoryRepository = $agendaItemCategoryRepository;
-        $this->_applicationFormRepository = $applicationFormRepository;
     }
 
-    public function index()
+    public function index(): View
     {
         return view('beheer.agendaItem.index');
     }
@@ -42,7 +36,7 @@ class AgendaItemController extends Controller
         return $this->renderCreateEditView(null, $fields);
     }
 
-    public function store(Request $request)
+    public function store(Request $request): RedirectResponse
     {
         $this->validateInput($request);
         $agendaItem = $this->_agendaItemRepository->create($request->all());
@@ -51,7 +45,7 @@ class AgendaItemController extends Controller
         return redirect('/agendaItems');
     }
 
-    public function show(AgendaItem $agendaItem)
+    public function show(AgendaItem $agendaItem): View
     {
         return view('beheer.agendaItem.show', compact('agendaItem'));
     }
@@ -62,7 +56,7 @@ class AgendaItemController extends Controller
         return $this->renderCreateEditView($agendaItem, $fields);
     }
 
-    public function update(Request $request, AgendaItem $agendaItem)
+    public function update(Request $request, AgendaItem $agendaItem): RedirectResponse
     {
         $this->validateInput($request);
         $this->_agendaItemRepository->update($agendaItem->id, $request->all());
@@ -71,20 +65,20 @@ class AgendaItemController extends Controller
         return redirect('/agendaItems');
     }
 
-    public function destroy($id)
+    public function destroy($id): RedirectResponse
     {
         $this->_agendaItemRepository->delete($id);
         Session::flash("message", 'Event removed');
         return redirect('/agendaItems');
     }
 
-    public function copy(AgendaItem $agendaItem)
+    public function copy(AgendaItem $agendaItem): RedirectResponse
     {
         $newAgendaItem = $this->_agendaItemRepository->copy($agendaItem);
         return redirect('/agendaItems/' . $newAgendaItem->id . '/edit');
     }
 
-    private function validateInput(Request $request)
+    private function validateInput(Request $request): void
     {
         $this->validate($request, [
             'title' => 'required|max:255',
@@ -98,7 +92,7 @@ class AgendaItemController extends Controller
         ]);
     }
 
-    private function getFields($method, $url, $title)
+    private function getFields(string $method, string $url, string $title): array
     {
         return [
             'title_info' => 'Event general information',
@@ -110,14 +104,17 @@ class AgendaItemController extends Controller
         ];
     }
 
-    private function renderCreateEditView($agendaItem, $fields)
+    private function renderCreateEditView(?AgendaItem $agendaItem, $fields): View
     {
         $agendaItemCategories = $this->getCategories();
         $applicationForms = $this->getForms();
         return view('beheer.agendaItem.create_edit', compact(['fields', 'agendaItem', 'agendaItemCategories', 'applicationForms']));
     }
 
-    private function getCategories()
+    /**
+     * @return mixed[]
+     */
+    private function getCategories(): array
     {
         $categories = [];
         foreach ($this->_agendaItemCategoryRepository->all(['id', 'name']) as $category) {
@@ -126,7 +123,10 @@ class AgendaItemController extends Controller
         return $categories;
     }
 
-    private function getForms()
+    /**
+     * @return mixed[]
+     */
+    private function getForms(): array
     {
         $forms = [];
         foreach ($this->_applicationFormRepository->all(['id', 'name']) as $form) {
@@ -135,7 +135,7 @@ class AgendaItemController extends Controller
         return $forms;
     }
 
-    private function handleImage(Request $request, AgendaItem $agendaItem)
+    private function handleImage(Request $request, AgendaItem $agendaItem): void
     {
         if ($request->hasFile('thumbnail')) {
             $name = $agendaItem->id . '-thumbnail.' . $request->thumbnail->extension();

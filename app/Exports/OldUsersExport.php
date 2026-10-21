@@ -7,23 +7,18 @@ use Illuminate\Support\Collection;
 
 class OldUsersExport extends SpreadsheetExport
 {
-    private $userRepository;
-
-    public function __construct(UserRepository $userRepository)
+    public function __construct(private readonly UserRepository $userRepository)
     {
-        $this->userRepository = $userRepository;
     }
 
     /**
-     * @return \Illuminate\Support\Collection
+     * @return Collection
      */
     public function collection(): Collection
     {
         $oldUsers = $this->userRepository->getOldUsers(['id', 'firstname', 'preposition', 'lastname', 'created_at', 'lid_af']);
 
-        return $oldUsers->map(function ($user) {
-            return $user->toArray();
-        });
+        return $oldUsers->map(fn ($user) => $user->toArray());
     }
 
     /**

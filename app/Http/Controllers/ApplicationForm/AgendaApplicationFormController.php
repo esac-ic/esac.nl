@@ -13,6 +13,7 @@ use App\Repositories\UserRepository;
 use App\Services\AgendaApplicationFormService;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Config;
 use Illuminate\View\View;
@@ -54,7 +55,7 @@ class AgendaApplicationFormController extends Controller
             array_push($registeredUsers, $registeredUser->user_id);
         }
 
-        foreach ($userRepository->getCurrentUsers(array('id', 'firstname', 'lastname')) as $user) {
+        foreach ($userRepository->getCurrentUsers(['id', 'firstname', 'lastname']) as $user) {
             if (!in_array($user->id, $registeredUsers)) {
                 $users[$user->id] = $user->getName();
             }
@@ -97,7 +98,7 @@ class AgendaApplicationFormController extends Controller
      *
      * @param $Agenda_id
      * @param $applicationResponseId
-     * @return \Illuminate\Http\Response
+     * @return Response
      */
     public function destroy($Agenda_id, $applicationResponseId): RedirectResponse
     {
@@ -120,7 +121,7 @@ class AgendaApplicationFormController extends Controller
     public function exportData(int $agendaId, AgendaApplicationFormService $agendaApplicationFormService): StreamedResponse
     {
         $agendaItem = AgendaItem::findOrFail($agendaId);
-        return (new AgendaRegistrationExport($agendaApplicationFormService, $agendaItem))
+        return new AgendaRegistrationExport($agendaApplicationFormService, $agendaItem)
             ->download(preg_replace('/[^a-zA-Z0-9]+/', '-', $agendaItem->title) . '.xlsx');
 
     }

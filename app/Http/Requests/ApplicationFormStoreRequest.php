@@ -7,7 +7,7 @@ use Illuminate\Foundation\Http\FormRequest;
 
 class ApplicationFormStoreRequest extends FormRequest
 {
-    private const TYPES_WITH_OPTIONS = [
+    private const array TYPES_WITH_OPTIONS = [
         ApplicationFormRow::FORM_TYPE_SELECT,
         ApplicationFormRow::FORM_TYPE_RADIO,
         ApplicationFormRow::FORM_TYPE_MULTI_CHECK_BOX,
@@ -18,7 +18,7 @@ class ApplicationFormStoreRequest extends FormRequest
      *
      * @return array
      */
-    public function rules()
+    public function rules(): array
     {
         $typesWithOptions = implode(',', self::TYPES_WITH_OPTIONS);
 

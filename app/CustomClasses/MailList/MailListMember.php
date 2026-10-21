@@ -25,7 +25,7 @@ class MailListMember
      * @param mixed $name
      * @return MailListMember
      */
-    public function setName($name)
+    public function setName($name): static
     {
         $this->name = $name;
         return $this;
@@ -43,7 +43,7 @@ class MailListMember
      * @param mixed $address
      * @return MailListMember
      */
-    public function setAddress($address)
+    public function setAddress($address): static
     {
         $this->address = $address;
         return $this;

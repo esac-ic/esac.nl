@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\Setting;
+use Illuminate\Contracts\View\View;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Session;
@@ -15,22 +17,22 @@ class SettingsController extends Controller
         $this->middleware('authorize:' . Config::get('constants.Administrator'));
     }
 
-    public function index()
+    public function index(): View
     {
         $settings = Setting::all();
         return view('beheer.settings.index', compact('settings'));
     }
 
-    public function edit()
+    public function edit(): View
     {
         $settings = Setting::all();
         return view('beheer.settings.edit', compact('settings'));
     }
 
-    public function update(Request $request)
+    public function update(Request $request): RedirectResponse
     {
         $settings = Setting::all();
-        foreach ($request->get('setting', []) as $key => $value) {
+        foreach ($request->input('setting', []) as $key => $value) {
             $setting = $settings->where('name', '=', $key)->first();
             $setting->value = $value;
             $setting->save();

@@ -2,28 +2,22 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\UserEventLogEntry;
-use App\Repositories\UserEventLogEntryRepository;
 use App\Exports\UserEventLogExport;
-use Illuminate\Support\Facades\Config;
-use Illuminate\Support\Facades\Session;
-use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Carbon;
+use App\Repositories\UserEventLogEntryRepository;
+use Illuminate\Contracts\View\View;
 use Illuminate\Http\Request;
+use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\Config;
 
 class UserEventLogEntryController extends Controller
 {
-    private UserEventLogEntryRepository $repository;
-    
-    public function __construct(UserEventLogEntryRepository $repository) 
+    public function __construct(private readonly UserEventLogEntryRepository $repository) 
     {
         $this->middleware('auth');
         $this->middleware('authorize:' . Config::get('constants.Administrator'));
-        
-        $this->repository = $repository;
     }
     
-    public function index() 
+    public function index(): View 
     {
         $events = $this->repository->all(['*']);
         return view('beheer.userEventLog.index', compact('events'));

@@ -13,7 +13,7 @@ use Symfony\Component\HttpFoundation\StreamedResponse;
  */
 abstract class SpreadsheetExport
 {
-    private const MAX_COLUMN_WIDTH = 60;
+    private const int MAX_COLUMN_WIDTH = 60;
 
     /**
      * The rows of the sheet, with the cells in the same order as the headings.

@@ -5,6 +5,9 @@ namespace App\Repositories\ApplicationFormRepositories;
 use App\Models\ApplicationForm\ApplicationForm;
 use App\Models\ApplicationForm\ApplicationFormRow;
 use App\Repositories\IRepository;
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Database\Eloquent\Model;
 
 /**
  * Class ApplicationFormRepository
@@ -13,17 +16,11 @@ use App\Repositories\IRepository;
 class ApplicationFormRepository implements IRepository
 {
     /**
-     * @var ApplicationFormRowRepository
-     */
-    private $applicationFormRowRepository;
-
-    /**
      * AplicationFormRepository constructor.
      * @param ApplicationFormRowRepository $applicationFormRowRepository
      */
-    public function __construct(ApplicationFormRowRepository $applicationFormRowRepository
-    ) {
-        $this->applicationFormRowRepository = $applicationFormRowRepository;
+    public function __construct(private readonly ApplicationFormRowRepository $applicationFormRowRepository)
+    {
     }
 
     /**
@@ -94,9 +91,9 @@ class ApplicationFormRepository implements IRepository
     /**
      * @param $id
      * @param array $columns
-     * @return \Illuminate\Database\Eloquent\Builder|\Illuminate\Database\Eloquent\Model|null|object
+     * @return Builder|Model|null|object
      */
-    public function find($id, $columns = array('*'))
+    public function find($id, $columns = ['*'])
     {
         return $this->findBy('id', $id, $columns);
     }
@@ -105,18 +102,18 @@ class ApplicationFormRepository implements IRepository
      * @param $field
      * @param $value
      * @param array $columns
-     * @return \Illuminate\Database\Eloquent\Builder|\Illuminate\Database\Eloquent\Model|null|object
+     * @return Builder|Model|null|object
      */
-    public function findBy($field, $value, $columns = array('*'))
+    public function findBy($field, $value, $columns = ['*'])
     {
         return ApplicationForm::query()->where($field, '=', $value)->first($columns);
     }
 
     /**
      * @param array $columns
-     * @return ApplicationForm[]|\Illuminate\Database\Eloquent\Collection
+     * @return ApplicationForm[]|Collection
      */
-    public function all($columns = array('*'))
+    public function all($columns = ['*'])
     {
         return ApplicationForm::all($columns);
     }

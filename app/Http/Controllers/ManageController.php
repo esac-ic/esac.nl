@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Contracts\View\View;
 use Illuminate\Support\Facades\Auth;
 
 class ManageController extends Controller
@@ -12,7 +13,7 @@ class ManageController extends Controller
         $this->middleware('auth');
     }
 
-    public function index()
+    public function index(): View
     {
         if (Auth::guest() || !Auth::user()->hasBackendRights()) {
             abort(403, 'You do not have sufficient access to view this page');

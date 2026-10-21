@@ -11,14 +11,10 @@ use Illuminate\Support\Facades\Log;
 
 class MailListFacade
 {
-    private MailListParser $_mailListParser;
-    private MailMan $_mailManHandler;
-    private string $_domain;
+    private readonly string $_domain;
 
-    public function __construct(MailListParser $mailListParser, MailMan $mailMan)
+    public function __construct(private readonly MailListParser $_mailListParser, private readonly MailMan $_mailManHandler)
     {
-        $this->_mailListParser = $mailListParser;
-        $this->_mailManHandler = $mailMan;
         $this->_domain = config('services.mailman.domain') ?? '';
     }
 
@@ -54,7 +50,7 @@ class MailListFacade
             $entries = $this->_mailManHandler->get('/lists/' . $id . '/roster/member')->get('entries', []);
             collect($entries)
                 ->map($this->_mailListParser->parseMailManMember(...))
-                ->each(fn ($member) => $mailList->addMember($member));
+                ->each(fn (MailListMember $member) => $mailList->addMember($member));
 
             return $mailList;
         } catch (RequestException $e) {
@@ -153,7 +149,7 @@ class MailListFacade
     {
         $listIds = $this->getMailListsForMember($oldEmail)->map(fn (MailList $list) => $list->getId());
 
-        $listIds->each(fn($id) => $this->deleteMemberFromMailList($id, $oldEmail));
+        $listIds->each(fn ($id) => $this->deleteMemberFromMailList($id, $oldEmail));
         $this->addUserToSpecifiedMailLists($newEmail, $user->getName(), $listIds);
     }
     
@@ -202,7 +198,7 @@ class MailListFacade
         collect($mailListIds)
             ->intersect($allListIds)
             //suppress errors so we don't break when a member is no longer part of a mail list
-            ->each(fn($listId) => $this->deleteMemberFromMailList($listId, $email, true));
+            ->each(fn ($listId) => $this->deleteMemberFromMailList($listId, $email, true));
     }
 
     /**

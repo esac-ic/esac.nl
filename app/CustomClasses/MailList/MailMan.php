@@ -13,11 +13,10 @@ use Illuminate\Http\Client\RequestException;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Http;
-use Illuminate\Support\Facades\Log;
 
 class MailMan
 {
-    private string $_baseUrl;
+    private readonly string $_baseUrl;
 
     public function __construct()
     {
