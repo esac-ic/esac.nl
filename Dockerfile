@@ -1,6 +1,6 @@
 # syntax=docker/dockerfile:1
 
-ARG FRANKENPHP_IMAGE=dunglas/frankenphp:1.13.1-php8.5-trixie
+ARG FRANKENPHP_IMAGE=dunglas/frankenphp:1.13.1-php8.3-trixie
 
 FROM composer:2 AS vendor
 WORKDIR /app
