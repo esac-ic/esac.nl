@@ -9,8 +9,9 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Mail\MailManager;
 use Illuminate\Support\Facades\Log;
 use Mockery\MockInterface;
+use Tests\TestCase;
 
-class GetAllMailListsTest extends \TestCase
+class GetAllMailListsTest extends TestCase
 {
     use RefreshDatabase;
     

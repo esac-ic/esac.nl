@@ -10,8 +10,9 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Event;
 use Mockery\MockInterface;
+use Tests\TestCase;
 
-class RemoveAsActiveMemberTest extends \TestCase
+class RemoveAsActiveMemberTest extends TestCase
 {
     use RefreshDatabase;
     

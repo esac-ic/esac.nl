@@ -7,7 +7,8 @@ use App\Models\User;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Config;
-use TestCase;
+use PHPUnit\Framework\Attributes\Test;
+use Tests\TestCase;
 
 class UpdateNewsItemTest extends TestCase
 {
@@ -33,7 +34,7 @@ class UpdateNewsItemTest extends TestCase
         Artisan::call('migrate:reset');
         parent::tearDown();
     }
-    /** @test */
+    #[Test]
     public function UpdateNewsItem(){
         $newsItem = NewsItem::factory()->create();
         $body = [

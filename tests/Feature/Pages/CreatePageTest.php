@@ -7,7 +7,8 @@ use App\Models\User;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Config;
-use TestCase;
+use PHPUnit\Framework\Attributes\Test;
+use Tests\TestCase;
 
 class CreatePageTest extends TestCase
 {
@@ -41,8 +42,9 @@ class CreatePageTest extends TestCase
     }
 
     /**
-     * @test whether an admin user can create a new page.
+     * Tests whether an admin user can create a new page.
      */
+    #[Test]
     public function admin_can_create_page()
     {
         $body = [
@@ -94,8 +96,9 @@ class CreatePageTest extends TestCase
     }
 
     /**
-     * @test whether users without content admin role cannot create a new page.
+     * Tests whether users without content admin role cannot create a new page.
      */
+    #[Test]
     public function no_role_no_create_page()
     {
         $body = [
@@ -123,8 +126,9 @@ class CreatePageTest extends TestCase
     }
 
     /**
-     * @test whether the page content is set correctly when type SubItem.
+     * Tests whether the page content is set correctly when type SubItem.
      */
+    #[Test]
     public function create_page_subitem_content_correct()
     {
         $body = [
@@ -151,8 +155,9 @@ class CreatePageTest extends TestCase
     }
 
     /**
-     * @test whether the page content is set correctly when type Standalone.
+     * Tests whether the page content is set correctly when type Standalone.
      */
+    #[Test]
     public function create_page_standalone_content_correct()
     {
         $body = [
@@ -178,8 +183,9 @@ class CreatePageTest extends TestCase
     }
 
     /**
-     * @test whether the login required field gets set correctly.
+     * Tests whether the login required field gets set correctly.
      */
+    #[Test]
     public function create_page_login_correct()
     {
         $body = [
@@ -212,8 +218,9 @@ class CreatePageTest extends TestCase
     }
 
     /**
-     * @test whether the login required field gets set correctly.
+     * Tests whether the login required field gets set correctly.
      */
+    #[Test]
     public function create_page_no_afterItem_correct()
     {
         $body = [
@@ -246,9 +253,10 @@ class CreatePageTest extends TestCase
     }
 
     /**
-     * @test whether a redirect is returned and the session contains errors for each of the required fields when
+     * Tests whether a redirect is returned and the session contains errors for each of the required fields when
      * fields are missing in the body.
      */
+    #[Test]
     public function empty_body_meaningful_error()
     {
         $body = [
@@ -274,8 +282,9 @@ class CreatePageTest extends TestCase
     }
 
     /**
-     * @test whether a redirect is returned and the session contains error for parentItem when itemType is subItem.
+     * Tests whether a redirect is returned and the session contains error for parentItem when itemType is subItem.
      */
+    #[Test]
     public function empty_body_meaningful_error_subitem()
     {
         $body = [

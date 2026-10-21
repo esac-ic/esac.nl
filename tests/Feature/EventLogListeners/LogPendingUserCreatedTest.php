@@ -8,8 +8,9 @@ use App\Models\User;
 use App\Models\UserEventLogEntry;
 use App\Repositories\UserEventLogEntryRepository;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Tests\TestCase;
 
-class LogPendingUserCreatedTest extends \TestCase
+class LogPendingUserCreatedTest extends TestCase
 {
     use RefreshDatabase;
     

@@ -7,7 +7,8 @@ use App\Models\User;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Config;
-use TestCase;
+use PHPUnit\Framework\Attributes\Test;
+use Tests\TestCase;
 
 class DeleteRoleTest extends TestCase
 {
@@ -40,7 +41,7 @@ class DeleteRoleTest extends TestCase
         parent::tearDown();
     }
 
-    /** @test */
+    #[Test]
     public function a_role_can_be_deleted_by_an_admin()
     {
         $role = Rol::factory()->create();
@@ -52,7 +53,7 @@ class DeleteRoleTest extends TestCase
         $this->assertNull(Rol::find($role->id));
     }
 
-    /** @test */
+    #[Test]
     public function a_user_can_not_delete_a_role()
     {
         $role = Rol::factory()->create();
