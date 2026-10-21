@@ -7,7 +7,7 @@ RUN composer install --no-dev --no-scripts --no-autoloader --prefer-dist --no-in
 COPY . .
 RUN composer dump-autoload --no-dev --optimize --no-scripts
 
-FROM node:24-trixie-slim AS assets
+FROM node:25-trixie-slim AS assets
 WORKDIR /app
 COPY package.json package-lock.json ./
 RUN npm ci --no-audit --no-fund
