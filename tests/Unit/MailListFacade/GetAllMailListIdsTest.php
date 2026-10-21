@@ -6,7 +6,7 @@ use App\CustomClasses\MailList\MailListFacade;
 use App\CustomClasses\MailList\MailMan;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Mockery\MockInterface;
-use TestCase;
+use Tests\TestCase;
 
 class GetAllMailListIdsTest extends TestCase
 {

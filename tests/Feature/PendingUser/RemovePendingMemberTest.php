@@ -7,8 +7,9 @@ use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Event;
+use Tests\TestCase;
 
-class RemovePendingMemberTest extends \TestCase
+class RemovePendingMemberTest extends TestCase
 {
     use RefreshDatabase;
     

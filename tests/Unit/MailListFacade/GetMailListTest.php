@@ -7,7 +7,7 @@ use App\CustomClasses\MailList\MailMan;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Http;
 use Mockery\MockInterface;
-use TestCase;
+use Tests\TestCase;
 
 class GetMailListTest extends TestCase
 {

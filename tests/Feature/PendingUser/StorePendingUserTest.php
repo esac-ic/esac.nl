@@ -7,8 +7,9 @@ use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Event;
+use Tests\TestCase;
 
-class StorePendingUserTest extends \TestCase
+class StorePendingUserTest extends TestCase
 {
     use RefreshDatabase;
 

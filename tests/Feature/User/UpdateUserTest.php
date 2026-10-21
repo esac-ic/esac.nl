@@ -10,8 +10,9 @@ use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Event;
 use Mockery\MockInterface;
+use Tests\TestCase;
 
-class UpdateUserTest extends \TestCase
+class UpdateUserTest extends TestCase
 {
     use RefreshDatabase;
     

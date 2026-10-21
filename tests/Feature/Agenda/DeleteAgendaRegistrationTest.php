@@ -7,7 +7,8 @@ use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Support\Facades\Artisan;
-use TestCase;
+use PHPUnit\Framework\Attributes\Test;
+use Tests\TestCase;
 
 class DeleteAgendaRegistrationTest extends TestCase
 {
@@ -39,7 +40,7 @@ class DeleteAgendaRegistrationTest extends TestCase
         parent::tearDown();
     }
 
-    /** @test */
+    #[Test]
     public function remove_agenda_registration(): void
     {
         $applicationResponse = ApplicationResponse::factory()->create([
@@ -56,7 +57,7 @@ class DeleteAgendaRegistrationTest extends TestCase
         $this->assertNull(ApplicationResponse::find($applicationResponse->id));
     }
 
-    /** @test */
+    #[Test]
     public function a_agenda_registration_can_not_be_removed_when_the_subscription_date_is_pasted(): void
     {
         $applicationResponse = ApplicationResponse::factory()->create([

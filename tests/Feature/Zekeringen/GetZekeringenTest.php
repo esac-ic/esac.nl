@@ -5,7 +5,7 @@ namespace Tests\Feature\Zekeringen;
 use App\Models\User;
 use App\Models\Zekering;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use TestCase;
+use Tests\TestCase;
 
 class GetZekeringenTest extends TestCase
 {

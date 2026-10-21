@@ -10,8 +10,9 @@ use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Lang;
 use Mockery;
+use Tests\TestCase;
 
-class HandleOldMemberBecameMemberTest extends \TestCase
+class HandleOldMemberBecameMemberTest extends TestCase
 {
     use RefreshDatabase;
     
