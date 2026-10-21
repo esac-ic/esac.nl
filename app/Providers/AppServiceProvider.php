@@ -4,7 +4,6 @@ namespace App\Providers;
 
 use App\CustomClasses\MenuSingleton;
 use App\Models\Setting;
-use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
@@ -14,20 +13,13 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register(): void
     {
-        $this->app->scoped(MenuSingleton::MENUSINGLETON, fn () => new MenuSingleton());
+        $this->app->scoped(MenuSingleton::MENUSINGLETON, fn () => new MenuSingleton);
 
         $this->app->scoped(Setting::SINGELTONNAME, function () {
-            $setting = new Setting();
+            $setting = new Setting;
             $setting->initialise();
+
             return $setting;
         });
-    }
-
-    /**
-     * Bootstrap any application services.
-     */
-    public function boot(): void
-    {
-        Validator::extend('recaptcha', 'App\\Validators\\ReCaptcha@validate');
     }
 }

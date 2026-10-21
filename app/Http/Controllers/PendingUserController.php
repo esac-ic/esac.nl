@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\User;
 use App\Repositories\UserRepository;
 use App\Rules\EmailDomainValidator;
+use App\Rules\Recaptcha;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Session;
@@ -86,7 +87,7 @@ class PendingUserController extends Controller
             'emergencycountry' => 'required|max:255',
             'birthDay' => 'required|date',
             'IBAN' => 'required|max:255',
-            'g-recaptcha-response' => 'required',
+            'g-recaptcha-response' => ['required', new Recaptcha()],
             'incasso' => 'required',
             'privacy_policy' => 'required',
             'termsconditions' => 'required',

@@ -8,6 +8,7 @@ use Carbon\Carbon;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Event;
+use Illuminate\Support\Facades\Http;
 use PHPUnit\Framework\Attributes\Test;
 use Tests\TestCase;
 
@@ -29,6 +30,7 @@ class RegisterNewMemberTest extends TestCase
     {
         parent::setUp();
         Event::fake();
+        Http::fake(['www.google.com/recaptcha/*' => Http::response(['success' => true])]);
         session()->start();
     }
 
