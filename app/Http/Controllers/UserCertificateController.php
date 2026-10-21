@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Enums\Role;
 use App\Models\Certificate;
 use App\Models\User;
 use App\Repositories\CertificateRepository;
@@ -9,7 +10,6 @@ use App\Repositories\UserRepository;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Config;
 
 class UserCertificateController extends Controller
 {
@@ -21,7 +21,7 @@ class UserCertificateController extends Controller
     public function __construct(private readonly UserRepository $_userRepository, private readonly CertificateRepository $_certificateRepository)
     {
         $this->middleware('auth');
-        $this->middleware('authorize:' . Config::get('constants.Administrator') . ',' . Config::get('constants.Certificate_administrator'));
+        $this->middleware('authorize:' . Role::Administrator->value . ',' . Role::CertificateAdministrator->value);
     }
 
     public function addCertificate(Request $request, User $user): View

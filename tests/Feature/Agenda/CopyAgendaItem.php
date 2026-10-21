@@ -3,12 +3,12 @@
 namespace Tests\Feature\Agenda;
 
 
+use App\Enums\Role;
 use App\Models\AgendaItem;
 use App\Models\Rol;
 use App\Models\User;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Support\Facades\Artisan;
-use Illuminate\Support\Facades\Config;
 use PHPUnit\Framework\Attributes\Test;
 use Tests\TestCase;
 
@@ -29,7 +29,7 @@ class CopyAgendaItem extends TestCase
             'id' => 3
         ]);
 
-        $this->user->roles()->attach(Config::get('constants.Activity_administrator'));
+        $this->user->roles()->attach(Role::ActivityAdministrator->value);
 
         $this->be($this->user);
 

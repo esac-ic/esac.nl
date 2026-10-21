@@ -2,12 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Enums\Role;
 use App\Models\AgendaItemCategory;
 use App\Repositories\AgendaItemCategoryRepository;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Session;
 
 class AgendaItemCategoryController extends Controller
@@ -15,7 +15,7 @@ class AgendaItemCategoryController extends Controller
     public function __construct(private readonly AgendaItemCategoryRepository $agendaItemCategoryRepository)
     {
         $this->middleware('auth');
-        $this->middleware('authorize:' . Config::get('constants.Administrator'));
+        $this->middleware('authorize:' . Role::Administrator->value);
     }
 
     public function index(): View

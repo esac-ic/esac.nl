@@ -40,7 +40,7 @@
                             </a>
                         </li>
                     @else
-                        @if(\Illuminate\Support\Facades\Auth::user()->hasRole(Config::get('constants.Administrator'),Config::get('constants.Activity_administrator'),Config::get('constants.Content_administrator'),Config::get('constants.Certificate_administrator')))
+                        @if(\Illuminate\Support\Facades\Auth::user()->hasRole(\App\Enums\Role::Administrator->value,\App\Enums\Role::ActivityAdministrator->value,\App\Enums\Role::ContentAdministrator->value,\App\Enums\Role::CertificateAdministrator->value))
                             <hr class="my-3">
 
                             <li class="nav-item active">
@@ -54,14 +54,14 @@
                                 </a>
                             </li>
                         @endif
-                        @if(\Illuminate\Support\Facades\Auth::user()->hasRole(Config::get('constants.Administrator'),Config::get('constants.Certificate_administrator')))
+                        @if(\Illuminate\Support\Facades\Auth::user()->hasRole(\App\Enums\Role::Administrator->value,\App\Enums\Role::CertificateAdministrator->value))
                             <li class="nav-item dropdown">
                                 <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                     {{'Members'}}
                                 </a>
                                 <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
                                     <a class="dropdown-item" href="{{ url('users') }}">{{'Current members'}}</a>
-                                    @if(\Illuminate\Support\Facades\Auth::user()->hasRole(Config::get('constants.Administrator')))
+                                    @if(\Illuminate\Support\Facades\Auth::user()->hasRole(\App\Enums\Role::Administrator->value))
                                         <a class="dropdown-item" href="{{ url('users/old_members') }}">{{'Old members'}}</a>
                                         <a class="dropdown-item" href="{{ url('users/pending_members') }}">{{'Pending users'}}</a>
                                         <a class="dropdown-item" href="{{ url('rols') }}">{{'Roles'}}</a>
@@ -70,7 +70,7 @@
                                 </div>
                             </li>
                         @endif
-                        @if(\Illuminate\Support\Facades\Auth::user()->hasRole(Config::get('constants.Content_administrator'),Config::get('constants.Activity_administrator')))
+                        @if(\Illuminate\Support\Facades\Auth::user()->hasRole(\App\Enums\Role::ContentAdministrator->value,\App\Enums\Role::ActivityAdministrator->value))
                             <li class="nav-item dropdown">
                                 <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                     {{'Activities'}}
@@ -78,13 +78,13 @@
                                 <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
                                     <a class="dropdown-item" href="{{ url('agendaItems') }}">{{'Events'}}</a>
                                     <a class="dropdown-item" href="{{ route('beheer.applicationForms.index') }}">{{'Application forms'}}</a>
-                                    @if(\Illuminate\Support\Facades\Auth::user()->hasRole(Config::get('constants.Administrator')))
+                                    @if(\Illuminate\Support\Facades\Auth::user()->hasRole(\App\Enums\Role::Administrator->value))
                                         <a class="dropdown-item" href="{{ url('agendaItemCategories') }}">{{'Event categories'}}</a>
                                     @endif
                                 </div>
                             </li>
                         @endif
-                        @if(\Illuminate\Support\Facades\Auth::user()->hasRole(Config::get('constants.Content_administrator')))
+                        @if(\Illuminate\Support\Facades\Auth::user()->hasRole(\App\Enums\Role::ContentAdministrator->value))
                             <li class="nav-item dropdown">
                                 <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                     {{'Content'}}
@@ -92,13 +92,13 @@
                                 <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
                                     <a class="dropdown-item" href="{{ url('pages') }}">{{'Page management'}}</a>
                                     <a class="dropdown-item" href="{{ url('newsItems') }}">{{'News items'}}</a>
-                                    @if(\Illuminate\Support\Facades\Auth::user()->hasRole(Config::get('constants.Administrator')))
+                                    @if(\Illuminate\Support\Facades\Auth::user()->hasRole(\App\Enums\Role::Administrator->value))
                                         <a class="dropdown-item" href="{{ url('books') }}">{{'Books'}}</a>
                                     @endif
                                 </div>
                             </li>
                         @endif
-                        @if(\Illuminate\Support\Facades\Auth::user()->hasRole(Config::get('constants.Administrator')))
+                        @if(\Illuminate\Support\Facades\Auth::user()->hasRole(\App\Enums\Role::Administrator->value))
                             <li class="nav-item">
                                 <a href="{{ url('mailList') }}" class="nav-link">
                                     {{'Mailing lists'}}

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Enums\Role;
 use App\Models\AgendaItem;
 use App\Repositories\AgendaItemCategoryRepository;
 use App\Repositories\AgendaItemRepository;
@@ -22,7 +23,7 @@ class AgendaItemController extends Controller
         private readonly ApplicationFormRepository $_applicationFormRepository
     ) {
         $this->middleware('auth');
-        $this->middleware('authorize:' . config('constants.Content_administrator') . ',' . config('constants.Activity_administrator'));
+        $this->middleware('authorize:' . Role::ContentAdministrator->value . ',' . Role::ActivityAdministrator->value);
     }
 
     public function index(): View

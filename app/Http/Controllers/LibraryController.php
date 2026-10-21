@@ -2,12 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Enums\Role;
 use App\Exports\LibraryExport;
 use App\Models\Book;
 use App\Repositories\BookRepository;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Session;
 
 class LibraryController extends Controller
@@ -15,7 +15,7 @@ class LibraryController extends Controller
     public function __construct(private readonly BookRepository $_bookRepository)
     {
         $this->middleware('auth');
-        $this->middleware('authorize:' . Config::get('constants.Administrator'));
+        $this->middleware('authorize:' . Role::Administrator->value);
     }
 
     public function index(): View

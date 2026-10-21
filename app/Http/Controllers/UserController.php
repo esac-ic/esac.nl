@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\CustomClasses\MailList\MailListFacade;
+use App\Enums\Role;
 use App\Exports\OldUsersExport;
 use App\Exports\PennoMemberExport;
 use App\Exports\UsersExport;
@@ -12,7 +13,6 @@ use App\Repositories\UserRepository;
 use App\Rules\EmailDomainValidator;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Session;
 
 class UserController extends Controller
@@ -29,8 +29,8 @@ class UserController extends Controller
         $this->middleware('auth');
         // The edit, update, and show methods check the authorization themselves, so we don't apply a role middleware there.
         // Only the index method is accessible by both Administrators and Certificate admins, so we apply a different middleware there.
-        $this->middleware('authorize:' . Config::get('constants.Administrator'))->except(['edit', 'update', 'show', 'index']);
-        $this->middleware('authorize:' . Config::get('constants.Administrator') . ',' . Config::get('constants.Certificate_administrator'))->only(['index']);
+        $this->middleware('authorize:' . Role::Administrator->value)->except(['edit', 'update', 'show', 'index']);
+        $this->middleware('authorize:' . Role::Administrator->value . ',' . Role::CertificateAdministrator->value)->only(['index']);
 
         $this->_userRepository = $userRepository;
     }
@@ -81,7 +81,7 @@ class UserController extends Controller
 
     public function show(Request $request, User $user)
     {
-        if (Auth::user()->id != $user->id && !Auth::user()->hasRole(Config::get('constants.Administrator'), Config::get('constants.Certificate_administrator'))) {
+        if (Auth::user()->id != $user->id && !Auth::user()->hasRole(Role::Administrator->value, Role::CertificateAdministrator->value)) {
             abort(403, 'You do not have sufficient access to view this page');
         }
         return view('beheer.user.show', compact('user'));
@@ -90,7 +90,7 @@ class UserController extends Controller
     //show edit screen
     public function edit(Request $request, User $user)
     {
-        if (Auth::user()->id != $user->id && !Auth::user()->hasRole(Config::get('constants.Administrator'))) {
+        if (Auth::user()->id != $user->id && !Auth::user()->hasRole(Role::Administrator->value)) {
             abort(403, 'You do not have sufficient access to view this page');
         }
 
@@ -106,7 +106,7 @@ class UserController extends Controller
     //update user
     public function update(Request $request, User $user, MailListFacade $mailListFacade)
     {
-        if (!Auth::user()->hasRole(Config::get('constants.Administrator'))) {
+        if (!Auth::user()->hasRole(Role::Administrator->value)) {
             if (Auth::user()->id != $user->id) {
                 abort(403, 'You do not have sufficient access to view this page');
             }
@@ -129,7 +129,7 @@ class UserController extends Controller
         
         $this->_userRepository->update($user->id, $request->all());
         
-        if (Auth::user()->hasRole(Config::get('constants.Administrator'))) {
+        if (Auth::user()->hasRole(Role::Administrator->value)) {
             $this->_userRepository->addRols($user->id, $request->get('roles', []));
         }
 
@@ -214,7 +214,7 @@ class UserController extends Controller
         ]);
 
         // These fields are only required for administrators.
-        if (Auth::user()->hasRole(Config::get('constants.Administrator'))) {
+        if (Auth::user()->hasRole(Role::Administrator->value)) {
             $this->validate($request, [
                 'kind_of_member' => 'required',
             ]);

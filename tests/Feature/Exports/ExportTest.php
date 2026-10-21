@@ -2,6 +2,7 @@
 
 namespace Tests\Feature\Exports;
 
+use App\Enums\Role;
 use App\Models\AgendaItem;
 use App\Models\ApplicationForm\ApplicationForm;
 use App\Models\ApplicationForm\ApplicationFormRow;
@@ -11,7 +12,6 @@ use App\Models\User;
 use App\Models\UserEventLogEntry;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Carbon;
-use Illuminate\Support\Facades\Config;
 use Illuminate\Testing\TestResponse;
 use OpenSpout\Reader\XLSX\Reader;
 use PHPUnit\Framework\Attributes\Test;
@@ -29,8 +29,8 @@ class ExportTest extends TestCase
 
         $this->admin = User::factory()->create();
         $this->admin->roles()->attach([
-            Config::get('constants.Administrator'),
-            Config::get('constants.Activity_administrator'),
+            Role::Administrator->value,
+            Role::ActivityAdministrator->value,
         ]);
     }
 

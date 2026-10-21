@@ -2,12 +2,12 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Enums\Role;
 use App\Http\Controllers\Controller;
 use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Config;
 
 class RegistrationController extends Controller
 {
@@ -20,7 +20,7 @@ class RegistrationController extends Controller
     {
         $userId = $request->input('user_id', -1);
 
-        if (!Auth::user()->hasRole(Config::get('constants.Administrator'))) {
+        if (!Auth::user()->hasRole(Role::Administrator->value)) {
             if (Auth::user()->id != $userId) {
                 abort(401);
             }
