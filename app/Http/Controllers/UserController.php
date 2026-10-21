@@ -14,7 +14,6 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Session;
-use Maatwebsite\Excel\Facades\Excel;
 
 class UserController extends Controller
 {
@@ -153,7 +152,7 @@ class UserController extends Controller
 
     public function exportUsers(UsersExport $usersExport)
     {
-        return Excel::download($usersExport, 'Members.xlsx');
+        return $usersExport->download('Members.xlsx');
     }
     public function pennoMemberExportSelect(Request $request)
     {
@@ -166,12 +165,12 @@ class UserController extends Controller
         ]);
         $export = new PennoMemberExport($userRepository, $request->integer('days_ago'));
         $exportDate = $export->getFromDate()->toDateString();
-        return Excel::download($export, "Members (created after $exportDate).xlsx");
+        return $export->download("Members (created after $exportDate).xlsx");
     }
 
     public function exportOldUsers(OldUsersExport $oldUsersExport)
     {
-        return Excel::download($oldUsersExport, 'Old members.xlsx');
+        return $oldUsersExport->download('Old members.xlsx');
     }
 
     public function makeActiveMember(Request $request, User $user)

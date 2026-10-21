@@ -10,8 +10,6 @@ use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Carbon;
 use Illuminate\Http\Request;
-use Maatwebsite\Excel\Excel;
-use PhpOffice\PhpSpreadsheet\Exception;
 
 class UserEventLogEntryController extends Controller
 {
@@ -31,7 +29,7 @@ class UserEventLogEntryController extends Controller
         return view('beheer.userEventLog.index', compact('events'));
     }
     
-    public function export(Request $request, Excel $excel, UserEventLogEntryRepository $repo)
+    public function export(Request $request, UserEventLogEntryRepository $repo)
     {
         $eventTypes = $request->eventTypes;
         
@@ -40,6 +38,6 @@ class UserEventLogEntryController extends Controller
         $endDate = Carbon::parse($request->endDate);
         
         $export = new UserEventLogExport($repo, $eventTypes, $names, $startDate, $endDate);
-        return $excel->download($export, $export->fileName() . '.xlsx');
+        return $export->download($export->fileName() . '.xlsx');
     }
 }
