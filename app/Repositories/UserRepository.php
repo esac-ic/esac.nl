@@ -86,7 +86,7 @@ class UserRepository implements IRepository
             ->where([['lid_af', null], ['pending_user', null]])
             ->get($columns);
     }
-    public function getCurrentUsersAfterSignupDate($columns = array('*'), $createAfter, array $with = [])
+    public function getCurrentUsersAfterSignupDate($columns, $createAfter, array $with = [])
     {
         return User::query()
             ->with($with)
