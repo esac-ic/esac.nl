@@ -313,5 +313,5 @@ DB\_HOST, DB\_PORT, DB\_DATABASE, DB\_USERNAME and DB\_PASSWORD
 When you update the server make sure you run the following commands
 ```
 php artisan migrate
-npm run production
+npm run build
 ```
