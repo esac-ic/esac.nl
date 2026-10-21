@@ -7,7 +7,8 @@ use App\Models\User;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Config;
-use TestCase;
+use PHPUnit\Framework\Attributes\Test;
+use Tests\TestCase;
 
 class CreateRoleTest extends TestCase
 {
@@ -40,7 +41,7 @@ class CreateRoleTest extends TestCase
         parent::tearDown();
     }
 
-    /** @test */
+    #[Test]
     public function an_admin_can_create_a_role()
     {
         $body = [
@@ -57,7 +58,7 @@ class CreateRoleTest extends TestCase
         $this->assertEquals($body['name'], $role->name);
     }
 
-    /** @test */
+    #[Test]
     public function a_role_can_not_create_a_role()
     {
         $body = [
@@ -72,7 +73,7 @@ class CreateRoleTest extends TestCase
         $response->assertStatus(403);
     }
 
-    /** @test */
+    #[Test]
     public function a_role_can_not_be_created_without_required_fields()
     {
         $body = [
@@ -83,6 +84,7 @@ class CreateRoleTest extends TestCase
 
         $response->assertStatus(302);
 
+        $response->assertSessionHasErrors();
         $errors = session('errors');
 
         $this->assertCount(1, $errors);

@@ -8,9 +8,9 @@ use GuzzleHttp\Exception\ClientException;
 use GuzzleHttp\Psr7\Request;
 use GuzzleHttp\Psr7\Response;
 use Mockery\MockInterface;
-use PHPUnit\Framework\TestCase;
+use Tests\TestCase;
 
-class DeleteMailListTest extends \TestCase
+class DeleteMailListTest extends TestCase
 {
     public function test_delete_mail_list()
     {

@@ -9,9 +9,11 @@ use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Lang;
 use Mockery;
+use Tests\TestCase;
+
 use function PHPUnit\Framework\assertEquals;
 
-class HandleMemberMassMailListSyncTest extends \TestCase
+class HandleMemberMassMailListSyncTest extends TestCase
 {
     use RefreshDatabase;
     

@@ -10,7 +10,8 @@ use Carbon\Carbon;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Config;
-use TestCase;
+use PHPUnit\Framework\Attributes\Test;
+use Tests\TestCase;
 
 class UpdateAgendaItemTest extends TestCase
 {
@@ -39,7 +40,7 @@ class UpdateAgendaItemTest extends TestCase
         Artisan::call('migrate:reset');
         parent::tearDown();
     }
-    /** @test */
+    #[Test]
     public function UpdateAgendaItemTest()
     {
         $agendaItem = AgendaItem::factory()->create();
