@@ -34,7 +34,7 @@ TODO: voeg toe moet gewoon plusje worden
                             <div class="form-group">
                                 {{ html()->submit('Voeg toe')->class('btn btn-primary') }}
                             </div>
-                            {{ csrf_field() }}
+                            @csrf
                             {{ html()->form()->close() }}
                         @else
                             {{'You need to be logged in to view the zekeringen'}}

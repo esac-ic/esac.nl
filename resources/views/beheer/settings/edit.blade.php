@@ -10,7 +10,8 @@
             <h3>{{'Edit settings'}}</h3>
         </div>
         <div class="card-body">
-            {{ html()->form('PUT', url('/beheer/settings'))->acceptsFiles()->open() }}
+            {{ html()->form('POST', url('/beheer/settings'))->acceptsFiles()->open() }}
+            @method('PUT')
             @foreach($settings as $setting)
                 <div class="form-group">
                     {{ html()->label(trans('settings.' . $setting->name), 'setting['. $setting->name . ']') }}
