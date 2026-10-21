@@ -10,6 +10,9 @@ services:
         www.${APP_DOMAIN:-esac.nl} {
           redir https://${APP_DOMAIN:-esac.nl}{uri} permanent
         }
+      CADDY_SERVER_EXTRA_DIRECTIVES: |
+        header X-Frame-Options "SAMEORIGIN"
+        header X-Content-Type-Options "nosniff"
     ports:
       - "80:80"
       - "443:443"
