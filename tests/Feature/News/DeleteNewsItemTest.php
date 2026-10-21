@@ -34,7 +34,7 @@ class DeleteNewsItemTest extends TestCase
     }
     /** @test */
     public function DeleteNewsItem(){
-        $newsItem = factory(NewsItem::class)->create();
+        $newsItem = NewsItem::factory()->create();
 
         $response = $this->delete($this->url . '/' . $newsItem->id);
 

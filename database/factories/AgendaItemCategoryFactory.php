@@ -3,10 +3,17 @@
 namespace Database\Factories;
 
 use App\Models\AgendaItemCategory;
-use Faker\Generator as Faker;
+use Illuminate\Database\Eloquent\Factories\Factory;
 
-$factory->define(AgendaItemCategory::class, function (Faker $faker) {
-    return [
-        'name' => $faker->word,
-    ];
-});
+/**
+ * @extends Factory<AgendaItemCategory>
+ */
+class AgendaItemCategoryFactory extends Factory
+{
+    public function definition(): array
+    {
+        return [
+            'name' => fake()->word(),
+        ];
+    }
+}
