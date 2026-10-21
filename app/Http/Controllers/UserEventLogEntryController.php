@@ -26,12 +26,10 @@ class UserEventLogEntryController extends Controller
     public function export(Request $request, UserEventLogEntryRepository $repo)
     {
         $eventTypes = $request->eventTypes;
-        
-        $names = $request->names;
         $startDate = Carbon::parse($request->startDate);
         $endDate = Carbon::parse($request->endDate);
-        
-        $export = new UserEventLogExport($repo, $eventTypes, $names, $startDate, $endDate);
+
+        $export = new UserEventLogExport($repo, $eventTypes, $startDate, $endDate);
         return $export->download($export->fileName() . '.xlsx');
     }
 }
