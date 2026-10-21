@@ -9,7 +9,8 @@ use App\Repositories\ApplicationFormRepositories\ApplicationFormRepository;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Storage;
-use Intervention\Image\ImageManagerStatic as Image;
+use Intervention\Image\Drivers\Gd\Driver;
+use Intervention\Image\ImageManager;
 
 class AgendaItemController extends Controller
 {
@@ -142,7 +143,7 @@ class AgendaItemController extends Controller
             $agendaItem->image_url = 'agendaItem/' . $name;
             $agendaItem->save();
             $img_path = Storage::disk('public')->path($agendaItem->image_url);
-            Image::make($img_path)->fit(400, 300)->save($img_path);
+            ImageManager::usingDriver(Driver::class)->decodePath($img_path)->cover(400, 300)->save($img_path);
         }
     }
 }
