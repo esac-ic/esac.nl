@@ -1,0 +1,46 @@
+name: esac
+
+services:
+  app:
+    image: ${APP_IMAGE:-ghcr.io/esac-ic/esac.nl:latest}
+    env_file: .env
+    environment:
+      SERVER_NAME: ${APP_DOMAIN:-esac.nl}
+      CADDY_EXTRA_CONFIG: |
+        www.${APP_DOMAIN:-esac.nl} {
+          redir https://${APP_DOMAIN:-esac.nl}{uri} permanent
+        }
+    ports:
+      - "80:80"
+      - "443:443"
+      - "443:443/udp"
+    volumes:
+      - app-storage:/app/storage
+      - caddy-data:/data/caddy
+      - caddy-config:/config/caddy
+    depends_on:
+      mysql:
+        condition: service_healthy
+    restart: unless-stopped
+
+  mysql:
+    image: mysql:8.4
+    environment:
+      MYSQL_DATABASE: ${DB_DATABASE}
+      MYSQL_USER: ${DB_USERNAME}
+      MYSQL_PASSWORD: ${DB_PASSWORD}
+      MYSQL_RANDOM_ROOT_PASSWORD: "yes"
+    command: --innodb-buffer-pool-size=128M --performance-schema=OFF --max-connections=30
+    volumes:
+      - mysql-data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD-SHELL", "mysqladmin ping -h 127.0.0.1 --silent"]
+      interval: 10s
+      retries: 12
+    restart: unless-stopped
+
+volumes:
+  app-storage:
+  mysql-data:
+  caddy-data:
+  caddy-config:
