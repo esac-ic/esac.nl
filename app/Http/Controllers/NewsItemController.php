@@ -8,7 +8,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Storage;
-use Intervention\Image\ImageManagerStatic as Image;
+use Intervention\Image\Drivers\Gd\Driver;
+use Intervention\Image\ImageManager;
 
 class NewsItemController extends Controller
 {
@@ -100,7 +101,7 @@ class NewsItemController extends Controller
     private function resizeImage(string $path, int $width, int $height)
     {
         $imagePath = Storage::disk('public')->path($path);
-        Image::make($imagePath)->fit($width, $height)->save($imagePath);
+        ImageManager::usingDriver(Driver::class)->decodePath($imagePath)->cover($width, $height)->save($imagePath);
     }
 
     private function validateInput(Request $request)
