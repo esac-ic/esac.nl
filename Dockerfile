@@ -32,7 +32,7 @@ WORKDIR "/var/www/"
 # Install PHP dependencies, and NPM dependencies
 RUN composer install --no-dev \
     && npm install \
-    && npm run prod
+    && npm run build
 
 # Copy opcache.ini after builds to prevent CLI opcache issues on arm64
 COPY opcache.ini /usr/local/etc/php/conf.d/opcache.ini

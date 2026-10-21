@@ -73,7 +73,7 @@ jobs:
         php artisan serve &
 
     - name: NPM build
-      run: npm run prod
+      run: npm run build
 
     - name: Directory Permissions
       run: chmod -R 777 storage bootstrap/cache
