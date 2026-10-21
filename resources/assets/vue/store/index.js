@@ -7,7 +7,7 @@ export const useAgendaStore = defineStore('agenda', {
         agendaItems: [],
         agendaTotalItemCount: 0,
         selectedCategory: "",
-        startDate: new Date().toLocaleDateString('nl', { year: 'numeric', month: 'numeric', day: 'numeric' }),
+        startDate: new Date().toLocaleDateString('nl', { year: 'numeric', month: '2-digit', day: '2-digit' }),
         selectedPage: 1,
     }),
     actions: {
