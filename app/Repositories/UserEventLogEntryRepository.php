@@ -4,7 +4,9 @@ namespace App\Repositories;
 
 use App\Models\UserEventLogEntry;
 use BadMethodCallException;
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Collection;
 
 class UserEventLogEntryRepository implements IRepository
 {
@@ -48,34 +50,34 @@ class UserEventLogEntryRepository implements IRepository
         throw new BadMethodCallException('Not implemented');
     }
 
-    public function find($id, $columns = array('*'))
+    public function find($id, $columns = ['*'])
     {
         return $this->findBy('id', $id, $columns);
     }
 
-    public function findBy($field, $value, $columns = array('*'))
+    public function findBy($field, $value, $columns = ['*'])
     {
         return UserEventLogEntry::query()->where($field, '=', $value)->first($columns);
     }
 
-    public function all($columns = array('*'))
+    public function all($columns = ['*'])
     {
         return UserEventLogEntry::all($columns);
     }
     
     /**
      * Find all user event logs that fulfill certain criteria
-     * 
+     *
      * @param array|null $eventTypes the selected event types to be filtered on
-     * @param \Carbon\Carbon $startDate start datetime of the selection
-     * @param \Carbon\Carbon $endDate end datetime of the selection
-     * 
-     * @return Builder[]|\Illuminate\Database\Eloquent\Collection
+     * @param Carbon $startDate start datetime of the selection
+     * @param Carbon $endDate end datetime of the selection
+     *
+     * @return Builder[]|Collection
      */
-    public function findLogs(Array | null $eventTypes, \Carbon\Carbon $startDate, \Carbon\Carbon $endDate)
+    public function findLogs(Array | null $eventTypes, Carbon $startDate, Carbon $endDate)
     {
         $query = UserEventLogEntry::query()
-        ->whereBetween('created_at', array($startDate, $endDate));
+        ->whereBetween('created_at', [$startDate, $endDate]);
         
         if ($eventTypes != null)
         {

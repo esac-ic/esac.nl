@@ -6,7 +6,7 @@ use App\Models\Book;
 
 class BookRepository implements IRepository
 {
-    public function create(array $data)
+    public function create(array $data): Book
     {
         $book = new Book($data);
         $book->save();
@@ -21,23 +21,23 @@ class BookRepository implements IRepository
         return $book;
     }
 
-    public function delete($id)
+    public function delete($id): void
     {
         $book = $this->find($id);
         $book->delete();
     }
 
-    public function find($id, $columns = array('*'))
+    public function find($id, $columns = ['*'])
     {
         return $this->findBy('id', $id, $columns)->first();
     }
 
-    public function findBy($field, $value, $columns = array('*'))
+    public function findBy($field, $value, $columns = ['*'])
     {
         return Book::where($field, '=', $value)->get($columns);
     }
 
-    public function all($columns = array('*'))
+    public function all($columns = ['*'])
     {
         return Book::all();
     }

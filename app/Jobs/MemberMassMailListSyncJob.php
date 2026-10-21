@@ -5,16 +5,13 @@ namespace App\Jobs;
 use App\CustomClasses\MailList\MailListFacade;
 use App\Listeners\UpdateMemberTypeMaillists;
 use App\Models\User;
-use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Database\Eloquent\Collection;
-use Illuminate\Foundation\Bus\Dispatchable;
-use Illuminate\Queue\InteractsWithQueue;
-use Illuminate\Queue\SerializesModels;
+use Illuminate\Foundation\Queue\Queueable;
 
 class MemberMassMailListSyncJob implements ShouldQueue
 {
-    use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
+    use Queueable;
     
     public function __construct(
         public Collection $users

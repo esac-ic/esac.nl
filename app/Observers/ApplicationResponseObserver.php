@@ -6,7 +6,7 @@ use App\Models\ApplicationForm\ApplicationResponse;
 
 class ApplicationResponseObserver
 {
-    public function deleting(ApplicationResponse $applicationResponse)
+    public function deleting(ApplicationResponse $applicationResponse): void
     {
         $applicationResponse->getApplicationFormResponseRows()->forceDelete();
     }

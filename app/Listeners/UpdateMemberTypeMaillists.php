@@ -12,14 +12,11 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 
 class UpdateMemberTypeMaillists implements ShouldQueue
 {
-    private MailListFacade $mailListFacade;
-    
     /**
      * Create the event listener.
      */
-    public function __construct(MailListFacade $mailListFacade)
+    public function __construct(private readonly MailListFacade $mailListFacade)
     {
-        $this->mailListFacade = $mailListFacade;
     }
     
     /**

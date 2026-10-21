@@ -6,7 +6,7 @@ use App\Models\MenuItem;
 
 class MenuRepository implements IRepository
 {
-    public function create(array $data)
+    public function create(array $data): void
     {
         $menuItem = new MenuItem($data);
         if ($data['itemType'] === "subItem") {
@@ -22,7 +22,7 @@ class MenuRepository implements IRepository
         $menuItem->save();
     }
 
-    public function update($id, array $data)
+    public function update($id, array $data): void
     {
         $menuItem = $this->find($id);
         $menuItem->update($data);
@@ -41,7 +41,7 @@ class MenuRepository implements IRepository
         $menuItem->save();
     }
 
-    public function delete($id)
+    public function delete($id): void
     {
         $menuItem = $this->find($id);
         if ($menuItem->deletable) {
@@ -55,17 +55,17 @@ class MenuRepository implements IRepository
         }
     }
 
-    public function find($id, $columns = array('*'))
+    public function find($id, $columns = ['*'])
     {
         return $this->findBy('id', $id, $columns);
     }
 
-    public function findBy($field, $value, $columns = array('*'))
+    public function findBy($field, $value, $columns = ['*'])
     {
         return MenuItem::query()->where($field, '=', $value)->first($columns);
     }
 
-    public function all($columns = array('*'))
+    public function all($columns = ['*'])
     {
         return MenuItem::all($columns);
     }

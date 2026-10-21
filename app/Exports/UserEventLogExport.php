@@ -5,34 +5,22 @@ namespace App\Exports;
 use App\Repositories\UserEventLogEntryRepository;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection;
-use Illuminate\Support\Facades\Log;
 
 class UserEventLogExport extends SpreadsheetExport
 {
-    private UserEventLogEntryRepository $repository;
-    private Array | null $names;
-    private Array | null $eventTypes;
-    private Carbon $startDate;
-    private Carbon $endDate;
-    
-     /**
+    /**
      * All properties to be included in the export. Maps model property to header label.
      * Note: the keys should be the same as the model attributes
      */
-    private const PROPERTY_LABELS = [
+    private const array PROPERTY_LABELS = [
         "Time",
         "Event Type",
         "User name",
         "Event Details",
     ];
     
-    public function __construct(UserEventLogEntryRepository $userEventLogEntryRepository, Array | null $eventTypes, Array | null $names, Carbon $startDate, Carbon $endDate)
+    public function __construct(private readonly UserEventLogEntryRepository $repository, private readonly Array | null $eventTypes, private readonly Array | null $names, private readonly Carbon $startDate, private readonly Carbon $endDate)
     {
-        $this->repository = $userEventLogEntryRepository;
-        $this->eventTypes = $eventTypes;
-        $this->names = $names;
-        $this->startDate = $startDate;
-        $this->endDate = $endDate;
     }
     
     public function collection(): Collection

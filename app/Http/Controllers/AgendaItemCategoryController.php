@@ -4,29 +4,27 @@ namespace App\Http\Controllers;
 
 use App\Models\AgendaItemCategory;
 use App\Repositories\AgendaItemCategoryRepository;
+use Illuminate\Contracts\View\View;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Session;
 
 class AgendaItemCategoryController extends Controller
 {
-    private AgendaItemCategoryRepository $agendaItemCategoryRepository;
-
-    public function __construct(AgendaItemCategoryRepository $agendaItemCategoryRepository)
+    public function __construct(private readonly AgendaItemCategoryRepository $agendaItemCategoryRepository)
     {
         $this->middleware('auth');
         $this->middleware('authorize:' . Config::get('constants.Administrator'));
-
-        $this->agendaItemCategoryRepository = $agendaItemCategoryRepository;
     }
 
-    public function index()
+    public function index(): View
     {
         $agendaItemCategories = $this->agendaItemCategoryRepository->all(['id', 'name']);
         return view('beheer.agendaItemCategory.index', compact('agendaItemCategories'));
     }
 
-    public function create()
+    public function create(): View
     {
         $fields = ['title' => 'Add an event category',
             'method' => 'POST',
@@ -35,7 +33,7 @@ class AgendaItemCategoryController extends Controller
         return view('beheer.agendaItemCategory.create_edit', compact(['fields', 'agendaItemCategory']));
     }
 
-    public function store(Request $request)
+    public function store(Request $request): RedirectResponse
     {
         $this->validateInput($request);
         $this->agendaItemCategoryRepository->create($request->all());
@@ -44,12 +42,12 @@ class AgendaItemCategoryController extends Controller
         return redirect('/agendaItemCategories');
     }
 
-    public function show(Request $request, AgendaItemCategory $agendaItemCategory)
+    public function show(Request $request, AgendaItemCategory $agendaItemCategory): View
     {
         return view('beheer.agendaItemCategory.show', compact('agendaItemCategory'));
     }
 
-    public function edit(Request $request, AgendaItemCategory $agendaItemCategory)
+    public function edit(Request $request, AgendaItemCategory $agendaItemCategory): View
     {
         $fields = ['title' => 'Edit category',
             'method' => 'PATCH',
@@ -58,7 +56,7 @@ class AgendaItemCategoryController extends Controller
         return view('beheer.agendaItemCategory.create_edit', compact('fields', 'agendaItemCategory'));
     }
 
-    public function update(Request $request, AgendaItemCategory $agendaItemCategory)
+    public function update(Request $request, AgendaItemCategory $agendaItemCategory): RedirectResponse
     {
         $this->validateInput($request);
         $this->agendaItemCategoryRepository->update($agendaItemCategory->id, $request->all());
@@ -67,7 +65,7 @@ class AgendaItemCategoryController extends Controller
         return redirect('/agendaItemCategories');
     }
 
-    public function destroy(Request $request, AgendaItemCategory $agendaItemCategory)
+    public function destroy(Request $request, AgendaItemCategory $agendaItemCategory): RedirectResponse
     {
         $this->agendaItemCategoryRepository->delete($agendaItemCategory->id);
 
@@ -75,7 +73,7 @@ class AgendaItemCategoryController extends Controller
         return redirect('/agendaItemCategories');
     }
 
-    private function validateInput(Request $request)
+    private function validateInput(Request $request): void
     {
         $this->validate($request, [
             'name' => 'required|max:255',

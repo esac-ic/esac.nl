@@ -15,7 +15,7 @@ use Illuminate\Support\Facades\Auth;
 class ZekeringenRepository implements IRepository
 {
 
-    public function create(array $data)
+    public function create(array $data): void
     {
         $zekering = new Zekering();
         $zekering->text = $data["text"];
@@ -32,27 +32,27 @@ class ZekeringenRepository implements IRepository
         $zekering->save();
     }
 
-    public function update($id, array $data)
+    public function update($id, array $data): void
     {
         // TODO: Implement update() method.
     }
 
-    public function delete($id)
+    public function delete($id): void
     {
         Zekering::destroy($id);
     }
 
-    public function find($id, $columns = array('*'))
+    public function find($id, $columns = ['*']): void
     {
         // TODO: Implement find() method.
     }
 
-    public function findBy($field, $value, $columns = array('*'))
+    public function findBy($field, $value, $columns = ['*'])
     {
         return Zekering::where($field, '=',$value)->orderBy('id', 'desc');
     }
 
-    public function all($columns = array('*'))
+    public function all($columns = ['*'])
     {
         return Zekering::query()->orderBy('parent_id', 'desc')->get();
     }
