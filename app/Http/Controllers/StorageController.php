@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Enums\Role;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Storage;
 
 class StorageController extends Controller
@@ -11,7 +11,7 @@ class StorageController extends Controller
     public function __construct()
     {
         $this->middleware('auth');
-        $this->middleware('authorize:' . Config::get('constants.Content_administrator'));
+        $this->middleware('authorize:' . Role::ContentAdministrator->value);
     }
 
     public function uploadImage(Request $request): string

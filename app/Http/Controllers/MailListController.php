@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\CustomClasses\MailList\MailListFacade;
+use App\Enums\Role;
 use App\Jobs\MemberMassMailListSyncJob;
 use App\Models\User;
 use App\Repositories\UserRepository;
@@ -10,7 +11,6 @@ use Illuminate\Contracts\View\View;
 use Illuminate\Http\Client\RequestException;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Session;
 
@@ -25,7 +25,7 @@ class MailListController extends Controller
     public function __construct(private readonly MailListFacade $_mailListFacade, private readonly UserRepository $userRepository)
     {
         $this->middleware('auth');
-        $this->middleware('authorize:' . Config::get('constants.Administrator'));
+        $this->middleware('authorize:' . Role::Administrator->value);
     }
 
     //gives the mail list views

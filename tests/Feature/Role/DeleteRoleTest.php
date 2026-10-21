@@ -2,10 +2,10 @@
 
 namespace Tests\Feature\Role;
 
+use App\Enums\Role;
 use App\Models\Rol;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Support\Facades\Config;
 use PHPUnit\Framework\Attributes\Test;
 use Tests\TestCase;
 
@@ -28,7 +28,7 @@ class DeleteRoleTest extends TestCase
         parent::setUp();
         $this->user = $user = User::factory()->create();
 
-        $user->roles()->attach(Config::get('constants.Administrator'));
+        $user->roles()->attach(Role::Administrator->value);
         $this->be($user);
 
         session()->start();

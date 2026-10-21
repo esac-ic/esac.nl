@@ -2,11 +2,11 @@
 
 namespace Tests\Feature\User;
 
+use App\Enums\Role;
 use App\Events\OldMemberBecameMember;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Carbon;
-use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Event;
 use Tests\TestCase;
 
@@ -20,7 +20,7 @@ class MakeActiveMemberTest extends TestCase
         parent::setUp();
         
         $this->admin = User::factory()->create();
-        $this->admin->roles()->attach(Config::get('constants.Administrator'));
+        $this->admin->roles()->attach(Role::Administrator->value);
     }
     
     public function test_make_old_member_active_member()

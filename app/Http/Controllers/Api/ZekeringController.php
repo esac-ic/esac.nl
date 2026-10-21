@@ -2,19 +2,19 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Enums\Role;
 use App\Http\Controllers\Controller;
 use App\Repositories\ZekeringenRepository;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
-use Illuminate\Support\Facades\Config;
 
 class ZekeringController extends Controller
 {
     public function __construct()
     {
         $this->middleware('auth');
-        $this->middleware('authorize:' . Config::get('constants.Activity_administrator'))->only('destroy');
+        $this->middleware('authorize:' . Role::ActivityAdministrator->value)->only('destroy');
     }
 
     public function getZekeringen(ZekeringenRepository $zekeringenRepository): array

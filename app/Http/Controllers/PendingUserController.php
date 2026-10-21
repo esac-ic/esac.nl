@@ -2,12 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Enums\Role;
 use App\Models\User;
 use App\Repositories\UserRepository;
 use App\Rules\EmailDomainValidator;
 use App\Rules\Recaptcha;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Session;
 
 class PendingUserController extends Controller
@@ -22,7 +22,7 @@ class PendingUserController extends Controller
     public function __construct(UserRepository $userRepository)
     {
         $this->middleware('auth')->except('storePendingUser');
-        $this->middleware('authorize:' . Config::get('constants.Administrator'))->except('storePendingUser');
+        $this->middleware('authorize:' . Role::Administrator->value)->except('storePendingUser');
 
         $this->_userRepository = $userRepository;
     }

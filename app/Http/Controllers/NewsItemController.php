@@ -2,12 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Enums\Role;
 use App\Models\NewsItem;
 use App\Repositories\NewsItemRepository;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Storage;
 use Intervention\Image\Drivers\Gd\Driver;
@@ -18,7 +18,7 @@ class NewsItemController extends Controller
     public function __construct(private readonly NewsItemRepository $_newsItemRepository)
     {
         $this->middleware('auth');
-        $this->middleware('authorize:' . Config::get('constants.Content_administrator') . ',' . Config::get('constants.Activity_administrator'));
+        $this->middleware('authorize:' . Role::ContentAdministrator->value . ',' . Role::ActivityAdministrator->value);
     }
 
     public function index(): View

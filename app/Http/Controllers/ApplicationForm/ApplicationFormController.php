@@ -2,13 +2,13 @@
 
 namespace App\Http\Controllers\ApplicationForm;
 
+use App\Enums\Role;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\ApplicationFormStoreRequest;
 use App\Http\Resources\ApplicationFormRowVueResource;
 use App\Models\ApplicationForm\ApplicationForm;
 use App\Repositories\ApplicationFormRepositories\ApplicationFormRepository;
 use Illuminate\Http\RedirectResponse;
-use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Session;
 use Illuminate\View\View;
 
@@ -21,7 +21,7 @@ class ApplicationFormController extends Controller
      */
     public function __construct()
     {
-        $this->middleware('authorize:' . Config::get('constants.Content_administrator') . ',' . Config::get('constants.Activity_administrator'));
+        $this->middleware('authorize:' . Role::ContentAdministrator->value . ',' . Role::ActivityAdministrator->value);
     }
 
     /**

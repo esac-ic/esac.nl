@@ -2,11 +2,11 @@
 
 namespace Tests\Feature\Views;
 
+use App\Enums\Role;
 use App\Models\AgendaItemCategory;
 use App\Models\ApplicationForm\ApplicationForm;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Support\Facades\Config;
 use PHPUnit\Framework\Attributes\Test;
 use Tests\TestCase;
 
@@ -22,7 +22,7 @@ class FormOldInputTest extends TestCase
         parent::setUp();
         $user = User::factory()->create();
 
-        $user->roles()->attach([Config::get('constants.Administrator'), Config::get('constants.Content_administrator')]);
+        $user->roles()->attach([Role::Administrator->value, Role::ContentAdministrator->value]);
         $this->be($user);
 
         session()->start();
