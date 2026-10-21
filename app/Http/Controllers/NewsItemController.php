@@ -8,17 +8,25 @@ use App\Repositories\NewsItemRepository;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Routing\Controllers\HasMiddleware;
+use Illuminate\Routing\Controllers\Middleware;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Storage;
 use Intervention\Image\Drivers\Gd\Driver;
 use Intervention\Image\ImageManager;
 
-class NewsItemController extends Controller
+class NewsItemController extends Controller implements HasMiddleware
 {
+    public static function middleware(): array
+    {
+        return [
+            'auth',
+            new Middleware('authorize:' . Role::ContentAdministrator->value . ',' . Role::ActivityAdministrator->value),
+        ];
+    }
+
     public function __construct(private readonly NewsItemRepository $_newsItemRepository)
     {
-        $this->middleware('auth');
-        $this->middleware('authorize:' . Role::ContentAdministrator->value . ',' . Role::ActivityAdministrator->value);
     }
 
     public function index(): View
@@ -104,7 +112,7 @@ class NewsItemController extends Controller
 
     private function validateInput(Request $request): void
     {
-        $this->validate($request, [
+        $request->validate([
             'title' => 'required|max:255',
             'text' => 'required',
             'author' => 'required|max:255',

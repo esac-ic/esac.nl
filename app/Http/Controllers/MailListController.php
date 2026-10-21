@@ -11,11 +11,20 @@ use Illuminate\Contracts\View\View;
 use Illuminate\Http\Client\RequestException;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Routing\Controllers\HasMiddleware;
+use Illuminate\Routing\Controllers\Middleware;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Session;
 
-class MailListController extends Controller
+class MailListController extends Controller implements HasMiddleware
 {
+    public static function middleware(): array
+    {
+        return [
+            'auth',
+            new Middleware('authorize:' . Role::Administrator->value),
+        ];
+    }
 
     /**
      * Create a new controller instance.
@@ -24,8 +33,6 @@ class MailListController extends Controller
      */
     public function __construct(private readonly MailListFacade $_mailListFacade, private readonly UserRepository $userRepository)
     {
-        $this->middleware('auth');
-        $this->middleware('authorize:' . Role::Administrator->value);
     }
 
     //gives the mail list views
@@ -66,7 +73,6 @@ class MailListController extends Controller
     {
         $mailList = $this->_mailListFacade->getMailList($mailList);
         return view('beheer.mailList.show', compact('mailList'));
-
     }
 
     public function destroy(Request $request, $mailList): RedirectResponse

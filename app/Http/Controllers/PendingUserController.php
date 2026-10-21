@@ -8,10 +8,19 @@ use App\Repositories\UserRepository;
 use App\Rules\EmailDomainValidator;
 use App\Rules\Recaptcha;
 use Illuminate\Http\Request;
+use Illuminate\Routing\Controllers\HasMiddleware;
+use Illuminate\Routing\Controllers\Middleware;
 use Illuminate\Support\Facades\Session;
 
-class PendingUserController extends Controller
+class PendingUserController extends Controller implements HasMiddleware
 {
+    public static function middleware(): array
+    {
+        return [
+            new Middleware('auth', except: ['storePendingUser']),
+            new Middleware('authorize:' . Role::Administrator->value, except: ['storePendingUser']),
+        ];
+    }
 
     private UserRepository $_userRepository;
     /**
@@ -21,9 +30,6 @@ class PendingUserController extends Controller
      */
     public function __construct(UserRepository $userRepository)
     {
-        $this->middleware('auth')->except('storePendingUser');
-        $this->middleware('authorize:' . Role::Administrator->value)->except('storePendingUser');
-
         $this->_userRepository = $userRepository;
     }
 
@@ -63,7 +69,7 @@ class PendingUserController extends Controller
 
     private function validateInput(Request $request)
     {
-        $this->validate($request, [
+        $request->validate([
             'email' => [
                 'required',
                 'email',
