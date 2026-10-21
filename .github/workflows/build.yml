@@ -151,5 +151,6 @@ jobs:
           sed -i 's|^APP_IMAGE=.*|APP_IMAGE=$IMAGE|' .env
           ./backup.sh < /dev/null
           docker compose up -d
-          docker compose exec -T app php artisan view:clear < /dev/null
-          docker compose exec -T app php artisan migrate --force < /dev/null"
+          docker compose exec -T app php artisan migrate --force < /dev/null
+          docker compose exec -T app php artisan optimize < /dev/null
+          docker compose exec -T app php artisan view:cache < /dev/null"
