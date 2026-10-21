@@ -7,14 +7,15 @@ use App\Enums\Role;
 use App\Exports\OldUsersExport;
 use App\Exports\PennoMemberExport;
 use App\Exports\UsersExport;
+use App\Http\Requests\UserRequest;
 use App\Models\Rol;
 use App\Models\User;
 use App\Repositories\UserRepository;
-use App\Rules\EmailDomainValidator;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controllers\HasMiddleware;
 use Illuminate\Routing\Controllers\Middleware;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Session;
 
 class UserController extends Controller implements HasMiddleware
@@ -71,10 +72,8 @@ class UserController extends Controller implements HasMiddleware
     }
 
     //store user
-    public function store(Request $request)
+    public function store(UserRequest $request)
     {
-        $this->validateInput($request);
-
         $user = $this->_userRepository->create($request->all());
         if ($request->get('roles') != null) {
             $this->_userRepository->addRols($user->id, $request->get('roles'));
@@ -85,20 +84,17 @@ class UserController extends Controller implements HasMiddleware
         return redirect('/users');
     }
 
-    public function show(Request $request, User $user)
+    public function show(User $user)
     {
-        if (Auth::user()->id != $user->id && !Auth::user()->hasRole(Role::Administrator->value, Role::CertificateAdministrator->value)) {
-            abort(403, 'You do not have sufficient access to view this page');
-        }
+        Gate::authorize('view', $user);
+
         return view('beheer.user.show', compact('user'));
     }
 
     //show edit screen
-    public function edit(Request $request, User $user)
+    public function edit(User $user)
     {
-        if (Auth::user()->id != $user->id && !Auth::user()->hasRole(Role::Administrator->value)) {
-            abort(403, 'You do not have sufficient access to view this page');
-        }
+        Gate::authorize('update', $user);
 
         $fields = ['title' => 'Edit user',
             'method' => 'PATCH',
@@ -110,25 +106,8 @@ class UserController extends Controller implements HasMiddleware
     }
 
     //update user
-    public function update(Request $request, User $user, MailListFacade $mailListFacade)
+    public function update(UserRequest $request, User $user, MailListFacade $mailListFacade)
     {
-        if (!Auth::user()->hasRole(Role::Administrator->value)) {
-            if (Auth::user()->id != $user->id) {
-                abort(403, 'You do not have sufficient access to view this page');
-            }
-
-            // If not an admin, set the fields that are not allowed to be changed to the current values.
-            $request = $request->merge([
-                'firstname' => $user->firstname,
-                'preposition' => $user->preposition,
-                'lastname' => $user->lastname,
-                'remark' => $user->remark,
-                'kind_of_member' => $user->kind_of_member,
-            ]);
-        }
-        
-        $this->validateInput($request, $user->id);
-        
         if ($user->email != $request['email']) {
             $mailListFacade->updateUserEmailForAllMailList($user, $user->email, $request['email']);
         }
@@ -188,42 +167,6 @@ class UserController extends Controller implements HasMiddleware
         {
             Session::flash("error", 'Failed to make member active');
             return redirect(route('users.index-old-members'));
-        }
-    }
-
-    private function validateInput(Request $request, ?int $userId = null)
-    {
-        $request->validate([
-            'email' => [
-                'required',
-                'email',
-                'max:255',
-                'unique:users,email,' . $userId, // Exclude the user being edited's email
-                new EmailDomainValidator(),
-            ],
-            'firstname' => 'required|max:255',
-            'lastname' => 'required|max:255',
-            'street' => 'required|max:255',
-            'houseNumber' => 'required|max:255',
-            'city' => 'required|max:255',
-            'zipcode' => 'required|max:255',
-            'country' => 'required|max:255',
-            'phonenumber' => 'required|max:255',
-            'emergencyNumber' => 'required|max:255',
-            'emergencyHouseNumber' => 'required|max:255',
-            'emergencystreet' => 'required|max:255',
-            'emergencycity' => 'required|max:255',
-            'emergencyzipcode' => 'required|max:255',
-            'emergencycountry' => 'required|max:255',
-            'birthDay' => 'required|date',
-            'IBAN' => 'required|max:255',
-        ]);
-
-        // These fields are only required for administrators.
-        if (Auth::user()->hasRole(Role::Administrator->value)) {
-            $request->validate([
-                'kind_of_member' => 'required',
-            ]);
         }
     }
 }
