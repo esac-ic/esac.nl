@@ -20,6 +20,11 @@ class AgendaController extends Controller
 
     public function getAgenda(Request $request)
     {
+        $request->validate([
+            'startDate' => ['nullable', 'date_format:d-m-Y'],
+            'endDate' => ['nullable', 'date_format:d-m-Y'],
+        ]);
+
         $agendaItemQuery = AgendaItem::with(['agendaItemCategory']);
 
         $limit = $request->input('limit', 9);
