@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use App\Enums\Role;
 use App\Models\Rol;
-use App\Repositories\RolRepository;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -22,19 +21,10 @@ class RolController extends Controller implements HasMiddleware
         ];
     }
 
-    /**
-     * Create a new controller instance.
-     *
-     * @return void
-     */
-    public function __construct(private readonly RolRepository $_rolRepository)
-    {
-    }
-
     //gives the rol views
     public function index(): View
     {
-        $rols = $this->_rolRepository->all(['name', 'id']);
+        $rols = Rol::all(['name', 'id']);
         return view('beheer.rol.index', compact('rols'));
     }
 
@@ -51,9 +41,7 @@ class RolController extends Controller implements HasMiddleware
     //store rol
     public function store(Request $request): RedirectResponse
     {
-        $this->validateInput($request);
-
-        $this->_rolRepository->create($request->all());
+        Rol::create($this->validateInput($request));
 
         Session::flash("message", 'Role added');
         return redirect('/rols');
@@ -77,9 +65,7 @@ class RolController extends Controller implements HasMiddleware
     //update rol
     public function update(Request $request, Rol $rol): RedirectResponse
     {
-        $this->validateInput($request);
-
-        $this->_rolRepository->update($rol->id, $request->all());
+        $rol->update($this->validateInput($request));
 
         Session::flash("message", 'Role edited');
         return redirect('/rols');
@@ -87,15 +73,15 @@ class RolController extends Controller implements HasMiddleware
 
     public function destroy(Request $request, Rol $rol): RedirectResponse
     {
-        $this->_rolRepository->delete($rol->id);
+        $rol->delete();
 
         Session::flash("message", 'Role removed');
         return redirect('/rols');
     }
 
-    private function validateInput(Request $request): void
+    private function validateInput(Request $request): array
     {
-        $request->validate([
+        return $request->validate([
             'name' => 'required|max:255',
         ]);
     }

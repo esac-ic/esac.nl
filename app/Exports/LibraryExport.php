@@ -3,7 +3,6 @@
 namespace App\Exports;
 
 use App\Models\Book;
-use App\Repositories\BookRepository;
 use Illuminate\Support\Collection;
 
 class LibraryExport extends SpreadsheetExport
@@ -22,16 +21,13 @@ class LibraryExport extends SpreadsheetExport
         "code" => "Code",
     ];
 
-    public function __construct(private readonly BookRepository $bookRepository)
-    {
-    }
     
     /**
      * @return Collection
      */
     public function collection(): Collection
     {
-        return $this->bookRepository->all(["*"]);
+        return Book::all();
     }
     
     public function title(): string
