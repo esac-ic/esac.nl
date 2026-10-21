@@ -23,6 +23,56 @@ Create an .env file from .env.example, with your local values for
 DB\_HOST, DB\_PORT, DB\_DATABASE, DB\_USERNAME and DB\_PASSWORD
 **Note**: When running your local environment on a certain port, let's say 3000, modify your `APP_URL` in the file to reflect that port, else the api's won't work
 
+### Development environment (Docker, easiest and works on any OS)
+The easiest method is using Docker, this requires node.js and docker to be installed, on windows this is the easiest with [Docker Desktop](https://www.docker.com/products/docker-desktop/). No local PHP, Composer, MySQL required, and no problems pinning PHP versions.
+
+On windows: use WSL and clone it on a WSL native path (otherwise the performace is shit)
+
+`compose.override.yaml` works on top of `compose.yaml`, it only uses the override when run locally and not in github actions. 
+
+1. Clone the project repository and cd into it
+	```
+	git clone https://github.com/esac-ic/esac.nl.git
+	cd esac.nl
+	```
+2. Copy `.env.example` to `.env`.
+	```
+	cp .env.example .env
+	```
+3. Build and start the containers (first run takes a few minutes)
+	```
+	docker compose up -d --build
+	```
+4. Set up the local dev instance
+	```
+	docker compose exec app composer install
+	docker compose exec app php artisan key:generate
+	docker compose exec app php artisan migrate --force
+	docker compose exec app php artisan db:seed --force
+	docker compose exec app php artisan storage:link
+	```
+5. Install and build the frontend assets. THIS DOES REQUIRE NODE.JS
+	```
+	npm install
+	npm run dev
+	```
+6. Configure `mailman` once, otherwise mail list sync will error:
+	```
+	curl -u restadmin:restpass -X POST http://localhost:8001/3.1/domains -d mail_host=esac.nl
+	curl -u restadmin:restpass -X POST http://localhost:8001/3.1/lists -d "fqdn_listname=alle-leden@esac.nl"
+	curl -u restadmin:restpass -X POST http://localhost:8001/3.1/lists -d "fqdn_listname=nieuwsbrief@esac.nl"
+	curl -u restadmin:restpass -X POST http://localhost:8001/3.1/lists -d "fqdn_listname=reunist@esac.nl"
+	```
+	(`restadmin`/`restpass` are the `MAIL_MAN_USERNAME`/`MAIL_MAN_PASSWORD` defaults from `.env.example`, change these if you changed them in the .env)
+7. Visit http://localhost:8000
+
+To start it back up later, just run `docker compose up -d` from the repository root. 
+Outgoing mails will go to mailpit (http://localhost:8025).
+
+To avoid typing `docker compose exec app php artisan blablabla` every time. You can add an alias, e.g. put `alias art='docker compose exec app php artisan'` in your `~/.bashrc`/`~/.zshrc` (or a PowerShell profile function on Windows), then you can just run `art migrate` instead.
+
+PHP code changes are hot reloaded, no rebuild needed. If you want to step-debug with Xdebug, set `SAIL_XDEBUG_MODE=debug` in `.env` and recreate the container with `docker compose up -d app`. In you ide use port 9003 with `host.docker.internal` as the client host.
+
 ### Development environment (Ubuntu on Windows + Visual Studio Code, prevents having to install a lot on Windows)
 1. Install the following:
 	* Visual Studio Code: https://code.visualstudio.com/
