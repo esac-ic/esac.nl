@@ -12,7 +12,7 @@
             {{ html()->text('shortDescription', ($agendaItem != null) ? $agendaItem->shortDescription : "")->class('form-control')->required()->maxlength(100) }}
         </div>
         <div class="form-group">
-            {{ html()->label('Content', 'content') }}
+            {{ html()->label('Content', 'content_en') }}
             {{ html()->textarea('text')->text(old('text', ($agendaItem != null) ? $agendaItem->text : ""))->class('form-control')->id('content_en')->cols(50)->rows(10) }}
         </div>
     </div>

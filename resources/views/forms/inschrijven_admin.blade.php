@@ -7,7 +7,7 @@
 @section('content')
     <div id="app">
         {{ html()->form('POST', url('forms/admin/' . $agendaItem->id))->open() }}
-            {{ csrf_field() }}
+            @csrf
             <div class="card">
                 <div class="card-header">
                     <h3>{{$applicationForm->name}}</h3>

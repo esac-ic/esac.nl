@@ -3,7 +3,7 @@
 @section('content')
 <div class="container intro-container" id="app">
     {{ html()->form('POST', url($route))->open() }}
-    {{ csrf_field() }}
+    @csrf
         <div class="card">
             <div class="card-header">
                 <h3>{{ $applicationForm->name }}</h3>

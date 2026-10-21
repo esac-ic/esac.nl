@@ -52,7 +52,7 @@
             </div>
             <div class="form-row">
                 <div class="form-group col-md-6">
-                    {{ html()->label('Email address', 'emaillbl') }}
+                    {{ html()->label('Email address', 'email') }}
                     {{ html()->text('email', '')->class('form-control')->required() }}
                 </div>
                 <div class="form-group col-md-6">

@@ -27,7 +27,7 @@
                             </div>
                             @endif
                             <form class="text-left col-lg-8" role="form" method="POST" action="/password/email">
-                                {{ csrf_field() }}
+                                @csrf
                                 <div class="form-group {{ $errors->has('email') ? ' has-error' : '' }}">
                                     <label for="email">{{'Email adress'}}</label>
                                     <input class="form-control form-control-lg" id="email" type="email" name="email" placeholder="{{'Email adress'}}" value="{{ old('email') }}" required autofocus>
