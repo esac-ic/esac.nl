@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Enums\Role;
 use App\Models\AgendaItem;
-use App\Repositories\AgendaItemCategoryRepository;
+use App\Models\AgendaItemCategory;
 use App\Repositories\AgendaItemRepository;
 use App\Repositories\ApplicationFormRepositories\ApplicationFormRepository;
 use Illuminate\Contracts\View\View;
@@ -29,7 +29,6 @@ class AgendaItemController extends Controller implements HasMiddleware
 
     public function __construct(
         private readonly AgendaItemRepository $_agendaItemRepository,
-        private readonly AgendaItemCategoryRepository $_agendaItemCategoryRepository,
         private readonly ApplicationFormRepository $_applicationFormRepository
     ) {
     }
@@ -126,7 +125,7 @@ class AgendaItemController extends Controller implements HasMiddleware
     private function getCategories(): array
     {
         $categories = [];
-        foreach ($this->_agendaItemCategoryRepository->all(['id', 'name']) as $category) {
+        foreach (AgendaItemCategory::all(['id', 'name']) as $category) {
             $categories[$category->id] = $category->name;
         }
         return $categories;

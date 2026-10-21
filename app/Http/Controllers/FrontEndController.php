@@ -3,13 +3,12 @@
 namespace App\Http\Controllers;
 
 use App\Models\AgendaItem;
+use App\Models\AgendaItemCategory;
+use App\Models\Book;
 use App\Models\MenuItem;
 use App\Models\NewsItem;
-use App\Repositories\AgendaItemCategoryRepository;
 use App\Repositories\AgendaItemRepository;
-use App\Repositories\BookRepository;
 use App\Repositories\MenuRepository;
-use App\Repositories\NewsItemRepository;
 use App\Repositories\UserRepository;
 use App\Services\AgendaApplicationFormService;
 use Illuminate\Contracts\View\View;
@@ -18,7 +17,11 @@ use Illuminate\Support\Facades\Redirect;
 
 class FrontEndController extends Controller
 {
-    public function __construct(private readonly MenuRepository $_menuItemRepository, private readonly AgendaItemCategoryRepository $_agendaCategoryRepository, private readonly NewsItemRepository $_newsItemRepository, private readonly AgendaItemRepository $_agendaRepository, private readonly UserRepository $_userRepository, private readonly BookRepository $_bookRepository)
+    public function __construct(
+        private readonly MenuRepository $_menuItemRepository,
+        private readonly AgendaItemRepository $_agendaRepository,
+        private readonly UserRepository $_userRepository,
+    )
     {
     }
 
@@ -29,7 +32,7 @@ class FrontEndController extends Controller
         $menuItem = $this->_menuItemRepository->findby('urlName', MenuItem::AGENDAURL);
         $content = $menuItem->content;
 
-        foreach ($this->_agendaCategoryRepository->all() as $category) {
+        foreach (AgendaItemCategory::all() as $category) {
             $categories[$category->id] = $category->name;
         }
 
@@ -96,7 +99,7 @@ class FrontEndController extends Controller
 
     public function library(): View
     {
-        $books = $this->_bookRepository->all(["id", "title", "year", "type", "country", "code"]);
+        $books = Book::all();
         $curPageName = 'Library';
         $menuItem = $this->_menuItemRepository->findby('urlName', MenuItem::LIBRARYURL);
         $content = $menuItem->content;
@@ -118,9 +121,9 @@ class FrontEndController extends Controller
         return view('front-end.memberlist', compact('users', 'curPageName', 'content'));
     }
 
-    public function home(AgendaItemRepository $agendaItemRepository): View
+    public function home(): View
     {
-        $newsItems = $this->_newsItemRepository->getLastXNewsItems(3);
+        $newsItems = NewsItem::query()->latest('id')->take(3)->get();
         $agendaItems = $this->_agendaRepository->getFirstXItems(4);
         $curPageName = 'Home';
         $menuItem = MenuItem::query()

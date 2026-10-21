@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use App\Enums\Role;
 use App\Models\Certificate;
-use App\Repositories\CertificateRepository;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -22,13 +21,9 @@ class CertificateController extends Controller implements HasMiddleware
         ];
     }
 
-    public function __construct(private readonly CertificateRepository $_certificateRepository)
-    {
-    }
-
     public function index(): View
     {
-        $certificates = $this->_certificateRepository->all(["id", "name"]);
+        $certificates = Certificate::all(["id", "name"]);
         return view("beheer.certificate.index", compact("certificates"));
     }
 
@@ -43,8 +38,7 @@ class CertificateController extends Controller implements HasMiddleware
 
     public function store(Request $request): RedirectResponse
     {
-        $this->validateData($request);
-        $this->_certificateRepository->create($request->all());
+        Certificate::create($this->validateInput($request));
 
         Session::flash("message", 'Certificate added');
         return redirect('/certificates');
@@ -66,8 +60,7 @@ class CertificateController extends Controller implements HasMiddleware
 
     public function update(Request $request, Certificate $certificate): RedirectResponse
     {
-        $this->validateData($request);
-        $this->_certificateRepository->update($certificate->id, $request->all());
+        $certificate->update($this->validateInput($request));
 
         Session::flash("message", 'Certificate edited');
         return redirect('/certificates');
@@ -75,15 +68,15 @@ class CertificateController extends Controller implements HasMiddleware
 
     public function destroy(Certificate $certificate): RedirectResponse
     {
-        $this->_certificateRepository->delete($certificate->id);
+        $certificate->delete();
 
         Session::flash("message", 'Certificate removed');
         return redirect('/certificates');
     }
 
-    private function validateData(Request $reqeust): void
+    private function validateInput(Request $request): array
     {
-        $reqeust->validate([
+        return $request->validate([
             'name' => 'required|max:255',
             'abbreviation' => 'required|max:255',
         ]);

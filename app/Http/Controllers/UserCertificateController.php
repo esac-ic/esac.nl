@@ -5,7 +5,6 @@ namespace App\Http\Controllers;
 use App\Enums\Role;
 use App\Models\Certificate;
 use App\Models\User;
-use App\Repositories\CertificateRepository;
 use App\Repositories\UserRepository;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
@@ -28,7 +27,7 @@ class UserCertificateController extends Controller implements HasMiddleware
      *
      * @return void
      */
-    public function __construct(private readonly UserRepository $_userRepository, private readonly CertificateRepository $_certificateRepository)
+    public function __construct(private readonly UserRepository $_userRepository)
     {
     }
 
@@ -42,7 +41,7 @@ class UserCertificateController extends Controller implements HasMiddleware
 
         $userCertificates = $this->_userRepository->getUserCertificates($user->id);
 
-        foreach ($this->_certificateRepository->all() as $cetificate) {
+        foreach (Certificate::all() as $cetificate) {
             if (!$userCertificates->contains($cetificate)) {
                 $certificates[$cetificate->id] = $cetificate->name;
             }
@@ -69,7 +68,7 @@ class UserCertificateController extends Controller implements HasMiddleware
 
         $certificates = [];
 
-        foreach ($this->_certificateRepository->all() as $cetificate) {
+        foreach (Certificate::all() as $cetificate) {
             $certificates[$cetificate->id] = $cetificate->name;
         }
 
