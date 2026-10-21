@@ -36,6 +36,7 @@ RUN composer install --no-dev \
 
 # Copy opcache.ini after builds to prevent CLI opcache issues on arm64
 COPY opcache.ini /usr/local/etc/php/conf.d/opcache.ini
+COPY php-security.ini /usr/local/etc/php/conf.d/zz-security.ini
 
 # Configure application
 RUN echo "listen = 0.0.0.0:9000" >> /usr/local/etc/php-fpm.d/www.conf \
