@@ -23,7 +23,7 @@ class AgendaItemFactory extends Factory
             'startDate' => fake()->date(),
             'endDate' => fake()->date(),
             'subscription_endDate' => fake()->date(),
-            'image_url' => fake()->imageUrl(),
+            'image_url' => '',
             'climbing_activity' => fake()->boolean(),
         ];
     }

@@ -186,7 +186,7 @@ class UserController extends Controller
         }
     }
 
-    private function validateInput(Request $request, int $userId = null)
+    private function validateInput(Request $request, ?int $userId = null)
     {
         $this->validate($request, [
             'email' => [
