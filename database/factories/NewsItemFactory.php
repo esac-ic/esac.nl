@@ -3,14 +3,21 @@
 namespace Database\Factories;
 
 use App\Models\NewsItem;
-use Faker\Generator as Faker;
+use Illuminate\Database\Eloquent\Factories\Factory;
 
-$factory->define(NewsItem::class, function (Faker $faker) {
-    return [
-        'title' => $faker->title,
-        'text' => $faker->text,
-        'image_url' =>$faker->imageUrl,
-        'thumbnail_url' => $faker->imageUrl,
-        'author' => $faker->firstName
-    ];
-});
+/**
+ * @extends Factory<NewsItem>
+ */
+class NewsItemFactory extends Factory
+{
+    public function definition(): array
+    {
+        return [
+            'title' => fake()->title(),
+            'text' => fake()->text(),
+            'image_url' => fake()->imageUrl(),
+            'thumbnail_url' => fake()->imageUrl(),
+            'author' => fake()->firstName(),
+        ];
+    }
+}

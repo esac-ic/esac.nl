@@ -43,7 +43,7 @@ class ApplicationFormIndexTest extends TestCase
         $user->roles()->attach(Config::get('constants.Content_administrator'));
         $this->be($user);
 
-        $this->applicationForm = factory(ApplicationForm::class)->create();
+        $this->applicationForm = ApplicationForm::factory()->create();
 
         session()->start();
     }

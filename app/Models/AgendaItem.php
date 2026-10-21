@@ -5,12 +5,15 @@ namespace App\Models;
 use App\Models\ApplicationForm\ApplicationForm;
 use App\Models\ApplicationForm\ApplicationResponse;
 use Carbon\Carbon;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Support\Facades\Storage;
 
 class AgendaItem extends Model
 {
+    use HasFactory;
+
     protected $fillable = [
         'title',
         'text',
