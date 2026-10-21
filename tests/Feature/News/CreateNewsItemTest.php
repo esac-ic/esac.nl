@@ -71,6 +71,15 @@ class CreateNewsItemTest extends TestCase
         $this->assertSame([400, 300], array_slice(getimagesize(Storage::disk('public')->path($newsItem->thumbnail_url)), 0, 2));
     }
 
+    #[Test]
+    public function a_news_item_needs_an_author()
+    {
+        $response = $this->post($this->url, ['title' => 'test nieuws', 'text' => 'test nieuws']);
+
+        $response->assertSessionHasErrors('author');
+        $this->assertSame(0, NewsItem::count());
+    }
+
     public function CreateNewsItemWithEmoji(){
         $body = [
             '_token' => csrf_token(),
