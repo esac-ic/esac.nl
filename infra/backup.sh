@@ -9,11 +9,16 @@ set -a; . ./backup.env; set +a
 mkdir -p dump
 trap 'rm -f dump/esac.sql' EXIT
 
+# Sessions and cache are dumped without their rows.
 docker compose exec -T mysql sh -c '
   export MYSQL_PWD="$MYSQL_PASSWORD"
-  mysqldump -u"$MYSQL_USER" --no-tablespaces --single-transaction --routines --triggers --events --set-gtid-purged=OFF \
-    --ignore-table="$MYSQL_DATABASE.sessions" --databases "$MYSQL_DATABASE" &&
-  mysqldump -u"$MYSQL_USER" --no-tablespaces --no-data "$MYSQL_DATABASE" sessions' < /dev/null > dump/esac.sql
+  options="--no-tablespaces --set-gtid-purged=OFF"
+  structure_only=$(mysql -u"$MYSQL_USER" -N -e "SELECT table_name FROM information_schema.tables
+    WHERE table_schema = DATABASE() AND table_name IN (\"sessions\", \"cache\", \"cache_locks\")" "$MYSQL_DATABASE") &&
+  mysqldump -u"$MYSQL_USER" $options --single-transaction --routines --triggers --events \
+    --ignore-table="$MYSQL_DATABASE.sessions" --ignore-table="$MYSQL_DATABASE.cache" --ignore-table="$MYSQL_DATABASE.cache_locks" \
+    --databases "$MYSQL_DATABASE" &&
+  mysqldump -u"$MYSQL_USER" $options --no-data "$MYSQL_DATABASE" $structure_only' < /dev/null > dump/esac.sql
 grep -q "^-- Dump completed" dump/esac.sql
 
 restic() {

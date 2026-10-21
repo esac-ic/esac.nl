@@ -137,4 +137,5 @@ jobs:
           docker compose up -d
           docker compose exec -T app php artisan migrate --force < /dev/null
           docker compose exec -T app php artisan optimize < /dev/null
-          docker compose exec -T app php artisan view:cache < /dev/null"
+          docker compose exec -T app php artisan reload < /dev/null
+          docker image prune -af --filter until=168h"
