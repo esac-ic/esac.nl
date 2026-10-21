@@ -2,12 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Enums\Role;
 use App\Models\MenuItem;
 use App\Repositories\MenuRepository;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Session;
 
 class PaginaBeheerController extends Controller
@@ -20,7 +20,7 @@ class PaginaBeheerController extends Controller
     public function __construct(private readonly MenuRepository $_menuRepository)
     {
         $this->middleware('auth');
-        $this->middleware('authorize:' . Config::get('constants.Content_administrator'));
+        $this->middleware('authorize:' . Role::ContentAdministrator->value);
     }
 
     //gives the rol views

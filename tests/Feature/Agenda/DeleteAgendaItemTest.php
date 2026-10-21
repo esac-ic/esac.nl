@@ -2,10 +2,10 @@
 
 namespace Tests\Feature\Agenda;
 
+use App\Enums\Role;
 use App\Models\AgendaItem;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Support\Facades\Config;
 use PHPUnit\Framework\Attributes\Test;
 use Tests\TestCase;
 
@@ -25,7 +25,7 @@ class DeleteAgendaItemTest extends TestCase
     {
         parent::setUp();
         $this->user = $user = User::factory()->create();
-        $user->roles()->attach(Config::get('constants.Activity_administrator'));
+        $user->roles()->attach(Role::ActivityAdministrator->value);
         $this->be($user);
 
         session()->start();

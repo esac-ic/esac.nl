@@ -21,7 +21,7 @@
         </div>
         <div class="col-md-6">
             <div class="btn-group mt-2 float-md-right" role="group" aria-label="Actions">
-            @if($user->isPendingMember() and \Illuminate\Support\Facades\Auth::user()->hasRole(Config::get('constants.Administrator')))
+            @if($user->isPendingMember() and \Illuminate\Support\Facades\Auth::user()->hasRole(\App\Enums\Role::Administrator->value))
                 {{ html()->form('POST', url('/users/'.$user->id . '/approveAsPendingMember'))->open() }}
                 @method('PATCH')
                 <button type="submit" class="btn btn-success"><em class="ion-checkmark"></em> {{'Approve as member'}}</button>
@@ -36,7 +36,7 @@
                     <button type="submit" class="btn btn-danger"><em class="ion-trash-a"></em> {{'Remove as pending'}}</button>
                 </form>
             @else
-                @if($user->isOldMember() and \Illuminate\Support\Facades\Auth::user()->hasRole(Config::get('constants.Administrator')))
+                @if($user->isOldMember() and \Illuminate\Support\Facades\Auth::user()->hasRole(\App\Enums\Role::Administrator->value))
                     {{ html()->form('POST', url('/users/'.$user->id . '/makeActiveMember'))->open() }}
                     @method('PATCH')
                         <button type="submit" class="btn btn-success"><em class="ion-plus"></em> {{'Make active member'}}</button>
@@ -46,7 +46,7 @@
                     <span title="{{'Edit'}}" class="ion-edit" aria-hidden="true"></span>
                     {{'Edit'}}
                 </a>
-                @if(\Illuminate\Support\Facades\Auth::user()->hasRole(Config::get('constants.Administrator'),Config::get('constants.Certificate_administrator')))
+                @if(\Illuminate\Support\Facades\Auth::user()->hasRole(\App\Enums\Role::Administrator->value,\App\Enums\Role::CertificateAdministrator->value))
                     <a href="{{url('/users/'.$user->id . '/addCertificate' )}}" class="btn btn-primary">
                         <span title="{{'Add certificate'}}" class="ion-plus" aria-hidden="true"></span>
                         {{'Add certificate'}}
@@ -58,7 +58,7 @@
                         {{'Back'}}
                     </a>
                 @endif
-                @if(\Illuminate\Support\Facades\Auth::user()->hasRole(Config::get('constants.Administrator')))
+                @if(\Illuminate\Support\Facades\Auth::user()->hasRole(\App\Enums\Role::Administrator->value))
                     @if($user->isActiveMember())
                         {{ html()->form('POST', url('/users/'.$user->id . '/removeAsActiveMember'))->open() }}
                         @method('PATCH')
@@ -95,7 +95,7 @@
                     <a class="nav-link" id="tab3" data-toggle="tab" href="#registrations" role="tab" aria-controls="security" aria-selected="false">{{'Registrations' }}</a>
                 </li>
             </ul>
-            @if(\Illuminate\Support\Facades\Auth::user()->hasRole(Config::get('constants.Administrator')) || \Illuminate\Support\Facades\Auth::user()->id === $user->id)
+            @if(\Illuminate\Support\Facades\Auth::user()->hasRole(\App\Enums\Role::Administrator->value) || \Illuminate\Support\Facades\Auth::user()->id === $user->id)
             <div class="tab-content space-sm">
                 <div class="tab-pane fade show active" id="tab1-content" role="tabpanel" aria-labelledby="tab1-content">
                     <table class="table table-striped" style="width:100%">

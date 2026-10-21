@@ -2,10 +2,10 @@
 
 namespace Tests\Feature\Pages;
 
+use App\Enums\Role;
 use App\Models\MenuItem;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Support\Facades\Config;
 use PHPUnit\Framework\Attributes\Test;
 use Tests\TestCase;
 
@@ -28,7 +28,7 @@ class CreatePageTest extends TestCase
         parent::setUp();
         $this->user = $user = User::factory()->create();
 
-        $user->roles()->attach(Config::get('constants.Content_administrator'));
+        $user->roles()->attach(Role::ContentAdministrator->value);
         $this->be($user);
 
         session()->start();
@@ -106,9 +106,9 @@ class CreatePageTest extends TestCase
 
         // Give the user all roles except for content admin.
         $this->user->roles()->sync([
-            Config::get('constants.Administrator'),
-            Config::get('constants.Activity_administrator'),
-            Config::get('constants.Certificate_administrator'),
+            Role::Administrator->value,
+            Role::ActivityAdministrator->value,
+            Role::CertificateAdministrator->value,
         ]);
 
         $response = $this->post($this->url, $body);

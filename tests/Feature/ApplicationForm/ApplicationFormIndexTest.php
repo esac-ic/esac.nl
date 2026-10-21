@@ -2,10 +2,10 @@
 
 namespace Tests\Feature\ApplicationForm;
 
+use App\Enums\Role;
 use App\Models\ApplicationForm\ApplicationForm;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Support\Facades\Config;
 use PHPUnit\Framework\Attributes\Test;
 use Tests\TestCase;
 
@@ -40,7 +40,7 @@ class ApplicationFormIndexTest extends TestCase
         parent::setUp();
         $this->user = $user = User::factory()->create();
 
-        $user->roles()->attach(Config::get('constants.Content_administrator'));
+        $user->roles()->attach(Role::ContentAdministrator->value);
         $this->be($user);
 
         $this->applicationForm = ApplicationForm::factory()->create();
@@ -59,7 +59,7 @@ class ApplicationFormIndexTest extends TestCase
     #[Test]
     public function an_activity_administrator_can_view_the_page(): void
     {
-        $this->user->roles()->sync([Config::get('constants.Activity_administrator')]);
+        $this->user->roles()->sync([Role::ActivityAdministrator->value]);
 
         $response = $this->get(self::URL);
 
@@ -69,7 +69,7 @@ class ApplicationFormIndexTest extends TestCase
     #[Test]
     public function an_administrator_can_not_view_the_page(): void
     {
-        $this->user->roles()->sync([Config::get('constants.Administrator')]);
+        $this->user->roles()->sync([Role::Administrator->value]);
 
         $response = $this->get(self::URL);
 
@@ -79,7 +79,7 @@ class ApplicationFormIndexTest extends TestCase
     #[Test]
     public function a_certificate_administrator_can_not_view_the_page(): void
     {
-        $this->user->roles()->sync([Config::get('constants.Certificate_administrator')]);
+        $this->user->roles()->sync([Role::CertificateAdministrator->value]);
 
         $response = $this->get(self::URL);
 
@@ -89,7 +89,7 @@ class ApplicationFormIndexTest extends TestCase
     #[Test]
     public function an_user_without_views_can_not_view_the_page(): void
     {
-        $this->user->roles()->sync([Config::get('constants.Certificate_administrator')]);
+        $this->user->roles()->sync([Role::CertificateAdministrator->value]);
 
         $response = $this->get(self::URL);
 

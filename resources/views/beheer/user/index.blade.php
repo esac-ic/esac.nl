@@ -27,7 +27,7 @@
             <h1>{{'Current members'}}</h1>
         </div>
 
-        @if(\Illuminate\Support\Facades\Auth::user()->hasRole(Config::get('constants.Administrator')))
+        @if(\Illuminate\Support\Facades\Auth::user()->hasRole(\App\Enums\Role::Administrator->value))
         <div class="col-md-6">
             <div class="btn-group mt-2 float-md-right" role="group" aria-label="Actions">
                 <a href="{{route('users.create')}}" class="btn btn-primary" title="{{'New user'}}">

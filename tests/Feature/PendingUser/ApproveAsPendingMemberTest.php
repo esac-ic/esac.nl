@@ -2,10 +2,10 @@
 
 namespace Tests\Feature\PendingUser;
 
+use App\Enums\Role;
 use App\Events\PendingUserApproved;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Event;
 use Tests\TestCase;
 
@@ -19,7 +19,7 @@ class ApproveAsPendingMemberTest extends TestCase
         parent::setUp();
         
         $this->admin = User::factory()->create();
-        $this->admin->roles()->attach(Config::get('constants.Administrator'));
+        $this->admin->roles()->attach(Role::Administrator->value);
     }
     
     public function test_approve_pending_member()

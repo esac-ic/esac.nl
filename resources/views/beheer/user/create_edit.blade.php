@@ -31,7 +31,7 @@
             <div class="form-row">
                 <div class="form-group col-md-5">
                     {{ html()->label('First name', 'firstname') }}
-                    @if(\Illuminate\Support\Facades\Auth::user()->hasRole(Config::get('constants.Administrator')))
+                    @if(\Illuminate\Support\Facades\Auth::user()->hasRole(\App\Enums\Role::Administrator->value))
                         {{ html()->text('firstname', ($user != null) ? $user->firstname : "")->class('form-control')->required() }}
                     @else
                         {{ html()->text('firstname', ($user != null) ? $user->firstname : "")->class('form-control')->required()->disabled() }}
@@ -39,7 +39,7 @@
                 </div>
                 <div class="form-group col-md-2">
                     {{ html()->label('Preposition', 'preposition') }}
-                    @if(\Illuminate\Support\Facades\Auth::user()->hasRole(Config::get('constants.Administrator')))
+                    @if(\Illuminate\Support\Facades\Auth::user()->hasRole(\App\Enums\Role::Administrator->value))
                         {{ html()->text('preposition', ($user != null) ? $user->preposition : "")->class('form-control') }}
                     @else
                         {{ html()->text('preposition', ($user != null) ? $user->preposition : "")->class('form-control')->disabled() }}
@@ -47,7 +47,7 @@
                 </div>
                 <div class="form-group col-md-5">
                     {{ html()->label('Last name', 'lastname') }}
-                    @if(\Illuminate\Support\Facades\Auth::user()->hasRole(Config::get('constants.Administrator')))
+                    @if(\Illuminate\Support\Facades\Auth::user()->hasRole(\App\Enums\Role::Administrator->value))
                         {{ html()->text('lastname', ($user != null) ? $user->lastname : "")->class('form-control')->required() }}
                     @else
                         {{ html()->text('lastname', ($user != null) ? $user->lastname : "")->class('form-control')->required()->disabled() }}
@@ -110,7 +110,7 @@
                 </div>
                 <div class="form-group col-md-6">
                     {{ html()->label('Type of member', 'kind_of_member') }}
-                    @if(\Illuminate\Support\Facades\Auth::user()->hasRole(Config::get('constants.Administrator')))
+                    @if(\Illuminate\Support\Facades\Auth::user()->hasRole(\App\Enums\Role::Administrator->value))
                         {{ html()->select('kind_of_member', trans('kind_of_member'), ($user != null) ? $user->kind_of_member : "")->class('form-control')->required()->id('kind_of_member') }}
                     @else
                         {{ html()->select('kind_of_member', trans('kind_of_member'), ($user != null) ? $user->kind_of_member : "")->class('form-control')->required()->id('kind_of_member')->disabled() }}
@@ -119,7 +119,7 @@
             </div>
             <div class="form-group">
                 {{ html()->label('Remarks', 'remark') }}
-                @if(\Illuminate\Support\Facades\Auth::user()->hasRole(Config::get('constants.Administrator')))
+                @if(\Illuminate\Support\Facades\Auth::user()->hasRole(\App\Enums\Role::Administrator->value))
                     {{ html()->text('remark', ($user != null) ? $user->remark : "")->class('form-control') }}
                 @else
                     {{ html()->text('remark', ($user != null) ? $user->remark : "")->class('form-control')->disabled() }}
@@ -183,7 +183,7 @@
             </div>
         </div>
     </div>
-    @if(\Illuminate\Support\Facades\Auth::user()->hasRole(Config::get('constants.Administrator')))
+    @if(\Illuminate\Support\Facades\Auth::user()->hasRole(\App\Enums\Role::Administrator->value))
         <div class="card mt-4">
             <div class="card-header">
                 <h3>{{ 'Roles' }}</h3>
