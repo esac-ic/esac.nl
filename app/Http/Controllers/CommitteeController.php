@@ -80,6 +80,7 @@ class CommitteeController extends Controller
     
     public function setChairPersons(Request $request, Committee $committee)
     {
+        $request->mergeIfMissing(['chair_persons' => []]); //if no checkboxes are checked, the key is missing from the request
         $validated = $request->validate([
             'chair_persons' => ['array'],
             'chair_persons.*' => ['integer', 'exists:users,id'],

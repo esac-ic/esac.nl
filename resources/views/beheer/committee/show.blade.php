@@ -78,16 +78,18 @@
                 </tr>
                 <tr>
                     <td>
-                        {{$committee->chairPersons()->count() > 1 ? 'chairpersons' : 'chairperson'}}
+                        {{$committee->chairPersons()->count() <= 1 ? 'Chairperson':'Chairpersons'}}
                     </td>
-                    <td @class(['text-muted' => empty($committee->chairPersons())])>
-                        @if(!empty($committee->chairPersons()))
+                    <td @class(['text-muted' => $committee->chairPersons()->count() == 0])>
+                        @if($committee->chairPersons()->count() > 0)
                             @foreach($committee->chairPersons() as $chair)
                                 {{$chair->getName()}}
                                 @if(!$loop->last)
                                     {{", "}}
                                 @endif
                             @endforeach
+                        @else
+                            {{"This committee has no chairperson."}}
                         @endif
 {{--                        {{ !empty($committee->chairPersons()) ? $committee->chairPersons()->pluck("firstname") : 'This committee has no chairperson.'}}--}}
                     </td>
@@ -96,15 +98,15 @@
             <h4> {{'Members'}}</h4>
             <table id="committeeMembers" class="table table-striped dt-responsive nowrap" style="width: 100%">
                 <thead>
-                <td><strong>{{'Email'}}</strong></td>
                 <td><strong>{{'Name'}}</strong></td>
+                <td><strong>{{'Email'}}</strong></td>
                 <td><strong>{{'Management'}}</strong></td>
                 </thead>
                 <tbody>
                 @foreach($committee->members as $member)
                     <tr>
-                        <td>{{$member->email}}</td>
                         <td>{{$member->getName()}}</td>
+                        <td>{{$member->email}}</td>
                         <td>
                             <form method="post"
                                   action="{{ route('beheer.committees.removeMember', [$committee, $member]) }}">
@@ -123,6 +125,7 @@
     @include('beheer.committee.adduser')
     
 {{--    Set chair modal    --}}
+{{--    TODO make this a seperate component? --}}
     <div class="modal fade" id="setChairPersonsModal">
         <div class="modal-dialog modal-lg">
             <div class="modal-content">
@@ -184,9 +187,9 @@
         $(document).ready(function () {
             $('#committeeMembers').DataTable({
                 columnDefs: [
-                    {width: '40%', target: 0},
-                    {width: '40%', target: 1},
-                    {width: '20%', target: 2},
+                    {width: '45%', target: 0},
+                    {width: '45%', target: 1},
+                    {width: '10%', target: 2},
                 ]
             });
         });
