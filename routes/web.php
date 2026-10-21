@@ -20,12 +20,9 @@ use App\Http\Controllers\StorageController;
 use App\Http\Controllers\UserCertificateController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\UserEventLogEntryController;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
 Route::permanentRedirect('/', '/home');
-
-Auth::routes(['register' => false]);
 
 //Admin routes
 Route::group(['as' => 'beheer.', 'prefix' => 'beheer/', 'middleware' => 'auth'], function () {

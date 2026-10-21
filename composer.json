@@ -9,9 +9,9 @@
         "php": "^8.5",
         "eluceo/ical": "^2.17",
         "intervention/image": "^4.4",
+        "laravel/fortify": "^1.30",
         "laravel/framework": "^13.38",
         "laravel/tinker": "^3.0",
-        "laravel/ui": "^4.6",
         "spatie/laravel-html": "^3.13",
         "spatie/simple-excel": "^3.11"
     },
