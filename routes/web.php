@@ -65,7 +65,7 @@ Route::resource('certificates', CertificateController::class);
 Route::resource('agendaItems', AgendaItemController::class);
 Route::resource('agendaItemCategories', AgendaItemCategoryController::class);
 Route::resource('newsItems', NewsItemController::class);
-Route::resource('mailList', MailListController::class);
+Route::resource('mailList', MailListController::class)->except(['edit', 'update']);
 Route::post('/signup', [PendingUserController::class, 'storePendingUser'])->name('user.signup');
 Route::resource('books', LibraryController::class);
 Route::post('images/upload', [StorageController::class, 'uploadImage']);
