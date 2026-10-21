@@ -3,6 +3,7 @@
 namespace App\Listeners;
 
 use App\CustomClasses\MailList\MailListFacade;
+use App\Events\MemberBecameOldMember;
 use App\Events\MemberKindChanged;
 use App\Events\OldMemberBecameMember;
 use App\Events\PendingUserApproved;
@@ -65,6 +66,14 @@ class UpdateMemberTypeMaillists implements ShouldQueue
     public function handlePendingUserApproved(PendingUserApproved $event): void
     {
         $this->addUserToMailLists($event->user, $event->user->kind_of_member);
+    }
+
+    /**
+     * Removes an old member from all their mail lists.
+     */
+    public function handleMemberBecameOldMember(MemberBecameOldMember $event): void
+    {
+        $this->mailListFacade->deleteUserForAllMailList($event->user);
     }
     
     /**

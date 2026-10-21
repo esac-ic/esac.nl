@@ -231,9 +231,11 @@ class User extends Authenticatable
      */
     public function approveAsPendingMember(): void
     {
-        $this->pending_user = null;
-        $this->save();
-        PendingUserApproved::dispatch($this);
+        DB::transaction(function () {
+            $this->pending_user = null;
+            $this->save();
+            PendingUserApproved::dispatch($this);
+        });
     }
     
     /**
