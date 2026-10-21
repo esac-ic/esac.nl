@@ -9,7 +9,6 @@ use App\Events\PendingUserApproved;
 use App\Models\Setting;
 use App\Models\User;
 use Illuminate\Contracts\Queue\ShouldQueue;
-use Illuminate\Events\Dispatcher;
 
 class UpdateMemberTypeMaillists implements ShouldQueue
 {
@@ -69,15 +68,6 @@ class UpdateMemberTypeMaillists implements ShouldQueue
     public function handlePendingUserApproved(PendingUserApproved $event): void
     {
         $this->addUserToMailLists($event->user, $event->user->kind_of_member);
-    }
-    
-    public function subscribe(Dispatcher $events): array
-    {
-        return [
-            OldMemberBecameMember::class => 'handleOldMemberBecameMember',
-            MemberKindChanged::class => 'handleMemberKindChanged',
-            PendingUserApproved::class => 'handlePendingUserApproved',
-        ];
     }
     
     /**

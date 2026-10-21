@@ -40,7 +40,7 @@ class RemoveOldUsers extends Command
     public function handle()
     {
         User::query()
-            ->whereDate('lid_af', '<', Carbon::now()->subYears(config('custom.old_users_save_period')))
+            ->whereDate('lid_af', '<', Carbon::now()->subYears(config('app.old_user_retention_years')))
             ->update([
                 'email' => null,
                 'password' => null,

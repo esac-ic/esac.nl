@@ -30,7 +30,7 @@ services:
     restart: !reset
     # Lets `up --wait` return once the site loads; the first start takes a few minutes
     healthcheck:
-      test: ["CMD", "curl", "-fso", "/dev/null", "http://localhost/login"]
+      test: ["CMD", "curl", "-fso", "/dev/null", "http://localhost/up"]
       start_period: 10m
       start_interval: 2s
     depends_on:
