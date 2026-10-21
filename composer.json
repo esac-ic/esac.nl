@@ -1,43 +1,31 @@
 {
+    "$schema": "https://getcomposer.org/schema.json",
     "name": "esac-ic/esac.nl",
     "type": "project",
     "description": "Website for the Eindhoven Student Alpine Club (esac.nl)",
-    "keywords": [
-        "framework",
-        "laravel"
-    ],
+    "keywords": ["laravel", "framework"],
     "license": "MIT",
     "require": {
-        "php": "^8.2",
-        "eluceo/ical": "^2.12",
+        "php": "^8.5",
+        "eluceo/ical": "^2.17",
         "intervention/image": "^4.4",
-        "laravel/framework": "^13.0",
+        "laravel/framework": "^13.38",
         "laravel/tinker": "^3.0",
-        "laravel/ui": "^4.5",
-        "spatie/laravel-html": "^3",
+        "laravel/ui": "^4.6",
+        "spatie/laravel-html": "^3.13",
         "spatie/simple-excel": "^3.11"
     },
     "require-dev": {
         "ext-dom": "*",
         "ext-libxml": "*",
         "barryvdh/laravel-debugbar": "^4.4",
-        "fakerphp/faker": "^1.23",
+        "fakerphp/faker": "^1.24",
+        "laravel/pail": "^1.2.7",
+        "laravel/pao": "^1.1.5",
+        "laravel/pint": "^1.27",
         "mockery/mockery": "^1.6",
-        "nunomaduro/collision": "^8.6",
-        "phpunit/phpunit": "^12.5"
-    },
-    "config": {
-        "optimize-autoloader": true,
-        "preferred-install": "dist",
-        "sort-packages": true,
-        "platform": {
-            "php": "8.3"
-        }
-    },
-    "extra": {
-        "laravel": {
-            "dont-discover": []
-        }
+        "nunomaduro/collision": "^8.9",
+        "phpunit/phpunit": "^12.5.40"
     },
     "autoload": {
         "psr-4": {
@@ -51,25 +39,32 @@
             "Tests\\": "tests/"
         }
     },
-    "minimum-stability": "stable",
-    "prefer-stable": true,
     "scripts": {
-        "post-root-package-install": [
-            "php -r \"file_exists('.env') || copy('.env.example', '.env');\""
-        ],
-        "post-create-project-cmd": [
-            "php artisan key:generate"
-        ],
-        "post-install-cmd": [
-            "Illuminate\\Foundation\\ComposerScripts::postInstall"
-        ],
-        "post-update-cmd": [
-            "Illuminate\\Foundation\\ComposerScripts::postUpdate"
+        "test": [
+            "@php artisan config:clear --ansi @no_additional_args",
+            "@php artisan test"
         ],
         "post-autoload-dump": [
             "Illuminate\\Foundation\\ComposerScripts::postAutoloadDump",
-            "@php artisan package:discover"
+            "@php artisan package:discover --ansi"
         ],
-        "test": "@php vendor/bin/phpunit"
-    }
+        "pre-package-uninstall": [
+            "Illuminate\\Foundation\\ComposerScripts::prePackageUninstall"
+        ]
+    },
+    "extra": {
+        "laravel": {
+            "dont-discover": []
+        }
+    },
+    "config": {
+        "optimize-autoloader": true,
+        "preferred-install": "dist",
+        "sort-packages": true,
+        "platform": {
+            "php": "8.5"
+        }
+    },
+    "minimum-stability": "stable",
+    "prefer-stable": true
 }
