@@ -102,8 +102,3 @@ Route::get('/news/{newsItem}', [FrontEndController::class, 'newsDetailView'])->n
 Route::get('/memberlist', [FrontEndController::class, 'memberList'])->name('front-end.memberlist');
 Route::get("/ical", [ICalController::class, 'getAgendaItemsICalObject'])->name('front-end.ical');
 Route::get('/{menuItem}', [FrontEndController::class, 'showPage']);
-
-//setting routes
-Route::get('/management/settings', [SettingsController::class, 'index']);
-Route::put('/management/settings', [SettingsController::class, 'update']);
-Route::get('/management/settings/edit', [SettingsController::class, 'edit']);

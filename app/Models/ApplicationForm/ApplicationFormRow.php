@@ -57,11 +57,6 @@ class ApplicationFormRow extends Model
     const FORM_TYPE_TEXT = 'text';
 
     /**
-     * @var array
-     */
-    private $_inputfiels = null;
-
-    /**
      * @return HasMany
      */
     public function applicationFormRowOptions(): HasMany
