@@ -7,6 +7,7 @@ use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Event;
+use Illuminate\Support\Facades\Http;
 use Tests\TestCase;
 
 class StorePendingUserTest extends TestCase
@@ -40,6 +41,7 @@ class StorePendingUserTest extends TestCase
         ];
         
         Event::fake();
+        Http::fake(['www.google.com/recaptcha/*' => Http::response(['success' => true])]);
         
         $this->assertEquals(0, User::all()->count());
         
@@ -71,5 +73,17 @@ class StorePendingUserTest extends TestCase
         $this->assertEquals(new Carbon('1990-01-01'), $user->birthDay);
         $this->assertEquals(1, $user->incasso);
         
+    }
+
+    public function test_a_failed_captcha_is_rejected()
+    {
+        Http::fake(['www.google.com/recaptcha/*' => Http::response(['success' => false])]);
+        Event::fake();
+
+        $response = $this->post(route('user.signup'), ['g-recaptcha-response' => 'invalid']);
+
+        $response->assertSessionHasErrors(['g-recaptcha-response' => "'I'm not a robot' validation failed, please try again"]);
+        Event::assertNotDispatched(PendingUserCreated::class);
+        Http::assertSent(fn ($request) => $request['response'] === 'invalid');
     }
 }
