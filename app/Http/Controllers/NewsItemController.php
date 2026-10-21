@@ -99,7 +99,7 @@ class NewsItemController extends Controller
 
     private function resizeImage(string $path, int $width, int $height)
     {
-        $imagePath = Storage::path('public/' . $path);
+        $imagePath = Storage::disk('public')->path($path);
         Image::make($imagePath)->fit($width, $height)->save($imagePath);
     }
 

@@ -21,13 +21,13 @@ class MailMan
 
     public function __construct()
     {
-        $this->_baseUrl = Config::get('mailman.url') ?? '';
+        $this->_baseUrl = Config::get('services.mailman.url') ?? '';
     }
 
     protected function http(): PendingRequest
     {
         return Http::baseUrl($this->_baseUrl)->withBasicAuth(
-            config('mailman.credentials.username'), config('mailman.credentials.password'),
+            config('services.mailman.username'), config('services.mailman.password'),
         );
     }
 
