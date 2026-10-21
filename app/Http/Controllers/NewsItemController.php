@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use App\Enums\Role;
 use App\Models\NewsItem;
-use App\Repositories\NewsItemRepository;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -25,13 +24,9 @@ class NewsItemController extends Controller implements HasMiddleware
         ];
     }
 
-    public function __construct(private readonly NewsItemRepository $_newsItemRepository)
-    {
-    }
-
     public function index(): View
     {
-        $newsItems = $this->_newsItemRepository->all(['id', 'title', 'created_at', 'author']);
+        $newsItems = NewsItem::all(['id', 'title', 'created_at', 'author']);
         return view('beheer.newsItem.index', compact('newsItems'));
     }
 
@@ -44,8 +39,7 @@ class NewsItemController extends Controller implements HasMiddleware
 
     public function store(Request $request): RedirectResponse
     {
-        $this->validateInput($request);
-        $newsItem = $this->_newsItemRepository->create($request->all());
+        $newsItem = NewsItem::create($this->validateInput($request));
 
         if ($request->hasFile('thumbnail')) {
             $this->uploadAndResizeImage($request, $newsItem);
@@ -68,8 +62,7 @@ class NewsItemController extends Controller implements HasMiddleware
 
     public function update(Request $request, NewsItem $newsItem): RedirectResponse
     {
-        $this->validateInput($request);
-        $this->_newsItemRepository->update($newsItem->id, $request->all());
+        $newsItem->update($this->validateInput($request));
 
         if ($request->hasFile('thumbnail')) {
             $this->uploadAndResizeImage($request, $newsItem);
@@ -81,7 +74,7 @@ class NewsItemController extends Controller implements HasMiddleware
 
     public function destroy(Request $request, NewsItem $newsItem): RedirectResponse
     {
-        $this->_newsItemRepository->delete($newsItem->id);
+        $newsItem->delete();
 
         Session::flash("message", 'News item removed');
         return redirect('/newsItems');
@@ -110,9 +103,9 @@ class NewsItemController extends Controller implements HasMiddleware
         ImageManager::usingDriver(Driver::class)->decodePath($imagePath)->cover($width, $height)->save($imagePath);
     }
 
-    private function validateInput(Request $request): void
+    private function validateInput(Request $request): array
     {
-        $request->validate([
+        return $request->validate([
             'title' => 'required|max:255',
             'text' => 'required',
             'author' => 'required|max:255',

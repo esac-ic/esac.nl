@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use App\Enums\Role;
 use App\Models\AgendaItemCategory;
-use App\Repositories\AgendaItemCategoryRepository;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -22,13 +21,9 @@ class AgendaItemCategoryController extends Controller implements HasMiddleware
         ];
     }
 
-    public function __construct(private readonly AgendaItemCategoryRepository $agendaItemCategoryRepository)
-    {
-    }
-
     public function index(): View
     {
-        $agendaItemCategories = $this->agendaItemCategoryRepository->all(['id', 'name']);
+        $agendaItemCategories = AgendaItemCategory::all(['id', 'name']);
         return view('beheer.agendaItemCategory.index', compact('agendaItemCategories'));
     }
 
@@ -43,19 +38,18 @@ class AgendaItemCategoryController extends Controller implements HasMiddleware
 
     public function store(Request $request): RedirectResponse
     {
-        $this->validateInput($request);
-        $this->agendaItemCategoryRepository->create($request->all());
+        AgendaItemCategory::create($this->validateInput($request));
 
         Session::flash("message", 'Events category is added');
         return redirect('/agendaItemCategories');
     }
 
-    public function show(Request $request, AgendaItemCategory $agendaItemCategory): View
+    public function show(AgendaItemCategory $agendaItemCategory): View
     {
         return view('beheer.agendaItemCategory.show', compact('agendaItemCategory'));
     }
 
-    public function edit(Request $request, AgendaItemCategory $agendaItemCategory): View
+    public function edit(AgendaItemCategory $agendaItemCategory): View
     {
         $fields = ['title' => 'Edit category',
             'method' => 'PATCH',
@@ -66,24 +60,23 @@ class AgendaItemCategoryController extends Controller implements HasMiddleware
 
     public function update(Request $request, AgendaItemCategory $agendaItemCategory): RedirectResponse
     {
-        $this->validateInput($request);
-        $this->agendaItemCategoryRepository->update($agendaItemCategory->id, $request->all());
+        $agendaItemCategory->update($this->validateInput($request));
 
         Session::flash("message", 'Events category is edited');
         return redirect('/agendaItemCategories');
     }
 
-    public function destroy(Request $request, AgendaItemCategory $agendaItemCategory): RedirectResponse
+    public function destroy(AgendaItemCategory $agendaItemCategory): RedirectResponse
     {
-        $this->agendaItemCategoryRepository->delete($agendaItemCategory->id);
+        $agendaItemCategory->delete();
 
         Session::flash("message", 'Events category is removed');
         return redirect('/agendaItemCategories');
     }
 
-    private function validateInput(Request $request): void
+    private function validateInput(Request $request): array
     {
-        $request->validate([
+        return $request->validate([
             'name' => 'required|max:255',
         ]);
     }
