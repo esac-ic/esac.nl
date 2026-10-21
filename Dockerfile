@@ -14,7 +14,7 @@ RUN npm ci --no-audit --no-fund
 COPY . .
 RUN npm run production
 
-FROM dunglas/frankenphp:1.13.2-php8.3.36-trixie
+FROM dunglas/frankenphp:1.13.2-php8.5.12-trixie
 
 # The MySQL client loads database/schema/mysql-schema.sql when migrating an empty database.
 # MySQL's certificate is self-signed, so the client keeps TLS but doesn't verify it.
