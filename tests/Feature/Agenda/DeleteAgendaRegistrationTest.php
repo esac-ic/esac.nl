@@ -42,7 +42,7 @@ class DeleteAgendaRegistrationTest extends TestCase
     /** @test */
     public function remove_agenda_registration(): void
     {
-        $applicationResponse = factory(ApplicationResponse::class)->create([
+        $applicationResponse = ApplicationResponse::factory()->create([
             'user_id' => $this->user->id,
         ]);
         $agendaItem = $applicationResponse->agendaItem;
@@ -59,7 +59,7 @@ class DeleteAgendaRegistrationTest extends TestCase
     /** @test */
     public function a_agenda_registration_can_not_be_removed_when_the_subscription_date_is_pasted(): void
     {
-        $applicationResponse = factory(ApplicationResponse::class)->create([
+        $applicationResponse = ApplicationResponse::factory()->create([
             'user_id' => $this->user->id,
         ]);
         $agendaItem = $applicationResponse->agendaItem;

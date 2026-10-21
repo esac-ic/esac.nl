@@ -42,7 +42,7 @@ abstract class TestCase extends Illuminate\Foundation\Testing\TestCase
         foreach (Config::get('constants') as $key => $value) {
             if (!Rol::find($value))
             {
-                factory(Rol::class)->create([
+                Rol::factory()->create([
                     'id' => $value,
                 ]);
             }

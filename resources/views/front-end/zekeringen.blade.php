@@ -26,16 +26,16 @@ TODO: voeg toe moet gewoon plusje worden
                     <div class="card-body">
                         <h4 class="card-title">{{'Add zekering'}}</h4>
                         @if (!Auth::guest())
-                            {!! Form::open(['method' => 'POST', 'url' => url('api/zekeringen')]) !!}
+                            {{ html()->form('POST', url('api/zekeringen'))->open() }}
                             <div class="form-group">
-                                {{Form::label('zekering_content', 'Inhoud')}}
-                                {!! Form::textarea('text','',['class'=> 'form-control','required' => 'required', 'maxlength' => 150, 'rows' => '3', 'id' => 'zekering_content']) !!}
+                                {{ html()->label('Inhoud', 'zekering_content') }}
+                                {{ html()->textarea('text')->text(old('text', ''))->class('form-control')->required()->maxlength(150)->id('zekering_content')->cols(50)->rows(3) }}
                             </div>
                             <div class="form-group">
-                                {!! Form::submit('Voeg toe',['class'=> 'btn btn-primary']) !!}
+                                {{ html()->submit('Voeg toe')->class('btn btn-primary') }}
                             </div>
-                            {{ csrf_field() }}
-                            {!! Form::close() !!}
+                            @csrf
+                            {{ html()->form()->close() }}
                         @else
                             {{'You need to be logged in to view the zekeringen'}}
                         @endif
