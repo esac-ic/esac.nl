@@ -25,7 +25,8 @@
         <div class="col-md-6">
             <div class="btn-group mt-2 float-md-right" role="group" aria-label="Actions">
             @if($user->isPendingMember() and \Illuminate\Support\Facades\Auth::user()->hasRole(Config::get('constants.Administrator')))
-                {{ html()->form('PATCH', url('/users/'.$user->id . '/approveAsPendingMember'))->open() }}
+                {{ html()->form('POST', url('/users/'.$user->id . '/approveAsPendingMember'))->open() }}
+                @method('PATCH')
                 <button type="submit" class="btn btn-success"><em class="ion-checkmark"></em> {{'Approve as member'}}</button>
                 {{ html()->form()->close() }}
                 
@@ -39,7 +40,8 @@
                 </form>
             @else
                 @if($user->isOldMember() and \Illuminate\Support\Facades\Auth::user()->hasRole(Config::get('constants.Administrator')))
-                    {{ html()->form('PATCH', url('/users/'.$user->id . '/makeActiveMember'))->open() }}
+                    {{ html()->form('POST', url('/users/'.$user->id . '/makeActiveMember'))->open() }}
+                    @method('PATCH')
                         <button type="submit" class="btn btn-success"><em class="ion-plus"></em> {{'Make active member'}}</button>
                     {{ html()->form()->close() }}
                 @endif
@@ -61,7 +63,8 @@
                 @endif
                 @if(\Illuminate\Support\Facades\Auth::user()->hasRole(Config::get('constants.Administrator')))
                     @if($user->isActiveMember())
-                        {{ html()->form('PATCH', url('/users/'.$user->id . '/removeAsActiveMember'))->open() }}
+                        {{ html()->form('POST', url('/users/'.$user->id . '/removeAsActiveMember'))->open() }}
+                        @method('PATCH')
                         <button type="submit" class="btn btn-danger"><em class="ion-trash-a"></em> {{'Remove as active member'}}</button>
                         {{ html()->form()->close() }}
                     @endif
@@ -272,7 +275,8 @@
                                     <a href="{{url('/users/' . $user->id . '/addCertificate/' . $certificate->id)}}" onclick="event.preventDefault(); document.getElementById('delete-usercertificate-{{$certificate->id}}').submit();">
                                         <span title="Remove Certificate" class="ion-trash-a" aria-hidden="true"></span>
                                     </a>
-                                    {{ html()->form('DELETE', url('/users/' . $user->id . '/addCertificate/' . $certificate->id))->id("delete-usercertificate-$certificate->id")->open() }}
+                                    {{ html()->form('POST', url('/users/' . $user->id . '/addCertificate/' . $certificate->id))->id("delete-usercertificate-$certificate->id")->open() }}
+                                    @method('DELETE')
                                     {{ html()->form()->close() }}
                                 </td>
                             </tr>
