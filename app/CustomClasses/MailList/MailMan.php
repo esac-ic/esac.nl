@@ -26,7 +26,7 @@ class MailMan
     protected function http(): PendingRequest
     {
         return Http::baseUrl($this->_baseUrl)->withBasicAuth(
-            config('services.mailman.username'), config('services.mailman.password'),
+            (string) config('services.mailman.username'), (string) config('services.mailman.password'),
         );
     }
 
