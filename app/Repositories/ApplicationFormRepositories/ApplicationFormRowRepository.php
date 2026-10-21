@@ -115,14 +115,4 @@ class ApplicationFormRowRepository
     {
         return ApplicationFormRow::all($columns);
     }
-
-    /**
-     * @param $application_form_id
-     * @return mixed
-     */
-    public function getRows($application_form_id)
-    {
-        return $this->findBy('application_form_id', $application_form_id, $columns = ['*']);
-
-    }
 }
