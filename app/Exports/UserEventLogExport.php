@@ -19,8 +19,12 @@ class UserEventLogExport extends SpreadsheetExport
         "Event Details",
     ];
     
-    public function __construct(private readonly UserEventLogEntryRepository $repository, private readonly Array | null $eventTypes, private readonly Array | null $names, private readonly Carbon $startDate, private readonly Carbon $endDate)
-    {
+    public function __construct(
+        private readonly UserEventLogEntryRepository $repository,
+        private readonly ?array $eventTypes,
+        private readonly Carbon $startDate,
+        private readonly Carbon $endDate,
+    ) {
     }
     
     public function collection(): Collection
