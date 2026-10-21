@@ -16,8 +16,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Config;
 use Illuminate\View\View;
-use Maatwebsite\Excel\Facades\Excel;
-use Symfony\Component\HttpFoundation\BinaryFileResponse;
+use Symfony\Component\HttpFoundation\StreamedResponse;
 
 class AgendaApplicationFormController extends Controller
 {
@@ -116,17 +115,13 @@ class AgendaApplicationFormController extends Controller
     /**
      * @param int $agendaId
      * @param AgendaApplicationFormService $agendaApplicationFormService
-     * @return BinaryFileResponse
-     * @throws \PhpOffice\PhpSpreadsheet\Exception
-     * @throws \PhpOffice\PhpSpreadsheet\Writer\Exception
+     * @return StreamedResponse
      */
-    public function exportData(int $agendaId, AgendaApplicationFormService $agendaApplicationFormService): BinaryFileResponse
+    public function exportData(int $agendaId, AgendaApplicationFormService $agendaApplicationFormService): StreamedResponse
     {
         $agendaItem = AgendaItem::findOrFail($agendaId);
-        return Excel::download(
-            new AgendaRegistrationExport($agendaApplicationFormService, $agendaItem),
-            preg_replace('/[^a-zA-Z0-9]+/', '-', $agendaItem->title) . '.xlsx'
-        );
+        return (new AgendaRegistrationExport($agendaApplicationFormService, $agendaItem))
+            ->download(preg_replace('/[^a-zA-Z0-9]+/', '-', $agendaItem->title) . '.xlsx');
 
     }
 }

@@ -4,12 +4,8 @@ namespace App\Exports;
 
 use App\Repositories\UserRepository;
 use Illuminate\Support\Collection;
-use Maatwebsite\Excel\Concerns\FromCollection;
-use Maatwebsite\Excel\Concerns\ShouldAutoSize;
-use Maatwebsite\Excel\Concerns\WithHeadings;
-use Maatwebsite\Excel\Concerns\WithTitle;
 
-class UsersExport implements FromCollection, WithTitle, WithHeadings, ShouldAutoSize
+class UsersExport extends SpreadsheetExport
 {
     private $userRepository;
 
@@ -21,12 +17,12 @@ class UsersExport implements FromCollection, WithTitle, WithHeadings, ShouldAuto
     /**
      * @return \Illuminate\Support\Collection
      */
-    public function collection()
+    public function collection(): Collection
     {
         $activeUsers = $this->userRepository->getCurrentUsers(['*'], ['certificates']);
         $exportData = [];
         foreach ($activeUsers as $user) {
-            $user->makeHidden(['updated_at', 'lid_af', 'pending_user']);
+            $user->makeHidden(['updated_at', 'lid_af', 'pending_user', 'deleted_at']);
             $data = $user->toArray();
             $data['certificates'] = $user->getCertificationsAbbreviations();
             array_push($exportData, $data);
