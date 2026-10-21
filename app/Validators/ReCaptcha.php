@@ -13,7 +13,7 @@ class ReCaptcha
         $response = $client->post('https://www.google.com/recaptcha/api/siteverify',
             ['form_params'=>
                 [
-                    'secret'=>config('custom.google_recaptcha_secret'),
+                    'secret'=>config('services.recaptcha.secret'),
                     'response'=>$value
                  ]
             ]

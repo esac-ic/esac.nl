@@ -4,30 +4,15 @@ namespace App\Providers;
 
 use App\CustomClasses\MenuSingleton;
 use App\Models\Setting;
-use Illuminate\Database\Schema\Blueprint;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
-use Illuminate\Support\Fluent;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
 {
     /**
-     * Bootstrap any application services.
-     *
-     * @return void
-     */
-    public function boot()
-    {
-        Validator::extend('recaptcha', 'App\\Validators\\ReCaptcha@validate');
-    }
-
-    /**
      * Register any application services.
-     *
-     * @return void
      */
-    public function register()
+    public function register(): void
     {
         $this->app->singleton(MenuSingleton::MENUSINGLETON, function () {
             return new MenuSingleton();
@@ -38,13 +23,13 @@ class AppServiceProvider extends ServiceProvider
             $setting->initialise();
             return $setting;
         });
+    }
 
-        Blueprint::macro('dropForeignSilently', function ($index): Fluent {
-            if (DB::getDriverName() === 'sqlite') {
-                return new Fluent();
-            }
-
-            return self::dropForeign($index);
-        });
+    /**
+     * Bootstrap any application services.
+     */
+    public function boot(): void
+    {
+        Validator::extend('recaptcha', 'App\\Validators\\ReCaptcha@validate');
     }
 }

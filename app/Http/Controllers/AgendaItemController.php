@@ -8,6 +8,7 @@ use App\Repositories\AgendaItemRepository;
 use App\Repositories\ApplicationFormRepositories\ApplicationFormRepository;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Session;
+use Illuminate\Support\Facades\Storage;
 use Intervention\Image\ImageManagerStatic as Image;
 
 class AgendaItemController extends Controller
@@ -140,7 +141,7 @@ class AgendaItemController extends Controller
             $request->file('thumbnail')->storeAs('agendaItem', $name, 'public');
             $agendaItem->image_url = 'agendaItem/' . $name;
             $agendaItem->save();
-            $img_path = "../storage/app/public/" . $agendaItem->image_url;
+            $img_path = Storage::disk('public')->path($agendaItem->image_url);
             Image::make($img_path)->fit(400, 300)->save($img_path);
         }
     }
