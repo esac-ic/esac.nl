@@ -8,14 +8,22 @@ use App\Models\Book;
 use App\Repositories\BookRepository;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\Request;
+use Illuminate\Routing\Controllers\HasMiddleware;
+use Illuminate\Routing\Controllers\Middleware;
 use Illuminate\Support\Facades\Session;
 
-class LibraryController extends Controller
+class LibraryController extends Controller implements HasMiddleware
 {
+    public static function middleware(): array
+    {
+        return [
+            'auth',
+            new Middleware('authorize:' . Role::Administrator->value),
+        ];
+    }
+
     public function __construct(private readonly BookRepository $_bookRepository)
     {
-        $this->middleware('auth');
-        $this->middleware('authorize:' . Role::Administrator->value);
     }
 
     public function index(): View
@@ -80,7 +88,7 @@ class LibraryController extends Controller
 
     private function validateInput(Request $request): void
     {
-        $this->validate($request, [
+        $request->validate([
             'title' => 'required|max:255',
             'year' => 'integer',
             'type' => 'required|max:255',

@@ -7,14 +7,22 @@ use App\Exports\UserEventLogExport;
 use App\Repositories\UserEventLogEntryRepository;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\Request;
+use Illuminate\Routing\Controllers\HasMiddleware;
+use Illuminate\Routing\Controllers\Middleware;
 use Illuminate\Support\Carbon;
 
-class UserEventLogEntryController extends Controller
+class UserEventLogEntryController extends Controller implements HasMiddleware
 {
+    public static function middleware(): array
+    {
+        return [
+            'auth',
+            new Middleware('authorize:' . Role::Administrator->value),
+        ];
+    }
+
     public function __construct(private readonly UserEventLogEntryRepository $repository) 
     {
-        $this->middleware('auth');
-        $this->middleware('authorize:' . Role::Administrator->value);
     }
     
     public function index(): View 

@@ -8,10 +8,20 @@ use App\Repositories\MenuRepository;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Routing\Controllers\HasMiddleware;
+use Illuminate\Routing\Controllers\Middleware;
 use Illuminate\Support\Facades\Session;
 
-class PaginaBeheerController extends Controller
+class PaginaBeheerController extends Controller implements HasMiddleware
 {
+    public static function middleware(): array
+    {
+        return [
+            'auth',
+            new Middleware('authorize:' . Role::ContentAdministrator->value),
+        ];
+    }
+
     /**
      * Create a new controller instance.
      *
@@ -19,8 +29,6 @@ class PaginaBeheerController extends Controller
      */
     public function __construct(private readonly MenuRepository $_menuRepository)
     {
-        $this->middleware('auth');
-        $this->middleware('authorize:' . Role::ContentAdministrator->value);
     }
 
     //gives the rol views
@@ -95,7 +103,7 @@ class PaginaBeheerController extends Controller
 
     private function validateData(Request $request): void
     {
-        $this->validate($request, [
+        $request->validate([
             'urlName' => 'required|max:255|unique:menu_items',
             'itemType' => 'required',
             'name' => 'required|max:255',
@@ -104,7 +112,7 @@ class PaginaBeheerController extends Controller
         ]);
 
         if ($request->input('itemType') === 'subItem') {
-            $this->validate($request, [
+            $request->validate([
                 'parentItem' => 'required',
             ]);
         }

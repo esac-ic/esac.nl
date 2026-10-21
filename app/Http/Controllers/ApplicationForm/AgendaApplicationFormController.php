@@ -15,19 +15,20 @@ use App\Services\AgendaApplicationFormService;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use Illuminate\Routing\Controllers\HasMiddleware;
+use Illuminate\Routing\Controllers\Middleware;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\View\View;
 use Symfony\Component\HttpFoundation\StreamedResponse;
 
-class AgendaApplicationFormController extends Controller
+class AgendaApplicationFormController extends Controller implements HasMiddleware
 {
-    /**
-     * AgendaApplicationFormController constructor.
-     */
-    public function __construct()
+    public static function middleware(): array
     {
-        $this->middleware('auth');
-        $this->middleware('authorize:' . Role::ContentAdministrator->value . ',' . Role::ActivityAdministrator->value)->except('destroy');
+        return [
+            'auth',
+            new Middleware('authorize:' . Role::ContentAdministrator->value . ',' . Role::ActivityAdministrator->value, except: ['destroy']),
+        ];
     }
 
     /**
@@ -123,6 +124,5 @@ class AgendaApplicationFormController extends Controller
         $agendaItem = AgendaItem::findOrFail($agendaId);
         return new AgendaRegistrationExport($agendaApplicationFormService, $agendaItem)
             ->download(preg_replace('/[^a-zA-Z0-9]+/', '-', $agendaItem->title) . '.xlsx');
-
     }
 }

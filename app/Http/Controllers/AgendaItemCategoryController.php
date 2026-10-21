@@ -8,14 +8,22 @@ use App\Repositories\AgendaItemCategoryRepository;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Routing\Controllers\HasMiddleware;
+use Illuminate\Routing\Controllers\Middleware;
 use Illuminate\Support\Facades\Session;
 
-class AgendaItemCategoryController extends Controller
+class AgendaItemCategoryController extends Controller implements HasMiddleware
 {
+    public static function middleware(): array
+    {
+        return [
+            'auth',
+            new Middleware('authorize:' . Role::Administrator->value),
+        ];
+    }
+
     public function __construct(private readonly AgendaItemCategoryRepository $agendaItemCategoryRepository)
     {
-        $this->middleware('auth');
-        $this->middleware('authorize:' . Role::Administrator->value);
     }
 
     public function index(): View
@@ -75,7 +83,7 @@ class AgendaItemCategoryController extends Controller
 
     private function validateInput(Request $request): void
     {
-        $this->validate($request, [
+        $request->validate([
             'name' => 'required|max:255',
         ]);
     }

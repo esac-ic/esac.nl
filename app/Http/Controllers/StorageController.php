@@ -4,14 +4,18 @@ namespace App\Http\Controllers;
 
 use App\Enums\Role;
 use Illuminate\Http\Request;
+use Illuminate\Routing\Controllers\HasMiddleware;
+use Illuminate\Routing\Controllers\Middleware;
 use Illuminate\Support\Facades\Storage;
 
-class StorageController extends Controller
+class StorageController extends Controller implements HasMiddleware
 {
-    public function __construct()
+    public static function middleware(): array
     {
-        $this->middleware('auth');
-        $this->middleware('authorize:' . Role::ContentAdministrator->value);
+        return [
+            'auth',
+            new Middleware('authorize:' . Role::ContentAdministrator->value),
+        ];
     }
 
     public function uploadImage(Request $request): string
