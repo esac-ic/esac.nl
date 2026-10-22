@@ -10,9 +10,7 @@
         <meta name="csrf-token" content="{{ csrf_token() }}">
 
         <script>
-            window.Laravel = <?php echo json_encode([
-                'csrfToken' => csrf_token(),
-            ]); ?>
+            window.Laravel = @json(['csrfToken' => csrf_token()])
         </script>
 
         <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">

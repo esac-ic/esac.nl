@@ -32,7 +32,7 @@
                   @if($newsItem->image_url != "")
                     <img class="card-img-top" src="{{$newsItem->getImageUrl()}}" alt="Card image cap">
                   @endif
-                    <span class="card-date position-absolute bg-light py-1 px-3 rounded">{{\Carbon\Carbon::parse($newsItem->created_at)->format('d M')}}</span>
+                    <span class="card-date position-absolute bg-light py-1 px-3 rounded">{{ $newsItem->created_at->format('d M') }}</span>
                   </div>
                   <div class="card-body">
                     <h4 class="card-title">{{$newsItem->title}}</h4>
@@ -68,7 +68,7 @@
                     <a href="{{ route('agenda.detail', $agendaItem) }}">
                         <img class="card-img-top " src="{{$agendaItem->getImageUrl()}}" alt="Card image cap">
                     </a>
-                    <span class="card-date position-absolute bg-light py-1 px-3 rounded">{{\Carbon\Carbon::parse($agendaItem->start_date)->format('d M')}}</span>
+                    <span class="card-date position-absolute bg-light py-1 px-3 rounded">{{ $agendaItem->start_date->format('d M') }}</span>
                     <div class="card-body">
                     <a href="{{ route('agenda.detail', $agendaItem) }}">
 
@@ -83,7 +83,7 @@
                                 <span class="ion-person-stalker"></span> {{count($agendaItem->getApplicationFormResponses)}}
                             </div>
                             <div class="col-auto">
-                                @if(Auth::guest())
+                                @guest
                                     {{'Please log in to register'}}
                                 @else
                                     @if($agendaItem->canRegister())
@@ -91,7 +91,7 @@
                                     @else
                                         {{'Registration not possible'}}
                                     @endif
-                                @endif
+                                @endguest
                             </div>
                         </div>
                     </div>
