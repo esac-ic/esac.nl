@@ -82,7 +82,7 @@ class PaginaBeheerController extends Controller implements HasMiddleware
     //update page
     public function update(Request $request, MenuItem $page): RedirectResponse
     {
-        if ($page->urlName != $request->urlName && $page->editable) {
+        if ($page->url_name != $request->url_name && $page->editable) {
             $this->validateData($request);
         }
 
@@ -103,7 +103,7 @@ class PaginaBeheerController extends Controller implements HasMiddleware
     private function validateData(Request $request): void
     {
         $request->validate([
-            'urlName' => 'required|max:255|unique:menu_items',
+            'url_name' => 'required|max:255|unique:menu_items',
             'itemType' => 'required',
             'name' => 'required|max:255',
             'content' => 'required',

@@ -8,15 +8,15 @@
             </div>
             @if($page === null || $page->editable)
                 <div class="form-group col-md-6">
-                    {{ html()->label('URL name', 'urlName') }}
-                    {{ html()->text('urlName', ($page != null) ? $page->urlName : "")->class('form-control')->required() }}
+                    {{ html()->label('URL name', 'url_name') }}
+                    {{ html()->text('url_name', ($page != null) ? $page->url_name : "")->class('form-control')->required() }}
                 </div>
             @endif
         </div>
         <div class="form-row">
             <div class="col-md-6">
                 <div class="form-group form-check">
-                    {{ html()->checkbox('menuItem', ! session()->hasOldInput() && $page != null && $page->menuItem, 0)->class('form-check-input')->id('menuItem') }}
+                    {{ html()->checkbox('menu_item', ! session()->hasOldInput() && $page != null && $page->menu_item, 0)->class('form-check-input')->id('menuItem') }}
                     {{ html()->label('Show page in menu', 'menuItem')->class('form-check-label') }}
                 </div>
                 <div class="form-group form-check">

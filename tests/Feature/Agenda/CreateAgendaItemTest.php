@@ -51,12 +51,12 @@ class CreateAgendaItemTest extends TestCase
             '_token' => csrf_token(),
             'title' => 'test agenda',
             'text' => 'test agenda',
-            'shortDescription' => 'test agenda',
+            'short_description' => 'test agenda',
             'category' => $agendaItemCategory->id,
             'applicationForm' => ApplicationForm::factory()->create()->id,
-            'subscription_endDate' => Carbon::now()->addDays(2),
-            'endDate' => Carbon::now()->addDays(3),
-            'startDate' => Carbon::now()->addDays(1),
+            'subscription_end_date' => Carbon::now()->addDays(2),
+            'end_date' => Carbon::now()->addDays(3),
+            'start_date' => Carbon::now()->addDays(1),
         ];
         $response = $this->post($this->url, $body);
         $response->assertStatus(302);
@@ -76,12 +76,12 @@ class CreateAgendaItemTest extends TestCase
         $response = $this->post($this->url, [
             'title' => 'test agenda',
             'text' => 'test agenda',
-            'shortDescription' => 'test agenda',
+            'short_description' => 'test agenda',
             'category' => AgendaItemCategory::factory()->create()->id,
             'applicationForm' => 0,
-            'subscription_endDate' => Carbon::now()->addDays(2),
-            'endDate' => Carbon::now()->addDays(3),
-            'startDate' => Carbon::now()->addDays(1),
+            'subscription_end_date' => Carbon::now()->addDays(2),
+            'end_date' => Carbon::now()->addDays(3),
+            'start_date' => Carbon::now()->addDays(1),
             'thumbnail' => UploadedFile::fake()->image('photo.png', 1000, 1000),
         ]);
         $response->assertStatus(302);
@@ -100,12 +100,12 @@ class CreateAgendaItemTest extends TestCase
             '_token' => csrf_token(),
             'title' => 'test agenda',
             'text' => 'test agenda',
-            'shortDescription' => 'test agenda',
+            'short_description' => 'test agenda',
             'category' => $agendaItemCategory->id,
             'applicationForm' => ApplicationForm::factory()->create()->id,
-            'subscription_endDate' => Carbon::now()->addDays(2),
-            'endDate' => Carbon::now()->addDays(3),
-            'startDate' => Carbon::now()->addDays(1),
+            'subscription_end_date' => Carbon::now()->addDays(2),
+            'end_date' => Carbon::now()->addDays(3),
+            'start_date' => Carbon::now()->addDays(1),
         ];
         $response = $this->post($this->url, $body);
         $response->assertStatus(403);
@@ -121,12 +121,12 @@ class CreateAgendaItemTest extends TestCase
             '_token' => csrf_token(),
             'title' => '',
             'text' => 'test agenda',
-            'shortDescription' => 'test agenda',
+            'short_description' => 'test agenda',
             'category' => $agendaItemCategory->id,
             'applicationForm' => ApplicationForm::factory()->create()->id,
-            'subscription_endDate' => Carbon::now()->addDays(2),
-            'endDate' => Carbon::now()->addDays(3),
-            'startDate' => Carbon::now()->addDays(1),
+            'subscription_end_date' => Carbon::now()->addDays(2),
+            'end_date' => Carbon::now()->addDays(3),
+            'start_date' => Carbon::now()->addDays(1),
         ];
         $response = $this->post($this->url, $body);
         $response->assertStatus(500);
@@ -143,12 +143,12 @@ class CreateAgendaItemTest extends TestCase
             '_token' => csrf_token(),
             'title' => 'test agenda 😀',
             'text' => 'test agenda 😀',
-            'shortDescription' => 'test agenda 😀',
+            'short_description' => 'test agenda 😀',
             'category' => $agendaItemCategory->id,
             'applicationForm' => ApplicationForm::factory()->create()->id,
-            'subscription_endDate' => Carbon::now()->addDays(2),
-            'endDate' => Carbon::now()->addDays(3),
-            'startDate' => Carbon::now()->addDays(1),
+            'subscription_end_date' => Carbon::now()->addDays(2),
+            'end_date' => Carbon::now()->addDays(3),
+            'start_date' => Carbon::now()->addDays(1),
         ];
         $response = $this->post($this->url, $body);
         $response->assertStatus(302);

@@ -10,14 +10,14 @@
                         <h3 class="card-title">{{$agendaItem->title}}</h3>
                         <p class="card-text">
                             From
-                            <span class="badge badge-secondary font-size-100">{{trans(\Carbon\Carbon::parse($agendaItem->startDate)->format('d M H:i'))}}</span>
+                            <span class="badge badge-secondary font-size-100">{{trans(\Carbon\Carbon::parse($agendaItem->start_date)->format('d M H:i'))}}</span>
                             to
-                            <span class="badge badge-secondary font-size-100">{{trans(\Carbon\Carbon::parse($agendaItem->endDate)->format('d M H:i'))}}</span>
+                            <span class="badge badge-secondary font-size-100">{{trans(\Carbon\Carbon::parse($agendaItem->end_date)->format('d M H:i'))}}</span>
                         </p>
                         @if($agendaItem->canRegister())
                             <p class="card-text">
                                 Subscriptions close
-                                <span class="badge badge-secondary font-size-100">{{trans(\Carbon\Carbon::parse($agendaItem->subscription_endDate)->format('d M H:i'))}}</span>
+                                <span class="badge badge-secondary font-size-100">{{trans(\Carbon\Carbon::parse($agendaItem->subscription_end_date)->format('d M H:i'))}}</span>
                             </p>
                         @endif
                     </div>
@@ -34,7 +34,7 @@
                                         {{'Please log in to register'}}
                                     @else
                                         @if($agendaItem->canRegister())
-                                            @if($agendaItem->subscription_endDate > \Carbon\Carbon::now() && array_key_exists(Auth::id(), $users))
+                                            @if($agendaItem->subscription_end_date > \Carbon\Carbon::now() && array_key_exists(Auth::id(), $users))
                                                 <a class="btn btn-outline-danger" href="{{ route('forms.unregister', $agendaItem) }}">{{ 'Unregister' }} </a>
                                             @else
                                                 <a class="btn btn-outline-primary" href="{{ route('forms.create', $agendaItem) }}">{{'Register now'}}</a>

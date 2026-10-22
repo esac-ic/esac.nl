@@ -10,9 +10,9 @@ use Illuminate\Support\Facades\Auth;
 #[Fillable([
     'name',
     'parent_id',
-    'urlName',
+    'url_name',
     'after',
-    'menuItem',
+    'menu_item',
     'deletable',
     'editable',
     'content',
@@ -42,12 +42,12 @@ class MenuItem extends Model
     //return the menu items wich aren't sub menus
     public function getMenuItems()
     {
-        return MenuItem::query()->where('parent_id', '=', null)->where('menuItem', '=', true)->get();
+        return MenuItem::query()->where('parent_id', '=', null)->where('menu_item', '=', true)->get();
     }
 
     public function getSubMenuItems($id)
     {
-        return MenuItem::query()->where('parent_id', '=', $id)->where('menuItem', '=', true)->get();
+        return MenuItem::query()->where('parent_id', '=', $id)->where('menu_item', '=', true)->get();
     }
 
     public function show(): bool

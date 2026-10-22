@@ -19,7 +19,7 @@ class ZekeringenRepository implements IRepository
     {
         $zekering = new Zekering();
         $zekering->text = $data["text"];
-        $zekering->createdBy = Auth::user()->id;
+        $zekering->created_by = Auth::user()->id;
         $zekering->score = 1;
     
         if (array_key_exists('parent', $data)) {

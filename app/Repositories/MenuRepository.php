@@ -12,10 +12,10 @@ class MenuRepository implements IRepository
         if ($data['itemType'] === "subItem") {
             $menuItem->parent_id = $data['parentItem'];
         }
-        $menuItem->urlName = $data['urlName'];
+        $menuItem->url_name = $data['url_name'];
         $menuItem->after = $data['afterItem'] == -1 ? null : $data['afterItem'];
         $menuItem->login = array_key_exists("login", $data);
-        $menuItem->menuItem = array_key_exists("menuItem", $data);
+        $menuItem->menu_item = array_key_exists("menu_item", $data);
         //can only be set in the database
         $menuItem->deletable = true;
         $menuItem->editable = true;
@@ -33,9 +33,9 @@ class MenuRepository implements IRepository
             $menuItem->parent_id = null;
         }
         if ($menuItem->editable) {
-            $menuItem->urlName = $data['urlName'];
+            $menuItem->url_name = $data['url_name'];
         }
-        $menuItem->menuItem = array_key_exists("menuItem", $data);
+        $menuItem->menu_item = array_key_exists("menu_item", $data);
         $menuItem->after = $data['afterItem'] == -1 ? null : $data['afterItem'];
         $menuItem->login = array_key_exists("login", $data);
         $menuItem->save();

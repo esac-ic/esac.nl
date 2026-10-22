@@ -38,17 +38,17 @@ class AgendaController extends Controller
         if ($startDate = $request->input('startDate')) {
             $startDate = Carbon::createFromFormat('d-m-Y', $startDate)->startOfDay();
             $agendaItemQuery->where(function ($query) use ($startDate) {
-                $query->where('startDate', '>=', $startDate)
-                    ->orWhere('endDate', '>=', $startDate);
+                $query->where('start_date', '>=', $startDate)
+                    ->orWhere('end_date', '>=', $startDate);
             });
         }
 
         if ($endDate = $request->input('endDate')) {
             $endDate = Carbon::createFromFormat('d-m-Y', $endDate)->endOfDay();
-            $agendaItemQuery->where('startDate', '<=', $endDate);
+            $agendaItemQuery->where('start_date', '<=', $endDate);
         }
 
-        $agendaItemQuery->orderBy('startDate', 'asc');
+        $agendaItemQuery->orderBy('start_date', 'asc');
 
         $agendaItemCount = $agendaItemQuery->count();
 
@@ -68,11 +68,11 @@ class AgendaController extends Controller
                     'id' => $agendaItem->id,
                     'title' => $agendaItem->title,
                     'thumbnail' => $agendaItem->getImageUrl(),
-                    'startDate' => Carbon::parse($agendaItem->startDate)->format('d M'),
-                    'endDate' => $agendaItem->endDate,
-                    'full_startDate' => $agendaItem->startDate,
+                    'startDate' => Carbon::parse($agendaItem->start_date)->format('d M'),
+                    'endDate' => $agendaItem->end_date,
+                    'full_startDate' => $agendaItem->start_date,
                     'category' => $agendaItem->agendaItemCategory->name,
-                    'text' => $agendaItem->shortDescription,
+                    'text' => $agendaItem->short_description,
                     'formId' => $agendaItem->getApplicationForm,
                     'canRegister' => $agendaItem->canRegister(),
                     'application_form_id' => $agendaItem->application_form_id,

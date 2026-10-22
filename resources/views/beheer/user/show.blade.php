@@ -113,7 +113,7 @@
                         </tr>
                         <tr>
                             <td>{{'Phone number'}}</td>
-                            <td>{{$user->phonenumber}}</td>
+                            <td>{{$user->phone_number}}</td>
                         </tr>
                         <tr>
                             <td>{{'First name'}}</td>
@@ -129,7 +129,7 @@
                         </tr>
                         <tr>
                             <td>{{'Address'}}</td>
-                            <td>{{$user->street . " " . $user->houseNumber}}</td>
+                            <td>{{$user->street . " " . $user->house_number}}</td>
                         </tr>
                         <tr>
                             <td>{{'City'}}</td>
@@ -149,11 +149,11 @@
                         </tr>
                         <tr>
                             <td>{{'Alternative phone number'}}</td>
-                            <td>{{$user->phonenumber_alt}}</td>
+                            <td>{{$user->phone_number_alt}}</td>
                         </tr>
                         <tr>
                             <td>{{'Birthdate'}}</td>
-                            <td>{{$user->birthDay}}</td>
+                            <td>{{$user->birthday}}</td>
                         </tr>
                         <tr>
                             <td>{{'Kind of member'}}</td>
@@ -191,11 +191,11 @@
                     <table class="table table-striped" style="width:100%">
                         <tr>
                             <td>{{'IBAN'}}</td>
-                            <td>{{$user->IBAN}}</td>
+                            <td>{{$user->iban}}</td>
                         </tr>
                         <tr>
                             <td>{{'BIC'}}</td>
-                            <td>{{$user->BIC}}</td>
+                            <td>{{$user->bic}}</td>
                         </tr>
                         <tr>
                             <td>{{'Accept Automatic Collection'}}</td>
@@ -207,27 +207,27 @@
                     <table class="table table-striped" style="width:100%">
                         <tr>
                             <td>{{'Emergency address street'}}</td>
-                            <td>{{$user->emergencystreet}}</td>
+                            <td>{{$user->emergency_street}}</td>
                         </tr>
                         <tr>
                             <td>{{'Emergency address house number'}}</td>
-                            <td>{{$user->emergencyHouseNumber}}</td>
+                            <td>{{$user->emergency_house_number}}</td>
                         </tr>
                         <tr>
                             <td>{{'Emergency address postal code'}}</td>
-                            <td>{{$user->emergencyzipcode}}</td>
+                            <td>{{$user->emergency_zipcode}}</td>
                         </tr>
                         <tr>
                             <td>{{'Emergency address city'}}</td>
-                            <td>{{$user->emergencycity}}</td>
+                            <td>{{$user->emergency_city}}</td>
                         </tr>
                         <tr>
                             <td>{{'Emergency address country'}}</td>
-                            <td>{{trans('countries.' . $user->emergencycountry)}}</td>
+                            <td>{{trans('countries.' . $user->emergency_country)}}</td>
                         </tr>
                         <tr>
                             <td>{{'Emergency phone number'}}</td>
-                            <td>{{$user->emergencyNumber}}</td>
+                            <td>{{$user->emergency_number}}</td>
                         </tr>
                     </table>
                 </div>

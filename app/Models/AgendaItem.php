@@ -17,10 +17,10 @@ class AgendaItem extends Model
     protected $fillable = [
         'title',
         'text',
-        'shortDescription',
-        'subscription_endDate',
-        'startDate',
-        'endDate',
+        'short_description',
+        'subscription_end_date',
+        'start_date',
+        'end_date',
         'image_url',
         'category',
         'climbing_activity',
@@ -42,7 +42,7 @@ class AgendaItem extends Model
 
     public function getCreatedBy()
     {
-        return $this->hasOne(User::class, 'id', 'createdBy');
+        return $this->hasOne(User::class, 'id', 'created_by');
     }
 
     public function getImageUrl()
@@ -61,7 +61,7 @@ class AgendaItem extends Model
 
     public function canRegister()
     {
-        if ($this->subscription_endDate < Carbon::now()) {
+        if ($this->subscription_end_date < Carbon::now()) {
             return false;
         } else {
             return true;

@@ -75,8 +75,8 @@
                     {{ html()->text('street', ($user != null) ? $user->street : "")->class('form-control')->required() }}
                 </div>
                 <div class="form-group col-md-6">
-                    {{ html()->label('House number', 'houseNumber') }}
-                    {{ html()->text('houseNumber', ($user != null) ? $user->houseNumber : "")->class('form-control')->required() }}
+                    {{ html()->label('House number', 'house_number') }}
+                    {{ html()->text('house_number', ($user != null) ? $user->house_number : "")->class('form-control')->required() }}
                 </div>
             </div>
             <div class="form-row">
@@ -95,19 +95,19 @@
             </div>
             <div class="form-row">
                 <div class="form-group col-md-6">
-                    {{ html()->label('Phone number', 'phonenumber') }}
-                    {{ html()->text('phonenumber', ($user != null) ? $user->phonenumber : "")->class('form-control')->required() }}
+                    {{ html()->label('Phone number', 'phone_number') }}
+                    {{ html()->text('phone_number', ($user != null) ? $user->phone_number : "")->class('form-control')->required() }}
                 </div>
                 <div class="form-group col-md-6">
-                    {{ html()->label('Alternative phone number', 'phonenumber_alt') }}
-                    {{ html()->text('phonenumber_alt', ($user != null) ? $user->phonenumber_alt : "")->class('form-control') }}
+                    {{ html()->label('Alternative phone number', 'phone_number_alt') }}
+                    {{ html()->text('phone_number_alt', ($user != null) ? $user->phone_number_alt : "")->class('form-control') }}
                 </div>
             </div>
             <div class="form-row">
                 <div class="form-group col-md-6">
                     {{ html()->label('Birthdate', 'birthDay') }}
                     <div class="input-group date" id="birthDayBox" data-target-input="nearest">
-                        <input type='text' class="form-control datetimepicker-input" id="birthDay" name="birthDay" data-target="#birthDayBox" value="{{($user != null) ? Carbon::parse($user->birthDay)->format('d-m-Y') : now()->format('d-m-Y')}}" required="required">
+                        <input type='text' class="form-control datetimepicker-input" id="birthDay" name="birthday" data-target="#birthDayBox" value="{{($user != null) ? Carbon::parse($user->birthday)->format('d-m-Y') : now()->format('d-m-Y')}}" required="required">
                         <div class="input-group-append" data-target="#birthDayBox" data-toggle="datetimepicker">
                             <div class="input-group-text"><i class="ion-calendar"></i></div>
                         </div>
@@ -139,12 +139,12 @@
         <div class="card-body">
             <div class="form-row">
                 <div class="form-group col-md-4">
-                    {{ html()->label('BIC', 'BIC') }}
-                    {{ html()->text('BIC', ($user != null) ? $user->BIC : "")->class('form-control') }}
+                    {{ html()->label('BIC', 'bic') }}
+                    {{ html()->text('bic', ($user != null) ? $user->bic : "")->class('form-control') }}
                 </div>
                 <div class="form-group col-md-8">
-                    {{ html()->label('IBAN', 'IBAN') }}
-                    {{ html()->text('IBAN', ($user != null) ? $user->IBAN : "")->class('form-control')->required() }}
+                    {{ html()->label('IBAN', 'iban') }}
+                    {{ html()->text('iban', ($user != null) ? $user->iban : "")->class('form-control')->required() }}
                 </div>
             </div>
             <div class="form-check">
@@ -160,31 +160,31 @@
         <div class="card-body">
             <div class="form-row">
                 <div class="form-group col-md-6">
-                    {{ html()->label('Emergency address street', 'emergencystreet') }}
-                    {{ html()->text('emergencystreet', ($user != null) ? $user->emergencystreet : "")->class('form-control')->required() }}
+                    {{ html()->label('Emergency address street', 'emergency_street') }}
+                    {{ html()->text('emergency_street', ($user != null) ? $user->emergency_street : "")->class('form-control')->required() }}
                 </div>
                 <div class="form-group col-md-6">
-                    {{ html()->label('Emergency address house number', 'emergencyHouseNumber') }}
-                    {{ html()->text('emergencyHouseNumber', ($user != null) ? $user->emergencyHouseNumber : "")->class('form-control')->required() }}
+                    {{ html()->label('Emergency address house number', 'emergency_house_number') }}
+                    {{ html()->text('emergency_house_number', ($user != null) ? $user->emergency_house_number : "")->class('form-control')->required() }}
                 </div>
             </div>
             <div class="form-row">
                 <div class="form-group col-md-4">
-                    {{ html()->label('Emergency postal code', 'emergencyzipcode') }}
-                    {{ html()->text('emergencyzipcode', ($user != null) ? $user->emergencyzipcode : "")->class('form-control')->required() }}
+                    {{ html()->label('Emergency postal code', 'emergency_zipcode') }}
+                    {{ html()->text('emergency_zipcode', ($user != null) ? $user->emergency_zipcode : "")->class('form-control')->required() }}
                 </div>
                 <div class="form-group col-md-4">
-                    {{ html()->label('Emergency city', 'emergencycity') }}
-                    {{ html()->text('emergencycity', ($user != null) ? $user->emergencycity : "")->class('form-control')->required() }}
+                    {{ html()->label('Emergency city', 'emergency_city') }}
+                    {{ html()->text('emergency_city', ($user != null) ? $user->emergency_city : "")->class('form-control')->required() }}
                 </div>
                 <div class="form-group col-md-4">
-                    {{ html()->label('Emergency country', 'emergencycountry') }}
-                    {{ html()->select('emergencycountry', trans("countries"), ($user != null) ? $user->emergencycountry : "NL")->class('form-control')->required() }}
+                    {{ html()->label('Emergency country', 'emergency_country') }}
+                    {{ html()->select('emergency_country', trans("countries"), ($user != null) ? $user->emergency_country : "NL")->class('form-control')->required() }}
                 </div>
             </div>
             <div class="form-group">
-                {{ html()->label('Emergency phone number', 'emergencyNumber') }}
-                {{ html()->text('emergencyNumber', ($user != null) ? $user->emergencyNumber : "")->class('form-control')->required() }}
+                {{ html()->label('Emergency phone number', 'emergency_number') }}
+                {{ html()->text('emergency_number', ($user != null) ? $user->emergency_number : "")->class('form-control')->required() }}
             </div>
         </div>
     </div>

@@ -33,8 +33,8 @@ class ICalController extends Controller
             $event = new Event(new UniqueIdentifier('agenda-item-'.$agendaItem->id.'@'.$host));
             $event
                 ->setOccurrence(new TimeSpan(
-                    new DateTime(new DateTimeImmutable($agendaItem->startDate), false),
-                    new DateTime(new DateTimeImmutable($agendaItem->endDate), false),
+                    new DateTime(new DateTimeImmutable($agendaItem->start_date), false),
+                    new DateTime(new DateTimeImmutable($agendaItem->end_date), false),
                 ))
                 ->setSummary($agendaItem->title)
                 ->setDescription(
