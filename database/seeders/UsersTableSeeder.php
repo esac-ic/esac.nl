@@ -23,7 +23,7 @@ class UsersTableSeeder extends Seeder
         $user->preposition = 'van';
         $user->lastname = 'Jansen';
         $user->street = 'Kerkstraat';
-        $user->house_number = 34;
+        $user->house_number = '34';
         $user->city = 'test';
         $user->zipcode = '5301jh';
         $user->country = 'NL';
@@ -55,7 +55,7 @@ class UsersTableSeeder extends Seeder
         $user->preposition = 'van';
         $user->lastname = 'Jansen';
         $user->street = 'Kerkstraat';
-        $user->house_number = 34;
+        $user->house_number = '34';
         $user->city = 'test';
         $user->zipcode = '5301jh';
         $user->country = 'Nederland';
@@ -83,7 +83,7 @@ class UsersTableSeeder extends Seeder
         $user->preposition = 'van';
         $user->lastname = 'Jansen';
         $user->street = 'Kerkstraat';
-        $user->house_number = 34;
+        $user->house_number = '34';
         $user->city = 'test';
         $user->zipcode = '5301jh';
         $user->country = 'Nederland';

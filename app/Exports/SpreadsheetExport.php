@@ -73,7 +73,7 @@ abstract class SpreadsheetExport
 
     private function setColumnWidths(Writer $writer, array $rows): void
     {
-        foreach (array_values($this->headings()) as $index => $heading) {
+        foreach ($this->headings() as $index => $heading) {
             $width = collect($rows)
                 ->map(fn (array $row) => mb_strlen((string) ($row[$index] ?? '')))
                 ->push(mb_strlen($heading))

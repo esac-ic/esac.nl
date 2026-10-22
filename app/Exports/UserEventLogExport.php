@@ -49,7 +49,7 @@ class UserEventLogExport extends SpreadsheetExport
 
     public function headings(): array
     {
-        return array_values(UserEventLogExport::PROPERTY_LABELS);
+        return UserEventLogExport::PROPERTY_LABELS;
     }
 
     public function map(mixed $event): array

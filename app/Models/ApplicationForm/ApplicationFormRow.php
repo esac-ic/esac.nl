@@ -32,6 +32,9 @@ class ApplicationFormRow extends Model
 
     const FORM_TYPE_TEXT = 'text';
 
+    /**
+     * @return HasMany<ApplicationFormRowOption, $this>
+     */
     public function applicationFormRowOptions(): HasMany
     {
         return $this->hasMany(ApplicationFormRowOption::class);

@@ -41,7 +41,7 @@ class UserFactory extends Factory
             'birthday' => fake()->date(),
             'kind_of_member' => fake()->randomElement(User::KINDS_OF_MEMBER),
             'iban' => fake()->iban(),
-            'bic' => fake()->bankAccountNumber(),
+            'bic' => fake()->swiftBicNumber(),
             'incasso' => fake()->boolean(),
             'remark' => fake()->sentence(),
         ];

@@ -89,9 +89,9 @@ class Mailman
     {
         try {
             $mailList = $this->toMailList($this->get('/lists/'.$id)->all());
-            $mailList->members = collect($this->get('/lists/'.$id.'/roster/member')->get('entries', []))
+            $mailList->set('members', collect($this->get('/lists/'.$id.'/roster/member')->get('entries', []))
                 ->map($this->toMember(...))
-                ->all();
+                ->all());
 
             return $mailList;
         } catch (RequestException $e) {
@@ -180,7 +180,7 @@ class Mailman
     public function deleteUserForAllMailList(User $user): void
     {
         $this->getMailListsForMember($user->email)
-            ->each(fn (Fluent $list) => $this->deleteMemberFromMailList($list->id, $user->email));
+            ->each(fn (Fluent $list) => $this->deleteMemberFromMailList($list->get('id'), $user->email));
     }
 
     /** @throws RequestException */
