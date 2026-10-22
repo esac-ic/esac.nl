@@ -21,6 +21,7 @@ trait ValidatesMemberDetails
                 new EmailDomainValidator(),
             ],
             'firstname' => 'required|max:255',
+            'preposition' => 'nullable|max:255',
             'lastname' => 'required|max:255',
             'street' => 'required|max:255',
             'house_number' => 'required|max:255',
@@ -28,6 +29,7 @@ trait ValidatesMemberDetails
             'zipcode' => 'required|max:255',
             'country' => 'required|max:255',
             'phone_number' => 'required|max:255',
+            'phone_number_alt' => 'nullable|max:255',
             'emergency_number' => 'required|max:255',
             'emergency_house_number' => 'required|max:255',
             'emergency_street' => 'required|max:255',
@@ -36,6 +38,7 @@ trait ValidatesMemberDetails
             'emergency_country' => 'required|max:255',
             'birthday' => 'required|date',
             'iban' => 'required|max:255',
+            'bic' => 'nullable|max:255',
         ];
     }
 }

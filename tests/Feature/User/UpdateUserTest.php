@@ -9,6 +9,7 @@ use App\Services\Mailman;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Event;
+use Illuminate\Support\Facades\Hash;
 use Mockery\MockInterface;
 use Tests\TestCase;
 
@@ -225,6 +226,17 @@ class UpdateUserTest extends TestCase
         $this->assertEquals($newMember->emergency_country, $updateData['emergency_country']);
         $this->assertEquals($newMember->birthday, new Carbon($updateData['birthday']));
         $this->assertEquals($newMember->iban, $updateData['iban']);
+        $this->assertSame($this->member->password, $newMember->password);
+    }
+
+    public function test_a_new_password_must_be_confirmed_and_is_hashed()
+    {
+        $data = [...$this->admin->only(['email', 'firstname', 'lastname', 'street', 'house_number', 'city', 'zipcode', 'country', 'phone_number', 'emergency_number', 'emergency_house_number', 'emergency_street', 'emergency_city', 'emergency_zipcode', 'emergency_country', 'iban', 'kind_of_member']), 'birthday' => '1990-02-02', 'password' => 'new-password'];
+
+        $this->actingAs($this->admin)->patch(route('users.update', $this->admin), $data)->assertSessionHasErrors('password');
+
+        $this->actingAs($this->admin)->patch(route('users.update', $this->admin), [...$data, 'password_confirmation' => 'new-password'])->assertSessionHasNoErrors();
+        $this->assertTrue(Hash::check('new-password', $this->admin->fresh()->password));
     }
 
     public function test_member_updates_self()

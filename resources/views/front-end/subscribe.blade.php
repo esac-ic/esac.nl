@@ -56,6 +56,12 @@
                 </div>
             </div>
             <div class="form-row">
+                <div class="form-group col-md-6 offset-md-6">
+                    {{ html()->label('Confirm password', 'password_confirmation') }}
+                    {{ html()->password('password_confirmation')->class('form-control')->required() }}
+                </div>
+            </div>
+            <div class="form-row">
                 <div class="form-group col-md-6">
                     {{ html()->label('Street', 'street') }}
                     {{ html()->text('street', '')->class('form-control')->required() }}
