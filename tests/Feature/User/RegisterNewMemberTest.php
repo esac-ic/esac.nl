@@ -8,7 +8,9 @@ use Carbon\Carbon;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Event;
-use TestCase;
+use Illuminate\Support\Facades\Http;
+use PHPUnit\Framework\Attributes\Test;
+use Tests\TestCase;
 
 class RegisterNewMemberTest extends TestCase
 {
@@ -28,6 +30,7 @@ class RegisterNewMemberTest extends TestCase
     {
         parent::setUp();
         Event::fake();
+        Http::fake(['www.google.com/recaptcha/*' => Http::response(['success' => true])]);
         session()->start();
     }
 
@@ -37,7 +40,7 @@ class RegisterNewMemberTest extends TestCase
         parent::tearDown();
     }
 
-    /** @test */
+    #[Test]
     public function a_guest_can_register_a_new_user()
     {
         
@@ -95,7 +98,7 @@ class RegisterNewMemberTest extends TestCase
         $this->assertNotNull($user->pending_user);
     }
 
-    /** @test */
+    #[Test]
     public function a_user_should_not_be_created_without_the_required_data_fields()
     {
         $body = [
@@ -107,6 +110,7 @@ class RegisterNewMemberTest extends TestCase
         $response->assertStatus(302);
         Event::assertNotDispatched(PendingUserCreated::class);
 
+        $response->assertSessionHasErrors();
         $errors = session('errors');
         $this->assertCount(21, $errors);
 

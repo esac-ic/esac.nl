@@ -2,6 +2,7 @@
 
 namespace App\Models\ApplicationForm;
 
+use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -11,6 +12,12 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * Class ApplicationFormRow
  * @package App\Models\ApplicationForm
  */
+#[Fillable([
+    'name',
+    'application_form_id',
+    'type',
+    'required',
+])]
 class ApplicationFormRow extends Model
 {
     use HasFactory, SoftDeletes;
@@ -50,32 +57,19 @@ class ApplicationFormRow extends Model
     const FORM_TYPE_TEXT = 'text';
 
     /**
-     * @var array
-     */
-    protected $fillable = [
-        'name',
-        'application_form_id',
-        'type',
-        'required',
-    ];
-
-    /**
-     * @var array
-     */
-    protected $casts = [
-        'required' => 'boolean',
-    ];
-
-    /**
-     * @var array
-     */
-    private $_inputfiels = null;
-
-    /**
      * @return HasMany
      */
     public function applicationFormRowOptions(): HasMany
     {
         return $this->hasMany(ApplicationFormRowOption::class);
+    }
+    /**
+     * @return array
+     */
+    protected function casts(): array
+    {
+        return [
+            'required' => 'boolean',
+        ];
     }
 }

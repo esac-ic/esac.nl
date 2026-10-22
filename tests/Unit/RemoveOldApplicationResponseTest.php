@@ -7,7 +7,7 @@ use App\Models\ApplicationForm\ApplicationResponseRow;
 use Carbon\Carbon;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Support\Facades\Artisan;
-use TestCase;
+use Tests\TestCase;
 
 class RemoveOldApplicationResponseTest extends TestCase
 {

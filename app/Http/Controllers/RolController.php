@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Models\Rol;
 use App\Repositories\RolRepository;
+use Illuminate\Contracts\View\View;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Session;
@@ -11,29 +13,26 @@ use Illuminate\Support\Facades\Session;
 class RolController extends Controller
 {
 
-    private RolRepository $_rolRepository;
     /**
      * Create a new controller instance.
      *
      * @return void
      */
-    public function __construct(RolRepository $rolRepository)
+    public function __construct(private readonly RolRepository $_rolRepository)
     {
         $this->middleware('auth');
         $this->middleware('authorize:' . Config::get('constants.Administrator'));
-
-        $this->_rolRepository = $rolRepository;
     }
 
     //gives the rol views
-    public function index()
+    public function index(): View
     {
-        $rols = $this->_rolRepository->all(array('name', 'id'));
+        $rols = $this->_rolRepository->all(['name', 'id']);
         return view('beheer.rol.index', compact('rols'));
     }
 
     //show create screen
-    public function create()
+    public function create(): View
     {
         $fields = ['title' => 'Add a role',
             'method' => 'POST',
@@ -43,7 +42,7 @@ class RolController extends Controller
     }
 
     //store rol
-    public function store(Request $request)
+    public function store(Request $request): RedirectResponse
     {
         $this->validateInput($request);
 
@@ -53,13 +52,13 @@ class RolController extends Controller
         return redirect('/rols');
     }
 
-    public function show(Request $request, Rol $rol)
+    public function show(Request $request, Rol $rol): View
     {
         return view('beheer.rol.show', compact('rol'));
     }
 
     //show edit screen
-    public function edit(Request $request, Rol $rol)
+    public function edit(Request $request, Rol $rol): View
     {
         $fields = ['title' => 'Edit role',
             'method' => 'PATCH',
@@ -69,7 +68,7 @@ class RolController extends Controller
     }
 
     //update rol
-    public function update(Request $request, Rol $rol)
+    public function update(Request $request, Rol $rol): RedirectResponse
     {
         $this->validateInput($request);
 
@@ -79,7 +78,7 @@ class RolController extends Controller
         return redirect('/rols');
     }
 
-    public function destroy(Request $request, Rol $rol)
+    public function destroy(Request $request, Rol $rol): RedirectResponse
     {
         $this->_rolRepository->delete($rol->id);
 
@@ -87,7 +86,7 @@ class RolController extends Controller
         return redirect('/rols');
     }
 
-    private function validateInput(Request $request)
+    private function validateInput(Request $request): void
     {
         $this->validate($request, [
             'name' => 'required|max:255',

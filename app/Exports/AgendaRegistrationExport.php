@@ -4,42 +4,27 @@ namespace App\Exports;
 
 use App\Models\AgendaItem;
 use App\Services\AgendaApplicationFormService;
-use Maatwebsite\Excel\Concerns\FromCollection;
-use Maatwebsite\Excel\Concerns\ShouldAutoSize;
-use Maatwebsite\Excel\Concerns\WithHeadings;
-use Maatwebsite\Excel\Concerns\WithTitle;
+use Illuminate\Support\Collection;
 
 /**
  * Class AgendaRegistrationExport
  * @package App\Exports
  */
-class AgendaRegistrationExport implements FromCollection, WithTitle, WithHeadings, ShouldAutoSize
+class AgendaRegistrationExport extends SpreadsheetExport
 {
-    /**
-     * @var AgendaApplicationFormService
-     */
-    private AgendaApplicationFormService $agendaApplicationFormService;
-
-    /**
-     * @var AgendaItem
-     */
-    private AgendaItem $agendaItem;
-
     /**
      * AgendaRegistrationExport constructor.
      * @param AgendaApplicationFormService $agendaApplicationFormService
      * @param AgendaItem $agendaItem
      */
-    public function __construct(AgendaApplicationFormService $agendaApplicationFormService, AgendaItem $agendaItem)
+    public function __construct(private readonly AgendaApplicationFormService $agendaApplicationFormService, private readonly AgendaItem $agendaItem)
     {
-        $this->agendaApplicationFormService = $agendaApplicationFormService;
-        $this->agendaItem = $agendaItem;
     }
 
     /**
-     * @return \Illuminate\Support\Collection
+     * @return Collection
      */
-    public function collection()
+    public function collection(): Collection
     {
         return $this->agendaApplicationFormService->getExportData($this->agendaItem);
     }

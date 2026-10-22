@@ -6,7 +6,9 @@ use App\CustomClasses\MailList\MailListFacade;
 use App\Jobs\MemberMassMailListSyncJob;
 use App\Models\User;
 use App\Repositories\UserRepository;
+use Illuminate\Contracts\View\View;
 use Illuminate\Http\Client\RequestException;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Log;
@@ -15,24 +17,19 @@ use Illuminate\Support\Facades\Session;
 class MailListController extends Controller
 {
 
-    private MailListFacade $_mailListFacade;
-    private UserRepository $userRepository;
-
     /**
      * Create a new controller instance.
      *
      * @return void
      */
-    public function __construct(MailListFacade $mailListFacade, UserRepository $userRepository)
+    public function __construct(private readonly MailListFacade $_mailListFacade, private readonly UserRepository $userRepository)
     {
-        $this->_mailListFacade = $mailListFacade;
         $this->middleware('auth');
         $this->middleware('authorize:' . Config::get('constants.Administrator'));
-        $this->userRepository = $userRepository;
     }
 
     //gives the mail list views
-    public function index()
+    public function index(): View
     {
         $mailLists = $this->_mailListFacade->getAllMailLists()->all();
 
@@ -40,7 +37,7 @@ class MailListController extends Controller
     }
 
     //show create screen
-    public function create()
+    public function create(): View
     {
         $fields = ['title' => 'Add mailing list',
             'method' => 'POST',
@@ -50,7 +47,7 @@ class MailListController extends Controller
     }
 
     //store maillist
-    public function store(Request $request)
+    public function store(Request $request): RedirectResponse
     {
         try {
             $this->_mailListFacade->storeMailList($request->all());
@@ -65,23 +62,23 @@ class MailListController extends Controller
         return redirect('/mailList');
     }
 
-    public function show(Request $request, $mailList)
+    public function show(Request $request, $mailList): View
     {
         $mailList = $this->_mailListFacade->getMailList($mailList);
         return view('beheer.mailList.show', compact('mailList'));
 
     }
 
-    public function destroy(Request $request, $mailList)
+    public function destroy(Request $request, $mailList): RedirectResponse
     {
         $this->_mailListFacade->deleteMailList($mailList);
 
         return redirect('/mailList');
     }
 
-    public function addMember(Request $request, $mailList)
+    public function addMember(Request $request, $mailList): string
     {
-        $users = User::find($request->get('userIds'));
+        $users = User::find($request->input('userIds'));
         foreach ($users as $user) {
             $this->_mailListFacade->addMember($mailList, $user->email, $user->getName());
         }
@@ -89,13 +86,13 @@ class MailListController extends Controller
         return "";
     }
 
-    public function deleteMemberFromMailList($mailList, $member)
+    public function deleteMemberFromMailList($mailList, $member): void
     {
         $this->_mailListFacade->deleteMemberFromMailList($mailList, $member);
     }
 
     
-    public function massMemberMailListSync()
+    public function massMemberMailListSync(): RedirectResponse
     {
         $users = $this->userRepository->getCurrentUsers(); //should give user objects
         

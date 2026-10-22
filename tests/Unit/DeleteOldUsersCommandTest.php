@@ -6,7 +6,7 @@ use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Support\Facades\Artisan;
-use TestCase;
+use Tests\TestCase;
 
 class DeleteOldUsersCommandTest extends TestCase
 {

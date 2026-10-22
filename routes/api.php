@@ -1,29 +1,22 @@
 <?php
 
+use App\Http\Controllers\ApiController;
+use App\Http\Controllers\Api\AgendaController;
+use App\Http\Controllers\Api\RegistrationController;
+use App\Http\Controllers\Api\UserController;
+use App\Http\Controllers\Api\ZekeringController;
 use Illuminate\Support\Facades\Route;
 
-/*
-|--------------------------------------------------------------------------
-| API Routes
-|--------------------------------------------------------------------------
-|
-| Here is where you can register API routes for your application. These
-| routes are loaded by the RouteServiceProvider within a group which
-| is assigned the "api" middleware group. Enjoy building your API!
-|
- */
+Route::get('/menuItems', [ApiController::class, 'getMenuItems']);
+Route::get('/users', [ApiController::class, 'getUsers']);
+Route::get('/users/autoComplete', [UserController::class, 'autoComplete'])->name('user.autoComplete');
 
-//api routes
-Route::get('/menuItems', 'ApiController@getMenuItems');
-Route::get('/users', 'ApiController@getUsers');
-Route::get('/users/autoComplete', 'Api\UserController@autoComplete')->name('user.autoComplete');
+Route::get('/agenda', [AgendaController::class, 'getAgenda']);
+Route::get('/agendaCategories', [AgendaController::class, 'getCategories']);
 
-Route::get('/agenda', 'Api\AgendaController@getAgenda');
-Route::get('/agendaCategories', 'Api\AgendaController@getCategories');
+Route::get('/zekeringen', [ZekeringController::class, 'getZekeringen']);
+Route::post('/zekeringen', [ZekeringController::class, 'storeZekering']);
+Route::post('/subzekering', [ZekeringController::class, 'storeSubZekering']);
+Route::delete('/zekeringen/{id}', [ZekeringController::class, 'destroy']);
 
-Route::get('/zekeringen', 'Api\ZekeringController@getZekeringen');
-Route::post('/zekeringen', 'Api\ZekeringController@storeZekering');
-Route::post('/subzekering', 'Api\ZekeringController@storeSubZekering');
-Route::delete('/zekeringen/{id}', 'Api\ZekeringController@destroy');
-
-Route::get('/user/registrations', 'Api\RegistrationController@registrationsByUser');
+Route::get('/user/registrations', [RegistrationController::class, 'registrationsByUser']);

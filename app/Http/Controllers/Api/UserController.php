@@ -19,7 +19,7 @@ class UserController extends Controller
     {
         $users = User::query()
             ->where(function (Builder $query) use ($request) {
-                $term = $request->get('term', '');
+                $term = $request->input('term', '');
                 $query->where('firstname', 'like', "%$term%")
                     ->orWhere('lastname', 'like', "%$term%");
             })

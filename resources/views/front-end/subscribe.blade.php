@@ -222,7 +222,7 @@
                     {{ html()->checkbox('termsconditions')->class('form-check-input')->id('termsconditions') }}
                     {{ html()->label('Accept the Terms and Conditions', 'termsconditions')->class('form-check-label') }}
                 </div>
-                <div class="g-recaptcha" data-sitekey="{{config('custom.google_recaptcha_key')}}"></div>
+                <div class="g-recaptcha" data-sitekey="{{config('services.recaptcha.key')}}"></div>
             </div>
         </div>
     </div>

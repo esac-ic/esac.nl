@@ -7,7 +7,8 @@ use App\Models\User;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Config;
-use TestCase;
+use PHPUnit\Framework\Attributes\Test;
+use Tests\TestCase;
 
 class DeleteAgendaItemTest extends TestCase
 {
@@ -36,7 +37,7 @@ class DeleteAgendaItemTest extends TestCase
         Artisan::call('migrate:reset');
         parent::tearDown();
     }
-    /** @test */
+    #[Test]
     public function DeleteAgendaItem()
     {
         $agendaItem = AgendaItem::factory()->create();

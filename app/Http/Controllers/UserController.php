@@ -14,7 +14,6 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Session;
-use Maatwebsite\Excel\Facades\Excel;
 
 class UserController extends Controller
 {
@@ -143,17 +142,16 @@ class UserController extends Controller
         }
     }
 
-    public function removeAsActiveMember(Request $request, User $user, MailListFacade $mailListFacade)
+    public function removeAsActiveMember(Request $request, User $user)
     {
         $user->removeAsActiveMember();
-        $mailListFacade->deleteUserForAllMailList($user);
 
         return redirect('/users/' . $user->id);
     }
 
     public function exportUsers(UsersExport $usersExport)
     {
-        return Excel::download($usersExport, 'Members.xlsx');
+        return $usersExport->download('Members.xlsx');
     }
     public function pennoMemberExportSelect(Request $request)
     {
@@ -162,16 +160,16 @@ class UserController extends Controller
     public function pennoMemberExport(Request $request, UserRepository $userRepository)
     {
         $request->validate([
-            'days_ago' => 'required|integer:strict|min:0'
+            'days_ago' => 'required|integer|min:0'
         ]);
-        $export = new PennoMemberExport($userRepository, $request->get('days_ago'));
+        $export = new PennoMemberExport($userRepository, $request->integer('days_ago'));
         $exportDate = $export->getFromDate()->toDateString();
-        return Excel::download($export, "Members (created after $exportDate).xlsx");
+        return $export->download("Members (created after $exportDate).xlsx");
     }
 
     public function exportOldUsers(OldUsersExport $oldUsersExport)
     {
-        return Excel::download($oldUsersExport, 'Old members.xlsx');
+        return $oldUsersExport->download('Old members.xlsx');
     }
 
     public function makeActiveMember(Request $request, User $user)
@@ -187,7 +185,7 @@ class UserController extends Controller
         }
     }
 
-    private function validateInput(Request $request, int $userId = null)
+    private function validateInput(Request $request, ?int $userId = null)
     {
         $this->validate($request, [
             'email' => [

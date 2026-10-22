@@ -24,7 +24,7 @@ jobs:
     environment: Build
     services:
       mysql:
-        image: mysql:8.4
+        image: mysql:9.7
         env:
           MYSQL_DATABASE: ${{ env.DB_DATABASE }}
           MYSQL_USER: ${{ env.DB_USERNAME }}
@@ -45,7 +45,7 @@ jobs:
     - name: Setup PHP
       uses: shivammathur/setup-php@eb7c497e18156a6bbabfef1d3a82760b9eda3962 # 2.40.0
       with:
-        php-version: '8.3'
+        php-version: '8.5'
 
     - name: Install PHP dependencies
       run: composer install --prefer-dist --no-progress --no-interaction
@@ -153,4 +153,5 @@ jobs:
           docker compose up -d
           docker compose exec -T app php artisan migrate --force < /dev/null
           docker compose exec -T app php artisan optimize < /dev/null
-          docker compose exec -T app php artisan view:cache < /dev/null"
+          docker compose exec -T app php artisan reload < /dev/null
+          docker image prune -af --filter until=168h"

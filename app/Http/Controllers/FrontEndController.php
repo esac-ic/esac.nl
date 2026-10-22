@@ -12,36 +12,19 @@ use App\Repositories\MenuRepository;
 use App\Repositories\NewsItemRepository;
 use App\Repositories\UserRepository;
 use App\Services\AgendaApplicationFormService;
+use Illuminate\Contracts\View\View;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Redirect;
 
 class FrontEndController extends Controller
 {
-    private MenuRepository $_menuItemRepository;
-    private AgendaItemCategoryRepository $_agendaCategoryRepository;
-    private NewsItemRepository $_newsItemRepository;
-    private AgendaItemRepository $_agendaRepository;
-    private UserRepository $_userRepository;
-    private BookRepository $_bookRepository;
-
-    public function __construct(
-        MenuRepository $menuItemRepository,
-        AgendaItemCategoryRepository $agendaCategoryRepository,
-        NewsItemRepository $newsItemRepository,
-        AgendaItemRepository $agendaRepository,
-        UserRepository $userRepository,
-        BookRepository $bookRepository) {
-        $this->_menuItemRepository = $menuItemRepository;
-        $this->_agendaCategoryRepository = $agendaCategoryRepository;
-        $this->_newsItemRepository = $newsItemRepository;
-        $this->_agendaRepository = $agendaRepository;
-        $this->_userRepository = $userRepository;
-        $this->_bookRepository = $bookRepository;
+    public function __construct(private readonly MenuRepository $_menuItemRepository, private readonly AgendaItemCategoryRepository $_agendaCategoryRepository, private readonly NewsItemRepository $_newsItemRepository, private readonly AgendaItemRepository $_agendaRepository, private readonly UserRepository $_userRepository, private readonly BookRepository $_bookRepository)
+    {
     }
 
-    public function agenda()
+    public function agenda(): View
     {
-        $categories = array();
+        $categories = [];
         $curPageName = 'Events';
         $menuItem = $this->_menuItemRepository->findby('urlName', MenuItem::AGENDAURL);
         $content = $menuItem->content;
@@ -56,8 +39,8 @@ class FrontEndController extends Controller
     public function agendaDetailView(
         AgendaItem $agendaItem,
         AgendaApplicationFormService $agendaApplicationFormService
-    ) {
-        $users = array();
+    ): View {
+        $users = [];
         $curPageName = $agendaItem->title;
         if ($agendaItem->application_form_id != null) {
             foreach ($agendaApplicationFormService->getRegisteredUsers($agendaItem)['userdata'] as $user) {
@@ -84,7 +67,7 @@ class FrontEndController extends Controller
         return view("front-end.zekeringen", compact('curPageName', 'content'));
     }
 
-    public function publicSubscribe()
+    public function publicSubscribe(): View
     {
         $menuItem = $this->_menuItemRepository->findby('urlName', MenuItem::SUBSCRIBEURL);
         $content = $menuItem->content;
@@ -92,7 +75,7 @@ class FrontEndController extends Controller
         return view("front-end.subscribe", compact('curPageName', 'content'));
     }
 
-    public function news()
+    public function news(): View
     {
         $newsItems = NewsItem::orderBy('id', 'desc')->paginate(9);
         $curPageName = 'News';
@@ -102,7 +85,7 @@ class FrontEndController extends Controller
         return view("front-end.news", compact('curPageName', 'content', 'newsItems'));
     }
 
-    public function newsDetailView(Request $request, NewsItem $newsItem)
+    public function newsDetailView(Request $request, NewsItem $newsItem): View
     {
         $curPageName = $newsItem->title;
         $menuItem = $this->_menuItemRepository->findby('urlName', MenuItem::NEWSURL);
@@ -111,9 +94,9 @@ class FrontEndController extends Controller
         return view("front-end.news_detail", compact('newsItem', 'curPageName'));
     }
 
-    public function library()
+    public function library(): View
     {
-        $books = $this->_bookRepository->all(array("id", "title", "year", "type", "country", "code"));
+        $books = $this->_bookRepository->all(["id", "title", "year", "type", "country", "code"]);
         $curPageName = 'Library';
         $menuItem = $this->_menuItemRepository->findby('urlName', MenuItem::LIBRARYURL);
         $content = $menuItem->content;
@@ -123,7 +106,7 @@ class FrontEndController extends Controller
 
     public function memberlist()
     {
-        $users = $this->_userRepository->getCurrentUsers(array('firstname', 'lastname', 'email', 'preposition', 'kind_of_member', 'phonenumber'));
+        $users = $this->_userRepository->getCurrentUsers(['firstname', 'lastname', 'email', 'preposition', 'kind_of_member', 'phonenumber']);
         $curPageName = 'Members list';
         $menuItem = $this->_menuItemRepository->findby('urlName', MenuItem::MEMBERLISTURL);
         $content = $menuItem->content;
@@ -135,7 +118,7 @@ class FrontEndController extends Controller
         return view('front-end.memberlist', compact('users', 'curPageName', 'content'));
     }
 
-    public function home(AgendaItemRepository $agendaItemRepository)
+    public function home(AgendaItemRepository $agendaItemRepository): View
     {
         $newsItems = $this->_newsItemRepository->getLastXNewsItems(3);
         $agendaItems = $this->_agendaRepository->getFirstXItems(4);

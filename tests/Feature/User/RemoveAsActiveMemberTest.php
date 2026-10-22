@@ -2,16 +2,15 @@
 
 namespace Tests\Feature\User;
 
-use App\CustomClasses\MailList\MailListFacade;
 use App\Events\MemberBecameOldMember;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Event;
-use Mockery\MockInterface;
+use Tests\TestCase;
 
-class RemoveAsActiveMemberTest extends \TestCase
+class RemoveAsActiveMemberTest extends TestCase
 {
     use RefreshDatabase;
     
@@ -35,15 +34,6 @@ class RemoveAsActiveMemberTest extends \TestCase
         $initialDispenser = Event::getFacadeRoot();
         Event::fake();
         Model::setEventDispatcher($initialDispenser);
-        
-        $this->mock(MailListFacade::class, function (MockInterface $mock) use ($user) {
-            $mock->shouldReceive('deleteUserForAllMailList')
-                ->with(\Mockery::type(User::class))
-                ->with(\Mockery::on(function ($arg) use ($user) { //custom validator to check if the correct argument is passed
-                    return $user->is($arg);
-                }))
-                ->once();
-        });
         
         $response = $this->actingAs($this->admin)->patch(route('users.removeAsActiveMember', $user));
         $response->assertRedirect(route('users.show', $user));

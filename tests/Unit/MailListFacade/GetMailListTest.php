@@ -7,14 +7,14 @@ use App\CustomClasses\MailList\MailMan;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Http;
 use Mockery\MockInterface;
-use TestCase;
+use Tests\TestCase;
 
 class GetMailListTest extends TestCase
 {
     protected function setUp(): void
     {
         parent::setUp();
-        Config::set('mailman.url', 'http://localhost:8001/3.1');
+        Config::set('services.mailman.url', 'http://localhost:8001/3.1');
     }
 
     public function test_happy_flow_multiple_members()

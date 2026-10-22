@@ -8,7 +8,8 @@ use App\Models\User;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Config;
-use TestCase;
+use PHPUnit\Framework\Attributes\Test;
+use Tests\TestCase;
 
 class AgendaFilterTest extends TestCase
 {
@@ -41,7 +42,7 @@ class AgendaFilterTest extends TestCase
         parent::tearDown();
     }
 
-    /** @test */
+    #[Test]
     public function api_returns_filtered_agenda_items()
     {
         $agendaItemCategory = AgendaItemCategory::factory()->create();

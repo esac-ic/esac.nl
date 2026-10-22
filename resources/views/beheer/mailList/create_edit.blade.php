@@ -26,7 +26,7 @@
                 <div class="input-group">
                     {{ html()->text('address', ($mailList != null) ? explode('@',$mailList->getAddress())[0] : "")->class('form-control')->required()->attribute('aria-describedby', 'basic-addon3') }}
                     <div class="input-group-append">
-                        <span class="input-group-text" id="basic-addon3">{{ config('mailman.domain') }}</span>
+                        <span class="input-group-text" id="basic-addon3">{{ config('services.mailman.domain') }}</span>
                     </div>
                 </div>
             </div>

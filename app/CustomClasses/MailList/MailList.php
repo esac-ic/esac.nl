@@ -16,7 +16,7 @@ class MailList
     private $name;
 
     /** @var MailListMember[] */
-    private array $members = array();
+    private array $members = [];
 
     /**
      * @return mixed
@@ -30,7 +30,7 @@ class MailList
      * @param mixed $id
      * @return MailList
      */
-    public function setId($id)
+    public function setId($id): static
     {
         $this->id = $id;
         return $this;
@@ -48,7 +48,7 @@ class MailList
      * @param mixed $address
      * @return MailList
      */
-    public function setAddress($address)
+    public function setAddress($address): static
     {
         $this->address = $address;
         return $this;
@@ -66,7 +66,7 @@ class MailList
      * @param mixed $members_count
      * @return MailList
      */
-    public function setMembersCount($members_count)
+    public function setMembersCount($members_count): static
     {
         $this->members_count = $members_count;
         return $this;
@@ -84,7 +84,7 @@ class MailList
      * @param mixed $name
      * @return MailList
      */
-    public function setName($name)
+    public function setName($name): static
     {
         $this->name = $name;
         return $this;

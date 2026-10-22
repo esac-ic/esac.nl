@@ -10,43 +10,44 @@ use Eluceo\iCal\Domain\Entity\Event;
 use Eluceo\iCal\Domain\Entity\TimeZone;
 use Eluceo\iCal\Domain\ValueObject\DateTime;
 use Eluceo\iCal\Domain\ValueObject\TimeSpan;
+use Eluceo\iCal\Domain\ValueObject\UniqueIdentifier;
 use Eluceo\iCal\Presentation\Factory\CalendarFactory;
+use Illuminate\Http\Response;
 
 class ICalController extends Controller
 {
-    public function getAgendaItemsICalObject()
+    public function getAgendaItemsICalObject(): Response
     {
         $phpDateTimeZone = new PhpDateTimeZone('Europe/Amsterdam');
         $timeZone = TimeZone::createFromPhpDateTimeZone(
             $phpDateTimeZone,
-            new DateTimeImmutable(date("Y", strtotime("-1 year")) . '-' . date("m") . '-' . date("d") . ' 00:00:00', $phpDateTimeZone),
-            new DateTimeImmutable(date("Y", strtotime("+1 year")) . '-' . date("m") . '-' . date("d") . ' 00:00:00', $phpDateTimeZone),
+            new DateTimeImmutable('-1 year midnight', $phpDateTimeZone),
+            new DateTimeImmutable('+1 year midnight', $phpDateTimeZone),
         );
 
-        $agenda_items = AgendaItem::all();
         $calendar = new Calendar([]);
         $calendar->addTimeZone($timeZone);
+        $host = parse_url(config('app.url'), PHP_URL_HOST);
 
-        // create Ical events from agenda items
-        foreach ($agenda_items as $agenda_item) {
-            $event = new Event();
+        foreach (AgendaItem::all() as $agendaItem) {
+            $event = new Event(new UniqueIdentifier('agenda-item-'.$agendaItem->id.'@'.$host));
             $event
-                ->setOccurrence(new TimeSpan(new DateTime(new \DateTime($agenda_item->startDate), false), new DateTime(new \DateTime($agenda_item->endDate), false)))
-                ->setSummary($agenda_item->title)
+                ->setOccurrence(new TimeSpan(
+                    new DateTime(new DateTimeImmutable($agendaItem->startDate), false),
+                    new DateTime(new DateTimeImmutable($agendaItem->endDate), false),
+                ))
+                ->setSummary($agendaItem->title)
                 ->setDescription(
-                    html_entity_decode(strip_tags($agenda_item->text)) .
-                    "\r\n\r\n----------\r\n" .
-                    "Meer informatie: " . url('/agenda/' . $agenda_item->id));
+                    html_entity_decode(strip_tags($agendaItem->text)).
+                    "\r\n\r\n----------\r\n".
+                    'Meer informatie: '.url('/agenda/'.$agendaItem->id)
+                );
             $calendar->addEvent($event);
         }
 
-        $componentFactory = new CalendarFactory();
-        $calendarComponent = $componentFactory->createCalendar($calendar);
-
-        // set Http headers
-        header('Content-Type: text/calendar; charset=utf-8');
-        header('Content-Disposition: attachment; filename="cal.ics"');
-
-        echo $calendarComponent;
+        return response((string) new CalendarFactory()->createCalendar($calendar), 200, [
+            'Content-Type' => 'text/calendar; charset=utf-8',
+            'Content-Disposition' => 'attachment; filename="cal.ics"',
+        ]);
     }
 }

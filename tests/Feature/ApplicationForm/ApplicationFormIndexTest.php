@@ -7,7 +7,8 @@ use App\Models\User;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Config;
-use TestCase;
+use PHPUnit\Framework\Attributes\Test;
+use Tests\TestCase;
 
 /**
  * Class ApplicationFormIndexTest
@@ -57,7 +58,7 @@ class ApplicationFormIndexTest extends TestCase
         parent::tearDown();
     }
 
-    /** @test */
+    #[Test]
     public function a_content_administrator_can_view_the_page(): void
     {
         $response = $this->get(self::URL);
@@ -65,7 +66,7 @@ class ApplicationFormIndexTest extends TestCase
         $response->assertStatus(200);
     }
 
-    /** @test */
+    #[Test]
     public function an_activity_administrator_can_view_the_page(): void
     {
         $this->user->roles()->sync([Config::get('constants.Activity_administrator')]);
@@ -75,7 +76,7 @@ class ApplicationFormIndexTest extends TestCase
         $response->assertStatus(200);
     }
 
-    /** @test */
+    #[Test]
     public function an_administrator_can_not_view_the_page(): void
     {
         $this->user->roles()->sync([Config::get('constants.Administrator')]);
@@ -85,7 +86,7 @@ class ApplicationFormIndexTest extends TestCase
         $response->assertStatus(403);
     }
 
-    /** @test */
+    #[Test]
     public function a_certificate_administrator_can_not_view_the_page(): void
     {
         $this->user->roles()->sync([Config::get('constants.Certificate_administrator')]);
@@ -95,7 +96,7 @@ class ApplicationFormIndexTest extends TestCase
         $response->assertStatus(403);
     }
 
-    /** @test */
+    #[Test]
     public function an_user_without_views_can_not_view_the_page(): void
     {
         $this->user->roles()->sync([Config::get('constants.Certificate_administrator')]);

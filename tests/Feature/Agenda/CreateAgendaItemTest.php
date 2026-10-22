@@ -8,9 +8,12 @@ use App\Models\ApplicationForm\ApplicationForm;
 use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
+use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Config;
-use TestCase;
+use Illuminate\Support\Facades\Storage;
+use PHPUnit\Framework\Attributes\Test;
+use Tests\TestCase;
 
 class CreateAgendaItemTest extends TestCase
 {
@@ -36,7 +39,7 @@ class CreateAgendaItemTest extends TestCase
         Artisan::call('migrate:reset');
         parent::tearDown();
     }
-    /** @test */
+    #[Test]
     public function CreateAgendaItem()
     {
         //Attach
@@ -62,6 +65,29 @@ class CreateAgendaItemTest extends TestCase
         $this->assertEquals($body['text'], $agendaItem->text);
         $this->assertEquals($body['title'], $agendaItem->title);
         $this->assertEquals($body['category'], $agendaItem->agendaItemCategory->id);
+    }
+
+    #[Test]
+    public function creating_an_agenda_item_stores_a_resized_thumbnail()
+    {
+        Storage::fake('public');
+        $this->user->roles()->attach(Config::get('constants.Activity_administrator'));
+
+        $response = $this->post($this->url, [
+            'title' => 'test agenda',
+            'text' => 'test agenda',
+            'shortDescription' => 'test agenda',
+            'category' => AgendaItemCategory::factory()->create()->id,
+            'applicationForm' => 0,
+            'subscription_endDate' => Carbon::now()->addDays(2),
+            'endDate' => Carbon::now()->addDays(3),
+            'startDate' => Carbon::now()->addDays(1),
+            'thumbnail' => UploadedFile::fake()->image('photo.png', 1000, 1000),
+        ]);
+        $response->assertStatus(302);
+        $agendaItem = AgendaItem::all()->last();
+
+        $this->assertSame([400, 300], array_slice(getimagesize(Storage::disk('public')->path($agendaItem->image_url)), 0, 2));
     }
 
     public function CreateAgendaWithIncorrectRole()

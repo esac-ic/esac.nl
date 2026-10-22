@@ -9,7 +9,8 @@ use App\Models\User;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Config;
-use TestCase;
+use PHPUnit\Framework\Attributes\Test;
+use Tests\TestCase;
 
 class CopyAgendaItem extends TestCase
 {
@@ -41,7 +42,7 @@ class CopyAgendaItem extends TestCase
         parent::tearDown();
     }
 
-    /** @test */
+    #[Test]
     public function agenda_item_can_be_copied(){
         $agendaItem = AgendaItem::factory()->create(['image_url' => ""]);
 
