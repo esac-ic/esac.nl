@@ -15,8 +15,7 @@ class DeleteEditorImageTest extends TestCase
     public function test_an_editor_image_is_deleted_by_its_src()
     {
         Storage::fake('public')->put('image_uploads/a.jpg', 'a');
-        $admin = User::factory()->create();
-        $admin->roles()->attach(Role::ContentAdministrator->value);
+        $admin = User::factory()->withRole(Role::ContentAdministrator)->create();
 
         $this->actingAs($admin)->delete('images/delete?path=/storage/image_uploads/a.jpg')->assertOk();
 

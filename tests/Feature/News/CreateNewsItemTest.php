@@ -8,6 +8,7 @@ use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\Test;
 use Tests\TestCase;
 
@@ -15,36 +16,27 @@ class CreateNewsItemTest extends TestCase
 {
     use RefreshDatabase;
 
-    private $url = 'newsItems';
-
-    private $newsItem;
-
-    private $user;
-
     protected function setUp(): void
     {
         parent::setUp();
-        $this->user = $user = User::factory()->create();
+        $this->actingAs(User::factory()->withRole(Role::ActivityAdministrator)->create());
+    }
 
-        $user->roles()->attach(Role::ActivityAdministrator->value);
-        $this->be($user);
+    public static function newsItems(): array
+    {
+        return [
+            'plain' => [['title' => 'test nieuws', 'text' => 'test nieuws', 'author' => 'Gebruiker1']],
+            'emoji' => [['title' => 'test news 😀', 'text' => 'test nieuws 😀', 'author' => 'Gebruiker1']],
+        ];
     }
 
     #[Test]
-    public function create_news_item()
+    #[DataProvider('newsItems')]
+    public function create_news_item(array $body)
     {
-        $body = [
-            'title' => 'test nieuws',
-            'text' => 'test nieuws',
-            'author' => 'Gebruiker1',
-        ];
-        $response = $this->post($this->url, $body);
-        $response->assertStatus(302);
-        $newsItem = NewsItem::all()->last();
+        $this->post('newsItems', $body)->assertRedirect();
 
-        $this->assertEquals($body['text'], $newsItem->text);
-        $this->assertEquals($body['title'], $newsItem->title);
-        $this->assertEquals($body['author'], $newsItem->author);
+        $this->assertDatabaseHas(NewsItem::class, $body);
     }
 
     #[Test]
@@ -52,14 +44,13 @@ class CreateNewsItemTest extends TestCase
     {
         Storage::fake('public');
 
-        $response = $this->post($this->url, [
+        $this->post('newsItems', [
             'title' => 'test nieuws',
             'text' => 'test nieuws',
             'author' => 'Gebruiker1',
             'thumbnail' => UploadedFile::fake()->image('photo.jpg', 1600, 1200),
-        ]);
-        $response->assertStatus(302);
-        $newsItem = NewsItem::all()->last();
+        ])->assertRedirect();
+        $newsItem = NewsItem::sole();
 
         $this->assertSame([1200, 500], array_slice(getimagesize(Storage::disk('public')->path($newsItem->image_url)), 0, 2));
         $this->assertSame([400, 300], array_slice(getimagesize(Storage::disk('public')->path($newsItem->thumbnail_url)), 0, 2));
@@ -68,26 +59,8 @@ class CreateNewsItemTest extends TestCase
     #[Test]
     public function a_news_item_needs_an_author()
     {
-        $response = $this->post($this->url, ['title' => 'test nieuws', 'text' => 'test nieuws']);
+        $this->post('newsItems', ['title' => 'test nieuws', 'text' => 'test nieuws'])->assertInvalid('author');
 
-        $response->assertSessionHasErrors('author');
-        $this->assertSame(0, NewsItem::count());
-    }
-
-    #[Test]
-    public function create_news_item_with_emoji()
-    {
-        $body = [
-            'title' => 'test news 😀',
-            'text' => 'test nieuws 😀',
-            'author' => 'Gebruiker1',
-        ];
-        $response = $this->post($this->url, $body);
-        $response->assertStatus(302);
-        $newsItem = NewsItem::all()->last();
-
-        $this->assertEquals($body['text'], $newsItem->text);
-        $this->assertEquals($body['title'], $newsItem->title);
-        $this->assertEquals($body['author'], $newsItem->author);
+        $this->assertDatabaseEmpty(NewsItem::class);
     }
 }

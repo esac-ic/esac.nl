@@ -16,8 +16,7 @@ class MailListRoutesTest extends TestCase
     #[Test]
     public function mailing_lists_can_not_be_edited()
     {
-        $admin = User::factory()->create();
-        $admin->roles()->attach(Role::Administrator->value);
+        $admin = User::factory()->withRole(Role::Administrator)->create();
 
         $this->actingAs($admin)->get('mailList/leden.esac.nl/edit')->assertNotFound();
         $this->actingAs($admin)->patch('mailList/leden.esac.nl')->assertMethodNotAllowed();

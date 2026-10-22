@@ -11,7 +11,6 @@ use App\Models\Book;
 use App\Models\User;
 use App\Models\UserEventLogEntry;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Support\Carbon;
 use Illuminate\Testing\TestResponse;
 use OpenSpout\Reader\XLSX\Reader;
 use PHPUnit\Framework\Attributes\Test;
@@ -27,11 +26,8 @@ class ExportTest extends TestCase
     {
         parent::setUp();
 
-        $this->admin = User::factory()->create();
-        $this->admin->roles()->attach([
-            Role::Administrator->value,
-            Role::ActivityAdministrator->value,
-        ]);
+        $this->admin = User::factory()->withRole(Role::Administrator, Role::ActivityAdministrator)->create();
+        $this->actingAs($this->admin);
     }
 
     #[Test]
@@ -40,7 +36,7 @@ class ExportTest extends TestCase
         User::factory()->count(2)->create();
         User::factory()->lidAf()->create();
 
-        [$sheet, $rows] = $this->readSpreadsheet($this->actingAs($this->admin)->get('users/exportUsers'), 'Members.xlsx');
+        [$sheet, $rows] = $this->readSpreadsheet($this->get('users/exportUsers'), 'Members.xlsx');
 
         $this->assertSame('Active members', $sheet);
         $this->assertSame('#', $rows[0][0]);
@@ -55,7 +51,7 @@ class ExportTest extends TestCase
     {
         User::factory()->count(2)->lidAf()->create();
 
-        [$sheet, $rows] = $this->readSpreadsheet($this->actingAs($this->admin)->get('users/exportOldUsers'), 'Old members.xlsx');
+        [$sheet, $rows] = $this->readSpreadsheet($this->get('users/exportOldUsers'), 'Old members.xlsx');
 
         $this->assertSame('Old members', $sheet);
         $this->assertSame(['#', 'First name', 'Preposition', 'Last name', 'User created at', 'User removed at'], $rows[0]);
@@ -65,11 +61,11 @@ class ExportTest extends TestCase
     #[Test]
     public function penno_export_lists_the_members_created_after_the_given_date()
     {
-        User::factory()->create(['created_at' => Carbon::now()->subDays(10)]);
-        User::factory()->create(['created_at' => Carbon::now()->subDay()]);
+        User::factory()->create(['created_at' => now()->subDays(10)]);
+        User::factory()->create(['created_at' => now()->subDay()]);
 
-        $response = $this->actingAs($this->admin)->get('users/pennoMemberExport?days_ago=5');
-        $exportDate = Carbon::today()->subDays(5)->toDateString();
+        $response = $this->get('users/pennoMemberExport?days_ago=5');
+        $exportDate = today()->subDays(5)->toDateString();
 
         [$sheet, $rows] = $this->readSpreadsheet($response, "Members (created after $exportDate).xlsx");
 
@@ -84,7 +80,7 @@ class ExportTest extends TestCase
     {
         Book::create(['title' => 'Alpine climbing', 'year' => 1990, 'country' => 'CH', 'type' => 'Guide', 'code' => 'A1']);
 
-        [$sheet, $rows] = $this->readSpreadsheet($this->actingAs($this->admin)->get('books/exportLibrary'), 'Library.xlsx');
+        [$sheet, $rows] = $this->readSpreadsheet($this->get('books/exportLibrary'), 'Library.xlsx');
 
         $this->assertSame('Books', $sheet);
         $this->assertSame(['#', 'Title', 'Year', 'Type', 'Country', 'Code'], $rows[0]);
@@ -95,12 +91,12 @@ class ExportTest extends TestCase
     #[Test]
     public function event_log_export_lists_the_entries_in_the_period()
     {
-        UserEventLogEntry::factory()->count(3)->create(['user_id' => $this->admin->id, 'created_at' => Carbon::now()]);
-        UserEventLogEntry::factory()->create(['user_id' => $this->admin->id, 'created_at' => Carbon::now()->subWeek()]);
+        UserEventLogEntry::factory()->count(3)->create(['user_id' => $this->admin->id, 'created_at' => now()]);
+        UserEventLogEntry::factory()->create(['user_id' => $this->admin->id, 'created_at' => now()->subWeek()]);
 
-        $response = $this->actingAs($this->admin)->post('userEventLog/export', [
-            'startDate' => Carbon::now()->subDay()->format('d-m-Y H:i'),
-            'endDate' => Carbon::now()->addDay()->format('d-m-Y H:i'),
+        $response = $this->post('userEventLog/export', [
+            'startDate' => now()->subDay()->format('d-m-Y H:i'),
+            'endDate' => now()->addDay()->format('d-m-Y H:i'),
         ]);
 
         [$sheet, $rows] = $this->readSpreadsheet($response);
@@ -126,7 +122,7 @@ class ExportTest extends TestCase
             'inschrijf_form_id' => $form->id,
         ]);
 
-        $response = $this->actingAs($this->admin)->get("forms/users/{$agendaItem->id}/export");
+        $response = $this->get("forms/users/{$agendaItem->id}/export");
 
         [$sheet, $rows] = $this->readSpreadsheet($response, 'Trip-to-Font.xlsx');
 

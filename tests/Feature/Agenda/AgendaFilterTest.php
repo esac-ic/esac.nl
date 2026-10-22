@@ -21,10 +21,8 @@ class AgendaFilterTest extends TestCase
     protected function setUp(): void
     {
         parent::setUp();
-        $this->user = $user = User::factory()->create();
-
-        $user->roles()->attach(Role::Administrator->value);
-        $this->be($user);
+        $this->user = User::factory()->withRole(Role::Administrator)->create();
+        $this->actingAs($this->user);
     }
 
     #[Test]

@@ -4,8 +4,8 @@ namespace Tests\Feature\User;
 
 use App\Events\PendingUserCreated;
 use App\Models\User;
-use Carbon\Carbon;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\Http;
 use PHPUnit\Framework\Attributes\Test;
@@ -14,10 +14,6 @@ use Tests\TestCase;
 class RegisterNewMemberTest extends TestCase
 {
     use RefreshDatabase;
-
-    private $url = '/signup';
-
-    private $user;
 
     protected function setUp(): void
     {
@@ -29,7 +25,6 @@ class RegisterNewMemberTest extends TestCase
     #[Test]
     public function a_guest_can_register_a_new_user()
     {
-
         $body = [
             'email' => 'test@esac.nl',
             'firstname' => 'esac',
@@ -46,7 +41,7 @@ class RegisterNewMemberTest extends TestCase
             'emergency_city' => 'dead',
             'emergency_zipcode' => '3473JP',
             'emergency_country' => 'NL',
-            'birthday' => Carbon::now()->subCenturies(2)->format('d-m-Y'),
+            'birthday' => now()->subCenturies(2)->format('d-m-Y'),
             'iban' => 'BLNDj838474784848',
             'password' => 'a-password',
             'password_confirmation' => 'a-password',
@@ -56,66 +51,45 @@ class RegisterNewMemberTest extends TestCase
             'g-recaptcha-response' => 'ikbenvalid',
         ];
 
-        $response = $this->post($this->url, $body);
+        $this->post('/signup', $body)->assertRedirect();
 
-        $response->assertStatus(302);
         Event::assertDispatched(PendingUserCreated::class);
-
-        $user = User::all()->last();
-
-        $this->assertEquals($body['email'], $user->email);
-        $this->assertEquals($body['firstname'], $user->firstname);
-        $this->assertEquals($body['lastname'], $user->lastname);
-        $this->assertEquals($body['street'], $user->street);
-        $this->assertEquals($body['house_number'], $user->house_number);
-        $this->assertEquals($body['city'], $user->city);
-        $this->assertEquals($body['zipcode'], $user->zipcode);
-        $this->assertEquals($body['country'], $user->country);
-        $this->assertEquals($body['phone_number'], $user->phone_number);
-        $this->assertEquals($body['emergency_number'], $user->emergency_number);
-        $this->assertEquals($body['emergency_house_number'], $user->emergency_house_number);
-        $this->assertEquals($body['emergency_street'], $user->emergency_street);
-        $this->assertEquals($body['emergency_city'], $user->emergency_city);
-        $this->assertEquals($body['emergency_zipcode'], $user->emergency_zipcode);
-        $this->assertEquals($body['emergency_country'], $user->emergency_country);
-        $this->assertEquals($body['birthday'], Carbon::parse($user->birthday)->format('d-m-Y'));
-        $this->assertEquals('member', $user->kind_of_member);
-        $this->assertEquals($body['iban'], $user->iban);
-        $this->assertEquals($body['incasso'], $user->incasso);
+        $this->assertDatabaseHas(User::class, [
+            ...Arr::except($body, ['birthday', 'password', 'password_confirmation', 'privacy_policy', 'termsconditions', 'g-recaptcha-response']),
+            'kind_of_member' => 'member',
+        ]);
+        $user = User::sole();
+        $this->assertEquals($body['birthday'], $user->birthday->format('d-m-Y'));
         $this->assertNotNull($user->pending_user);
     }
 
     #[Test]
     public function a_user_should_not_be_created_without_the_required_data_fields()
     {
-        $body = [
-        ];
+        $this->post('/signup')
+            ->assertRedirect()
+            ->assertInvalid([
+                'email' => 'Field email is required',
+                'firstname' => 'Field firstname is required',
+                'lastname' => 'Field lastname is required',
+                'street' => 'Field street is required',
+                'house_number' => 'Field house number is required',
+                'city' => 'Field city is required',
+                'phone_number' => 'Field phone number is required',
+                'emergency_number' => 'Field emergency number is required',
+                'emergency_street' => 'Field emergency street is required',
+                'emergency_zipcode' => 'Field emergency zipcode is required',
+                'emergency_country' => 'Field emergency country is required',
+                'birthday' => 'Field birthday is required',
+                'iban' => 'Field IBAN is required',
+                'g-recaptcha-response' => "'I'm not a robot' validation is required",
+                'incasso' => 'Field Automatic Collection is required',
+                'privacy_policy' => 'Field Privacy Policy is required',
+                'termsconditions' => 'Field Terms and Conditions is required',
+            ]);
 
-        $response = $this->post($this->url, $body);
-
-        $response->assertStatus(302);
+        $this->assertCount(22, session('errors'));
         Event::assertNotDispatched(PendingUserCreated::class);
-
-        $response->assertSessionHasErrors();
-        $errors = session('errors');
-        $this->assertCount(22, $errors);
-
-        $this->assertEquals('Field email is required', $errors->get('email')[0]);
-        $this->assertEquals('Field firstname is required', $errors->get('firstname')[0]);
-        $this->assertEquals('Field lastname is required', $errors->get('lastname')[0]);
-        $this->assertEquals('Field street is required', $errors->get('street')[0]);
-        $this->assertEquals('Field house number is required', $errors->get('house_number')[0]);
-        $this->assertEquals('Field city is required', $errors->get('city')[0]);
-        $this->assertEquals('Field phone number is required', $errors->get('phone_number')[0]);
-        $this->assertEquals('Field emergency number is required', $errors->get('emergency_number')[0]);
-        $this->assertEquals('Field emergency street is required', $errors->get('emergency_street')[0]);
-        $this->assertEquals('Field emergency zipcode is required', $errors->get('emergency_zipcode')[0]);
-        $this->assertEquals('Field emergency country is required', $errors->get('emergency_country')[0]);
-        $this->assertEquals('Field birthday is required', $errors->get('birthday')[0]);
-        $this->assertEquals('Field IBAN is required', $errors->get('iban')[0]);
-        $this->assertEquals("'I'm not a robot' validation is required", $errors->get('g-recaptcha-response')[0]);
-        $this->assertEquals('Field Automatic Collection is required', $errors->get('incasso')[0]);
-        $this->assertEquals('Field Privacy Policy is required', $errors->get('privacy_policy')[0]);
-        $this->assertEquals('Field Terms and Conditions is required', $errors->get('termsconditions')[0]);
+        $this->assertDatabaseEmpty(User::class);
     }
 }

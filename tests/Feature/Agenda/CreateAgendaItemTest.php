@@ -7,10 +7,10 @@ use App\Models\AgendaItem;
 use App\Models\AgendaItemCategory;
 use App\Models\ApplicationForm\ApplicationForm;
 use App\Models\User;
-use Carbon\Carbon;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\Test;
 use Tests\TestCase;
 
@@ -18,137 +18,79 @@ class CreateAgendaItemTest extends TestCase
 {
     use RefreshDatabase;
 
-    private $url = 'agendaItems';
-
-    private $agendaItem;
-
-    private $user;
-
-    protected function setUp(): void
+    private function actingAsActivityAdministrator(): void
     {
-        parent::setUp();
-        $this->user = $user = User::factory()->create();
-
-        $this->be($user);
+        $this->actingAs(User::factory()->withRole(Role::ActivityAdministrator)->create());
     }
 
-    #[Test]
-    public function create_agenda_item()
+    private function body(array $overrides = []): array
     {
-        // Attach
-        $this->user->roles()->attach(Role::ActivityAdministrator->value);
-
-        $agendaItemCategory = AgendaItemCategory::factory()->create();
-
-        $body = [
+        return [
             'title' => 'test agenda',
             'text' => 'test agenda',
             'short_description' => 'test agenda',
-            'category' => $agendaItemCategory->id,
+            'category' => AgendaItemCategory::factory()->create()->id,
             'applicationForm' => ApplicationForm::factory()->create()->id,
-            'subscription_end_date' => Carbon::now()->addDays(2),
-            'end_date' => Carbon::now()->addDays(3),
-            'start_date' => Carbon::now()->addDays(1),
+            'subscription_end_date' => now()->addDays(2),
+            'end_date' => now()->addDays(3),
+            'start_date' => now()->addDays(1),
+            ...$overrides,
         ];
-        $response = $this->post($this->url, $body);
-        $response->assertStatus(302);
-        $agendaItem = AgendaItem::all()->last();
+    }
 
-        $this->assertEquals($body['text'], $agendaItem->text);
-        $this->assertEquals($body['title'], $agendaItem->title);
-        $this->assertEquals($body['category'], $agendaItem->agendaItemCategory->id);
+    public static function texts(): array
+    {
+        return [
+            'plain' => ['test agenda'],
+            'emoji' => ['test agenda 😀'],
+        ];
+    }
+
+    #[Test]
+    #[DataProvider('texts')]
+    public function create_agenda_item(string $text)
+    {
+        $this->actingAsActivityAdministrator();
+        $body = $this->body(['title' => $text, 'text' => $text, 'short_description' => $text]);
+
+        $this->post('agendaItems', $body)->assertRedirect();
+
+        $this->assertDatabaseHas(AgendaItem::class, [
+            'title' => $text,
+            'text' => $text,
+            'category' => $body['category'],
+        ]);
     }
 
     #[Test]
     public function creating_an_agenda_item_stores_a_resized_thumbnail()
     {
         Storage::fake('public');
-        $this->user->roles()->attach(Role::ActivityAdministrator->value);
+        $this->actingAsActivityAdministrator();
 
-        $response = $this->post($this->url, [
-            'title' => 'test agenda',
-            'text' => 'test agenda',
-            'short_description' => 'test agenda',
-            'category' => AgendaItemCategory::factory()->create()->id,
+        $this->post('agendaItems', $this->body([
             'applicationForm' => null,
-            'subscription_end_date' => Carbon::now()->addDays(2),
-            'end_date' => Carbon::now()->addDays(3),
-            'start_date' => Carbon::now()->addDays(1),
             'thumbnail' => UploadedFile::fake()->image('photo.png', 1000, 1000),
-        ]);
-        $response->assertStatus(302);
-        $agendaItem = AgendaItem::all()->last();
+        ]))->assertRedirect();
 
-        $this->assertSame([400, 300], array_slice(getimagesize(Storage::disk('public')->path($agendaItem->image_url)), 0, 2));
+        $this->assertSame([400, 300], array_slice(getimagesize(Storage::disk('public')->path(AgendaItem::sole()->image_url)), 0, 2));
     }
 
     #[Test]
     public function create_agenda_with_incorrect_role()
     {
-        // Login as User with incorrect role
-        $this->user->roles()->detach();
+        $this->actingAs(User::factory()->create());
 
-        $agendaItemCategory = AgendaItemCategory::factory()->create();
-        $body = [
-            'title' => 'test agenda',
-            'text' => 'test agenda',
-            'short_description' => 'test agenda',
-            'category' => $agendaItemCategory->id,
-            'applicationForm' => ApplicationForm::factory()->create()->id,
-            'subscription_end_date' => Carbon::now()->addDays(2),
-            'end_date' => Carbon::now()->addDays(3),
-            'start_date' => Carbon::now()->addDays(1),
-        ];
-        $response = $this->post($this->url, $body);
-        $response->assertStatus(403);
-
+        $this->post('agendaItems', $this->body())->assertForbidden();
     }
 
     #[Test]
     public function create_agenda_with_empty_fields()
     {
-        $this->user->roles()->attach(Role::ActivityAdministrator->value);
+        $this->actingAsActivityAdministrator();
 
-        $agendaItemCategory = AgendaItemCategory::factory()->create();
-        $body = [
-            'title' => '',
-            'text' => 'test agenda',
-            'short_description' => 'test agenda',
-            'category' => $agendaItemCategory->id,
-            'applicationForm' => ApplicationForm::factory()->create()->id,
-            'subscription_end_date' => Carbon::now()->addDays(2),
-            'end_date' => Carbon::now()->addDays(3),
-            'start_date' => Carbon::now()->addDays(1),
-        ];
-        $response = $this->post($this->url, $body);
-        $response->assertSessionHasErrors('title');
-        $this->assertSame(0, AgendaItem::count());
-    }
+        $this->post('agendaItems', $this->body(['title' => '']))->assertInvalid('title');
 
-    #[Test]
-    public function create_agenda_item_with_emoji()
-    {
-        // Attach
-        $this->user->roles()->attach(Role::ActivityAdministrator->value);
-
-        $agendaItemCategory = AgendaItemCategory::factory()->create();
-
-        $body = [
-            'title' => 'test agenda 😀',
-            'text' => 'test agenda 😀',
-            'short_description' => 'test agenda 😀',
-            'category' => $agendaItemCategory->id,
-            'applicationForm' => ApplicationForm::factory()->create()->id,
-            'subscription_end_date' => Carbon::now()->addDays(2),
-            'end_date' => Carbon::now()->addDays(3),
-            'start_date' => Carbon::now()->addDays(1),
-        ];
-        $response = $this->post($this->url, $body);
-        $response->assertStatus(302);
-        $agendaItem = AgendaItem::all()->last();
-
-        $this->assertEquals($body['text'], $agendaItem->text);
-        $this->assertEquals($body['title'], $agendaItem->title);
-        $this->assertEquals($body['category'], $agendaItem->agendaItemCategory->id);
+        $this->assertDatabaseEmpty(AgendaItem::class);
     }
 }

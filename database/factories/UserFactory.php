@@ -2,10 +2,14 @@
 
 namespace Database\Factories;
 
+use App\Enums\Role;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Facades\Hash;
 
+/**
+ * @extends Factory<User>
+ */
 class UserFactory extends Factory
 {
     protected static ?string $password;
@@ -45,6 +49,11 @@ class UserFactory extends Factory
             'incasso' => fake()->boolean(),
             'remark' => fake()->sentence(),
         ];
+    }
+
+    public function withRole(Role ...$roles): static
+    {
+        return $this->afterCreating(fn (User $user) => $user->roles()->attach(array_map(fn (Role $role) => $role->value, $roles)));
     }
 
     public function member(): static

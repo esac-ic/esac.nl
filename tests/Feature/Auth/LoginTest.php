@@ -6,12 +6,27 @@ use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Testing\TestResponse;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\Test;
 use Tests\TestCase;
 
 class LoginTest extends TestCase
 {
     use RefreshDatabase;
+
+    private function login(User $user, string $password = 'password', array $extra = []): TestResponse
+    {
+        return $this->post('/login', ['email' => $user->email, 'password' => $password, ...$extra]);
+    }
+
+    public static function blockedMembers(): array
+    {
+        return [
+            'old member' => ['lidAf', 'Old members can not login'],
+            'pending member' => ['pending', 'Pending members can not login'],
+        ];
+    }
 
     #[Test]
     public function the_login_page_is_shown()
@@ -22,102 +37,81 @@ class LoginTest extends TestCase
     #[Test]
     public function a_member_logs_in_and_is_remembered()
     {
-        $user = User::factory()->create(['password' => Hash::make('secret-password')]);
+        $user = User::factory()->create();
 
-        $response = $this->post('/login', [
-            'email' => $user->email,
-            'password' => 'secret-password',
-            'remember' => '1',
-        ]);
+        $this->login($user, extra: ['remember' => '1'])
+            ->assertRedirect('/home')
+            ->assertCookie(Auth::guard()->getRecallerName());
 
-        $response->assertRedirect('/home');
         $this->assertAuthenticatedAs($user);
-        $response->assertCookie(Auth::guard()->getRecallerName());
         $this->assertNotNull($user->fresh()->remember_token);
     }
 
     #[Test]
     public function a_member_is_not_remembered_without_the_checkbox()
     {
-        $user = User::factory()->create(['password' => Hash::make('secret-password')]);
-
-        $response = $this->post('/login', ['email' => $user->email, 'password' => 'secret-password']);
-
-        $response->assertRedirect('/home');
-        $response->assertCookieMissing(Auth::guard()->getRecallerName());
+        $this->login(User::factory()->create())
+            ->assertRedirect('/home')
+            ->assertCookieMissing(Auth::guard()->getRecallerName());
     }
 
     #[Test]
     public function a_wrong_password_is_rejected()
     {
-        $user = User::factory()->create(['password' => Hash::make('secret-password')]);
+        $this->from('/login');
 
-        $this->from('/login')->post('/login', ['email' => $user->email, 'password' => 'wrong'])
+        $this->login(User::factory()->create(), 'wrong')
             ->assertRedirect('/login')
-            ->assertSessionHasErrors('email');
+            ->assertInvalid('email');
+
         $this->assertGuest();
     }
 
     #[Test]
-    public function an_old_member_can_not_log_in()
+    #[DataProvider('blockedMembers')]
+    public function a_blocked_member_can_not_log_in(string $state, string $message)
     {
-        $user = User::factory()->lidAf()->create(['password' => Hash::make('secret-password')]);
+        $this->login(User::factory()->{$state}()->create())->assertInvalid(['email' => $message]);
 
-        $this->post('/login', ['email' => $user->email, 'password' => 'secret-password'])
-            ->assertSessionHasErrors(['email' => 'Old members can not login']);
-        $this->assertGuest();
-    }
-
-    #[Test]
-    public function a_pending_member_can_not_log_in()
-    {
-        $user = User::factory()->pending()->create(['password' => Hash::make('secret-password')]);
-
-        $this->post('/login', ['email' => $user->email, 'password' => 'secret-password'])
-            ->assertSessionHasErrors(['email' => 'Pending members can not login']);
         $this->assertGuest();
     }
 
     #[Test]
     public function an_old_member_with_a_wrong_password_gets_the_generic_error()
     {
-        $user = User::factory()->lidAf()->create(['password' => Hash::make('secret-password')]);
+        $this->login(User::factory()->lidAf()->create(), 'wrong')->assertInvalid('email');
 
-        $response = $this->post('/login', ['email' => $user->email, 'password' => 'wrong']);
-
-        $response->assertSessionHasErrors('email');
         $this->assertNotSame('Old members can not login', session('errors')->first('email'));
     }
 
     #[Test]
     public function logins_are_throttled()
     {
-        $user = User::factory()->create(['password' => Hash::make('secret-password')]);
+        $user = User::factory()->create();
 
         foreach (range(1, 5) as $attempt) {
-            $this->post('/login', ['email' => $user->email, 'password' => 'wrong']);
+            $this->login($user, 'wrong');
         }
 
-        $this->post('/login', ['email' => $user->email, 'password' => 'secret-password'])->assertTooManyRequests();
+        $this->login($user)->assertTooManyRequests();
         $this->assertGuest();
     }
 
     #[Test]
     public function a_member_logs_out()
     {
-        $user = User::factory()->create();
+        $this->actingAs(User::factory()->create())->post('/logout')->assertRedirect('/');
 
-        $this->actingAs($user)->post('/logout')->assertRedirect('/');
         $this->assertGuest();
     }
 
     #[Test]
     public function an_outdated_password_hash_is_rehashed_on_login()
     {
-        $user = User::factory()->create(['password' => Hash::make('secret-password', ['rounds' => 4])]);
+        $user = User::factory()->create(['password' => Hash::make('password', ['rounds' => 4])]);
         Hash::driver('bcrypt')->setRounds(5);
 
-        $this->post('/login', ['email' => $user->email, 'password' => 'secret-password'])->assertRedirect('/home');
+        $this->login($user)->assertRedirect('/home');
 
         $this->assertSame(5, password_get_info($user->fresh()->password)['options']['cost']);
     }

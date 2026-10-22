@@ -25,9 +25,8 @@ class UpdateAgendaItemTest extends TestCase
     protected function setUp(): void
     {
         parent::setUp();
-        $this->user = $user = User::factory()->create();
-        $user->roles()->attach(Role::ActivityAdministrator->value);
-        $this->be($user);
+        $this->user = User::factory()->withRole(Role::ActivityAdministrator)->create();
+        $this->actingAs($this->user);
     }
 
     #[Test]

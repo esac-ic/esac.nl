@@ -13,29 +13,13 @@ class DeleteNewsItemTest extends TestCase
 {
     use RefreshDatabase;
 
-    private $url = 'newsItems';
-
-    private $newsItem;
-
-    private $user;
-
-    protected function setUp(): void
-    {
-        parent::setUp();
-        $this->user = $user = User::factory()->create();
-
-        $user->roles()->attach(Role::ActivityAdministrator->value);
-        $this->be($user);
-    }
-
     #[Test]
     public function delete_news_item()
     {
         $newsItem = NewsItem::factory()->create();
+        $this->actingAs(User::factory()->withRole(Role::ActivityAdministrator)->create());
 
-        $response = $this->delete($this->url.'/'.$newsItem->id);
-
-        $response->assertStatus(302);
+        $this->delete('newsItems/'.$newsItem->id)->assertRedirect();
 
         $this->assertSoftDeleted($newsItem);
     }

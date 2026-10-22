@@ -13,65 +13,37 @@ class UpdateRoleTest extends TestCase
 {
     use RefreshDatabase;
 
-    private $url = 'rols';
-
-    private $user;
+    private Rol $role;
 
     protected function setUp(): void
     {
         parent::setUp();
-        $this->user = $user = User::factory()->create();
-
-        $user->roles()->attach(Role::Administrator->value);
-        $this->be($user);
+        $this->role = Rol::factory()->create();
+        $this->actingAs(User::factory()->withRole(Role::Administrator)->create());
     }
 
     #[Test]
     public function an_admin_can_update_a_role()
     {
-        $role = Rol::factory()->create();
-        $body = [
-            'name' => 'test role',
-        ];
+        $this->patch('rols/'.$this->role->id, ['name' => 'test role'])->assertRedirect();
 
-        $response = $this->patch($this->url.'/'.$role->id, $body);
-
-        $response->assertStatus(302);
-
-        $role = $role->refresh();
-
-        $this->assertEquals($body['name'], $role->name);
+        $this->assertSame('test role', $this->role->refresh()->name);
     }
 
     #[Test]
     public function a_role_can_not_update_a_role()
     {
-        $role = Rol::factory()->create();
-        $body = [
-            'name' => 'test role',
-        ];
+        $this->actingAs(User::factory()->create());
 
-        $this->user->roles()->detach();
-
-        $response = $this->patch($this->url.'/'.$role->id, $body);
-
-        $response->assertStatus(403);
+        $this->patch('rols/'.$this->role->id, ['name' => 'test role'])->assertForbidden();
     }
 
     #[Test]
     public function a_role_can_not_be_updated_without_required_fields()
     {
-        $role = Rol::factory()->create();
-        $body = [
-        ];
-
-        $response = $this->patch($this->url.'/'.$role->id, $body);
-
-        $response->assertStatus(302);
-
-        $response->assertSessionHasErrors();
-        $errors = session('errors');
-        $this->assertCount(1, $errors);
-        $this->assertEquals('Field name is required', $errors->get('name')[0]);
+        $this->patch('rols/'.$this->role->id)
+            ->assertRedirect()
+            ->assertInvalid(['name' => 'Field name is required'])
+            ->assertOnlyInvalid(['name']);
     }
 }
