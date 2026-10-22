@@ -13,27 +13,13 @@ class DeleteRoleTest extends TestCase
 {
     use RefreshDatabase;
 
-    private $url = 'rols';
-
-    private $user;
-
-    protected function setUp(): void
-    {
-        parent::setUp();
-        $this->user = $user = User::factory()->create();
-
-        $user->roles()->attach(Role::Administrator->value);
-        $this->be($user);
-    }
-
     #[Test]
     public function a_role_can_be_deleted_by_an_admin()
     {
         $role = Rol::factory()->create();
+        $this->actingAs(User::factory()->withRole(Role::Administrator)->create());
 
-        $response = $this->delete($this->url.'/'.$role->id);
-
-        $response->assertStatus(302);
+        $this->delete('rols/'.$role->id)->assertRedirect();
 
         $this->assertSoftDeleted($role);
     }
@@ -42,11 +28,8 @@ class DeleteRoleTest extends TestCase
     public function a_user_can_not_delete_a_role()
     {
         $role = Rol::factory()->create();
-        $this->user->roles()->detach();
+        $this->actingAs(User::factory()->create());
 
-        $response = $this->delete($this->url.'/'.$role->id);
-
-        $response->assertStatus(403);
-
+        $this->delete('rols/'.$role->id)->assertForbidden();
     }
 }

@@ -13,63 +13,34 @@ class CreateRoleTest extends TestCase
 {
     use RefreshDatabase;
 
-    private $url = 'rols';
-
-    private $user;
-
     protected function setUp(): void
     {
         parent::setUp();
-        $this->user = $user = User::factory()->create();
-
-        $user->roles()->attach(Role::Administrator->value);
-        $this->be($user);
+        $this->actingAs(User::factory()->withRole(Role::Administrator)->create());
     }
 
     #[Test]
     public function an_admin_can_create_a_role()
     {
-        $body = [
-            'name' => 'test role',
-        ];
+        $this->post('rols', ['name' => 'test role'])->assertRedirect();
 
-        $response = $this->post($this->url, $body);
-
-        $response->assertStatus(302);
-
-        $role = Rol::all()->last();
-
-        $this->assertEquals($body['name'], $role->name);
+        $this->assertDatabaseHas(Rol::class, ['name' => 'test role']);
     }
 
     #[Test]
     public function a_role_can_not_create_a_role()
     {
-        $body = [
-            'name' => 'test role',
-        ];
+        $this->actingAs(User::factory()->create());
 
-        $this->user->roles()->detach();
-
-        $response = $this->post($this->url, $body);
-
-        $response->assertStatus(403);
+        $this->post('rols', ['name' => 'test role'])->assertForbidden();
     }
 
     #[Test]
     public function a_role_can_not_be_created_without_required_fields()
     {
-        $body = [
-        ];
-
-        $response = $this->post($this->url, $body);
-
-        $response->assertStatus(302);
-
-        $response->assertSessionHasErrors();
-        $errors = session('errors');
-
-        $this->assertCount(1, $errors);
-        $this->assertEquals('Field name is required', $errors->get('name')[0]);
+        $this->post('rols')
+            ->assertRedirect()
+            ->assertInvalid(['name' => 'Field name is required'])
+            ->assertOnlyInvalid(['name']);
     }
 }

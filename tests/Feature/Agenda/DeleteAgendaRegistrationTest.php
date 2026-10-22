@@ -4,7 +4,6 @@ namespace Tests\Feature\Agenda;
 
 use App\Models\ApplicationForm\ApplicationResponse;
 use App\Models\User;
-use Carbon\Carbon;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use PHPUnit\Framework\Attributes\Test;
 use Tests\TestCase;
@@ -13,50 +12,35 @@ class DeleteAgendaRegistrationTest extends TestCase
 {
     use RefreshDatabase;
 
-    private $url = '/forms/';
-
-    private $user;
-
-    protected function setUp(): void
+    private function registration(string $subscriptionEndDate): ApplicationResponse
     {
-        parent::setUp();
-        $this->user = $user = User::factory()->create();
+        $user = User::factory()->create();
+        $this->actingAs($user);
+        $registration = ApplicationResponse::factory()->create(['user_id' => $user->id]);
+        $registration->agendaItem->update(['subscription_end_date' => now()->modify($subscriptionEndDate)]);
 
-        $this->be($user);
+        return $registration;
     }
 
     #[Test]
     public function remove_agenda_registration(): void
     {
-        $applicationResponse = ApplicationResponse::factory()->create([
-            'user_id' => $this->user->id,
-        ]);
-        $agendaItem = $applicationResponse->agendaItem;
-        $agendaItem->subscription_end_date = Carbon::now()->addWeek();
-        $agendaItem->save();
+        $registration = $this->registration('+1 week');
 
-        $response = $this->delete('forms/'.$agendaItem->id);
+        $this->delete('forms/'.$registration->agenda_id)->assertRedirect();
 
-        $response->assertStatus(302);
-
-        $this->assertSoftDeleted($applicationResponse);
+        $this->assertSoftDeleted($registration);
     }
 
     #[Test]
     public function a_agenda_registration_can_not_be_removed_when_the_subscription_date_is_pasted(): void
     {
-        $applicationResponse = ApplicationResponse::factory()->create([
-            'user_id' => $this->user->id,
-        ]);
-        $agendaItem = $applicationResponse->agendaItem;
-        $agendaItem->subscription_end_date = Carbon::now()->subWeek();
-        $agendaItem->save();
+        $registration = $this->registration('-1 week');
 
-        $response = $this->delete('forms/'.$agendaItem->id);
+        $this->delete('forms/'.$registration->agenda_id)
+            ->assertRedirect()
+            ->assertSessionHas('message', 'The registration date has expired, so you can no longer unsubscribe.');
 
-        $response->assertStatus(302);
-
-        $response->assertSessionHas('message', 'The registration date has expired, so you can no longer unsubscribe.');
-        $this->assertNotSoftDeleted($applicationResponse);
+        $this->assertNotSoftDeleted($registration);
     }
 }

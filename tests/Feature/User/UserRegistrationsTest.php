@@ -22,8 +22,7 @@ class UserRegistrationsTest extends TestCase
             'user_id' => $member->id,
             'agenda_id' => AgendaItem::factory()->create(['title' => 'Ice climbing weekend']),
         ]);
-        $admin = User::factory()->create();
-        $admin->roles()->attach(Role::CertificateAdministrator->value);
+        $admin = User::factory()->withRole(Role::CertificateAdministrator)->create();
 
         $this->actingAs($admin)
             ->getJson(route('api.user.registrations', ['user_id' => $member->id]))

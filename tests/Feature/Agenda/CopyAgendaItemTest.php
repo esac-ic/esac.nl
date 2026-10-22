@@ -21,8 +21,7 @@ class CopyAgendaItemTest extends TestCase
     protected function setUp(): void
     {
         parent::setUp();
-        $this->user = User::factory()->create();
-        $this->user->roles()->attach(Role::ActivityAdministrator->value);
+        $this->user = User::factory()->withRole(Role::ActivityAdministrator)->create();
 
         $this->be($this->user);
     }

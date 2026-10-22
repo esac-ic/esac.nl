@@ -21,8 +21,7 @@ class RemoveAsActiveMemberTest extends TestCase
     {
         parent::setUp();
 
-        $this->admin = User::factory()->create();
-        $this->admin->roles()->attach(Role::Administrator->value);
+        $this->admin = User::factory()->withRole(Role::Administrator)->create();
     }
 
     public function test_remove_as_active_member()

@@ -22,8 +22,7 @@ class SimpleResourcesTest extends TestCase
     {
         parent::setUp();
 
-        $this->admin = User::factory()->create();
-        $this->admin->roles()->attach([Role::Administrator->value, Role::CertificateAdministrator->value]);
+        $this->admin = User::factory()->withRole(Role::Administrator, Role::CertificateAdministrator)->create();
     }
 
     #[Test]

@@ -5,180 +5,57 @@ namespace Tests\Feature\ApplicationForm;
 use App\Enums\Role;
 use App\Models\ApplicationForm\ApplicationForm;
 use App\Models\ApplicationForm\ApplicationFormRow;
-use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\Test;
+use Tests\Concerns\ManagesApplicationForms;
 use Tests\TestCase;
 
 class CreateApplicationFormTest extends TestCase
 {
+    use ManagesApplicationForms;
     use RefreshDatabase;
 
-    private $user;
-
-    const URL = 'beheer/applicationForms';
-
-    protected function setUp(): void
+    private function body(): array
     {
-        parent::setUp();
-        $this->user = $user = User::factory()->create();
-
-        $user->roles()->attach(Role::ContentAdministrator->value);
-        $this->be($user);
-    }
-
-    #[Test]
-    public function create_application_form_as_content_administrator(): void
-    {
-        $body = [
+        return [
             'name' => 'test name',
             'rows' => [
-                [
-                    'name' => 'Question 1',
-                    'type' => ApplicationFormRow::FORM_TYPE_NUMBER,
-                ],
-                [
-                    'name' => 'Question 2',
-                    'type' => ApplicationFormRow::FORM_TYPE_CHECK_BOX,
-                    'required' => true,
-                ],
+                ['name' => 'Question 1', 'type' => ApplicationFormRow::FORM_TYPE_NUMBER],
+                ['name' => 'Question 2', 'type' => ApplicationFormRow::FORM_TYPE_CHECK_BOX, 'required' => true],
                 [
                     'name' => 'Question 3',
                     'type' => ApplicationFormRow::FORM_TYPE_RADIO,
                     'required' => true,
                     'options' => [
-                        [
-                            'value' => 1,
-                            'name' => 'Option 1',
-                        ],
-                        [
-                            'value' => 3,
-                            'name' => 'Option 2',
-                        ],
-                        [
-                            'value' => 16,
-                            'name' => 'Option 3',
-                        ],
+                        ['value' => 1, 'name' => 'Option 1'],
+                        ['value' => 3, 'name' => 'Option 2'],
+                        ['value' => 16, 'name' => 'Option 3'],
                     ],
                 ],
             ],
         ];
-
-        $response = $this->post(self::URL, $body);
-
-        $response->assertStatus(302);
-
-        $applicationForm = ApplicationForm::all()->last();
-
-        $this->assertNotNull($applicationForm);
-        $this->assertApplicationForm($applicationForm, $body);
     }
 
     #[Test]
-    public function create_application_form_as_activity_administrator(): void
+    #[DataProvider('managingRoles')]
+    public function application_form_managers_can_create_an_application_form(Role $role): void
     {
-        $this->user->roles()->sync([Role::ActivityAdministrator->value]);
-        $body = [
-            'name' => 'test name',
-            'rows' => [
-                [
-                    'name' => 'Question 1',
-                    'type' => ApplicationFormRow::FORM_TYPE_NUMBER,
-                ],
-                [
-                    'name' => 'Question 2',
-                    'type' => ApplicationFormRow::FORM_TYPE_CHECK_BOX,
-                    'required' => true,
-                ],
-            ],
-        ];
+        $this->actingAsRole($role);
 
-        $response = $this->post(self::URL, $body);
+        $this->post('beheer/applicationForms', $this->body())->assertRedirect();
 
-        $response->assertStatus(302);
-
-        $applicationForm = ApplicationForm::all()->last();
-
-        $this->assertNotNull($applicationForm);
-        $this->assertApplicationForm($applicationForm, $body);
+        $this->assertApplicationForm(ApplicationForm::sole(), $this->body());
     }
 
     #[Test]
-    public function create_application_form_as_administrator_should_return_403(): void
+    #[DataProvider('otherRoles')]
+    public function other_roles_can_not_create_an_application_form(Role $role): void
     {
-        $this->user->roles()->sync([Role::Administrator->value]);
+        $this->actingAsRole($role);
 
-        $body = [
-            'name' => 'test name',
-            'rows' => [
-                [
-                    'name' => 'Question 1',
-                    'type' => ApplicationFormRow::FORM_TYPE_NUMBER,
-                ],
-                [
-                    'name' => 'Question 2',
-                    'type' => ApplicationFormRow::FORM_TYPE_CHECK_BOX,
-                    'required' => true,
-                ],
-            ],
-        ];
+        $this->post('beheer/applicationForms', $this->body())->assertForbidden();
 
-        $response = $this->post(self::URL, $body);
-
-        $response->assertStatus(403);
-    }
-
-    #[Test]
-    public function create_application_form_as_certificate_administrator_should_return_403(): void
-    {
-        $this->user->roles()->sync([Role::CertificateAdministrator->value]);
-
-        $body = [
-            'name' => 'test name',
-            'rows' => [
-                [
-                    'name' => 'Question 1',
-                    'type' => ApplicationFormRow::FORM_TYPE_NUMBER,
-                ],
-                [
-                    'name' => 'Question 2',
-                    'type' => ApplicationFormRow::FORM_TYPE_CHECK_BOX,
-                    'required' => true,
-                ],
-            ],
-        ];
-
-        $response = $this->post(self::URL, $body);
-
-        $response->assertStatus(403);
-    }
-
-    private function assertApplicationForm(ApplicationForm $applicationForm, array $data)
-    {
-        $this->assertEquals($data['name'], $applicationForm->name);
-        $this->assertCount(count($data['rows']), $applicationForm->applicationFormRows);
-
-        for ($i = 0; $i < count($applicationForm->applicationFormRows); $i++) {
-            $rowData = $data['rows'][$i];
-            $row = $applicationForm->applicationFormRows[$i];
-
-            $this->assertEquals($rowData['name'], $row->name);
-            $this->assertEquals($rowData['type'], $row->type);
-            $this->assertEquals(array_key_exists('required', $rowData), $row->required);
-
-            if (array_key_exists('options', $rowData)) {
-                $optionDataItems = $rowData['options'];
-                $options = $row->applicationFormRowOptions;
-
-                $this->assertCount(count($optionDataItems), $options);
-                for ($x = 0; $x < count($options); $x++) {
-                    $optionData = $optionDataItems[$x];
-                    $option = $options[$x];
-
-                    $this->assertEquals($optionData['value'], $option->value);
-                    $this->assertEquals($optionData['name'], $option->name);
-                }
-            }
-        }
+        $this->assertDatabaseEmpty(ApplicationForm::class);
     }
 }
