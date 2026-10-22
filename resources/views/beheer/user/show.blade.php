@@ -74,28 +74,30 @@
         </div>
         <div class="card-body">
             <ul class="nav nav-tabs" id="myTab" role="tablist">
+                @can('update', $user)
                 <li class="nav-item">
-                    <a class="nav-link active" id="tab1" data-toggle="tab" href="#tab1-content" role="tab" aria-controls="general" aria-selected="true">{{'Personal'}}</a>
+                    <a class="nav-link active" id="tab1" data-toggle="tab" href="#tab1-content" role="tab" aria-controls="tab1-content" aria-selected="true">{{'Personal'}}</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" id="tab2" data-toggle="tab" href="#tab2-content" role="tab" aria-controls="billing" aria-selected="false">{{'Financial'}}</a>
+                    <a class="nav-link" id="tab2" data-toggle="tab" href="#tab2-content" role="tab" aria-controls="tab2-content" aria-selected="false">{{'Financial'}}</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" id="tab3" data-toggle="tab" href="#tab3-content" role="tab" aria-controls="security" aria-selected="false">{{'Emergency info'}}</a>
+                    <a class="nav-link" id="tab3" data-toggle="tab" href="#tab3-content" role="tab" aria-controls="tab3-content" aria-selected="false">{{'Emergency info'}}</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" id="tab3" data-toggle="tab" href="#rols" role="tab" aria-controls="security" aria-selected="false">{{'Roles'}}</a>
+                    <a class="nav-link" id="tab4" data-toggle="tab" href="#rols" role="tab" aria-controls="rols" aria-selected="false">{{'Roles'}}</a>
+                </li>
+                @endcan
+                <li class="nav-item">
+                    <a @class(['nav-link', 'active' => auth()->user()->cannot('update', $user)]) id="tab5" data-toggle="tab" href="#certifications" role="tab" aria-controls="certifications" aria-selected="false">{{'Certificates' }}</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" id="tab3" data-toggle="tab" href="#certifications" role="tab" aria-controls="security" aria-selected="false">{{'Certificates' }}</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" id="tab3" data-toggle="tab" href="#registrations" role="tab" aria-controls="security" aria-selected="false">{{'Registrations' }}</a>
+                    <a class="nav-link" id="tab6" data-toggle="tab" href="#registrations" role="tab" aria-controls="registrations" aria-selected="false">{{'Registrations' }}</a>
                 </li>
             </ul>
-            @can('update', $user)
             <div class="tab-content space-sm">
-                <div class="tab-pane fade show active" id="tab1-content" role="tabpanel" aria-labelledby="tab1-content">
+                @can('update', $user)
+                <div class="tab-pane fade show active" id="tab1-content" role="tabpanel" aria-labelledby="tab1">
                     <table class="table table-striped" style="width:100%">
                         <tr>
                             <td>{{'Name'}}</td>
@@ -181,7 +183,7 @@
                         @endisset
                     </table>
                 </div>
-                <div class="tab-pane fade" id="tab2-content" role="tabpanel" aria-labelledby="tab2-content">
+                <div class="tab-pane fade" id="tab2-content" role="tabpanel" aria-labelledby="tab2">
                     <table class="table table-striped" style="width:100%">
                         <tr>
                             <td>{{'IBAN'}}</td>
@@ -197,7 +199,7 @@
                         </tr>
                     </table>
                 </div>
-                <div class="tab-pane fade" id="tab3-content" role="tabpanel" aria-labelledby="tab3-content">
+                <div class="tab-pane fade" id="tab3-content" role="tabpanel" aria-labelledby="tab3">
                     <table class="table table-striped" style="width:100%">
                         <tr>
                             <td>{{'Emergency address street'}}</td>
@@ -225,7 +227,7 @@
                         </tr>
                     </table>
                 </div>
-                <div class="tab-pane fade" id="rols" role="tabpanel" aria-labelledby="tab3-content">
+                <div class="tab-pane fade" id="rols" role="tabpanel" aria-labelledby="tab4">
                     <table class="table table-striped" style="width:100%">
                         @if(count($user->roles) > 0)
                             <tr>
@@ -241,7 +243,7 @@
                     </table>
                 </div>
                 @endcan
-                <div class="tab-pane fade" id="certifications" role="tabpanel" aria-labelledby="tab3-content">
+                <div @class(['tab-pane fade', 'show active' => auth()->user()->cannot('update', $user)]) id="certifications" role="tabpanel" aria-labelledby="tab5">
                     <table class="table table-striped" style="width:100%">
                         <thead>
                         <tr>
@@ -279,7 +281,7 @@
                         </tbody>
                     </table>
                 </div>
-                <div class="tab-pane fade" id="registrations" role="tabpanel" aria-labelledby="registrations">
+                <div class="tab-pane fade" id="registrations" role="tabpanel" aria-labelledby="tab6">
                     <table class="table table-striped" style="width:100%" id="registrations_table">
                         <thead>
                         <tr>
