@@ -11,7 +11,9 @@ use App\View\Composers\MenuComposer;
 use Illuminate\Auth\Access\Response;
 use Illuminate\Pagination\Paginator;
 use Illuminate\Support\Facades\Gate;
+use Illuminate\Support\Facades\Queue;
 use Illuminate\Support\Facades\View;
+use Illuminate\Support\Once;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
@@ -24,6 +26,9 @@ class AppServiceProvider extends ServiceProvider
         $this->defineGates();
 
         Paginator::useBootstrapFour();
+
+        // A queue worker runs many jobs in one process, so each job reads the settings afresh.
+        Queue::before(fn () => Once::flush());
 
         View::composer('includes.menu', MenuComposer::class);
         View::composer('includes.footer', fn ($view) => $view->with(

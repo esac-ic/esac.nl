@@ -2,6 +2,7 @@
 
 namespace Database\Factories;
 
+use App\Enums\KindOfMember;
 use App\Enums\Role;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
@@ -43,7 +44,7 @@ class UserFactory extends Factory
             'emergency_zipcode' => fake()->postcode(),
             'emergency_country' => fake()->country(),
             'birthday' => fake()->date(),
-            'kind_of_member' => fake()->randomElement(User::KINDS_OF_MEMBER),
+            'kind_of_member' => fake()->randomElement(KindOfMember::cases()),
             'iban' => fake()->iban(),
             'bic' => fake()->swiftBicNumber(),
             'incasso' => fake()->boolean(),

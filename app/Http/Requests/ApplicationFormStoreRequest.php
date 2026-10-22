@@ -2,37 +2,31 @@
 
 namespace App\Http\Requests;
 
-use App\Models\ApplicationForm\ApplicationFormRow;
+use App\Enums\FormRowType;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class ApplicationFormStoreRequest extends FormRequest
 {
-    private const array TYPES_WITH_OPTIONS = [
-        ApplicationFormRow::FORM_TYPE_SELECT,
-        ApplicationFormRow::FORM_TYPE_RADIO,
-        ApplicationFormRow::FORM_TYPE_MULTI_CHECK_BOX,
-    ];
-
-    /**
-     * Get the validation rules that apply to the request.
-     */
     public function rules(): array
     {
-        $typesWithOptions = implode(',', self::TYPES_WITH_OPTIONS);
+        $typesWithOptions = collect(FormRowType::cases())->filter->hasOptions()->pluck('value')->implode(',');
 
         return [
-            'name' => 'required',
-            'rows.*.name' => 'required',
-            'rows.*.type' => 'required',
-            'rows.*.options' => "array|required_if:rows.*.type,$typesWithOptions",
-            'rows.*.options.*.name' => 'required',
-            'rows.*.options.*.value' => 'nullable',
+            'name' => ['required'],
+            'rows' => ['array'],
+            'rows.*.id' => ['sometimes', 'integer'],
+            'rows.*.name' => ['required'],
+            'rows.*.type' => ['required', Rule::enum(FormRowType::class)],
+            'rows.*.required' => ['boolean'],
+            'rows.*.options' => ['array', "required_if:rows.*.type,$typesWithOptions"],
+            'rows.*.options.*.id' => ['sometimes', 'integer'],
+            'rows.*.options.*.name' => ['required'],
+            'rows.*.options.*.value' => ['required'],
         ];
     }
 
     /**
-     * Get the error messages for the defined validation rules.
-     *
      * @return array<string, string>
      */
     public function messages(): array
@@ -44,26 +38,17 @@ class ApplicationFormStoreRequest extends FormRequest
     }
 
     /**
-     * Turns rows.*.required into a boolean: a checked checkbox is posted as "on" and an unchecked one isn't posted.
-     * Makes sure that rows.*.options.*.value isn't empty, uses rows.*.options.*.name as a fallback
+     * A checked checkbox is posted as "on" and an unchecked one isn't posted; an option without a value uses its name.
      */
-    protected function passedValidation(): void
+    protected function prepareForValidation(): void
     {
-        $rows = $this->input('rows', []);
-        foreach ($rows as $rowKey => $row) {
-            $rows[$rowKey]['required'] = filter_var($row['required'] ?? false, FILTER_VALIDATE_BOOL);
-
-            if (! in_array($row['type'], self::TYPES_WITH_OPTIONS) || ! isset($row['options'])) {
-                continue;
-            }
-
-            foreach ($row['options'] as $optionKey => $option) {
-                if (! empty($option['value'])) {
-                    continue;
-                }
-                $rows[$rowKey]['options'][$optionKey]['value'] = $option['name'];
-            }
-        }
-        $this->merge(['rows' => $rows]);
+        $this->merge(['rows' => collect($this->input('rows', []))->map(fn (array $row) => [
+            ...$row,
+            'required' => filter_var($row['required'] ?? false, FILTER_VALIDATE_BOOL),
+            'options' => collect($row['options'] ?? [])->map(fn (array $option) => [
+                ...$option,
+                'value' => filled($option['value'] ?? null) ? $option['value'] : ($option['name'] ?? null),
+            ])->all(),
+        ])->all()]);
     }
 }

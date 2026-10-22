@@ -2,16 +2,13 @@
 
 namespace App\Listeners;
 
-use App\Enums\SettingKey;
 use App\Events\MemberBecameOldMember;
 use App\Events\MemberKindChanged;
 use App\Events\OldMemberBecameMember;
 use App\Events\PendingUserApproved;
-use App\Models\Setting;
 use App\Models\User;
 use App\Services\Mailman;
 use Illuminate\Contracts\Queue\ShouldQueueAfterCommit;
-use Illuminate\Support\Facades\Log;
 
 class UpdateMemberTypeMaillists implements ShouldQueueAfterCommit
 {
@@ -22,8 +19,8 @@ class UpdateMemberTypeMaillists implements ShouldQueueAfterCommit
      */
     public function handleMemberKindChanged(MemberKindChanged $event): void
     {
-        $oldLists = collect(self::getMemberTypeMailLists($event->previousMemberType));
-        $newLists = collect(self::getMemberTypeMailLists($event->newMemberType));
+        $oldLists = collect($event->previousMemberType->mailLists());
+        $newLists = collect($event->newMemberType->mailLists());
 
         $removeFromLists = $oldLists->diff($newLists);
         $addToLists = $newLists->diff($oldLists);
@@ -38,12 +35,12 @@ class UpdateMemberTypeMaillists implements ShouldQueueAfterCommit
 
     public function handleOldMemberBecameMember(OldMemberBecameMember $event): void
     {
-        $this->addUserToMailLists($event->user, $event->user->kind_of_member);
+        $this->addUserToMailLists($event->user);
     }
 
     public function handlePendingUserApproved(PendingUserApproved $event): void
     {
-        $this->addUserToMailLists($event->user, $event->user->kind_of_member);
+        $this->addUserToMailLists($event->user);
     }
 
     public function handleMemberBecameOldMember(MemberBecameOldMember $event): void
@@ -51,32 +48,12 @@ class UpdateMemberTypeMaillists implements ShouldQueueAfterCommit
         $this->mailman->deleteUserForAllMailList($event->user);
     }
 
-    public function addUserToMailLists(User $user, string $memberType): void
+    private function addUserToMailLists(User $user): void
     {
-        $mailLists = self::getMemberTypeMailLists($memberType);
+        $mailLists = $user->kind_of_member->mailLists();
 
         if ($mailLists !== []) {
             $this->mailman->addUserToSpecifiedMailLists($user->email, $user->getName(), $mailLists);
         }
-    }
-
-    /**
-     * The mail lists for a kind of member, from the settings.
-     *
-     * @return string[]
-     */
-    public static function getMemberTypeMailLists(string $memberType): array
-    {
-        $setting = SettingKey::mailListsFor($memberType);
-
-        if ($setting === null) {
-            Log::error('Tried to update maillist membership while no ESAC member type was given');
-
-            return [];
-        }
-
-        $mailLists = trim(Setting::valueOf($setting));
-
-        return $mailLists === '' ? [] : explode(';', $mailLists);
     }
 }

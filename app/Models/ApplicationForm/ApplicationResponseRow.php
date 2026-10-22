@@ -2,6 +2,7 @@
 
 namespace App\Models\ApplicationForm;
 
+use App\Enums\FormRowType;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Model;
@@ -28,7 +29,7 @@ class ApplicationResponseRow extends Model
     protected function formattedValue(): Attribute
     {
         return Attribute::make(get: fn () => match ($this->formRow->type) {
-            ApplicationFormRow::FORM_TYPE_CHECK_BOX => $this->value === 'on' ? 'Yes' : 'No',
+            FormRowType::CheckBox => $this->value === 'on' ? 'Yes' : 'No',
             default => $this->value,
         });
     }

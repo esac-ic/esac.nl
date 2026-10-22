@@ -42,7 +42,7 @@
             <div class="form-group col-md-6">
                 <x-date-picker name="birthday" id="birthDay" label="Birthdate" :value="($user->birthday ?? now())->format('d-m-Y')" />
             </div>
-            <x-field name="kind_of_member" label="Type of member" :options="trans('kind_of_member')" :value="$user->kind_of_member" col="6" required :disabled="auth()->user()->cannot('manage-members')" />
+            <x-field name="kind_of_member" label="Type of member" :options="$kindsOfMember" :value="$user->kind_of_member" col="6" required :disabled="auth()->user()->cannot('manage-members')" />
         </div>
         <x-field name="remark" label="Remarks" :value="$user->remark" :disabled="auth()->user()->cannot('manage-members')" />
     </x-card>

@@ -51,7 +51,7 @@ class UpdateUserTest extends TestCase
     public function test_admin_updates_self_email_unchanged()
     {
         $this->mock(Mailman::class)->shouldNotReceive('updateUserEmailForAllMailList');
-        $data = self::DETAILS + ['email' => $this->admin->email, 'firstname' => 'New', 'lastname' => 'Second', 'kind_of_member' => $this->admin->kind_of_member];
+        $data = self::DETAILS + ['email' => $this->admin->email, 'firstname' => 'New', 'lastname' => 'Second', 'kind_of_member' => $this->admin->kind_of_member->value];
 
         $this->actingAs($this->admin)->patch(route('beheer.users.update', $this->admin), $data)
             ->assertRedirect(route('beheer.users.show', [$this->admin, 'back' => 'false']));
@@ -63,7 +63,7 @@ class UpdateUserTest extends TestCase
     public function test_admin_updates_self_email_changed()
     {
         $this->mock(Mailman::class)->shouldReceive('updateUserEmailForAllMailList')->once();
-        $data = self::DETAILS + ['email' => 'Second@esac.nl', 'firstname' => 'New', 'lastname' => 'Second', 'kind_of_member' => $this->admin->kind_of_member];
+        $data = self::DETAILS + ['email' => 'Second@esac.nl', 'firstname' => 'New', 'lastname' => 'Second', 'kind_of_member' => $this->admin->kind_of_member->value];
 
         $this->actingAs($this->admin)->patch(route('beheer.users.update', $this->admin), $data)
             ->assertRedirect(route('beheer.users.show', [$this->admin, 'back' => 'false']));
@@ -87,7 +87,7 @@ class UpdateUserTest extends TestCase
 
     public function test_a_new_password_must_be_confirmed_and_is_hashed()
     {
-        $data = ['password' => 'new-password'] + self::DETAILS + ['email' => $this->admin->email, 'firstname' => 'New', 'lastname' => 'Second', 'kind_of_member' => $this->admin->kind_of_member];
+        $data = ['password' => 'new-password'] + self::DETAILS + ['email' => $this->admin->email, 'firstname' => 'New', 'lastname' => 'Second', 'kind_of_member' => $this->admin->kind_of_member->value];
 
         $this->actingAs($this->admin)->patch(route('beheer.users.update', $this->admin), $data)->assertInvalid('password');
 
@@ -99,7 +99,7 @@ class UpdateUserTest extends TestCase
     {
         $this->mock(Mailman::class)->shouldReceive('updateUserEmailForAllMailList')->once();
         $data = self::DETAILS + ['email' => 'Second@esac.nl']
-            + $this->member->only(['firstname', 'preposition', 'lastname', 'kind_of_member', 'remark']);
+            + Arr::only($this->member->attributesToArray(), ['firstname', 'preposition', 'lastname', 'kind_of_member', 'remark']);
 
         $this->actingAs($this->member)->patch(route('beheer.users.update', $this->member), $data)
             ->assertRedirect(route('beheer.users.show', [$this->member, 'back' => 'false']));
@@ -111,7 +111,7 @@ class UpdateUserTest extends TestCase
     public function test_member_cannot_update_forbidden_fields()
     {
         $this->mock(Mailman::class)->shouldReceive('updateUserEmailForAllMailList')->once();
-        $forbidden = $this->member->only(['firstname', 'preposition', 'lastname', 'kind_of_member', 'remark']);
+        $forbidden = Arr::only($this->member->attributesToArray(), ['firstname', 'preposition', 'lastname', 'kind_of_member', 'remark']);
         $data = self::DETAILS + ['email' => 'Second@esac.nl'] + array_fill_keys(array_keys($forbidden), 'Second');
 
         $this->actingAs($this->member)->patch(route('beheer.users.update', $this->member), $data)
@@ -139,6 +139,6 @@ class UpdateUserTest extends TestCase
 
         $this->assertSame('1990-02-02', $user->birthday->toDateString());
         $expected = Arr::except($data, ['password', 'birthday']);
-        $this->assertEquals($expected, $user->only(array_keys($expected)));
+        $this->assertEquals($expected, Arr::only($user->attributesToArray(), array_keys($expected)));
     }
 }

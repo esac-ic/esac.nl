@@ -2,7 +2,6 @@
 
 namespace App\Jobs;
 
-use App\Listeners\UpdateMemberTypeMaillists;
 use App\Models\User;
 use App\Services\Mailman;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -20,7 +19,7 @@ class MemberMassMailListSyncJob implements ShouldQueue
 
     public function handle(Mailman $mailman): void
     {
-        $mailLists = UpdateMemberTypeMaillists::getMemberTypeMailLists((string) $this->user->kind_of_member);
+        $mailLists = $this->user->kind_of_member?->mailLists() ?? [];
 
         if ($mailLists !== []) {
             $mailman->addUserToSpecifiedMailLists($this->user->email, $this->user->getName(), $mailLists);

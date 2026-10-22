@@ -2,6 +2,7 @@
 
 namespace App\Models\ApplicationForm;
 
+use App\Enums\FormRowType;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -17,20 +18,6 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 class ApplicationFormRow extends Model
 {
     use HasFactory, SoftDeletes;
-
-    const FORM_TYPE_SELECT = 'select';
-
-    const FORM_TYPE_RADIO = 'radio';
-
-    const FORM_TYPE_TEXT_BOX = 'textBox';
-
-    const FORM_TYPE_CHECK_BOX = 'checkbox';
-
-    const FORM_TYPE_MULTI_CHECK_BOX = 'checkboxen';
-
-    const FORM_TYPE_NUMBER = 'number';
-
-    const FORM_TYPE_TEXT = 'text';
 
     /**
      * @return HasMany<ApplicationFormRowOption, $this>
@@ -66,6 +53,7 @@ class ApplicationFormRow extends Model
     {
         return [
             'required' => 'boolean',
+            'type' => FormRowType::class,
         ];
     }
 }

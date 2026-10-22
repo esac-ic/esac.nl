@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Enums\KindOfMember;
 use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Database\Seeder;
@@ -36,7 +37,7 @@ class UsersTableSeeder extends Seeder
         $user->emergency_zipcode = '3633IK';
         $user->emergency_country = 'NL';
         $user->birthday = Carbon::now()->subYears(20);
-        $user->kind_of_member = 'member';
+        $user->kind_of_member = KindOfMember::Member;
         $user->iban = 'NL55 RABO 0107331020';
         $user->bic = '';
         $user->incasso = false;
@@ -68,7 +69,7 @@ class UsersTableSeeder extends Seeder
         $user->emergency_zipcode = '3633IK';
         $user->emergency_country = 'NL';
         $user->birthday = Carbon::now()->subYears(20);
-        $user->kind_of_member = 'member';
+        $user->kind_of_member = KindOfMember::Member;
         $user->iban = 'NL55 RABO 0107331020';
         $user->bic = '';
         $user->incasso = false;
@@ -96,7 +97,7 @@ class UsersTableSeeder extends Seeder
         $user->emergency_zipcode = '3633IK';
         $user->emergency_country = 'NL';
         $user->birthday = Carbon::now()->subYears(20);
-        $user->kind_of_member = 'member';
+        $user->kind_of_member = KindOfMember::Member;
         $user->iban = 'NL55 RABO 0107331020';
         $user->bic = '';
         $user->incasso = false;

@@ -2,6 +2,7 @@
 
 namespace Tests\Feature\ApplicationForm;
 
+use App\Enums\FormRowType;
 use App\Enums\Role;
 use App\Models\ApplicationForm\ApplicationForm;
 use App\Models\ApplicationForm\ApplicationFormRow;
@@ -41,7 +42,7 @@ class UpdateApplicationFormTest extends TestCase
                 [
                     'id' => $row->id,
                     'name' => 'Question 2',
-                    'type' => ApplicationFormRow::FORM_TYPE_CHECK_BOX,
+                    'type' => FormRowType::CheckBox,
                     'required' => true,
                     'options' => [
                         ['id' => $option->id, 'value' => 1, 'name' => 'Option 1'],
@@ -49,7 +50,7 @@ class UpdateApplicationFormTest extends TestCase
                         ['value' => 16, 'name' => 'Option 3'],
                     ],
                 ],
-                ['name' => 'Question 1', 'type' => ApplicationFormRow::FORM_TYPE_NUMBER],
+                ['name' => 'Question 1', 'type' => FormRowType::Number],
             ],
         ];
 
@@ -66,7 +67,7 @@ class UpdateApplicationFormTest extends TestCase
 
         $this->put($this->url, [
             'name' => 'test name',
-            'rows' => [['name' => 'Question 1', 'type' => ApplicationFormRow::FORM_TYPE_NUMBER]],
+            'rows' => [['name' => 'Question 1', 'type' => FormRowType::Number]],
         ])->assertForbidden();
     }
 
@@ -76,7 +77,7 @@ class UpdateApplicationFormTest extends TestCase
         $this->actingAsRole(Role::ContentAdministrator);
         $row = ApplicationFormRow::factory()->create([
             'application_form_id' => $this->applicationForm->id,
-            'type' => ApplicationFormRow::FORM_TYPE_TEXT,
+            'type' => FormRowType::Text,
             'required' => false,
         ]);
         $question = ['id' => $row->id, 'name' => $row->name, 'type' => $row->type];
