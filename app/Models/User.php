@@ -16,7 +16,6 @@ use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Attributes\Hidden;
 use Illuminate\Database\Eloquent\Attributes\Scope;
 use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -164,13 +163,6 @@ class User extends Authenticatable
     public function applicationResponses(): HasMany
     {
         return $this->hasMany(ApplicationResponse::class);
-    }
-
-    protected function birthdayFormatted(): Attribute
-    {
-        return Attribute::make(
-            get: fn () => $this->birthday->format('d-m-Y'),
-        );
     }
 
     public function hasRole(Role ...$roles): bool

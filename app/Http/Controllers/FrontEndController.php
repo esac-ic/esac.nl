@@ -8,7 +8,6 @@ use App\Models\Book;
 use App\Models\MenuItem;
 use App\Models\NewsItem;
 use App\Models\User;
-use App\Services\AgendaApplicationFormService;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Gate;
@@ -24,21 +23,11 @@ class FrontEndController extends Controller
         ]);
     }
 
-    public function agendaDetailView(AgendaItem $agendaItem, AgendaApplicationFormService $agendaApplicationFormService): View
+    public function agendaDetailView(AgendaItem $agendaItem): View
     {
-        $users = [];
-        if ($agendaItem->application_form_id != null) {
-            foreach ($agendaApplicationFormService->getRegisteredUsers($agendaItem)['userdata'] as $user) {
-                $users[$user->id] = [
-                    'name' => $user->getName(),
-                    'certificate_names' => $user->certificate_names,
-                ];
-            }
-        }
-
         return view('front-end.agenda_detail', [
             'agendaItem' => $agendaItem,
-            'users' => $users,
+            'registrations' => $agendaItem->registrations()->with('user.certificates')->get(),
             'curPageName' => $agendaItem->title,
         ]);
     }

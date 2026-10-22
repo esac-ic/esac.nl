@@ -19,10 +19,10 @@
             </tr>
             </thead>
             <tbody>
-            @foreach($applicationDataRows as $applicationDataRow)
+            @foreach($rows as $row)
                 <tr>
-                    <td>{{$applicationDataRow->formRow->name}}</td>
-                    <td>{{$applicationDataRow->formatted_value}}</td>
+                    <td>{{ $row->formRow->name }}</td>
+                    <td>{{ $row->formatted_value }}</td>
                 </tr>
             @endforeach
             </tbody>

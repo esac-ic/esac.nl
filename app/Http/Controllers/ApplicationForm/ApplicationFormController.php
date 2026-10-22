@@ -4,7 +4,7 @@ namespace App\Http\Controllers\ApplicationForm;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\ApplicationFormStoreRequest;
-use App\Http\Resources\ApplicationFormRowVueResource;
+use App\Http\Resources\ApplicationFormRowResource;
 use App\Models\ApplicationForm\ApplicationForm;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
@@ -42,7 +42,7 @@ class ApplicationFormController extends Controller implements HasMiddleware
 
     public function show(ApplicationForm $applicationForm): View
     {
-        return view('beheer.applicationForm.show', ['applicationForm' => $applicationForm]);
+        return view('beheer.applicationForm.show', ['applicationForm' => $applicationForm->load('applicationFormRows.applicationFormRowOptions')]);
     }
 
     public function edit(ApplicationForm $applicationForm): View
@@ -69,8 +69,8 @@ class ApplicationFormController extends Controller implements HasMiddleware
     private function form(ApplicationForm $applicationForm): View
     {
         return view('beheer.applicationForm.create_edit', [
-            'applicationForm' => $applicationForm,
-            'rows' => ApplicationFormRowVueResource::collection($applicationForm->applicationFormRows),
+            'applicationForm' => $applicationForm->load('applicationFormRows.applicationFormRowOptions'),
+            'rows' => ApplicationFormRowResource::collection($applicationForm->applicationFormRows),
         ]);
     }
 }
