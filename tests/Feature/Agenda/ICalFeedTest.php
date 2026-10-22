@@ -12,15 +12,17 @@ class ICalFeedTest extends TestCase
     use RefreshDatabase;
 
     #[Test]
-    public function the_feed_lists_every_agenda_item_in_local_time()
+    public function the_feed_lists_the_agenda_items_of_the_last_year_onward_in_local_time()
     {
+        $this->travelTo('2026-06-01');
         $item = AgendaItem::factory()->create([
             'title' => 'Climbing weekend',
             'text' => '<p>Bring a rope &amp; harness</p>',
             'start_date' => '2026-05-01 10:00:00',
             'end_date' => '2026-05-03 18:30:00',
         ]);
-        AgendaItem::factory()->create();
+        AgendaItem::factory()->create(['start_date' => '2027-01-01', 'end_date' => '2027-01-01']);
+        AgendaItem::factory()->create(['start_date' => '2025-05-01', 'end_date' => '2025-05-02']);
 
         $response = $this->get('/ical');
 
