@@ -69,7 +69,7 @@ class FrontEndController extends Controller
         return view('front-end.news', [
             'curPageName' => 'News',
             'content' => $this->pageContent(MenuItem::NEWSURL),
-            'newsItems' => NewsItem::orderBy('id', 'desc')->paginate(9),
+            'newsItems' => NewsItem::latest('id')->paginate(9),
         ]);
     }
 
@@ -111,7 +111,7 @@ class FrontEndController extends Controller
             'newsItems' => NewsItem::query()->latest('id')->take(3)->get(),
             'content' => $this->pageContent(MenuItem::HOMEURL),
             'curPageName' => 'Home',
-            'agendaItems' => AgendaItem::upcoming()->with('getApplicationFormResponses')->take(4)->get(),
+            'agendaItems' => AgendaItem::upcoming()->withCount('getApplicationFormResponses as registrations_count')->take(4)->get(),
         ]);
     }
 

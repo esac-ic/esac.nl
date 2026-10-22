@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use App\Models\AgendaItem;
+use App\Models\User;
 use Illuminate\Support\Collection;
 
 class AgendaApplicationFormService
@@ -110,16 +111,6 @@ class AgendaApplicationFormService
         ];
         $selectedElements = array_merge($selectedElements, $users['customfields']);
 
-        $activeUsers = [];
-        foreach ($users['userdata'] as $user) {
-            $userline = [];
-            foreach ($selectedElements as $element) {
-                $userline[$element] = $user[$element];
-            }
-
-            array_push($activeUsers, $userline);
-        }
-
-        return new Collection($activeUsers);
+        return collect($users['userdata'])->map(fn (User $user) => $user->only($selectedElements));
     }
 }

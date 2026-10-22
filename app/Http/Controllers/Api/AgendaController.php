@@ -7,7 +7,6 @@ use App\Http\Resources\AgendaItemCategoryResource;
 use App\Http\Resources\AgendaItemResource;
 use App\Models\AgendaItem;
 use App\Models\AgendaItemCategory;
-use Carbon\Carbon;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
@@ -41,20 +40,18 @@ class AgendaController extends Controller
             $agendaItemQuery->where('category', $category);
         }
 
-        if ($startDate = $request->input('startDate')) {
-            $startDate = Carbon::createFromFormat('d-m-Y', $startDate, config('app.display_timezone'))->startOfDay()->utc();
+        if ($startDate = $request->date('startDate', 'd-m-Y', config('app.display_timezone'))?->startOfDay()->utc()) {
             $agendaItemQuery->where(function ($query) use ($startDate) {
                 $query->where('start_date', '>=', $startDate)
                     ->orWhere('end_date', '>=', $startDate);
             });
         }
 
-        if ($endDate = $request->input('endDate')) {
-            $endDate = Carbon::createFromFormat('d-m-Y', $endDate, config('app.display_timezone'))->endOfDay()->utc();
+        if ($endDate = $request->date('endDate', 'd-m-Y', config('app.display_timezone'))?->endOfDay()->utc()) {
             $agendaItemQuery->where('start_date', '<=', $endDate);
         }
 
-        $agendaItemQuery->orderBy('start_date', 'asc');
+        $agendaItemQuery->oldest('start_date');
 
         $agendaItemCount = $agendaItemQuery->count();
 

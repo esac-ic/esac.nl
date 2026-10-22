@@ -39,23 +39,17 @@ class AgendaApplicationFormController extends Controller implements HasMiddlewar
     public function registerUser(AgendaItem $agendaItem): View
     {
         $applicationForm = $agendaItem->getApplicationForm;
-        $users = [];
-        $registeredUsers = [];
 
-        foreach ($agendaItem->getApplicationFormResponses as $registeredUser) {
-            array_push($registeredUsers, $registeredUser->user_id);
-        }
-
-        foreach (User::current()->orderBy('firstname')->orderBy('lastname')->get(['id', 'firstname', 'preposition', 'lastname']) as $user) {
-            if (! in_array($user->id, $registeredUsers)) {
-                $users[$user->id] = $user->getName();
-            }
-        }
+        $users = User::current()
+            ->whereNotIn('id', $agendaItem->getApplicationFormResponses->pluck('user_id'))
+            ->orderBy('firstname')->orderBy('lastname')
+            ->get(['id', 'firstname', 'preposition', 'lastname'])
+            ->mapWithKeys(fn (User $user) => [$user->id => $user->getName()]);
 
         return view('forms.inschrijven_admin', [
             'rows' => ApplicationFormRowVueResource::collection($applicationForm->applicationFormRows),
             'applicationForm' => $applicationForm,
-            'users' => $users,
+            'users' => $users->all(),
             'agendaItem' => $agendaItem,
         ]);
     }

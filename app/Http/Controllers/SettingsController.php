@@ -33,7 +33,7 @@ class SettingsController extends Controller implements HasMiddleware
     {
         $settings = Setting::all();
         foreach ($request->input('setting', []) as $key => $value) {
-            $setting = $settings->where('name', '=', $key)->first();
+            $setting = $settings->firstWhere('name', $key);
             $setting->value = $value;
             $setting->save();
         }

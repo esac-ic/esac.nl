@@ -63,8 +63,8 @@ class UserController extends Controller implements HasMiddleware
     {
         $user = User::fromForm($request->validated());
         $user->save();
-        if ($request->get('roles') != null) {
-            $user->roles()->sync($request->get('roles'));
+        if ($request->filled('roles')) {
+            $user->roles()->sync($request->input('roles'));
         }
 
         return to_route('users.index')->with('message', 'User is added');
@@ -102,7 +102,7 @@ class UserController extends Controller implements HasMiddleware
         $user->updateFromForm($request->validated());
 
         if ($request->user()->can('manage-members')) {
-            $user->roles()->sync($request->get('roles', []));
+            $user->roles()->sync($request->input('roles', []));
         }
 
         if ($request->user()->is($user)) {
