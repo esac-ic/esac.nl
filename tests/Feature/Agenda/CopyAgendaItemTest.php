@@ -31,7 +31,7 @@ class CopyAgendaItemTest extends TestCase
     {
         $agendaItem = AgendaItem::factory()->create(['image_url' => '']);
 
-        $response = $this->get($this->url.$agendaItem->id.'/copy');
+        $response = $this->post($this->url.$agendaItem->id.'/copy');
 
         $response->assertStatus(302);
 

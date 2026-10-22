@@ -65,13 +65,10 @@ class UserApplicationFormController extends Controller implements HasMiddleware
         return to_route('agenda.detail', $agendaItem);
     }
 
-    public function unregister(Request $request, AgendaItem $agendaItem, int $fromAgendaItem = 1): RedirectResponse
+    public function unregister(Request $request, AgendaItem $agendaItem): RedirectResponse
     {
-        // 0 means the member unregistered from the agenda overview.
-        $redirect = $fromAgendaItem == 1 ? to_route('agenda.detail', $agendaItem) : to_route('front-end.agenda');
-
         if (! $agendaItem->canRegister()) {
-            return $redirect->with('message', 'The registration date has expired, so you can no longer unsubscribe.');
+            return back()->with('message', 'The registration date has expired, so you can no longer unsubscribe.');
         }
 
         ApplicationResponse::query()
@@ -79,7 +76,7 @@ class UserApplicationFormController extends Controller implements HasMiddleware
             ->where('user_id', $request->user()->id)
             ->delete();
 
-        return $redirect->with('message', 'You successfully unsubscribed from the event.');
+        return back()->with('message', 'You successfully unsubscribed from the event.');
     }
 
     private function error(string $error): View
