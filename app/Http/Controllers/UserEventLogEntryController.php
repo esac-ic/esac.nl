@@ -33,8 +33,8 @@ class UserEventLogEntryController extends Controller implements HasMiddleware
     {
         $export = new UserEventLogExport(
             $request->input('eventTypes'),
-            Carbon::parse($request->input('startDate')),
-            Carbon::parse($request->input('endDate')),
+            Carbon::parse($request->input('startDate'), config('app.display_timezone'))->utc(),
+            Carbon::parse($request->input('endDate'), config('app.display_timezone'))->utc(),
         );
 
         return $export->download($export->fileName().'.xlsx');

@@ -30,7 +30,7 @@
         @foreach ($events as $entry)
             <tr>
                 <td>{{$entry->event_type}}</td>
-                <td>{{$entry->created_at}}</td>
+                <td>{{ $entry->created_at->tz(config('app.display_timezone')) }}</td>
                 <td>{{$entry->event_details}}</td>
             </tr>
         @endforeach

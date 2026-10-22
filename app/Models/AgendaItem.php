@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Casts\DisplayDateTime;
 use App\Models\ApplicationForm\ApplicationForm;
 use App\Models\ApplicationForm\ApplicationResponse;
 use App\Models\ApplicationForm\ApplicationResponseRow;
@@ -34,9 +35,9 @@ class AgendaItem extends Model
     {
         return [
             'climbing_activity' => 'boolean',
-            'start_date' => 'datetime',
-            'end_date' => 'datetime',
-            'subscription_end_date' => 'datetime',
+            'start_date' => DisplayDateTime::class,
+            'end_date' => DisplayDateTime::class,
+            'subscription_end_date' => DisplayDateTime::class,
         ];
     }
 
@@ -46,7 +47,7 @@ class AgendaItem extends Model
     #[Scope]
     protected function upcoming(Builder $query): void
     {
-        $query->whereDate('start_date', '>=', Carbon::now())->orderBy('start_date', 'ASC');
+        $query->where('start_date', '>=', today(config('app.display_timezone'))->utc())->orderBy('start_date', 'ASC');
     }
 
     /**
@@ -54,11 +55,11 @@ class AgendaItem extends Model
      */
     public function fillFromForm(array $data): static
     {
-        $this->start_date = Carbon::parse($data['start_date'])->startOfMinute();
-        $this->end_date = Carbon::parse($data['end_date'])->startOfMinute();
+        $this->start_date = $data['start_date'];
+        $this->end_date = $data['end_date'];
 
         if ($data['applicationForm'] != 0) {
-            $this->subscription_end_date = Carbon::parse($data['subscription_end_date'])->startOfMinute();
+            $this->subscription_end_date = $data['subscription_end_date'];
             $this->application_form_id = $data['applicationForm'];
         } else {
             $this->subscription_end_date = null;

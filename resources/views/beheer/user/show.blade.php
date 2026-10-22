@@ -163,11 +163,11 @@
                         </tr>
                         <tr>
                             <td>{{'User created at'}}</td>
-                            <td>{{ $user->created_at?->format('d-m-Y') }}</td>
+                            <td>{{ $user->created_at?->tz(config('app.display_timezone'))->format('d-m-Y') }}</td>
                         </tr>
                         <tr>
                             <td>{{'User updated at'}}</td>
-                            <td>{{ $user->updated_at?->format('d-m-Y') }}</td>
+                            <td>{{ $user->updated_at?->tz(config('app.display_timezone'))->format('d-m-Y') }}</td>
                         </tr>
                         <tr>
                             <td>{{'ID'}}</td>

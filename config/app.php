@@ -67,6 +67,9 @@ return [
 
     'timezone' => 'UTC',
 
+    // The timezone dates are shown and entered in; they're stored in UTC.
+    'display_timezone' => 'Europe/Amsterdam',
+
     /*
     |--------------------------------------------------------------------------
     | Application Locale Configuration
