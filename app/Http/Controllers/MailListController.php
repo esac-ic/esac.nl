@@ -39,7 +39,7 @@ class MailListController extends Controller implements HasMiddleware
     {
         $data = $request->validate(['address' => ['required', 'alpha_dash', 'max:255']]);
 
-        $this->mailman->storeMailList($data);
+        $this->mailman->storeMailList($data['address']);
 
         return to_route('beheer.mail-lists.index')->with('message', 'Mailing list added');
     }
