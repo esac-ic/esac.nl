@@ -9,6 +9,7 @@ use App\Models\Setting;
 use App\Models\User;
 use App\View\Composers\MenuComposer;
 use Illuminate\Auth\Access\Response;
+use Illuminate\Pagination\Paginator;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\View;
 use Illuminate\Support\ServiceProvider;
@@ -21,6 +22,8 @@ class AppServiceProvider extends ServiceProvider
     public function boot(): void
     {
         $this->defineGates();
+
+        Paginator::useBootstrapFour();
 
         View::composer('includes.menu', MenuComposer::class);
         View::composer('includes.footer', fn ($view) => $view->with(

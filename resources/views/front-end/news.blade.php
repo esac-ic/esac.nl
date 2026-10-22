@@ -42,6 +42,6 @@
             @endforeach
         </div>
     </div>
-    {{ $newsItems->links('front-end.pagination') }}
+    <div class="d-flex justify-content-center">{{ $newsItems->links() }}</div>
 </section>
 @endsection
