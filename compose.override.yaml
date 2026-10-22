@@ -26,6 +26,23 @@ services:
     ports:
       - "${FORWARD_DB_PORT:-3306}:3306"
 
+  mysql-test:
+    image: mysql:8.4
+    environment:
+      MYSQL_DATABASE: ${DB_DATABASE}
+      MYSQL_USER: ${DB_USERNAME}
+      MYSQL_PASSWORD: ${DB_PASSWORD}
+      MYSQL_RANDOM_ROOT_PASSWORD: "yes"
+    command: --innodb-buffer-pool-size=128M --performance-schema=OFF --max-connections=30
+    tmpfs:
+      - /var/lib/mysql
+    healthcheck:
+      test: ["CMD-SHELL", "mysqladmin ping -h 127.0.0.1 --silent"]
+      interval: 5s
+      retries: 20
+    profiles:
+      - test
+
   mailpit:
     image: axllent/mailpit:latest
     ports:

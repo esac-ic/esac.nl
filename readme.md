@@ -80,6 +80,22 @@ To avoid typing `docker compose exec app php artisan blablabla` every time. You 
 
 PHP code changes are hot reloaded, no rebuild needed. If you want to step-debug with Xdebug, set `SAIL_XDEBUG_MODE=debug` in `.env` and recreate the container with `docker compose up -d app`. In you ide use port 9003 with `host.docker.internal` as the client host.
 
+#### Running tests
+Tests run against their own disposable stack (the mysql test profile)
+
+1. Start the test database (it's behind the `test` profile, so it won't start with a plain `docker compose up`)
+	```
+	docker compose --profile test up -d mysql-test
+	```
+2. Migrate 
+	```
+	docker compose exec -e DB_HOST=mysql-test app php artisan migrate --force
+	```
+3. Run the test
+	```
+	docker compose exec -e APP_ENV=testing -e DB_HOST=mysql-test app vendor/bin/phpunit
+	```
+
 ### Development environment (Ubuntu on Windows + Visual Studio Code, prevents having to install a lot on Windows)
 1. Install the following:
 	* Visual Studio Code: https://code.visualstudio.com/
