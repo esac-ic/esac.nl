@@ -59,7 +59,7 @@ class RegisterForAgendaItemTest extends TestCase
         $this->assertEquals($user->id, $response->user_id);
         $this->assertEquals($agendaItem->id, $response->agenda_id);
         $this->assertEquals($agendaItem->application_form_id, $response->inschrijf_form_id);
-        $this->assertEquals($answers, $response->getApplicationFormResponseRows->pluck('value', 'application_form_row_id')->all());
+        $this->assertEquals($answers, $response->rows->pluck('value', 'application_form_row_id')->all());
     }
 
     #[Test]
@@ -146,6 +146,6 @@ class RegisterForAgendaItemTest extends TestCase
         $this->post('/forms/'.$agendaItem->id, [$required->id => 'not a number'])->assertInvalid([$required->id]);
         $this->post('/forms/'.$agendaItem->id, $this->answers($agendaItem) + [$required->id => 3, $otherFormsRow->id => 'x'])->assertValid();
 
-        $this->assertNotContains($otherFormsRow->id, ApplicationResponse::sole()->getApplicationFormResponseRows->pluck('application_form_row_id'));
+        $this->assertNotContains($otherFormsRow->id, ApplicationResponse::sole()->rows->pluck('application_form_row_id'));
     }
 }

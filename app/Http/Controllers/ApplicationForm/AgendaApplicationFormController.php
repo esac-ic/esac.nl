@@ -38,10 +38,10 @@ class AgendaApplicationFormController extends Controller implements HasMiddlewar
 
     public function registerUser(AgendaItem $agendaItem): View
     {
-        $applicationForm = $agendaItem->getApplicationForm;
+        $applicationForm = $agendaItem->applicationForm;
 
         $users = User::current()
-            ->whereNotIn('id', $agendaItem->getApplicationFormResponses->pluck('user_id'))
+            ->whereNotIn('id', $agendaItem->registrations->pluck('user_id'))
             ->orderBy('firstname')->orderBy('lastname')
             ->get(['id', 'firstname', 'preposition', 'lastname'])
             ->mapWithKeys(fn (User $user) => [$user->id => $user->getName()]);
@@ -63,7 +63,7 @@ class AgendaApplicationFormController extends Controller implements HasMiddlewar
 
     public function show(AgendaItem $agendaItem, User $user): View
     {
-        $applicationResponse = $agendaItem->getApplicationFormResponses()->whereBelongsTo($user)->firstOrFail();
+        $applicationResponse = $agendaItem->registrations()->whereBelongsTo($user)->firstOrFail();
 
         return view('forms.inschrijven_details', [
             'agendaId' => $agendaItem->id,

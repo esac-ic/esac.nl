@@ -88,13 +88,13 @@ class AgendaItem extends Model
     public function register(int $userId, array $answers): void
     {
         DB::transaction(function () use ($userId, $answers) {
-            $applicationResponse = $this->getApplicationFormResponses()->create([
+            $applicationResponse = $this->registrations()->create([
                 'inschrijf_form_id' => $this->application_form_id,
                 'user_id' => $userId,
             ]);
 
             // Unanswered optional questions are saved as blank answers.
-            $applicationResponse->getApplicationFormResponseRows()->createMany(
+            $applicationResponse->rows()->createMany(
                 collect($answers)
                     ->map(fn ($value, $rowId) => [
                         'application_form_row_id' => $rowId,
@@ -108,7 +108,7 @@ class AgendaItem extends Model
     /**
      * @return BelongsTo<ApplicationForm, $this>
      */
-    public function getApplicationForm(): BelongsTo
+    public function applicationForm(): BelongsTo
     {
         return $this->belongsTo(ApplicationForm::class, 'application_form_id');
     }
@@ -121,7 +121,10 @@ class AgendaItem extends Model
         return $this->belongsTo(AgendaItemCategory::class, 'category')->withTrashed();
     }
 
-    public function getCreatedBy(): BelongsTo
+    /**
+     * @return BelongsTo<User, $this>
+     */
+    public function creator(): BelongsTo
     {
         return $this->belongsTo(User::class, 'created_by');
     }
@@ -138,14 +141,14 @@ class AgendaItem extends Model
     /**
      * @return HasMany<ApplicationResponse, $this>
      */
-    public function getApplicationFormResponses(): HasMany
+    public function registrations(): HasMany
     {
         return $this->hasMany(ApplicationResponse::class, 'agenda_id');
     }
 
     public function isRegistered(User $user): bool
     {
-        return $this->getApplicationFormResponses()
+        return $this->registrations()
             ->whereBelongsTo($user)
             ->where('inschrijf_form_id', $this->application_form_id)
             ->exists();

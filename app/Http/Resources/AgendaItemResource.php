@@ -24,12 +24,12 @@ class AgendaItemResource extends JsonResource
             'full_startDate' => $this->start_date->toDateTimeString(),
             'category' => $this->agendaItemCategory->name,
             'text' => $this->short_description,
-            'formId' => $this->getApplicationForm,
+            'formId' => $this->applicationForm,
             'canRegister' => $this->canRegister(),
             'application_form_id' => $this->application_form_id,
             // Counted and checked by the agenda API's query.
-            'amountOfPeopleRegisterd' => $this->application_form_id ? $this->get_application_form_responses_count : 0,
-            'currentUserSignedUp' => $this->application_form_id && $this->getApplicationFormResponses->isNotEmpty(),
+            'amountOfPeopleRegisterd' => $this->application_form_id ? $this->registrations_count : 0,
+            'currentUserSignedUp' => $this->application_form_id && $this->registrations->isNotEmpty(),
         ];
     }
 }

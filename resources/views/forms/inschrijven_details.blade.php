@@ -21,7 +21,7 @@
             <tbody>
             @foreach($applicationDataRows as $applicationDataRow)
                 <tr>
-                    <td>{{$applicationDataRow->getApplicationFormRow->name}}</td>
+                    <td>{{$applicationDataRow->formRow->name}}</td>
                     <td>{{$applicationDataRow->formatted_value}}</td>
                 </tr>
             @endforeach

@@ -21,8 +21,8 @@
             <x-detail-row label="Last possible registration date">{{ $agendaItem->subscription_end_date?->format('d-m-Y H:i') }}</x-detail-row>
             <x-detail-row label="Category">{{$agendaItem->agendaItemCategory->name}}</x-detail-row>
             <x-detail-row label="Show certificates in the event item">{{$agendaItem->climbing_activity ? 'Yes' : 'No'}}</x-detail-row>
-            <x-detail-row label="Created by">{{$agendaItem->getCreatedBy->getName()}}</x-detail-row>
-            <x-detail-row label="Application form">{{ $agendaItem->getApplicationForm?->name }}</x-detail-row>
+            <x-detail-row label="Created by">{{$agendaItem->creator->getName()}}</x-detail-row>
+            <x-detail-row label="Application form">{{ $agendaItem->applicationForm?->name }}</x-detail-row>
             <x-detail-row label="Thumbnail image"><img src="{{$agendaItem->getImageUrl()}}" style="max-width: 240px" class="img-fluid"></x-detail-row>
         </table>
     </x-card>

@@ -11,12 +11,12 @@ class AgendaApplicationFormService
     public function getRegisteredUsers(AgendaItem $agendaItem): array
     {
         // Eager load necessary relationships
-        $agendaItem->load('getApplicationFormResponses.user');
+        $agendaItem->load('registrations.user');
 
         // Retrieve necessary objects
-        $applicationForm = $agendaItem->getApplicationForm;
+        $applicationForm = $agendaItem->applicationForm;
         // Anonymised registrations still count, but have no one to list
-        $applicationResponses = $agendaItem->getApplicationFormResponses->whereNotNull('user_id');
+        $applicationResponses = $agendaItem->registrations->whereNotNull('user_id');
 
         if (is_null($applicationForm)) {
             return [
@@ -49,12 +49,12 @@ class AgendaApplicationFormService
     public function getRegisteredUsersWithResponses(AgendaItem $agendaItem): array
     {
         // Eager load necessary relationships
-        $agendaItem->load('getApplicationForm.applicationFormRows', 'getApplicationFormResponses.user', 'getApplicationFormResponses.getApplicationFormResponseRows.getApplicationFormRow');
+        $agendaItem->load('applicationForm.applicationFormRows', 'registrations.user', 'registrations.rows.formRow');
 
         // Retrieve necessary objects
-        $applicationForm = $agendaItem->getApplicationForm;
+        $applicationForm = $agendaItem->applicationForm;
         // Anonymised registrations still count, but have no one to list
-        $applicationResponses = $agendaItem->getApplicationFormResponses->whereNotNull('user_id');
+        $applicationResponses = $agendaItem->registrations->whereNotNull('user_id');
 
         if (is_null($applicationForm)) {
             return [
@@ -75,8 +75,8 @@ class AgendaApplicationFormService
             $user = $response->user;
             $user['_signupId'] = $response->id;
 
-            $response->getApplicationFormResponseRows->each(function ($responseRow) use (&$user) {
-                $columnname = $responseRow->getApplicationFormRow->name;
+            $response->rows->each(function ($responseRow) use (&$user) {
+                $columnname = $responseRow->formRow->name;
                 $user[$columnname] = $responseRow->value;
             });
 

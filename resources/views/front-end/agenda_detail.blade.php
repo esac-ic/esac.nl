@@ -25,7 +25,7 @@
                         <div class="row justify-content-between align-items-center">
                             <div class="col-auto text-muted">
                                 @if($agendaItem->application_form_id != null)
-                                    <span class="ion-person-stalker"></span> {{count($agendaItem->getApplicationFormResponses)}}
+                                    <span class="ion-person-stalker"></span> {{count($agendaItem->registrations)}}
                                 @endif
                             </div>
                             <div class="col-auto">

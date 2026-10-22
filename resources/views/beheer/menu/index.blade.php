@@ -14,7 +14,7 @@
         @foreach ($pages as $menu)
             <tr>
                 <td>{{$menu->name}}</td>
-                <td>{{ $menu->partner?->name }}</td>
+                <td>{{ $menu->parent?->name }}</td>
                 <td>{{ $menu->afterItem?->name }}</td>
                 <td>
                     <x-icon-link :href="route('beheer.pages.edit', $menu)" icon="edit" title="Edit page" />

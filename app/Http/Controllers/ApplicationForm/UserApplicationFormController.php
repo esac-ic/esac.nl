@@ -27,7 +27,7 @@ class UserApplicationFormController extends Controller implements HasMiddleware
             return to_route('front-end.agenda.detail', $agendaItem)->with('error', $error);
         }
 
-        $applicationForm = $agendaItem->getApplicationForm;
+        $applicationForm = $agendaItem->applicationForm;
 
         return view('forms.inschrijven', [
             'rows' => ApplicationFormRowVueResource::collection($applicationForm->applicationFormRows),
@@ -55,7 +55,7 @@ class UserApplicationFormController extends Controller implements HasMiddleware
             return back()->with('message', 'The registration date has expired, so you can no longer unsubscribe.');
         }
 
-        $agendaItem->getApplicationFormResponses()->whereBelongsTo($request->user())->delete();
+        $agendaItem->registrations()->whereBelongsTo($request->user())->delete();
 
         return back()->with('message', 'You successfully unsubscribed from the event.');
     }
