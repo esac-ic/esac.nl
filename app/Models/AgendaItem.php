@@ -5,7 +5,6 @@ namespace App\Models;
 use App\Casts\DisplayDateTime;
 use App\Models\ApplicationForm\ApplicationForm;
 use App\Models\ApplicationForm\ApplicationResponse;
-use App\Models\ApplicationForm\ApplicationResponseRow;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Attributes\Scope;
@@ -14,6 +13,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 
 #[Fillable([
@@ -92,23 +92,27 @@ class AgendaItem extends Model
     }
 
     /**
-     * Registers the user for the event with their answers, keyed by the form row id.
+     * Registers the user for the event with their validated answers, keyed by the form row id.
      */
     public function register(int $userId, array $answers): void
     {
-        $applicationResponse = new ApplicationResponse;
-        $applicationResponse->agenda_id = $this->id;
-        $applicationResponse->inschrijf_form_id = $this->application_form_id;
-        $applicationResponse->user_id = $userId;
-        $applicationResponse->save();
+        DB::transaction(function () use ($userId, $answers) {
+            $applicationResponse = $this->getApplicationFormResponses()->create([
+                'inschrijf_form_id' => $this->application_form_id,
+                'user_id' => $userId,
+            ]);
 
-        foreach ($answers as $key => $value) {
-            $applicationResponseRow = new ApplicationResponseRow;
-            $applicationResponseRow->application_response_id = $applicationResponse->id;
-            $applicationResponseRow->application_form_row_id = $key;
-            $applicationResponseRow->value = is_array($value) ? implode(',', $value) : $value;
-            $applicationResponseRow->save();
-        }
+            // Unanswered optional questions get no row.
+            $applicationResponse->getApplicationFormResponseRows()->createMany(
+                collect($answers)
+                    ->whereNotNull()
+                    ->map(fn ($value, $rowId) => [
+                        'application_form_row_id' => $rowId,
+                        'value' => is_array($value) ? implode(',', $value) : $value,
+                    ])
+                    ->values(),
+            );
+        });
     }
 
     public function getApplicationForm(): BelongsTo

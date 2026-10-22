@@ -18,8 +18,6 @@
     </div>
 </div>
 <div class="container">
-    @include('includes.flash')
-
     @if ($errors->any())
         <ul class="alert alert-danger">
             @foreach ($errors->all() as $error)
