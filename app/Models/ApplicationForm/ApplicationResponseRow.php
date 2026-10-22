@@ -17,6 +17,9 @@ class ApplicationResponseRow extends Model
 {
     use SoftDeletes;
 
+    /**
+     * @return BelongsTo<ApplicationFormRow, $this>
+     */
     public function getApplicationFormRow(): BelongsTo
     {
         return $this->belongsTo(ApplicationFormRow::class, 'application_form_row_id')->withTrashed();

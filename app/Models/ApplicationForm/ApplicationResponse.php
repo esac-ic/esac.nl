@@ -20,16 +20,25 @@ class ApplicationResponse extends Model
 {
     use HasFactory, SoftDeletes;
 
+    /**
+     * @return HasMany<ApplicationResponseRow, $this>
+     */
     public function getApplicationFormResponseRows(): HasMany
     {
         return $this->hasMany(ApplicationResponseRow::class, 'application_response_id')->withTrashed();
     }
 
+    /**
+     * @return BelongsTo<AgendaItem, $this>
+     */
     public function agendaItem(): BelongsTo
     {
         return $this->belongsTo(AgendaItem::class, 'agenda_id');
     }
 
+    /**
+     * @return BelongsTo<User, $this>
+     */
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);

@@ -1,12 +1,3 @@
-{{--
-TODO: toevoegen van voting knoppen zodat mensen kunnen plussen en minnen
-Werking van deze pagina
-Zekeringen kunnen worden toegevoegd via deze pagina als mensen ingelogd zijn.
-Als iemand niet ingelogd is ziet diegene de knop ook niet.
-TODO: idee, mensen hun eigen zekeringen laten verwijderen?
-TODO: voeg toe moet gewoon plusje worden
---}}
-
 @extends('layouts.app')
 
 @section('content')

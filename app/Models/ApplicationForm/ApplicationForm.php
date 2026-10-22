@@ -15,6 +15,9 @@ class ApplicationForm extends Model
 {
     use HasFactory, SoftDeletes;
 
+    /**
+     * @return HasMany<ApplicationFormRow, $this>
+     */
     public function applicationFormRows(): HasMany
     {
         return $this->hasMany(ApplicationFormRow::class, 'application_form_id');
@@ -31,7 +34,7 @@ class ApplicationForm extends Model
             if (array_key_exists('id', $rowData) === true) {
                 $row = $this->applicationFormRows()->findOrFail($rowData['id']);
             } else {
-                $row = new ApplicationFormRow();
+                $row = new ApplicationFormRow;
                 $row->application_form_id = $this->id;
             }
             $row->fill($rowData);

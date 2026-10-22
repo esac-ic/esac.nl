@@ -12,7 +12,7 @@ class UserEventLogEntrySeeder extends Seeder
      * Run the database seeds.
      */
     public function run(): void
-    {   
+    {
         $nrOfUsers = User::count();
         UserEventLogEntry::factory()->randomUser($nrOfUsers)->count(10)->create();
     }

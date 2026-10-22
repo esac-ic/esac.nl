@@ -18,6 +18,13 @@ class Zekering extends Model
 {
     use SoftDeletes;
 
+    protected function casts(): array
+    {
+        return [
+            'has_parent' => 'boolean',
+        ];
+    }
+
     public function children(): HasMany
     {
         return $this->hasMany(Zekering::class, 'parent_id', 'id')->whereColumn('id', '!=', 'parent_id')->orderBy('id', 'asc');

@@ -47,7 +47,7 @@ class AgendaItem extends Model
     #[Scope]
     protected function upcoming(Builder $query): void
     {
-        $query->where('start_date', '>=', today(config('app.display_timezone'))->utc())->orderBy('start_date', 'ASC');
+        $query->where('start_date', '>=', today(config('app.display_timezone'))->utc())->orderBy('start_date');
     }
 
     /**
@@ -108,11 +108,17 @@ class AgendaItem extends Model
         });
     }
 
+    /**
+     * @return BelongsTo<ApplicationForm, $this>
+     */
     public function getApplicationForm(): BelongsTo
     {
         return $this->belongsTo(ApplicationForm::class, 'application_form_id');
     }
 
+    /**
+     * @return BelongsTo<AgendaItemCategory, $this>
+     */
     public function agendaItemCategory(): BelongsTo
     {
         return $this->belongsTo(AgendaItemCategory::class, 'category')->withTrashed();
@@ -132,6 +138,9 @@ class AgendaItem extends Model
         }
     }
 
+    /**
+     * @return HasMany<ApplicationResponse, $this>
+     */
     public function getApplicationFormResponses(): HasMany
     {
         return $this->hasMany(ApplicationResponse::class, 'agenda_id');

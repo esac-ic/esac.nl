@@ -16,7 +16,7 @@ class StorePendingUserRequest extends FormRequest
         return [
             ...$this->memberDetailRules(),
             'password' => ['required', 'confirmed', Password::defaults()],
-            'g-recaptcha-response' => ['required', new Recaptcha()],
+            'g-recaptcha-response' => ['required', new Recaptcha],
             'incasso' => 'required',
             'privacy_policy' => 'required',
             'termsconditions' => 'required',

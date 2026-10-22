@@ -14,10 +14,10 @@ class CertificaatSeeder extends Seeder
      */
     public function run()
     {
-        $certificat = new Certificate(['name' => 'Outdoor lead climbing', 'abbreviation' => "OV"]);
+        $certificat = new Certificate(['name' => 'Outdoor lead climbing', 'abbreviation' => 'OV']);
         $certificat->save();
 
-        $certificat = new Certificate(['name' => 'Indoor lead climbing', 'abbreviation' => "IV"]);
+        $certificat = new Certificate(['name' => 'Indoor lead climbing', 'abbreviation' => 'IV']);
         $certificat->save();
     }
 }

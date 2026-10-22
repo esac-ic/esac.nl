@@ -14,6 +14,9 @@ class MemberMassMailListSyncJob implements ShouldQueue
 {
     use Queueable;
 
+    /**
+     * @param  Collection<int, User>  $users
+     */
     public function __construct(public Collection $users) {}
 
     public function handle(Mailman $mailman): void
