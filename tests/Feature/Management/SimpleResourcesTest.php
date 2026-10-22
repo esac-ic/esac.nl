@@ -7,7 +7,7 @@ use App\Models\AgendaItemCategory;
 use App\Models\Book;
 use App\Models\Certificate;
 use App\Models\User;
-use Database\Seeders\MenuItemTableSeeder;
+use Database\Seeders\MenuItemSeeder;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use PHPUnit\Framework\Attributes\Test;
 use Tests\TestCase;
@@ -84,7 +84,7 @@ class SimpleResourcesTest extends TestCase
     #[Test]
     public function the_library_and_front_pages_list_their_content()
     {
-        $this->seed(MenuItemTableSeeder::class);
+        $this->seed(MenuItemSeeder::class);
         Book::create(['title' => 'Alpine climbing', 'year' => 1990, 'type' => 'Guide', 'country' => 'CH', 'code' => 'A1']);
 
         $this->actingAs($this->admin)->get('library')->assertOk()->assertSee('Alpine climbing');
