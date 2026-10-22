@@ -47,15 +47,15 @@
                 </tr>
                 <tr>
                     <td>{{'Start date'}}</td>
-                    <td>{{ $agendaItem->start_date->format('d-m-Y h:i') }}</td>
+                    <td>{{ $agendaItem->start_date->format('d-m-Y H:i') }}</td>
                 </tr>
                 <tr>
                     <td>{{'End date'}}</td>
-                    <td>{{ $agendaItem->end_date->format('d-m-Y h:i') }}</td>
+                    <td>{{ $agendaItem->end_date->format('d-m-Y H:i') }}</td>
                 </tr>
                 <tr>
                     <td>{{'Last possible registration date'}}</td>
-                    <td>{{ $agendaItem->subscription_end_date?->format('d-m-Y h:i') }}</td>
+                    <td>{{ $agendaItem->subscription_end_date?->format('d-m-Y H:i') }}</td>
                 </tr>
                 <tr>
                     <td>{{'Category'}}</td>
