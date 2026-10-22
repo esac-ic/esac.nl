@@ -25,7 +25,7 @@ TODO: voeg toe moet gewoon plusje worden
                 <div class="card w-100">
                     <div class="card-body">
                         <h4 class="card-title">{{'Add zekering'}}</h4>
-                        @if (!Auth::guest())
+                        @auth
                             {{ html()->form('POST', route('api.zekeringen.store'))->open() }}
                             <div class="form-group">
                                 {{ html()->label('Inhoud', 'zekering_content') }}
@@ -38,7 +38,7 @@ TODO: voeg toe moet gewoon plusje worden
                             {{ html()->form()->close() }}
                         @else
                             {{'You need to be logged in to view the zekeringen'}}
-                        @endif
+                        @endauth
                     </div>
                 </div>
             </div>
@@ -50,7 +50,15 @@ TODO: voeg toe moet gewoon plusje worden
 
 @push('scripts')
     <script>
-        var LOGDIN = "{{Auth::guest() ? "0" : "1"}}";
-        var ADMIN = "{{!Auth::guest() && Auth::getUser()->hasRole(\App\Enums\Role::ActivityAdministrator->value) ? "1" : "0"}}"
+        @auth
+        var LOGDIN = "1";
+        @else
+        var LOGDIN = "0";
+        @endauth
+        @can('manage-zekeringen')
+        var ADMIN = "1";
+        @else
+        var ADMIN = "0";
+        @endcan
     </script>
 @endpush

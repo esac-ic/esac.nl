@@ -2,7 +2,6 @@
 
 namespace App\Http\Requests;
 
-use App\Enums\Role;
 use App\Http\Requests\Concerns\ValidatesMemberDetails;
 use App\Models\User;
 use Illuminate\Foundation\Http\FormRequest;
@@ -44,6 +43,6 @@ class UserRequest extends FormRequest
 
     private function isAdministrator(): bool
     {
-        return $this->user()->hasRole(Role::Administrator->value);
+        return $this->user()->can('manage-members');
     }
 }

@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\CustomClasses\MailList\MailListFacade;
-use App\Enums\Role;
 use App\Jobs\MemberMassMailListSyncJob;
 use App\Models\User;
 use App\Repositories\UserRepository;
@@ -22,7 +21,7 @@ class MailListController extends Controller implements HasMiddleware
     {
         return [
             'auth',
-            new Middleware('authorize:' . Role::Administrator->value),
+            new Middleware('can:manage-mail-lists'),
         ];
     }
 

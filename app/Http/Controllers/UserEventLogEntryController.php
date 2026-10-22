@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use App\Enums\Role;
 use App\Exports\UserEventLogExport;
+use App\Models\UserEventLogEntry;
 use App\Repositories\UserEventLogEntryRepository;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\Request;
@@ -17,7 +17,7 @@ class UserEventLogEntryController extends Controller implements HasMiddleware
     {
         return [
             'auth',
-            new Middleware('authorize:' . Role::Administrator->value),
+            new Middleware('can:view-user-event-log'),
         ];
     }
 
@@ -28,7 +28,8 @@ class UserEventLogEntryController extends Controller implements HasMiddleware
     public function index(): View 
     {
         $events = $this->repository->all(['*']);
-        return view('beheer.userEventLog.index', compact('events'));
+        $eventTypes = UserEventLogEntry::distinct('event_type')->pluck('event_type')->sort();
+        return view('beheer.userEventLog.index', compact('events', 'eventTypes'));
     }
     
     public function export(Request $request, UserEventLogEntryRepository $repo)

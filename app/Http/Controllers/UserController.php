@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\CustomClasses\MailList\MailListFacade;
-use App\Enums\Role;
 use App\Exports\OldUsersExport;
 use App\Exports\PennoMemberExport;
 use App\Exports\UsersExport;
@@ -22,12 +21,12 @@ class UserController extends Controller implements HasMiddleware
 {
     public static function middleware(): array
     {
-        // The edit, update, and show methods check the authorization themselves, so they get no role middleware.
-        // The index is open to both Administrators and Certificate administrators.
+        // The edit, update, and show methods check the authorization themselves, so they get no ability middleware.
+        // The index is also open to those who can only view members.
         return [
             'auth',
-            new Middleware('authorize:' . Role::Administrator->value, except: ['edit', 'update', 'show', 'index']),
-            new Middleware('authorize:' . Role::Administrator->value . ',' . Role::CertificateAdministrator->value, only: ['index']),
+            new Middleware('can:manage-members', except: ['edit', 'update', 'show', 'index']),
+            new Middleware('can:view-members', only: ['index']),
         ];
     }
 
@@ -114,7 +113,7 @@ class UserController extends Controller implements HasMiddleware
         
         $this->_userRepository->update($user->id, $request->all());
         
-        if (Auth::user()->hasRole(Role::Administrator->value)) {
+        if (Auth::user()->can('manage-members')) {
             $this->_userRepository->addRols($user->id, $request->get('roles', []));
         }
 

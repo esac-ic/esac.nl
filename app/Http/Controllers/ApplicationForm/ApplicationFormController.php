@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers\ApplicationForm;
 
-use App\Enums\Role;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\ApplicationFormStoreRequest;
 use App\Http\Resources\ApplicationFormRowVueResource;
@@ -19,7 +18,7 @@ class ApplicationFormController extends Controller implements HasMiddleware
     public static function middleware(): array
     {
         return [
-            new Middleware('authorize:' . Role::ContentAdministrator->value . ',' . Role::ActivityAdministrator->value),
+            new Middleware('can:manage-agenda'),
         ];
     }
 
