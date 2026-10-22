@@ -26,6 +26,7 @@ class StorageController extends Controller implements HasMiddleware
 
     public function deleteImage(Request $request): void
     {
-        Storage::disk('public')->delete($request->input('path'));
+        // The editor sends the image's src, e.g. /storage/image_uploads/x.jpg
+        Storage::disk('public')->delete('image_uploads/'.basename((string) $request->input('path')));
     }
 }
