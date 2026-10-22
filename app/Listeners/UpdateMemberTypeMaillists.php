@@ -10,10 +10,10 @@ use App\Events\PendingUserApproved;
 use App\Models\Setting;
 use App\Models\User;
 use App\Services\Mailman;
-use Illuminate\Contracts\Queue\ShouldQueue;
+use Illuminate\Contracts\Queue\ShouldQueueAfterCommit;
 use Illuminate\Support\Facades\Log;
 
-class UpdateMemberTypeMaillists implements ShouldQueue
+class UpdateMemberTypeMaillists implements ShouldQueueAfterCommit
 {
     public function __construct(private readonly Mailman $mailman) {}
 
