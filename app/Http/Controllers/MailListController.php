@@ -79,7 +79,7 @@ class MailListController extends Controller implements HasMiddleware
 
     public function massMemberMailListSync(): RedirectResponse
     {
-        MemberMassMailListSyncJob::dispatch(User::current()->get());
+        MemberMassMailListSyncJob::dispatch();
 
         return to_route('beheer.mail-lists.index');
     }

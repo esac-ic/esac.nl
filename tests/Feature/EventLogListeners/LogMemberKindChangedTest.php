@@ -2,6 +2,7 @@
 
 namespace Tests\Feature\EventLogListeners;
 
+use App\Enums\KindOfMember;
 use App\Events\MemberKindChanged;
 use App\Listeners\LogUserEvent;
 use App\Models\User;
@@ -18,7 +19,7 @@ class LogMemberKindChangedTest extends TestCase
 
     #[Test]
     #[DataProvider('kindChanges')]
-    public function a_kind_of_member_change_is_logged(string $from, string $to)
+    public function a_kind_of_member_change_is_logged(KindOfMember $from, KindOfMember $to)
     {
         $user = User::factory()->create(['kind_of_member' => $from]);
 
@@ -27,6 +28,6 @@ class LogMemberKindChangedTest extends TestCase
         $logEntry = UserEventLogEntry::sole();
         $this->assertTrue($user->is($logEntry->user));
         $this->assertSame('MemberKindChanged', $logEntry->event_type);
-        $this->assertSame($user->getName()." changed from $from to $to", $logEntry->event_details);
+        $this->assertSame($user->getName()." changed from {$from->value} to {$to->value}", $logEntry->event_details);
     }
 }

@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Enums\FormRowType;
 use App\Models\ApplicationForm\ApplicationForm;
 use App\Models\ApplicationForm\ApplicationFormRow;
 use Illuminate\Database\Seeder;
@@ -21,21 +22,21 @@ class ApplicationFormSeeder extends Seeder
 
         $row = new ApplicationFormRow;
         $row->name = 'Car available';
-        $row->type = 'Checkbox';
+        $row->type = FormRowType::CheckBox;
         $row->required = 1;
         $row->application_form_id = $applicationForm->id;
         $row->save();
 
         $row = new ApplicationFormRow;
         $row->name = 'Tent available';
-        $row->type = 'Number';
+        $row->type = FormRowType::Number;
         $row->required = 1;
         $row->application_form_id = $applicationForm->id;
         $row->save();
 
         $row = new ApplicationFormRow;
         $row->name = 'Food requests';
-        $row->type = 'Text';
+        $row->type = FormRowType::Text;
         $row->required = 0;
         $row->application_form_id = $applicationForm->id;
         $row->save();
@@ -46,7 +47,7 @@ class ApplicationFormSeeder extends Seeder
         $applicationForm->save();
         $row = new ApplicationFormRow;
         $row->name = 'Food requests';
-        $row->type = 'Text';
+        $row->type = FormRowType::Text;
         $row->required = 0;
         $row->application_form_id = $applicationForm->id;
         $row->save();

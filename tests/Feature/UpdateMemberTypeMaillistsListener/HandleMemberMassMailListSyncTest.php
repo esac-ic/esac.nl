@@ -2,6 +2,7 @@
 
 namespace Tests\Feature\UpdateMemberTypeMaillistsListener;
 
+use App\Enums\KindOfMember;
 use App\Jobs\MemberMassMailListSyncJob;
 use App\Models\User;
 use App\Services\Mailman;
@@ -33,13 +34,13 @@ class HandleMemberMassMailListSyncTest extends TestCase
             ->with($user->email, $user->getName(), ['member.esac.nl'])
             ->once();
 
-        new MemberMassMailListSyncJob(User::all())->handle($mailman);
+        new MemberMassMailListSyncJob()->handle($mailman);
     }
 
     #[Test]
     public function every_kind_of_member_is_added_to_their_own_mail_lists()
     {
-        foreach (User::KINDS_OF_MEMBER as $kind) {
+        foreach (KindOfMember::cases() as $kind) {
             User::factory()->create(['kind_of_member' => $kind]);
         }
 
@@ -51,6 +52,6 @@ class HandleMemberMassMailListSyncTest extends TestCase
                 ->once();
         }
 
-        new MemberMassMailListSyncJob(User::all())->handle($mailman);
+        new MemberMassMailListSyncJob()->handle($mailman);
     }
 }

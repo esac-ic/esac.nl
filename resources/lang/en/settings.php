@@ -5,7 +5,6 @@ use App\Enums\SettingKey;
 return [
     SettingKey::BlockedEmailDomains->value => 'Blocked email domains',
     SettingKey::Killswitch->value => 'Block complete website front-end (0 or 1)',
-    SettingKey::ShowIntroOption->value => 'Show intro package options (0 or 1)',
     SettingKey::FooterPhoneNumber->value => 'Phone number in footer',
     SettingKey::NormalMemberMailLists->value => 'Normal member mail lists',
     SettingKey::ExtraordinaryMemberMailLists->value => 'Extraordinary participant mail lists',

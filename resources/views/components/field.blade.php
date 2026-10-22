@@ -1,6 +1,7 @@
 @props(['name', 'label', 'type' => 'text', 'value' => null, 'options' => null, 'col' => null])
 @php($id = $attributes->get('id', $name))
 @php($value = old(str_replace(['[', ']'], ['.', ''], $name), $value))
+@php($value = $value instanceof BackedEnum ? $value->value : $value)
 <div @class(['form-group', 'col-md-'.$col => $col])>
     <label for="{{ $id }}">{{ $label }}</label>
     @if ($options !== null)

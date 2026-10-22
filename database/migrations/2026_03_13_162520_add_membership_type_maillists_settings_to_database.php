@@ -9,13 +9,13 @@ return new class extends Migration
     public function up(): void
     {
         Setting::insert([
-            ['name' => SettingKey::NormalMemberMailLists->value, 'type' => Setting::TYPE_STRING, 'value' => 'alle-leden.esac.nl;nieuwsbrief.esac.nl'],
-            ['name' => SettingKey::ExtraordinaryMemberMailLists->value, 'type' => Setting::TYPE_STRING, 'value' => 'reunist.esac.nl;alle-leden.esac.nl;nieuwsbrief.esac.nl'],
-            ['name' => SettingKey::ReunistMemberMailLists->value, 'type' => Setting::TYPE_STRING, 'value' => 'reunist.esac.nl'],
-            ['name' => SettingKey::HonoraryMemberMailLists->value, 'type' => Setting::TYPE_STRING, 'value' => ''],
-            ['name' => SettingKey::MeritMemberMailLists->value, 'type' => Setting::TYPE_STRING, 'value' => ''],
-            ['name' => SettingKey::TrainerMemberMailLists->value, 'type' => Setting::TYPE_STRING, 'value' => 'alle-leden.esac.nl;nieuwsbrief.esac.nl'],
-            ['name' => SettingKey::RelationshipMemberMailLists->value, 'type' => Setting::TYPE_STRING, 'value' => ''],
+            ['name' => SettingKey::NormalMemberMailLists->value, 'type' => 'TYPE_STRING', 'value' => 'alle-leden.esac.nl;nieuwsbrief.esac.nl'],
+            ['name' => SettingKey::ExtraordinaryMemberMailLists->value, 'type' => 'TYPE_STRING', 'value' => 'reunist.esac.nl;alle-leden.esac.nl;nieuwsbrief.esac.nl'],
+            ['name' => SettingKey::ReunistMemberMailLists->value, 'type' => 'TYPE_STRING', 'value' => 'reunist.esac.nl'],
+            ['name' => SettingKey::HonoraryMemberMailLists->value, 'type' => 'TYPE_STRING', 'value' => ''],
+            ['name' => SettingKey::MeritMemberMailLists->value, 'type' => 'TYPE_STRING', 'value' => ''],
+            ['name' => SettingKey::TrainerMemberMailLists->value, 'type' => 'TYPE_STRING', 'value' => 'alle-leden.esac.nl;nieuwsbrief.esac.nl'],
+            ['name' => SettingKey::RelationshipMemberMailLists->value, 'type' => 'TYPE_STRING', 'value' => ''],
         ]);
     }
 

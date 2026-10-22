@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Enums\KindOfMember;
 use App\Enums\Role;
 use App\Events\MemberBecameOldMember;
 use App\Events\MemberKindChanged;
@@ -10,7 +11,6 @@ use App\Events\PendingUserApproved;
 use App\Events\PendingUserCreated;
 use App\Events\PendingUserRemoved;
 use App\Models\ApplicationForm\ApplicationResponse;
-use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Attributes\Hidden;
 use Illuminate\Database\Eloquent\Attributes\Scope;
@@ -61,19 +61,6 @@ class User extends Authenticatable
 {
     use HasFactory, Notifiable, SoftDeletes;
 
-    /**
-     * All kinds of member, translated in lang/en/kind_of_member.php.
-     */
-    public const array KINDS_OF_MEMBER = [
-        'member',
-        'extraordinary_member',
-        'reunist',
-        'honorary_member',
-        'member_of_merit',
-        'trainer',
-        'relationship',
-    ];
-
     protected function casts(): array
     {
         return [
@@ -82,6 +69,7 @@ class User extends Authenticatable
             'lid_af' => 'date:Y-m-d',
             'pending_user' => 'date:Y-m-d',
             'incasso' => 'boolean',
+            'kind_of_member' => KindOfMember::class,
         ];
     }
 
@@ -123,7 +111,7 @@ class User extends Authenticatable
 
         // A date column, so the date in Amsterdam rather than in UTC.
         $user->pending_user = today(config('app.display_timezone'));
-        $user->kind_of_member = 'member';
+        $user->kind_of_member = KindOfMember::Member;
         $user->lid_af = null;
 
         $user->save();
@@ -145,8 +133,8 @@ class User extends Authenticatable
         // Update before dispatching the event, so Mailman can't desync when the kind of member and email change together.
         $this->update($data);
 
-        if ($data['kind_of_member'] != $oldKindOfMember) {
-            MemberKindChanged::dispatch($this, $oldKindOfMember, $data['kind_of_member']);
+        if ($this->kind_of_member !== $oldKindOfMember) {
+            MemberKindChanged::dispatch($this, $oldKindOfMember, $this->kind_of_member);
         }
     }
 

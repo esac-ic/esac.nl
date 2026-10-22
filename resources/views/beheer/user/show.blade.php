@@ -101,9 +101,7 @@
                     <tr>
                         <td>{{'Kind of member'}}</td>
                         <td>
-                            @isset($user->kind_of_member)
-                            {{trans('kind_of_member.' . $user->kind_of_member)}}
-                            @endisset
+                            {{ $user->kind_of_member?->label() }}
                         </td>
                     </tr>
                     <x-detail-row label="Remarks">{{$user->remark}}</x-detail-row>

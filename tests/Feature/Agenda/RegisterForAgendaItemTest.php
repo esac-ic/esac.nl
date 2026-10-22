@@ -2,6 +2,7 @@
 
 namespace Tests\Feature\Agenda;
 
+use App\Enums\FormRowType;
 use App\Enums\Role;
 use App\Models\AgendaItem;
 use App\Models\ApplicationForm\ApplicationForm;
@@ -38,13 +39,13 @@ class RegisterForAgendaItemTest extends TestCase
     private function answers(AgendaItem $agendaItem): array
     {
         $values = [
-            ApplicationFormRow::FORM_TYPE_NUMBER => 2342,
-            ApplicationFormRow::FORM_TYPE_TEXT => 'hello',
-            ApplicationFormRow::FORM_TYPE_TEXT_BOX => 'hello',
+            [FormRowType::Number, 2342],
+            [FormRowType::Text, 'hello'],
+            [FormRowType::TextBox, 'hello'],
         ];
 
         $body = [];
-        foreach ($values as $type => $value) {
+        foreach ($values as [$type, $value]) {
             $row = ApplicationFormRow::factory()->create(['application_form_id' => $agendaItem->application_form_id, 'type' => $type]);
             $body[$row->id] = $value;
         }
@@ -138,7 +139,7 @@ class RegisterForAgendaItemTest extends TestCase
         $agendaItem = $this->agendaItemWithForm();
         $required = ApplicationFormRow::factory()->create([
             'application_form_id' => $agendaItem->application_form_id,
-            'type' => ApplicationFormRow::FORM_TYPE_NUMBER,
+            'type' => FormRowType::Number,
             'required' => true,
         ]);
         $otherFormsRow = ApplicationFormRow::factory()->create();

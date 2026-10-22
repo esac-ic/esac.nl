@@ -2,6 +2,7 @@
 
 namespace Tests\Feature\UpdateMemberTypeMaillistsListener;
 
+use App\Enums\KindOfMember;
 use App\Enums\SettingKey;
 use App\Events\MemberKindChanged;
 use App\Listeners\UpdateMemberTypeMaillists;
@@ -52,12 +53,12 @@ class HandleMemberTypeChangedTest extends TestCase
             ->ordered();
 
         new UpdateMemberTypeMaillists($this->mockedMailman)
-            ->handleMemberKindChanged(new MemberKindChanged($this->user, 'member', 'reunist'));
+            ->handleMemberKindChanged(new MemberKindChanged($this->user, KindOfMember::Member, KindOfMember::Reunist));
     }
 
     #[Test]
     #[DataProvider('kindChanges')]
-    public function mail_lists_are_updated_when_the_kind_of_member_changes(string $from, string $to)
+    public function mail_lists_are_updated_when_the_kind_of_member_changes(KindOfMember $from, KindOfMember $to)
     {
         $this->mockedMailman->shouldReceive('removeUserFromSpecifiedMailLists')
             ->with($this->user->email, [$this->mailListOf($from)])

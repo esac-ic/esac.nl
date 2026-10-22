@@ -2,6 +2,7 @@
 
 namespace Tests\Feature\UpdateMemberTypeMaillistsListener;
 
+use App\Enums\KindOfMember;
 use App\Events\OldMemberBecameMember;
 use App\Listeners\UpdateMemberTypeMaillists;
 use App\Models\User;
@@ -19,7 +20,7 @@ class HandleOldMemberBecameMemberTest extends TestCase
 
     #[Test]
     #[DataProvider('kindsOfMember')]
-    public function an_old_member_is_added_to_the_mail_lists_of_their_kind(string $kind)
+    public function an_old_member_is_added_to_the_mail_lists_of_their_kind(KindOfMember $kind)
     {
         $this->fakeMailListSettings();
         $user = User::factory()->create(['kind_of_member' => $kind]);

@@ -2,6 +2,7 @@
 
 namespace Tests\Feature\Exports;
 
+use App\Enums\FormRowType;
 use App\Enums\Role;
 use App\Models\AgendaItem;
 use App\Models\ApplicationForm\ApplicationForm;
@@ -114,7 +115,7 @@ class ExportTest extends TestCase
         ApplicationFormRow::factory()->create([
             'application_form_id' => $form->id,
             'name' => 'Diet',
-            'type' => ApplicationFormRow::FORM_TYPE_TEXT,
+            'type' => FormRowType::Text,
         ]);
         $agendaItem = AgendaItem::factory()->create(['title' => 'Trip to Font', 'application_form_id' => $form->id]);
         ApplicationResponse::factory()->count(2)->create([

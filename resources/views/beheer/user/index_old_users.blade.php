@@ -18,9 +18,7 @@
                 <td>{{$user->getName()}}</td>
                 <td>{{$user->email}}</td>
                 <td>
-                    @isset($user->kind_of_member)
-                    {{trans('kind_of_member.' . $user->kind_of_member)}}
-                    @endisset
+                    {{ $user->kind_of_member?->label() }}
                 </td>
                 <td>
                     <x-icon-link :href="route('beheer.users.edit', $user)" icon="edit" title="Edit user" />

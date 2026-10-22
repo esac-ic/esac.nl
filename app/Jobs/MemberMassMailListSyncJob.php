@@ -2,35 +2,26 @@
 
 namespace App\Jobs;
 
-use App\Listeners\UpdateMemberTypeMaillists;
 use App\Models\User;
 use App\Services\Mailman;
 use Illuminate\Contracts\Queue\ShouldQueue;
-use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Foundation\Queue\Queueable;
 use Illuminate\Support\Facades\Log;
 
+/**
+ * Adds every current member to the mail lists of their kind of member.
+ */
 class MemberMassMailListSyncJob implements ShouldQueue
 {
     use Queueable;
-
-    /**
-     * @param  Collection<int, User>  $users
-     */
-    public function __construct(public Collection $users) {}
 
     public function handle(Mailman $mailman): void
     {
         Log::info('Performing a mass mail list sync');
 
-        $mailListsPerMemberKind = [];
-        foreach (User::KINDS_OF_MEMBER as $kind_of_member) {
-            $mailListsPerMemberKind[$kind_of_member] = UpdateMemberTypeMaillists::getMemberTypeMailLists($kind_of_member);
-        }
-
-        foreach ($this->users as $user) {
-            if ($mailListsPerMemberKind[$user->kind_of_member] ?? false) {
-                $mailman->addUserToSpecifiedMailLists($user->email, $user->getName(), $mailListsPerMemberKind[$user->kind_of_member]);
+        foreach (User::current()->get() as $user) {
+            if ($mailLists = $user->kind_of_member->mailLists()) {
+                $mailman->addUserToSpecifiedMailLists($user->email, $user->getName(), $mailLists);
             }
         }
 

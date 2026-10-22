@@ -2,9 +2,11 @@
 
 namespace App\Http\Requests;
 
+use App\Enums\KindOfMember;
 use App\Http\Requests\Concerns\ValidatesMemberDetails;
 use App\Models\User;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Support\Arr;
 use Illuminate\Validation\Rule;
 use Illuminate\Validation\Rules\Password;
 
@@ -30,7 +32,7 @@ class UserRequest extends FormRequest
         $user = $this->route('user');
 
         if ($user instanceof User && ! $this->isAdministrator()) {
-            $this->merge($user->only(['firstname', 'preposition', 'lastname', 'remark', 'kind_of_member']));
+            $this->merge(Arr::only($user->attributesToArray(), ['firstname', 'preposition', 'lastname', 'remark', 'kind_of_member']));
         }
     }
 
@@ -47,7 +49,7 @@ class UserRequest extends FormRequest
             ],
             'incasso' => 'boolean',
             'remark' => 'nullable',
-            'kind_of_member' => Rule::requiredIf($this->isAdministrator()),
+            'kind_of_member' => [Rule::requiredIf($this->isAdministrator()), Rule::enum(KindOfMember::class)],
         ];
     }
 

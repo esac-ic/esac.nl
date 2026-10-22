@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests;
 
+use App\Enums\FormRowType;
 use App\Models\AgendaItem;
 use App\Models\ApplicationForm\ApplicationFormRow;
 use Illuminate\Foundation\Http\FormRequest;
@@ -35,12 +36,12 @@ class RegistrationRequest extends FormRequest
         $options = Rule::in($row->applicationFormRowOptions->pluck('value')->all());
 
         return match ($row->type) {
-            ApplicationFormRow::FORM_TYPE_NUMBER => [$row->id => [$presence, 'numeric']],
-            ApplicationFormRow::FORM_TYPE_CHECK_BOX => [$row->id => $row->required ? ['accepted'] : ['nullable', Rule::in(['on', '0'])]],
-            ApplicationFormRow::FORM_TYPE_SELECT => [$row->id => [$presence, $options]],
+            FormRowType::Number => [$row->id => [$presence, 'numeric']],
+            FormRowType::CheckBox => [$row->id => $row->required ? ['accepted'] : ['nullable', Rule::in(['on', '0'])]],
+            FormRowType::Select => [$row->id => [$presence, $options]],
             // Radio buttons and checkboxes are posted as arrays.
-            ApplicationFormRow::FORM_TYPE_RADIO => [$row->id => [$presence, 'array', 'max:1'], $row->id.'.*' => [$options]],
-            ApplicationFormRow::FORM_TYPE_MULTI_CHECK_BOX => [$row->id => [$presence, 'array'], $row->id.'.*' => [$options]],
+            FormRowType::Radio => [$row->id => [$presence, 'array', 'max:1'], $row->id.'.*' => [$options]],
+            FormRowType::MultiCheckBox => [$row->id => [$presence, 'array'], $row->id.'.*' => [$options]],
             default => [$row->id => [$presence, 'string']],
         };
     }

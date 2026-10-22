@@ -2,9 +2,9 @@
 
 namespace Tests\Feature\ApplicationForm;
 
+use App\Enums\FormRowType;
 use App\Enums\Role;
 use App\Models\ApplicationForm\ApplicationForm;
-use App\Models\ApplicationForm\ApplicationFormRow;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\Test;
@@ -21,11 +21,11 @@ class CreateApplicationFormTest extends TestCase
         return [
             'name' => 'test name',
             'rows' => [
-                ['name' => 'Question 1', 'type' => ApplicationFormRow::FORM_TYPE_NUMBER],
-                ['name' => 'Question 2', 'type' => ApplicationFormRow::FORM_TYPE_CHECK_BOX, 'required' => true],
+                ['name' => 'Question 1', 'type' => FormRowType::Number],
+                ['name' => 'Question 2', 'type' => FormRowType::CheckBox, 'required' => true],
                 [
                     'name' => 'Question 3',
-                    'type' => ApplicationFormRow::FORM_TYPE_RADIO,
+                    'type' => FormRowType::Radio,
                     'required' => true,
                     'options' => [
                         ['value' => 1, 'name' => 'Option 1'],

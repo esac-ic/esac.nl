@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Enums\KindOfMember;
 use App\Exports\OldUsersExport;
 use App\Exports\PennoMemberExport;
 use App\Exports\UsersExport;
@@ -47,7 +48,7 @@ class UserController extends Controller implements HasMiddleware
 
     public function create(): View
     {
-        return view('beheer.user.create_edit', ['user' => new User, 'roles' => Rol::all()]);
+        return view('beheer.user.create_edit', ['user' => new User, 'roles' => Rol::all(), 'kindsOfMember' => KindOfMember::options()]);
     }
 
     public function store(UserRequest $request): RedirectResponse
@@ -70,7 +71,7 @@ class UserController extends Controller implements HasMiddleware
     {
         Gate::authorize('update', $user);
 
-        return view('beheer.user.create_edit', ['user' => $user, 'roles' => Rol::all()]);
+        return view('beheer.user.create_edit', ['user' => $user, 'roles' => Rol::all(), 'kindsOfMember' => KindOfMember::options()]);
     }
 
     public function update(UserRequest $request, User $user, Mailman $mailman): RedirectResponse
