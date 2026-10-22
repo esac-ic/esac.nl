@@ -25,7 +25,7 @@ class UserRegistrationsTest extends TestCase
         $admin = User::factory()->withRole(Role::CertificateAdministrator)->create();
 
         $this->actingAs($admin)
-            ->getJson(route('api.user.registrations', ['user_id' => $member->id]))
+            ->getJson(route('api.registrations.index', ['user_id' => $member->id]))
             ->assertOk()
             ->assertJsonPath('0.name', 'Ice climbing weekend');
     }

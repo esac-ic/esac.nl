@@ -16,7 +16,7 @@
                 <label for="author">Author</label>
                 <auto-complete-field
                         name="author"
-                        url="{{ route('api.users.autoComplete') }}"
+                        url="{{ route('api.users.auto-complete') }}"
                         placeholder="Author"
                         value="{{ $newsItem->author }}">
                 </auto-complete-field>

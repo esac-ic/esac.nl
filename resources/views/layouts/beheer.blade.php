@@ -51,7 +51,7 @@
                         <x-nav-dropdown label="Members">
                             <a class="dropdown-item" href="{{ route('beheer.users.index') }}">{{'Current members'}}</a>
                             @can('manage-members')
-                                <a class="dropdown-item" href="{{ route('beheer.users.old-members') }}">{{'Old members'}}</a>
+                                <a class="dropdown-item" href="{{ route('beheer.old-members.index') }}">{{'Old members'}}</a>
                                 <a class="dropdown-item" href="{{ route('beheer.pending-users.index') }}">{{'Pending users'}}</a>
                             @endcan
                             @can('manage-roles')

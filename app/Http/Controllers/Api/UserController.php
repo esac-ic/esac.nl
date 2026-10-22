@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Http\Resources\MemberResource;
 use App\Models\User;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -15,8 +16,14 @@ class UserController extends Controller implements HasMiddleware
     {
         return [
             'auth',
-            new Middleware('can:manage-news'),
+            new Middleware('can:manage-mail-lists', only: ['index']),
+            new Middleware('can:manage-news', only: ['autoComplete']),
         ];
+    }
+
+    public function index(): array
+    {
+        return ['aaData' => MemberResource::collection(User::query()->current()->get(['id', 'email', 'firstname', 'preposition', 'lastname']))];
     }
 
     public function autoComplete(Request $request): JsonResponse

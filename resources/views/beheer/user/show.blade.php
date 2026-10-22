@@ -29,8 +29,7 @@
         @else
             @can('manage-members')
                 @if($user->isOldMember())
-                    {{ html()->form('POST', route('beheer.users.activate', $user))->open() }}
-                    @method('PATCH')
+                    {{ html()->form('POST', route('beheer.users.membership.store', $user))->open() }}
                         <button type="submit" class="btn btn-success"><em class="ion-plus"></em> {{'Make active member'}}</button>
                     {{ html()->form()->close() }}
                 @endif
@@ -44,8 +43,8 @@
             @endif
             @can('manage-members')
                 @if($user->isActiveMember())
-                    {{ html()->form('POST', route('beheer.users.deactivate', $user))->open() }}
-                    @method('PATCH')
+                    {{ html()->form('POST', route('beheer.users.membership.destroy', $user))->open() }}
+                    @method('DELETE')
                     <button type="submit" class="btn btn-danger"><em class="ion-trash-a"></em> {{'Remove as active member'}}</button>
                     {{ html()->form()->close() }}
                 @endif
@@ -213,7 +212,7 @@
         $('#registrations_table').DataTable({
             "order": [[ 1, "asc" ]],
             "ajax": {
-                'url' : '{{ route('api.user.registrations', ['user_id' => $user->id]) }}',
+                'url' : '{{ route('api.registrations.index', ['user_id' => $user->id]) }}',
                 "dataSrc": ""
             },
             "columns": [

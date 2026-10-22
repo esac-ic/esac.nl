@@ -33,7 +33,7 @@ class MakeActiveMemberTest extends TestCase
 
         Event::fake();
 
-        $response = $this->actingAs($this->admin)->patch(route('beheer.users.activate', $user));
+        $response = $this->actingAs($this->admin)->post(route('beheer.users.membership.store', $user));
 
         $response->assertRedirect(route('beheer.users.show', $user));
         Event::assertDispatched(OldMemberBecameMember::class);
@@ -49,8 +49,8 @@ class MakeActiveMemberTest extends TestCase
 
         Event::fake();
 
-        $response = $this->actingAs($this->admin)->patch(route('beheer.users.activate', $user));
-        $response->assertRedirect(route('beheer.users.old-members'));
+        $response = $this->actingAs($this->admin)->post(route('beheer.users.membership.store', $user));
+        $response->assertRedirect(route('beheer.old-members.index'));
         Event::assertNotDispatched(OldMemberBecameMember::class);
     }
 
@@ -65,8 +65,8 @@ class MakeActiveMemberTest extends TestCase
 
         Event::fake();
 
-        $response = $this->actingAs($this->admin)->patch(route('beheer.users.activate', $user));
-        $response->assertRedirect(route('beheer.users.old-members'));
+        $response = $this->actingAs($this->admin)->post(route('beheer.users.membership.store', $user));
+        $response->assertRedirect(route('beheer.old-members.index'));
         Event::assertNotDispatched(OldMemberBecameMember::class);
 
         $this->assertNotNull(User::find($userId)->lid_af);
@@ -81,8 +81,8 @@ class MakeActiveMemberTest extends TestCase
 
         Event::fake();
 
-        $response = $this->actingAs($this->admin)->patch(route('beheer.users.activate', $user));
-        $response->assertRedirect(route('beheer.users.old-members'));
+        $response = $this->actingAs($this->admin)->post(route('beheer.users.membership.store', $user));
+        $response->assertRedirect(route('beheer.old-members.index'));
         Event::assertNotDispatched(OldMemberBecameMember::class);
     }
 }

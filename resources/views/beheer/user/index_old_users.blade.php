@@ -9,7 +9,7 @@
 
     <x-page-header title="Old members">
         @can('manage-members')
-            <x-button-link :href="route('beheer.users.old-members.export')" icon="android-download">Export old members</x-button-link>
+            <x-button-link :href="route('beheer.old-members.export')" icon="android-download">Export old members</x-button-link>
         @endcan
     </x-page-header>
     <x-data-table :columns="['Name', 'Email address', 'Type of member', 'Management']">

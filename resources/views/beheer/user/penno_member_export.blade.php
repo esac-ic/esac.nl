@@ -9,7 +9,7 @@
     <x-validation-errors />
 
     <x-card title="Penno export">
-        {{ html()->form('GET', route('beheer.users.penno-export.download'))->open() }}
+        {{ html()->form('POST', route('beheer.penno-export.store'))->open() }}
         <x-field name="days_ago" label="Amount of days in the past" type="number" value="7" required />
     </x-card>
 

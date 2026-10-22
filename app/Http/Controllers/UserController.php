@@ -3,20 +3,14 @@
 namespace App\Http\Controllers;
 
 use App\Enums\KindOfMember;
-use App\Exports\OldUsersExport;
-use App\Exports\PennoMemberExport;
-use App\Exports\UsersExport;
 use App\Http\Requests\UserRequest;
 use App\Models\Rol;
 use App\Models\User;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
-use Illuminate\Http\Request;
 use Illuminate\Routing\Controllers\HasMiddleware;
 use Illuminate\Routing\Controllers\Middleware;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Gate;
-use Symfony\Component\HttpFoundation\StreamedResponse;
 
 class UserController extends Controller implements HasMiddleware
 {
@@ -26,7 +20,7 @@ class UserController extends Controller implements HasMiddleware
         // The index is also open to those who can only view members.
         return [
             'auth',
-            new Middleware('can:manage-members', except: ['edit', 'update', 'show', 'index']),
+            new Middleware('can:manage-members', only: ['create', 'store']),
             new Middleware('can:view-members', only: ['index']),
         ];
     }
@@ -36,13 +30,6 @@ class UserController extends Controller implements HasMiddleware
         return view('beheer.user.index', [
             'users' => User::query()->current()->with('roles')->get(['id', 'firstname', 'lastname', 'email', 'preposition', 'kind_of_member']),
             'roles' => Rol::all(),
-        ]);
-    }
-
-    public function indexOldMembers(): View
-    {
-        return view('beheer.user.index_old_users', [
-            'users' => User::query()->old()->get(['id', 'firstname', 'lastname', 'email', 'preposition', 'kind_of_member']),
         ]);
     }
 
@@ -87,56 +74,5 @@ class UserController extends Controller implements HasMiddleware
         }
 
         return to_route('beheer.users.index')->with('message', 'Changes to user have been saved');
-    }
-
-    public function removeAsActiveMember(Request $request, User $user): RedirectResponse
-    {
-        $user->removeAsActiveMember();
-
-        if ($request->user()->is($user)) {
-            Auth::logout();
-            $request->session()->invalidate();
-            $request->session()->regenerateToken();
-
-            return to_route('front-end.home');
-        }
-
-        return to_route('beheer.users.show', $user);
-    }
-
-    public function exportUsers(UsersExport $usersExport): StreamedResponse
-    {
-        return $usersExport->download('Members.xlsx');
-    }
-
-    public function pennoMemberExportSelect(): View
-    {
-        return view('beheer.user.penno_member_export');
-    }
-
-    public function pennoMemberExport(Request $request): StreamedResponse
-    {
-        $request->validate([
-            'days_ago' => 'required|integer|min:0',
-        ]);
-        $export = new PennoMemberExport($request->integer('days_ago'));
-        $exportDate = $export->getFromDate()->toDateString();
-
-        return $export->download("Members (created after $exportDate).xlsx");
-    }
-
-    public function exportOldUsers(OldUsersExport $oldUsersExport): StreamedResponse
-    {
-        return $oldUsersExport->download('Old members.xlsx');
-    }
-
-    public function makeActiveMember(User $user): RedirectResponse
-    {
-        // This only fails when the member is already active or has no email address.
-        if ($user->makeActiveMember()) {
-            return to_route('beheer.users.show', $user);
-        }
-
-        return to_route('beheer.users.old-members')->with('error', 'Failed to make member active');
     }
 }
