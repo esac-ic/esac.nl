@@ -18,14 +18,10 @@
                         <h4 class="card-title">{{'Add zekering'}}</h4>
                         @auth
                             {{ html()->form('POST', route('api.zekeringen.store'))->open() }}
-                            <div class="form-group">
-                                {{ html()->label('Inhoud', 'zekering_content') }}
-                                {{ html()->textarea('text')->text(old('text', ''))->class('form-control')->required()->maxlength(150)->id('zekering_content')->cols(50)->rows(3) }}
-                            </div>
+                            <x-field name="text" id="zekering_content" label="Inhoud" type="textarea" required maxlength="150" rows="3" />
                             <div class="form-group">
                                 {{ html()->submit('Voeg toe')->class('btn btn-primary') }}
                             </div>
-                            @csrf
                             {{ html()->form()->close() }}
                         @else
                             {{'You need to be logged in to view the zekeringen'}}

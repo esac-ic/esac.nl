@@ -12,188 +12,73 @@
     <h1>{{$fields['title']}}</h1>
 
     {{ html()->form($fields['method'], $fields['url'])->open() }}
-    <div class="card mt-4" id="personal-info">
-        <div class="card-header">
-            <h3>{{'Personal'}}</h3>
+    <x-card title="Personal" class="mt-4" id="personal-info">
+        <div class="form-row">
+            <x-field name="firstname" label="First name" :value="$user?->firstname" col="5" required :disabled="auth()->user()->cannot('manage-members')" />
+            <x-field name="preposition" label="Preposition" :value="$user?->preposition" col="2" :disabled="auth()->user()->cannot('manage-members')" />
+            <x-field name="lastname" label="Last name" :value="$user?->lastname" col="5" required :disabled="auth()->user()->cannot('manage-members')" />
         </div>
-        <div class="card-body">
-            <div class="form-row">
-                <div class="form-group col-md-5">
-                    {{ html()->label('First name', 'firstname') }}
-                    @can('manage-members')
-                        {{ html()->text('firstname', ($user != null) ? $user->firstname : "")->class('form-control')->required() }}
-                    @else
-                        {{ html()->text('firstname', ($user != null) ? $user->firstname : "")->class('form-control')->required()->disabled() }}
-                    @endcan
-                </div>
-                <div class="form-group col-md-2">
-                    {{ html()->label('Preposition', 'preposition') }}
-                    @can('manage-members')
-                        {{ html()->text('preposition', ($user != null) ? $user->preposition : "")->class('form-control') }}
-                    @else
-                        {{ html()->text('preposition', ($user != null) ? $user->preposition : "")->class('form-control')->disabled() }}
-                    @endcan
-                </div>
-                <div class="form-group col-md-5">
-                    {{ html()->label('Last name', 'lastname') }}
-                    @can('manage-members')
-                        {{ html()->text('lastname', ($user != null) ? $user->lastname : "")->class('form-control')->required() }}
-                    @else
-                        {{ html()->text('lastname', ($user != null) ? $user->lastname : "")->class('form-control')->required()->disabled() }}
-                    @endcan
-                </div>
-            </div>
-            <div class="form-row">
-                <div class="form-group col-md-6">
-                    {{ html()->label('Email address', 'email') }}
-                    {{ html()->text('email', ($user != null) ? $user->email : "")->class('form-control')->required() }}
-                </div>
-                <div class="form-group col-md-6">
-                    {{ html()->label('Password', 'password') }}
-                    {{ html()->password('password')->class('form-control')->if($fields['method'] === "POST", fn ($input) => $input->required()->minlength(8)) }}
-                </div>
-            </div>
-            <div class="form-row">
-                <div class="form-group col-md-6 offset-md-6">
-                    {{ html()->label('Confirm password', 'password_confirmation') }}
-                    {{ html()->password('password_confirmation')->class('form-control')->if($fields['method'] === "POST", fn ($input) => $input->required()) }}
-                </div>
-            </div>
-            <div class="form-row">
-                <div class="form-group col-md-6">
-                    {{ html()->label('Street', 'street') }}
-                    {{ html()->text('street', ($user != null) ? $user->street : "")->class('form-control')->required() }}
-                </div>
-                <div class="form-group col-md-6">
-                    {{ html()->label('House number', 'house_number') }}
-                    {{ html()->text('house_number', ($user != null) ? $user->house_number : "")->class('form-control')->required() }}
-                </div>
-            </div>
-            <div class="form-row">
-                <div class="form-group col-md-4">
-                    {{ html()->label('Postal code', 'zipcode') }}
-                    {{ html()->text('zipcode', ($user != null) ? $user->zipcode : "")->class('form-control')->required() }}
-                </div>
-                <div class="form-group col-md-4">
-                    {{ html()->label('City', 'city') }}
-                    {{ html()->text('city', ($user != null) ? $user->city : "")->class('form-control')->required() }}
-                </div>
-                <div class="form-group col-md-4">
-                    {{ html()->label('Country', 'country') }}
-                    {{ html()->select('country', trans("countries"), ($user != null) ? $user->country : "NL")->class('form-control')->required() }}
-                </div>
-            </div>
-            <div class="form-row">
-                <div class="form-group col-md-6">
-                    {{ html()->label('Phone number', 'phone_number') }}
-                    {{ html()->text('phone_number', ($user != null) ? $user->phone_number : "")->class('form-control')->required() }}
-                </div>
-                <div class="form-group col-md-6">
-                    {{ html()->label('Alternative phone number', 'phone_number_alt') }}
-                    {{ html()->text('phone_number_alt', ($user != null) ? $user->phone_number_alt : "")->class('form-control') }}
-                </div>
-            </div>
-            <div class="form-row">
-                <div class="form-group col-md-6">
-                    {{ html()->label('Birthdate', 'birthDay') }}
-                    <div class="input-group date" id="birthDayBox" data-target-input="nearest">
-                        <input type='text' class="form-control datetimepicker-input" id="birthDay" name="birthday" data-target="#birthDayBox" value="{{ ($user?->birthday ?? now())->format('d-m-Y') }}" required="required">
-                        <div class="input-group-append" data-target="#birthDayBox" data-toggle="datetimepicker">
-                            <div class="input-group-text"><i class="ion-calendar"></i></div>
-                        </div>
-                    </div>
-                </div>
-                <div class="form-group col-md-6">
-                    {{ html()->label('Type of member', 'kind_of_member') }}
-                    @can('manage-members')
-                        {{ html()->select('kind_of_member', trans('kind_of_member'), ($user != null) ? $user->kind_of_member : "")->class('form-control')->required()->id('kind_of_member') }}
-                    @else
-                        {{ html()->select('kind_of_member', trans('kind_of_member'), ($user != null) ? $user->kind_of_member : "")->class('form-control')->required()->id('kind_of_member')->disabled() }}
-                    @endcan
-                </div>
-            </div>
-            <div class="form-group">
-                {{ html()->label('Remarks', 'remark') }}
-                @can('manage-members')
-                    {{ html()->text('remark', ($user != null) ? $user->remark : "")->class('form-control') }}
-                @else
-                    {{ html()->text('remark', ($user != null) ? $user->remark : "")->class('form-control')->disabled() }}
-                @endcan
-            </div>
+        <div class="form-row">
+            <x-field name="email" label="Email address" :value="$user?->email" col="6" required />
         </div>
-    </div>
-    <div class="card mt-4">
-        <div class="card-header">
-            <h3>{{'Financial'}}</h3>
+        <div class="form-row">
+            <x-field name="password" label="Password" type="password" col="6" :required="$user === null" :minlength="$user === null ? 8 : null" />
+            <x-field name="password_confirmation" label="Confirm password" type="password" col="6" :required="$user === null" />
         </div>
-        <div class="card-body">
-            <div class="form-row">
-                <div class="form-group col-md-4">
-                    {{ html()->label('BIC', 'bic') }}
-                    {{ html()->text('bic', ($user != null) ? $user->bic : "")->class('form-control') }}
-                </div>
-                <div class="form-group col-md-8">
-                    {{ html()->label('IBAN', 'iban') }}
-                    {{ html()->text('iban', ($user != null) ? $user->iban : "")->class('form-control')->required() }}
-                </div>
-            </div>
-            <div class="form-check">
-                {{ html()->checkbox('incasso', ! session()->hasOldInput() && $user?->incasso)->class('form-check-input')->id('incasso') }}
-                {{ html()->label('Accept Automatic Collection', 'incasso')->class('form-check-label') }}
-            </div>
+        <div class="form-row">
+            <x-field name="street" label="Street" :value="$user?->street" col="6" required />
+            <x-field name="house_number" label="House number" :value="$user?->house_number" col="6" required />
         </div>
-    </div>
-    <div class="card mt-4">
-        <div class="card-header">
-            <h3>{{'Emergency info'}}</h3>
+        <div class="form-row">
+            <x-field name="zipcode" label="Postal code" :value="$user?->zipcode" col="4" required />
+            <x-field name="city" label="City" :value="$user?->city" col="4" required />
+            <x-field name="country" label="Country" :options="trans('countries')" :value="$user?->country ?? 'NL'" col="4" required />
         </div>
-        <div class="card-body">
-            <div class="form-row">
-                <div class="form-group col-md-6">
-                    {{ html()->label('Emergency address street', 'emergency_street') }}
-                    {{ html()->text('emergency_street', ($user != null) ? $user->emergency_street : "")->class('form-control')->required() }}
-                </div>
-                <div class="form-group col-md-6">
-                    {{ html()->label('Emergency address house number', 'emergency_house_number') }}
-                    {{ html()->text('emergency_house_number', ($user != null) ? $user->emergency_house_number : "")->class('form-control')->required() }}
-                </div>
-            </div>
-            <div class="form-row">
-                <div class="form-group col-md-4">
-                    {{ html()->label('Emergency postal code', 'emergency_zipcode') }}
-                    {{ html()->text('emergency_zipcode', ($user != null) ? $user->emergency_zipcode : "")->class('form-control')->required() }}
-                </div>
-                <div class="form-group col-md-4">
-                    {{ html()->label('Emergency city', 'emergency_city') }}
-                    {{ html()->text('emergency_city', ($user != null) ? $user->emergency_city : "")->class('form-control')->required() }}
-                </div>
-                <div class="form-group col-md-4">
-                    {{ html()->label('Emergency country', 'emergency_country') }}
-                    {{ html()->select('emergency_country', trans("countries"), ($user != null) ? $user->emergency_country : "NL")->class('form-control')->required() }}
-                </div>
-            </div>
-            <div class="form-group">
-                {{ html()->label('Emergency phone number', 'emergency_number') }}
-                {{ html()->text('emergency_number', ($user != null) ? $user->emergency_number : "")->class('form-control')->required() }}
-            </div>
+        <div class="form-row">
+            <x-field name="phone_number" label="Phone number" :value="$user?->phone_number" col="6" required />
+            <x-field name="phone_number_alt" label="Alternative phone number" :value="$user?->phone_number_alt" col="6" />
         </div>
-    </div>
+        <div class="form-row">
+            <div class="form-group col-md-6">
+                <x-date-picker name="birthday" id="birthDay" label="Birthdate" :value="($user?->birthday ?? now())->format('d-m-Y')" />
+            </div>
+            <x-field name="kind_of_member" label="Type of member" :options="trans('kind_of_member')" :value="$user?->kind_of_member" col="6" required :disabled="auth()->user()->cannot('manage-members')" />
+        </div>
+        <x-field name="remark" label="Remarks" :value="$user?->remark" :disabled="auth()->user()->cannot('manage-members')" />
+    </x-card>
+    <x-card title="Financial" class="mt-4">
+        <div class="form-row">
+            <x-field name="bic" label="BIC" :value="$user?->bic" col="4" />
+            <x-field name="iban" label="IBAN" :value="$user?->iban" col="8" required />
+        </div>
+        <div class="form-check">
+            {{ html()->checkbox('incasso', ! session()->hasOldInput() && $user?->incasso)->class('form-check-input')->id('incasso') }}
+            {{ html()->label('Accept Automatic Collection', 'incasso')->class('form-check-label') }}
+        </div>
+    </x-card>
+    <x-card title="Emergency info" class="mt-4">
+        <div class="form-row">
+            <x-field name="emergency_street" label="Emergency address street" :value="$user?->emergency_street" col="6" required />
+            <x-field name="emergency_house_number" label="Emergency address house number" :value="$user?->emergency_house_number" col="6" required />
+        </div>
+        <div class="form-row">
+            <x-field name="emergency_zipcode" label="Emergency postal code" :value="$user?->emergency_zipcode" col="4" required />
+            <x-field name="emergency_city" label="Emergency city" :value="$user?->emergency_city" col="4" required />
+            <x-field name="emergency_country" label="Emergency country" :options="trans('countries')" :value="$user?->emergency_country ?? 'NL'" col="4" required />
+        </div>
+        <x-field name="emergency_number" label="Emergency phone number" :value="$user?->emergency_number" required />
+    </x-card>
     @can('manage-members')
-        <div class="card mt-4">
-            <div class="card-header">
-                <h3>{{ 'Roles' }}</h3>
+        <x-card title="Roles" class="mt-4">
+            <div class="form-group">
+                    @foreach($roles as $role)
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" name="roles[]" value="{{$role->id}}" id="{{$role->id}}" @checked($ownedRoles->contains($role->id))>
+                            <label class="form-check-label" for="{{$role->id}}">{{$role->name}}</label>
+                        </div>
+                    @endforeach
             </div>
-            <div class="card-body">
-                <div class="form-group">
-                        @foreach($roles as $role)
-                            <div class="form-check">
-                                <input class="form-check-input" type="checkbox" name="roles[]" value="{{$role->id}}" id="{{$role->id}}" @checked($ownedRoles->contains($role->id))>
-                                <label class="form-check-label" for="{{$role->id}}">{{$role->name}}</label>
-                            </div>
-                        @endforeach
-                </div>
-            </div>
-        </div>
+        </x-card>
     @endcan
     <div class="my-4">
         {{ html()->submit('Save')->class('btn btn-primary') }}

@@ -5,57 +5,18 @@
 @endsection
 
 @section('content')
-    <div class="row mb-3">
-        <div class="col-md-6">
-            <h1>{{'Books'}}</h1>
-        </div>
-
-        <div class="col-md-6">
-            <div class="btn-group mt-2 float-md-right" role="group" aria-label="Actions">
-                <a href="{{route('books.edit', $book)}}" class="btn btn-primary">
-                    <em class="ion-edit"></em> {{'Edit'}}
-                </a>
-                <a href="{{route('books.index')}}" class="btn btn-block btn-primary">
-                    <em class="ion-android-arrow-back"></em> {{'Back'}}
-                </a>
-                <form method="post"
-                      action="{{ route("books.destroy", $book) }}"
-                      onsubmit="return confirm('Are you sure you want to delete this book?');"
-                >
-                    @csrf
-                    @method('DELETE')
-                    <button type="submit" class="btn btn-danger"><em class="ion-trash-a"></em> {{'Remove'}}</button>
-                </form>
-            </div>
-        </div>
-    </div>
-    <div class="card mt-4">
-        <div class="card-header">
-            <h3>{{'Book'}}</h3>
-        </div>
-        <div class="card-body">
-            <table class="table table-striped" style="width:100%">
-                <tr>
-                    <td>{{'Title'}}</td>
-                    <td>{{ $book->title }}</td>
-                </tr>
-                <tr>
-                    <td>{{'Year'}}</td>
-                    <td>{{ $book->year }}</td>
-                </tr>
-                <tr>
-                    <td>{{'Country'}}</td>
-                    <td>{{ $book->country }}</td>
-                </tr>
-                <tr>
-                    <td>{{'Type'}}</td>
-                    <td>{{ $book->type }}</td>
-                </tr>
-                <tr>
-                    <td>{{'Code'}}</td>
-                    <td>{{ $book->code }}</td>
-                </tr>
-            </table>
-        </div>
-    </div>
+    <x-page-header title="Books">
+        <x-edit-button :href="route('books.edit', $book)" />
+        <x-back-button :href="route('books.index')" />
+        <x-delete-button :action="route('books.destroy', $book)" confirm="Are you sure you want to delete this book?" />
+    </x-page-header>
+    <x-card title="Book" class="mt-4">
+        <table class="table table-striped" style="width:100%">
+            <x-detail-row label="Title">{{ $book->title }}</x-detail-row>
+            <x-detail-row label="Year">{{ $book->year }}</x-detail-row>
+            <x-detail-row label="Country">{{ $book->country }}</x-detail-row>
+            <x-detail-row label="Type">{{ $book->type }}</x-detail-row>
+            <x-detail-row label="Code">{{ $book->code }}</x-detail-row>
+        </table>
+    </x-card>
 @endsection

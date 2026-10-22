@@ -5,65 +5,24 @@
 @endsection
 
 @section('content')
-    <div class="row mb-3">
-        <div class="col-md-6">
-            <h1>{{'News item'}}</h1>
-        </div>
-
-        <div class="col-md-6">
-            <div class="btn-group mt-2 float-md-right" role="group" aria-label="Actions">
-                <a href="{{route('newsItems.edit', $newsItem)}}" class="btn btn-primary">
-                    <em class="ion-edit"></em> {{'Edit'}}
-                </a>
-                @if(request('back') != 'false')
-                    <a href="{{route('newsItems.index')}}" class="btn btn-primary">
-                        <em class="ion-android-arrow-back"></em> {{'Back'}}
-                    </a>
-                @endif
-                <form method="post"
-                      action="{{ route("newsItems.destroy", $newsItem) }}"
-                      onsubmit="return confirm('Are you sure you want to delete this news item?');"
-                >
-                    @csrf
-                    @method('DELETE')
-                    <button type="submit" class="btn btn-danger"><em class="ion-trash-a"></em> {{'Remove'}}</button>
-                </form>
-            </div>
-        </div>
-    </div>
-    <div class="card mt-4">
-        <div class="card-header">
-            <h3>{{'General information'}}</h3>
-        </div>
-        <div class="card-body">
-            <table class="table table-striped" style="width:100%">
-                <tr>
-                    <td>{{'Title'}}</td>
-                    <td>{{$newsItem->title}}</td>
-                </tr>
-                <tr>
-                    <td>{{'Created at'}}</td>
-                    <td>{{ $newsItem->created_at->tz(config('app.display_timezone'))->format('d-m-Y H:i') }}</td>
-                </tr>
-                <tr>
-                    <td>{{'Created by'}}</td>
-                    <td>{{$newsItem->author}}</td>
-                </tr>
-                @if($newsItem->image_url != "")
-                    <tr>
-                        <td>{{'Image'}}</td>
-                        <td><img src="{{$newsItem->getImageUrl()}}" style="max-width: 240px" class="img-fluid"></td>
-                    </tr>
-                @endif
-            </table>
-        </div>
-    </div>
-    <div class="card mt-4">
-        <div class="card-header">
-            <h3>{{'News message' }}</h3>
-        </div>
-        <div class="card-body">
-            {!! $newsItem->text !!}
-        </div>
-    </div>
+    <x-page-header title="News item">
+        <x-edit-button :href="route('newsItems.edit', $newsItem)" />
+        @if(request('back') != 'false')
+            <x-back-button :href="route('newsItems.index')" :block="false" />
+        @endif
+        <x-delete-button :action="route('newsItems.destroy', $newsItem)" confirm="Are you sure you want to delete this news item?" />
+    </x-page-header>
+    <x-card title="General information" class="mt-4">
+        <table class="table table-striped" style="width:100%">
+            <x-detail-row label="Title">{{ $newsItem->title }}</x-detail-row>
+            <x-detail-row label="Created at">{{ $newsItem->created_at->tz(config('app.display_timezone'))->format('d-m-Y H:i') }}</x-detail-row>
+            <x-detail-row label="Created by">{{ $newsItem->author }}</x-detail-row>
+            @if($newsItem->image_url != "")
+                <x-detail-row label="Image"><img src="{{$newsItem->getImageUrl()}}" style="max-width: 240px" class="img-fluid"></x-detail-row>
+            @endif
+        </table>
+    </x-card>
+    <x-card title="News message" class="mt-4">
+        {!! $newsItem->text !!}
+    </x-card>
 @endsection

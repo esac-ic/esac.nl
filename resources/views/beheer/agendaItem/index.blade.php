@@ -7,47 +7,18 @@
 @section('content')
     @include('includes.flash')
 
-    <div class="row mb-3">
-        <div class="col-md-6">
-            <h1>{{'Events'}}</h1>
-        </div>
-        <div class="col-md-6">
-            <div class="btn-group mt-2 float-md-right" role="group" aria-label="Actions">
-                <a href="{{route('agendaItems.create')}}" class="btn btn-primary">
-                    <span title="{{'New user'}}" class="ion-plus" aria-hidden="true"></span>
-                    {{'New event'}}
-                </a>
-            </div>
-        </div>
-    </div>
+    <x-page-header title="Events">
+        <x-button-link :href="route('agendaItems.create')" icon="plus">New event</x-button-link>
+    </x-page-header>
     <div class="row mb-3">
         <div class="col-md-3">
             <div class="form-group">
-                {{ html()->label('Start date', 'startDate') }}
-                <div class="input-group date" id="startDateBox" data-target-input="nearest">
-                    <input type='text' class="form-control datetimepicker-input" id="startDate" name="startDate"
-                           data-target="#startDateBox" value="{{ now(config('app.display_timezone'))->format('d-m-Y') }}"
-                           required/>
-                    <div class="input-group-append" data-target="#startDateBox" data-toggle="datetimepicker">
-                        <div class="input-group-text"><i class="ion-calendar"></i></div>
-                    </div>
-                </div>
+                <x-date-picker name="startDate" id="startDate" label="Start date" :value="now(config('app.display_timezone'))->format('d-m-Y')" />
             </div>
         </div>
     </div>
 
-    <table id="agenda-items" class="table table-striped dt-responsive nowrap" style="width:100%">
-        <thead>
-        <tr>
-            <th>{{'Title'}}</th>
-            <th>{{'Start date'}}</th>
-            <th>{{'End date'}}</th>
-            <th>{{'Management'}}</th>
-        </tr>
-        </thead>
-        <tbody>
-        </tbody>
-    </table>
+    <x-data-table id="agenda-items" :columns="['Title', 'Start date', 'End date', 'Management']" />
 @endsection
 
 @push('styles')

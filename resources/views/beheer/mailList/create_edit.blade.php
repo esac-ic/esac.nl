@@ -1,30 +1,16 @@
 @extends('layouts.beheer')
 
 @section('content')
-    @include('includes.flash')
-    <x-validation-errors />
-    <div class="card">
-        <div class="card-header">
-            <h3>{{$fields['title']}}</h3>
-        </div>
-        <div class="card-body">
-            {{ html()->form($fields['method'], $fields['url'])->open() }}
-            <input type="hidden" name="id" value="{{($mailList != null) ? $mailList->address : ""}}">
-            <div class="form-group">
-                {{ html()->label('Email', 'address') }}
-                <div class="input-group">
-                    {{ html()->text('address', ($mailList != null) ? explode('@',$mailList->address)[0] : "")->class('form-control')->required()->attribute('aria-describedby', 'basic-addon3') }}
-                    <div class="input-group-append">
-                        <span class="input-group-text" id="basic-addon3">{{ config('services.mailman.domain') }}</span>
-                    </div>
+    <x-form-card :$fields :cancel="$mailList === null ? route('mailList.index') : route('mailList.show', $mailList->address)">
+        <input type="hidden" name="id" value="{{ $mailList?->address }}">
+        <div class="form-group">
+            <label for="address">Email</label>
+            <div class="input-group">
+                <input class="form-control" type="text" name="address" id="address" value="{{ old('address', $mailList ? explode('@', $mailList->address)[0] : '') }}" required aria-describedby="basic-addon3">
+                <div class="input-group-append">
+                    <span class="input-group-text" id="basic-addon3">{{ config('services.mailman.domain') }}</span>
                 </div>
             </div>
         </div>
-    </div>
-
-    <div class="my-4">
-        {{ html()->submit('Save')->class('btn btn-primary') }}
-        {{ html()->form()->close() }}
-        <a class="btn btn-danger btn-close" href="{{ $mailList === null ? route('mailList.index') : route('mailList.show', $mailList->address) }}">{{'Cancel'}}</a>
-    </div>
+    </x-form-card>
 @endsection

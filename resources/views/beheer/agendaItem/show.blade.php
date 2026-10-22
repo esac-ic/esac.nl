@@ -5,87 +5,28 @@
 @endsection
 
 @section('content')
-    <div class="row mb-3">
-        <div class="col-md-6">
-            <h1>Agenda item</h1>
-        </div>
-
-        <div class="col-md-6">
-            <div class="btn-group mt-2 float-md-right" role="group" aria-label="Actions">
-                <a href="{{route('agendaItems.edit', $agendaItem)}}" class="btn btn-primary">
-                    <em class="ion-edit"></em> {{'Edit'}}
-                </a>
-                @if(request('back') != 'false')
-                    <a href="{{route('agendaItems.index')}}" class="btn btn-primary">
-                        <em class="ion-android-arrow-back"></em> {{'Back'}}
-                    </a>
-                @endif
-                <form method="post"
-                      action="{{ route("agendaItems.destroy", $agendaItem) }}"
-                      onsubmit="return confirm('Are you sure you want to delete this agenda item?');"
-                >
-                    @csrf
-                    @method('DELETE')
-                    <button type="submit" class="btn btn-danger"><em class="ion-trash-a"></em> {{'Remove'}}</button>
-                </form>
-            </div>
-        </div>
-    </div>
-    <div class="card mt-4">
-        <div class="card-header">
-            <h3>{{'Event general information'}}</h3>
-        </div>
-        <div class="card-body">
-            <table class="table table-striped" style="width:100%">
-                <tr>
-                    <td>{{'Title'}}</td>
-                    <td>{{$agendaItem->title}}</td>
-                </tr>
-                <tr>
-                    <td>{{'Short description'}}</td>
-                    <td>{{$agendaItem->short_description}}</td>
-                </tr>
-                <tr>
-                    <td>{{'Start date'}}</td>
-                    <td>{{ $agendaItem->start_date->format('d-m-Y H:i') }}</td>
-                </tr>
-                <tr>
-                    <td>{{'End date'}}</td>
-                    <td>{{ $agendaItem->end_date->format('d-m-Y H:i') }}</td>
-                </tr>
-                <tr>
-                    <td>{{'Last possible registration date'}}</td>
-                    <td>{{ $agendaItem->subscription_end_date?->format('d-m-Y H:i') }}</td>
-                </tr>
-                <tr>
-                    <td>{{'Category'}}</td>
-                    <td>{{$agendaItem->agendaItemCategory->name}}</td>
-                </tr>
-                <tr>
-                    <td>{{'Show certificates in the event item'}}</td>
-                    <td>{{$agendaItem->climbing_activity ? 'Yes' : 'No'}}</td>
-                </tr>
-                <tr>
-                    <td>{{'Created by'}}</td>
-                    <td>{{$agendaItem->getCreatedBy->getName()}}</td>
-                </tr>
-                <tr>
-                    <td>{{'Application form'}}</td>
-                    <td>{{($agendaItem->application_form_id !=null)? $agendaItem->getApplicationForm->name:""}}</td>
-                </tr>
-                <tr>
-                    <td>{{'Thumbnail image'}}</td>
-                    <td><img src="{{$agendaItem->getImageUrl()}}" style="max-width: 240px" class="img-fluid"></td>
-                </tr>
-            </table>
-        </div>
-    </div>
-    <div class="card my-4">
-        <div class="card-header">
-            <h3>{{'Event item content' }}</h3>
-        </div>
-        <div class="card-body">
-            {!! $agendaItem->text !!}
-        </div>
-    </div>
+    <x-page-header title="Agenda item">
+        <x-edit-button :href="route('agendaItems.edit', $agendaItem)" />
+        @if(request('back') != 'false')
+            <x-back-button :href="route('agendaItems.index')" :block="false" />
+        @endif
+        <x-delete-button :action="route('agendaItems.destroy', $agendaItem)" confirm="Are you sure you want to delete this agenda item?" />
+    </x-page-header>
+    <x-card title="Event general information" class="mt-4">
+        <table class="table table-striped" style="width:100%">
+            <x-detail-row label="Title">{{$agendaItem->title}}</x-detail-row>
+            <x-detail-row label="Short description">{{$agendaItem->short_description}}</x-detail-row>
+            <x-detail-row label="Start date">{{ $agendaItem->start_date->format('d-m-Y H:i') }}</x-detail-row>
+            <x-detail-row label="End date">{{ $agendaItem->end_date->format('d-m-Y H:i') }}</x-detail-row>
+            <x-detail-row label="Last possible registration date">{{ $agendaItem->subscription_end_date?->format('d-m-Y H:i') }}</x-detail-row>
+            <x-detail-row label="Category">{{$agendaItem->agendaItemCategory->name}}</x-detail-row>
+            <x-detail-row label="Show certificates in the event item">{{$agendaItem->climbing_activity ? 'Yes' : 'No'}}</x-detail-row>
+            <x-detail-row label="Created by">{{$agendaItem->getCreatedBy->getName()}}</x-detail-row>
+            <x-detail-row label="Application form">{{ $agendaItem->getApplicationForm?->name }}</x-detail-row>
+            <x-detail-row label="Thumbnail image"><img src="{{$agendaItem->getImageUrl()}}" style="max-width: 240px" class="img-fluid"></x-detail-row>
+        </table>
+    </x-card>
+    <x-card title="Event item content" class="my-4">
+        {!! $agendaItem->text !!}
+    </x-card>
 @endsection

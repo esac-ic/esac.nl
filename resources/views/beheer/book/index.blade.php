@@ -7,52 +7,23 @@
 @section('content')
     @include('includes.flash')
 
-    <div class="row mb-3">
-        <div class="col-md-6">
-            <h1>{{'Books'}}</h1>
-        </div>
-
-        <div class="col-md-6">
-            <div class="btn-group mt-2 float-md-right" role="group" aria-label="Actions">
-                <a href="{{route('books.create')}}" class="btn btn-primary">
-                    <span title="{{'New book'}}" class="ion-plus" aria-hidden="true"></span>
-                    {{'New book'}}
-                </a>
-                
-                <a href="{{ route('books.export') }}" class="btn btn-primary">
-                    <span title="{{'Export library'}}" class="ion-android-download" aria-hidden="true"></span>
-                    {{'Export books'}}
-                </a>
-                
-            </div>
-        </div>
-    </div>
-    <table id="users" class="table table-striped dt-responsive nowrap" style="width:100%">
-        <thead>
-        <tr>
-            <th>{{'Title'}}</th>
-            <th>{{'Year'}}</th>
-            <th>{{'Country'}}</th>
-            <th>{{'Type'}}</th>
-            <th>{{'Code'}}</th>
-            <th>{{'Management'}}</th>
-        </tr>
-        </thead>
-        <tbody>
-
+    <x-page-header title="Books">
+        <x-button-link :href="route('books.create')" icon="plus">New book</x-button-link>
+        <x-button-link :href="route('books.export')" icon="android-download">Export books</x-button-link>
+    </x-page-header>
+    <x-data-table :columns="['Title', 'Year', 'Country', 'Type', 'Code', 'Management']">
         @foreach ($books as $book)
-            <tr >
+            <tr>
                 <td>{{$book->title}}</td>
                 <td>{{$book->year}}</td>
                 <td>{{$book->country}}</td>
                 <td>{{$book->type}}</td>
                 <td>{{$book->code}}</td>
                 <td>
-                    <a class="mr-1 ml-1" href="{{route('books.edit', $book)}}"><span title="{{'Edit book'}}" class="ion-edit font-size-120" aria-hidden="true"></span></a>
-                    <a class="mr-1 ml-1" href="{{route('books.show', $book)}}"><span title="Show book" class="ion-eye font-size-120" aria-hidden="true"></span></a>
+                    <x-icon-link :href="route('books.edit', $book)" icon="edit" title="Edit book" />
+                    <x-icon-link :href="route('books.show', $book)" icon="eye" title="Show book" />
                 </td>
             </tr>
         @endforeach
-        </tbody>
-    </table>
+    </x-data-table>
 @endsection

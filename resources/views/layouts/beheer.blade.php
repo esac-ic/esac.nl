@@ -28,97 +28,74 @@
                             {{ 'Account overview' }}
                         </a>
                     </li>
-                    @guest
+                    @can('access-admin')
+                        <hr class="my-3">
+
+                        <li class="nav-item active">
+                            <span class="nav-link">
+                                {{ 'Management' }}
+                            </span>
+                        </li>
                         <li class="nav-item">
-                            <a href="{{ route('login') }}" class="nav-link">
-                            Login
+                            <a class="nav-link" href="{{ route('beheer.home') }}">
+                            Dashboard
                             </a>
                         </li>
-                    @else
-                        @can('access-admin')
-                            <hr class="my-3">
-
-                            <li class="nav-item active">
-                                <span class="nav-link">
-                                    {{ 'Management' }}
-                                </span>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link" href="{{ route('beheer.home') }}">
-                                Dashboard
-                                </a>
-                            </li>
-                        @endcan
-                        @can('view-members')
-                            <li class="nav-item dropdown">
-                                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                    {{'Members'}}
-                                </a>
-                                <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-                                    <a class="dropdown-item" href="{{ route('users.index') }}">{{'Current members'}}</a>
-                                    @can('manage-members')
-                                        <a class="dropdown-item" href="{{ route('users.index-old-members') }}">{{'Old members'}}</a>
-                                        <a class="dropdown-item" href="{{ route('users.indexPendingMembers') }}">{{'Pending users'}}</a>
-                                    @endcan
-                                    @can('manage-roles')
-                                        <a class="dropdown-item" href="{{ route('rols.index') }}">{{'Roles'}}</a>
-                                    @endcan
-                                    @can('manage-certificates')
-                                        <a class="dropdown-item" href="{{ route('certificates.index') }}">{{'Certificates'}}</a>
-                                    @endcan
-                                </div>
-                            </li>
-                        @endcan
-                        @can('manage-agenda')
-                            <li class="nav-item dropdown">
-                                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                    {{'Activities'}}
-                                </a>
-                                <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-                                    <a class="dropdown-item" href="{{ route('agendaItems.index') }}">{{'Events'}}</a>
-                                    <a class="dropdown-item" href="{{ route('beheer.applicationForms.index') }}">{{'Application forms'}}</a>
-                                    @can('manage-agenda-categories')
-                                        <a class="dropdown-item" href="{{ route('agendaItemCategories.index') }}">{{'Event categories'}}</a>
-                                    @endcan
-                                </div>
-                            </li>
-                        @endcan
-                        @can('manage-pages')
-                            <li class="nav-item dropdown">
-                                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                    {{'Content'}}
-                                </a>
-                                <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-                                    <a class="dropdown-item" href="{{ route('pages.index') }}">{{'Page management'}}</a>
-                                    <a class="dropdown-item" href="{{ route('newsItems.index') }}">{{'News items'}}</a>
-                                    @can('manage-library')
-                                        <a class="dropdown-item" href="{{ route('books.index') }}">{{'Books'}}</a>
-                                    @endcan
-                                </div>
-                            </li>
-                        @endcan
-                        @can('manage-mail-lists')
-                            <li class="nav-item">
-                                <a href="{{ route('mailList.index') }}" class="nav-link">
-                                    {{'Mailing lists'}}
-                                </a>
-                            </li>
-                        @endcan
-                        @can('view-user-event-log')
-                            <li class="nav-item">
-                                <a href="{{ route('user-event-log-entry.index') }}" class="nav-link">
-                                    {{'User event log'}}
-                                </a>
-                            </li>
-                        @endcan
-                        @can('manage-settings')
-                            <li class="nav-item">
-                                <a href="{{ route('beheer.settings.index') }}" class="nav-link">
-                                    {{'Setting'}}
-                                </a>
-                            </li>
-                        @endcan
-                    @endguest
+                    @endcan
+                    @can('view-members')
+                        <x-nav-dropdown label="Members">
+                            <a class="dropdown-item" href="{{ route('users.index') }}">{{'Current members'}}</a>
+                            @can('manage-members')
+                                <a class="dropdown-item" href="{{ route('users.index-old-members') }}">{{'Old members'}}</a>
+                                <a class="dropdown-item" href="{{ route('users.indexPendingMembers') }}">{{'Pending users'}}</a>
+                            @endcan
+                            @can('manage-roles')
+                                <a class="dropdown-item" href="{{ route('rols.index') }}">{{'Roles'}}</a>
+                            @endcan
+                            @can('manage-certificates')
+                                <a class="dropdown-item" href="{{ route('certificates.index') }}">{{'Certificates'}}</a>
+                            @endcan
+                        </x-nav-dropdown>
+                    @endcan
+                    @can('manage-agenda')
+                        <x-nav-dropdown label="Activities">
+                            <a class="dropdown-item" href="{{ route('agendaItems.index') }}">{{'Events'}}</a>
+                            <a class="dropdown-item" href="{{ route('beheer.applicationForms.index') }}">{{'Application forms'}}</a>
+                            @can('manage-agenda-categories')
+                                <a class="dropdown-item" href="{{ route('agendaItemCategories.index') }}">{{'Event categories'}}</a>
+                            @endcan
+                        </x-nav-dropdown>
+                    @endcan
+                    @can('manage-pages')
+                        <x-nav-dropdown label="Content">
+                            <a class="dropdown-item" href="{{ route('pages.index') }}">{{'Page management'}}</a>
+                            <a class="dropdown-item" href="{{ route('newsItems.index') }}">{{'News items'}}</a>
+                            @can('manage-library')
+                                <a class="dropdown-item" href="{{ route('books.index') }}">{{'Books'}}</a>
+                            @endcan
+                        </x-nav-dropdown>
+                    @endcan
+                    @can('manage-mail-lists')
+                        <li class="nav-item">
+                            <a href="{{ route('mailList.index') }}" class="nav-link">
+                                {{'Mailing lists'}}
+                            </a>
+                        </li>
+                    @endcan
+                    @can('view-user-event-log')
+                        <li class="nav-item">
+                            <a href="{{ route('user-event-log-entry.index') }}" class="nav-link">
+                                {{'User event log'}}
+                            </a>
+                        </li>
+                    @endcan
+                    @can('manage-settings')
+                        <li class="nav-item">
+                            <a href="{{ route('beheer.settings.index') }}" class="nav-link">
+                                {{'Setting'}}
+                            </a>
+                        </li>
+                    @endcan
                 </ul>
               </div>
             </nav>

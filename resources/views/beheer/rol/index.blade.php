@@ -7,39 +7,19 @@
 @section('content')
     @include('includes.flash')
 
-    <div class="row mb-3">
-        <div class="col-md-6">
-            <h1>Roles</h1>
-            <p>Warning: don't add or remove roles without discussing with the IC</p>
-        </div>
-
-        <div class="col-md-6">
-            <div class="btn-group mt-2 float-md-right" role="group" aria-label="Actions">
-                <a href="{{route('rols.create')}}" class="btn btn-primary">
-                    <span title="{{'New user'}}" class="ion-plus" aria-hidden="true"></span>
-                    {{'New role'}}
-                </a>
-            </div>
-        </div>
-    </div>
-    <table id="users" class="table table-striped dt-responsive nowrap" style="width:100%">
-        <thead>
-        <tr>
-            <th>Name</th>
-            <th>Management</th>
-        </tr>
-        </thead>
-        <tbody>
-
+    <x-page-header title="Roles">
+        <x-slot:intro><p>Warning: don't add or remove roles without discussing with the IC</p></x-slot:intro>
+        <x-button-link :href="route('rols.create')" icon="plus">New role</x-button-link>
+    </x-page-header>
+    <x-data-table :columns="['Name', 'Management']">
         @foreach ($rols as $rol)
-            <tr >
+            <tr>
                 <td>{{$rol->name}}</td>
                 <td>
-                    <a class="mr-1 ml-1" href="{{route('rols.edit', $rol)}}"><span title="Edit role" class="ion-edit font-size-120" aria-hidden="true"></span></a>
-                    <a class="mr-1 ml-1" href="{{route('rols.show', $rol)}}"><span title="Show role" class="ion-eye font-size-120" aria-hidden="true"></span></a>
+                    <x-icon-link :href="route('rols.edit', $rol)" icon="edit" title="Edit role" />
+                    <x-icon-link :href="route('rols.show', $rol)" icon="eye" title="Show role" />
                 </td>
             </tr>
         @endforeach
-        </tbody>
-    </table>
+    </x-data-table>
 @endsection

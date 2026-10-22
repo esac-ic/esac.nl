@@ -7,35 +7,14 @@
 @section('content')
     @include('includes.flash')
 
-    <div class="row mb-3">
-        <div class="col-md-6">
-            <h1>{{'Old members'}}</h1>
-        </div>
-
+    <x-page-header title="Old members">
         @can('manage-members')
-        <div class="col-md-6">
-            <div class="btn-group mt-2 float-md-right" role="group" aria-label="Actions">
-                <a href="{{ route('users.exportOldUsers') }}" class="btn btn-primary">
-                    <span title="{{'New user'}}" class="ion-android-download" aria-hidden="true"></span>
-                    {{'Export old members'}}
-                </a>
-            </div>
-        </div>
+            <x-button-link :href="route('users.exportOldUsers')" icon="android-download">Export old members</x-button-link>
         @endcan
-    </div>
-    <table id="users" class="table table-striped dt-responsive nowrap" style="width:100%">
-        <thead>
-        <tr>
-            <th>{{'Name'}}</th>
-            <th>{{'Email address'}}</th>
-            <th>{{'Type of member'}}</th>
-            <th>{{'Management'}}</th>
-        </tr>
-        </thead>
-        <tbody>
-
+    </x-page-header>
+    <x-data-table :columns="['Name', 'Email address', 'Type of member', 'Management']">
         @foreach ($users as $user)
-            <tr >
+            <tr>
                 <td>{{$user->getName()}}</td>
                 <td>{{$user->email}}</td>
                 <td>
@@ -44,11 +23,10 @@
                     @endisset
                 </td>
                 <td>
-                    <a class="mr-1 ml-1" href="{{route('users.edit', $user)}}"><span title="{{'Edit user'}}" class="ion-edit font-size-120" aria-hidden="true"></span></a>
-                    <a class="mr-1 ml-1" href="{{route('users.show', $user)}}"><span title="{{'Show user information'}}" class="ion-eye font-size-120" aria-hidden="true"></span></a>
+                    <x-icon-link :href="route('users.edit', $user)" icon="edit" title="Edit user" />
+                    <x-icon-link :href="route('users.show', $user)" icon="eye" title="Show user information" />
                 </td>
             </tr>
         @endforeach
-        </tbody>
-    </table>
+    </x-data-table>
 @endsection

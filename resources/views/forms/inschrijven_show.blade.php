@@ -7,25 +7,17 @@
 @section('content')
     @include('includes.flash')
 
-    <div class="row mb-3">
-        <div class="col-md-6">
-            <h1>{{'Subscriptions' . ": " . $users["agendaItemTitle"]}}</h1>
-        </div>
-
-        <div class="col-md-6">
-            <div class="btn-group mt-2 float-md-right" role="group" aria-label="Actions">
-                <a href="{{route('forms.admin.create', $agendaItemId)}}" class="btn btn-primary">
-                    <em class="ion-person-add"></em> {{'New subscription'}}
-                </a>
-                <a href="{{route('forms.users.export', $users["agendaItemId"])}}" class="btn btn-primary">
-                    <em class="ion-android-download"></em> {{'Export'}}
-                </a>
-                <a href="{{route('agendaItems.index')}}" class="btn btn-primary">
-                    <em class="ion-android-arrow-back"></em> {{'Back'}}
-                </a>
-            </div>
-        </div>
-    </div>
+    <x-page-header :title="'Subscriptions: '.$users['agendaItemTitle']">
+        <a href="{{route('forms.admin.create', $agendaItemId)}}" class="btn btn-primary">
+            <em class="ion-person-add"></em> {{'New subscription'}}
+        </a>
+        <a href="{{route('forms.users.export', $users["agendaItemId"])}}" class="btn btn-primary">
+            <em class="ion-android-download"></em> {{'Export'}}
+        </a>
+        <a href="{{route('agendaItems.index')}}" class="btn btn-primary">
+            <em class="ion-android-arrow-back"></em> {{'Back'}}
+        </a>
+    </x-page-header>
     <table id="users" class="table table-striped dt-responsive nowrap" style="width:100%">
         <thead>
         <tr>

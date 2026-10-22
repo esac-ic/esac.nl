@@ -10,21 +10,13 @@
 
     <div id="app">
         {{ html()->form($fields['method'], $fields['url'])->open() }}
-            <div class="card">
-                <div class="card-header">
-                    <h3>{{$fields['title']}}</h3>
+            <x-card :title="$fields['title']">
+                {{--hidden field with the amount of formrows--}}
+                <input name="amount_of_formrows" type="hidden" id="amount_of_formrows" value="0">
+                <div class="form-row">
+                    <x-field name="name" label="Name" :value="$applicationForm?->name" col="6" required />
                 </div>
-                <div class="card-body">
-                    {{--hidden field with the amount of formrows--}}
-                    <input name="amount_of_formrows" type="hidden" id="amount_of_formrows" value="0">
-                    <div class="form-row">
-                        <div class="form-group col-md-6">
-                            {{ html()->label('Name', 'name') }}
-                            {{ html()->text('name', ($applicationForm != null) ? $applicationForm->name : "")->class('form-control')->required() }}
-                        </div>
-                    </div>
-                </div>
-            </div>
+            </x-card>
             <application-form :rows="{{ json_encode($rows) }}"></application-form>
 
             <div class="my-4">

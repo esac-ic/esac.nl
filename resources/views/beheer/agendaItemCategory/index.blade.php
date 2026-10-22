@@ -7,38 +7,18 @@
 @section('content')
     @include('includes.flash')
 
-    <div class="row mb-3">
-        <div class="col-md-6">
-            <h1>{{'Event categories'}}</h1>
-        </div>
-
-        <div class="col-md-6">
-            <div class="btn-group mt-2 float-md-right" role="group" aria-label="Actions">
-                <a href="{{route('agendaItemCategories.create')}}" class="btn btn-primary">
-                    <span title="{{'New user'}}" class="ion-plus" aria-hidden="true"></span>
-                    {{'New category'}}
-                </a>
-            </div>
-        </div>
-    </div>
-    <table id="users" class="table table-striped dt-responsive nowrap" style="width:100%">
-        <thead>
-        <tr>
-            <th>{{'Name'}}</th>
-            <th>Beheer</th>
-        </tr>
-        </thead>
-        <tbody>
-
+    <x-page-header title="Event categories">
+        <x-button-link :href="route('agendaItemCategories.create')" icon="plus">New category</x-button-link>
+    </x-page-header>
+    <x-data-table :columns="['Name', 'Beheer']">
         @foreach ($agendaItemCategories as $category)
             <tr>
                 <td>{{$category->name}}</td>
                 <td>
-                    <a class="mr-1 ml-1" href="{{route('agendaItemCategories.edit', $category)}}"><span title="{{'Edit category'}}" class="ion-edit font-size-120" aria-hidden="true"></span></a>
-                    <a class="mr-1 ml-1" href="{{route('agendaItemCategories.show', $category)}}"><span title="Show category" class="ion-eye font-size-120" aria-hidden="true"></span></a>
+                    <x-icon-link :href="route('agendaItemCategories.edit', $category)" icon="edit" title="Edit category" />
+                    <x-icon-link :href="route('agendaItemCategories.show', $category)" icon="eye" title="Show category" />
                 </td>
             </tr>
         @endforeach
-        </tbody>
-    </table>
+    </x-data-table>
 @endsection

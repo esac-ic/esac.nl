@@ -5,25 +5,7 @@
 @endsection
 
 @section('content')
-    @include('includes.flash')
-    <x-validation-errors />
-
-    <div class="card">
-        <div class="card-header">
-            <h3>{{$fields['title']}}</h3>
-        </div>
-        <div class="card-body">
-            {{ html()->form($fields['method'], $fields['url'])->open() }}
-            <div class="form-group">
-                {{ html()->label('Name', 'name') }}
-                {{ html()->text('name', ($rol != null) ? $rol->name : "")->class('form-control')->required() }}
-            </div>
-        </div>
-    </div>
-
-    <div class="my-4">
-        {{ html()->submit('Save')->class('btn btn-primary') }}
-        {{ html()->form()->close() }}
-        <a class="btn btn-danger btn-close" href="{{ $rol === null ? route('rols.index') : route('rols.show', $rol) }}">{{'Cancel'}}</a>
-    </div>
+    <x-form-card :$fields :cancel="$rol === null ? route('rols.index') : route('rols.show', $rol)">
+        <x-field name="name" label="Name" :value="$rol?->name" required />
+    </x-form-card>
 @endsection
