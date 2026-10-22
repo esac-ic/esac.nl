@@ -2,11 +2,13 @@
 
 namespace Tests\Unit;
 
+use App\Enums\Role;
+use App\Exports\AgendaRegistrationExport;
 use App\Models\AgendaItem;
 use App\Models\ApplicationForm\ApplicationFormRow;
 use App\Models\ApplicationForm\ApplicationResponse;
 use App\Models\ApplicationForm\ApplicationResponseRow;
-use App\Services\AgendaApplicationFormService;
+use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use PHPUnit\Framework\Attributes\Test;
@@ -38,7 +40,18 @@ class RemoveOldApplicationResponseTest extends TestCase
         $this->assertNull($applicationResponse->user_id);
         $this->assertSame(0, ApplicationResponseRow::withTrashed()->count());
         $this->assertSame(1, $applicationResponse->agendaItem->registrations()->count());
-        $this->assertSame([], app(AgendaApplicationFormService::class)->getRegisteredUsers($applicationResponse->agendaItem)['userdata']);
+
+        // Counted on the event page, but no longer listed there, on the admin page or in the export
+        $agendaItem = $applicationResponse->agendaItem;
+        $this->actingAs(User::factory()->withRole(Role::ActivityAdministrator)->create());
+        $this->get(route('front-end.agenda.detail', $agendaItem))
+            ->assertOk()
+            ->assertViewHas('registrations', fn ($registrations) => $registrations->isEmpty())
+            ->assertViewHas('agendaItem', fn ($agendaItem) => $agendaItem->registrations_count === 1);
+        $this->get(route('beheer.agenda-items.registrations.index', $agendaItem))
+            ->assertOk()
+            ->assertViewHas('registrations', fn ($registrations) => $registrations->isEmpty());
+        $this->assertCount(0, new AgendaRegistrationExport($agendaItem)->collection());
     }
 
     #[Test]

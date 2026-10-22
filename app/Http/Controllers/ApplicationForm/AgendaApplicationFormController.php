@@ -5,19 +5,21 @@ namespace App\Http\Controllers\ApplicationForm;
 use App\Exports\AgendaRegistrationExport;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\AdminRegistrationRequest;
-use App\Http\Resources\ApplicationFormRowVueResource;
+use App\Http\Resources\ApplicationFormRowResource;
 use App\Models\AgendaItem;
 use App\Models\ApplicationForm\ApplicationResponse;
-use App\Models\ApplicationForm\ApplicationResponseRow;
 use App\Models\User;
-use App\Services\AgendaApplicationFormService;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Routing\Controllers\HasMiddleware;
 use Illuminate\Routing\Controllers\Middleware;
 use Illuminate\Support\Facades\Gate;
+use Illuminate\Support\Str;
 use Symfony\Component\HttpFoundation\StreamedResponse;
 
+/**
+ * The registrations of an event, managed by the activity administrators.
+ */
 class AgendaApplicationFormController extends Controller implements HasMiddleware
 {
     public static function middleware(): array
@@ -28,61 +30,58 @@ class AgendaApplicationFormController extends Controller implements HasMiddlewar
         ];
     }
 
-    public function index(AgendaItem $agendaItem, AgendaApplicationFormService $agendaApplicationFormService): View
+    public function index(AgendaItem $agendaItem): View
     {
         return view('forms.inschrijven_show', [
-            'users' => $agendaApplicationFormService->getRegisteredUsers($agendaItem),
-            'agendaItemId' => $agendaItem->id,
+            'agendaItem' => $agendaItem,
+            // Anonymised registrations still count, but have no one to list
+            'registrations' => $agendaItem->registrations()->whereNotNull('user_id')->with('user')->get(),
         ]);
     }
 
-    public function registerUser(AgendaItem $agendaItem): View
+    public function create(AgendaItem $agendaItem): View
     {
-        $applicationForm = $agendaItem->applicationForm;
+        $applicationForm = $agendaItem->applicationForm->load('applicationFormRows.applicationFormRowOptions');
 
         $users = User::query()->current()
-            ->whereNotIn('id', $agendaItem->registrations->pluck('user_id'))
+            ->whereNotIn('id', $agendaItem->registrations()->select('user_id'))
             ->orderBy('firstname')->orderBy('lastname')
             ->get(['id', 'firstname', 'preposition', 'lastname'])
             ->mapWithKeys(fn (User $user) => [$user->id => $user->getName()]);
 
         return view('forms.inschrijven_admin', [
-            'rows' => ApplicationFormRowVueResource::collection($applicationForm->applicationFormRows),
+            'rows' => ApplicationFormRowResource::collection($applicationForm->applicationFormRows),
             'applicationForm' => $applicationForm,
             'users' => $users->all(),
             'agendaItem' => $agendaItem,
         ]);
     }
 
-    public function saveRegistration(AdminRegistrationRequest $request, AgendaItem $agendaItem): RedirectResponse
+    public function store(AdminRegistrationRequest $request, AgendaItem $agendaItem): RedirectResponse
     {
         $agendaItem->register($request->validated('user'), $request->safe()->except('user'));
 
         return to_route('beheer.agenda-items.registrations.index', $agendaItem);
     }
 
-    public function show(AgendaItem $agendaItem, User $user): View
+    public function show(AgendaItem $agendaItem, ApplicationResponse $registration): View
     {
-        $applicationResponse = $agendaItem->registrations()->whereBelongsTo($user)->firstOrFail();
-
         return view('forms.inschrijven_details', [
-            'agendaId' => $agendaItem->id,
-            'applicationDataRows' => ApplicationResponseRow::query()->where('application_response_id', $applicationResponse->id)->get(),
+            'rows' => $registration->rows()->with('formRow')->get(),
         ]);
     }
 
-    public function destroy(AgendaItem $agendaItem, ApplicationResponse $applicationResponse): RedirectResponse
+    public function destroy(AgendaItem $agendaItem, ApplicationResponse $registration): RedirectResponse
     {
-        Gate::authorize('delete-registration', $applicationResponse);
+        Gate::authorize('delete-registration', $registration);
 
-        $applicationResponse->delete();
+        $registration->delete();
 
         return to_route('beheer.agenda-items.registrations.index', $agendaItem);
     }
 
-    public function exportData(AgendaItem $agendaItem, AgendaApplicationFormService $agendaApplicationFormService): StreamedResponse
+    public function export(AgendaItem $agendaItem): StreamedResponse
     {
-        return new AgendaRegistrationExport($agendaApplicationFormService, $agendaItem)
-            ->download(preg_replace('/[^a-zA-Z0-9]+/', '-', $agendaItem->title).'.xlsx');
+        return new AgendaRegistrationExport($agendaItem)->download(Str::slug($agendaItem->title).'.xlsx');
     }
 }

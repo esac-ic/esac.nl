@@ -3,16 +3,43 @@
 namespace App\Exports;
 
 use App\Models\AgendaItem;
-use App\Services\AgendaApplicationFormService;
+use App\Models\ApplicationForm\ApplicationFormRow;
+use App\Models\ApplicationForm\ApplicationResponse;
 use Illuminate\Support\Collection;
 
+/**
+ * The registered members of an event with their answers, one column per question.
+ */
 class AgendaRegistrationExport extends SpreadsheetExport
 {
-    public function __construct(private readonly AgendaApplicationFormService $agendaApplicationFormService, private readonly AgendaItem $agendaItem) {}
+    public function __construct(private readonly AgendaItem $agendaItem) {}
 
     public function collection(): Collection
     {
-        return $this->agendaApplicationFormService->getExportData($this->agendaItem);
+        // Anonymised registrations have no one to export
+        return $this->agendaItem->registrations()->whereNotNull('user_id')->with(['user', 'rows'])->get();
+    }
+
+    /**
+     * @param  ApplicationResponse  $registration
+     */
+    public function map(mixed $registration): array
+    {
+        $user = $registration->user;
+
+        return [
+            $user->firstname,
+            $user->preposition,
+            $user->lastname,
+            $user->street,
+            $user->house_number,
+            $user->city,
+            $user->zipcode,
+            $user->email,
+            $user->phone_number,
+            $user->birthday?->format('d-m-Y'),
+            ...$this->questions()->map(fn (ApplicationFormRow $question) => $registration->rows->firstWhere('application_form_row_id', $question->id)?->value),
+        ];
     }
 
     public function title(): string
@@ -22,7 +49,7 @@ class AgendaRegistrationExport extends SpreadsheetExport
 
     public function headings(): array
     {
-        $defaultValues = [
+        return [
             'First name',
             'Preposition',
             'Last name',
@@ -33,8 +60,15 @@ class AgendaRegistrationExport extends SpreadsheetExport
             'Email address',
             'Phone number',
             'Date of birth',
+            ...$this->questions()->pluck('name'),
         ];
+    }
 
-        return array_merge($defaultValues, $this->agendaItem->applicationForm->applicationFormRows->pluck('name')->all());
+    /**
+     * @return Collection<int, ApplicationFormRow>
+     */
+    private function questions(): Collection
+    {
+        return $this->agendaItem->applicationForm->applicationFormRows;
     }
 }

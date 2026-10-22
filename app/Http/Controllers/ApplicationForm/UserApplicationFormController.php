@@ -4,7 +4,7 @@ namespace App\Http\Controllers\ApplicationForm;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\RegistrationRequest;
-use App\Http\Resources\ApplicationFormRowVueResource;
+use App\Http\Resources\ApplicationFormRowResource;
 use App\Models\AgendaItem;
 use App\Models\User;
 use Illuminate\Contracts\View\View;
@@ -27,10 +27,10 @@ class UserApplicationFormController extends Controller implements HasMiddleware
             return to_route('front-end.agenda.detail', $agendaItem)->with('error', $error);
         }
 
-        $applicationForm = $agendaItem->applicationForm;
+        $applicationForm = $agendaItem->applicationForm->load('applicationFormRows.applicationFormRowOptions');
 
         return view('forms.inschrijven', [
-            'rows' => ApplicationFormRowVueResource::collection($applicationForm->applicationFormRows),
+            'rows' => ApplicationFormRowResource::collection($applicationForm->applicationFormRows),
             'route' => route('forms.store', $agendaItem),
             'applicationForm' => $applicationForm,
             'cancleRoute' => route('front-end.agenda.detail', $agendaItem),

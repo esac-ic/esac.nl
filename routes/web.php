@@ -52,15 +52,8 @@ Route::prefix('beheer')->name('beheer.')->group(function () {
     Route::post('agenda-items/{agenda_item}/copy', [AgendaItemController::class, 'copy'])->name('agenda-items.copy');
     Route::resource('application-forms', ApplicationFormController::class);
 
-    Route::controller(AgendaApplicationFormController::class)->prefix('agenda-items/{agenda_item}/registrations')->name('agenda-items.registrations.')->group(function () {
-        Route::get('/', 'index')->name('index');
-        Route::get('create', 'registerUser')->name('create');
-        Route::post('/', 'saveRegistration')->name('store');
-        Route::get('export', 'exportData')->name('export');
-        Route::get('{user}', 'show')->name('show');
-    });
-    Route::delete('agenda-items/{agenda_item}/registrations/{application_response}', [AgendaApplicationFormController::class, 'destroy'])
-        ->name('agenda-items.registrations.destroy');
+    Route::get('agenda-items/{agenda_item}/registrations/export', [AgendaApplicationFormController::class, 'export'])->name('agenda-items.registrations.export');
+    Route::resource('agenda-items.registrations', AgendaApplicationFormController::class)->only(['index', 'create', 'store', 'show', 'destroy'])->scoped();
 
     Route::resource('agenda-item-categories', AgendaItemCategoryController::class);
     Route::resource('news-items', NewsItemController::class);

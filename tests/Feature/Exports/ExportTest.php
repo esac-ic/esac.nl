@@ -125,7 +125,7 @@ class ExportTest extends TestCase
 
         $response = $this->get("beheer/agenda-items/{$agendaItem->id}/registrations/export");
 
-        [$sheet, $rows] = $this->readSpreadsheet($response, 'Trip-to-Font.xlsx');
+        [$sheet, $rows] = $this->readSpreadsheet($response, 'trip-to-font.xlsx');
 
         $this->assertSame('Subscriptions', $sheet);
         $this->assertSame('First name', $rows[0][0]);

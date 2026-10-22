@@ -9,7 +9,7 @@ use Illuminate\Http\Resources\Json\JsonResource;
 /**
  * @mixin ApplicationFormRowOption
  */
-class ApplicationFormRowOptionVueResource extends JsonResource
+class ApplicationFormRowOptionResource extends JsonResource
 {
     public function toArray(Request $request): array
     {

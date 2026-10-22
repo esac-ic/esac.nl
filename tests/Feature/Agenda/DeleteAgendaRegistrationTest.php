@@ -2,6 +2,8 @@
 
 namespace Tests\Feature\Agenda;
 
+use App\Enums\Role;
+use App\Models\AgendaItem;
 use App\Models\ApplicationForm\ApplicationResponse;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -42,5 +44,17 @@ class DeleteAgendaRegistrationTest extends TestCase
             ->assertSessionHas('message', 'The registration date has expired, so you can no longer unsubscribe.');
 
         $this->assertNotSoftDeleted($registration);
+    }
+
+    #[Test]
+    public function a_registration_can_only_be_removed_through_its_own_event(): void
+    {
+        $registration = $this->registration('+1 week');
+        $this->actingAs(User::factory()->withRole(Role::ActivityAdministrator)->create());
+
+        $this->delete(route('beheer.agenda-items.registrations.destroy', [AgendaItem::factory()->create(), $registration]))->assertNotFound();
+        $this->delete(route('beheer.agenda-items.registrations.destroy', [$registration->agenda_id, $registration]))->assertRedirect();
+
+        $this->assertSoftDeleted($registration);
     }
 }

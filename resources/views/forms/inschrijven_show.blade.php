@@ -1,17 +1,17 @@
 @extends('layouts.beheer')
 
 @section('title')
-{{'Subscriptions' . ": " . $users["agendaItemTitle"]}}
+{{ 'Subscriptions: '.$agendaItem->title }}
 @endsection
 
 @section('content')
     @include('includes.flash')
 
-    <x-page-header :title="'Subscriptions: '.$users['agendaItemTitle']">
-        <a href="{{route('beheer.agenda-items.registrations.create', $agendaItemId)}}" class="btn btn-primary">
+    <x-page-header :title="'Subscriptions: '.$agendaItem->title">
+        <a href="{{route('beheer.agenda-items.registrations.create', $agendaItem)}}" class="btn btn-primary">
             <em class="ion-person-add"></em> {{'New subscription'}}
         </a>
-        <a href="{{route('beheer.agenda-items.registrations.export', $users["agendaItemId"])}}" class="btn btn-primary">
+        <a href="{{route('beheer.agenda-items.registrations.export', $agendaItem)}}" class="btn btn-primary">
             <em class="ion-android-download"></em> {{'Export'}}
         </a>
         <a href="{{route('beheer.agenda-items.index')}}" class="btn btn-primary">
@@ -28,15 +28,15 @@
         </tr>
         </thead>
         <tbody>
-        @foreach ($users["userdata"] as $user)
+        @foreach ($registrations as $registration)
             <tr>
-                <td>{{$user->getName()}}</td>
-                <td>{{$user->email}}</td>
-                <td>{{$user->getAddress()}}</td>
+                <td>{{ $registration->user->getName() }}</td>
+                <td>{{ $registration->user->email }}</td>
+                <td>{{ $registration->user->getAddress() }}</td>
 
                 <td>
-                    <a href="{{route('beheer.agenda-items.registrations.show', [$agendaItemId, $user->id])}}"><span title="{{'Show entered information'}}" class="ion-eye" aria-hidden="true"></span></a>
-                    <a href="#" id="delete_button" data-url="{{route('beheer.agenda-items.registrations.destroy', [$users["agendaItemId"], $user["_signupId"]])}}"><span  class="ion-trash-a"></span></a>
+                    <a href="{{ route('beheer.agenda-items.registrations.show', [$agendaItem, $registration]) }}"><span title="{{'Show entered information'}}" class="ion-eye" aria-hidden="true"></span></a>
+                    <a href="#" id="delete_button" data-url="{{ route('beheer.agenda-items.registrations.destroy', [$agendaItem, $registration]) }}"><span  class="ion-trash-a"></span></a>
                 </td>
             </tr>
         @endforeach

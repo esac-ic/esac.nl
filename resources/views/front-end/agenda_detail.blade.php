@@ -25,7 +25,7 @@
                         <div class="row justify-content-between align-items-center">
                             <div class="col-auto text-muted">
                                 @if($agendaItem->application_form_id != null)
-                                    <span class="ion-person-stalker"></span> {{count($agendaItem->registrations)}}
+                                    <span class="ion-person-stalker"></span> {{ $agendaItem->registrations_count }}
                                 @endif
                             </div>
                             <div class="col-auto">
@@ -34,7 +34,7 @@
                                         {{'Please log in to register'}}
                                     @else
                                         @if($agendaItem->canRegister())
-                                            @if(array_key_exists(auth()->id(), $users))
+                                            @if($registrations->contains('user_id', auth()->id()))
                                                 <form method="POST" action="{{ route('forms.unregister', $agendaItem) }}">
                                                     @csrf
                                                     @method('DELETE')
@@ -61,12 +61,11 @@
                         @if($agendaItem->application_form_id != null && auth()->check())
                             <h4 class="card-title">{{'Registrations'}}</h4>
                             <ol class="column-count-lg-3">
-                                @foreach($users as $user)
-                                    <li>{{$user['name']}}
-                                        @if($user["certificate_names"] != null)
-                                            ({{$user["certificate_names"]}})
+                                @foreach($registrations as $registration)
+                                    <li>{{ $registration->user->getName() }}
+                                        @if($agendaItem->climbing_activity && $registration->user->certificates->isNotEmpty())
+                                            ({{ $registration->user->getCertificationsAbbreviations() }})
                                         @endif
-
                                     </li>
                                 @endforeach
                             </ol>
