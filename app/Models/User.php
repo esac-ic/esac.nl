@@ -122,7 +122,8 @@ class User extends Authenticatable
     {
         $user = self::fromForm($data);
 
-        $user->pending_user = Carbon::now();
+        // A date column, so the date in Amsterdam rather than in UTC.
+        $user->pending_user = today(config('app.display_timezone'));
         $user->kind_of_member = 'member';
         $user->lid_af = null;
 
@@ -234,7 +235,7 @@ class User extends Authenticatable
 
     public function removeAsActiveMember(): void
     {
-        $this->lid_af = Carbon::now();
+        $this->lid_af = today(config('app.display_timezone'));
         // Logs them out everywhere: their sessions and remember-me cookies stop working
         $this->setRememberToken(Str::random(60));
         $this->save();
