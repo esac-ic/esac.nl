@@ -17,6 +17,8 @@ return [
         'privacy_policy' => 'Privacy Policy',
         'termsconditions' => 'Terms and Conditions',
         'incasso' => 'Automatic Collection',
+        'iban' => 'IBAN',
+        'bic' => 'BIC',
     ],
     'custom' => [
         'amount_of_formrows' => [

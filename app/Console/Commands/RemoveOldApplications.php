@@ -20,7 +20,7 @@ class RemoveOldApplications extends Command
     public function handle(): void
     {
         $old = ApplicationResponse::withTrashed()
-            ->whereRelation('agendaItem', 'endDate', '<', Carbon::now()->subYears(config('custom.application_response_save_period')));
+            ->whereRelation('agendaItem', 'end_date', '<', Carbon::now()->subYears(config('custom.application_response_save_period')));
 
         DB::transaction(function () use ($old) {
             ApplicationResponseRow::withTrashed()->whereIn('application_response_id', $old->clone()->select('id'))->forceDelete();

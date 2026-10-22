@@ -14,8 +14,8 @@ class AgendaApiDateFilterTest extends TestCase
     #[Test]
     public function the_agenda_can_be_filtered_by_date()
     {
-        AgendaItem::factory()->create(['startDate' => '2026-05-01 10:00:00', 'endDate' => '2026-05-01 12:00:00']);
-        AgendaItem::factory()->create(['startDate' => '2026-07-01 10:00:00', 'endDate' => '2026-07-01 12:00:00']);
+        AgendaItem::factory()->create(['start_date' => '2026-05-01 10:00:00', 'end_date' => '2026-05-01 12:00:00']);
+        AgendaItem::factory()->create(['start_date' => '2026-07-01 10:00:00', 'end_date' => '2026-07-01 12:00:00']);
 
         $this->getJson('api/agenda?startDate=01-06-2026&endDate=31-07-2026')
             ->assertOk()

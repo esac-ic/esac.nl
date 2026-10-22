@@ -35,13 +35,13 @@
                                     <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
                                         @foreach($menu->getSubMenuItem($menuItem->id) as $subItem)
                                             <a class="dropdown-item"
-                                               href="{{ route('front-end.page', $subItem->urlName) }}">{{$subItem->name}}</a>
+                                               href="{{ route('front-end.page', $subItem->url_name) }}">{{$subItem->name}}</a>
                                         @endforeach
                                     </div>
                                 </li>
                             @else
                                 <li class="nav-item">
-                                    <a class="nav-link" href="{{ route('front-end.page', $menuItem->urlName) }}">{{$menuItem->name}}</a>
+                                    <a class="nav-link" href="{{ route('front-end.page', $menuItem->url_name) }}">{{$menuItem->name}}</a>
                                 </li>
                             @endif
                         @endforeach

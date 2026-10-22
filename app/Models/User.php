@@ -38,22 +38,22 @@ class User extends Authenticatable
         'preposition',
         'lastname',
         'street',
-        'houseNumber',
+        'house_number',
         'city',
         'zipcode',
         'country',
-        'phonenumber',
-        'phonenumber_alt',
-        'emergencyNumber',
-        'emergencyHouseNumber',
-        'emergencystreet',
-        'emergencycity',
-        'emergencyzipcode',
-        'emergencycountry',
-        'birthDay',
+        'phone_number',
+        'phone_number_alt',
+        'emergency_number',
+        'emergency_house_number',
+        'emergency_street',
+        'emergency_city',
+        'emergency_zipcode',
+        'emergency_country',
+        'birthday',
         'kind_of_member',
-        'IBAN',
-        'BIC',
+        'iban',
+        'bic',
         'incasso',
         'remark',
     ];
@@ -84,7 +84,7 @@ class User extends Authenticatable
     ];
     
     protected $casts = [
-        'birthDay' => 'date',
+        'birthday' => 'date',
     ];
 
     public function roles(): BelongsToMany
@@ -107,10 +107,10 @@ class User extends Authenticatable
      *
      * @return Attribute formatted birthday model attribute
      */
-    public function birthDayFormatted(): Attribute
+    public function birthdayFormatted(): Attribute
     {
         return Attribute::make(
-            get: fn () => $this->birthDay->format('d-m-Y'),
+            get: fn () => $this->birthday->format('d-m-Y'),
         );
     }
 
@@ -167,7 +167,7 @@ class User extends Authenticatable
      */
     public function getAddress(): string
     {
-        return "{$this->street} {$this->houseNumber}";
+        return "{$this->street} {$this->house_number}";
     }
     
     public function isOldMember(): bool

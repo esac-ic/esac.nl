@@ -27,7 +27,7 @@ class PennoMemberExport extends SpreadsheetExport
 
         return $users->map(function (User $user) {
             $export = $user->toArray();
-            $export['IBAN'] = str_replace(' ', '', $export['IBAN']);
+            $export['iban'] = str_replace(' ', '', $export['iban']);
             // Remove the time component of the created_at field:
             $export['created_at'] = $user->created_at->toDateString();
             $export['incasso'] = $user->incasso ? "Yes" : "No";
@@ -57,8 +57,8 @@ class PennoMemberExport extends SpreadsheetExport
             'city',
             'country',
             'kind_of_member',
-            'IBAN',
-            'BIC',
+            'iban',
+            'bic',
             'incasso',
             'created_at'
         ];

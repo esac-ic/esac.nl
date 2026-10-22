@@ -18,7 +18,7 @@ class DeleteOldUsersCommandTest extends TestCase
     {
         parent::setUp();
         // Transactions dont reset the incremental id
-        $this->id = User::factory()->create(['phonenumber_alt' => '0612345678', 'incasso' => true, 'remember_token' => 'token'])->id;
+        $this->id = User::factory()->create(['phone_number_alt' => '0612345678', 'incasso' => true, 'remember_token' => 'token'])->id;
     }
 
     public function testDeleteOldUserWichIsLidAfFor3Years()
@@ -35,22 +35,22 @@ class DeleteOldUsersCommandTest extends TestCase
         $this->assertNotEquals(null, $user->firstname);
         $this->assertNotEquals(null, $user->lastname);
         $this->assertEquals(null, $user->street);
-        $this->assertEquals(null, $user->houseNumber);
+        $this->assertEquals(null, $user->house_number);
         $this->assertEquals(null, $user->city);
         $this->assertEquals(null, $user->zipcode);
         $this->assertEquals(null, $user->country);
-        $this->assertEquals(null, $user->phonenumber);
-        $this->assertEquals(null, $user->phonenumber_alt);
-        $this->assertEquals(null, $user->emergencyNumber);
-        $this->assertEquals(null, $user->emergencyHouseNumber);
-        $this->assertEquals(null, $user->emergencystreet);
-        $this->assertEquals(null, $user->emergencycity);
-        $this->assertEquals(null, $user->emergencyzipcode);
-        $this->assertEquals(null, $user->emergencycountry);
-        $this->assertEquals(null, $user->birthDay);
+        $this->assertEquals(null, $user->phone_number);
+        $this->assertEquals(null, $user->phone_number_alt);
+        $this->assertEquals(null, $user->emergency_number);
+        $this->assertEquals(null, $user->emergency_house_number);
+        $this->assertEquals(null, $user->emergency_street);
+        $this->assertEquals(null, $user->emergency_city);
+        $this->assertEquals(null, $user->emergency_zipcode);
+        $this->assertEquals(null, $user->emergency_country);
+        $this->assertEquals(null, $user->birthday);
         $this->assertEquals(null, $user->kind_of_member);
-        $this->assertEquals(null, $user->IBAN);
-        $this->assertEquals(null, $user->BIC);
+        $this->assertEquals(null, $user->iban);
+        $this->assertEquals(null, $user->bic);
         $this->assertEquals(null, $user->remark);
         $this->assertEquals(0, $user->incasso);
         $this->assertEquals(null, $user->remember_token);
@@ -70,21 +70,21 @@ class DeleteOldUsersCommandTest extends TestCase
         $this->assertNotEquals(null, $user->firstname);
         $this->assertNotEquals(null, $user->lastname);
         $this->assertNotEquals(null, $user->street);
-        $this->assertNotEquals(null, $user->houseNumber);
+        $this->assertNotEquals(null, $user->house_number);
         $this->assertNotEquals(null, $user->city);
         $this->assertNotEquals(null, $user->zipcode);
         $this->assertNotEquals(null, $user->country);
-        $this->assertNotEquals(null, $user->phonenumber);
-        $this->assertNotEquals(null, $user->phonenumber_alt);
-        $this->assertNotEquals(null, $user->emergencyNumber);
-        $this->assertNotEquals(null, $user->emergencyHouseNumber);
-        $this->assertNotEquals(null, $user->emergencystreet);
-        $this->assertNotEquals(null, $user->emergencycity);
-        $this->assertNotEquals(null, $user->emergencyzipcode);
-        $this->assertNotEquals(null, $user->emergencycountry);
-        $this->assertNotEquals(null, $user->birthDay);
+        $this->assertNotEquals(null, $user->phone_number);
+        $this->assertNotEquals(null, $user->phone_number_alt);
+        $this->assertNotEquals(null, $user->emergency_number);
+        $this->assertNotEquals(null, $user->emergency_house_number);
+        $this->assertNotEquals(null, $user->emergency_street);
+        $this->assertNotEquals(null, $user->emergency_city);
+        $this->assertNotEquals(null, $user->emergency_zipcode);
+        $this->assertNotEquals(null, $user->emergency_country);
+        $this->assertNotEquals(null, $user->birthday);
         $this->assertNotEquals(null, $user->kind_of_member);
-        $this->assertNotEquals(null, $user->IBAN);
+        $this->assertNotEquals(null, $user->iban);
         $this->assertNotEquals(null, $user->remark);
     }
 }

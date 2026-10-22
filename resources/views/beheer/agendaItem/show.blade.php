@@ -43,19 +43,19 @@
                 </tr>
                 <tr>
                     <td>{{'Short description'}}</td>
-                    <td>{{$agendaItem->shortDescription}}</td>
+                    <td>{{$agendaItem->short_description}}</td>
                 </tr>
                 <tr>
                     <td>{{'Start date'}}</td>
-                    <td>{{\Carbon\Carbon::parse($agendaItem->startDate)->format('d-m-Y h:i')}}</td>
+                    <td>{{\Carbon\Carbon::parse($agendaItem->start_date)->format('d-m-Y h:i')}}</td>
                 </tr>
                 <tr>
                     <td>{{'End date'}}</td>
-                    <td>{{\Carbon\Carbon::parse($agendaItem->endDate)->format('d-m-Y h:i')}}</td>
+                    <td>{{\Carbon\Carbon::parse($agendaItem->end_date)->format('d-m-Y h:i')}}</td>
                 </tr>
                 <tr>
                     <td>{{'Last possible registration date'}}</td>
-                    <td>{{($agendaItem->subscription_endDate !=null)? \Carbon\Carbon::parse($agendaItem->subscription_endDate)->format('d-m-Y h:i') : ""}}</td>
+                    <td>{{($agendaItem->subscription_end_date !=null)? \Carbon\Carbon::parse($agendaItem->subscription_end_date)->format('d-m-Y h:i') : ""}}</td>
                 </tr>
                 <tr>
                     <td>{{'Category'}}</td>

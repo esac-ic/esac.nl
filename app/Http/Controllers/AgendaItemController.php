@@ -89,13 +89,13 @@ class AgendaItemController extends Controller implements HasMiddleware
     {
         $request->validate([
             'title' => 'required|max:255',
-            'shortDescription' => 'required|max:100',
+            'short_description' => 'required|max:100',
             'text' => 'required',
             'thumbnail' => 'image|mimes:jpeg,png,jpg',
             'category' => 'required|numeric|min:1',
             'applicationForm' => 'required|numeric|min:0',
-            'endDate' => 'required|date',
-            'startDate' => 'required|date',
+            'end_date' => 'required|date',
+            'start_date' => 'required|date',
         ]);
     }
 

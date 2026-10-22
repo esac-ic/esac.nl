@@ -40,7 +40,7 @@ class DeleteAgendaRegistrationTest extends TestCase
             'user_id' => $this->user->id,
         ]);
         $agendaItem = $applicationResponse->agendaItem;
-        $agendaItem->subscription_endDate = Carbon::now()->addWeek();
+        $agendaItem->subscription_end_date = Carbon::now()->addWeek();
         $agendaItem->save();
 
         $response = $this->get('forms/' . $agendaItem->id . '/unregister');
@@ -57,7 +57,7 @@ class DeleteAgendaRegistrationTest extends TestCase
             'user_id' => $this->user->id,
         ]);
         $agendaItem = $applicationResponse->agendaItem;
-        $agendaItem->subscription_endDate = Carbon::now()->subWeek();
+        $agendaItem->subscription_end_date = Carbon::now()->subWeek();
         $agendaItem->save();
 
         $response = $this->get('forms/' . $agendaItem->id . '/unregister');

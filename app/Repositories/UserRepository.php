@@ -39,8 +39,8 @@ class UserRepository implements IRepository
         $user = $this->find($id);
         
         if ($user != null) {
-            $birthDay = new \DateTime($data['birthDay']);
-            $data['birthDay'] = Carbon::createFromFormat('d-m-Y H:i', $birthDay->format('d-m-Y') . ' ' . $birthDay->format('H:i'));
+            $birthday = new \DateTime($data['birthday']);
+            $data['birthday'] = Carbon::createFromFormat('d-m-Y H:i', $birthday->format('d-m-Y') . ' ' . $birthday->format('H:i'));
             $data['incasso'] = array_key_exists("incasso", $data);
             $data['password'] = ($data['password'] != "") ? bcrypt($data['password']) : $user->password;
             
@@ -159,8 +159,8 @@ class UserRepository implements IRepository
     {
         $user = new User($data);
         $user->password = bcrypt($user->password);
-        $birthDay = new \DateTime($data['birthDay']);
-        $user->birthDay = Carbon::createFromFormat('d-m-Y H:i', $birthDay->format('d-m-Y') . ' ' . $birthDay->format('H:i'));
+        $birthday = new \DateTime($data['birthday']);
+        $user->birthday = Carbon::createFromFormat('d-m-Y H:i', $birthday->format('d-m-Y') . ' ' . $birthday->format('H:i'));
         $user->incasso = array_key_exists("incasso", $data);
         
         return $user;

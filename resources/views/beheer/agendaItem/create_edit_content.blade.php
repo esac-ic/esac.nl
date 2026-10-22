@@ -8,8 +8,8 @@
             {{ html()->text('title', ($agendaItem != null) ? $agendaItem->title : "")->class('form-control')->required() }}
         </div>
         <div class="form-group">
-            {{ html()->label('Short description (max. 100 characters)', 'shortDescription') }}
-            {{ html()->text('shortDescription', ($agendaItem != null) ? $agendaItem->shortDescription : "")->class('form-control')->required()->maxlength(100) }}
+            {{ html()->label('Short description (max. 100 characters)', 'short_description') }}
+            {{ html()->text('short_description', ($agendaItem != null) ? $agendaItem->short_description : "")->class('form-control')->required()->maxlength(100) }}
         </div>
         <div class="form-group">
             {{ html()->label('Content', 'content_en') }}

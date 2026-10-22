@@ -18,7 +18,7 @@ class RemoveOldApplicationResponseTest extends TestCase
 
     private function registrationForEventThatEnded(Carbon $endDate): ApplicationResponse
     {
-        $agendaItem = AgendaItem::factory()->create(['endDate' => $endDate]);
+        $agendaItem = AgendaItem::factory()->create(['end_date' => $endDate]);
         $applicationResponse = ApplicationResponse::factory()->create(['agenda_id' => $agendaItem->id]);
         foreach (ApplicationFormRow::factory()->count(2)->create(['application_form_id' => $applicationResponse->inschrijf_form_id]) as $row) {
             $applicationResponse->getApplicationFormResponseRows()->create(['application_form_row_id' => $row->id, 'value' => 'answer']);

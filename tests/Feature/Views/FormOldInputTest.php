@@ -48,21 +48,21 @@ class FormOldInputTest extends TestCase
     #[Test]
     public function page_checkboxes_keep_the_submitted_state()
     {
-        $menuItem = $this->field($this->get('pages/create'), 'menuItem')->getAttribute('value');
+        $menuItem = $this->field($this->get('pages/create'), 'menu_item')->getAttribute('value');
 
         $response = $this->from('pages/create')->followingRedirects()->post('pages', [
-            'urlName' => 'test',
+            'url_name' => 'test',
             'itemType' => 'subItem',
             'parentItem' => 0,
             'afterItem' => 0,
             'content' => 'Inhoud',
-            'menuItem' => $menuItem,
+            'menu_item' => $menuItem,
             '_token' => csrf_token(),
         ]);
 
         $response->assertOk();
         $this->assertFieldValue($response, 'content', 'Inhoud');
-        $this->assertChecked($response, 'menuItem');
+        $this->assertChecked($response, 'menu_item');
         $this->assertChecked($response, 'login', false);
     }
 

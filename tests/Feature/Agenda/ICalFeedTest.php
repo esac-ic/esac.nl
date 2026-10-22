@@ -17,8 +17,8 @@ class ICalFeedTest extends TestCase
         $item = AgendaItem::factory()->create([
             'title' => 'Climbing weekend',
             'text' => '<p>Bring a rope &amp; harness</p>',
-            'startDate' => '2026-05-01 10:00:00',
-            'endDate' => '2026-05-03 18:30:00',
+            'start_date' => '2026-05-01 10:00:00',
+            'end_date' => '2026-05-03 18:30:00',
         ]);
         AgendaItem::factory()->create();
 

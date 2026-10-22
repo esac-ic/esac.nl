@@ -49,7 +49,7 @@ Page
                 </tr>
                 <tr>
                     <td>{{'URL name'}}</td>
-                    <td>{{$page->urlName}}</td>
+                    <td>{{$page->url_name}}</td>
                 </tr>
                 <tr>
                     <td>{{'User needs to be logged in to view the page'}}</td>
