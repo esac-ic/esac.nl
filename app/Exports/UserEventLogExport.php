@@ -2,7 +2,7 @@
 
 namespace App\Exports;
 
-use App\Repositories\UserEventLogEntryRepository;
+use App\Models\UserEventLogEntry;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection;
 
@@ -20,7 +20,6 @@ class UserEventLogExport extends SpreadsheetExport
     ];
     
     public function __construct(
-        private readonly UserEventLogEntryRepository $repository,
         private readonly ?array $eventTypes,
         private readonly Carbon $startDate,
         private readonly Carbon $endDate,
@@ -29,8 +28,11 @@ class UserEventLogExport extends SpreadsheetExport
     
     public function collection(): Collection
     {
-        $collection = $this->repository->findLogs($this->eventTypes, $this->startDate, $this->endDate);
-        return $collection;
+        return UserEventLogEntry::query()
+            ->whereBetween('created_at', [$this->startDate, $this->endDate])
+            ->when($this->eventTypes, fn ($query) => $query->whereIn('event_type', $this->eventTypes))
+            ->get()
+            ->makeHidden(['updated_at']);
     }
     
     public function title(): string

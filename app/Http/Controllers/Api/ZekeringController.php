@@ -3,53 +3,65 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
-use App\Repositories\ZekeringenRepository;
+use App\Http\Resources\ZekeringResource;
+use App\Models\Zekering;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
-use Illuminate\Support\Facades\Config;
+use Illuminate\Routing\Controllers\HasMiddleware;
+use Illuminate\Routing\Controllers\Middleware;
 
-class ZekeringController extends Controller
+class ZekeringController extends Controller implements HasMiddleware
 {
-    public function __construct()
+    public static function middleware(): array
     {
-        $this->middleware('auth');
-        $this->middleware('authorize:' . Config::get('constants.Activity_administrator'))->only('destroy');
+        return [
+            'auth',
+            new Middleware('can:manage-zekeringen', only: ['destroy']),
+        ];
     }
 
-    public function getZekeringen(ZekeringenRepository $zekeringenRepository): array
+    public function getZekeringen(): array
     {
-        $zekeringen = $zekeringenRepository->findBy('has_parent', false)->with('children')->get();
+        $zekeringen = Zekering::where('has_parent', false)->orderBy('id', 'desc')->with('children')->get();
 
-        return ['zekeringen' => $zekeringen];
+        return ['zekeringen' => ZekeringResource::collection($zekeringen)];
     }
 
-    public function storeZekering(Request $request, ZekeringenRepository $zekeringenRepository): RedirectResponse
+    public function storeZekering(Request $request): RedirectResponse
     {
         $this->validateInput($request);
 
-        $zekeringenRepository->create($request->all());
+        $this->createZekering($request, $request->has('parent'), $request->input('parent'));
 
-        return redirect('/zekeringen');
+        return to_route('front-end.zekeringen');
     }
 
-    public function storeSubZekering(Request $request, ZekeringenRepository $zekeringenRepository): Response
+    public function storeSubZekering(Request $request): Response
     {
         $this->validateInput($request);
 
-        $data = $request->all();
-        $data['parent'] = $request->input('parent_id');
-
-        $zekeringenRepository->create($data);
+        $this->createZekering($request, true, $request->input('parent_id'));
 
         return response(["msg" => "Sub zekering created"], 200);
     }
 
-    public function destroy(int $id, ZekeringenRepository $zekeringenRepository): Response
+    public function destroy(int $id): Response
     {
-        $zekeringenRepository->delete($id);
+        Zekering::destroy($id);
 
         return response("", 200);
+    }
+
+    private function createZekering(Request $request, bool $hasParent, $parentId): void
+    {
+        $zekering = new Zekering();
+        $zekering->text = $request->input('text');
+        $zekering->created_by = $request->user()->id;
+        $zekering->score = 1;
+        $zekering->parent_id = $hasParent ? $parentId : null;
+        $zekering->has_parent = $hasParent;
+        $zekering->save();
     }
 
     private function validateInput(Request $request): void

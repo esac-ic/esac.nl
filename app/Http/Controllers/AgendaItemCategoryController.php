@@ -3,24 +3,26 @@
 namespace App\Http\Controllers;
 
 use App\Models\AgendaItemCategory;
-use App\Repositories\AgendaItemCategoryRepository;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Config;
+use Illuminate\Routing\Controllers\HasMiddleware;
+use Illuminate\Routing\Controllers\Middleware;
 use Illuminate\Support\Facades\Session;
 
-class AgendaItemCategoryController extends Controller
+class AgendaItemCategoryController extends Controller implements HasMiddleware
 {
-    public function __construct(private readonly AgendaItemCategoryRepository $agendaItemCategoryRepository)
+    public static function middleware(): array
     {
-        $this->middleware('auth');
-        $this->middleware('authorize:' . Config::get('constants.Administrator'));
+        return [
+            'auth',
+            new Middleware('can:manage-agenda-categories'),
+        ];
     }
 
     public function index(): View
     {
-        $agendaItemCategories = $this->agendaItemCategoryRepository->all(['id', 'name']);
+        $agendaItemCategories = AgendaItemCategory::all(['id', 'name']);
         return view('beheer.agendaItemCategory.index', compact('agendaItemCategories'));
     }
 
@@ -28,54 +30,52 @@ class AgendaItemCategoryController extends Controller
     {
         $fields = ['title' => 'Add an event category',
             'method' => 'POST',
-            'url' => '/agendaItemCategories'];
+            'url' => route('agendaItemCategories.store')];
         $agendaItemCategory = null;
         return view('beheer.agendaItemCategory.create_edit', compact(['fields', 'agendaItemCategory']));
     }
 
     public function store(Request $request): RedirectResponse
     {
-        $this->validateInput($request);
-        $this->agendaItemCategoryRepository->create($request->all());
+        AgendaItemCategory::create($this->validateInput($request));
 
         Session::flash("message", 'Events category is added');
-        return redirect('/agendaItemCategories');
+        return to_route('agendaItemCategories.index');
     }
 
-    public function show(Request $request, AgendaItemCategory $agendaItemCategory): View
+    public function show(AgendaItemCategory $agendaItemCategory): View
     {
         return view('beheer.agendaItemCategory.show', compact('agendaItemCategory'));
     }
 
-    public function edit(Request $request, AgendaItemCategory $agendaItemCategory): View
+    public function edit(AgendaItemCategory $agendaItemCategory): View
     {
         $fields = ['title' => 'Edit category',
             'method' => 'PATCH',
-            'url' => '/agendaItemCategories/' . $agendaItemCategory->id];
+            'url' => route('agendaItemCategories.update', $agendaItemCategory)];
 
         return view('beheer.agendaItemCategory.create_edit', compact('fields', 'agendaItemCategory'));
     }
 
     public function update(Request $request, AgendaItemCategory $agendaItemCategory): RedirectResponse
     {
-        $this->validateInput($request);
-        $this->agendaItemCategoryRepository->update($agendaItemCategory->id, $request->all());
+        $agendaItemCategory->update($this->validateInput($request));
 
         Session::flash("message", 'Events category is edited');
-        return redirect('/agendaItemCategories');
+        return to_route('agendaItemCategories.index');
     }
 
-    public function destroy(Request $request, AgendaItemCategory $agendaItemCategory): RedirectResponse
+    public function destroy(AgendaItemCategory $agendaItemCategory): RedirectResponse
     {
-        $this->agendaItemCategoryRepository->delete($agendaItemCategory->id);
+        $agendaItemCategory->delete();
 
         Session::flash("message", 'Events category is removed');
-        return redirect('/agendaItemCategories');
+        return to_route('agendaItemCategories.index');
     }
 
-    private function validateInput(Request $request): void
+    private function validateInput(Request $request): array
     {
-        $this->validate($request, [
+        return $request->validate([
             'name' => 'required|max:255',
         ]);
     }

@@ -33,7 +33,7 @@
         </ul>
     @endif
 
-    {{ html()->form('POST', url('signup'))->open() }}
+    {{ html()->form('POST', route('user.signup'))->open() }}
     <div class="card mt-4" id="personal-info">
         <div class="card-header">
             <h3>{{'Personal'}}</h3>
@@ -69,8 +69,8 @@
                     {{ html()->text('street', '')->class('form-control')->required() }}
                 </div>
                 <div class="form-group col-md-6">
-                    {{ html()->label('House number', 'houseNumber') }}
-                    {{ html()->text('houseNumber', '')->class('form-control')->required() }}
+                    {{ html()->label('House number', 'house_number') }}
+                    {{ html()->text('house_number', '')->class('form-control')->required() }}
                 </div>
             </div>
             <div class="form-row">
@@ -89,13 +89,13 @@
             </div>
             <div class="form-row">
                 <div class="form-group col-md-6">
-                    {{ html()->label('Phone number', 'phonenumber') }}
-                    {{ html()->text('phonenumber', '')->class('form-control')->required() }}
+                    {{ html()->label('Phone number', 'phone_number') }}
+                    {{ html()->text('phone_number', '')->class('form-control')->required() }}
                 </div>
                 <div class="form-group col-md-6">
                     {{ html()->label('Birthdate', 'birthDay') }}
                     <div class="input-group date" id="birthDayBox" data-target-input="nearest">
-                        <input type='text' class="form-control datetimepicker-input" id="birthDay" name="birthDay" data-target="#birthDayBox" value="" required="required">
+                        <input type='text' class="form-control datetimepicker-input" id="birthDay" name="birthday" data-target="#birthDayBox" value="" required="required">
                         <div class="input-group-append" data-target="#birthDayBox" data-toggle="datetimepicker">
                             <div class="input-group-text"><i class="ion-calendar"></i></div>
                         </div>
@@ -111,12 +111,12 @@
         <div class="card-body">
             <div class="form-row">
                 <div class="form-group col-md-4">
-                    {{ html()->label('BIC', 'BIC') }}
-                    {{ html()->text('BIC', '')->class('form-control') }}
+                    {{ html()->label('BIC', 'bic') }}
+                    {{ html()->text('bic', '')->class('form-control') }}
                 </div>
                 <div class="form-group col-md-8">
-                    {{ html()->label('IBAN', 'IBAN') }}
-                    {{ html()->text('IBAN', '')->class('form-control')->required() }}
+                    {{ html()->label('IBAN', 'iban') }}
+                    {{ html()->text('iban', '')->class('form-control')->required() }}
                 </div>
             </div>
         </div>
@@ -128,31 +128,31 @@
         <div class="card-body">
             <div class="form-row">
                 <div class="form-group col-md-6">
-                    {{ html()->label('Emergency address street', 'emergencystreet') }}
-                    {{ html()->text('emergencystreet', '')->class('form-control')->required() }}
+                    {{ html()->label('Emergency address street', 'emergency_street') }}
+                    {{ html()->text('emergency_street', '')->class('form-control')->required() }}
                 </div>
                 <div class="form-group col-md-6">
-                    {{ html()->label('Emergency address house number', 'emergencyHouseNumber') }}
-                    {{ html()->text('emergencyHouseNumber', '')->class('form-control')->required() }}
+                    {{ html()->label('Emergency address house number', 'emergency_house_number') }}
+                    {{ html()->text('emergency_house_number', '')->class('form-control')->required() }}
                 </div>
             </div>
             <div class="form-row">
                 <div class="form-group col-md-4">
-                    {{ html()->label('Emergency zip code', 'emergencyzipcode') }}
-                    {{ html()->text('emergencyzipcode', '')->class('form-control')->required() }}
+                    {{ html()->label('Emergency zip code', 'emergency_zipcode') }}
+                    {{ html()->text('emergency_zipcode', '')->class('form-control')->required() }}
                 </div>
                 <div class="form-group col-md-4">
-                    {{ html()->label('Emergency city', 'emergencycity') }}
-                    {{ html()->text('emergencycity', '')->class('form-control')->required() }}
+                    {{ html()->label('Emergency city', 'emergency_city') }}
+                    {{ html()->text('emergency_city', '')->class('form-control')->required() }}
                 </div>
                 <div class="form-group col-md-4">
-                    {{ html()->label('Emergency country', 'emergencycountry') }}
-                    {{ html()->select('emergencycountry', trans("countries"), 'NL')->class('form-control')->required() }}
+                    {{ html()->label('Emergency country', 'emergency_country') }}
+                    {{ html()->select('emergency_country', trans("countries"), 'NL')->class('form-control')->required() }}
                 </div>
             </div>
             <div class="form-group">
-                {{ html()->label('Emergency phone number', 'emergencyNumber') }}
-                {{ html()->text('emergencyNumber', '')->class('form-control')->required() }}
+                {{ html()->label('Emergency phone number', 'emergency_number') }}
+                {{ html()->text('emergency_number', '')->class('form-control')->required() }}
             </div>
         </div>
     </div>

@@ -32,7 +32,7 @@
                             <tr>
                                 <td>{{$user->getName()}}</td>
                                 <td>{{$user->email}}</td>
-                                <td>{{$user->phonenumber}}</td>
+                                <td>{{$user->phone_number}}</td>
                                 <td>{{trans('kind_of_member.' . $user->kind_of_member)}}</td>
                             </tr>
                         @endforeach

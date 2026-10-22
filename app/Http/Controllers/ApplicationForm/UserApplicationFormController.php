@@ -6,19 +6,21 @@ use App\Http\Controllers\Controller;
 use App\Http\Resources\ApplicationFormRowVueResource;
 use App\Models\AgendaItem;
 use App\Models\ApplicationForm\ApplicationResponse;
-use App\Repositories\ApplicationFormRepositories\ApplicationFormRegistrationRepository;
 use Carbon\Carbon;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Routing\Controllers\HasMiddleware;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Session;
 
-class UserApplicationFormController extends Controller
+class UserApplicationFormController extends Controller implements HasMiddleware
 {
-    public function __construct()
+    public static function middleware(): array
     {
-        $this->middleware('auth');
+        return [
+            'auth',
+        ];
     }
 
     public function showRegistrationForm(AgendaItem $agendaItem): View
@@ -26,9 +28,7 @@ class UserApplicationFormController extends Controller
         $user_id = Auth::user()->id;
 
         //check if the date has expired
-        $agendaEndDate = new \DateTime($agendaItem->subscription_endDate);
-        $now = new \DateTime();
-        if ($agendaEndDate < $now) {
+        if ($agendaItem->subscription_end_date < Carbon::now()) {
             $error = 'The registration date has expired, so you can no longer subscribe.';
             $curPageName = $error;
 
@@ -58,8 +58,8 @@ class UserApplicationFormController extends Controller
 
         //retrieves all the rows of the form
         $rows = ApplicationFormRowVueResource::collection($applicationForm->applicationFormRows);
-        $route = 'forms/' . $agendaItem->id; //route for the form sign up
-        $cancleRoute = 'agenda/' . $agendaItem->id; //route for the form sign up
+        $route = route('forms.store', $agendaItem); //route for the form sign up
+        $cancleRoute = route('agenda.detail', $agendaItem); //route for the cancel button
 
         $curPageName = $applicationForm->name;
 
@@ -69,7 +69,7 @@ class UserApplicationFormController extends Controller
         );
     }
 
-    public function store(Request $request, AgendaItem $agendaItem, ApplicationFormRegistrationRepository $repository): View|RedirectResponse
+    public function store(Request $request, AgendaItem $agendaItem): View|RedirectResponse
     {
         //check if the user has already signed up
         $signup = ApplicationResponse::where('user_id', Auth::user()->id)
@@ -84,21 +84,21 @@ class UserApplicationFormController extends Controller
             return view("forms.inschrijven_error", compact('error', 'curPageName'));
         }
 
-        $repository->storeRegistration($request->except(['_token']), $agendaItem, Auth::user()->id);
+        $agendaItem->register(Auth::user()->id, $request->except(['_token']));
         $user = Auth::user();
 
-        return redirect('agenda/' . $agendaItem->id);
+        return to_route('agenda.detail', $agendaItem);
     }
 
     public function unregister(AgendaItem $agendaItem, int $fromAgendaItem = 1): RedirectResponse
     {
-        if (Carbon::parse($agendaItem->subscription_endDate) < Carbon::now()) {
+        if ($agendaItem->subscription_end_date < Carbon::now()) {
             Session::flash("message", 'The registration date has expired, so you can no longer unsubscribe.');
 
             if ($fromAgendaItem == 1) {
-                return redirect('agenda/' . $agendaItem->id);
+                return to_route('agenda.detail', $agendaItem);
             } else if ($fromAgendaItem == 0) {
-                return redirect('agenda/');
+                return to_route('front-end.agenda');
             }
         }
 
@@ -110,9 +110,9 @@ class UserApplicationFormController extends Controller
         Session::flash("message", 'You successfully unsubscribed from the event.');
 
         if ($fromAgendaItem == 1) {
-            return redirect('agenda/' . $agendaItem->id);
+            return to_route('agenda.detail', $agendaItem);
         } else {
-            return redirect('agenda/');
+            return to_route('front-end.agenda');
         }
     }
 }

@@ -3,15 +3,18 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Config;
+use Illuminate\Routing\Controllers\HasMiddleware;
+use Illuminate\Routing\Controllers\Middleware;
 use Illuminate\Support\Facades\Storage;
 
-class StorageController extends Controller
+class StorageController extends Controller implements HasMiddleware
 {
-    public function __construct()
+    public static function middleware(): array
     {
-        $this->middleware('auth');
-        $this->middleware('authorize:' . Config::get('constants.Content_administrator'));
+        return [
+            'auth',
+            new Middleware('can:manage-pages'),
+        ];
     }
 
     public function uploadImage(Request $request): string

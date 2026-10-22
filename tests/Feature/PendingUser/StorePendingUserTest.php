@@ -21,19 +21,19 @@ class StorePendingUserTest extends TestCase
             'firstname' => 'Initial',
             'lastname' => 'Initial',
             'street' => 'Initial',
-            'houseNumber' => '1',
+            'house_number' => '1',
             'city' => 'Initial',
             'zipcode' => '1111AA',
             'country' => 'Initial',
-            'phonenumber' => '123456789',
-            'emergencyNumber' => '123456789',
-            'emergencyHouseNumber' => '1',
-            'emergencystreet' =>  'Initial',
-            'emergencycity' => 'Initial',
-            'emergencyzipcode' =>  '1111AA',
-            'emergencycountry' => 'Initial',
-            'birthDay' => '1990-01-01',
-            'IBAN' =>  '123456789',
+            'phone_number' => '123456789',
+            'emergency_number' => '123456789',
+            'emergency_house_number' => '1',
+            'emergency_street' =>  'Initial',
+            'emergency_city' => 'Initial',
+            'emergency_zipcode' =>  '1111AA',
+            'emergency_country' => 'Initial',
+            'birthday' => '1990-01-01',
+            'iban' =>  '123456789',
             'g-recaptcha-response' => 'True',
             'incasso' => 'True',
             'privacy_policy' => 'True',
@@ -57,20 +57,20 @@ class StorePendingUserTest extends TestCase
         $this->assertEquals('Initial', $user->firstname);
         $this->assertEquals('Initial', $user->lastname);
         $this->assertEquals('Initial', $user->street);
-        $this->assertEquals('1', $user->houseNumber);
+        $this->assertEquals('1', $user->house_number);
         $this->assertEquals('Initial', $user->city);
         $this->assertEquals('1111AA', $user->zipcode);
         $this->assertEquals('Initial', $user->country);
-        $this->assertEquals('123456789', $user->phonenumber);
-        $this->assertEquals('123456789', $user->emergencyNumber);
-        $this->assertEquals('1', $user->emergencyHouseNumber);
-        $this->assertEquals('Initial', $user->emergencystreet);
-        $this->assertEquals('Initial', $user->emergencycity);
-        $this->assertEquals('1111AA', $user->emergencyzipcode);
-        $this->assertEquals('Initial', $user->emergencycountry);
-        $this->assertEquals('123456789', $user->IBAN);
+        $this->assertEquals('123456789', $user->phone_number);
+        $this->assertEquals('123456789', $user->emergency_number);
+        $this->assertEquals('1', $user->emergency_house_number);
+        $this->assertEquals('Initial', $user->emergency_street);
+        $this->assertEquals('Initial', $user->emergency_city);
+        $this->assertEquals('1111AA', $user->emergency_zipcode);
+        $this->assertEquals('Initial', $user->emergency_country);
+        $this->assertEquals('123456789', $user->iban);
         
-        $this->assertEquals(new Carbon('1990-01-01'), $user->birthDay);
+        $this->assertEquals(new Carbon('1990-01-01'), $user->birthday);
         $this->assertEquals(1, $user->incasso);
         
     }

@@ -18,4 +18,14 @@ class OldMemberBecameMember implements LoggableUserEventInterface
     {
         //
     }
+
+    public function logDetails(): string
+    {
+        return $this->user->getName() . " became a member again";
+    }
+
+    public function loggedUser(): ?User
+    {
+        return $this->user;
+    }
 }

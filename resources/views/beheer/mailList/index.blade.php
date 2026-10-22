@@ -36,7 +36,7 @@
                     @csrf
                     <button title="{{'Sync member mail lists'}}" type="submit" class="btn btn-primary"><span class="ion-loop" aria-hidden="true"></span> {{'Sync member mail lists'}}</button>
                 </form>    
-                <a href="{{url('mailList/create')}}" class="btn btn-primary" title="{{'New mailing list'}}">
+                <a href="{{route('mailList.create')}}" class="btn btn-primary" title="{{'New mailing list'}}">
                     <span class="ion-plus" aria-hidden="true"></span>
                     {{'New mailing list'}}
                 </a>
@@ -56,11 +56,11 @@
 
         @foreach ($mailLists as $mailingList)
             <tr >
-                <td>{{$mailingList->getName()}}</td>
-                <td>{{$mailingList->getAddress()}}</td>
-                <td>{{$mailingList->getMembersCount()}}</td>
+                <td>{{$mailingList->name}}</td>
+                <td>{{$mailingList->address}}</td>
+                <td>{{$mailingList->members_count}}</td>
                 <td>
-                    <a href="{{url('/mailList/'. $mailingList->getAddress())}}"><span title="{{'Show mailing list'}}" class="ion-eye" aria-hidden="true"></span></a>
+                    <a href="{{ route('mailList.show', $mailingList->address) }}"><span title="{{'Show mailing list'}}" class="ion-eye" aria-hidden="true"></span></a>
                 </td>
             </tr>
         @endforeach

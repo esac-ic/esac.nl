@@ -3,12 +3,12 @@
 namespace Tests\Feature\Agenda;
 
 
+use App\Enums\Role;
 use App\Models\AgendaItem;
 use App\Models\Rol;
 use App\Models\User;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Support\Facades\Artisan;
-use Illuminate\Support\Facades\Config;
 use PHPUnit\Framework\Attributes\Test;
 use Tests\TestCase;
 
@@ -29,7 +29,7 @@ class CopyAgendaItem extends TestCase
             'id' => 3
         ]);
 
-        $this->user->roles()->attach(Config::get('constants.Activity_administrator'));
+        $this->user->roles()->attach(Role::ActivityAdministrator->value);
 
         $this->be($this->user);
 
@@ -54,14 +54,14 @@ class CopyAgendaItem extends TestCase
         $this->assertCount(2, $agendaItems);
         $newAgendaItem = $agendaItems[1];
 
-        $this->assertEquals($agendaItem->subscription_endDate, $newAgendaItem->subscription_endDate);
-        $this->assertEquals($agendaItem->startDate, $newAgendaItem->startDate);
-        $this->assertEquals($agendaItem->endDate, $newAgendaItem->endDate);
+        $this->assertEquals($agendaItem->subscription_end_date, $newAgendaItem->subscription_end_date);
+        $this->assertEquals($agendaItem->start_date, $newAgendaItem->start_date);
+        $this->assertEquals($agendaItem->end_date, $newAgendaItem->end_date);
         $this->assertEquals($agendaItem->category, $newAgendaItem->category);
         $this->assertEquals($agendaItem->climbing_activity, $newAgendaItem->climbing_activity);
 
         $this->assertEquals($agendaItem->title, $newAgendaItem->title);
         $this->assertEquals($agendaItem->text, $newAgendaItem->text);
-        $this->assertEquals($agendaItem->shortDescription, $newAgendaItem->shortDescription);
+        $this->assertEquals($agendaItem->short_description, $newAgendaItem->short_description);
     }
 }

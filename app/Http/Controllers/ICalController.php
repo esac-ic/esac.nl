@@ -33,14 +33,14 @@ class ICalController extends Controller
             $event = new Event(new UniqueIdentifier('agenda-item-'.$agendaItem->id.'@'.$host));
             $event
                 ->setOccurrence(new TimeSpan(
-                    new DateTime(new DateTimeImmutable($agendaItem->startDate), false),
-                    new DateTime(new DateTimeImmutable($agendaItem->endDate), false),
+                    new DateTime($agendaItem->start_date->toDateTimeImmutable(), false),
+                    new DateTime($agendaItem->end_date->toDateTimeImmutable(), false),
                 ))
                 ->setSummary($agendaItem->title)
                 ->setDescription(
                     html_entity_decode(strip_tags($agendaItem->text)).
                     "\r\n\r\n----------\r\n".
-                    'Meer informatie: '.url('/agenda/'.$agendaItem->id)
+                    'Meer informatie: '.route('agenda.detail', $agendaItem)
                 );
             $calendar->addEvent($event);
         }

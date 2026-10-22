@@ -6,22 +6,20 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\ApplicationFormStoreRequest;
 use App\Http\Resources\ApplicationFormRowVueResource;
 use App\Models\ApplicationForm\ApplicationForm;
-use App\Repositories\ApplicationFormRepositories\ApplicationFormRepository;
 use Illuminate\Http\RedirectResponse;
-use Illuminate\Support\Facades\Config;
+use Illuminate\Routing\Controllers\HasMiddleware;
+use Illuminate\Routing\Controllers\Middleware;
 use Illuminate\Support\Facades\Session;
 use Illuminate\View\View;
 
-class ApplicationFormController extends Controller
+class ApplicationFormController extends Controller implements HasMiddleware
 {
-    /**
-     * Create a new controller instance.
-     *
-     * @return void
-     */
-    public function __construct()
+    public static function middleware(): array
     {
-        $this->middleware('authorize:' . Config::get('constants.Content_administrator') . ',' . Config::get('constants.Activity_administrator'));
+        return [
+            'auth',
+            new Middleware('can:manage-agenda'),
+        ];
     }
 
     /**
@@ -65,17 +63,14 @@ class ApplicationFormController extends Controller
      * Store a newly created resource in storage.
      *
      * @param ApplicationFormStoreRequest $request
-     * @param ApplicationFormRepository $applicationFormRepository
      * @return RedirectResponse
      */
-    public function store(
-        ApplicationFormStoreRequest $request,
-        ApplicationFormRepository $applicationFormRepository
-    ): RedirectResponse {
-        $applicationFormRepository->create($request->all());
+    public function store(ApplicationFormStoreRequest $request): RedirectResponse
+    {
+        ApplicationForm::create($request->all())->syncRows($request->input('rows', []));
 
         Session::flash("message", 'Application form added');
-        return redirect()->route('beheer.applicationForms.index');
+        return to_route('beheer.applicationForms.index');
     }
 
     /**
@@ -118,33 +113,30 @@ class ApplicationFormController extends Controller
      * Update the specified resource in storage.
      *
      * @param ApplicationFormStoreRequest $request
-     * @param int $id
-     * @param ApplicationFormRepository $applicationFormRepository
+     * @param ApplicationForm $applicationForm
      * @return RedirectResponse
      */
-    public function update(
-        ApplicationFormStoreRequest $request,
-        int $id,
-        ApplicationFormRepository $applicationFormRepository
-    ): RedirectResponse {
-        $applicationFormRepository->update($id, $request->all());
+    public function update(ApplicationFormStoreRequest $request, ApplicationForm $applicationForm): RedirectResponse
+    {
+        $applicationForm->update($request->all());
+        $applicationForm->syncRows($request->input('rows', []));
 
         Session::flash("message", 'Application form edited');
-        return redirect()->route('beheer.applicationForms.index');
+        return to_route('beheer.applicationForms.index');
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param int $id
-     * @param ApplicationFormRepository $applicationFormRepository
+     * @param ApplicationForm $applicationForm
      * @return RedirectResponse
      */
-    public function destroy(int $id, ApplicationFormRepository $applicationFormRepository): RedirectResponse
+    public function destroy(ApplicationForm $applicationForm): RedirectResponse
     {
-        $applicationFormRepository->delete($id);
+        $applicationForm->applicationFormRows->each->delete();
+        $applicationForm->delete();
 
         Session::flash("message", 'Application form edited');
-        return redirect()->route('beheer.applicationForms.index');
+        return to_route('beheer.applicationForms.index');
     }
 }

@@ -2,7 +2,7 @@
 
 namespace Tests\Feature\UpdateMemberTypeMaillistsListener;
 
-use App\CustomClasses\MailList\MailListFacade;
+use App\Services\Mailman;
 use App\Events\PendingUserApproved;
 use App\Listeners\UpdateMemberTypeMaillists;
 use App\Models\Setting;
@@ -16,7 +16,7 @@ class HandlePendingUserApprovedTest extends TestCase
 {
     use RefreshDatabase;
     
-    private $mockedMailListFacade;
+    private $mockedMailman;
     private User  $user;
     private array $mailLists = [
         'member' => [
@@ -53,7 +53,7 @@ class HandlePendingUserApprovedTest extends TestCase
     {
         parent::setUp();
         
-        $this->mockedMailListFacade = Mockery::mock(MailListFacade::class);
+        $this->mockedMailman = Mockery::mock(Mailman::class);
         $this->user = User::factory()->member()->create();
 
         Setting::truncate();
@@ -69,16 +69,16 @@ class HandlePendingUserApprovedTest extends TestCase
      */
     public function test_pending_member_becomes_normal_member()
     {
-        $this->mockedMailListFacade->shouldNotReceive('removeUserFromSpecifiedMailLists');
+        $this->mockedMailman->shouldNotReceive('removeUserFromSpecifiedMailLists');
         
-        $this->mockedMailListFacade->shouldReceive('addUserToSpecifiedMailLists')
+        $this->mockedMailman->shouldReceive('addUserToSpecifiedMailLists')
             ->with($this->user->email, $this->user->getName(), [$this->mailLists['member']['value']])
             ->once();
         
         $this->user->kind_of_member = Lang::get('member');
         $this->user->save();
         
-        $listener = new UpdateMemberTypeMaillists($this->mockedMailListFacade);
+        $listener = new UpdateMemberTypeMaillists($this->mockedMailman);
         $event = new PendingUserApproved($this->user);
         
         $listener->handlePendingUserApproved($event);
@@ -86,16 +86,16 @@ class HandlePendingUserApprovedTest extends TestCase
     
     public function test_pending_member_becomes_reunist()
     {
-        $this->mockedMailListFacade->shouldNotReceive('removeUserFromSpecifiedMailLists');
+        $this->mockedMailman->shouldNotReceive('removeUserFromSpecifiedMailLists');
         
-        $this->mockedMailListFacade->shouldReceive('addUserToSpecifiedMailLists')
+        $this->mockedMailman->shouldReceive('addUserToSpecifiedMailLists')
             ->with($this->user->email, $this->user->getName(), [$this->mailLists['reunist']['value']])
             ->once();
         
         $this->user->kind_of_member = Lang::get('reunist');
         $this->user->save();
         
-        $listener = new UpdateMemberTypeMaillists($this->mockedMailListFacade);
+        $listener = new UpdateMemberTypeMaillists($this->mockedMailman);
         $event = new PendingUserApproved($this->user);
         
         $listener->handlePendingUserApproved($event);
@@ -103,16 +103,16 @@ class HandlePendingUserApprovedTest extends TestCase
     
     public function test_pending_member_becomes_extraordinary_participant()
     {
-        $this->mockedMailListFacade->shouldNotReceive('removeUserFromSpecifiedMailLists');
+        $this->mockedMailman->shouldNotReceive('removeUserFromSpecifiedMailLists');
         
-        $this->mockedMailListFacade->shouldReceive('addUserToSpecifiedMailLists')
+        $this->mockedMailman->shouldReceive('addUserToSpecifiedMailLists')
             ->with($this->user->email, $this->user->getName(), [$this->mailLists['extraordinary_member']['value']])
             ->once();
         
         $this->user->kind_of_member = Lang::get('extraordinary_member');
         $this->user->save();
         
-        $listener = new UpdateMemberTypeMaillists($this->mockedMailListFacade);
+        $listener = new UpdateMemberTypeMaillists($this->mockedMailman);
         $event = new PendingUserApproved($this->user);
         
         $listener->handlePendingUserApproved($event);
@@ -120,16 +120,16 @@ class HandlePendingUserApprovedTest extends TestCase
     
     public function test_pending_member_becomes_honorary_member()
     {
-        $this->mockedMailListFacade->shouldNotReceive('removeUserFromSpecifiedMailLists');
+        $this->mockedMailman->shouldNotReceive('removeUserFromSpecifiedMailLists');
         
-        $this->mockedMailListFacade->shouldReceive('addUserToSpecifiedMailLists')
+        $this->mockedMailman->shouldReceive('addUserToSpecifiedMailLists')
             ->with($this->user->email, $this->user->getName(), [$this->mailLists['honorary_member']['value']])
             ->once();
         
         $this->user->kind_of_member = Lang::get('honorary_member');
         $this->user->save();
         
-        $listener = new UpdateMemberTypeMaillists($this->mockedMailListFacade);
+        $listener = new UpdateMemberTypeMaillists($this->mockedMailman);
         $event = new PendingUserApproved($this->user);
         
         $listener->handlePendingUserApproved($event);
@@ -137,16 +137,16 @@ class HandlePendingUserApprovedTest extends TestCase
     
     public function test_pending_member_becomes_member_of_merit()
     {
-        $this->mockedMailListFacade->shouldNotReceive('removeUserFromSpecifiedMailLists');
+        $this->mockedMailman->shouldNotReceive('removeUserFromSpecifiedMailLists');
         
-        $this->mockedMailListFacade->shouldReceive('addUserToSpecifiedMailLists')
+        $this->mockedMailman->shouldReceive('addUserToSpecifiedMailLists')
             ->with($this->user->email, $this->user->getName(), [$this->mailLists['member_of_merit']['value']])
             ->once();
         
         $this->user->kind_of_member = Lang::get('member_of_merit');
         $this->user->save();
         
-        $listener = new UpdateMemberTypeMaillists($this->mockedMailListFacade);
+        $listener = new UpdateMemberTypeMaillists($this->mockedMailman);
         $event = new PendingUserApproved($this->user);
         
         $listener->handlePendingUserApproved($event);
@@ -154,16 +154,16 @@ class HandlePendingUserApprovedTest extends TestCase
     
     public function test_pending_member_becomes_trainer()
     {
-        $this->mockedMailListFacade->shouldNotReceive('removeUserFromSpecifiedMailLists');
+        $this->mockedMailman->shouldNotReceive('removeUserFromSpecifiedMailLists');
         
-        $this->mockedMailListFacade->shouldReceive('addUserToSpecifiedMailLists')
+        $this->mockedMailman->shouldReceive('addUserToSpecifiedMailLists')
             ->with($this->user->email, $this->user->getName(), [$this->mailLists['trainer']['value']])
             ->once();
         
         $this->user->kind_of_member = Lang::get('trainer');
         $this->user->save();
         
-        $listener = new UpdateMemberTypeMaillists($this->mockedMailListFacade);
+        $listener = new UpdateMemberTypeMaillists($this->mockedMailman);
         $event = new PendingUserApproved($this->user);
         
         $listener->handlePendingUserApproved($event);
@@ -171,16 +171,16 @@ class HandlePendingUserApprovedTest extends TestCase
     
     public function test_pending_member_becomes_relationship()
     {
-        $this->mockedMailListFacade->shouldNotReceive('removeUserFromSpecifiedMailLists');
+        $this->mockedMailman->shouldNotReceive('removeUserFromSpecifiedMailLists');
         
-        $this->mockedMailListFacade->shouldReceive('addUserToSpecifiedMailLists')
+        $this->mockedMailman->shouldReceive('addUserToSpecifiedMailLists')
             ->with($this->user->email, $this->user->getName(), [$this->mailLists['relationship']['value']])
             ->once();
         
         $this->user->kind_of_member = Lang::get('relationship');
         $this->user->save();
         
-        $listener = new UpdateMemberTypeMaillists($this->mockedMailListFacade);
+        $listener = new UpdateMemberTypeMaillists($this->mockedMailman);
         $event = new PendingUserApproved($this->user);
         
         $listener->handlePendingUserApproved($event);

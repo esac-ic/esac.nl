@@ -2,36 +2,41 @@
 
 namespace App\Http\Controllers;
 
-use App\CustomClasses\MailList\MailListFacade;
+use App\Services\Mailman;
 use App\Jobs\MemberMassMailListSyncJob;
 use App\Models\User;
-use App\Repositories\UserRepository;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\Client\RequestException;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Config;
+use Illuminate\Routing\Controllers\HasMiddleware;
+use Illuminate\Routing\Controllers\Middleware;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Session;
 
-class MailListController extends Controller
+class MailListController extends Controller implements HasMiddleware
 {
+    public static function middleware(): array
+    {
+        return [
+            'auth',
+            new Middleware('can:manage-mail-lists'),
+        ];
+    }
 
     /**
      * Create a new controller instance.
      *
      * @return void
      */
-    public function __construct(private readonly MailListFacade $_mailListFacade, private readonly UserRepository $userRepository)
+    public function __construct(private readonly Mailman $mailman)
     {
-        $this->middleware('auth');
-        $this->middleware('authorize:' . Config::get('constants.Administrator'));
     }
 
     //gives the mail list views
     public function index(): View
     {
-        $mailLists = $this->_mailListFacade->getAllMailLists()->all();
+        $mailLists = $this->mailman->getAllMailLists()->all();
 
         return view('beheer.mailList.index', compact('mailLists'));
     }
@@ -41,7 +46,7 @@ class MailListController extends Controller
     {
         $fields = ['title' => 'Add mailing list',
             'method' => 'POST',
-            'url' => '/mailList'];
+            'url' => route('mailList.store')];
         $mailList = null;
         return view('beheer.mailList.create_edit', compact('fields', 'mailList'));
     }
@@ -50,7 +55,7 @@ class MailListController extends Controller
     public function store(Request $request): RedirectResponse
     {
         try {
-            $this->_mailListFacade->storeMailList($request->all());
+            $this->mailman->storeMailList($request->all());
             Session::flash("message", 'Mailing list added');
         } catch (RequestException $e) {
             $code = $e->getCode();
@@ -59,28 +64,27 @@ class MailListController extends Controller
             Log::error($msg, ['exception' => $e]);
         }
 
-        return redirect('/mailList');
+        return to_route('mailList.index');
     }
 
     public function show(Request $request, $mailList): View
     {
-        $mailList = $this->_mailListFacade->getMailList($mailList);
+        $mailList = $this->mailman->getMailList($mailList);
         return view('beheer.mailList.show', compact('mailList'));
-
     }
 
     public function destroy(Request $request, $mailList): RedirectResponse
     {
-        $this->_mailListFacade->deleteMailList($mailList);
+        $this->mailman->deleteMailList($mailList);
 
-        return redirect('/mailList');
+        return to_route('mailList.index');
     }
 
     public function addMember(Request $request, $mailList): string
     {
         $users = User::find($request->input('userIds'));
         foreach ($users as $user) {
-            $this->_mailListFacade->addMember($mailList, $user->email, $user->getName());
+            $this->mailman->addMember($mailList, $user->email, $user->getName());
         }
 
         return "";
@@ -88,15 +92,15 @@ class MailListController extends Controller
 
     public function deleteMemberFromMailList($mailList, $member): void
     {
-        $this->_mailListFacade->deleteMemberFromMailList($mailList, $member);
+        $this->mailman->deleteMemberFromMailList($mailList, $member);
     }
 
     
     public function massMemberMailListSync(): RedirectResponse
     {
-        $users = $this->userRepository->getCurrentUsers(); //should give user objects
+        $users = User::current()->get(); //should give user objects
         
         MemberMassMailListSyncJob::dispatch($users); //add all these users to the maillists corresponding to their member types.
-        return redirect('/mailList');
+        return to_route('mailList.index');
     }
 }

@@ -3,16 +3,19 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Attributes\Fillable;
+use Illuminate\Database\Eloquent\Attributes\Scope;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Facades\Auth;
 
 #[Fillable([
     'name',
     'parent_id',
-    'urlName',
+    'url_name',
     'after',
-    'menuItem',
+    'menu_item',
     'deletable',
     'editable',
     'content',
@@ -29,25 +32,23 @@ class MenuItem extends Model
     const AGENDAURL = 'agenda';
     const LIBRARYURL = 'library';
 
-    public function partner()
+    public function partner(): HasOne
     {
         return $this->hasOne(MenuItem::class, 'id', 'parent_id');
     }
 
-    public function afterItem()
+    public function afterItem(): HasOne
     {
         return $this->hasOne(MenuItem::class, 'id', 'after');
     }
 
-    //return the menu items wich aren't sub menus
-    public function getMenuItems()
+    /**
+     * Items that are shown in the menu.
+     */
+    #[Scope]
+    protected function inMenu(Builder $query): void
     {
-        return MenuItem::query()->where('parent_id', '=', null)->where('menuItem', '=', true)->get();
-    }
-
-    public function getSubMenuItems($id)
-    {
-        return MenuItem::query()->where('parent_id', '=', $id)->where('menuItem', '=', true)->get();
+        $query->where('menu_item', true);
     }
 
     public function show(): bool
@@ -64,7 +65,7 @@ class MenuItem extends Model
     /**
      * @return mixed[]
      */
-    public function sortMeunuList($menuList): array
+    public static function sortMenuList($menuList): array
     {
         $newList = [];
         //get a menu item which is not after one

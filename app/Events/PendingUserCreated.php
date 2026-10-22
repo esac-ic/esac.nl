@@ -18,4 +18,14 @@ class PendingUserCreated implements LoggableUserEventInterface
     {
         //
     }
+
+    public function logDetails(): string
+    {
+        return "New pending user: " . $this->user->getName();
+    }
+
+    public function loggedUser(): ?User
+    {
+        return $this->user;
+    }
 }

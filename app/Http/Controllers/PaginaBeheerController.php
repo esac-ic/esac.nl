@@ -3,30 +3,27 @@
 namespace App\Http\Controllers;
 
 use App\Models\MenuItem;
-use App\Repositories\MenuRepository;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Config;
+use Illuminate\Routing\Controllers\HasMiddleware;
+use Illuminate\Routing\Controllers\Middleware;
 use Illuminate\Support\Facades\Session;
 
-class PaginaBeheerController extends Controller
+class PaginaBeheerController extends Controller implements HasMiddleware
 {
-    /**
-     * Create a new controller instance.
-     *
-     * @return void
-     */
-    public function __construct(private readonly MenuRepository $_menuRepository)
+    public static function middleware(): array
     {
-        $this->middleware('auth');
-        $this->middleware('authorize:' . Config::get('constants.Content_administrator'));
+        return [
+            'auth',
+            new Middleware('can:manage-pages'),
+        ];
     }
 
     //gives the rol views
     public function index(): View
     {
-        $pages = $this->_menuRepository->all(["name", "id", "after", "parent_id"]);
+        $pages = MenuItem::all(["name", "id", "after", "parent_id"]);
         return view('beheer.menu.index', compact('pages'));
     }
 
@@ -37,9 +34,9 @@ class PaginaBeheerController extends Controller
             'title_menu' => 'Add menu item ',
             'title_page' => 'Add page',
             'method' => 'POST',
-            'url' => '/pages'];
+            'url' => route('pages.store')];
         $page = null;
-        $pages = $this->_menuRepository->all();
+        $pages = MenuItem::all();
         return view('beheer.menu.create_edit', compact(['page', 'fields', 'pages']));
     }
 
@@ -48,15 +45,27 @@ class PaginaBeheerController extends Controller
     {
         $this->validateData($request);
 
-        $this->_menuRepository->create($request->all());
+        $data = $request->all();
+        $menuItem = new MenuItem($data);
+        if ($data['itemType'] === "subItem") {
+            $menuItem->parent_id = $data['parentItem'];
+        }
+        $menuItem->url_name = $data['url_name'];
+        $menuItem->after = $data['afterItem'] == -1 ? null : $data['afterItem'];
+        $menuItem->login = array_key_exists("login", $data);
+        $menuItem->menu_item = array_key_exists("menu_item", $data);
+        //can only be set in the database
+        $menuItem->deletable = true;
+        $menuItem->editable = true;
+        $menuItem->save();
 
         Session::flash("message", 'Page is added');
-        return redirect('/pages');
+        return to_route('pages.index');
     }
 
     public function show(Request $request, MenuItem $page): View
     {
-        $subItems = $page->getSubMenuItems($page->id);
+        $subItems = MenuItem::inMenu()->where('parent_id', $page->id)->get();
         return view('beheer.menu.show', compact('page', 'subItems'));
     }
 
@@ -67,36 +76,52 @@ class PaginaBeheerController extends Controller
             'title_menu' => 'Edit menu page',
             'title_page' => 'Edit page',
             'method' => 'PATCH',
-            'url' => '/pages/' . $page->id];
-        $pages = $this->_menuRepository->all();
+            'url' => route('pages.update', $page)];
+        $pages = MenuItem::all();
         return view('beheer.menu.create_edit', compact(['page', 'fields', 'pages']));
     }
 
     //update page
     public function update(Request $request, MenuItem $page): RedirectResponse
     {
-        if ($page->urlName != $request->urlName && $page->editable) {
+        if ($page->url_name != $request->url_name && $page->editable) {
             $this->validateData($request);
         }
 
-        $this->_menuRepository->update($page->id, $request->all());
+        $data = $request->all();
+        $page->update($data);
+
+        $page->parent_id = $data['itemType'] === "subItem" ? $data['parentItem'] : null;
+        if ($page->editable) {
+            $page->url_name = $data['url_name'];
+        }
+        $page->menu_item = array_key_exists("menu_item", $data);
+        $page->after = $data['afterItem'] == -1 ? null : $data['afterItem'];
+        $page->login = array_key_exists("login", $data);
+        $page->save();
 
         Session::flash("message", 'Page is edited');
-        return redirect('/pages');
+        return to_route('pages.index');
     }
 
     public function destroy(Request $request, MenuItem $page): RedirectResponse
     {
-        $this->_menuRepository->delete($page->id);
+        if ($page->deletable) {
+            //delete references from the other menu items
+            MenuItem::where('parent_id', $page->id)->update(['parent_id' => null]);
+            MenuItem::where('after', $page->id)->update(['after' => null]);
+
+            $page->delete();
+        }
         Session::flash("message", 'Menu item removed');
 
-        return redirect('/pages');
+        return to_route('pages.index');
     }
 
     private function validateData(Request $request): void
     {
-        $this->validate($request, [
-            'urlName' => 'required|max:255|unique:menu_items',
+        $request->validate([
+            'url_name' => 'required|max:255|unique:menu_items',
             'itemType' => 'required',
             'name' => 'required|max:255',
             'content' => 'required',
@@ -104,7 +129,7 @@ class PaginaBeheerController extends Controller
         ]);
 
         if ($request->input('itemType') === 'subItem') {
-            $this->validate($request, [
+            $request->validate([
                 'parentItem' => 'required',
             ]);
         }

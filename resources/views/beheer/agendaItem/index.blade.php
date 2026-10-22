@@ -20,7 +20,7 @@
         </div>
         <div class="col-md-6">
             <div class="btn-group mt-2 float-md-right" role="group" aria-label="Actions">
-                <a href="{{url('agendaItems/create')}}" class="btn btn-primary">
+                <a href="{{route('agendaItems.create')}}" class="btn btn-primary">
                     <span title="{{'New user'}}" class="ion-plus" aria-hidden="true"></span>
                     {{'New event'}}
                 </a>
@@ -128,12 +128,12 @@
 
         function getAgendaItemActions(data) {
             let actions = "";
-            actions += '<a class="mr-1 ml-1" href="{{url('agendaItems')}}/' + data.id + '/edit"><span title="{{'Edit event'}}" class="ion-edit font-size-120 icon" aria-hidden="true"></span></a>';
-            actions += '<a class="mr-1 ml-1" href="{{url('agendaItems')}}/' + data.id + '"><span title="{{'Show event'}}" class="ion-eye font-size-120 icon" aria-hidden="true"></span></a>';
+            actions += '<a class="mr-1 ml-1" href="' + '{{ route('agendaItems.edit', '__id__') }}'.replace('__id__', data.id) + '"><span title="{{'Edit event'}}" class="ion-edit font-size-120 icon" aria-hidden="true"></span></a>';
+            actions += '<a class="mr-1 ml-1" href="' + '{{ route('agendaItems.show', '__id__') }}'.replace('__id__', data.id) + '"><span title="{{'Show event'}}" class="ion-eye font-size-120 icon" aria-hidden="true"></span></a>';
             if (data.application_form_id != null) {
-                actions += '<a class="mr-1 ml-1" href="{{url('/forms/users')}}/' + data.id + '"><span title="{{'Show sign ups'}}" class="ion-android-list font-size-120 icon" aria-hidden="true"></span></a>';
+                actions += '<a class="mr-1 ml-1" href="' + '{{ route('forms.users.index', '__id__') }}'.replace('__id__', data.id) + '"><span title="{{'Show sign ups'}}" class="ion-android-list font-size-120 icon" aria-hidden="true"></span></a>';
             }
-            actions += '<a class="mr-1 ml-1" href="{{url('agendaItems')}}/' + data.id + '/copy"><span title="{{'Copy event'}}" class="ion-ios-copy font-size-120 icon" aria-hidden="true"></span></a>';
+            actions += '<a class="mr-1 ml-1" href="' + '{{ route('copyAgendaItem', '__id__') }}'.replace('__id__', data.id) + '"><span title="{{'Copy event'}}" class="ion-ios-copy font-size-120 icon" aria-hidden="true"></span></a>';
             return actions;
         }
 
@@ -144,7 +144,7 @@
                 params += "&startDate=" + datePicker.val();
             }
 
-            return "{{url("api/agenda")}}?" + params;
+            return "{{ route('api.agenda.index') }}?" + params;
         }
     </script>
 @endpush

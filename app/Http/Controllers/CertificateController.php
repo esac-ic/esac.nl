@@ -3,24 +3,26 @@
 namespace App\Http\Controllers;
 
 use App\Models\Certificate;
-use App\Repositories\CertificateRepository;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Config;
+use Illuminate\Routing\Controllers\HasMiddleware;
+use Illuminate\Routing\Controllers\Middleware;
 use Illuminate\Support\Facades\Session;
 
-class CertificateController extends Controller
+class CertificateController extends Controller implements HasMiddleware
 {
-    public function __construct(private readonly CertificateRepository $_certificateRepository)
+    public static function middleware(): array
     {
-        $this->middleware('auth');
-        $this->middleware('authorize:' . Config::get('constants.Administrator') . ',' . Config::get('constants.Certificate_administrator'));
+        return [
+            'auth',
+            new Middleware('can:manage-certificates'),
+        ];
     }
 
     public function index(): View
     {
-        $certificates = $this->_certificateRepository->all(["id", "name"]);
+        $certificates = Certificate::all(["id", "name"]);
         return view("beheer.certificate.index", compact("certificates"));
     }
 
@@ -28,18 +30,17 @@ class CertificateController extends Controller
     {
         $fields = ['title' => 'Add a new certificate',
             'method' => 'POST',
-            'url' => '/certificates'];
+            'url' => route('certificates.store')];
         $certificate = null;
         return view("beheer.certificate.create_edit", compact('certificate', 'fields'));
     }
 
     public function store(Request $request): RedirectResponse
     {
-        $this->validateData($request);
-        $this->_certificateRepository->create($request->all());
+        Certificate::create($this->validateInput($request));
 
         Session::flash("message", 'Certificate added');
-        return redirect('/certificates');
+        return to_route('certificates.index');
     }
 
     public function show(Certificate $certificate): View
@@ -51,31 +52,30 @@ class CertificateController extends Controller
     {
         $fields = ['title' => 'Add a new certificate',
             'method' => 'PATCH',
-            'url' => '/certificates/' . $certificate->id];
+            'url' => route('certificates.update', $certificate)];
 
         return view("beheer.certificate.create_edit", compact('certificate', 'fields'));
     }
 
     public function update(Request $request, Certificate $certificate): RedirectResponse
     {
-        $this->validateData($request);
-        $this->_certificateRepository->update($certificate->id, $request->all());
+        $certificate->update($this->validateInput($request));
 
         Session::flash("message", 'Certificate edited');
-        return redirect('/certificates');
+        return to_route('certificates.index');
     }
 
     public function destroy(Certificate $certificate): RedirectResponse
     {
-        $this->_certificateRepository->delete($certificate->id);
+        $certificate->delete();
 
         Session::flash("message", 'Certificate removed');
-        return redirect('/certificates');
+        return to_route('certificates.index');
     }
 
-    private function validateData(Request $reqeust): void
+    private function validateInput(Request $request): array
     {
-        $this->validate($reqeust, [
+        return $request->validate([
             'name' => 'required|max:255',
             'abbreviation' => 'required|max:255',
         ]);

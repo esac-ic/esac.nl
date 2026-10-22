@@ -21,7 +21,7 @@
                 <h3>{{'Latest news'}}</h3>
             </div>
             <div class="col-auto">
-                <a href="{{url('news')}}" class="btn btn-outline-primary">{{'See more'}}</a>
+                <a href="{{ route('front-end.news') }}" class="btn btn-outline-primary">{{'See more'}}</a>
             </div>
         </div>
         <div class="row d-flex align-items-stretch align-items-center">
@@ -58,22 +58,22 @@
                 <h3>{{'Activities'}}</h3>
             </div>
             <div class="col-auto">
-                <a href="{{url('agenda')}}" class="btn btn-outline-primary">{{'See more'}}</a>
+                <a href="{{ route('front-end.agenda') }}" class="btn btn-outline-primary">{{'See more'}}</a>
             </div>
         </div>
         <div class="row d-flex align-items-stretch align-items-center">
             @foreach($agendaItems as $agendaItem)
             <div class="col-sm-12 d-flex flex-wrap">
                 <div class="card w-100 position-relative">
-                    <a href="/agenda/{{$agendaItem->id}} ">
+                    <a href="{{ route('agenda.detail', $agendaItem) }}">
                         <img class="card-img-top " src="{{$agendaItem->getImageUrl()}}" alt="Card image cap">
                     </a>
-                    <span class="card-date position-absolute bg-light py-1 px-3 rounded">{{\Carbon\Carbon::parse($agendaItem->startDate)->format('d M')}}</span>
+                    <span class="card-date position-absolute bg-light py-1 px-3 rounded">{{\Carbon\Carbon::parse($agendaItem->start_date)->format('d M')}}</span>
                     <div class="card-body">
-                    <a href="/agenda/{{$agendaItem->id}} ">
+                    <a href="{{ route('agenda.detail', $agendaItem) }}">
 
                             <h4 class="card-title">{{$agendaItem->title}}</h4>
-                            <p class="card-text text-body">{{$agendaItem->shortDescription}}</p>
+                            <p class="card-text text-body">{{$agendaItem->short_description}}</p>
                     </a>
                     </div>
                     @if($agendaItem->application_form_id != null)
@@ -87,7 +87,7 @@
                                     {{'Please log in to register'}}
                                 @else
                                     @if($agendaItem->canRegister())
-                                        <a class="btn btn-outline-primary" href="{{url('')}}/forms/{{$agendaItem->id}}">{{'Register now'}}</a>
+                                        <a class="btn btn-outline-primary" href="{{ route('forms.create', $agendaItem) }}">{{'Register now'}}</a>
                                     @else
                                         {{'Registration not possible'}}
                                     @endif

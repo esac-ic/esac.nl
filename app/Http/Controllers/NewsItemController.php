@@ -3,48 +3,49 @@
 namespace App\Http\Controllers;
 
 use App\Models\NewsItem;
-use App\Repositories\NewsItemRepository;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Config;
+use Illuminate\Routing\Controllers\HasMiddleware;
+use Illuminate\Routing\Controllers\Middleware;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Storage;
 use Intervention\Image\Drivers\Gd\Driver;
 use Intervention\Image\ImageManager;
 
-class NewsItemController extends Controller
+class NewsItemController extends Controller implements HasMiddleware
 {
-    public function __construct(private readonly NewsItemRepository $_newsItemRepository)
+    public static function middleware(): array
     {
-        $this->middleware('auth');
-        $this->middleware('authorize:' . Config::get('constants.Content_administrator') . ',' . Config::get('constants.Activity_administrator'));
+        return [
+            'auth',
+            new Middleware('can:manage-news'),
+        ];
     }
 
     public function index(): View
     {
-        $newsItems = $this->_newsItemRepository->all(['id', 'title', 'created_at', 'author']);
+        $newsItems = NewsItem::all(['id', 'title', 'created_at', 'author']);
         return view('beheer.newsItem.index', compact('newsItems'));
     }
 
     public function create(): View
     {
-        $fields = ['title' => 'Add a news item ', 'method' => 'POST', 'url' => '/newsItems'];
+        $fields = ['title' => 'Add a news item ', 'method' => 'POST', 'url' => route('newsItems.store')];
         $newsItem = null;
         return view('beheer.newsItem.create_edit', compact('fields', 'newsItem'));
     }
 
     public function store(Request $request): RedirectResponse
     {
-        $this->validateInput($request);
-        $newsItem = $this->_newsItemRepository->create($request->all());
+        $newsItem = NewsItem::create($this->validateInput($request));
 
         if ($request->hasFile('thumbnail')) {
             $this->uploadAndResizeImage($request, $newsItem);
         }
 
         Session::flash("message", 'News item added');
-        return redirect('/newsItems');
+        return to_route('newsItems.index');
     }
 
     public function show(Request $request, NewsItem $newsItem): View
@@ -54,29 +55,28 @@ class NewsItemController extends Controller
 
     public function edit(Request $request, NewsItem $newsItem): View
     {
-        $fields = ['title' => 'Edit news item ', 'method' => 'PATCH', 'url' => '/newsItems/' . $newsItem->id];
+        $fields = ['title' => 'Edit news item ', 'method' => 'PATCH', 'url' => route('newsItems.update', $newsItem)];
         return view('beheer.newsItem.create_edit', compact('fields', 'newsItem'));
     }
 
     public function update(Request $request, NewsItem $newsItem): RedirectResponse
     {
-        $this->validateInput($request);
-        $this->_newsItemRepository->update($newsItem->id, $request->all());
+        $newsItem->update($this->validateInput($request));
 
         if ($request->hasFile('thumbnail')) {
             $this->uploadAndResizeImage($request, $newsItem);
         }
 
         Session::flash("message", 'News item edited');
-        return redirect('/newsItems');
+        return to_route('newsItems.index');
     }
 
     public function destroy(Request $request, NewsItem $newsItem): RedirectResponse
     {
-        $this->_newsItemRepository->delete($newsItem->id);
+        $newsItem->delete();
 
         Session::flash("message", 'News item removed');
-        return redirect('/newsItems');
+        return to_route('newsItems.index');
     }
 
     private function uploadAndResizeImage(Request $request, $newsItem): void
@@ -102,9 +102,9 @@ class NewsItemController extends Controller
         ImageManager::usingDriver(Driver::class)->decodePath($imagePath)->cover($width, $height)->save($imagePath);
     }
 
-    private function validateInput(Request $request): void
+    private function validateInput(Request $request): array
     {
-        $this->validate($request, [
+        return $request->validate([
             'title' => 'required|max:255',
             'text' => 'required',
             'author' => 'required|max:255',

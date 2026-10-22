@@ -18,4 +18,14 @@ class PendingUserRemoved implements LoggableUserEventInterface
     {
         //
     }
+
+    public function logDetails(): string
+    {
+        return $this->userName . " was removed as a pending member";
+    }
+
+    public function loggedUser(): ?User
+    {
+        return null;
+    }
 }

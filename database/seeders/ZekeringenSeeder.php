@@ -17,7 +17,7 @@ class ZekeringenSeeder extends Seeder
         //inserting test data
         $zekering = new Zekering();
         $zekering->text = "dit is een dummy tekst voor een zekering";
-        $zekering->createdBy = 1;
+        $zekering->created_by = 1;
         $zekering->score = 1;
         $zekering->parent_id = 1;
         $zekering->has_parent = 0;
@@ -27,7 +27,7 @@ class ZekeringenSeeder extends Seeder
 
         $zekering = new Zekering();
         $zekering->text = "dit is een dummy tekst 2 voor een zekering";
-        $zekering->createdBy = 1;
+        $zekering->created_by = 1;
         $zekering->score = 1;
         $zekering->parent_id = 2;
         $zekering->has_parent = 0;
@@ -37,7 +37,7 @@ class ZekeringenSeeder extends Seeder
 
         $zekering = new Zekering();
         $zekering->text = "dit is een dummy tekst 2 voor een zekering met een parent";
-        $zekering->createdBy = 1;
+        $zekering->created_by = 1;
         $zekering->score = 1;
         $zekering->parent_id = 2;
         $zekering->has_parent = 1;

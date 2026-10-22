@@ -22,77 +22,77 @@ class MenuItemTableSeeder extends Seeder
                 <p class="card-text">De Eindhovense Studenten Alpen Club houdt zich in de breedste zin bezig met de bergsport. Met veel plezier en gezelligheid genieten we van de hoogteverschillen in het landschap of in de hal. Hieronder is actuele informatie te vinden, informatie over lid worden of contact opnemen zijn elders op de website te vinden.</p>';
         $menuItem = new MenuItem();
         $menuItem->name = 'Home';
-        $menuItem->urlName = MenuItem::HOMEURL;
+        $menuItem->url_name = MenuItem::HOMEURL;
         $menuItem->login = false;
         $menuItem->deletable = false;
         $menuItem->editable = true;
-        $menuItem->menuItem = true;
+        $menuItem->menu_item = true;
         $menuItem->content = $content;
         $menuItem->save();
 
         //agenda
         $menuItem = new MenuItem();
         $menuItem->name = 'Agenda';
-        $menuItem->urlName = MenuItem::AGENDAURL;
+        $menuItem->url_name = MenuItem::AGENDAURL;
         $menuItem->login = false;
         $menuItem->deletable = false;
         $menuItem->editable = true;
-        $menuItem->menuItem = true;
+        $menuItem->menu_item = true;
         $menuItem->content = 'Agenda content';
         $menuItem->save();
 
         //memberlist
         $menuItem = new MenuItem();
         $menuItem->name = 'Members list';
-        $menuItem->urlName = MenuItem::MEMBERLISTURL;
+        $menuItem->url_name = MenuItem::MEMBERLISTURL;
         $menuItem->login = true;
         $menuItem->deletable = false;
         $menuItem->editable = true;
-        $menuItem->menuItem = true;
+        $menuItem->menu_item = true;
         $menuItem->content = 'Members list content';
         $menuItem->save();
 
         //news
         $menuItem = new MenuItem();
         $menuItem->name = 'News';
-        $menuItem->urlName = MenuItem::NEWSURL;
+        $menuItem->url_name = MenuItem::NEWSURL;
         $menuItem->login = false;
         $menuItem->deletable = false;
         $menuItem->editable = true;
-        $menuItem->menuItem = true;
+        $menuItem->menu_item = true;
         $menuItem->content = 'News content';
         $menuItem->save();
 
         //subscribe
         $menuItem = new MenuItem();
         $menuItem->name = 'Subscribe as member';
-        $menuItem->urlName = MenuItem::SUBSCRIBEURL;
+        $menuItem->url_name = MenuItem::SUBSCRIBEURL;
         $menuItem->login = false;
         $menuItem->deletable = false;
         $menuItem->editable = true;
-        $menuItem->menuItem = true;
+        $menuItem->menu_item = true;
         $menuItem->content = 'Subscribe content';
         $menuItem->save();
 
         //library
         $menuItem = new MenuItem();
         $menuItem->name = 'Library';
-        $menuItem->urlName = MenuItem::LIBRARYURL;
+        $menuItem->url_name = MenuItem::LIBRARYURL;
         $menuItem->login = false;
         $menuItem->deletable = false;
         $menuItem->editable = true;
-        $menuItem->menuItem = true;
+        $menuItem->menu_item = true;
         $menuItem->content = 'Library content';
         $menuItem->save();
 
         //zekeringen page
         $menuItem = new MenuItem();
         $menuItem->name = 'Zekeringen';
-        $menuItem->urlName = MenuItem::ZEKERINGURL;
+        $menuItem->url_name = MenuItem::ZEKERINGURL;
         $menuItem->login = true;
         $menuItem->editable = true;
         $menuItem->deletable = false;
-        $menuItem->menuItem = true;
+        $menuItem->menu_item = true;
         $menuItem->content = 'Zekeringen content';
         $menuItem->save();
     }

@@ -2,24 +2,17 @@
 
 namespace App\Exports;
 
-use App\Repositories\UserRepository;
+use App\Models\User;
 use Illuminate\Support\Collection;
 
 class UsersExport extends SpreadsheetExport
 {
-    private $userRepository;
-
-    public function __construct(UserRepository $userRepository)
-    {
-        $this->userRepository = $userRepository;
-    }
-
     /**
      * @return \Illuminate\Support\Collection
      */
     public function collection(): Collection
     {
-        $activeUsers = $this->userRepository->getCurrentUsers(['*'], ['certificates']);
+        $activeUsers = User::current()->with('certificates')->get();
         $exportData = [];
         foreach ($activeUsers as $user) {
             $user->makeHidden(['updated_at', 'lid_af', 'pending_user', 'deleted_at']);

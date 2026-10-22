@@ -7,27 +7,26 @@ use App\Http\Controllers\Controller;
 use App\Http\Resources\ApplicationFormRowVueResource;
 use App\Models\AgendaItem;
 use App\Models\ApplicationForm\ApplicationResponse;
+use App\Models\ApplicationForm\ApplicationResponseRow;
 use App\Models\User;
-use App\Repositories\ApplicationFormRepositories\ApplicationFormRegistrationRepository;
-use App\Repositories\UserRepository;
 use App\Services\AgendaApplicationFormService;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Config;
+use Illuminate\Routing\Controllers\HasMiddleware;
+use Illuminate\Routing\Controllers\Middleware;
+use Illuminate\Support\Facades\Gate;
 use Illuminate\View\View;
 use Symfony\Component\HttpFoundation\StreamedResponse;
 
-class AgendaApplicationFormController extends Controller
+class AgendaApplicationFormController extends Controller implements HasMiddleware
 {
-    /**
-     * AgendaApplicationFormController constructor.
-     */
-    public function __construct()
+    public static function middleware(): array
     {
-        $this->middleware('auth');
-        $this->middleware('authorize:' . Config::get('constants.Content_administrator') . ',' . Config::get('constants.Activity_administrator'))->except('destroy');
+        return [
+            'auth',
+            new Middleware('can:manage-agenda', except: ['destroy']),
+        ];
     }
 
     /**
@@ -43,7 +42,7 @@ class AgendaApplicationFormController extends Controller
         return view("forms.inschrijven_show", compact('users', 'agendaItemId'));
     }
 
-    public function registerUser(AgendaItem $agendaItem, UserRepository $userRepository): View
+    public function registerUser(AgendaItem $agendaItem): View
     {
         //retrieves all the rows of the form
         $applicationForm = $agendaItem->getApplicationForm;
@@ -55,7 +54,7 @@ class AgendaApplicationFormController extends Controller
             array_push($registeredUsers, $registeredUser->user_id);
         }
 
-        foreach ($userRepository->getCurrentUsers(['id', 'firstname', 'lastname']) as $user) {
+        foreach (User::current()->get(['id', 'firstname', 'lastname']) as $user) {
             if (!in_array($user->id, $registeredUsers)) {
                 $users[$user->id] = $user->getName();
             }
@@ -66,28 +65,27 @@ class AgendaApplicationFormController extends Controller
     /**
      * @param Request $request
      * @param AgendaItem $agendaItem
-     * @param ApplicationFormRegistrationRepository $repository
      * @return RedirectResponse
      */
-    public function saveRegistration(
-        Request $request,
-        AgendaItem $agendaItem,
-        ApplicationFormRegistrationRepository $repository
-    ): RedirectResponse {
-        $repository->storeRegistration($request->except(['_token', 'user']), $agendaItem, $request['user']);
+    public function saveRegistration(Request $request, AgendaItem $agendaItem): RedirectResponse
+    {
+        $agendaItem->register($request['user'], $request->except(['_token', 'user']));
 
-        return redirect('/forms/users/' . $agendaItem->id);
+        return to_route('forms.users.index', $agendaItem);
     }
 
     /**
      * @param User $user
      * @param AgendaItem $agendaItem
-     * @param ApplicationFormRegistrationRepository $repository
      * @return View
      */
-    public function show(User $user, AgendaItem $agendaItem, ApplicationFormRegistrationRepository $repository): View
+    public function show(User $user, AgendaItem $agendaItem): View
     {
-        $applicationDataRows = $repository->getApplicationInformation($agendaItem->id, $user->id);
+        $applicationResponse = ApplicationResponse::query()
+            ->where('agenda_id', $agendaItem->id)
+            ->where('user_id', $user->id)
+            ->firstOrFail();
+        $applicationDataRows = ApplicationResponseRow::where('application_response_id', $applicationResponse->id)->get();
         $agendaId = $agendaItem->id;
 
         return view('forms.inschrijven_details', compact('agendaId', 'applicationDataRows'));
@@ -102,15 +100,11 @@ class AgendaApplicationFormController extends Controller
      */
     public function destroy($Agenda_id, $applicationResponseId): RedirectResponse
     {
-        $applicationReponse = ApplicationResponse::find($applicationResponseId);
-        if (!Auth::user()->hasRole(Config::get('constants.Activity_administrator'))) {
-            if (Auth::user()->id != $applicationReponse->user_id) {
-                abort(401);
-            }
-        }
+        $registration = ApplicationResponse::findOrFail($applicationResponseId);
+        Gate::authorize('delete-registration', $registration);
 
-        ApplicationResponse::destroy($applicationResponseId);
-        return redirect('forms/users/' . $Agenda_id);
+        $registration->delete();
+        return to_route('forms.users.index', $Agenda_id);
     }
 
     /**
@@ -123,6 +117,5 @@ class AgendaApplicationFormController extends Controller
         $agendaItem = AgendaItem::findOrFail($agendaId);
         return new AgendaRegistrationExport($agendaApplicationFormService, $agendaItem)
             ->download(preg_replace('/[^a-zA-Z0-9]+/', '-', $agendaItem->title) . '.xlsx');
-
     }
 }

@@ -2,15 +2,20 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Resources\MemberResource;
+use App\Http\Resources\MenuItemResource;
 use App\Models\MenuItem;
-use App\Repositories\UserRepository;
+use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Routing\Controllers\HasMiddleware;
 
-class ApiController extends Controller
+class ApiController extends Controller implements HasMiddleware
 {
-    public function __construct(private readonly UserRepository $_userRepository)
+    public static function middleware(): array
     {
-        $this->middleware('auth');
+        return [
+            'auth',
+        ];
     }
 
     public function getMenuItems(Request $request): array
@@ -23,28 +28,11 @@ class ApiController extends Controller
                 $menuItemQeury->where('parent_id', '=', null);
             }
         }
-        $entries = $menuItemQeury->get();
-        $menuItems = [];
-        foreach ($entries as $menuItem) {
-            array_push($menuItems, [
-                "id" => $menuItem->id,
-                "name" => $menuItem->name,
-            ]);
-        }
-        return $menuItems;
+        return MenuItemResource::collection($menuItemQeury->get())->resolve($request);
     }
 
     public function getUsers(): array
     {
-        $users = [];
-        foreach ($this->_userRepository->getCurrentUsers(['id', 'email', 'firstname', 'preposition', 'lastname']) as $user) {
-            array_push($users, [
-                'id' => $user->id,
-                'name' => $user->getName(),
-                'email' => $user->email,
-            ]);
-        }
-
-        return ['aaData' => $users];
+        return ['aaData' => MemberResource::collection(User::current()->get(['id', 'email', 'firstname', 'preposition', 'lastname']))];
     }
 }

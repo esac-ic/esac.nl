@@ -2,9 +2,9 @@
 
 namespace Tests;
 
+use App\Enums\Role;
 use App\Models\Rol;
 use Illuminate\Foundation\Testing\TestCase as BaseTestCase;
-use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Http;
 
 abstract class TestCase extends BaseTestCase
@@ -18,10 +18,10 @@ abstract class TestCase extends BaseTestCase
 
     private function createRoles(): void
     {
-        foreach (Config::get('constants') as $value) {
-            if (! Rol::find($value)) {
+        foreach (Role::cases() as $role) {
+            if (! Rol::find($role->value)) {
                 Rol::factory()->create([
-                    'id' => $value,
+                    'id' => $role->value,
                 ]);
             }
         }

@@ -11,14 +11,14 @@
             </div>    
         
             <div class="modal-body">
-                <form name="export-user-events-form" id="export-user-events-form" method="post" action="{{url('userEventLog/export')}}">
+                <form name="export-user-events-form" id="export-user-events-form" method="post" action="{{ route('user-event-log-entry.export') }}">
                     @csrf    
                     
                     <!-- checkboxes for event types -->
                     <div class="form-row">
                         <div class="form-group">
                             <label>{{"Event types"}}</label>
-                            @foreach (\App\Models\UserEventLogEntry::distinct('event_type')->pluck('event_type')->sort() as $eventType)
+                            @foreach ($eventTypes as $eventType)
                             <div class="form-check">
                                 <input class="form-check-input" type="checkbox" checked name="eventTypes[]" value="{{$eventType}}" id={{$eventType . "Check"}}>
                                 <label class="form-check-label" for={{$eventType . "Check"}}>{{$eventType}}</label>
@@ -32,7 +32,7 @@
                         <div class="form-group col-md-6">
                             <label for="startDate">Start date</label>
                             <div class="input-group date" id="startDateBox" data-target-input="nearest">
-                                <input type='text' class="form-control datetimepicker-input" id="startDate" name="startDate" data-target="#startDateBox" value="{{\Carbon\Carbon::now()->addHour()->subWeeks(1)->format('d-m-Y H:i')}}" required/>
+                                <input type='text' class="form-control datetimepicker-input" id="startDate" name="startDate" data-target="#startDateBox" value="{{ now()->addHour()->subWeeks(1)->format('d-m-Y H:i') }}" required/>
                                 <div class="input-group-append" data-target="#startDateBox" data-toggle="datetimepicker">
                                     <div class="input-group-text"><i class="ion-calendar"></i></div>
                                 </div>
@@ -41,7 +41,7 @@
                         <div class="form-group col-md-6">
                             <label for="endDate">End date</label>
                             <div class="input-group date" id="endDateBox" data-target-input="nearest">
-                                <input type='text' class="form-control datetimepicker-input" id="endDate" name="endDate" data-target="#endDateBox" value="{{\Carbon\Carbon::now()->addHour()->format('d-m-Y H:i')}}" required/>
+                                <input type='text' class="form-control datetimepicker-input" id="endDate" name="endDate" data-target="#endDateBox" value="{{ now()->addHour()->format('d-m-Y H:i') }}" required/>
                                 <div class="input-group-append" data-target="#endDateBox" data-toggle="datetimepicker">
                                     <div class="input-group-text"><i class="ion-calendar"></i></div>
                                 </div>
