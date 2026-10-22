@@ -93,7 +93,7 @@
                         </td>
                     </tr>
                     <x-detail-row label="Alternative phone number">{{$user->phone_number_alt}}</x-detail-row>
-                    <x-detail-row label="Birthdate">{{$user->birthday}}</x-detail-row>
+                    <x-detail-row label="Birthdate">{{ $user->birthday?->format('d-m-Y') }}</x-detail-row>
                     <tr>
                         <td>{{'Kind of member'}}</td>
                         <td>
