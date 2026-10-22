@@ -1,10 +1,10 @@
 <?php
 
-use App\Http\Controllers\ApiController;
 use App\Http\Controllers\Api\AgendaController;
 use App\Http\Controllers\Api\RegistrationController;
 use App\Http\Controllers\Api\UserController;
 use App\Http\Controllers\Api\ZekeringController;
+use App\Http\Controllers\ApiController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/menuItems', [ApiController::class, 'getMenuItems'])->name('api.menuItems.index');

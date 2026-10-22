@@ -14,7 +14,7 @@ class RolTableSeeder extends Seeder
      */
     public function run()
     {
-        //add default data
+        // add default data
         $rol = new Rol(['name' => 'Administrator']);
         $rol->save();
         $rol = new Rol(['name' => 'Content administrator']);

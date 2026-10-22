@@ -15,8 +15,6 @@ class ApplicationFormStoreRequest extends FormRequest
 
     /**
      * Get the validation rules that apply to the request.
-     *
-     * @return array
      */
     public function rules(): array
     {
@@ -31,6 +29,7 @@ class ApplicationFormStoreRequest extends FormRequest
             'rows.*.options.*.value' => 'nullable',
         ];
     }
+
     /**
      * Get the error messages for the defined validation rules.
      *
@@ -47,8 +46,6 @@ class ApplicationFormStoreRequest extends FormRequest
     /**
      * Turns rows.*.required into a boolean: a checked checkbox is posted as "on" and an unchecked one isn't posted.
      * Makes sure that rows.*.options.*.value isn't empty, uses rows.*.options.*.name as a fallback
-     *
-     * @return void
      */
     protected function passedValidation(): void
     {
@@ -60,8 +57,10 @@ class ApplicationFormStoreRequest extends FormRequest
                 continue;
             }
 
-            foreach($row['options'] as $optionKey => $option) {
-                if (!empty($option['value'])) continue;
+            foreach ($row['options'] as $optionKey => $option) {
+                if (! empty($option['value'])) {
+                    continue;
+                }
                 $rows[$rowKey]['options'][$optionKey]['value'] = $option['name'];
             }
         }

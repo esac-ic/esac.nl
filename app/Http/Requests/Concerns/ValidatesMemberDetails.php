@@ -18,7 +18,7 @@ trait ValidatesMemberDetails
                 'email',
                 'max:255',
                 Rule::unique('users')->ignore($ignoreUserId),
-                new EmailDomainValidator(),
+                new EmailDomainValidator,
             ],
             'firstname' => 'required|max:255',
             'preposition' => 'nullable|max:255',

@@ -15,7 +15,7 @@ class ApplicationResponseSeeder extends Seeder
     public function run()
     {
 
-        $applicationResponse = new ApplicationResponse();
+        $applicationResponse = new ApplicationResponse;
         $applicationResponse->agenda_id = 1;
         $applicationResponse->inschrijf_form_id = 1;
         $applicationResponse->user_id = 1;
