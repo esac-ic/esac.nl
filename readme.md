@@ -73,6 +73,8 @@ On WSL you have 2 places where you can store/edit files:
 	(`restadmin`/`restpass` are the `MAIL_MAN_USERNAME`/`MAIL_MAN_PASSWORD` defaults from `.env.example`, change these if you changed them in the .env)
 7. Visit http://localhost:8000
 
+When you are done, you can stop the server with `docker compose down`
+
 To start it back up later, just run `docker compose up -d` from the repository root. 
 Outgoing mails will go to mailpit (http://localhost:8025).
 
