@@ -25,10 +25,12 @@ class UserRequest extends FormRequest
     }
 
     /**
-     * Members updating themselves can't change their name, remark or kind of membership.
+     * An unchecked checkbox isn't posted. Members updating themselves can't change their name, remark or kind of membership.
      */
     protected function prepareForValidation(): void
     {
+        $this->merge(['incasso' => $this->boolean('incasso')]);
+
         $user = $this->route('user');
 
         if ($user instanceof User && ! $this->isAdministrator()) {
@@ -47,8 +49,8 @@ class UserRequest extends FormRequest
                 'confirmed',
                 Password::defaults(),
             ],
-            'incasso' => 'boolean',
-            'remark' => 'nullable',
+            'incasso' => ['boolean'],
+            'remark' => ['nullable'],
             'kind_of_member' => [Rule::requiredIf($this->isAdministrator()), Rule::enum(KindOfMember::class)],
         ];
     }

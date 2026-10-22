@@ -17,9 +17,17 @@ class StorePendingUserRequest extends FormRequest
             ...$this->memberDetailRules(),
             'password' => ['required', 'confirmed', Password::defaults()],
             'g-recaptcha-response' => ['required', new Recaptcha],
-            'incasso' => 'required',
-            'privacy_policy' => 'required',
-            'termsconditions' => 'required',
+            'incasso' => ['accepted'],
+            'privacy_policy' => ['required'],
+            'termsconditions' => ['required'],
         ];
+    }
+
+    /**
+     * An unchecked checkbox isn't posted.
+     */
+    protected function prepareForValidation(): void
+    {
+        $this->merge(['incasso' => $this->boolean('incasso')]);
     }
 }

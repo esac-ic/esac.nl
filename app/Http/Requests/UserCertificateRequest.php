@@ -9,7 +9,7 @@ class UserCertificateRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'certificate_id' => 'required|exists:certificates,id',
+            'certificate_id' => ['required', 'exists:certificates,id'],
         ];
     }
 }

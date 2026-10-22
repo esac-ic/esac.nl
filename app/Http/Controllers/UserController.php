@@ -40,8 +40,7 @@ class UserController extends Controller implements HasMiddleware
 
     public function store(UserRequest $request): RedirectResponse
     {
-        $user = User::fromForm($request->validated());
-        $user->save();
+        $user = User::query()->create($request->validated());
         $user->roles()->sync($request->input('roles', []));
 
         return to_route('beheer.users.index')->with('message', 'User is added');

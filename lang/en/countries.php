@@ -1,12 +1,5 @@
 <?php
 
-/**
- * Created by PhpStorm.
- * User: Niekh
- * Date: 1-12-2016
- * Time: 16:59
- */
-
 return [
     'AF' => 'Afghanistan',
     'AX' => 'Åland Islands',

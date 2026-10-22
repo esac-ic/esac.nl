@@ -56,7 +56,7 @@ class AgendaItem extends Model
     {
         $this->application_form_id = $data['applicationForm'] ?? null;
         $this->subscription_end_date = $data['subscription_end_date'] ?? null;
-        $this->climbing_activity = $data['climbing_activity'] ?? false;
+        $this->climbing_activity = $data['climbing_activity'];
 
         return $this;
     }
