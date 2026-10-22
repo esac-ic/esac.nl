@@ -69,7 +69,6 @@ jobs:
       run: |
         php artisan key:generate
         php artisan storage:link
-        php artisan migrate --seed
 
     - name: NPM build
       run: npm run prod
@@ -195,8 +194,7 @@ jobs:
           APP_IMAGE=$IMAGE docker compose pull app
           sed -i 's|^APP_IMAGE=.*|APP_IMAGE=$IMAGE|' .env
           ./backup.sh < /dev/null
+          docker compose run --rm -T app php artisan migrate --force < /dev/null
           docker compose up -d
-          docker compose exec -T app php artisan migrate --force < /dev/null
-          docker compose exec -T app php artisan optimize < /dev/null
           docker compose exec -T app php artisan reload < /dev/null
           docker image prune -af --filter until=168h"
