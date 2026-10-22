@@ -3,10 +3,9 @@
 namespace Tests\Feature\EventLogListeners;
 
 use App\Events\MemberKindChanged;
-use App\Listeners\LogMemberKindChanged;
+use App\Listeners\LogUserEvent;
 use App\Models\User;
 use App\Models\UserEventLogEntry;
-use App\Repositories\UserEventLogEntryRepository;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Lang;
 use InvalidArgumentException;
@@ -58,7 +57,7 @@ class LogMemberKindChangedTest extends TestCase
         
         $this->assertEquals(0, UserEventLogEntry::all()->count());
         
-        $listener = new LogMemberKindChanged($this->app->make(UserEventLogEntryRepository::class));
+        $listener = new LogUserEvent();
         $listener->handle($event);
         
         $this->assertEquals(1, UserEventLogEntry::all()->count());

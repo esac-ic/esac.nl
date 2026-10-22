@@ -2,7 +2,7 @@
 
 namespace Tests\Feature\User;
 
-use App\CustomClasses\MailList\MailListFacade;
+use App\Services\Mailman;
 use App\Enums\Role;
 use App\Events\MemberKindChanged;
 use App\Models\User;
@@ -56,7 +56,7 @@ class UpdateUserTest extends TestCase
             'email' => $this->admin->email,
             'firstname' => 'New',
             'lastname' => 'Second',
-            'password' => '', //password doesn't change, but the userRepository errors when password is not present in the request
+            'password' => '', //password doesn't change, but updating the user errors when password is not present in the request
             'street' => 'Second',
             'house_number' => '2',
             'city' => 'Second',
@@ -77,7 +77,7 @@ class UpdateUserTest extends TestCase
         
         Event::fake(); //make sure event listeners are not called
         
-        $mock = $this->mock(MailListFacade::class, function (MockInterface $mock) {
+        $mock = $this->mock(Mailman::class, function (MockInterface $mock) {
             $mock->shouldNotReceive('updateUserEmailFormAllMailList');
         });
         
@@ -117,7 +117,7 @@ class UpdateUserTest extends TestCase
             'email' => 'Second@esac.nl',
             'firstname' => 'New',
             'lastname' => 'Second',
-            'password' => '', //password doesn't change, but the userRepository errors when password is not present in the request
+            'password' => '', //password doesn't change, but updating the user errors when password is not present in the request
             'street' => 'Second',
             'house_number' => '2',
             'city' => 'Second',
@@ -137,7 +137,7 @@ class UpdateUserTest extends TestCase
         
         Event::fake(); //make sure event listeners are not called
         
-        $mock = $this->mock(MailListFacade::class, function (MockInterface $mock) {
+        $mock = $this->mock(Mailman::class, function (MockInterface $mock) {
             $mock->shouldReceive('updateUserEmailForAllMailList')->once();
         });
         
@@ -174,7 +174,7 @@ class UpdateUserTest extends TestCase
             'email' => 'Second@esac.nl',
             'firstname' => 'New',
             'lastname' => 'Second',
-            'password' => '', //password doesn't change, but the userRepository errors when password is not present in the request
+            'password' => '', //password doesn't change, but updating the user errors when password is not present in the request
             'street' => 'Second',
             'house_number' => '2',
             'city' => 'Second',
@@ -193,7 +193,7 @@ class UpdateUserTest extends TestCase
         ];
         
         Event::fake(); //make sure event listeners are not called
-        $mock = $this->mock(MailListFacade::class, function (MockInterface $mock) {
+        $mock = $this->mock(Mailman::class, function (MockInterface $mock) {
             $mock->shouldReceive('updateUserEmailForAllMailList');
         });
         
@@ -233,7 +233,7 @@ class UpdateUserTest extends TestCase
             'firstname' => $this->member->firstname,
             'preposition' => $this->member->preposition,
             'lastname' => $this->member->lastname,
-            'password' => '', //password doesn't change, but the userRepository errors when password is not present in the request
+            'password' => '', //password doesn't change, but updating the user errors when password is not present in the request
             'street' => 'Second',
             'house_number' => '2',
             'city' => 'Second',
@@ -254,7 +254,7 @@ class UpdateUserTest extends TestCase
         
         Event::fake(); //make sure event listeners are not called
         
-        $mock = $this->mock(MailListFacade::class, function (MockInterface $mock) {
+        $mock = $this->mock(Mailman::class, function (MockInterface $mock) {
             $mock->shouldReceive('updateUserEmailForAllMailList')->once();
         });
         
@@ -295,7 +295,7 @@ class UpdateUserTest extends TestCase
             'firstname' => 'Second',
             'preposition' => 'Second',
             'lastname' => 'Second',
-            'password' => '', //password doesn't change, but the userRepository errors when password is not present in the request
+            'password' => '', //password doesn't change, but updating the user errors when password is not present in the request
             'street' => 'Second',
             'house_number' => '2',
             'city' => 'Second',
@@ -322,7 +322,7 @@ class UpdateUserTest extends TestCase
         
         Event::fake(); //make sure event listeners are not called
         
-        $mock = $this->mock(MailListFacade::class, function (MockInterface $mock) {
+        $mock = $this->mock(Mailman::class, function (MockInterface $mock) {
             $mock->shouldReceive('updateUserEmailForAllMailList')->once();
         });
         
@@ -364,7 +364,7 @@ class UpdateUserTest extends TestCase
             'firstname' => $this->member->firstname,
             'preposition' => $this->member->preposition,
             'lastname' => $this->member->lastname,
-            'password' => '', //password doesn't change, but the userRepository errors when password is not present in the request
+            'password' => '', //password doesn't change, but updating the user errors when password is not present in the request
             'street' => 'Second',
             'house_number' => '2',
             'city' => 'Second',
@@ -387,7 +387,7 @@ class UpdateUserTest extends TestCase
         
         $oldAdminAttributes = User::find($this->admin->id)->getAttributes();
         
-        $mock = $this->mock(MailListFacade::class, function (MockInterface $mock) {
+        $mock = $this->mock(Mailman::class, function (MockInterface $mock) {
             $mock->shouldNotReceive('updateUserEmailFormAllMailList');
         });
         

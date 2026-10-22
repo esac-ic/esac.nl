@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use App\Models\Certificate;
 use App\Models\User;
-use App\Repositories\UserRepository;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -21,15 +20,6 @@ class UserCertificateController extends Controller implements HasMiddleware
         ];
     }
 
-    /**
-     * Create a new controller instance.
-     *
-     * @return void
-     */
-    public function __construct(private readonly UserRepository $_userRepository)
-    {
-    }
-
     public function addCertificate(Request $request, User $user): View
     {
         $fields = ['title' => 'Add certificate',
@@ -38,7 +28,7 @@ class UserCertificateController extends Controller implements HasMiddleware
 
         $certificates = [];
 
-        $userCertificates = $this->_userRepository->getUserCertificates($user->id);
+        $userCertificates = $user->certificates;
 
         foreach (Certificate::all() as $cetificate) {
             if (!$userCertificates->contains($cetificate)) {
@@ -54,7 +44,7 @@ class UserCertificateController extends Controller implements HasMiddleware
     public function saveCertificate(Request $request, User $user): RedirectResponse
     {
         $this->validateInput($request);
-        $this->_userRepository->addCertificate($user->id, $request->all());
+        $user->certificates()->attach($request->input('certificate_id'));
 
         return to_route('users.show', $user);
     }
@@ -80,7 +70,7 @@ class UserCertificateController extends Controller implements HasMiddleware
     {
         $this->validateInput($request);
         $user->certificates()->detach($certificate->id);
-        $this->_userRepository->addCertificate($user->id, $request->all());
+        $user->certificates()->attach($request->input('certificate_id'));
         return to_route('users.show', $user);
     }
 

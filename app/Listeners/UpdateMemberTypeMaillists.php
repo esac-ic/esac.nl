@@ -2,7 +2,7 @@
 
 namespace App\Listeners;
 
-use App\CustomClasses\MailList\MailListFacade;
+use App\Services\Mailman;
 use App\Events\MemberBecameOldMember;
 use App\Events\MemberKindChanged;
 use App\Events\OldMemberBecameMember;
@@ -16,7 +16,7 @@ class UpdateMemberTypeMaillists implements ShouldQueue
     /**
      * Create the event listener.
      */
-    public function __construct(private readonly MailListFacade $mailListFacade)
+    public function __construct(private readonly Mailman $mailman)
     {
     }
     
@@ -37,10 +37,10 @@ class UpdateMemberTypeMaillists implements ShouldQueue
         $addToLists = $newLists->diff($oldLists);
         
         if ($removeFromLists->isNotEmpty()) {
-            $this->mailListFacade->removeUserFromSpecifiedMailLists($event->user->email, $removeFromLists->all());
+            $this->mailman->removeUserFromSpecifiedMailLists($event->user->email, $removeFromLists->all());
         }
         if ($addToLists->isNotEmpty()) {
-            $this->mailListFacade->addUserToSpecifiedMailLists($event->user->email, $event->user->getName(), $addToLists->all());
+            $this->mailman->addUserToSpecifiedMailLists($event->user->email, $event->user->getName(), $addToLists->all());
         }
     }
     
@@ -73,7 +73,7 @@ class UpdateMemberTypeMaillists implements ShouldQueue
      */
     public function handleMemberBecameOldMember(MemberBecameOldMember $event): void
     {
-        $this->mailListFacade->deleteUserForAllMailList($event->user);
+        $this->mailman->deleteUserForAllMailList($event->user);
     }
     
     /**
@@ -87,7 +87,7 @@ class UpdateMemberTypeMaillists implements ShouldQueue
         $mailLists = collect(self::getMemberTypeMailLists($memberType));
         
         if ($mailLists->isNotEmpty()) {
-            $this->mailListFacade->addUserToSpecifiedMailLists($user->email, $user->getName(), $mailLists->all());
+            $this->mailman->addUserToSpecifiedMailLists($user->email, $user->getName(), $mailLists->all());
         }
     }
     

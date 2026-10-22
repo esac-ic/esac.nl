@@ -2,18 +2,14 @@
 
 namespace Tests\Feature\Events;
 
+use App\Events\LoggableUserEventInterface;
 use App\Events\MemberBecameOldMember;
 use App\Events\MemberKindChanged;
 use App\Events\OldMemberBecameMember;
 use App\Events\PendingUserApproved;
 use App\Events\PendingUserCreated;
 use App\Events\PendingUserRemoved;
-use App\Listeners\LogMemberBecameOldMember;
-use App\Listeners\LogMemberKindChanged;
-use App\Listeners\LogOldMemberBecameMember;
-use App\Listeners\LogPendingUserApproved;
-use App\Listeners\LogPendingUserCreated;
-use App\Listeners\LogPendingUserRemoved;
+use App\Listeners\LogUserEvent;
 use App\Listeners\UpdateMemberTypeMaillists;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -31,24 +27,34 @@ class EventListenersTest extends TestCase
     public static function listeners(): array
     {
         return [
-            'PendingUserCreated' => [PendingUserCreated::class, [LogPendingUserCreated::class]],
-            'PendingUserRemoved' => [PendingUserRemoved::class, [LogPendingUserRemoved::class]],
-            'PendingUserApproved' => [PendingUserApproved::class, [LogPendingUserApproved::class, UpdateMemberTypeMaillists::class.'@handlePendingUserApproved']],
-            'MemberBecameOldMember' => [MemberBecameOldMember::class, [LogMemberBecameOldMember::class, UpdateMemberTypeMaillists::class.'@handleMemberBecameOldMember']],
-            'OldMemberBecameMember' => [OldMemberBecameMember::class, [LogOldMemberBecameMember::class, UpdateMemberTypeMaillists::class.'@handleOldMemberBecameMember']],
-            'MemberKindChanged' => [MemberKindChanged::class, [LogMemberKindChanged::class, UpdateMemberTypeMaillists::class.'@handleMemberKindChanged']],
+            'PendingUserCreated' => [PendingUserCreated::class, []],
+            'PendingUserRemoved' => [PendingUserRemoved::class, []],
+            'PendingUserApproved' => [PendingUserApproved::class, [UpdateMemberTypeMaillists::class.'@handlePendingUserApproved']],
+            'MemberBecameOldMember' => [MemberBecameOldMember::class, [UpdateMemberTypeMaillists::class.'@handleMemberBecameOldMember']],
+            'OldMemberBecameMember' => [OldMemberBecameMember::class, [UpdateMemberTypeMaillists::class.'@handleOldMemberBecameMember']],
+            'MemberKindChanged' => [MemberKindChanged::class, [UpdateMemberTypeMaillists::class.'@handleMemberKindChanged']],
         ];
     }
 
     #[Test]
     #[DataProvider('listeners')]
-    public function the_event_has_each_listener_once(string $event, array $listeners)
+    public function the_event_is_logged_and_has_each_listener_once(string $event, array $listeners)
     {
         Event::fake();
 
+        $this->assertContains(LoggableUserEventInterface::class, class_implements($event));
         foreach ($listeners as $listener) {
             Event::assertListening($event, $listener);
         }
-        $this->assertCount(count($listeners), Event::getRawListeners()[$event]);
+        $this->assertCount(count($listeners), Event::getRawListeners()[$event] ?? []);
+    }
+
+    #[Test]
+    public function the_user_event_log_listens_once_to_every_loggable_event()
+    {
+        Event::fake();
+
+        Event::assertListening(LoggableUserEventInterface::class, LogUserEvent::class);
+        $this->assertCount(1, Event::getRawListeners()[LoggableUserEventInterface::class]);
     }
 }

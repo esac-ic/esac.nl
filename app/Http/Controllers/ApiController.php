@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\MenuItem;
-use App\Repositories\UserRepository;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controllers\HasMiddleware;
 
@@ -14,10 +14,6 @@ class ApiController extends Controller implements HasMiddleware
         return [
             'auth',
         ];
-    }
-
-    public function __construct(private readonly UserRepository $_userRepository)
-    {
     }
 
     public function getMenuItems(Request $request): array
@@ -44,7 +40,7 @@ class ApiController extends Controller implements HasMiddleware
     public function getUsers(): array
     {
         $users = [];
-        foreach ($this->_userRepository->getCurrentUsers(['id', 'email', 'firstname', 'preposition', 'lastname']) as $user) {
+        foreach (User::current()->get(['id', 'email', 'firstname', 'preposition', 'lastname']) as $user) {
             array_push($users, [
                 'id' => $user->id,
                 'name' => $user->getName(),

@@ -4,11 +4,15 @@ namespace App\Models;
 
 use App\Enums\Role;
 use App\Events\MemberBecameOldMember;
+use App\Events\MemberKindChanged;
 use App\Events\OldMemberBecameMember;
 use App\Events\PendingUserApproved;
+use App\Events\PendingUserCreated;
 use App\Events\PendingUserRemoved;
 use App\Models\ApplicationForm\ApplicationResponse;
 use Carbon\Carbon;
+use Illuminate\Database\Eloquent\Attributes\Scope;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
@@ -86,6 +90,91 @@ class User extends Authenticatable
     protected $casts = [
         'birthday' => 'date',
     ];
+
+    /**
+     * Members who are neither old nor pending.
+     */
+    #[Scope]
+    protected function current(Builder $query): void
+    {
+        $query->whereNull('lid_af')->whereNull('pending_user');
+    }
+
+    #[Scope]
+    protected function old(Builder $query): void
+    {
+        $query->whereNotNull('lid_af');
+    }
+
+    #[Scope]
+    protected function pending(Builder $query): void
+    {
+        $query->whereNotNull('pending_user');
+    }
+
+    /**
+     * Makes an unsaved user from the member form's data.
+     *
+     * @param array $data array of mass assignable attribute values
+     * @throws \Exception if birthday parsing fails
+     */
+    public static function fromForm(array $data): self
+    {
+        $user = new self($data);
+        $user->password = bcrypt($user->password);
+        $birthday = new \DateTime($data['birthday']);
+        $user->birthday = Carbon::createFromFormat('d-m-Y H:i', $birthday->format('d-m-Y') . ' ' . $birthday->format('H:i'));
+        $user->incasso = array_key_exists("incasso", $data);
+
+        return $user;
+    }
+
+    /**
+     * Creates a new pending user.
+     * Dispatches a PendingUserCreated event
+     *
+     * @param array $data array with the mass assignable user attributes
+     * @throws \Exception if user birthday parsing fails
+     */
+    public static function createPending(array $data): self
+    {
+        $user = self::fromForm($data);
+
+        //pending user specific
+        $user->pending_user = Carbon::now();
+        $user->kind_of_member = "member";
+        $user->lid_af = null;
+
+        $user->save();
+
+        PendingUserCreated::dispatch($user);
+
+        return $user;
+    }
+
+    /**
+     * Updates the user from the member form's data.
+     * Dispatches a MemberKindChanged event when the kind of member changes.
+     *
+     * @param array $data array of mass assignable attributes to be updated on the user.
+     * @throws \Exception if the birthday parsing fails
+     */
+    public function updateFromForm(array $data): void
+    {
+        $birthday = new \DateTime($data['birthday']);
+        $data['birthday'] = Carbon::createFromFormat('d-m-Y H:i', $birthday->format('d-m-Y') . ' ' . $birthday->format('H:i'));
+        $data['incasso'] = array_key_exists("incasso", $data);
+        $data['password'] = ($data['password'] != "") ? bcrypt($data['password']) : $this->password;
+
+        $oldKindOfMember = $this->kind_of_member;
+
+        $this->update($data); //update before firing the events so mailman can't desync if kind_of_member and email are updated in the same request
+
+        //fire a MemberKindChanged event when the kind_of_member field is updated
+        if ($data['kind_of_member'] != $oldKindOfMember) {
+            MemberKindChanged::dispatch($this, $oldKindOfMember, $data['kind_of_member']);
+        }
+    }
 
     public function roles(): BelongsToMany
     {

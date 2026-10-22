@@ -1,13 +1,13 @@
 @extends('layouts.beheer')
 
 @section('title')
-{{$mailList->getName()}}
+{{$mailList->name}}
 @endsection
 
 @section('content')
     <div class="row mb-3">
         <div class="col-md-6">
-            <h1>{{$mailList->getName()}}</h1>
+            <h1>{{$mailList->name}}</h1>
         </div>
 
         <div class="col-md-6">
@@ -19,7 +19,7 @@
                     <em class="ion-android-arrow-back"></em>  {{'Back'}}
                 </a>
                 <form method="post"
-                      action="{{ route('mailList.destroy', $mailList->getId()) }}"
+                      action="{{ route('mailList.destroy', $mailList->id) }}"
                       onsubmit="return confirm('Are you sure you want to delete the maillist?');"
                 >
                     @csrf
@@ -40,7 +40,7 @@
                         {{'Name'}}
                     </td>
                     <td>
-                        {{$mailList->getName()}}
+                        {{$mailList->name}}
                     </td>
                 </tr>
                 <tr>
@@ -48,7 +48,7 @@
                         {{'Email'}}
                     </td>
                     <td>
-                        {{$mailList->getAddress()}}
+                        {{$mailList->address}}
                     </td>
                 </tr>
                 <tr>
@@ -56,7 +56,7 @@
                         {{'Members count'}}
                     </td>
                     <td>
-                        {{$mailList->getMembersCount()}}
+                        {{$mailList->members_count}}
                     </td>
                 </tr>
             </table>
@@ -68,15 +68,15 @@
                     <td><strong>{{'Management'}}</strong></td>
                 </thead>
                 <tbody>
-                @foreach($mailList->getMembers() as $member)
+                @foreach($mailList->members as $member)
                     <tr>
-                        <td>{{$member->getAddress()}}</td>
-                        <td>{{$member->getName()}}</td>
+                        <td>{{$member->address}}</td>
+                        <td>{{$member->name}}</td>
                         <td>
                             <a href="#"
                                id="deleteMember"
-                               data-mailList-id="{{$mailList->getId()}}"
-                               data-member-email="{{$member->getAddress()}}"
+                               data-mailList-id="{{$mailList->id}}"
+                               data-member-email="{{$member->address}}"
                             >
                                 <em class="ion-trash-a"></em>
                             </a>
@@ -110,7 +110,7 @@
             const mailListId = $(this).attr('data-mailList-id');
             const memberEmail = $(this).attr('data-member-email');
             
-            if (confirm('Are you sure you want to remove this member from {{$mailList->getAddress()}}?'))
+            if (confirm('Are you sure you want to remove this member from {{$mailList->address}}?'))
             {
                 $.ajax({
                     url: '{{ route('mailList.members.destroy', ['__list__', '__member__']) }}'.replace('__list__', mailListId).replace('__member__', memberEmail),
