@@ -22,6 +22,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
@@ -60,28 +61,28 @@ use RuntimeException;
 ])]
 class User extends Authenticatable
 {
-    use Notifiable, HasFactory, SoftDeletes;
-    
+    use HasFactory, Notifiable, SoftDeletes;
+
     /**
-     * All possible member types.
-     * use trans('key') for nicely formatted string
-     * 
-     * @var array
+     * All kinds of member, translated in lang/en/kind_of_member.php.
      */
-    public const KINDS_OF_MEMBER = [
-        "member",
-        "extraordinary_member",
-        "reunist",
-        "honorary_member",
-        "member_of_merit",
-        "trainer",
-        "relationship",
+    public const array KINDS_OF_MEMBER = [
+        'member',
+        'extraordinary_member',
+        'reunist',
+        'honorary_member',
+        'member_of_merit',
+        'trainer',
+        'relationship',
     ];
-    
+
     protected function casts(): array
     {
         return [
+            'password' => 'hashed',
             'birthday' => 'date',
+            'lid_af' => 'date:Y-m-d',
+            'pending_user' => 'date:Y-m-d',
         ];
     }
 
@@ -108,35 +109,23 @@ class User extends Authenticatable
 
     /**
      * Makes an unsaved user from the member form's data.
-     *
-     * @param array $data array of mass assignable attribute values
-     * @throws \Exception if birthday parsing fails
      */
     public static function fromForm(array $data): self
     {
-        $user = new self($data);
-        $user->password = bcrypt($user->password);
-        $birthday = new \DateTime($data['birthday']);
-        $user->birthday = Carbon::createFromFormat('d-m-Y H:i', $birthday->format('d-m-Y') . ' ' . $birthday->format('H:i'));
-        $user->incasso = array_key_exists("incasso", $data);
+        $user = new self(Arr::except($data, 'password'));
+        $user->password = $data['password'] ?? null;
+        $user->birthday = Carbon::parse($data['birthday'])->startOfMinute();
+        $user->incasso = array_key_exists('incasso', $data);
 
         return $user;
     }
 
-    /**
-     * Creates a new pending user.
-     * Dispatches a PendingUserCreated event
-     *
-     * @param array $data array with the mass assignable user attributes
-     * @throws \Exception if user birthday parsing fails
-     */
     public static function createPending(array $data): self
     {
         $user = self::fromForm($data);
 
-        //pending user specific
         $user->pending_user = Carbon::now();
-        $user->kind_of_member = "member";
+        $user->kind_of_member = 'member';
         $user->lid_af = null;
 
         $user->save();
@@ -147,24 +136,21 @@ class User extends Authenticatable
     }
 
     /**
-     * Updates the user from the member form's data.
-     * Dispatches a MemberKindChanged event when the kind of member changes.
-     *
-     * @param array $data array of mass assignable attributes to be updated on the user.
-     * @throws \Exception if the birthday parsing fails
+     * Updates the user from the member form's data, keeping the password when none is given.
      */
     public function updateFromForm(array $data): void
     {
-        $birthday = new \DateTime($data['birthday']);
-        $data['birthday'] = Carbon::createFromFormat('d-m-Y H:i', $birthday->format('d-m-Y') . ' ' . $birthday->format('H:i'));
-        $data['incasso'] = array_key_exists("incasso", $data);
-        $data['password'] = ($data['password'] != "") ? bcrypt($data['password']) : $this->password;
+        $data['birthday'] = Carbon::parse($data['birthday'])->startOfMinute();
+        $data['incasso'] = array_key_exists('incasso', $data);
+        if (blank($data['password'] ?? null)) {
+            unset($data['password']);
+        }
 
         $oldKindOfMember = $this->kind_of_member;
 
-        $this->update($data); //update before firing the events so mailman can't desync if kind_of_member and email are updated in the same request
+        // Update before dispatching the event, so Mailman can't desync when the kind of member and email change together.
+        $this->update($data);
 
-        //fire a MemberKindChanged event when the kind_of_member field is updated
         if ($data['kind_of_member'] != $oldKindOfMember) {
             MemberKindChanged::dispatch($this, $oldKindOfMember, $data['kind_of_member']);
         }
@@ -180,17 +166,13 @@ class User extends Authenticatable
         return $this->belongsToMany(Certificate::class)
             ->withTimestamps();
     }
+
     public function applicationResponses(): HasMany
     {
         return $this->hasMany(ApplicationResponse::class);
     }
-    
-    /**
-     * Format birthday
-     *
-     * @return Attribute formatted birthday model attribute
-     */
-    public function birthdayFormatted(): Attribute
+
+    protected function birthdayFormatted(): Attribute
     {
         return Attribute::make(
             get: fn () => $this->birthday->format('d-m-Y'),
@@ -204,34 +186,25 @@ class User extends Authenticatable
                 return true;
             }
         }
+
         return false;
-    }
-    
-    /**
-     * Returns a string of the certificate abbreviations in the format "abbr, abbr, ..."
-     * @return string
-     */
-    public function getCertificationsAbbreviations(): string
-    {
-        $abbreviations = [];
-        foreach ($this->certificates as $certificate) {
-            $abbreviations[] = $certificate->abbreviation;
-        }
-        return implode(', ', $abbreviations);
     }
 
     /**
-     * Checks if a user has role like admin or content administrator
-     * @return bool
+     * The certificate abbreviations, as "abbr, abbr, ...".
      */
+    public function getCertificationsAbbreviations(): string
+    {
+        return $this->certificates->pluck('abbreviation')->implode(', ');
+    }
+
     public function hasBackendRights(): bool
     {
-        return count($this->roles) > 0;
+        return $this->roles->isNotEmpty();
     }
-    
+
     /**
-     * Returns the name in the format "firstname preposition lastname".
-     * @return string
+     * The name as "firstname preposition lastname".
      */
     public function getName(): string
     {
@@ -243,16 +216,12 @@ class User extends Authenticatable
 
         return implode(' ', array_filter($nameParts));
     }
-    
-    /**
-     * Returns the address of the user in the format "street house number".
-     * @return string
-     */
+
     public function getAddress(): string
     {
         return "{$this->street} {$this->house_number}";
     }
-    
+
     public function isOldMember(): bool
     {
         return $this->lid_af !== null;
@@ -265,15 +234,9 @@ class User extends Authenticatable
 
     public function isActiveMember(): bool
     {
-        return ($this->lid_af === null && $this->pending_user === null);
+        return $this->lid_af === null && $this->pending_user === null;
     }
-    
-    /**
-     * Makes a member an inactive/old member.
-     * Dispatches a MemberBecameOldMember event.
-     *
-     * @return void
-     */
+
     public function removeAsActiveMember(): void
     {
         $this->lid_af = Carbon::now();
@@ -284,40 +247,37 @@ class User extends Authenticatable
 
         $this->roles()->detach();
 
-        if (Auth::user()->id === $this->id) {
+        if (Auth::user()->is($this)) {
             Auth::logout();
         }
-        
+
         MemberBecameOldMember::dispatch($this);
     }
-    
+
     /**
-     * Makes a member active.
-     * Dispatches an OldMemberBecameMember event
-     *
-     * @return bool True if operation succeeded
+     * Makes an old member active again; returns false when they're already active or have no email address.
      */
     public function makeActiveMember(): bool
     {
-        if (!$this->email || $this->isActiveMember()) { //don't do anything if the member is already active or doesn't have an email address
-            if ($this->isActiveMember()) Log::notice("User " . $this->getName() . " was attempted to made active, but is already active");
-            if (!$this->email) Log::notice("User " . $this->getName() . " was attempted to made active, but doesn't have an email address");
+        if ($this->isActiveMember()) {
+            Log::notice('User '.$this->getName().' was attempted to made active, but is already active');
+        }
+        if (! $this->email) {
+            Log::notice('User '.$this->getName()." was attempted to made active, but doesn't have an email address");
+        }
+        if (! $this->email || $this->isActiveMember()) {
             return false;
         }
-        
+
         DB::transaction(function () {
             $this->lid_af = null;
             $this->save();
             OldMemberBecameMember::dispatch($this);
         });
+
         return true;
     }
-    
-    /**
-     * Approves a pending member as a member.
-     * Dispatches a PendingUserApproved event.
-     * @return void
-     */
+
     public function approveAsPendingMember(): void
     {
         DB::transaction(function () {
@@ -326,21 +286,16 @@ class User extends Authenticatable
             PendingUserApproved::dispatch($this);
         });
     }
-    
+
     /**
-     * Removes a pending member.
-     * Dispatches a PendingUserRemovedEvent
-     *
-     * @return void
-     * @throws RuntimeException when called on a non-pending member
+     * @throws RuntimeException when the user isn't a pending member
      */
     public function removeAsPendingMember(): void
     {
         if (! $this->isPendingMember()) {
-            throw new RuntimeException("User is not a pending member.");
+            throw new RuntimeException('User is not a pending member.');
         }
         PendingUserRemoved::dispatch($this, $this->getName());
         $this->delete();
     }
-
 }

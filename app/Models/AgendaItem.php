@@ -11,8 +11,8 @@ use Illuminate\Database\Eloquent\Attributes\Scope;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
-use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Support\Facades\Storage;
 
 #[Fillable([
@@ -54,14 +54,11 @@ class AgendaItem extends Model
      */
     public function fillFromForm(array $data): static
     {
-        $starttime = new \DateTime($data['start_date']);
-        $endtime = new \DateTime($data['end_date']);
-        $subscription_endDate = new \DateTime($data['subscription_end_date']);
-        $this->start_date = Carbon::createFromFormat('d-m-Y H:i', $starttime->format('d-m-Y') . ' ' . $starttime->format('H:i'));
-        $this->end_date = Carbon::createFromFormat('d-m-Y H:i', $endtime->format('d-m-Y') . ' ' . $endtime->format('H:i'));
+        $this->start_date = Carbon::parse($data['start_date'])->startOfMinute();
+        $this->end_date = Carbon::parse($data['end_date'])->startOfMinute();
 
         if ($data['applicationForm'] != 0) {
-            $this->subscription_end_date = Carbon::createFromFormat('d-m-Y H:i', $subscription_endDate->format('d-m-Y') . ' ' . $subscription_endDate->format('H:i'));
+            $this->subscription_end_date = Carbon::parse($data['subscription_end_date'])->startOfMinute();
             $this->application_form_id = $data['applicationForm'];
         } else {
             $this->subscription_end_date = null;
@@ -82,7 +79,7 @@ class AgendaItem extends Model
         $newAgendaItem->created_by = $creator->id;
         $newAgendaItem->save();
 
-        if ($this->image_url !== null && $this->image_url !== "") {
+        if ($this->image_url !== null && $this->image_url !== '') {
             $oldPath = $this->image_url;
             $newPath = str_replace($this->id, $newAgendaItem->id, $oldPath);
             Storage::disk('public')->copy($oldPath, $newPath);
@@ -98,42 +95,42 @@ class AgendaItem extends Model
      */
     public function register(int $userId, array $answers): void
     {
-        $applicationResponse = new ApplicationResponse();
+        $applicationResponse = new ApplicationResponse;
         $applicationResponse->agenda_id = $this->id;
         $applicationResponse->inschrijf_form_id = $this->application_form_id;
         $applicationResponse->user_id = $userId;
         $applicationResponse->save();
 
         foreach ($answers as $key => $value) {
-            $applicationResponseRow = new ApplicationResponseRow();
+            $applicationResponseRow = new ApplicationResponseRow;
             $applicationResponseRow->application_response_id = $applicationResponse->id;
             $applicationResponseRow->application_form_row_id = $key;
-            $applicationResponseRow->value = gettype($value) === 'array' ? implode(',', $value) : $value ?? '';
+            $applicationResponseRow->value = is_array($value) ? implode(',', $value) : $value ?? '';
             $applicationResponseRow->save();
         }
     }
 
-    public function getApplicationForm(): HasOne
+    public function getApplicationForm(): BelongsTo
     {
-        return $this->hasOne(ApplicationForm::class, 'id', "application_form_id");
+        return $this->belongsTo(ApplicationForm::class, 'application_form_id');
     }
 
-    public function agendaItemCategory(): HasOne
+    public function agendaItemCategory(): BelongsTo
     {
-        return $this->hasOne(AgendaItemCategory::class, 'id', 'category')->withTrashed();
+        return $this->belongsTo(AgendaItemCategory::class, 'category')->withTrashed();
     }
 
-    public function getCreatedBy(): HasOne
+    public function getCreatedBy(): BelongsTo
     {
-        return $this->hasOne(User::class, 'id', 'created_by');
+        return $this->belongsTo(User::class, 'created_by');
     }
 
-    public function getImageUrl()
+    public function getImageUrl(): string
     {
-        if ($this->image_url != "") {
+        if ($this->image_url != '') {
             return Storage::disk('public')->url($this->image_url);
         } else {
-            return "/img/default_agenda_item_cover.jpg";
+            return '/img/default_agenda_item_cover.jpg';
         }
     }
 

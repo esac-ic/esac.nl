@@ -3,6 +3,7 @@
 namespace App\Providers;
 
 use App\Enums\Role;
+use App\Enums\SettingKey;
 use App\Models\ApplicationForm\ApplicationResponse;
 use App\Models\Setting;
 use App\Models\User;
@@ -15,19 +16,6 @@ use Illuminate\Support\ServiceProvider;
 class AppServiceProvider extends ServiceProvider
 {
     /**
-     * Register any application services.
-     */
-    public function register(): void
-    {
-        $this->app->scoped(Setting::SINGELTONNAME, function () {
-            $setting = new Setting;
-            $setting->initialise();
-
-            return $setting;
-        });
-    }
-
-    /**
      * Bootstrap any application services.
      */
     public function boot(): void
@@ -37,7 +25,7 @@ class AppServiceProvider extends ServiceProvider
         View::composer('includes.menu', MenuComposer::class);
         View::composer('includes.footer', fn ($view) => $view->with(
             'footerPhoneNumber',
-            app(Setting::SINGELTONNAME)->getsetting(Setting::SETTING_FOOTER_PHONE_NR),
+            Setting::valueOf(SettingKey::FooterPhoneNumber),
         ));
     }
 
