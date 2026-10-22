@@ -15,7 +15,7 @@
                 <a href="{{route('agendaItems.edit', $agendaItem)}}" class="btn btn-primary">
                     <em class="ion-edit"></em> {{'Edit'}}
                 </a>
-                @if(app('request')->input('back') != 'false')
+                @if(request('back') != 'false')
                     <a href="{{route('agendaItems.index')}}" class="btn btn-primary">
                         <em class="ion-android-arrow-back"></em> {{'Back'}}
                     </a>
@@ -47,15 +47,15 @@
                 </tr>
                 <tr>
                     <td>{{'Start date'}}</td>
-                    <td>{{\Carbon\Carbon::parse($agendaItem->start_date)->format('d-m-Y h:i')}}</td>
+                    <td>{{ $agendaItem->start_date->format('d-m-Y h:i') }}</td>
                 </tr>
                 <tr>
                     <td>{{'End date'}}</td>
-                    <td>{{\Carbon\Carbon::parse($agendaItem->end_date)->format('d-m-Y h:i')}}</td>
+                    <td>{{ $agendaItem->end_date->format('d-m-Y h:i') }}</td>
                 </tr>
                 <tr>
                     <td>{{'Last possible registration date'}}</td>
-                    <td>{{($agendaItem->subscription_end_date !=null)? \Carbon\Carbon::parse($agendaItem->subscription_end_date)->format('d-m-Y h:i') : ""}}</td>
+                    <td>{{ $agendaItem->subscription_end_date?->format('d-m-Y h:i') }}</td>
                 </tr>
                 <tr>
                     <td>{{'Category'}}</td>

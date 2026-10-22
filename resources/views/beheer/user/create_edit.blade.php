@@ -1,17 +1,11 @@
 @extends('layouts.beheer')
-@use('Illuminate\Support\Carbon')
 
 @section('title')
 {{$fields['title']}}
 @endsection
 
 @section('content')
-    @session('message')
-        <div class="alert alert-success alert-dismissable" role="alert">
-            <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-            {{ $value }}
-        </div>
-    @endsession
+    @include('includes.flash')
 
     @if ($errors->any())
         <ul class="alert alert-danger">
@@ -103,7 +97,7 @@
                 <div class="form-group col-md-6">
                     {{ html()->label('Birthdate', 'birthDay') }}
                     <div class="input-group date" id="birthDayBox" data-target-input="nearest">
-                        <input type='text' class="form-control datetimepicker-input" id="birthDay" name="birthday" data-target="#birthDayBox" value="{{($user != null) ? Carbon::parse($user->birthday)->format('d-m-Y') : now()->format('d-m-Y')}}" required="required">
+                        <input type='text' class="form-control datetimepicker-input" id="birthDay" name="birthday" data-target="#birthDayBox" value="{{ ($user?->birthday ?? now())->format('d-m-Y') }}" required="required">
                         <div class="input-group-append" data-target="#birthDayBox" data-toggle="datetimepicker">
                             <div class="input-group-text"><i class="ion-calendar"></i></div>
                         </div>
