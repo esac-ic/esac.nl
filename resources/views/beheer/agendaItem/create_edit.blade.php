@@ -60,7 +60,6 @@
         $(this).next('.custom-file-label').addClass("selected").html(fileName);
     });
     $('#startDateBox, #endDateBox, #subscription_endDateBox').datetimepicker({
-        locale: 'nl',
         icons: {
             time: 'ion-clock',
             date: 'ion-calendar',

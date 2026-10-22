@@ -19,7 +19,7 @@
         <tbody>
         @foreach($settings as $setting)
             <tr>
-                <td>{{trans('settings.' . $setting->name)}}</td>
+                <td>{{ $setting->name->label() }}</td>
                 <td>
                     {{$setting->value}}
                 </td>

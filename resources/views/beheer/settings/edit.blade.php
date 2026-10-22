@@ -8,7 +8,7 @@
     <x-card title="Edit settings">
         {{ html()->form('PUT', route('beheer.settings.update'))->open() }}
         @foreach($settings as $setting)
-            <x-field :name="'setting['.$setting->name.']'" :label="trans('settings.'.$setting->name)" :value="$setting->value" />
+            <x-field :name="'setting['.$setting->name->value.']'" :label="$setting->name->label()" :value="$setting->value" />
         @endforeach
     </x-card>
 

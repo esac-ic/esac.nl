@@ -52,7 +52,6 @@
 
     <script type="module">
         $('#startDateBox, #endDateBox').datetimepicker({
-            locale: 'nl',
             icons: {
                 time: 'ion-clock',
                 date: 'ion-calendar',

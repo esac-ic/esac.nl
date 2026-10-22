@@ -30,7 +30,7 @@
         <div class="form-row">
             <x-field name="zipcode" label="Postal code" :value="$user->zipcode" col="4" required />
             <x-field name="city" label="City" :value="$user->city" col="4" required />
-            <x-field name="country" label="Country" :options="trans('countries')" :value="$user->country ?? 'NL'" col="4" required />
+            <x-field name="country" label="Country" :options="config('countries')" :value="$user->country ?? 'NL'" col="4" required />
         </div>
         <div class="form-row">
             <x-field name="phone_number" label="Phone number" :value="$user->phone_number" col="6" required />
@@ -62,7 +62,7 @@
         <div class="form-row">
             <x-field name="emergency_zipcode" label="Emergency postal code" :value="$user->emergency_zipcode" col="4" required />
             <x-field name="emergency_city" label="Emergency city" :value="$user->emergency_city" col="4" required />
-            <x-field name="emergency_country" label="Emergency country" :options="trans('countries')" :value="$user->emergency_country ?? 'NL'" col="4" required />
+            <x-field name="emergency_country" label="Emergency country" :options="config('countries')" :value="$user->emergency_country ?? 'NL'" col="4" required />
         </div>
         <x-field name="emergency_number" label="Emergency phone number" :value="$user->emergency_number" required />
     </x-card>
@@ -90,7 +90,6 @@
     @vite(['resources/assets/js/vendor/moment.js', 'resources/assets/js/vendor/tempusdominus.js'])
     <script type="module">
         $('#birthDayBox').datetimepicker({
-            locale: 'nl',
             format: 'L',
             icons: {
                 time: 'ion-clock',

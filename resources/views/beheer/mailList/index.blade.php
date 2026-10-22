@@ -18,7 +18,7 @@ Mailing list
             New mailing list
         </a>
     </x-page-header>
-    <x-data-table :columns="['Name', 'Email', 'Members count', 'Beheer']">
+    <x-data-table :columns="['Name', 'Email', 'Members count', 'Actions']">
         @foreach ($mailLists as $mailingList)
             <tr>
                 <td>{{$mailingList->name}}</td>

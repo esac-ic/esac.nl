@@ -13,7 +13,7 @@ class MenuItemSeeder extends Seeder
     public function run(): void
     {
         $pages = [
-            [MenuItem::HOMEURL, 'Home', false, '<h2 class="card-title">Welcome</h2><p class="card-text">Welkom bij de ESAC, dé studenten klim- en bergsportvereniging van Eindhoven.</p>'],
+            [MenuItem::HOMEURL, 'Home', false, '<h2 class="card-title">Welcome</h2><p class="card-text">Welcome to the ESAC, the student climbing and mountaineering club of Eindhoven.</p>'],
             [MenuItem::AGENDAURL, 'Agenda', false, 'Agenda content'],
             [MenuItem::MEMBERLISTURL, 'Members list', true, 'Members list content'],
             [MenuItem::NEWSURL, 'News', false, 'News content'],

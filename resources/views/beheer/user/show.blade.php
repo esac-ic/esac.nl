@@ -86,7 +86,7 @@ Info of {{ $user->getName() }}
                         <td>Country</td>
                         <td>
                             @isset($user->country)
-                            {{trans('countries.' . $user->country)}}
+                            {{ config('countries.'.$user->country, $user->country) }}
                             @endisset
                         </td>
                     </tr>
@@ -123,7 +123,7 @@ Info of {{ $user->getName() }}
                     <x-detail-row label="Emergency address house number">{{$user->emergency_house_number}}</x-detail-row>
                     <x-detail-row label="Emergency address postal code">{{$user->emergency_zipcode}}</x-detail-row>
                     <x-detail-row label="Emergency address city">{{$user->emergency_city}}</x-detail-row>
-                    <x-detail-row label="Emergency address country">{{trans('countries.' . $user->emergency_country)}}</x-detail-row>
+                    <x-detail-row label="Emergency address country">{{ config('countries.'.$user->emergency_country, $user->emergency_country) }}</x-detail-row>
                     <x-detail-row label="Emergency phone number">{{$user->emergency_number}}</x-detail-row>
                 </table>
             </div>

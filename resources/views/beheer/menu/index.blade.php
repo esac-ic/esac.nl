@@ -8,7 +8,7 @@ Pages
     <x-page-header title="Pages">
         <x-button-link :href="route('beheer.pages.create')" icon="plus">New page</x-button-link>
     </x-page-header>
-    <x-data-table :columns="['Name', 'Sub item of', 'After menu item', 'Beheer']">
+    <x-data-table :columns="['Name', 'Sub item of', 'After menu item', 'Actions']">
         @foreach ($pages as $menu)
             <tr>
                 <td>{{$menu->name}}</td>

@@ -33,7 +33,7 @@ class ICalController extends Controller
                 ->setDescription(
                     html_entity_decode(strip_tags($agendaItem->text)).
                     "\r\n\r\n----------\r\n".
-                    'Meer informatie: '.route('front-end.agenda.detail', $agendaItem)
+                    'More information: '.route('front-end.agenda.detail', $agendaItem)
                 );
             $calendar->addEvent($event);
         }

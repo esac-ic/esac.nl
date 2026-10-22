@@ -31,7 +31,6 @@
     @vite(['resources/assets/js/vendor/datatables.js', 'resources/assets/js/vendor/moment.js', 'resources/assets/js/vendor/tempusdominus.js'])
     <script type="module">
         $('#startDateBox').datetimepicker({
-            locale: 'nl',
             format: "DD-MM-YYYY",
             icons: {
                 time: 'ion-clock',

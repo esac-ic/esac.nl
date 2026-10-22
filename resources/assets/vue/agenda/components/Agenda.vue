@@ -64,7 +64,7 @@ import AgendaPagination from './AgendaPagination.vue';
         data() {
             return {
                 description: window.DESCRIPTION,
-                titleText: 'Activiteiten',
+                titleText: 'Activities',
                 exportText: 'Exporteren',
                 filterText: "Filters",
             }

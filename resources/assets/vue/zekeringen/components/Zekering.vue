@@ -24,7 +24,7 @@
                     <input type="text" class="form-control" id="subZekering" v-model="subZekering" placeholder="...Sub-zekering">
                 </div>
                 <div class="col-auto">
-                    <button class="btn btn-primary" v-on:click="addSubZekering">Voeg toe</button>
+                    <button class="btn btn-primary" v-on:click="addSubZekering">Add</button>
                 </div>
             </div>
         </div>
