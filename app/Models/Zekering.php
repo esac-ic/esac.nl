@@ -25,6 +25,9 @@ class Zekering extends Model
         ];
     }
 
+    /**
+     * @return HasMany<Zekering, $this>
+     */
     public function children(): HasMany
     {
         return $this->hasMany(Zekering::class, 'parent_id', 'id')->whereColumn('id', '!=', 'parent_id')->orderBy('id', 'asc');

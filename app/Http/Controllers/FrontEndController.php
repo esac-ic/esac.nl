@@ -111,7 +111,7 @@ class FrontEndController extends Controller
             'newsItems' => NewsItem::query()->latest('id')->take(3)->get(),
             'content' => $this->pageContent(MenuItem::HOMEURL),
             'curPageName' => 'Home',
-            'agendaItems' => AgendaItem::upcoming()->withCount('getApplicationFormResponses as registrations_count')->take(4)->get(),
+            'agendaItems' => AgendaItem::upcoming()->withCount('registrations')->take(4)->get(),
         ]);
     }
 

@@ -14,7 +14,7 @@ class RegistrationRequest extends FormRequest
 {
     public function rules(): array
     {
-        $rows = $this->agendaItem()->getApplicationForm?->applicationFormRows()->with('applicationFormRowOptions')->get() ?? [];
+        $rows = $this->agendaItem()->applicationForm?->applicationFormRows()->with('applicationFormRowOptions')->get() ?? [];
 
         $rules = [];
         foreach ($rows as $row) {

@@ -46,11 +46,17 @@ class MenuItem extends Model
         ];
     }
 
-    public function partner(): BelongsTo
+    /**
+     * @return BelongsTo<MenuItem, $this>
+     */
+    public function parent(): BelongsTo
     {
         return $this->belongsTo(MenuItem::class, 'parent_id');
     }
 
+    /**
+     * @return BelongsTo<MenuItem, $this>
+     */
     public function afterItem(): BelongsTo
     {
         return $this->belongsTo(MenuItem::class, 'after');

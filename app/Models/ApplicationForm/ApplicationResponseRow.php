@@ -20,14 +20,14 @@ class ApplicationResponseRow extends Model
     /**
      * @return BelongsTo<ApplicationFormRow, $this>
      */
-    public function getApplicationFormRow(): BelongsTo
+    public function formRow(): BelongsTo
     {
         return $this->belongsTo(ApplicationFormRow::class, 'application_form_row_id')->withTrashed();
     }
 
     protected function formattedValue(): Attribute
     {
-        return Attribute::make(get: fn () => match ($this->getApplicationFormRow->type) {
+        return Attribute::make(get: fn () => match ($this->formRow->type) {
             ApplicationFormRow::FORM_TYPE_CHECK_BOX => $this->value === 'on' ? 'Yes' : 'No',
             default => $this->value,
         });

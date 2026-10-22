@@ -26,11 +26,11 @@ class AgendaController extends Controller
         $agendaItemQuery = AgendaItem::query()
             ->with([
                 'agendaItemCategory',
-                'getApplicationForm',
+                'applicationForm',
                 // Only the current user's registration, to show whether they signed up.
-                'getApplicationFormResponses' => fn ($query) => $query->where('user_id', $request->user()?->id),
+                'registrations' => fn ($query) => $query->where('user_id', $request->user()?->id),
             ])
-            ->withCount('getApplicationFormResponses')
+            ->withCount('registrations')
             ->when($request->integer('category'), fn ($query, $category) => $query->where('category', $category))
             ->when($request->date('startDate', 'd-m-Y', config('app.display_timezone'))?->startOfDay()->utc(), fn ($query, $startDate) => $query->where(
                 fn ($query) => $query->where('start_date', '>=', $startDate)->orWhere('end_date', '>=', $startDate)

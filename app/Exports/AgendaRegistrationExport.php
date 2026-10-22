@@ -35,6 +35,6 @@ class AgendaRegistrationExport extends SpreadsheetExport
             'Date of birth',
         ];
 
-        return array_merge($defaultValues, $this->agendaItem->getApplicationForm->applicationFormRows->pluck('name')->all());
+        return array_merge($defaultValues, $this->agendaItem->applicationForm->applicationFormRows->pluck('name')->all());
     }
 }

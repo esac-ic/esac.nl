@@ -23,7 +23,7 @@ class ApplicationResponse extends Model
     /**
      * @return HasMany<ApplicationResponseRow, $this>
      */
-    public function getApplicationFormResponseRows(): HasMany
+    public function rows(): HasMany
     {
         return $this->hasMany(ApplicationResponseRow::class, 'application_response_id')->withTrashed();
     }

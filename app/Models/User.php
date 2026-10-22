@@ -150,17 +150,26 @@ class User extends Authenticatable
         }
     }
 
+    /**
+     * @return BelongsToMany<Rol, $this>
+     */
     public function roles(): BelongsToMany
     {
         return $this->belongsToMany(Rol::class);
     }
 
+    /**
+     * @return BelongsToMany<Certificate, $this>
+     */
     public function certificates(): BelongsToMany
     {
         return $this->belongsToMany(Certificate::class)
             ->withTimestamps()->withTrashed();
     }
 
+    /**
+     * @return HasMany<ApplicationResponse, $this>
+     */
     public function applicationResponses(): HasMany
     {
         return $this->hasMany(ApplicationResponse::class);
