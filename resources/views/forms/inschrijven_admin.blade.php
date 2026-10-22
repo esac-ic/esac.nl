@@ -14,7 +14,7 @@
 
             <div class="my-4">
                 {{ html()->submit('Submit')->class('btn btn-primary') }}
-                <a class="btn btn-danger btn-close" href="{{route('beheer.agenda-items.registrations.index', $agendaItem)}}">{{'Cancel'}}</a>
+                <a class="btn btn-danger btn-close" href="{{route('beheer.agenda-items.registrations.index', $agendaItem)}}">Cancel</a>
             </div>
         {{ html()->form()->close() }}
     </div>

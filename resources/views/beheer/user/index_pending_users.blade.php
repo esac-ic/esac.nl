@@ -1,12 +1,10 @@
 @extends('layouts.beheer')
 
 @section('title')
-{{'Pending users'}}
+Pending users
 @endsection
 
 @section('content')
-    @include('includes.flash')
-
     <x-page-header title="Pending users" />
     <x-data-table :columns="['Name', 'Email address', 'Type of member', 'Beheer']">
         @foreach ($users as $user)

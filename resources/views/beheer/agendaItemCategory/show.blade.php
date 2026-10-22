@@ -1,7 +1,7 @@
 @extends('layouts.beheer')
 
 @section('title')
-{{'Event category'}}
+Event category
 @endsection
 
 @section('content')

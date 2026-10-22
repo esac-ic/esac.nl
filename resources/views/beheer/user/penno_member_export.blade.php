@@ -1,11 +1,10 @@
 @extends('layouts.beheer')
 
 @section('title')
-{{'Penno export'}}
+Penno export
 @endsection
 
 @section('content')
-    @include('includes.flash')
     <x-validation-errors />
 
     <x-card title="Penno export">
@@ -16,6 +15,6 @@
     <div class="my-4">
         {{ html()->submit('Download')->class('btn btn-primary') }}
         {{ html()->form()->close() }}
-        <a class="btn btn-danger btn-close" href="{{ route("beheer.users.index") }}">{{'Back'}}</a>
+        <a class="btn btn-danger btn-close" href="{{ route("beheer.users.index") }}">Back</a>
     </div>
 @endsection

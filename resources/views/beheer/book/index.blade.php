@@ -1,12 +1,10 @@
 @extends('layouts.beheer')
 
 @section('title')
-{{'Books'}}
+Books
 @endsection
 
 @section('content')
-    @include('includes.flash')
-
     <x-page-header title="Books">
         <x-button-link :href="route('beheer.books.create')" icon="plus">New book</x-button-link>
         <x-button-link :href="route('beheer.books.export')" icon="android-download">Export books</x-button-link>

@@ -1,7 +1,7 @@
 @extends('layouts.beheer')
 
 @section('title')
-{{'Books'}}
+Books
 @endsection
 
 @section('content')

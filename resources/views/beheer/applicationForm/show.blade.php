@@ -13,17 +13,17 @@
     <x-card title="Form rows" class="mt-4">
         <table class="table table-striped" style="width:100%">
             <thead>
-            <th>{{'Name'}}</td>
-            <th>{{'Row type'}}</td>
-            <th>{{'Value required'}}</td>
-            <th>{{'Options'}}</td>
+            <th>Name</td>
+            <th>Row type</td>
+            <th>Value required</td>
+            <th>Options</td>
             </thead>
             <tbody>
             @foreach($applicationForm->applicationFormRows as $row)
                 <tr>
                     <td>{{$row->name}}</td>
                     <td>{{$row->type}}</td>
-                    <td>{{($row->required == 1)? 'Yes': 'No'}}</td>
+                    <td>{{ $row->required ? 'Yes' : 'No' }}</td>
                     <td>
                         @if ($row->applicationFormRowOptions->count() > 0)
                             <ul>

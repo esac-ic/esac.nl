@@ -3,7 +3,6 @@
 @section('title', 'Add an application form')
 
 @section('content')
-    @include('includes.flash')
     <x-validation-errors />
 
     <div id="app">
@@ -20,7 +19,7 @@
             <div class="my-4">
                 {{ html()->submit('Save')->class('btn btn-primary') }}
                 <a class="btn btn-danger btn-close" href="{{ $applicationForm->exists ? route('beheer.application-forms.show', $applicationForm) : route('beheer.application-forms.index') }}">
-                    {{'Cancel'}}
+                    Cancel
                 </a>
             </div>
         {{ html()->form()->close() }}

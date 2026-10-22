@@ -18,10 +18,10 @@
     <div class="col-sm-8 pr-sm-5">
         <div class="row justify-content-between mb-4">
             <div class="col-auto">
-                <h3>{{'Latest news'}}</h3>
+                <h3>Latest news</h3>
             </div>
             <div class="col-auto">
-                <a href="{{ route('front-end.news') }}" class="btn btn-outline-primary">{{'See more'}}</a>
+                <a href="{{ route('front-end.news') }}" class="btn btn-outline-primary">See more</a>
             </div>
         </div>
         <div class="row d-flex align-items-stretch align-items-center">
@@ -32,7 +32,7 @@
                   @if($newsItem->image_url != "")
                     <img class="card-img-top" src="{{$newsItem->getImageUrl()}}" alt="Card image cap">
                   @endif
-                    <span class="card-date position-absolute bg-light py-1 px-3 rounded">{{ $newsItem->created_at->tz(config('app.display_timezone'))->format('d M') }}</span>
+                    <span class="card-date position-absolute bg-light py-1 px-3 rounded"><x-local-time :value="$newsItem->created_at" format="d M" /></span>
                   </div>
                   <div class="card-body">
                     <h4 class="card-title">{{$newsItem->title}}</h4>
@@ -55,10 +55,10 @@
     <div class="col-sm-4 mt-5 mt-sm-0">
         <div class="row justify-content-between mb-4">
             <div class="col-auto">
-                <h3>{{'Activities'}}</h3>
+                <h3>Activities</h3>
             </div>
             <div class="col-auto">
-                <a href="{{ route('front-end.agenda') }}" class="btn btn-outline-primary">{{'See more'}}</a>
+                <a href="{{ route('front-end.agenda') }}" class="btn btn-outline-primary">See more</a>
             </div>
         </div>
         <div class="row d-flex align-items-stretch align-items-center">
@@ -84,12 +84,12 @@
                             </div>
                             <div class="col-auto">
                                 @guest
-                                    {{'Please log in to register'}}
+                                    Please log in to register
                                 @else
                                     @if($agendaItem->canRegister())
-                                        <a class="btn btn-outline-primary" href="{{ route('forms.create', $agendaItem) }}">{{'Register now'}}</a>
+                                        <a class="btn btn-outline-primary" href="{{ route('forms.create', $agendaItem) }}">Register now</a>
                                     @else
-                                        {{'Registration not possible'}}
+                                        Registration not possible
                                     @endif
                                 @endguest
                             </div>

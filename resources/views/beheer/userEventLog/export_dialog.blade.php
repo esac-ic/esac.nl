@@ -4,7 +4,7 @@
         <div class="modal-content">
             
             <div class="modal-header">
-                <h5 class="modal-title">{{'Export event log'}}</h5>
+                <h5 class="modal-title">Export event log</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
@@ -16,7 +16,7 @@
                     
                     <div class="form-row">
                         <div class="form-group">
-                            <label>{{"Event types"}}</label>
+                            <label>Event types</label>
                             @foreach ($eventTypes as $eventType)
                             <div class="form-check">
                                 <input class="form-check-input" type="checkbox" checked name="eventTypes[]" value="{{$eventType}}" id={{$eventType . "Check"}}>
@@ -37,7 +37,7 @@
                     
                     <div class="form-row">
                         <div class="my-4 mx-auto">
-                            <button type="submit" class="btn btn-primary px-4"><i class="ion-android-download"></i> {{"Export to excel"}}</button>
+                            <button type="submit" class="btn btn-primary px-4"><i class="ion-android-download"></i> Export to excel</button>
                         </div>
                     </div>
                 </form>

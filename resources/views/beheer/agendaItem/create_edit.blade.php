@@ -7,7 +7,6 @@
 @endpush
 
 @section('content')
-    @include('includes.flash')
     <x-validation-errors />
 
     {{ html()->form($agendaItem->exists ? 'PATCH' : 'POST', $agendaItem->exists ? route('beheer.agenda-items.update', $agendaItem) : route('beheer.agenda-items.store'))->acceptsFiles()->open() }}
@@ -52,7 +51,7 @@
     <div class="my-4">
         {{ html()->submit('Save')->class('btn btn-primary') }}
         {{ html()->form()->close() }}
-        <a class="btn btn-danger btn-close" href="{{ $agendaItem->exists ? route('beheer.agenda-items.show', $agendaItem) : route('beheer.agenda-items.index') }}">{{'Cancel'}}</a>
+        <a class="btn btn-danger btn-close" href="{{ $agendaItem->exists ? route('beheer.agenda-items.show', $agendaItem) : route('beheer.agenda-items.index') }}">Cancel</a>
     </div>
 @endsection
 

@@ -5,10 +5,7 @@
 @endsection
 
 @section('main')
-@component('includes.menu')
-    @slot('navClass', 'position-fixed bg-dark')
-    @slot('navId', 'scrollNav')
-@endcomponent
+<x-menu nav-class="position-fixed bg-dark" nav-id="scrollNav" />
 @include('includes.header')
 
 {{-- Floats under the menu, so it shows on every page layout --}}

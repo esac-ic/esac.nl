@@ -7,10 +7,10 @@
 @section('content')
     <x-page-header :title="$mailList->name">
         <a href="#" id="addMember" class="btn btn-primary" data-toggle="modal" data-target="#addUserModal">
-            <em class="ion-plus"></em> {{'Add members'}}
+            <em class="ion-plus"></em> Add members
         </a>
         <a href="{{route('beheer.mail-lists.index')}}" class="btn btn-primary">
-            <em class="ion-android-arrow-back"></em>  {{'Back'}}
+            <em class="ion-android-arrow-back"></em>  Back
         </a>
         <form method="post"
               action="{{ route('beheer.mail-lists.destroy', $mailList->id) }}"
@@ -18,7 +18,7 @@
         >
             @csrf
             @method('DELETE')
-            <button type="submit" class="btn btn-danger btn-primary"><em class="ion-trash-a"></em> {{'Remove'}}</button>
+            <button type="submit" class="btn btn-danger btn-primary"><em class="ion-trash-a"></em> Remove</button>
         </form>
     </x-page-header>
     <x-card title="Mailing list" class="mt-4">
@@ -27,12 +27,12 @@
             <x-detail-row label="Email">{{$mailList->address}}</x-detail-row>
             <x-detail-row label="Members count">{{$mailList->members_count}}</x-detail-row>
         </table>
-        <h4> {{'Members'}}</h4>
+        <h4> Members</h4>
         <table id="maillistMembers" class="table table-striped dt-responsive nowrap">
             <thead>
-                <td><strong>{{'Email'}}</strong></td>
-                <td><strong>{{'Name'}}</strong></td>
-                <td><strong>{{'Management'}}</strong></td>
+                <td><strong>Email</strong></td>
+                <td><strong>Name</strong></td>
+                <td><strong>Management</strong></td>
             </thead>
             <tbody>
             @foreach($mailList->members as $member)

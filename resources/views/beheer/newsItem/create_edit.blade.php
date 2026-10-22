@@ -6,7 +6,6 @@
 
 @section('content')
     <div id="app">
-        @include('includes.flash')
         <x-validation-errors />
 
         {{ html()->form($newsItem->exists ? 'PATCH' : 'POST', $newsItem->exists ? route('beheer.news-items.update', $newsItem) : route('beheer.news-items.store'))->acceptsFiles()->open() }}
@@ -21,7 +20,7 @@
                         value="{{ $newsItem->author }}">
                 </auto-complete-field>
             </div>
-            <span>{{'Image'}}</span>
+            <span>Image</span>
             <div class="form-group mt-2">
                 <div class="custom-file">
                     <input type="file" class="custom-file-input" id="thumbnail" name="thumbnail">

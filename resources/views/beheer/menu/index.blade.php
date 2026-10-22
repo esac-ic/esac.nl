@@ -1,12 +1,10 @@
 @extends('layouts.beheer')
 
 @section('title')
-{{'Pages'}}
+Pages
 @endsection
 
 @section('content')
-    @include('includes.flash')
-
     <x-page-header title="Pages">
         <x-button-link :href="route('beheer.pages.create')" icon="plus">New page</x-button-link>
     </x-page-header>

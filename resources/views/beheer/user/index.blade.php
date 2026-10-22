@@ -1,25 +1,23 @@
 @extends('layouts.beheer')
 
 @section('title')
-{{'Member'}}
+Member
 @endsection
 
 @section('content')
-    @include('includes.flash')
-
     <x-page-header title="Current members">
         @can('manage-members')
-            <a href="{{route('beheer.users.create')}}" class="btn btn-primary" title="{{'New user'}}">
+            <a href="{{route('beheer.users.create')}}" class="btn btn-primary" title="New user">
                 <span class="ion-person-add" aria-hidden="true"></span>
-                {{'New user'}}
+                New user
             </a>
-            <a href="{{route('beheer.penno-export.create')}}" class="btn btn-primary" title="{{'Export only the fields needed for the financial administration'}}" >
+            <a href="{{route('beheer.penno-export.create')}}" class="btn btn-primary" title="Export only the fields needed for the financial administration" >
                 <span class="ion-android-download" aria-hidden="true"></span>
-                {{'Penno export'}}
+                Penno export
             </a>
-            <a href="{{route('beheer.users.export')}}" class="btn btn-primary" title="{{'Export all active members'}}">
+            <a href="{{route('beheer.users.export')}}" class="btn btn-primary" title="Export all active members">
                 <span class="ion-android-download" aria-hidden="true"></span>
-                {{'Export members'}}
+                Export members
             </a>
         @endcan
     </x-page-header>
@@ -38,7 +36,7 @@
         @endforeach
     </x-data-table>
 
-    <h5 class="mt-3 mb-0 bold">*{{'Roles'}}</h5>
+    <h5 class="mt-3 mb-0 bold">*Roles</h5>
     <ol>
     @foreach($roles as $role)
         <li>{{$role->name}}</li>

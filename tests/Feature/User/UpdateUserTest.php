@@ -53,7 +53,7 @@ class UpdateUserTest extends TestCase
         $data = self::DETAILS + ['email' => $this->admin->email, 'firstname' => 'New', 'lastname' => 'Second', 'kind_of_member' => $this->admin->kind_of_member->value];
 
         $this->actingAs($this->admin)->patch(route('beheer.users.update', $this->admin), $data)
-            ->assertRedirect(route('beheer.users.show', [$this->admin, 'back' => 'false']));
+            ->assertRedirect(route('beheer.users.show', $this->admin));
 
         Event::assertNotDispatched(MemberKindChanged::class);
         Event::assertNotDispatched(MemberEmailChanged::class);
@@ -65,7 +65,7 @@ class UpdateUserTest extends TestCase
         $data = self::DETAILS + ['email' => 'Second@esac.nl', 'firstname' => 'New', 'lastname' => 'Second', 'kind_of_member' => $this->admin->kind_of_member->value];
 
         $this->actingAs($this->admin)->patch(route('beheer.users.update', $this->admin), $data)
-            ->assertRedirect(route('beheer.users.show', [$this->admin, 'back' => 'false']));
+            ->assertRedirect(route('beheer.users.show', $this->admin));
 
         Event::assertNotDispatched(MemberKindChanged::class);
         Event::assertDispatched(MemberEmailChanged::class);
@@ -101,7 +101,7 @@ class UpdateUserTest extends TestCase
             + Arr::only($this->member->attributesToArray(), ['firstname', 'preposition', 'lastname', 'kind_of_member', 'remark']);
 
         $this->actingAs($this->member)->patch(route('beheer.users.update', $this->member), $data)
-            ->assertRedirect(route('beheer.users.show', [$this->member, 'back' => 'false']));
+            ->assertRedirect(route('beheer.users.show', $this->member));
 
         Event::assertNotDispatched(MemberKindChanged::class);
         Event::assertDispatched(MemberEmailChanged::class);
@@ -114,7 +114,7 @@ class UpdateUserTest extends TestCase
         $data = self::DETAILS + ['email' => 'Second@esac.nl'] + array_fill_keys(array_keys($forbidden), 'Second');
 
         $this->actingAs($this->member)->patch(route('beheer.users.update', $this->member), $data)
-            ->assertRedirect(route('beheer.users.show', [$this->member, 'back' => 'false']));
+            ->assertRedirect(route('beheer.users.show', $this->member));
 
         Event::assertNotDispatched(MemberKindChanged::class);
         Event::assertDispatched(MemberEmailChanged::class);

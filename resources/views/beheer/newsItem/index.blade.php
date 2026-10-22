@@ -1,12 +1,10 @@
 @extends('layouts.beheer')
 
 @section('title')
-{{'News items'}}
+News items
 @endsection
 
 @section('content')
-    @include('includes.flash')
-
     <x-page-header title="News items">
         <x-button-link :href="route('beheer.news-items.create')" icon="plus">New news item</x-button-link>
     </x-page-header>
@@ -15,7 +13,7 @@
             <tr>
                 <td>{{$newsItem->title}}</td>
                 <td>{{$newsItem->author}}</td>
-                <td>{{ $newsItem->created_at->tz(config('app.display_timezone'))->format('d-m-Y H:i') }}</td>
+                <td><x-local-time :value="$newsItem->created_at" /></td>
                 <td>
                     <x-icon-link :href="route('beheer.news-items.edit', $newsItem)" icon="edit" title="Edit news item" />
                     <x-icon-link :href="route('beheer.news-items.show', $newsItem)" icon="eye" title="Show news item" />

@@ -28,14 +28,14 @@
             </div>
             <div class="form-row mt-2" id="menuSettingRow1">
                 <div class="form-group col-md-6">
-                    <label for="itemType"> {{'Item type: '}} </label>
+                    <label for="itemType"> Item type:  </label>
                     <select class="form-control" name="itemType" id="menuType">
-                        <option value="standAlone" @selected($page->parent_id == null)>{{'Standalone menu item'}}</option>
-                        <option value="subItem" @selected($page->parent_id != null)>{{'Sub menu item'}}</option>
+                        <option value="standAlone" @selected($page->parent_id == null)>Standalone menu item</option>
+                        <option value="subItem" @selected($page->parent_id != null)>Sub menu item</option>
                     </select>
                 </div>
                 <div id="parentItemBox" class="col-md-6 hidden">
-                    <label for="parentItem"> {{'If page is a sub page, who is the parent?'}} </label>
+                    <label for="parentItem"> If page is a sub page, who is the parent? </label>
                     <select class="form-control" name="parentItem" id="parentItem">
                         @foreach($pages as $item)
                             <option value="{{$item->id}}" @selected($item->id === $page->parent_id)>{{$item->name}}</option>
@@ -45,7 +45,7 @@
             </div>
             <div class="form-row" id="menuSettingRow2">
                 <div class="form-group col-md-6">
-                    <label for="afterItem"> {{'After which menu item'}} </label>
+                    <label for="afterItem"> After which menu item </label>
                     <select class="form-control" name="afterItem" id="afterItem">
                     </select>
                 </div>

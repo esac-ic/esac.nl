@@ -1,7 +1,7 @@
 @extends('layouts.beheer')
 
 @section('title')
-{{'Roles'}}
+Roles
 @endsection
 
 @section('content')

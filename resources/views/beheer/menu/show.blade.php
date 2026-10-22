@@ -26,7 +26,7 @@ Page
                 @foreach($subItems as $subItem)
                     <tr>
                         @if($loop->first)
-                            <td rowspan="{{ $loop->count }}">{{'Submenu items'}}</td>
+                            <td rowspan="{{ $loop->count }}">Submenu items</td>
                         @endif
                         <td>{{ $subItem->name }}</td>
                     </tr>

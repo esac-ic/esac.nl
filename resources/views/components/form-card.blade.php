@@ -4,7 +4,6 @@
     $method ??= $model->exists ? 'PATCH' : 'POST';
     $cancel ??= $model->exists ? route("$resource.show", $model) : route("$resource.index");
 @endphp
-@include('includes.flash')
 <x-validation-errors />
 
 <div class="card">

@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Collection;
 
 #[Fillable([
     'name',
@@ -70,7 +71,7 @@ class MenuItem extends Model
         $query->where('menu_item', true);
     }
 
-    public static function sortMenuList($menuList): array
+    public static function sortMenuList(Collection $menuList): array
     {
         $newList = [];
         // get a menu item which is not after one

@@ -1,7 +1,7 @@
 @extends('layouts.beheer')
 
 @section('title')
-{{'Certificate'}}
+Certificate
 @endsection
 
 @section('content')

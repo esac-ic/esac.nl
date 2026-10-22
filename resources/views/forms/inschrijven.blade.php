@@ -9,7 +9,7 @@
 
         <div class="my-4">
             {{ html()->submit('Submit')->class('btn btn-primary') }}
-            <a class="btn btn-danger btn-close" href="{{$cancleRoute}}">{{'Cancel'}}</a>
+            <a class="btn btn-danger btn-close" href="{{$cancleRoute}}">Cancel</a>
         </div>
     {{ html()->form()->close() }}
 </div>

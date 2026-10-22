@@ -1,15 +1,13 @@
 @extends('layouts.beheer')
 
 @section('title')
-{{'Event general information'}}
+Event general information
 @endsection
 
 @section('content')
     <x-page-header title="Agenda item">
         <x-edit-button :href="route('beheer.agenda-items.edit', $agendaItem)" />
-        @if(request('back') != 'false')
-            <x-back-button :href="route('beheer.agenda-items.index')" :block="false" />
-        @endif
+        <x-back-button :href="route('beheer.agenda-items.index')" :block="false" />
         <x-delete-button :action="route('beheer.agenda-items.destroy', $agendaItem)" confirm="Are you sure you want to delete this agenda item?" />
     </x-page-header>
     <x-card title="Event general information" class="mt-4">

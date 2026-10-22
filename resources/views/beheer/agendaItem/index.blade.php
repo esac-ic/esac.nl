@@ -1,12 +1,10 @@
 @extends('layouts.beheer')
 
 @section('title')
-    {{'Events'}}
+    Events
 @endsection
 
 @section('content')
-    @include('includes.flash')
-
     <x-page-header title="Events">
         <x-button-link :href="route('beheer.agenda-items.create')" icon="plus">New event</x-button-link>
     </x-page-header>
@@ -92,12 +90,12 @@
 
         function getAgendaItemActions(data) {
             let actions = "";
-            actions += '<a class="mr-1 ml-1" href="' + '{{ route('beheer.agenda-items.edit', '__id__') }}'.replace('__id__', data.id) + '"><span title="{{'Edit event'}}" class="ion-edit font-size-120 icon" aria-hidden="true"></span></a>';
-            actions += '<a class="mr-1 ml-1" href="' + '{{ route('beheer.agenda-items.show', '__id__') }}'.replace('__id__', data.id) + '"><span title="{{'Show event'}}" class="ion-eye font-size-120 icon" aria-hidden="true"></span></a>';
+            actions += '<a class="mr-1 ml-1" href="' + '{{ route('beheer.agenda-items.edit', '__id__') }}'.replace('__id__', data.id) + '"><span title="Edit event" class="ion-edit font-size-120 icon" aria-hidden="true"></span></a>';
+            actions += '<a class="mr-1 ml-1" href="' + '{{ route('beheer.agenda-items.show', '__id__') }}'.replace('__id__', data.id) + '"><span title="Show event" class="ion-eye font-size-120 icon" aria-hidden="true"></span></a>';
             if (data.application_form_id != null) {
-                actions += '<a class="mr-1 ml-1" href="' + '{{ route('beheer.agenda-items.registrations.index', '__id__') }}'.replace('__id__', data.id) + '"><span title="{{'Show sign ups'}}" class="ion-android-list font-size-120 icon" aria-hidden="true"></span></a>';
+                actions += '<a class="mr-1 ml-1" href="' + '{{ route('beheer.agenda-items.registrations.index', '__id__') }}'.replace('__id__', data.id) + '"><span title="Show sign ups" class="ion-android-list font-size-120 icon" aria-hidden="true"></span></a>';
             }
-            actions += '<form class="d-inline" method="POST" action="' + '{{ route('beheer.agenda-items.copy', '__id__') }}'.replace('__id__', data.id) + '"><input type="hidden" name="_token" value="{{ csrf_token() }}"><button type="submit" class="btn btn-link p-0 mr-1 ml-1"><span title="{{'Copy event'}}" class="ion-ios-copy font-size-120 icon" aria-hidden="true"></span></button></form>';
+            actions += '<form class="d-inline" method="POST" action="' + '{{ route('beheer.agenda-items.copy', '__id__') }}'.replace('__id__', data.id) + '"><input type="hidden" name="_token" value="{{ csrf_token() }}"><button type="submit" class="btn btn-link p-0 mr-1 ml-1"><span title="Copy event" class="ion-ios-copy font-size-120 icon" aria-hidden="true"></span></button></form>';
             return actions;
         }
 
