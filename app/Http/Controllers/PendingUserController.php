@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\StorePendingUserRequest;
 use App\Models\User;
-use App\Repositories\UserRepository;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controllers\HasMiddleware;
 use Illuminate\Routing\Controllers\Middleware;
@@ -20,21 +19,10 @@ class PendingUserController extends Controller implements HasMiddleware
         ];
     }
 
-    private UserRepository $_userRepository;
-    /**
-     * Create a new controller instance.
-     *
-     * @return void
-     */
-    public function __construct(UserRepository $userRepository)
-    {
-        $this->_userRepository = $userRepository;
-    }
-
     //pending users view
     public function indexPendingMembers()
     {
-        $users = $this->_userRepository->getPendingUsers(array('id', 'firstname', 'lastname', 'email', 'preposition', 'kind_of_member'));
+        $users = User::pending()->get(['id', 'firstname', 'lastname', 'email', 'preposition', 'kind_of_member']);
 
         return view('beheer.user.index_pending_users', compact('users'));
     }
@@ -42,7 +30,7 @@ class PendingUserController extends Controller implements HasMiddleware
     //store pending user
     public function storePendingUser(StorePendingUserRequest $request)
     {
-        $this->_userRepository->createPendingUser($request->all());
+        User::createPending($request->all());
         
         Session::flash("message", 'Your membership request is pending, we will get back to you as soon as possible');
 

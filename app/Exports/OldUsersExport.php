@@ -2,21 +2,17 @@
 
 namespace App\Exports;
 
-use App\Repositories\UserRepository;
+use App\Models\User;
 use Illuminate\Support\Collection;
 
 class OldUsersExport extends SpreadsheetExport
 {
-    public function __construct(private readonly UserRepository $userRepository)
-    {
-    }
-
     /**
      * @return Collection
      */
     public function collection(): Collection
     {
-        $oldUsers = $this->userRepository->getOldUsers(['id', 'firstname', 'preposition', 'lastname', 'created_at', 'lid_af']);
+        $oldUsers = User::old()->get(['id', 'firstname', 'preposition', 'lastname', 'created_at', 'lid_af']);
 
         return $oldUsers->map(fn ($user) => $user->toArray());
     }

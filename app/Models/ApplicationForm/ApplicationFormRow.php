@@ -63,6 +63,28 @@ class ApplicationFormRow extends Model
     {
         return $this->hasMany(ApplicationFormRowOption::class);
     }
+
+    /**
+     * Updates the options that have an id, adds those that don't and deletes the options that aren't given.
+     */
+    public function syncOptions(array $options): void
+    {
+        $optionIds = [];
+
+        foreach ($options as $optionData) {
+            if (array_key_exists('id', $optionData)) {
+                $option = ApplicationFormRowOption::find($optionData['id']);
+                $option->update($optionData);
+            } else {
+                $option = $this->applicationFormRowOptions()->create($optionData);
+            }
+            $optionIds[] = $option->id;
+        }
+
+        $this->applicationFormRowOptions()
+            ->whereNotIn('id', $optionIds)
+            ->delete();
+    }
     /**
      * @return array
      */

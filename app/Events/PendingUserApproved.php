@@ -18,4 +18,14 @@ class PendingUserApproved implements LoggableUserEventInterface
     {
         //
     }
+
+    public function logDetails(): string
+    {
+        return $this->user->getName() . " was approved as a member";
+    }
+
+    public function loggedUser(): ?User
+    {
+        return $this->user;
+    }
 }

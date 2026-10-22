@@ -2,11 +2,11 @@
 
 namespace App\Providers;
 
-use App\CustomClasses\MenuSingleton;
 use App\Enums\Role;
 use App\Models\ApplicationForm\ApplicationResponse;
 use App\Models\Setting;
 use App\Models\User;
+use App\View\Composers\MenuComposer;
 use Illuminate\Auth\Access\Response;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\View;
@@ -19,8 +19,6 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register(): void
     {
-        $this->app->scoped(MenuSingleton::MENUSINGLETON, fn () => new MenuSingleton);
-
         $this->app->scoped(Setting::SINGELTONNAME, function () {
             $setting = new Setting;
             $setting->initialise();
@@ -36,7 +34,7 @@ class AppServiceProvider extends ServiceProvider
     {
         $this->defineGates();
 
-        View::composer('includes.menu', fn ($view) => $view->with('menu', app(MenuSingleton::MENUSINGLETON)));
+        View::composer('includes.menu', MenuComposer::class);
         View::composer('includes.footer', fn ($view) => $view->with(
             'footerPhoneNumber',
             app(Setting::SINGELTONNAME)->getsetting(Setting::SETTING_FOOTER_PHONE_NR),

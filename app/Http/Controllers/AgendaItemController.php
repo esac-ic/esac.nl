@@ -4,8 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\AgendaItem;
 use App\Models\AgendaItemCategory;
-use App\Repositories\AgendaItemRepository;
-use App\Repositories\ApplicationFormRepositories\ApplicationFormRepository;
+use App\Models\ApplicationForm\ApplicationForm;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -26,12 +25,6 @@ class AgendaItemController extends Controller implements HasMiddleware
         ];
     }
 
-    public function __construct(
-        private readonly AgendaItemRepository $_agendaItemRepository,
-        private readonly ApplicationFormRepository $_applicationFormRepository
-    ) {
-    }
-
     public function index(): View
     {
         return view('beheer.agendaItem.index');
@@ -46,7 +39,10 @@ class AgendaItemController extends Controller implements HasMiddleware
     public function store(Request $request): RedirectResponse
     {
         $this->validateInput($request);
-        $agendaItem = $this->_agendaItemRepository->create($request->all());
+        $agendaItem = new AgendaItem($request->all())->fillFromForm($request->all());
+        $agendaItem->image_url = "";
+        $agendaItem->created_by = $request->user()->id;
+        $agendaItem->save();
         $this->handleImage($request, $agendaItem);
         Session::flash("message", 'Event added');
         return to_route('agendaItems.index');
@@ -66,22 +62,31 @@ class AgendaItemController extends Controller implements HasMiddleware
     public function update(Request $request, AgendaItem $agendaItem): RedirectResponse
     {
         $this->validateInput($request);
-        $this->_agendaItemRepository->update($agendaItem->id, $request->all());
+        $agendaItem->title = $request->input('title');
+        $agendaItem->text = $request->input('text');
+        $agendaItem->short_description = $request->input('short_description');
+        $agendaItem->category = $request->input('category');
+        $agendaItem->fillFromForm($request->all())->save();
         $this->handleImage($request, $agendaItem);
         Session::flash("message", 'Event edited');
         return to_route('agendaItems.index');
     }
 
-    public function destroy($id): RedirectResponse
+    public function destroy(AgendaItem $agendaItem): RedirectResponse
     {
-        $this->_agendaItemRepository->delete($id);
+        $agendaItem->delete();
+
+        if ($agendaItem->image_url != "") {
+            Storage::disk('public')->delete($agendaItem->image_url);
+        }
+
         Session::flash("message", 'Event removed');
         return to_route('agendaItems.index');
     }
 
-    public function copy(AgendaItem $agendaItem): RedirectResponse
+    public function copy(Request $request, AgendaItem $agendaItem): RedirectResponse
     {
-        $newAgendaItem = $this->_agendaItemRepository->copy($agendaItem);
+        $newAgendaItem = $agendaItem->copyFor($request->user());
         return to_route('agendaItems.edit', $newAgendaItem);
     }
 
@@ -136,7 +141,7 @@ class AgendaItemController extends Controller implements HasMiddleware
     private function getForms(): array
     {
         $forms = [];
-        foreach ($this->_applicationFormRepository->all(['id', 'name']) as $form) {
+        foreach (ApplicationForm::all(['id', 'name']) as $form) {
             $forms[$form->id] = $form->name;
         }
         return $forms;

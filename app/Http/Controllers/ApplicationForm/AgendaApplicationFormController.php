@@ -7,9 +7,8 @@ use App\Http\Controllers\Controller;
 use App\Http\Resources\ApplicationFormRowVueResource;
 use App\Models\AgendaItem;
 use App\Models\ApplicationForm\ApplicationResponse;
+use App\Models\ApplicationForm\ApplicationResponseRow;
 use App\Models\User;
-use App\Repositories\ApplicationFormRepositories\ApplicationFormRegistrationRepository;
-use App\Repositories\UserRepository;
 use App\Services\AgendaApplicationFormService;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -43,7 +42,7 @@ class AgendaApplicationFormController extends Controller implements HasMiddlewar
         return view("forms.inschrijven_show", compact('users', 'agendaItemId'));
     }
 
-    public function registerUser(AgendaItem $agendaItem, UserRepository $userRepository): View
+    public function registerUser(AgendaItem $agendaItem): View
     {
         //retrieves all the rows of the form
         $applicationForm = $agendaItem->getApplicationForm;
@@ -55,7 +54,7 @@ class AgendaApplicationFormController extends Controller implements HasMiddlewar
             array_push($registeredUsers, $registeredUser->user_id);
         }
 
-        foreach ($userRepository->getCurrentUsers(['id', 'firstname', 'lastname']) as $user) {
+        foreach (User::current()->get(['id', 'firstname', 'lastname']) as $user) {
             if (!in_array($user->id, $registeredUsers)) {
                 $users[$user->id] = $user->getName();
             }
@@ -66,15 +65,11 @@ class AgendaApplicationFormController extends Controller implements HasMiddlewar
     /**
      * @param Request $request
      * @param AgendaItem $agendaItem
-     * @param ApplicationFormRegistrationRepository $repository
      * @return RedirectResponse
      */
-    public function saveRegistration(
-        Request $request,
-        AgendaItem $agendaItem,
-        ApplicationFormRegistrationRepository $repository
-    ): RedirectResponse {
-        $repository->storeRegistration($request->except(['_token', 'user']), $agendaItem, $request['user']);
+    public function saveRegistration(Request $request, AgendaItem $agendaItem): RedirectResponse
+    {
+        $agendaItem->register($request['user'], $request->except(['_token', 'user']));
 
         return to_route('forms.users.index', $agendaItem);
     }
@@ -82,12 +77,15 @@ class AgendaApplicationFormController extends Controller implements HasMiddlewar
     /**
      * @param User $user
      * @param AgendaItem $agendaItem
-     * @param ApplicationFormRegistrationRepository $repository
      * @return View
      */
-    public function show(User $user, AgendaItem $agendaItem, ApplicationFormRegistrationRepository $repository): View
+    public function show(User $user, AgendaItem $agendaItem): View
     {
-        $applicationDataRows = $repository->getApplicationInformation($agendaItem->id, $user->id);
+        $applicationResponse = ApplicationResponse::query()
+            ->where('agenda_id', $agendaItem->id)
+            ->where('user_id', $user->id)
+            ->firstOrFail();
+        $applicationDataRows = ApplicationResponseRow::where('application_response_id', $applicationResponse->id)->get();
         $agendaId = $agendaItem->id;
 
         return view('forms.inschrijven_details', compact('agendaId', 'applicationDataRows'));

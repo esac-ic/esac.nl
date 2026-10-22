@@ -2,7 +2,7 @@
 
 namespace App\Jobs;
 
-use App\CustomClasses\MailList\MailListFacade;
+use App\Services\Mailman;
 use App\Listeners\UpdateMemberTypeMaillists;
 use App\Models\User;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -19,7 +19,7 @@ class MemberMassMailListSyncJob implements ShouldQueue
     {
     }
     
-    public function handle(MailListFacade $mailListFacade): void
+    public function handle(Mailman $mailman): void
     {
         \Log::info("Performing a mass mail list sync");
         
@@ -32,7 +32,7 @@ class MemberMassMailListSyncJob implements ShouldQueue
         foreach ($this->users as $user)
         {
             if ($mailListsPerMemberKind[$user->kind_of_member] ?? false) {
-                $mailListFacade->addUserToSpecifiedMailLists($user->email, $user->getName(), $mailListsPerMemberKind[$user->kind_of_member]);
+                $mailman->addUserToSpecifiedMailLists($user->email, $user->getName(), $mailListsPerMemberKind[$user->kind_of_member]);
             }
         }
         

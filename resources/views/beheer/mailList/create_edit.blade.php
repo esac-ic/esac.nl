@@ -20,11 +20,11 @@
         </div>
         <div class="card-body">
             {{ html()->form($fields['method'], $fields['url'])->open() }}
-            <input type="hidden" name="id" value="{{($mailList != null) ? $mailList->getAddress() : ""}}">
+            <input type="hidden" name="id" value="{{($mailList != null) ? $mailList->address : ""}}">
             <div class="form-group">
                 {{ html()->label('Email', 'address') }}
                 <div class="input-group">
-                    {{ html()->text('address', ($mailList != null) ? explode('@',$mailList->getAddress())[0] : "")->class('form-control')->required()->attribute('aria-describedby', 'basic-addon3') }}
+                    {{ html()->text('address', ($mailList != null) ? explode('@',$mailList->address)[0] : "")->class('form-control')->required()->attribute('aria-describedby', 'basic-addon3') }}
                     <div class="input-group-append">
                         <span class="input-group-text" id="basic-addon3">{{ config('services.mailman.domain') }}</span>
                     </div>
