@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Attributes\Scope;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Facades\Auth;
 
@@ -31,12 +32,12 @@ class MenuItem extends Model
     const AGENDAURL = 'agenda';
     const LIBRARYURL = 'library';
 
-    public function partner()
+    public function partner(): HasOne
     {
         return $this->hasOne(MenuItem::class, 'id', 'parent_id');
     }
 
-    public function afterItem()
+    public function afterItem(): HasOne
     {
         return $this->hasOne(MenuItem::class, 'id', 'after');
     }
