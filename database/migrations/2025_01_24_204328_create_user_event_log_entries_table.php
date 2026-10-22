@@ -3,7 +3,6 @@
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
-use App\Enums\UserEventTypes;
 
 return new class extends Migration
 {
@@ -14,8 +13,8 @@ return new class extends Migration
     {
         Schema::create('user_event_log_entries', function (Blueprint $table) {
             $table->id();
-            
-            //custom fields corresponding to the UserEventLogEntry model
+
+            // custom fields corresponding to the UserEventLogEntry model
             $table->string('event_type');
             $table->string('event_details');
             $table->unsignedInteger('user_id')->nullable();

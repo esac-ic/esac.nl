@@ -2,10 +2,10 @@
 
 namespace Tests\Feature\UpdateMemberTypeMaillistsListener;
 
-use App\Services\Mailman;
 use App\Events\MemberBecameOldMember;
 use App\Listeners\UpdateMemberTypeMaillists;
 use App\Models\User;
+use App\Services\Mailman;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Event;
 use Mockery;

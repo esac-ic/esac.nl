@@ -8,18 +8,18 @@ use App\Models\AgendaItemCategory;
 use App\Models\ApplicationForm\ApplicationForm;
 use App\Models\User;
 use Carbon\Carbon;
-use Illuminate\Foundation\Testing\DatabaseMigrations;
+use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Http\UploadedFile;
-use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Storage;
 use PHPUnit\Framework\Attributes\Test;
 use Tests\TestCase;
 
 class CreateAgendaItemTest extends TestCase
 {
-    use DatabaseMigrations;
+    use RefreshDatabase;
 
     private $url = 'agendaItems';
+
     private $agendaItem;
 
     private $user;
@@ -30,25 +30,17 @@ class CreateAgendaItemTest extends TestCase
         $this->user = $user = User::factory()->create();
 
         $this->be($user);
-
-        session()->start();
     }
 
-    protected function tearDown(): void
-    {
-        Artisan::call('migrate:reset');
-        parent::tearDown();
-    }
     #[Test]
-    public function CreateAgendaItem()
+    public function create_agenda_item()
     {
-        //Attach
+        // Attach
         $this->user->roles()->attach(Role::ActivityAdministrator->value);
 
         $agendaItemCategory = AgendaItemCategory::factory()->create();
 
         $body = [
-            '_token' => csrf_token(),
             'title' => 'test agenda',
             'text' => 'test agenda',
             'short_description' => 'test agenda',
@@ -90,14 +82,14 @@ class CreateAgendaItemTest extends TestCase
         $this->assertSame([400, 300], array_slice(getimagesize(Storage::disk('public')->path($agendaItem->image_url)), 0, 2));
     }
 
-    public function CreateAgendaWithIncorrectRole()
+    #[Test]
+    public function create_agenda_with_incorrect_role()
     {
-        //Login as User with incorrect role
+        // Login as User with incorrect role
         $this->user->roles()->detach();
 
         $agendaItemCategory = AgendaItemCategory::factory()->create();
         $body = [
-            '_token' => csrf_token(),
             'title' => 'test agenda',
             'text' => 'test agenda',
             'short_description' => 'test agenda',
@@ -112,13 +104,13 @@ class CreateAgendaItemTest extends TestCase
 
     }
 
-    public function CreateAgendaWithEmptyFields()
+    #[Test]
+    public function create_agenda_with_empty_fields()
     {
         $this->user->roles()->attach(Role::ActivityAdministrator->value);
 
         $agendaItemCategory = AgendaItemCategory::factory()->create();
         $body = [
-            '_token' => csrf_token(),
             'title' => '',
             'text' => 'test agenda',
             'short_description' => 'test agenda',
@@ -129,18 +121,19 @@ class CreateAgendaItemTest extends TestCase
             'start_date' => Carbon::now()->addDays(1),
         ];
         $response = $this->post($this->url, $body);
-        $response->assertStatus(500);
+        $response->assertSessionHasErrors('title');
+        $this->assertSame(0, AgendaItem::count());
     }
 
-    public function CreateAgendaItemWithEmoji()
+    #[Test]
+    public function create_agenda_item_with_emoji()
     {
-        //Attach
+        // Attach
         $this->user->roles()->attach(Role::ActivityAdministrator->value);
 
         $agendaItemCategory = AgendaItemCategory::factory()->create();
 
         $body = [
-            '_token' => csrf_token(),
             'title' => 'test agenda 😀',
             'text' => 'test agenda 😀',
             'short_description' => 'test agenda 😀',

@@ -2,61 +2,51 @@
 
 namespace Tests\Unit;
 
+use App\Models\AgendaItem;
+use App\Models\ApplicationForm\ApplicationForm;
+use App\Models\ApplicationForm\ApplicationFormRow;
 use App\Models\ApplicationForm\ApplicationResponse;
 use App\Models\ApplicationForm\ApplicationResponseRow;
-use Carbon\Carbon;
-use Illuminate\Foundation\Testing\DatabaseMigrations;
-use Illuminate\Support\Facades\Artisan;
+use App\Models\User;
+use Illuminate\Foundation\Testing\RefreshDatabase;
+use PHPUnit\Framework\Attributes\Test;
 use Tests\TestCase;
 
 class RemoveOldApplicationResponseTest extends TestCase
 {
-    use DatabaseMigrations;
+    use RefreshDatabase;
+
+    private ApplicationResponse $applicationResponse;
 
     protected function setUp(): void
     {
         parent::setUp();
-        Artisan::call('db:seed');
 
+        $agendaItem = AgendaItem::factory()->create(['application_form_id' => ApplicationForm::factory()]);
+        $row = ApplicationFormRow::factory()->create(['application_form_id' => $agendaItem->application_form_id]);
+        $agendaItem->register(User::factory()->create()->id, [$row->id => 'answer']);
+        $this->applicationResponse = ApplicationResponse::firstOrFail();
     }
 
-    protected function tearDown(): void
+    #[Test]
+    public function registrations_from_three_years_ago_are_removed()
     {
-        Artisan::call('migrate:reset');
-        parent::tearDown();
+        $this->applicationResponse->forceFill(['created_at' => now()->subYears(3)])->save();
+
+        $this->artisan('remove:oldApplications');
+
+        $this->assertSame(0, ApplicationResponse::withTrashed()->count());
+        $this->assertSame(0, ApplicationResponseRow::withTrashed()->count());
     }
 
-    public function testRemoveOldApplicationResponseFrom3YearsAgo()
+    #[Test]
+    public function registrations_from_a_year_ago_are_kept()
     {
-        $id = 1;
-        $applicationResponse = ApplicationResponse::find($id);
-        $applicationResponse->created_at = Carbon::now()->subYears(3);
-        $applicationResponse->save();
-        $responseRows = $applicationResponse->getApplicationFormResponseRows;
+        $this->applicationResponse->forceFill(['created_at' => now()->subYear()])->save();
 
-        Artisan::call('remove:oldApplications');
+        $this->artisan('remove:oldApplications');
 
-        $this->assertEquals(null, ApplicationResponse::find($id));
-
-        foreach ($responseRows as $row) {
-            $this->assertEquals(null, ApplicationResponseRow::find($row->id));
-        }
-    }
-
-    public function testDontRemoveOldApplicationResponseFrom1YearsAgo()
-    {
-        $id = 1;
-        $applicationResponse = ApplicationResponse::find($id);
-        $applicationResponse->created_at = Carbon::now()->subYears(1);
-        $applicationResponse->save();
-        $responseRows = $applicationResponse->getApplicationFormResponseRows;
-
-        Artisan::call('remove:oldApplications');
-
-        $this->assertNotEquals(null, ApplicationResponse::find($id));
-
-        foreach ($responseRows as $row) {
-            $this->assertNotEquals(null, ApplicationResponseRow::find($row->id));
-        }
+        $this->assertSame(1, ApplicationResponse::count());
+        $this->assertSame(1, ApplicationResponseRow::count());
     }
 }

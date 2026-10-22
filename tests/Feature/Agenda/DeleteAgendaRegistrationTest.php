@@ -5,23 +5,16 @@ namespace Tests\Feature\Agenda;
 use App\Models\ApplicationForm\ApplicationResponse;
 use App\Models\User;
 use Carbon\Carbon;
-use Illuminate\Foundation\Testing\DatabaseMigrations;
-use Illuminate\Support\Facades\Artisan;
+use Illuminate\Foundation\Testing\RefreshDatabase;
 use PHPUnit\Framework\Attributes\Test;
 use Tests\TestCase;
 
 class DeleteAgendaRegistrationTest extends TestCase
 {
-    use DatabaseMigrations;
+    use RefreshDatabase;
 
-    /**
-     * @var string
-     */
     private $url = '/forms/';
 
-    /**
-     * @var User
-     */
     private $user;
 
     protected function setUp(): void
@@ -30,14 +23,6 @@ class DeleteAgendaRegistrationTest extends TestCase
         $this->user = $user = User::factory()->create();
 
         $this->be($user);
-
-        session()->start();
-    }
-
-    protected function tearDown(): void
-    {
-        Artisan::call('migrate:reset');
-        parent::tearDown();
     }
 
     #[Test]
@@ -50,7 +35,7 @@ class DeleteAgendaRegistrationTest extends TestCase
         $agendaItem->subscription_end_date = Carbon::now()->addWeek();
         $agendaItem->save();
 
-        $response = $this->get('forms/' . $agendaItem->id . '/unregister');
+        $response = $this->get('forms/'.$agendaItem->id.'/unregister');
 
         $response->assertStatus(302);
 
@@ -67,7 +52,7 @@ class DeleteAgendaRegistrationTest extends TestCase
         $agendaItem->subscription_end_date = Carbon::now()->subWeek();
         $agendaItem->save();
 
-        $response = $this->get('forms/' . $agendaItem->id . '/unregister');
+        $response = $this->get('forms/'.$agendaItem->id.'/unregister');
 
         $response->assertStatus(302);
 

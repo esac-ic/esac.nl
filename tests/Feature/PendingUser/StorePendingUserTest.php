@@ -28,31 +28,31 @@ class StorePendingUserTest extends TestCase
             'phone_number' => '123456789',
             'emergency_number' => '123456789',
             'emergency_house_number' => '1',
-            'emergency_street' =>  'Initial',
+            'emergency_street' => 'Initial',
             'emergency_city' => 'Initial',
-            'emergency_zipcode' =>  '1111AA',
+            'emergency_zipcode' => '1111AA',
             'emergency_country' => 'Initial',
             'birthday' => '1990-01-01',
-            'iban' =>  '123456789',
+            'iban' => '123456789',
             'g-recaptcha-response' => 'True',
             'incasso' => 'True',
             'privacy_policy' => 'True',
-            'termsconditions' => 'True'
+            'termsconditions' => 'True',
         ];
-        
+
         Event::fake();
         Http::fake(['www.google.com/recaptcha/*' => Http::response(['success' => true])]);
-        
+
         $this->assertEquals(0, User::all()->count());
-        
+
         $response = $this->post(route('user.signup'), $requestData);
-        
+
         $response->assertRedirect(route('front-end.signup'));
         Event::assertDispatched(PendingUserCreated::class);
         $this->assertEquals(1, User::all()->count());
-        
-        $user =  User::first();
-        
+
+        $user = User::first();
+
         $this->assertEquals('initial@esac.nl', $user->email);
         $this->assertEquals('Initial', $user->firstname);
         $this->assertEquals('Initial', $user->lastname);
@@ -69,10 +69,10 @@ class StorePendingUserTest extends TestCase
         $this->assertEquals('1111AA', $user->emergency_zipcode);
         $this->assertEquals('Initial', $user->emergency_country);
         $this->assertEquals('123456789', $user->iban);
-        
+
         $this->assertEquals(new Carbon('1990-01-01'), $user->birthday);
         $this->assertEquals(1, $user->incasso);
-        
+
     }
 
     public function test_a_failed_captcha_is_rejected()

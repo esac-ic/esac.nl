@@ -1,5 +1,4 @@
 @extends('layouts.beheer')
-@use('Illuminate\Support\Carbon')
 
 @section('title')
 {{'Info of ' . $user->getName()}}
@@ -10,14 +9,7 @@
 @endpush
 
 @section('content')
-    @session('message')
-        <div class="alert alert-success alert-dismissible fade show" role="alert">
-            {{ $value }}
-            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                <span aria-hidden="true">&times;</span>
-            </button>
-        </div>
-    @endsession
+    @include('includes.flash')
 
     <div class="row mb-3">
         <div class="col-md-6">
@@ -40,12 +32,14 @@
                     <button type="submit" class="btn btn-danger"><em class="ion-trash-a"></em> {{'Remove as pending'}}</button>
                 </form>
             @else
-                @if($user->isOldMember() && auth()->user()->can('manage-members'))
-                    {{ html()->form('POST', route('users.makeActiveMember', $user))->open() }}
-                    @method('PATCH')
-                        <button type="submit" class="btn btn-success"><em class="ion-plus"></em> {{'Make active member'}}</button>
-                    {{ html()->form()->close() }}
-                @endif
+                @can('manage-members')
+                    @if($user->isOldMember())
+                        {{ html()->form('POST', route('users.makeActiveMember', $user))->open() }}
+                        @method('PATCH')
+                            <button type="submit" class="btn btn-success"><em class="ion-plus"></em> {{'Make active member'}}</button>
+                        {{ html()->form()->close() }}
+                    @endif
+                @endcan
                 <a href="{{route('users.edit', $user)}}" class="btn btn-primary">
                     <span title="{{'Edit'}}" class="ion-edit" aria-hidden="true"></span>
                     {{'Edit'}}
@@ -56,7 +50,7 @@
                         {{'Add certificate'}}
                     </a>
                 @endcan
-                @if(app('request')->input('back') != "false")
+                @if(request('back') != "false")
                     <a href="{{route('users.index')}}" class="btn btn-primary">
                         <span title="{{'Back'}}" class="ion-android-arrow-back" aria-hidden="true"></span>
                         {{'Back'}}
@@ -169,11 +163,11 @@
                         </tr>
                         <tr>
                             <td>{{'User created at'}}</td>
-                            <td>{{ Carbon::parse($user->created_at)->format('d-m-Y') }}</td>
+                            <td>{{ $user->created_at?->format('d-m-Y') }}</td>
                         </tr>
                         <tr>
                             <td>{{'User updated at'}}</td>
-                            <td>{{ Carbon::parse($user->updated_at)->format('d-m-Y') }}</td>
+                            <td>{{ $user->updated_at?->format('d-m-Y') }}</td>
                         </tr>
                         <tr>
                             <td>{{'ID'}}</td>
@@ -182,7 +176,7 @@
                         @isset($user->lid_af)
                         <tr>
                             <td>User removed as active member at</td>
-                            <td>{{ Carbon::parse($user->lid_af)->format('d-m-Y') }}</td>
+                            <td>{{ $user->lid_af->format('d-m-Y') }}</td>
                         </tr>
                         @endisset
                     </table>

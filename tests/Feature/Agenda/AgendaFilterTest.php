@@ -6,23 +6,16 @@ use App\Enums\Role;
 use App\Models\AgendaItem;
 use App\Models\AgendaItemCategory;
 use App\Models\User;
-use Illuminate\Foundation\Testing\DatabaseMigrations;
-use Illuminate\Support\Facades\Artisan;
+use Illuminate\Foundation\Testing\RefreshDatabase;
 use PHPUnit\Framework\Attributes\Test;
 use Tests\TestCase;
 
 class AgendaFilterTest extends TestCase
 {
-    use DatabaseMigrations;
+    use RefreshDatabase;
 
-    /**
-     * @var string
-     */
     private $url = 'api/agenda';
 
-    /**
-     * @var
-     */
     private $user;
 
     protected function setUp(): void
@@ -32,14 +25,6 @@ class AgendaFilterTest extends TestCase
 
         $user->roles()->attach(Role::Administrator->value);
         $this->be($user);
-
-        session()->start();
-    }
-
-    protected function tearDown(): void
-    {
-        Artisan::call('migrate:fresh');
-        parent::tearDown();
     }
 
     #[Test]
@@ -53,19 +38,19 @@ class AgendaFilterTest extends TestCase
         AgendaItem::factory()->create();
         AgendaItem::factory()->create();
 
-        $response = $this->get($this->url . "?category=" . $agendaItemCategory->id);
+        $response = $this->get($this->url.'?category='.$agendaItemCategory->id);
         $json = json_decode($response->getContent());
 
-        $this->assertEquals($json->{"agendaItemCount"}, 1);
-        $this->assertEquals($json->{"agendaItems"}[0]->{"category"}, $agendaItemCategory->name);
-        $this->assertEquals($json->{"agendaItems"}[0]->{"title"}, $agendaItem->title);
+        $this->assertEquals($json->{'agendaItemCount'}, 1);
+        $this->assertEquals($json->{'agendaItems'}[0]->{'category'}, $agendaItemCategory->name);
+        $this->assertEquals($json->{'agendaItems'}[0]->{'title'}, $agendaItem->title);
 
-        $response = $this->get($this->url . "?category=" . ($agendaItemCategory->id + 1));
+        $response = $this->get($this->url.'?category='.($agendaItemCategory->id + 1));
         $json = json_decode($response->getContent());
-        $this->assertEquals($json->{"agendaItemCount"}, 0);
+        $this->assertEquals($json->{'agendaItemCount'}, 0);
 
         $response = $this->get($this->url);
         $json = json_decode($response->getContent());
-        $this->assertEquals($json->{"agendaItemCount"}, 3);
+        $this->assertEquals($json->{'agendaItemCount'}, 3);
     }
 }

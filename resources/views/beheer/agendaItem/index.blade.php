@@ -5,14 +5,7 @@
 @endsection
 
 @section('content')
-    @if(Session::has('message'))
-        <div class="alert alert-success alert-dismissible fade show" role="alert">
-            {{Session::get('message')}}
-            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                <span aria-hidden="true">&times;</span>
-            </button>
-        </div>
-    @endif
+    @include('includes.flash')
 
     <div class="row mb-3">
         <div class="col-md-6">
@@ -33,7 +26,7 @@
                 {{ html()->label('Start date', 'startDate') }}
                 <div class="input-group date" id="startDateBox" data-target-input="nearest">
                     <input type='text' class="form-control datetimepicker-input" id="startDate" name="startDate"
-                           data-target="#startDateBox" value="{{\Carbon\Carbon::now()->addHours(1)->format('d-m-Y')}}"
+                           data-target="#startDateBox" value="{{ now()->addHour()->format('d-m-Y') }}"
                            required/>
                     <div class="input-group-append" data-target="#startDateBox" data-toggle="datetimepicker">
                         <div class="input-group-text"><i class="ion-calendar"></i></div>

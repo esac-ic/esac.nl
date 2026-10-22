@@ -2,187 +2,34 @@
 
 namespace Tests\Feature\UpdateMemberTypeMaillistsListener;
 
-use App\Services\Mailman;
 use App\Events\PendingUserApproved;
 use App\Listeners\UpdateMemberTypeMaillists;
-use App\Models\Setting;
 use App\Models\User;
+use App\Services\Mailman;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Support\Facades\Lang;
 use Mockery;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\Test;
+use Tests\Concerns\FakesMailListSettings;
 use Tests\TestCase;
 
 class HandlePendingUserApprovedTest extends TestCase
 {
-    use RefreshDatabase;
-    
-    private $mockedMailman;
-    private User  $user;
-    private array $mailLists = [
-        'member' => [
-            'key' => Setting::SETTING_NORMAL_MEMBER_MAIL_LISTS,
-            'value' => 'member.esac.nl',
-        ],
-        'extraordinary_member' => [
-            'key' => Setting::SETTING_EXTRAORDINARY_MEMBER_MAIL_LISTS,
-            'value' => 'extraordinary.esac.nl',
-        ],
-        'reunist' => [
-            'key' => Setting::SETTING_REUNIST_MEMBER_MAIL_LISTS,
-            'value' => 'reunist.esac.nl',
-        ],
-        'honorary_member' => [
-            'key' => Setting::SETTING_HONORARY_MEMBER_MAIL_LISTS,
-            'value' => 'honorary.esac.nl',
-        ],
-        'member_of_merit' => [
-            'key' => Setting::SETTING_MERIT_MEMBER_MAIL_LISTS,
-            'value' => 'merit.esac.nl',
-        ],
-        'trainer' => [
-            'key' => Setting::SETTING_TRAINER_MEMBER_MAIL_LISTS,
-            'value' => 'trainer.esac.nl',
-        ],
-        'relationship' => [
-            'key' => Setting::SETTING_RELATIONSHIP_MEMBER_MAIL_LISTS,
-            'value' => 'relationship.esac.nl',
-        ],
-    ];
-    
-    protected function setUp(): void
-    {
-        parent::setUp();
-        
-        $this->mockedMailman = Mockery::mock(Mailman::class);
-        $this->user = User::factory()->member()->create();
+    use FakesMailListSettings, RefreshDatabase;
 
-        Setting::truncate();
-        Setting::insert(collect($this->mailLists)->map(fn ($set) => new Setting([
-            'name' => $set['key'],
-            'type' => Setting::TYPE_STRING,
-            'value' => $set['value'],
-        ]))->values()->toArray());
-    }
-    
-    /*
-     * Happy flow tests, there is not really an error flow
-     */
-    public function test_pending_member_becomes_normal_member()
+    #[Test]
+    #[DataProvider('kindsOfMember')]
+    public function an_approved_member_is_added_to_the_mail_lists_of_their_kind(string $kind)
     {
-        $this->mockedMailman->shouldNotReceive('removeUserFromSpecifiedMailLists');
-        
-        $this->mockedMailman->shouldReceive('addUserToSpecifiedMailLists')
-            ->with($this->user->email, $this->user->getName(), [$this->mailLists['member']['value']])
+        $this->fakeMailListSettings();
+        $user = User::factory()->create(['kind_of_member' => $kind]);
+
+        $mailman = Mockery::mock(Mailman::class);
+        $mailman->shouldNotReceive('removeUserFromSpecifiedMailLists');
+        $mailman->shouldReceive('addUserToSpecifiedMailLists')
+            ->with($user->email, $user->getName(), [$this->mailListOf($kind)])
             ->once();
-        
-        $this->user->kind_of_member = Lang::get('member');
-        $this->user->save();
-        
-        $listener = new UpdateMemberTypeMaillists($this->mockedMailman);
-        $event = new PendingUserApproved($this->user);
-        
-        $listener->handlePendingUserApproved($event);
-    }
-    
-    public function test_pending_member_becomes_reunist()
-    {
-        $this->mockedMailman->shouldNotReceive('removeUserFromSpecifiedMailLists');
-        
-        $this->mockedMailman->shouldReceive('addUserToSpecifiedMailLists')
-            ->with($this->user->email, $this->user->getName(), [$this->mailLists['reunist']['value']])
-            ->once();
-        
-        $this->user->kind_of_member = Lang::get('reunist');
-        $this->user->save();
-        
-        $listener = new UpdateMemberTypeMaillists($this->mockedMailman);
-        $event = new PendingUserApproved($this->user);
-        
-        $listener->handlePendingUserApproved($event);
-    }
-    
-    public function test_pending_member_becomes_extraordinary_participant()
-    {
-        $this->mockedMailman->shouldNotReceive('removeUserFromSpecifiedMailLists');
-        
-        $this->mockedMailman->shouldReceive('addUserToSpecifiedMailLists')
-            ->with($this->user->email, $this->user->getName(), [$this->mailLists['extraordinary_member']['value']])
-            ->once();
-        
-        $this->user->kind_of_member = Lang::get('extraordinary_member');
-        $this->user->save();
-        
-        $listener = new UpdateMemberTypeMaillists($this->mockedMailman);
-        $event = new PendingUserApproved($this->user);
-        
-        $listener->handlePendingUserApproved($event);
-    }
-    
-    public function test_pending_member_becomes_honorary_member()
-    {
-        $this->mockedMailman->shouldNotReceive('removeUserFromSpecifiedMailLists');
-        
-        $this->mockedMailman->shouldReceive('addUserToSpecifiedMailLists')
-            ->with($this->user->email, $this->user->getName(), [$this->mailLists['honorary_member']['value']])
-            ->once();
-        
-        $this->user->kind_of_member = Lang::get('honorary_member');
-        $this->user->save();
-        
-        $listener = new UpdateMemberTypeMaillists($this->mockedMailman);
-        $event = new PendingUserApproved($this->user);
-        
-        $listener->handlePendingUserApproved($event);
-    }
-    
-    public function test_pending_member_becomes_member_of_merit()
-    {
-        $this->mockedMailman->shouldNotReceive('removeUserFromSpecifiedMailLists');
-        
-        $this->mockedMailman->shouldReceive('addUserToSpecifiedMailLists')
-            ->with($this->user->email, $this->user->getName(), [$this->mailLists['member_of_merit']['value']])
-            ->once();
-        
-        $this->user->kind_of_member = Lang::get('member_of_merit');
-        $this->user->save();
-        
-        $listener = new UpdateMemberTypeMaillists($this->mockedMailman);
-        $event = new PendingUserApproved($this->user);
-        
-        $listener->handlePendingUserApproved($event);
-    }
-    
-    public function test_pending_member_becomes_trainer()
-    {
-        $this->mockedMailman->shouldNotReceive('removeUserFromSpecifiedMailLists');
-        
-        $this->mockedMailman->shouldReceive('addUserToSpecifiedMailLists')
-            ->with($this->user->email, $this->user->getName(), [$this->mailLists['trainer']['value']])
-            ->once();
-        
-        $this->user->kind_of_member = Lang::get('trainer');
-        $this->user->save();
-        
-        $listener = new UpdateMemberTypeMaillists($this->mockedMailman);
-        $event = new PendingUserApproved($this->user);
-        
-        $listener->handlePendingUserApproved($event);
-    }
-    
-    public function test_pending_member_becomes_relationship()
-    {
-        $this->mockedMailman->shouldNotReceive('removeUserFromSpecifiedMailLists');
-        
-        $this->mockedMailman->shouldReceive('addUserToSpecifiedMailLists')
-            ->with($this->user->email, $this->user->getName(), [$this->mailLists['relationship']['value']])
-            ->once();
-        
-        $this->user->kind_of_member = Lang::get('relationship');
-        $this->user->save();
-        
-        $listener = new UpdateMemberTypeMaillists($this->mockedMailman);
-        $event = new PendingUserApproved($this->user);
-        
-        $listener->handlePendingUserApproved($event);
+
+        new UpdateMemberTypeMaillists($mailman)->handlePendingUserApproved(new PendingUserApproved($user));
     }
 }

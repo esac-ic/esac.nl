@@ -7,10 +7,6 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-/**
- * Class ApplicationFormRowOption
- * @package App\Models\ApplicationForm
- */
 #[Fillable([
     'name',
     'value',

@@ -2,40 +2,32 @@
 
 namespace App\Listeners;
 
-use App\Services\Mailman;
+use App\Enums\SettingKey;
 use App\Events\MemberBecameOldMember;
 use App\Events\MemberKindChanged;
 use App\Events\OldMemberBecameMember;
 use App\Events\PendingUserApproved;
 use App\Models\Setting;
 use App\Models\User;
+use App\Services\Mailman;
 use Illuminate\Contracts\Queue\ShouldQueue;
+use Illuminate\Support\Facades\Log;
 
 class UpdateMemberTypeMaillists implements ShouldQueue
 {
+    public function __construct(private readonly Mailman $mailman) {}
+
     /**
-     * Create the event listener.
-     */
-    public function __construct(private readonly Mailman $mailman)
-    {
-    }
-    
-    /**
-     * Removes the member from the maillists associated with their old member type
-     * and then adds them to the maillists for their new member type.
-     *
-     * @param MemberKindChanged $event
-     * @return void
+     * Moves the member from the mail lists of their old kind of member to those of their new kind.
      */
     public function handleMemberKindChanged(MemberKindChanged $event): void
     {
-        //compute difference in the maillists
         $oldLists = collect(self::getMemberTypeMailLists($event->previousMemberType));
         $newLists = collect(self::getMemberTypeMailLists($event->newMemberType));
-        
+
         $removeFromLists = $oldLists->diff($newLists);
         $addToLists = $newLists->diff($oldLists);
-        
+
         if ($removeFromLists->isNotEmpty()) {
             $this->mailman->removeUserFromSpecifiedMailLists($event->user->email, $removeFromLists->all());
         }
@@ -43,98 +35,48 @@ class UpdateMemberTypeMaillists implements ShouldQueue
             $this->mailman->addUserToSpecifiedMailLists($event->user->email, $event->user->getName(), $addToLists->all());
         }
     }
-    
-    /**
-     * Add the member to their membership type mail lists.
-     *
-     * @param OldMemberBecameMember $event
-     * @return void
-     */
+
     public function handleOldMemberBecameMember(OldMemberBecameMember $event): void
     {
         $this->addUserToMailLists($event->user, $event->user->kind_of_member);
     }
-    
-    
-    /**
-     * Adds a pending user to their member type maillists
-     * (In practice this would always be the normal member maillists)
-     *
-     * @param PendingUserApproved $event
-     * @return void
-     */
+
     public function handlePendingUserApproved(PendingUserApproved $event): void
     {
         $this->addUserToMailLists($event->user, $event->user->kind_of_member);
     }
 
-    /**
-     * Removes an old member from all their mail lists.
-     */
     public function handleMemberBecameOldMember(MemberBecameOldMember $event): void
     {
         $this->mailman->deleteUserForAllMailList($event->user);
     }
-    
-    /**
-     * Add user to the maillists for their kind of member specified in the settings table
-     * @param User $user
-     * @param string $memberType
-     * @return void
-     */
+
     public function addUserToMailLists(User $user, string $memberType): void
     {
-        $mailLists = collect(self::getMemberTypeMailLists($memberType));
-        
-        if ($mailLists->isNotEmpty()) {
-            $this->mailman->addUserToSpecifiedMailLists($user->email, $user->getName(), $mailLists->all());
+        $mailLists = self::getMemberTypeMailLists($memberType);
+
+        if ($mailLists !== []) {
+            $this->mailman->addUserToSpecifiedMailLists($user->email, $user->getName(), $mailLists);
         }
     }
-    
+
     /**
-     * Fetch and process the maillists associated with a membership type in the settings.
+     * The mail lists for a kind of member, from the settings.
      *
-     * @param string $memberType
-     * @return string[]|array
+     * @return string[]
      */
     public static function getMemberTypeMailLists(string $memberType): array
     {
-        //check member type and fetch the maillists
-        switch ($memberType) {
-            case "member":
-                $mailLists = trim(app(Setting::SINGELTONNAME)->getSetting(Setting::SETTING_NORMAL_MEMBER_MAIL_LISTS));
-                break;
-            case "extraordinary_member":
-                $mailLists = trim(app(Setting::SINGELTONNAME)->getSetting(Setting::SETTING_EXTRAORDINARY_MEMBER_MAIL_LISTS));
-                break;
-            case "reunist":
-                $mailLists = trim(app(Setting::SINGELTONNAME)->getSetting(Setting::SETTING_REUNIST_MEMBER_MAIL_LISTS));
-                break;
-            case "honorary_member":
-                $mailLists = trim(app(Setting::SINGELTONNAME)->getSetting(Setting::SETTING_HONORARY_MEMBER_MAIL_LISTS));
-                break;
-            case "member_of_merit":
-                $mailLists = trim(app(Setting::SINGELTONNAME)->getSetting(Setting::SETTING_MERIT_MEMBER_MAIL_LISTS));
-                break;
-            case "trainer":
-                $mailLists = trim(app(Setting::SINGELTONNAME)->getSetting(Setting::SETTING_TRAINER_MEMBER_MAIL_LISTS));
-                break;
-            case "relationship":
-                $mailLists = trim(app(Setting::SINGELTONNAME)->getSetting(Setting::SETTING_RELATIONSHIP_MEMBER_MAIL_LISTS));
-                break;
-            default:
-                //in case something goes wrong don't add the member to any maillists
-                \Log::error("Tried to update maillist membership while no ESAC member type was given");
-                $mailLists = "";
-                break;
-        }
-        
-        //check if there are maillists specified
-        if ($mailLists == "") {
+        $setting = SettingKey::mailListsFor($memberType);
+
+        if ($setting === null) {
+            Log::error('Tried to update maillist membership while no ESAC member type was given');
+
             return [];
         }
-        
-        //split the list of maillists
-        return explode(";", $mailLists);
+
+        $mailLists = trim(Setting::valueOf($setting));
+
+        return $mailLists === '' ? [] : explode(';', $mailLists);
     }
 }

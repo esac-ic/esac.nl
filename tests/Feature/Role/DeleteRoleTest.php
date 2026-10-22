@@ -5,23 +5,16 @@ namespace Tests\Feature\Role;
 use App\Enums\Role;
 use App\Models\Rol;
 use App\Models\User;
-use Illuminate\Foundation\Testing\DatabaseMigrations;
-use Illuminate\Support\Facades\Artisan;
+use Illuminate\Foundation\Testing\RefreshDatabase;
 use PHPUnit\Framework\Attributes\Test;
 use Tests\TestCase;
 
 class DeleteRoleTest extends TestCase
 {
-    use DatabaseMigrations;
+    use RefreshDatabase;
 
-    /**
-     * @var string
-     */
     private $url = 'rols';
 
-    /**
-     * @var
-     */
     private $user;
 
     protected function setUp(): void
@@ -31,14 +24,6 @@ class DeleteRoleTest extends TestCase
 
         $user->roles()->attach(Role::Administrator->value);
         $this->be($user);
-
-        session()->start();
-    }
-
-    protected function tearDown(): void
-    {
-        Artisan::call('migrate:reset');
-        parent::tearDown();
     }
 
     #[Test]
@@ -46,7 +31,7 @@ class DeleteRoleTest extends TestCase
     {
         $role = Rol::factory()->create();
 
-        $response = $this->delete($this->url . '/' . $role->id, ['_token' => csrf_token()]);
+        $response = $this->delete($this->url.'/'.$role->id);
 
         $response->assertStatus(302);
 
@@ -59,7 +44,7 @@ class DeleteRoleTest extends TestCase
         $role = Rol::factory()->create();
         $this->user->roles()->detach();
 
-        $response = $this->delete($this->url . '/' . $role->id, ['_token' => csrf_token()]);
+        $response = $this->delete($this->url.'/'.$role->id);
 
         $response->assertStatus(403);
 

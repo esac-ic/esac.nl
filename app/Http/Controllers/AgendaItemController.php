@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\AgendaItemRequest;
 use App\Models\AgendaItem;
 use App\Models\AgendaItemCategory;
 use App\Models\ApplicationForm\ApplicationForm;
@@ -10,7 +11,6 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controllers\HasMiddleware;
 use Illuminate\Routing\Controllers\Middleware;
-use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Storage;
 use Intervention\Image\Drivers\Gd\Driver;
 use Intervention\Image\ImageManager;
@@ -30,78 +30,62 @@ class AgendaItemController extends Controller implements HasMiddleware
         return view('beheer.agendaItem.index');
     }
 
-    public function create()
+    public function create(): View
     {
         $fields = $this->getFields('POST', route('agendaItems.store'), 'Add an event');
+
         return $this->renderCreateEditView(null, $fields);
     }
 
-    public function store(Request $request): RedirectResponse
+    public function store(AgendaItemRequest $request): RedirectResponse
     {
-        $this->validateInput($request);
-        $agendaItem = new AgendaItem($request->all())->fillFromForm($request->all());
-        $agendaItem->image_url = "";
+        $agendaItem = new AgendaItem($request->validated())->fillFromForm($request->all());
+        $agendaItem->image_url = '';
         $agendaItem->created_by = $request->user()->id;
         $agendaItem->save();
         $this->handleImage($request, $agendaItem);
-        Session::flash("message", 'Event added');
-        return to_route('agendaItems.index');
+
+        return to_route('agendaItems.index')->with('message', 'Event added');
     }
 
     public function show(AgendaItem $agendaItem): View
     {
-        return view('beheer.agendaItem.show', compact('agendaItem'));
+        return view('beheer.agendaItem.show', ['agendaItem' => $agendaItem]);
     }
 
-    public function edit(AgendaItem $agendaItem)
+    public function edit(AgendaItem $agendaItem): View
     {
         $fields = $this->getFields('PATCH', route('agendaItems.update', $agendaItem), 'Edit event');
+
         return $this->renderCreateEditView($agendaItem, $fields);
     }
 
-    public function update(Request $request, AgendaItem $agendaItem): RedirectResponse
+    public function update(AgendaItemRequest $request, AgendaItem $agendaItem): RedirectResponse
     {
-        $this->validateInput($request);
-        $agendaItem->title = $request->input('title');
-        $agendaItem->text = $request->input('text');
-        $agendaItem->short_description = $request->input('short_description');
-        $agendaItem->category = $request->input('category');
-        $agendaItem->fillFromForm($request->all())->save();
+        $agendaItem->fill($request->safe()->only(['title', 'text', 'short_description', 'category']))
+            ->fillFromForm($request->all())
+            ->save();
         $this->handleImage($request, $agendaItem);
-        Session::flash("message", 'Event edited');
-        return to_route('agendaItems.index');
+
+        return to_route('agendaItems.index')->with('message', 'Event edited');
     }
 
     public function destroy(AgendaItem $agendaItem): RedirectResponse
     {
         $agendaItem->delete();
 
-        if ($agendaItem->image_url != "") {
+        if ($agendaItem->image_url != '') {
             Storage::disk('public')->delete($agendaItem->image_url);
         }
 
-        Session::flash("message", 'Event removed');
-        return to_route('agendaItems.index');
+        return to_route('agendaItems.index')->with('message', 'Event removed');
     }
 
     public function copy(Request $request, AgendaItem $agendaItem): RedirectResponse
     {
         $newAgendaItem = $agendaItem->copyFor($request->user());
-        return to_route('agendaItems.edit', $newAgendaItem);
-    }
 
-    private function validateInput(Request $request): void
-    {
-        $request->validate([
-            'title' => 'required|max:255',
-            'short_description' => 'required|max:100',
-            'text' => 'required',
-            'thumbnail' => 'image|mimes:jpeg,png,jpg',
-            'category' => 'required|numeric|min:1',
-            'applicationForm' => 'required|numeric|min:0',
-            'end_date' => 'required|date',
-            'start_date' => 'required|date',
-        ]);
+        return to_route('agendaItems.edit', $newAgendaItem);
     }
 
     private function getFields(string $method, string $url, string $title): array
@@ -116,43 +100,22 @@ class AgendaItemController extends Controller implements HasMiddleware
         ];
     }
 
-    private function renderCreateEditView(?AgendaItem $agendaItem, $fields): View
+    private function renderCreateEditView(?AgendaItem $agendaItem, array $fields): View
     {
-        $agendaItemCategories = $this->getCategories();
-        $applicationForms = $this->getForms();
-        return view('beheer.agendaItem.create_edit', compact(['fields', 'agendaItem', 'agendaItemCategories', 'applicationForms']));
-    }
-
-    /**
-     * @return mixed[]
-     */
-    private function getCategories(): array
-    {
-        $categories = [];
-        foreach (AgendaItemCategory::all(['id', 'name']) as $category) {
-            $categories[$category->id] = $category->name;
-        }
-        return $categories;
-    }
-
-    /**
-     * @return mixed[]
-     */
-    private function getForms(): array
-    {
-        $forms = [];
-        foreach (ApplicationForm::all(['id', 'name']) as $form) {
-            $forms[$form->id] = $form->name;
-        }
-        return $forms;
+        return view('beheer.agendaItem.create_edit', [
+            'fields' => $fields,
+            'agendaItem' => $agendaItem,
+            'agendaItemCategories' => AgendaItemCategory::query()->pluck('name', 'id')->all(),
+            'applicationForms' => ApplicationForm::query()->pluck('name', 'id')->all(),
+        ]);
     }
 
     private function handleImage(Request $request, AgendaItem $agendaItem): void
     {
         if ($request->hasFile('thumbnail')) {
-            $name = $agendaItem->id . '-thumbnail.' . $request->thumbnail->extension();
+            $name = $agendaItem->id.'-thumbnail.'.$request->thumbnail->extension();
             $request->file('thumbnail')->storeAs('agendaItem', $name, 'public');
-            $agendaItem->image_url = 'agendaItem/' . $name;
+            $agendaItem->image_url = 'agendaItem/'.$name;
             $agendaItem->save();
             $img_path = Storage::disk('public')->path($agendaItem->image_url);
             ImageManager::usingDriver(Driver::class)->decodePath($img_path)->cover(400, 300)->save($img_path);
