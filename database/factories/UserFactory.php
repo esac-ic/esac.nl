@@ -4,22 +4,24 @@ namespace Database\Factories;
 
 use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
-use Illuminate\Support\Facades\Lang;
+use Illuminate\Support\Facades\Hash;
 
 class UserFactory extends Factory
 {
+    protected static ?string $password;
+
     public function definition(): array
     {
-        //generate sensible matching email, name pairs
+        // generate sensible matching email, name pairs
         $firstName = fake()->firstName();
-        $preposition = fake()->randomElement(["", "van", "ten", "van de", "de"]);
+        $preposition = fake()->randomElement(['', 'van', 'ten', 'van de', 'de']);
         $lastName = fake()->lastName();
         $domain = fake()->freeEmailDomain();
-        $email = str_replace(" ", "", $firstName . $preposition . $lastName . "@" . $domain);
-        
+        $email = str_replace(' ', '', $firstName.$preposition.$lastName.'@'.$domain);
+
         return [
             'email' => $email,
-            'password' => bcrypt(fake()->password()),
+            'password' => static::$password ??= Hash::make('password'),
             'firstname' => $firstName,
             'lastname' => $lastName,
             'preposition' => $preposition,
@@ -44,89 +46,52 @@ class UserFactory extends Factory
             'remark' => fake()->sentence(),
         ];
     }
-    
-    //member type variations
-    
-    public function member(): Factory
+
+    public function member(): static
     {
-        return $this->state(function (array $attributes) {
-            return [
-                'kind_of_member' => Lang::get('member'),
-            ];
-        });
+        return $this->state(['kind_of_member' => 'member']);
     }
-    
-    public function reunist(): Factory
+
+    public function reunist(): static
     {
-        return $this->state(function (array $attributes) {
-            return [
-                'kind_of_member' => Lang::get('reunist'),
-            ];
-        });
+        return $this->state(['kind_of_member' => 'reunist']);
     }
-    
-    public function extraordinary_participant(): Factory
+
+    public function extraordinary_participant(): static
     {
-        return $this->state(function (array $attributes) {
-            return [
-                'kind_of_member' => Lang::get('extraordinary_member'),
-            ];
-        });
+        return $this->state(['kind_of_member' => 'extraordinary_member']);
     }
-    
-    public function honorary_member(): Factory
+
+    public function honorary_member(): static
     {
-        return $this->state(function (array $attributes) {
-            return [
-                'kind_of_member' => Lang::get('honorary_member'),
-            ];
-        });
+        return $this->state(['kind_of_member' => 'honorary_member']);
     }
-    
-    public function member_of_merit(): Factory
+
+    public function member_of_merit(): static
     {
-        return $this->state(function (array $attributes) {
-            return [
-                'kind_of_member' => Lang::get('member_of_merit'),
-            ];
-        });
+        return $this->state(['kind_of_member' => 'member_of_merit']);
     }
-    
-    public function trainer(): Factory
+
+    public function trainer(): static
     {
-        return $this->state(function (array $attributes) {
-            return [
-                'kind_of_member' => Lang::get('trainer'),
-            ];
-        });
+        return $this->state(['kind_of_member' => 'trainer']);
     }
-    
-    public function relationship(): Factory
+
+    public function relationship(): static
     {
-        return $this->state(function (array $attributes) {
-            return [
-                'kind_of_member' => Lang::get('relationship'),
-            ];
-        });
+        return $this->state(['kind_of_member' => 'relationship']);
     }
-    
-    public function lidAf(): Factory
+
+    public function lidAf(): static
     {
-        return $this->state(function (array $attributes) {
-            return [
-                'lid_af' => fake()->dateTimeThisDecade(),
-            ];
-        });
+        return $this->state(fn () => ['lid_af' => fake()->dateTimeThisDecade()]);
     }
-    
-    public function pending(): Factory
+
+    public function pending(): static
     {
-        return $this->state(function (array $attributes) {
-            return [
-                'pending_user' => fake()->dateTimeThisMonth(),
-                'kind_of_member' => "member",
-            ];
-        });
+        return $this->state(fn () => [
+            'pending_user' => fake()->dateTimeThisMonth(),
+            'kind_of_member' => 'member',
+        ]);
     }
-    
 }

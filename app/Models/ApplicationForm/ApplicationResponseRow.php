@@ -5,15 +5,10 @@ namespace App\Models\ApplicationForm;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\HasOne;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-/**
- * Class ApplicationResponseRow
- * @package App\Models\ApplicationForm
- */
 #[Fillable([
-    'id',
     'application_response_id',
     'application_form_row_id',
     'value',
@@ -22,12 +17,9 @@ class ApplicationResponseRow extends Model
 {
     use SoftDeletes;
 
-    /**
-     * @return HasOne
-     */
-    public function getApplicationFormRow(): HasOne
+    public function getApplicationFormRow(): BelongsTo
     {
-        return $this->hasOne(ApplicationFormRow::class, 'id', 'application_form_row_id')->withTrashed();
+        return $this->belongsTo(ApplicationFormRow::class, 'application_form_row_id')->withTrashed();
     }
 
     protected function formattedValue(): Attribute

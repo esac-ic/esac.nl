@@ -18,10 +18,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 class UserEventLogEntry extends Model
 {
     use HasFactory;
-    
-    /**
-     * Related user object
-     */
+
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);

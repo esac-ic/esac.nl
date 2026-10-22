@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Attributes\Scope;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\HasOne;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Facades\Auth;
 
@@ -25,21 +25,37 @@ class MenuItem extends Model
     use SoftDeletes;
 
     const HOMEURL = 'home';
+
     const ZEKERINGURL = 'zekeringen';
+
     const SUBSCRIBEURL = 'signup';
+
     const NEWSURL = 'news';
+
     const MEMBERLISTURL = 'memberlist';
+
     const AGENDAURL = 'agenda';
+
     const LIBRARYURL = 'library';
 
-    public function partner(): HasOne
+    protected function casts(): array
     {
-        return $this->hasOne(MenuItem::class, 'id', 'parent_id');
+        return [
+            'login' => 'boolean',
+            'menu_item' => 'boolean',
+            'deletable' => 'boolean',
+            'editable' => 'boolean',
+        ];
     }
 
-    public function afterItem(): HasOne
+    public function partner(): BelongsTo
     {
-        return $this->hasOne(MenuItem::class, 'id', 'after');
+        return $this->belongsTo(MenuItem::class, 'parent_id');
+    }
+
+    public function afterItem(): BelongsTo
+    {
+        return $this->belongsTo(MenuItem::class, 'after');
     }
 
     /**
@@ -51,15 +67,12 @@ class MenuItem extends Model
         $query->where('menu_item', true);
     }
 
+    /**
+     * Whether the current visitor may see the page.
+     */
     public function show(): bool
     {
-        if ($this->login) {
-            if (Auth::guest()) {
-                return false;
-            }
-        }
-
-        return true;
+        return ! $this->login || Auth::check();
     }
 
     /**
@@ -68,13 +81,13 @@ class MenuItem extends Model
     public static function sortMenuList($menuList): array
     {
         $newList = [];
-        //get a menu item which is not after one
+        // get a menu item which is not after one
         $firstItem = $menuList->where('after', '=', null)->first();
         if ($firstItem == null) {
             if (count($menuList) == 0) {
                 return $newList;
             }
-            //there aren't any menu items witch don't have a menu after so we take the first item from te menu item
+            // there aren't any menu items witch don't have a menu after so we take the first item from te menu item
             $firstItem = $menuList[0];
         }
 
@@ -83,13 +96,13 @@ class MenuItem extends Model
         for ($i = 0; $i < count($newList); $i++) {
             $newItems = $menuList->where('after', '=', $newList[$i]->id);
 
-            //check if there are new menu item which are after the previos menu item.
+            // check if there are new menu item which are after the previos menu item.
             if (count($newItems) === 0) {
                 $newItems = $menuList->where('after', '=', null);
             }
 
             foreach ($newItems as $item) {
-                if (!in_array($item, $newList)) {
+                if (! in_array($item, $newList)) {
                     array_push($newList, $item);
                 }
             }
