@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Enums\Role;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controllers\HasMiddleware;
 use Illuminate\Routing\Controllers\Middleware;
@@ -14,7 +13,7 @@ class StorageController extends Controller implements HasMiddleware
     {
         return [
             'auth',
-            new Middleware('authorize:' . Role::ContentAdministrator->value),
+            new Middleware('can:manage-pages'),
         ];
     }
 

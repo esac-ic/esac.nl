@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Enums\Role;
 use App\Events\MemberBecameOldMember;
 use App\Events\OldMemberBecameMember;
 use App\Events\PendingUserApproved;
@@ -17,6 +18,7 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use RuntimeException;
 
 class User extends Authenticatable
@@ -111,10 +113,10 @@ class User extends Authenticatable
         );
     }
 
-    public function hasRole(...$roles): bool
+    public function hasRole(Role ...$roles): bool
     {
-        foreach ($roles as $rol) {
-            if ($this->roles->contains($rol)) {
+        foreach ($roles as $role) {
+            if ($this->roles->contains($role->value)) {
                 return true;
             }
         }
@@ -211,8 +213,8 @@ class User extends Authenticatable
     public function makeActiveMember(): bool
     {
         if (!$this->email || $this->isActiveMember()) { //don't do anything if the member is already active or doesn't have an email address
-            if ($this->isActiveMember()) \Log::notice("User " . $this->getName() . " was attempted to made active, but is already active");
-            if (!$this->email) \Log::notice("User " . $this->getName() . " was attempted to made active, but doesn't have an email address");
+            if ($this->isActiveMember()) Log::notice("User " . $this->getName() . " was attempted to made active, but is already active");
+            if (!$this->email) Log::notice("User " . $this->getName() . " was attempted to made active, but doesn't have an email address");
             return false;
         }
         

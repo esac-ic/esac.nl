@@ -42,7 +42,7 @@ class SettingsControllerTest extends TestCase
     }
 
     #[Test]
-    public function a_member_without_the_administrator_role_can_not_view_settings()
+    public function a_member_without_the_ability_can_not_view_settings()
     {
         $member = User::factory()->create();
 

@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Enums\Role;
 use App\Models\Rol;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
@@ -17,7 +16,7 @@ class RolController extends Controller implements HasMiddleware
     {
         return [
             'auth',
-            new Middleware('authorize:' . Role::Administrator->value),
+            new Middleware('can:manage-roles'),
         ];
     }
 

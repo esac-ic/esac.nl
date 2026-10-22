@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Enums\Role;
 use App\Exports\LibraryExport;
 use App\Models\Book;
 use Illuminate\Contracts\View\View;
@@ -17,7 +16,7 @@ class LibraryController extends Controller implements HasMiddleware
     {
         return [
             'auth',
-            new Middleware('authorize:' . Role::Administrator->value),
+            new Middleware('can:manage-library'),
         ];
     }
 

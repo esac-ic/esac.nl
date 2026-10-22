@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Enums\Role;
 use App\Http\Controllers\Controller;
 use App\Repositories\ZekeringenRepository;
 use Illuminate\Http\RedirectResponse;
@@ -17,7 +16,7 @@ class ZekeringController extends Controller implements HasMiddleware
     {
         return [
             'auth',
-            new Middleware('authorize:' . Role::ActivityAdministrator->value, only: ['destroy']),
+            new Middleware('can:manage-zekeringen', only: ['destroy']),
         ];
     }
 

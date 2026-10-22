@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Enums\Role;
 use App\Models\Certificate;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
@@ -17,7 +16,7 @@ class CertificateController extends Controller implements HasMiddleware
     {
         return [
             'auth',
-            new Middleware('authorize:' . Role::Administrator->value . ',' . Role::CertificateAdministrator->value),
+            new Middleware('can:manage-certificates'),
         ];
     }
 

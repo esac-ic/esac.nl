@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Enums\Role;
 use App\Http\Requests\StorePendingUserRequest;
 use App\Models\User;
 use App\Repositories\UserRepository;
@@ -17,7 +16,7 @@ class PendingUserController extends Controller implements HasMiddleware
     {
         return [
             new Middleware('auth', except: ['storePendingUser']),
-            new Middleware('authorize:' . Role::Administrator->value, except: ['storePendingUser']),
+            new Middleware('can:manage-members', except: ['storePendingUser']),
         ];
     }
 
