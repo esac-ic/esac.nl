@@ -83,8 +83,8 @@ class PaginaBeheerController extends Controller implements HasMiddleware
     {
         $menuItem->parent_id = $request->validated('itemType') === 'subItem' ? $request->validated('parentItem') : null;
         $menuItem->after = $request->validated('afterItem');
-        $menuItem->login = $request->has('login');
-        $menuItem->menu_item = $request->has('menu_item');
+        $menuItem->login = $request->validated('login');
+        $menuItem->menu_item = $request->validated('menu_item');
     }
 
     private function form(MenuItem $page): View

@@ -83,7 +83,7 @@ class RegisterNewMemberTest extends TestCase
                 'birthday' => 'Field birthday is required',
                 'iban' => 'Field IBAN is required',
                 'g-recaptcha-response' => "'I'm not a robot' validation is required",
-                'incasso' => 'Field Automatic Collection is required',
+                'incasso' => 'The Automatic Collection field must be accepted.',
                 'privacy_policy' => 'Field Privacy Policy is required',
                 'termsconditions' => 'Field Terms and Conditions is required',
             ]);

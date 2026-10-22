@@ -93,20 +93,9 @@ class User extends Authenticatable
         $query->whereNotNull('pending_user');
     }
 
-    /**
-     * Makes an unsaved user from the member form's data.
-     */
-    public static function fromForm(array $data): self
-    {
-        $user = new self($data);
-        $user->incasso = array_key_exists('incasso', $data);
-
-        return $user;
-    }
-
     public static function createPending(array $data): self
     {
-        $user = self::fromForm($data);
+        $user = new self($data);
 
         // A date column, so the date in Amsterdam rather than in UTC.
         $user->pending_user = today(config('app.display_timezone'));
@@ -125,8 +114,6 @@ class User extends Authenticatable
      */
     public function updateFromForm(array $data): void
     {
-        $data['incasso'] = array_key_exists('incasso', $data);
-
         $oldKindOfMember = $this->kind_of_member;
 
         $this->update($data);

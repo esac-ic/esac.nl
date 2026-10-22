@@ -16,11 +16,21 @@ class PageRequest extends FormRequest
         return [
             'url_name' => [$fixed, 'required', 'max:255', Rule::unique('menu_items', 'url_name')->ignore($page)],
             'itemType' => ['required', Rule::in(['standAlone', 'subItem'])],
-            'name' => 'required|max:255',
+            'name' => ['required', 'max:255'],
             'content' => [$fixed, 'required'],
             // -1 means the item is first in its menu.
             'afterItem' => [Rule::excludeIf($this->input('afterItem') == -1), 'required', Rule::exists('menu_items', 'id')],
             'parentItem' => ['exclude_unless:itemType,subItem', 'required', Rule::exists('menu_items', 'id')],
+            'login' => ['boolean'],
+            'menu_item' => ['boolean'],
         ];
+    }
+
+    /**
+     * An unchecked checkbox isn't posted.
+     */
+    protected function prepareForValidation(): void
+    {
+        $this->merge(['login' => $this->boolean('login'), 'menu_item' => $this->boolean('menu_item')]);
     }
 }
