@@ -36,7 +36,7 @@
             <tr>
                 <td>{{$newsItem->title}}</td>
                 <td>{{$newsItem->author}}</td>
-                <td>{{ $newsItem->created_at->format('d-m-Y h:i') }}</td>
+                <td>{{ $newsItem->created_at->tz(config('app.display_timezone'))->format('d-m-Y H:i') }}</td>
                 <td>
                     <a class="mr-1 ml-1" href="{{route('newsItems.edit', $newsItem)}}"><span title="Edit news item" class="ion-edit font-size-120" aria-hidden="true"></span></a>
                     <a class="mr-1 ml-1" href="{{route('newsItems.show', $newsItem)}}"><span title="Show news item" class="ion-eye font-size-120" aria-hidden="true"></span></a>

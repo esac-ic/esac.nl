@@ -70,7 +70,7 @@ class CreateAgendaItemTest extends TestCase
             'text' => 'test agenda',
             'short_description' => 'test agenda',
             'category' => AgendaItemCategory::factory()->create()->id,
-            'applicationForm' => 0,
+            'applicationForm' => null,
             'subscription_end_date' => Carbon::now()->addDays(2),
             'end_date' => Carbon::now()->addDays(3),
             'start_date' => Carbon::now()->addDays(1),

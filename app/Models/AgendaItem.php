@@ -2,9 +2,9 @@
 
 namespace App\Models;
 
+use App\Casts\DisplayDateTime;
 use App\Models\ApplicationForm\ApplicationForm;
 use App\Models\ApplicationForm\ApplicationResponse;
-use App\Models\ApplicationForm\ApplicationResponseRow;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Attributes\Scope;
@@ -13,6 +13,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 
 #[Fillable([
@@ -34,9 +35,9 @@ class AgendaItem extends Model
     {
         return [
             'climbing_activity' => 'boolean',
-            'start_date' => 'datetime',
-            'end_date' => 'datetime',
-            'subscription_end_date' => 'datetime',
+            'start_date' => DisplayDateTime::class,
+            'end_date' => DisplayDateTime::class,
+            'subscription_end_date' => DisplayDateTime::class,
         ];
     }
 
@@ -46,26 +47,19 @@ class AgendaItem extends Model
     #[Scope]
     protected function upcoming(Builder $query): void
     {
-        $query->whereDate('start_date', '>=', Carbon::now())->orderBy('start_date', 'ASC');
+        $query->where('start_date', '>=', today(config('app.display_timezone'))->utc())->orderBy('start_date', 'ASC');
     }
 
     /**
-     * Sets the dates, registration form and climbing flag from the event form's data.
+     * Sets the dates, registration form and climbing flag from the event form's validated data.
      */
     public function fillFromForm(array $data): static
     {
-        $this->start_date = Carbon::parse($data['start_date'])->startOfMinute();
-        $this->end_date = Carbon::parse($data['end_date'])->startOfMinute();
-
-        if ($data['applicationForm'] != 0) {
-            $this->subscription_end_date = Carbon::parse($data['subscription_end_date'])->startOfMinute();
-            $this->application_form_id = $data['applicationForm'];
-        } else {
-            $this->subscription_end_date = null;
-            $this->application_form_id = null;
-        }
-
-        $this->climbing_activity = array_key_exists('climbing_activity', $data);
+        $this->start_date = $data['start_date'];
+        $this->end_date = $data['end_date'];
+        $this->application_form_id = $data['applicationForm'] ?? null;
+        $this->subscription_end_date = $data['subscription_end_date'] ?? null;
+        $this->climbing_activity = $data['climbing_activity'] ?? false;
 
         return $this;
     }
@@ -79,10 +73,10 @@ class AgendaItem extends Model
         $newAgendaItem->created_by = $creator->id;
         $newAgendaItem->save();
 
-        if ($this->image_url !== null && $this->image_url !== '') {
-            $oldPath = $this->image_url;
-            $newPath = str_replace($this->id, $newAgendaItem->id, $oldPath);
-            Storage::disk('public')->copy($oldPath, $newPath);
+        if ($this->image_url !== '') {
+            // Named after the new item, so each item has its own file to replace or delete.
+            $newPath = 'agendaItem/'.$newAgendaItem->id.'-thumbnail.'.pathinfo($this->image_url, PATHINFO_EXTENSION);
+            Storage::disk('public')->copy($this->image_url, $newPath);
             $newAgendaItem->image_url = $newPath;
             $newAgendaItem->save();
         }
@@ -91,23 +85,27 @@ class AgendaItem extends Model
     }
 
     /**
-     * Registers the user for the event with their answers, keyed by the form row id.
+     * Registers the user for the event with their validated answers, keyed by the form row id.
      */
     public function register(int $userId, array $answers): void
     {
-        $applicationResponse = new ApplicationResponse;
-        $applicationResponse->agenda_id = $this->id;
-        $applicationResponse->inschrijf_form_id = $this->application_form_id;
-        $applicationResponse->user_id = $userId;
-        $applicationResponse->save();
+        DB::transaction(function () use ($userId, $answers) {
+            $applicationResponse = $this->getApplicationFormResponses()->create([
+                'inschrijf_form_id' => $this->application_form_id,
+                'user_id' => $userId,
+            ]);
 
-        foreach ($answers as $key => $value) {
-            $applicationResponseRow = new ApplicationResponseRow;
-            $applicationResponseRow->application_response_id = $applicationResponse->id;
-            $applicationResponseRow->application_form_row_id = $key;
-            $applicationResponseRow->value = is_array($value) ? implode(',', $value) : $value;
-            $applicationResponseRow->save();
-        }
+            // Unanswered optional questions get no row.
+            $applicationResponse->getApplicationFormResponseRows()->createMany(
+                collect($answers)
+                    ->whereNotNull()
+                    ->map(fn ($value, $rowId) => [
+                        'application_form_row_id' => $rowId,
+                        'value' => is_array($value) ? implode(',', $value) : $value,
+                    ])
+                    ->values(),
+            );
+        });
     }
 
     public function getApplicationForm(): BelongsTo

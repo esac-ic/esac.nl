@@ -4,6 +4,7 @@ namespace App\Exports;
 
 use DateTimeInterface;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\Date;
 use OpenSpout\Writer\XLSX\Writer;
 use Spatie\SimpleExcel\SimpleExcelWriter;
 use Symfony\Component\HttpFoundation\StreamedResponse;
@@ -59,7 +60,7 @@ abstract class SpreadsheetExport
 
     private function formatCell(mixed $value): mixed
     {
-        return $value instanceof DateTimeInterface ? $value->format('Y-m-d H:i:s') : $value;
+        return $value instanceof DateTimeInterface ? Date::instance($value)->tz(config('app.display_timezone'))->format('Y-m-d H:i:s') : $value;
     }
 
     /**

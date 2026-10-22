@@ -10,7 +10,7 @@ class BookRequest extends FormRequest
     {
         return [
             'title' => 'required|max:255',
-            'year' => 'integer',
+            'year' => 'nullable|integer',
             'type' => 'required|max:255',
             'country' => 'required|max:255',
             'code' => 'required|max:255',

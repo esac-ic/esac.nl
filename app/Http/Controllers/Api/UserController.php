@@ -4,10 +4,10 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Models\User;
-use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controllers\HasMiddleware;
+use Illuminate\Routing\Controllers\Middleware;
 
 class UserController extends Controller implements HasMiddleware
 {
@@ -15,21 +15,19 @@ class UserController extends Controller implements HasMiddleware
     {
         return [
             'auth',
+            new Middleware('can:manage-news'),
         ];
     }
 
     public function autoComplete(Request $request): JsonResponse
     {
-        $users = User::query()
-            ->where(function (Builder $query) use ($request) {
-                $term = $request->input('term', '');
-                $query->where('firstname', 'like', "%$term%")
-                    ->orWhere('lastname', 'like', "%$term%");
-            })
-            ->selectRaw("CONCAT(firstname, ' ', lastname) as text")
-            ->get();
+        $term = '%'.addcslashes((string) $request->input('term'), '%_\\').'%';
 
-        return response()
-            ->json($users);
+        $users = User::current()
+            ->whereAny(['firstname', 'lastname'], 'like', $term)
+            ->get(['firstname', 'lastname'])
+            ->map(fn (User $user) => ['text' => $user->firstname.' '.$user->lastname]);
+
+        return response()->json($users);
     }
 }

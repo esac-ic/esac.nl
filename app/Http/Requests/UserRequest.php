@@ -6,6 +6,7 @@ use App\Http\Requests\Concerns\ValidatesMemberDetails;
 use App\Models\User;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
+use Illuminate\Validation\Rules\Password;
 
 /**
  * Creating a user (administrators) or updating one (administrators, or members updating themselves).
@@ -37,6 +38,15 @@ class UserRequest extends FormRequest
     {
         return [
             ...$this->memberDetailRules($this->route('user')?->id),
+            // Leaving the password empty on an update keeps the current one.
+            'password' => [
+                Rule::excludeIf($this->route('user') !== null && $this->isNotFilled('password')),
+                'required',
+                'confirmed',
+                Password::defaults(),
+            ],
+            'incasso' => 'boolean',
+            'remark' => 'nullable',
             'kind_of_member' => Rule::requiredIf($this->isAdministrator()),
         ];
     }

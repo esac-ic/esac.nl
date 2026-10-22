@@ -3,11 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\AgendaItem;
-use DateTimeImmutable;
-use DateTimeZone as PhpDateTimeZone;
 use Eluceo\iCal\Domain\Entity\Calendar;
 use Eluceo\iCal\Domain\Entity\Event;
-use Eluceo\iCal\Domain\Entity\TimeZone;
 use Eluceo\iCal\Domain\ValueObject\DateTime;
 use Eluceo\iCal\Domain\ValueObject\TimeSpan;
 use Eluceo\iCal\Domain\ValueObject\UniqueIdentifier;
@@ -18,23 +15,19 @@ class ICalController extends Controller
 {
     public function getAgendaItemsICalObject(): Response
     {
-        $phpDateTimeZone = new PhpDateTimeZone('Europe/Amsterdam');
-        $timeZone = TimeZone::createFromPhpDateTimeZone(
-            $phpDateTimeZone,
-            new DateTimeImmutable('-1 year midnight', $phpDateTimeZone),
-            new DateTimeImmutable('+1 year midnight', $phpDateTimeZone),
-        );
-
         $calendar = new Calendar([]);
-        $calendar->addTimeZone($timeZone);
         $host = parse_url(config('app.url'), PHP_URL_HOST);
 
-        foreach (AgendaItem::all() as $agendaItem) {
+        // Old events only bloat the feed, so skip those that ended over a year ago.
+        $agendaItems = AgendaItem::where('end_date', '>=', now()->subYear()->startOfDay())->get();
+
+        foreach ($agendaItems as $agendaItem) {
             $event = new Event(new UniqueIdentifier('agenda-item-'.$agendaItem->id.'@'.$host));
             $event
                 ->setOccurrence(new TimeSpan(
-                    new DateTime($agendaItem->start_date->toDateTimeImmutable(), false),
-                    new DateTime($agendaItem->end_date->toDateTimeImmutable(), false),
+                    // In UTC, so the times are absolute.
+                    new DateTime($agendaItem->start_date->toImmutable()->utc(), true),
+                    new DateTime($agendaItem->end_date->toImmutable()->utc(), true),
                 ))
                 ->setSummary($agendaItem->title)
                 ->setDescription(
