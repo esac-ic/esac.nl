@@ -33,6 +33,11 @@ COPY infra/php.dev.ini "$PHP_INI_DIR/conf.d/zz-esac.ini"
 COPY --from=vendor /usr/bin/composer /usr/bin/composer
 RUN install-php-extensions xdebug
 
+COPY --from=node:24-trixie-slim /usr/local/bin/node /usr/local/bin/node
+COPY --from=node:24-trixie-slim /usr/local/lib/node_modules /usr/local/lib/node_modules
+RUN ln -s ../lib/node_modules/npm/bin/npm-cli.js /usr/local/bin/npm \
+    && ln -s ../lib/node_modules/npm/bin/npx-cli.js /usr/local/bin/npx
+
 FROM base AS production
 COPY infra/php.ini "$PHP_INI_DIR/conf.d/zz-esac.ini"
 COPY . .

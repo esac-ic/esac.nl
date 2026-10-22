@@ -24,7 +24,7 @@ DB\_HOST, DB\_PORT, DB\_DATABASE, DB\_USERNAME and DB\_PASSWORD
 **Note**: When running your local environment on a certain port, let's say 3000, modify your `APP_URL` in the file to reflect that port, else the api's won't work
 
 ### Development environment (Docker, easiest and works on any OS)
-The easiest method is using Docker, this requires node.js and docker to be installed, on windows this is the easiest with [Docker Desktop](https://www.docker.com/products/docker-desktop/). No local PHP, Composer, MySQL required, and no problems pinning PHP versions.
+The easiest method is using Docker, on windows this is the easiest with [Docker Desktop](https://www.docker.com/products/docker-desktop/). No local PHP, Composer, Node or MySQL required, and no problems pinning PHP/Node versions.
 
 On windows: use WSL and clone it on a WSL native path (otherwise the performace is shit)
 
@@ -51,10 +51,10 @@ On windows: use WSL and clone it on a WSL native path (otherwise the performace 
 	docker compose exec app php artisan db:seed --force
 	docker compose exec app php artisan storage:link
 	```
-5. Install and build the frontend assets. THIS DOES REQUIRE NODE.JS
+5. Install and build the frontend assets
 	```
-	npm install
-	npm run dev
+	docker compose exec app npm install
+	docker compose exec app npm run dev
 	```
 6. Configure `mailman` once, otherwise mail list sync will error:
 	```
