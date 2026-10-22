@@ -68,6 +68,9 @@
                             </ol>
                         @endif
                     </div>
+                    <div class="card-footer bg-white p-3">
+                        <a class="btn btn-outline-primary" href="{{ route('front-end.agenda') }}"><span class="ion-android-arrow-back"></span> {{ 'Back to the agenda' }}</a>
+                    </div>
                 </div>
             </div>
         </div>
