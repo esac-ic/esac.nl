@@ -17,6 +17,8 @@ class CreatePageTest extends TestCase
 
     private $user;
 
+    private MenuItem $parent;
+
     protected function setUp(): void
     {
         parent::setUp();
@@ -24,6 +26,11 @@ class CreatePageTest extends TestCase
 
         $user->roles()->attach(Role::ContentAdministrator->value);
         $this->be($user);
+
+        $this->parent = MenuItem::query()->forceCreate([
+            'name' => 'Parent', 'url_name' => 'parent', 'content' => 'Parent', 'login' => false,
+            'menu_item' => true, 'deletable' => true, 'editable' => true,
+        ]);
     }
 
     #[Test]
@@ -32,8 +39,8 @@ class CreatePageTest extends TestCase
         $body = [
             'url_name' => 'test',
             'itemType' => 'subItem',
-            'parentItem' => 0,
-            'afterItem' => 0,
+            'parentItem' => $this->parent->id,
+            'afterItem' => $this->parent->id,
             'name' => 'Test titel',
             'content' => 'Hele leuke test inhoud.',
         ];
@@ -57,8 +64,8 @@ class CreatePageTest extends TestCase
         $body = [
             'url_name' => 'test',
             'itemType' => 'subItem',
-            'parentItem' => 0,
-            'afterItem' => 0,
+            'parentItem' => $this->parent->id,
+            'afterItem' => $this->parent->id,
             'name' => 'Test title 😀',
             'content' => 'Hele leuke test inhoud. 😀',
         ];
@@ -81,7 +88,7 @@ class CreatePageTest extends TestCase
     {
         $body = ['url_name' => 'test', 'itemType' => 'standAlone', 'afterItem' => -1, 'name' => 'Test title', 'content' => 'Content'];
         $this->post($this->url, $body)->assertSessionHasNoErrors();
-        $page = MenuItem::sole();
+        $page = MenuItem::query()->where('url_name', 'test')->sole();
 
         $this->patch(route('pages.update', $page), [...$body, 'name' => ''])->assertSessionHasErrors('name');
         $this->patch(route('pages.update', $page), [...$body, 'name' => 'New title'])->assertSessionHasNoErrors();
@@ -94,8 +101,8 @@ class CreatePageTest extends TestCase
         $body = [
             'url_name' => 'test',
             'itemType' => 'subItem',
-            'parentItem' => 0,
-            'afterItem' => 0,
+            'parentItem' => $this->parent->id,
+            'afterItem' => $this->parent->id,
             'name' => 'Test titel',
             'content' => 'Very cool test content.',
         ];
@@ -111,7 +118,7 @@ class CreatePageTest extends TestCase
 
         // The user should not be able to create the page.
         $response->assertStatus(403);
-        $this->assertTrue(MenuItem::count() == 0);
+        $this->assertTrue(MenuItem::count() == 1);
     }
 
     #[Test]
@@ -120,8 +127,8 @@ class CreatePageTest extends TestCase
         $body = [
             'url_name' => 'test',
             'itemType' => 'subItem',
-            'parentItem' => 0,
-            'afterItem' => 0,
+            'parentItem' => $this->parent->id,
+            'afterItem' => $this->parent->id,
             'name' => 'Test title',
             'content' => 'Very cool test content.',
         ];
@@ -145,7 +152,7 @@ class CreatePageTest extends TestCase
         $body = [
             'url_name' => 'test',
             'itemType' => 'standAlone',
-            'afterItem' => 0,
+            'afterItem' => $this->parent->id,
             'name' => 'Test title',
             'content' => 'Very cool test content.',
         ];
@@ -169,8 +176,8 @@ class CreatePageTest extends TestCase
         $body = [
             'url_name' => 'test',
             'itemType' => 'subItem',
-            'parentItem' => 0,
-            'afterItem' => 0,
+            'parentItem' => $this->parent->id,
+            'afterItem' => $this->parent->id,
             'name' => 'Test title',
             'content' => 'Very cool test content.',
         ];
@@ -200,7 +207,7 @@ class CreatePageTest extends TestCase
         $body = [
             'url_name' => 'test',
             'itemType' => 'subItem',
-            'parentItem' => 0,
+            'parentItem' => $this->parent->id,
             'afterItem' => -1,
             'name' => 'Test title',
             'content' => 'Very cool test content.',
@@ -246,7 +253,7 @@ class CreatePageTest extends TestCase
         ]);
 
         // No pages should be created.
-        $this->assertTrue(MenuItem::count() == 0);
+        $this->assertTrue(MenuItem::count() == 1);
     }
 
     #[Test]
@@ -255,7 +262,7 @@ class CreatePageTest extends TestCase
         $body = [
             'url_name' => 'test',
             'itemType' => 'subItem',
-            'afterItem' => 0,
+            'afterItem' => $this->parent->id,
             'name' => 'Test title',
             'content' => 'Very cool test content.',
         ];
@@ -271,6 +278,6 @@ class CreatePageTest extends TestCase
         ]);
 
         // No pages should be created.
-        $this->assertTrue(MenuItem::count() == 0);
+        $this->assertTrue(MenuItem::count() == 1);
     }
 }
