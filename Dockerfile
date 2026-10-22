@@ -1,18 +1,7 @@
 # syntax=docker/dockerfile:1
 
-FROM composer:2 AS vendor
-WORKDIR /app
-COPY composer.json composer.lock ./
-RUN composer install --no-dev --no-scripts --no-autoloader --prefer-dist --no-interaction --ignore-platform-reqs
-COPY . .
-RUN composer dump-autoload --no-dev --optimize --no-scripts
-
-FROM node:24-trixie-slim AS assets
-WORKDIR /app
-COPY package.json package-lock.json ./
-RUN npm ci --no-audit --no-fund
-COPY . .
-RUN npm run build
+FROM composer:2 AS composer
+FROM node:24-trixie-slim AS node
 
 FROM dunglas/frankenphp:1.13.2-php8.5.12-trixie AS base
 
@@ -30,11 +19,27 @@ COPY infra/php.ini "$PHP_INI_DIR/conf.d/zz-esac.ini"
 
 WORKDIR /app
 
+# Composer runs on the runtime image, so it checks the platform requirements against its PHP extensions.
+FROM base AS vendor
+COPY --from=composer /usr/bin/composer /usr/bin/composer
+WORKDIR /app
+COPY composer.json composer.lock ./
+RUN composer install --no-dev --no-scripts --no-autoloader --prefer-dist --no-interaction
+COPY . .
+RUN composer dump-autoload --no-dev --optimize --no-scripts
+
+FROM node AS assets
+WORKDIR /app
+COPY package.json package-lock.json ./
+RUN npm ci --no-audit --no-fund
+COPY . .
+RUN npm run build
+
 FROM base AS dev
 COPY infra/php.dev.ini "$PHP_INI_DIR/conf.d/zzz-esac-dev.ini"
-COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
-COPY --from=node:24-trixie-slim /usr/local/bin/node /usr/local/bin/node
-COPY --from=node:24-trixie-slim /usr/local/lib/node_modules /usr/local/lib/node_modules
+COPY --from=composer /usr/bin/composer /usr/bin/composer
+COPY --from=node /usr/local/bin/node /usr/local/bin/node
+COPY --from=node /usr/local/lib/node_modules /usr/local/lib/node_modules
 COPY --chmod=755 infra/dev-entrypoint.sh /usr/local/bin/dev-entrypoint
 
 RUN install-php-extensions xdebug \
