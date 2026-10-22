@@ -4,6 +4,7 @@ namespace App\Http\Controllers\ApplicationForm;
 
 use App\Exports\AgendaRegistrationExport;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\AdminRegistrationRequest;
 use App\Http\Resources\ApplicationFormRowVueResource;
 use App\Models\AgendaItem;
 use App\Models\ApplicationForm\ApplicationResponse;
@@ -12,7 +13,6 @@ use App\Models\User;
 use App\Services\AgendaApplicationFormService;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
-use Illuminate\Http\Request;
 use Illuminate\Routing\Controllers\HasMiddleware;
 use Illuminate\Routing\Controllers\Middleware;
 use Illuminate\Support\Facades\Gate;
@@ -60,9 +60,9 @@ class AgendaApplicationFormController extends Controller implements HasMiddlewar
         ]);
     }
 
-    public function saveRegistration(Request $request, AgendaItem $agendaItem): RedirectResponse
+    public function saveRegistration(AdminRegistrationRequest $request, AgendaItem $agendaItem): RedirectResponse
     {
-        $agendaItem->register($request['user'], $request->except(['_token', 'user']));
+        $agendaItem->register($request->validated('user'), $request->safe()->except('user'));
 
         return to_route('forms.users.index', $agendaItem);
     }
