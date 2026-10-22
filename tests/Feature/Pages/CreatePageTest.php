@@ -77,6 +77,18 @@ class CreatePageTest extends TestCase
     }
 
     #[Test]
+    public function an_edited_page_is_validated_when_its_url_name_is_unchanged()
+    {
+        $body = ['url_name' => 'test', 'itemType' => 'standAlone', 'afterItem' => -1, 'name' => 'Test title', 'content' => 'Content'];
+        $this->post($this->url, $body)->assertSessionHasNoErrors();
+        $page = MenuItem::sole();
+
+        $this->patch(route('pages.update', $page), [...$body, 'name' => ''])->assertSessionHasErrors('name');
+        $this->patch(route('pages.update', $page), [...$body, 'name' => 'New title'])->assertSessionHasNoErrors();
+        $this->assertSame('New title', $page->fresh()->name);
+    }
+
+    #[Test]
     public function no_role_no_create_page()
     {
         $body = [
