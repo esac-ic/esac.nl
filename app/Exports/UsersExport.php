@@ -9,10 +9,42 @@ class UsersExport extends SpreadsheetExport
 {
     public function collection(): Collection
     {
-        return User::query()->current()->with('certificates')->get()->map(fn (User $user) => [
-            ...$user->makeHidden(['updated_at', 'lid_af', 'pending_user', 'deleted_at'])->toArray(),
-            'certificates' => $user->getCertificationsAbbreviations(),
-        ]);
+        return User::query()->current()->with('certificates')->get();
+    }
+
+    /**
+     * @param  User  $user
+     */
+    public function map(mixed $user): array
+    {
+        return [
+            $user->id,
+            $user->email,
+            $user->firstname,
+            $user->preposition,
+            $user->lastname,
+            $user->street,
+            $user->house_number,
+            $user->city,
+            $user->zipcode,
+            $user->country,
+            $user->phone_number,
+            $user->phone_number_alt,
+            $user->emergency_number,
+            $user->emergency_house_number,
+            $user->emergency_street,
+            $user->emergency_city,
+            $user->emergency_zipcode,
+            $user->emergency_country,
+            $user->birthday?->toDateString(),
+            $user->kind_of_member?->value,
+            $user->iban,
+            $user->bic,
+            $user->incasso,
+            $user->remark,
+            $user->created_at,
+            $user->getCertificationsAbbreviations(),
+        ];
     }
 
     public function title(): string

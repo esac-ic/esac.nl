@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\SettingsRequest;
 use App\Models\Setting;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
-use Illuminate\Http\Request;
 use Illuminate\Routing\Controllers\HasMiddleware;
 use Illuminate\Routing\Controllers\Middleware;
 
@@ -29,10 +29,11 @@ class SettingsController extends Controller implements HasMiddleware
         return view('beheer.settings.edit', ['settings' => Setting::all()]);
     }
 
-    public function update(Request $request): RedirectResponse
+    public function update(SettingsRequest $request): RedirectResponse
     {
-        foreach ($request->input('setting', []) as $name => $value) {
-            Setting::query()->where('name', $name)->update(['value' => $value]);
+        foreach ($request->validated('setting') as $name => $value) {
+            // An emptied field is saved as an empty value.
+            Setting::query()->where('name', $name)->update(['value' => $value ?? '']);
         }
 
         return to_route('beheer.settings.show')->with('message', 'Settings updated');

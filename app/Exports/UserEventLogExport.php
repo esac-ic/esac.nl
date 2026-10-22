@@ -8,17 +8,6 @@ use Illuminate\Support\Collection;
 
 class UserEventLogExport extends SpreadsheetExport
 {
-    /**
-     * All properties to be included in the export. Maps model property to header label.
-     * Note: the keys should be the same as the model attributes
-     */
-    private const array PROPERTY_LABELS = [
-        'Time',
-        'Event Type',
-        'User name',
-        'Event Details',
-    ];
-
     public function __construct(
         private readonly ?array $eventTypes,
         private readonly Carbon $startDate,
@@ -30,8 +19,8 @@ class UserEventLogExport extends SpreadsheetExport
         return UserEventLogEntry::query()
             ->whereBetween('created_at', [$this->startDate, $this->endDate])
             ->when($this->eventTypes, fn ($query) => $query->whereIn('event_type', $this->eventTypes))
-            ->get()
-            ->makeHidden(['updated_at']);
+            ->with('user')
+            ->get();
     }
 
     public function title(): string
@@ -49,7 +38,7 @@ class UserEventLogExport extends SpreadsheetExport
 
     public function headings(): array
     {
-        return UserEventLogExport::PROPERTY_LABELS;
+        return ['Time', 'Event Type', 'User name', 'Event Details'];
     }
 
     public function map(mixed $event): array
