@@ -7,9 +7,6 @@ use Illuminate\Support\Collection;
 
 class UsersExport extends SpreadsheetExport
 {
-    /**
-     * @return \Illuminate\Support\Collection
-     */
     public function collection(): Collection
     {
         $activeUsers = User::current()->with('certificates')->get();
@@ -24,21 +21,15 @@ class UsersExport extends SpreadsheetExport
         return new Collection($exportData);
     }
 
-    /**
-     * @return string
-     */
     public function title(): string
     {
         return 'Active members';
     }
 
-    /**
-     * @return array
-     */
     public function headings(): array
     {
         return [
-            "#",
+            '#',
             'Email address',
             'First name',
             'Preposition',
