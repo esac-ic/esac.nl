@@ -7,37 +7,18 @@
 @section('content')
     @include('includes.flash')
 
-    <div class="row mb-3">
-        <div class="col-md-6">
-            <h1>{{'Application forms'}}</h1>
-        </div>
-
-        <div class="col-md-6">
-            <div class="btn-group mt-2 float-md-right" role="group" aria-label="Actions">
-                <a href="{{ route('beheer.applicationForms.create') }}" class="btn btn-primary">
-                    <span title="{{'New user'}}" class="ion-plus" aria-hidden="true"></span>
-                    {{'New application form'}}
-                </a>
-            </div>
-        </div>
-    </div>
-    <table id="users" class="table table-striped dt-responsive nowrap" style="width:100%">
-        <thead>
-        <tr>
-            <th>{{'Name'}}</th>
-            <th>{{ 'Management' }}</th>
-        </tr>
-        </thead>
-        <tbody>
-            @foreach ($applicationForms as $applicationForm)
-                <tr >
-                    <td>{{$applicationForm->name}}</td>
-                    <td>
-                        <a class="mr-1 ml-1" href="{{route('beheer.applicationForms.edit', $applicationForm->id)}}"><span title="{{'Edit application form'}}" class="ion-edit font-size-120" aria-hidden="true"></span></a>
-                        <a class="mr-1 ml-1" href="{{route('beheer.applicationForms.show', $applicationForm->id)}}"><span title="Show application form" class="ion-eye font-size-120" aria-hidden="true"></span></a>
-                    </td>
-                </tr>
-            @endforeach
-        </tbody>
-    </table>
+    <x-page-header title="Application forms">
+        <x-button-link :href="route('beheer.applicationForms.create')" icon="plus">New application form</x-button-link>
+    </x-page-header>
+    <x-data-table :columns="['Name', 'Management']">
+        @foreach ($applicationForms as $applicationForm)
+            <tr>
+                <td>{{$applicationForm->name}}</td>
+                <td>
+                    <x-icon-link :href="route('beheer.applicationForms.edit', $applicationForm)" icon="edit" title="Edit application form" />
+                    <x-icon-link :href="route('beheer.applicationForms.show', $applicationForm)" icon="eye" title="Show application form" />
+                </td>
+            </tr>
+        @endforeach
+    </x-data-table>
 @endsection

@@ -7,42 +7,20 @@
 @section('content')
     @include('includes.flash')
 
-    <div class="row mb-3">
-        <div class="col-md-6">
-            <h1>{{'Pages'}}</h1>
-        </div>
-
-        <div class="col-md-6">
-            <div class="btn-group mt-2 float-md-right" role="group" aria-label="Actions">
-                <a href="{{route('pages.create')}}" class="btn btn-primary">
-                    <span title="{{'New user'}}" class="ion-plus" aria-hidden="true"></span>
-                    {{'New page'}}
-                </a>
-            </div>
-        </div>
-    </div>
-    <table id="users" class="table table-striped dt-responsive nowrap" style="width:100%">
-        <thead>
-        <tr>
-            <th>{{'Name'}}</th>
-            <th>{{'Sub item of'}}</th>
-            <th>{{'After menu item'}}</th>
-            <th>Beheer</th>
-        </tr>
-        </thead>
-        <tbody>
-
+    <x-page-header title="Pages">
+        <x-button-link :href="route('pages.create')" icon="plus">New page</x-button-link>
+    </x-page-header>
+    <x-data-table :columns="['Name', 'Sub item of', 'After menu item', 'Beheer']">
         @foreach ($pages as $menu)
             <tr>
                 <td>{{$menu->name}}</td>
                 <td>{{($menu->partner != null) ? $menu->partner->name : ""}}</td>
                 <td>{{($menu->after != null) ? $menu->afterItem->name : ""}}</td>
                 <td>
-                    <a class="mr-1 ml-1" href="{{route('pages.edit', $menu)}}"><span title="{{'Edit page'}}" class="ion-edit font-size-120" aria-hidden="true"></span></a>
-                    <a class="mr-1 ml-1" href="{{route('pages.show', $menu)}}"><span title="Show page" class="ion-eye font-size-120" aria-hidden="true"></span></a>
+                    <x-icon-link :href="route('pages.edit', $menu)" icon="edit" title="Edit page" />
+                    <x-icon-link :href="route('pages.show', $menu)" icon="eye" title="Show page" />
                 </td>
             </tr>
         @endforeach
-        </tbody>
-    </table>
+    </x-data-table>
 @endsection

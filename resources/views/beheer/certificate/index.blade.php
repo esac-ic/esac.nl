@@ -7,40 +7,19 @@
 @section('content')
     @include('includes.flash')
 
-    <div class="row mb-3">
-        <div class="col-md-6">
-            <h1>{{'Certificate'}}</h1>
-        </div>
-
-        <div class="col-md-6">
-            <div class="btn-group mt-2 float-md-right" role="group" aria-label="Actions">
-                <a href="{{route('certificates.create')}}" class="btn btn-primary">
-                    <span title="{{'New user'}}" class="ion-plus" aria-hidden="true"></span>
-                    {{'Make a new certificate'}}
-                </a>
-            </div>
-        </div>
-    </div>
-    <table id="users" class="table table-striped dt-responsive nowrap" style="width:100%">
-        <thead>
-        <tr>
-            <th>{{'Name'}}</th>
-            <th>{{'Abbreviation'}}</th>
-            <th>{{'Management'}}</th>
-        </tr>
-        </thead>
-        <tbody>
-
+    <x-page-header title="Certificate">
+        <x-button-link :href="route('certificates.create')" icon="plus">Make a new certificate</x-button-link>
+    </x-page-header>
+    <x-data-table :columns="['Name', 'Abbreviation', 'Management']">
         @foreach ($certificates as $certificate)
-            <tr >
+            <tr>
                 <td>{{$certificate->name}}</td>
                 <td>{{$certificate->abbreviation}}</td>
                 <td>
-                    <a class="mr-1 ml-1" href="{{route('certificates.edit', $certificate)}}"><span title="{{'Edit certificate'}}" class="ion-edit font-size-120" aria-hidden="true"></span></a>
-                    <a class="mr-1 ml-1" href="{{route('certificates.show', $certificate)}}"><span title="Show certificate" class="ion-eye font-size-120" aria-hidden="true"></span></a>
+                    <x-icon-link :href="route('certificates.edit', $certificate)" icon="edit" title="Edit certificate" />
+                    <x-icon-link :href="route('certificates.show', $certificate)" icon="eye" title="Show certificate" />
                 </td>
             </tr>
         @endforeach
-        </tbody>
-    </table>
+    </x-data-table>
 @endsection

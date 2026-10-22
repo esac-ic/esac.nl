@@ -3,13 +3,8 @@
 ])
 
 @section('content')
-    <div class="container intro-container">
-        <div class="card">
-            <div class="card-body">
-                <h2 class="card-title">{{'No access'}}</h2>
-                <p>{{'You do not have sufficient access to view this page'}}</p>
-            </div>
-        </div>
-    </div>
+    <x-page-intro title="No access">
+        <p>You do not have sufficient access to view this page</p>
+    </x-page-intro>
 @endsection
 

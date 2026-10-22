@@ -5,53 +5,15 @@
 @endsection
 
 @section('content')
-    <div class="row mb-3">
-        <div class="col-md-6">
-            <h1>{{'Certificate'}}</h1>
-        </div>
-
-        <div class="col-md-6">
-            <div class="btn-group mt-2 float-md-right" role="group" aria-label="Actions">
-                <a href="{{route('certificates.edit', $certificate)}}" class="btn btn-primary">
-                    <em class="ion-edit"></em> {{'Edit'}}
-                </a>
-                <a href="{{route('certificates.index')}}" class="btn btn-block btn-primary">
-                    <em class="ion-android-arrow-back"></em> Back
-                </a>
-                <form method="post"
-                      action="{{ route("certificates.destroy", $certificate) }}"
-                      onsubmit="return confirm('Are you sure you want to delete this certificate?');"
-                >
-                    @csrf
-                    @method('DELETE')
-                    <button type="submit" class="btn btn-danger"><em class="ion-trash-a"></em> {{'Remove'}}</button>
-                </form>
-            </div>
-        </div>
-    </div>
-    <div class="card mt-4">
-        <div class="card-header">
-            <h3>{{'Role'}}</h3>
-        </div>
-        <div class="card-body">
-            <table class="table table-striped" style="width:100%">
-                <tr>
-                    <td>
-                        {{'Name'}}
-                    </td>
-                    <td>
-                        {{$certificate->name}}
-                    </td>
-                </tr>
-                <tr>
-                    <td>
-                        {{'Abbreviation'}}
-                    </td>
-                    <td>
-                        {{$certificate->abbreviation}}
-                    </td>
-                </tr>
-            </table>
-        </div>
-    </div>
+    <x-page-header title="Certificate">
+        <x-edit-button :href="route('certificates.edit', $certificate)" />
+        <x-back-button :href="route('certificates.index')" />
+        <x-delete-button :action="route('certificates.destroy', $certificate)" confirm="Are you sure you want to delete this certificate?" />
+    </x-page-header>
+    <x-card title="Role" class="mt-4">
+        <table class="table table-striped" style="width:100%">
+            <x-detail-row label="Name">{{ $certificate->name }}</x-detail-row>
+            <x-detail-row label="Abbreviation">{{ $certificate->abbreviation }}</x-detail-row>
+        </table>
+    </x-card>
 @endsection

@@ -5,60 +5,24 @@ Page
 @endsection
 
 @section('content')
-    <div class="row mb-3">
-        <div class="col-md-6">
-            <h1>Page</h1>
-        </div>
-
-        <div class="col-md-6">
-            <div class="btn-group mt-2 float-md-right" role="group" aria-label="Actions">
-                <a href="{{route('pages.edit', $page)}}" class="btn btn-primary">
-                    <span title="{{'Edit'}}" class="ion-edit" aria-hidden="true"></span>
-                    {{'Edit'}}
-                </a>
-                <a href="{{route('pages.index')}}" class="btn btn-primary">
-                    <span title="{{'Back'}}" class="ion-android-arrow-back" aria-hidden="true"></span>
-                    {{'Back'}}
-                </a>
-                @if($page->deletable)
-                    <form method="post"
-                          action="{{ route("pages.destroy", $page) }}"
-                          onsubmit="return confirm('Are you sure you want to delete this page?');"
-                    >
-                        @csrf
-                        @method('DELETE')
-                        <button type="submit" class="btn btn-danger"><em class="ion-trash-a"></em> {{'Remove'}}</button>
-                    </form>
-                @endif
-            </div>
-        </div>
-    </div>
+    <x-page-header title="Page">
+        <x-button-link :href="route('pages.edit', $page)" icon="edit">Edit</x-button-link>
+        <x-button-link :href="route('pages.index')" icon="android-arrow-back">Back</x-button-link>
+        @if($page->deletable)
+            <x-delete-button :action="route('pages.destroy', $page)" confirm="Are you sure you want to delete this page?" />
+        @endif
+    </x-page-header>
     <div class="card mt-4">
         <div class="card-header">
             <h3>Page {{$page->name}}</h3>
         </div>
         <div class="card-body">
             <table class="table table-striped" style="width:100%">
-                <tr>
-                    <td>{{'Name'}}</td>
-                    <td>{{$page->name}}</td>
-                </tr>
-                <tr>
-                    <td>{{'Sub item of'}}</td>
-                    <td>{{($page->partner != null) ?$page->partner->name : ""}}</td>
-                </tr>
-                <tr>
-                    <td>{{'URL name'}}</td>
-                    <td>{{$page->url_name}}</td>
-                </tr>
-                <tr>
-                    <td>{{'User needs to be logged in to view the page'}}</td>
-                    <td>{{($page->login)? 'Yes' : 'No'}}</td>
-                </tr>
-                <tr>
-                    <td>{{'After menu item'}}</td>
-                    <td>{{($page->after != null) ?$page->afterItem->name : ""}}</td>
-                </tr>
+                <x-detail-row label="Name">{{$page->name}}</x-detail-row>
+                <x-detail-row label="Sub item of">{{($page->partner != null) ?$page->partner->name : ""}}</x-detail-row>
+                <x-detail-row label="URL name">{{$page->url_name}}</x-detail-row>
+                <x-detail-row label="User needs to be logged in to view the page">{{($page->login)? 'Yes' : 'No'}}</x-detail-row>
+                <x-detail-row label="After menu item">{{($page->after != null) ?$page->afterItem->name : ""}}</x-detail-row>
                 @foreach($subItems as $subItem)
                     <tr>
                         @if($loop->first)

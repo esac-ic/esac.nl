@@ -7,40 +7,22 @@
 @section('content')
     @include('includes.flash')
     
-    <div class="row mb-3">
-        <div class="col-md-6">
-            <h1>{{'Mailing list'}}</h1>
-        </div>
-
-        <div class="col-md-6">
-            <div class="btn-group mt-2 float-md-right" role="group" aria-label="Actions">
-                <form method="post"
-                      action="{{ route('mailList.massSync') }}"
-                      onsubmit="return confirm('Are you sure?\nThis action adds users to all maillists associated with their membership type.\nThis may cause people who have unsubscribed from a maillist to be readded.')"
-                >
-                    @csrf
-                    <button title="{{'Sync member mail lists'}}" type="submit" class="btn btn-primary"><span class="ion-loop" aria-hidden="true"></span> {{'Sync member mail lists'}}</button>
-                </form>    
-                <a href="{{route('mailList.create')}}" class="btn btn-primary" title="{{'New mailing list'}}">
-                    <span class="ion-plus" aria-hidden="true"></span>
-                    {{'New mailing list'}}
-                </a>
-            </div>
-        </div>
-    </div>
-    <table id="users" class="table table-striped dt-responsive nowrap" style="width:100%">
-        <thead>
-        <tr>
-            <th>{{'Name'}}</th>
-            <th>{{'Email'}}</th>
-            <th>{{'Members count'}}</th>
-            <th>Beheer</th>
-        </tr>
-        </thead>
-        <tbody>
-
+    <x-page-header title="Mailing list">
+        <form method="post"
+              action="{{ route('mailList.massSync') }}"
+              onsubmit="return confirm('Are you sure?\nThis action adds users to all maillists associated with their membership type.\nThis may cause people who have unsubscribed from a maillist to be readded.')"
+        >
+            @csrf
+            <button title="{{'Sync member mail lists'}}" type="submit" class="btn btn-primary"><span class="ion-loop" aria-hidden="true"></span> {{'Sync member mail lists'}}</button>
+        </form>    
+        <a href="{{route('mailList.create')}}" class="btn btn-primary" title="{{'New mailing list'}}">
+            <span class="ion-plus" aria-hidden="true"></span>
+            {{'New mailing list'}}
+        </a>
+    </x-page-header>
+    <x-data-table :columns="['Name', 'Email', 'Members count', 'Beheer']">
         @foreach ($mailLists as $mailingList)
-            <tr >
+            <tr>
                 <td>{{$mailingList->name}}</td>
                 <td>{{$mailingList->address}}</td>
                 <td>{{$mailingList->members_count}}</td>
@@ -49,6 +31,5 @@
                 </td>
             </tr>
         @endforeach
-        </tbody>
-    </table>
+    </x-data-table>
 @endsection

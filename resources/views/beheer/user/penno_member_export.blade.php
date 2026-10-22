@@ -8,18 +8,10 @@
     @include('includes.flash')
     <x-validation-errors />
 
-    <div class="card">
-        <div class="card-header">
-            <h3>Penno export</h3>
-        </div>
-        <div class="card-body">
-            {{ html()->form('GET', route('users.pennoMemberExport'))->open() }}
-            <div class="form-group">
-                {{ html()->label('Amount of days in the past', 'days_ago') }}
-                {{ html()->number('days_ago', 7)->class('form-control')->required() }}
-            </div>
-        </div>
-    </div>
+    <x-card title="Penno export">
+        {{ html()->form('GET', route('users.pennoMemberExport'))->open() }}
+        <x-field name="days_ago" label="Amount of days in the past" type="number" value="7" required />
+    </x-card>
 
     <div class="my-4">
         {{ html()->submit('Download')->class('btn btn-primary') }}

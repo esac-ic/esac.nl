@@ -7,19 +7,10 @@
 @section('content')
     <div id="app">
         {{ html()->form('POST', route('forms.admin.store', $agendaItem))->open() }}
-            @csrf
-            <div class="card">
-                <div class="card-header">
-                    <h3>{{$applicationForm->name}}</h3>
-                </div>
-                <div class="card-body">
-                    <div class="form-group">
-                        {{ html()->label('Member who will be registered:', 'user') }}
-                        {{ html()->select('user', $users)->class('form-control')->required() }}
-                    </div>
-                    <registration-form rows="{{ json_encode($rows) }}"></registration-form>
-                </div>
-            </div>
+            <x-card :title="$applicationForm->name">
+                <x-field name="user" label="Member who will be registered:" :options="$users" required />
+                <registration-form rows="{{ json_encode($rows) }}"></registration-form>
+            </x-card>
 
             <div class="my-4">
                 {{ html()->submit('Submit')->class('btn btn-primary') }}

@@ -5,21 +5,13 @@
 @endsection
 
 @section('content')
-    <div class="card">
-        <div class="card-header">
-            <h3>{{'Edit settings'}}</h3>
-        </div>
-        <div class="card-body">
-            {{ html()->form('POST', route('beheer.settings.update'))->acceptsFiles()->open() }}
-            @method('PUT')
-            @foreach($settings as $setting)
-                <div class="form-group">
-                    {{ html()->label(trans('settings.' . $setting->name), 'setting['. $setting->name . ']') }}
-                    {{ html()->text('setting['. $setting->name . ']', $setting->value)->class('form-control') }}
-                </div>
-            @endforeach
-        </div>
-    </div>
+    <x-card title="Edit settings">
+        {{ html()->form('POST', route('beheer.settings.update'))->acceptsFiles()->open() }}
+        @method('PUT')
+        @foreach($settings as $setting)
+            <x-field :name="'setting['.$setting->name.']'" :label="trans('settings.'.$setting->name)" :value="$setting->value" />
+        @endforeach
+    </x-card>
 
     <div class="my-4">
         {{ html()->submit('Save')->class('btn btn-primary') }}

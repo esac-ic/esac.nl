@@ -5,25 +5,7 @@
 @endsection
 
 @section('content')
-    @include('includes.flash')
-    <x-validation-errors />
-
-    <div class="card">
-        <div class="card-header">
-            <h3>{{$fields['title']}}</h3>
-        </div>
-        <div class="card-body">
-            {{ html()->form($fields['method'], $fields['url'])->open() }}
-            <div class="form-group">
-                {{ html()->label('Name', 'name') }}
-                {{ html()->text('name', ($agendaItemCategory != null) ? $agendaItemCategory->name : "")->class('form-control')->required() }}
-            </div>
-        </div>
-    </div>
-
-    <div class="my-4">
-        {{ html()->submit('Save')->class('btn btn-primary') }}
-        {{ html()->form()->close() }}
-        <a class="btn btn-danger btn-close" href="{{ $agendaItemCategory === null ? route('agendaItemCategories.index') : route('agendaItemCategories.show', $agendaItemCategory) }}">{{'Cancel'}}</a>
-    </div>
+    <x-form-card :$fields :cancel="$agendaItemCategory === null ? route('agendaItemCategories.index') : route('agendaItemCategories.show', $agendaItemCategory)">
+        <x-field name="name" label="Name" :value="$agendaItemCategory?->name" required />
+    </x-form-card>
 @endsection

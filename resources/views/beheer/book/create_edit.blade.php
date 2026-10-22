@@ -5,43 +5,13 @@
 @endsection
 
 @section('content')
-    @include('includes.flash')
-    <x-validation-errors />
-
-    <div class="card">
-        <div class="card-header">
-            <h3>{{$fields['title']}}</h3>
+    <x-form-card :$fields :cancel="$book === null ? route('books.index') : route('books.show', $book)">
+        <x-field name="title" label="Title" :value="$book?->title" required />
+        <div class="form-row">
+            <x-field name="year" label="Year" type="number" :value="$book?->year" col="3" required />
+            <x-field name="country" label="Country" :value="$book?->country" col="3" required />
+            <x-field name="type" label="Type" :value="$book?->type" col="3" required />
+            <x-field name="code" label="Code" :value="$book?->code" col="3" required />
         </div>
-        <div class="card-body">
-            {{ html()->form($fields['method'], $fields['url'])->open() }}
-            <div class="form-group">
-                {{ html()->label('Title', 'title') }}
-                {{ html()->text('title', ($book != null) ? $book->title : "")->class('form-control')->required() }}
-            </div>
-            <div class="form-row">
-                <div class="form-group col-md-3">
-                    {{ html()->label('Year', 'year') }}
-                    {{ html()->number('year', ($book != null) ? $book->year : "")->class('form-control')->required() }}
-                </div>
-                <div class="form-group col-md-3">
-                    {{ html()->label('Country', 'country') }}
-                    {{ html()->text('country', ($book != null) ? $book->country : "")->class('form-control')->required() }}
-                </div>
-                <div class="form-group col-md-3">
-                    {{ html()->label('Type', 'type') }}
-                    {{ html()->text('type', ($book != null) ? $book->type : "")->class('form-control')->required() }}
-                </div>
-                <div class="form-group col-md-3">
-                    {{ html()->label('Code', 'code') }}
-                    {{ html()->text('code', ($book != null) ? $book->code : "")->class('form-control')->required() }}
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <div class="my-4">
-        {{ html()->submit('Save')->class('btn btn-primary') }}
-        {{ html()->form()->close() }}
-        <a class="btn btn-danger btn-close" href="{{ $book === null ? route('books.index') : route('books.show', $book) }}">{{'Cancel'}}</a>
-    </div>
+    </x-form-card>
 @endsection

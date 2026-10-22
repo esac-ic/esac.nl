@@ -3,15 +3,9 @@
 @section('content')
 <div class="container intro-container" id="app">
     {{ html()->form('POST', $route)->open() }}
-    @csrf
-        <div class="card">
-            <div class="card-header">
-                <h3>{{ $applicationForm->name }}</h3>
-            </div>
-            <div class="card-body">
-                <registration-form rows="{{ json_encode($rows) }}"></registration-form>
-            </div>
-        </div>
+        <x-card :title="$applicationForm->name">
+            <registration-form rows="{{ json_encode($rows) }}"></registration-form>
+        </x-card>
 
         <div class="my-4">
             {{ html()->submit('Submit')->class('btn btn-primary') }}
