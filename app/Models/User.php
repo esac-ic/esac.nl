@@ -82,6 +82,7 @@ class User extends Authenticatable
             'birthday' => 'date',
             'lid_af' => 'date:Y-m-d',
             'pending_user' => 'date:Y-m-d',
+            'incasso' => 'boolean',
         ];
     }
 

@@ -144,7 +144,7 @@
                 </div>
             </div>
             <div class="form-check">
-                {{ html()->checkbox('incasso', ! session()->hasOldInput() && $user != null && $user->incasso === 1)->class('form-check-input')->id('incasso') }}
+                {{ html()->checkbox('incasso', ! session()->hasOldInput() && $user?->incasso)->class('form-check-input')->id('incasso') }}
                 {{ html()->label('Accept Automatic Collection', 'incasso')->class('form-check-label') }}
             </div>
         </div>

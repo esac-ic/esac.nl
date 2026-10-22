@@ -15,6 +15,9 @@ class ApplicationForm extends Model
 {
     use HasFactory, SoftDeletes;
 
+    /**
+     * @return HasMany<ApplicationFormRow, $this>
+     */
     public function applicationFormRows(): HasMany
     {
         return $this->hasMany(ApplicationFormRow::class, 'application_form_id');
