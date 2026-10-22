@@ -16,6 +16,7 @@ class PendingUserController extends Controller implements HasMiddleware
         return [
             new Middleware('auth', except: ['storePendingUser']),
             new Middleware('can:manage-members', except: ['storePendingUser']),
+            new Middleware('throttle:5,1', only: ['storePendingUser']),
         ];
     }
 
