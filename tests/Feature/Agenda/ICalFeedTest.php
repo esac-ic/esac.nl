@@ -39,6 +39,6 @@ class ICalFeedTest extends TestCase
         $this->assertStringContainsString("DTSTART:20261231T230000Z\r\n", $ics);
         $this->assertStringContainsString('UID:agenda-item-'.$item->id.'@localhost', $ics);
         $this->assertStringContainsString('Bring a rope & harness', $ics);
-        $this->assertStringContainsString('Meer informatie: http://localhost/agenda/'.$item->id, $ics);
+        $this->assertStringContainsString('More information: http://localhost/agenda/'.$item->id, $ics);
     }
 }

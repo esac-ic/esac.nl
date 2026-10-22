@@ -15,6 +15,13 @@ use Illuminate\Database\Eloquent\Model;
 ])]
 class Setting extends Model
 {
+    protected function casts(): array
+    {
+        return [
+            'name' => SettingKey::class,
+        ];
+    }
+
     public static function valueOf(SettingKey $key): string
     {
         // All settings are read with one query per request (or queued job).

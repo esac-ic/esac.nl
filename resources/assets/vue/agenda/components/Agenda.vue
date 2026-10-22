@@ -67,7 +67,7 @@ import AgendaPagination from './AgendaPagination';
         data() {
             return {
                 description: DESCRIPTION,
-                titleText: 'Activiteiten',
+                titleText: 'Activities',
                 exportText: 'Exporteren',
                 filterText: "Filters",
             }

@@ -1,7 +1,7 @@
 <?php
 
 return [
-    'unique' => 'The :attribute  is already used',
+    'unique' => 'The :attribute is already used',
     'min' => [
         'numeric' => ':attribute has to be at least :min',
     ],

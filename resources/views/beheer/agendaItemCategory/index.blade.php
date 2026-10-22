@@ -8,7 +8,7 @@ Event categories
     <x-page-header title="Event categories">
         <x-button-link :href="route('beheer.agenda-item-categories.create')" icon="plus">New category</x-button-link>
     </x-page-header>
-    <x-data-table :columns="['Name', 'Beheer']">
+    <x-data-table :columns="['Name', 'Actions']">
         @foreach ($agendaItemCategories as $category)
             <tr>
                 <td>{{$category->name}}</td>

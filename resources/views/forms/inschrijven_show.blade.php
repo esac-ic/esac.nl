@@ -21,8 +21,8 @@ Subscriptions: {{ $agendaItem->title }}
         <tr>
             <th>Name</th>
             <th>Email address</th>
-            <th>Adres</th>
-            <th>Beheer</th>
+            <th>Address</th>
+            <th>Actions</th>
         </tr>
         </thead>
         <tbody>

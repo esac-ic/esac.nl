@@ -7,7 +7,7 @@
             <div class="col-sm-8 d-flex flex-wrap">
                 <div class="card w-100">
                     <div class="card-body">
-                        <h2 class="card-title">Er wordt gezekerd dat...</h2>
+                        <h2 class="card-title">Rumour has it that...</h2>
                         {!! $content !!}
                     </div>
                 </div>     
@@ -20,7 +20,7 @@
                             {{ html()->form('POST', route('api.zekeringen.store'))->open() }}
                             <x-field name="text" id="zekering_content" label="Inhoud" type="textarea" required maxlength="150" rows="3" />
                             <div class="form-group">
-                                {{ html()->submit('Voeg toe')->class('btn btn-primary') }}
+                                {{ html()->submit('Add')->class('btn btn-primary') }}
                             </div>
                             {{ html()->form()->close() }}
                         @else

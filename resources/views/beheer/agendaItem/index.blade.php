@@ -34,7 +34,6 @@
     <script src="{{mix("js/vendor/tempusdominus.js")}}"></script>
     <script>
         $('#startDateBox').datetimepicker({
-            locale: 'nl',
             format: "DD-MM-YYYY",
             icons: {
                 time: 'ion-clock',

@@ -6,7 +6,7 @@ Pending users
 
 @section('content')
     <x-page-header title="Pending users" />
-    <x-data-table :columns="['Name', 'Email address', 'Type of member', 'Beheer']">
+    <x-data-table :columns="['Name', 'Email address', 'Type of member', 'Actions']">
         @foreach ($users as $user)
             <tr>
                 <td>{{$user->getName()}}</td>

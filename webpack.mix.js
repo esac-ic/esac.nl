@@ -20,10 +20,7 @@ mix.js('resources/assets/js/app.js', 'public/js')
       "node_modules/datatables.net-responsive-bs4/js/responsive.bootstrap4.js",
       "resources/assets/js/datatables.js"],
       "public/js/vendor/datatables.js")
-   .combine([
-      "node_modules/moment/moment.js",
-      "node_modules/moment/locale/nl.js"],
-      "public/js/vendor/moment.js")
+   .combine("node_modules/moment/moment.js", "public/js/vendor/moment.js")
    .sass("resources/assets/scss/theme.scss", "public/css/app.css")
    .options({
       processCssUrls: false
