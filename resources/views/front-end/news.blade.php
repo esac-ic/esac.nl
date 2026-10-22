@@ -16,13 +16,13 @@
             <div class="col-lg-4 col-md-6 d-flex flex-wrap">
                 <div class="card w-100 position-relative">
                     @if($newsItem->thumbnail_url != "")
-                    <a href="/news/{{ $newsItem->id }}">
+                    <a href="{{ route('front-end.news.detail', $newsItem) }}">
                         <img class="card-img-top" src="{{$newsItem->getThumbnailUrl()}}" alt="Card image cap">
                     </a>
                     @endif
                     <span class="card-date position-absolute bg-light py-1 px-3 rounded">{{\Carbon\Carbon::parse($newsItem->created_at)->format('d M')}}</span>
                     <div class="card-body">
-                        <a href="/news/{{ $newsItem->id }}">
+                        <a href="{{ route('front-end.news.detail', $newsItem) }}">
                             <h4 class="card-title">{{$newsItem->title}}</h4>
                             <p class="card-text text-body">{{ strip_tags(\Illuminate\Support\Str::limit($newsItem->text, 150, '...')) }}</p>
                         </a>
@@ -33,7 +33,7 @@
                                 <span class="ion-person"></span> {{$newsItem->author}}
                             </div>
                             <div class="col-auto">
-                                <a class="btn btn-outline-primary" href="/news/{{$newsItem->id}}">{{'Read more'}}</a>
+                                <a class="btn btn-outline-primary" href="{{ route('front-end.news.detail', $newsItem) }}">{{'Read more'}}</a>
                             </div>
                         </div>
                     </div>

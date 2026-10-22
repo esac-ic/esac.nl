@@ -40,7 +40,7 @@ class AgendaItemController extends Controller implements HasMiddleware
 
     public function create()
     {
-        $fields = $this->getFields('POST', '/agendaItems', 'Add an event');
+        $fields = $this->getFields('POST', route('agendaItems.store'), 'Add an event');
         return $this->renderCreateEditView(null, $fields);
     }
 
@@ -50,7 +50,7 @@ class AgendaItemController extends Controller implements HasMiddleware
         $agendaItem = $this->_agendaItemRepository->create($request->all());
         $this->handleImage($request, $agendaItem);
         Session::flash("message", 'Event added');
-        return redirect('/agendaItems');
+        return to_route('agendaItems.index');
     }
 
     public function show(AgendaItem $agendaItem): View
@@ -60,7 +60,7 @@ class AgendaItemController extends Controller implements HasMiddleware
 
     public function edit(AgendaItem $agendaItem)
     {
-        $fields = $this->getFields('PATCH', '/agendaItems/' . $agendaItem->id, 'Edit event');
+        $fields = $this->getFields('PATCH', route('agendaItems.update', $agendaItem), 'Edit event');
         return $this->renderCreateEditView($agendaItem, $fields);
     }
 
@@ -70,20 +70,20 @@ class AgendaItemController extends Controller implements HasMiddleware
         $this->_agendaItemRepository->update($agendaItem->id, $request->all());
         $this->handleImage($request, $agendaItem);
         Session::flash("message", 'Event edited');
-        return redirect('/agendaItems');
+        return to_route('agendaItems.index');
     }
 
     public function destroy($id): RedirectResponse
     {
         $this->_agendaItemRepository->delete($id);
         Session::flash("message", 'Event removed');
-        return redirect('/agendaItems');
+        return to_route('agendaItems.index');
     }
 
     public function copy(AgendaItem $agendaItem): RedirectResponse
     {
         $newAgendaItem = $this->_agendaItemRepository->copy($agendaItem);
-        return redirect('/agendaItems/' . $newAgendaItem->id . '/edit');
+        return to_route('agendaItems.edit', $newAgendaItem);
     }
 
     private function validateInput(Request $request): void

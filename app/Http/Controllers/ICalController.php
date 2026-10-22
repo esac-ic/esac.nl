@@ -40,7 +40,7 @@ class ICalController extends Controller
                 ->setDescription(
                     html_entity_decode(strip_tags($agendaItem->text)).
                     "\r\n\r\n----------\r\n".
-                    'Meer informatie: '.url('/agenda/'.$agendaItem->id)
+                    'Meer informatie: '.route('agenda.detail', $agendaItem)
                 );
             $calendar->addEvent($event);
         }

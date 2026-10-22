@@ -26,7 +26,7 @@
                                 {{ session('status') }}
                             </div>
                             @endif
-                            <form class="text-left col-lg-8" role="form" method="POST" action="{{ url('/login') }}">
+                            <form class="text-left col-lg-8" role="form" method="POST" action="{{ route('login.store') }}">
                                 @csrf
                                 <div class="form-group {{ $errors->has('email') ? ' has-error' : '' }}">
                                     <label for="email">{{'Email adress'}}</label>

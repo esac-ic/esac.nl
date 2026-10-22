@@ -30,7 +30,7 @@
         </ul>
     @endif
 
-    {{ html()->form('POST', url('signup'))->open() }}
+    {{ html()->form('POST', route('user.signup'))->open() }}
     <div class="card mt-4" id="personal-info">
         <div class="card-header">
             <h3>{{'Personal'}}</h3>

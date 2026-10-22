@@ -15,11 +15,11 @@
                 <a href="#" id="addMember" class="btn btn-primary" data-toggle="modal" data-target="#addUserModal">
                     <em class="ion-plus"></em> {{'Add members'}}
                 </a>
-                <a href="{{url('/mailList/')}}" class="btn btn-primary">
+                <a href="{{route('mailList.index')}}" class="btn btn-primary">
                     <em class="ion-android-arrow-back"></em>  {{'Back'}}
                 </a>
                 <form method="post"
-                      action="{{ url('mailList/' . $mailList->getId()) }}"
+                      action="{{ route('mailList.destroy', $mailList->getId()) }}"
                       onsubmit="return confirm('Are you sure you want to delete the maillist?');"
                 >
                     @csrf
@@ -113,7 +113,7 @@
             if (confirm('Are you sure you want to remove this member from {{$mailList->getAddress()}}?'))
             {
                 $.ajax({
-                    url: '/mailList/' + mailListId + '/member/' + memberEmail,
+                    url: '{{ route('mailList.members.destroy', ['__list__', '__member__']) }}'.replace('__list__', mailListId).replace('__member__', memberEmail),
                     data: {
                         _token: window.Laravel.csrfToken
                     },

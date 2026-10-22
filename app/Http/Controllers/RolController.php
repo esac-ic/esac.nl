@@ -33,7 +33,7 @@ class RolController extends Controller implements HasMiddleware
     {
         $fields = ['title' => 'Add a role',
             'method' => 'POST',
-            'url' => '/rols'];
+            'url' => route('rols.store')];
         $rol = null;
         return view('beheer.rol.create_edit', compact('fields', 'rol'));
     }
@@ -44,7 +44,7 @@ class RolController extends Controller implements HasMiddleware
         Rol::create($this->validateInput($request));
 
         Session::flash("message", 'Role added');
-        return redirect('/rols');
+        return to_route('rols.index');
     }
 
     public function show(Request $request, Rol $rol): View
@@ -57,7 +57,7 @@ class RolController extends Controller implements HasMiddleware
     {
         $fields = ['title' => 'Edit role',
             'method' => 'PATCH',
-            'url' => '/rols/' . $rol->id];
+            'url' => route('rols.update', $rol)];
 
         return view('beheer.rol.create_edit', compact('fields', 'rol'));
     }
@@ -68,7 +68,7 @@ class RolController extends Controller implements HasMiddleware
         $rol->update($this->validateInput($request));
 
         Session::flash("message", 'Role edited');
-        return redirect('/rols');
+        return to_route('rols.index');
     }
 
     public function destroy(Request $request, Rol $rol): RedirectResponse
@@ -76,7 +76,7 @@ class RolController extends Controller implements HasMiddleware
         $rol->delete();
 
         Session::flash("message", 'Role removed');
-        return redirect('/rols');
+        return to_route('rols.index');
     }
 
     private function validateInput(Request $request): array

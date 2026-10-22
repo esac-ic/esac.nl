@@ -35,7 +35,7 @@ return Application::configure(basePath: dirname(__DIR__))
             'authorize' => Authorize::class,
         ]);
 
-        $middleware->redirectUsersTo('/home');
+        $middleware->redirectUsersTo(fn () => route('front-end.home'));
     })
     ->withExceptions(function (Exceptions $exceptions): void {
         $exceptions->shouldRenderJsonWhen(

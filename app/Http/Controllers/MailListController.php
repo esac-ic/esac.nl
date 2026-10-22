@@ -48,7 +48,7 @@ class MailListController extends Controller implements HasMiddleware
     {
         $fields = ['title' => 'Add mailing list',
             'method' => 'POST',
-            'url' => '/mailList'];
+            'url' => route('mailList.store')];
         $mailList = null;
         return view('beheer.mailList.create_edit', compact('fields', 'mailList'));
     }
@@ -66,7 +66,7 @@ class MailListController extends Controller implements HasMiddleware
             Log::error($msg, ['exception' => $e]);
         }
 
-        return redirect('/mailList');
+        return to_route('mailList.index');
     }
 
     public function show(Request $request, $mailList): View
@@ -79,7 +79,7 @@ class MailListController extends Controller implements HasMiddleware
     {
         $this->_mailListFacade->deleteMailList($mailList);
 
-        return redirect('/mailList');
+        return to_route('mailList.index');
     }
 
     public function addMember(Request $request, $mailList): string
@@ -102,6 +102,6 @@ class MailListController extends Controller implements HasMiddleware
     {
         // One job per member, so a long list doesn't hit the worker's timeout and each member is retried on its own
         $this->userRepository->getCurrentUsers()->each(fn (User $user) => MemberMassMailListSyncJob::dispatch($user));
-        return redirect('/mailList');
+        return to_route('mailList.index');
     }
 }

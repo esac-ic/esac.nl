@@ -26,7 +26,7 @@ TODO: voeg toe moet gewoon plusje worden
                     <div class="card-body">
                         <h4 class="card-title">{{'Add zekering'}}</h4>
                         @if (!Auth::guest())
-                            {{ html()->form('POST', url('api/zekeringen'))->open() }}
+                            {{ html()->form('POST', route('api.zekeringen.store'))->open() }}
                             <div class="form-group">
                                 {{ html()->label('Inhoud', 'zekering_content') }}
                                 {{ html()->textarea('text')->text(old('text', ''))->class('form-control')->required()->maxlength(150)->id('zekering_content')->cols(50)->rows(3) }}

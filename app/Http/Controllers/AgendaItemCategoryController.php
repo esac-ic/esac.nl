@@ -31,7 +31,7 @@ class AgendaItemCategoryController extends Controller implements HasMiddleware
     {
         $fields = ['title' => 'Add an event category',
             'method' => 'POST',
-            'url' => '/agendaItemCategories'];
+            'url' => route('agendaItemCategories.store')];
         $agendaItemCategory = null;
         return view('beheer.agendaItemCategory.create_edit', compact(['fields', 'agendaItemCategory']));
     }
@@ -41,7 +41,7 @@ class AgendaItemCategoryController extends Controller implements HasMiddleware
         AgendaItemCategory::create($this->validateInput($request));
 
         Session::flash("message", 'Events category is added');
-        return redirect('/agendaItemCategories');
+        return to_route('agendaItemCategories.index');
     }
 
     public function show(AgendaItemCategory $agendaItemCategory): View
@@ -53,7 +53,7 @@ class AgendaItemCategoryController extends Controller implements HasMiddleware
     {
         $fields = ['title' => 'Edit category',
             'method' => 'PATCH',
-            'url' => '/agendaItemCategories/' . $agendaItemCategory->id];
+            'url' => route('agendaItemCategories.update', $agendaItemCategory)];
 
         return view('beheer.agendaItemCategory.create_edit', compact('fields', 'agendaItemCategory'));
     }
@@ -63,7 +63,7 @@ class AgendaItemCategoryController extends Controller implements HasMiddleware
         $agendaItemCategory->update($this->validateInput($request));
 
         Session::flash("message", 'Events category is edited');
-        return redirect('/agendaItemCategories');
+        return to_route('agendaItemCategories.index');
     }
 
     public function destroy(AgendaItemCategory $agendaItemCategory): RedirectResponse
@@ -71,7 +71,7 @@ class AgendaItemCategoryController extends Controller implements HasMiddleware
         $agendaItemCategory->delete();
 
         Session::flash("message", 'Events category is removed');
-        return redirect('/agendaItemCategories');
+        return to_route('agendaItemCategories.index');
     }
 
     private function validateInput(Request $request): array

@@ -22,7 +22,7 @@
 
     <h1>{{$fields['title']}}</h1>
 
-    {{ html()->form($fields['method'], url($fields['url']))->open() }}
+    {{ html()->form($fields['method'], $fields['url'])->open() }}
     <div class="card mt-4" id="personal-info">
         <div class="card-header">
             <h3>{{'Personal'}}</h3>
@@ -206,7 +206,7 @@
     @endif
     <div class="my-4">
         {{ html()->submit('Save')->class('btn btn-primary') }}
-        <a class="btn btn-danger" href="{{ ($user == null) ? ('/users') : ('/users/' . $user->id)}}">{{'Cancel'}}</a>
+        <a class="btn btn-danger" href="{{ $user === null ? route('users.index') : route('users.show', $user) }}">{{'Cancel'}}</a>
     </div>
 
     {{ html()->form()->close() }}

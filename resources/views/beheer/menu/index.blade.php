@@ -21,7 +21,7 @@
 
         <div class="col-md-6">
             <div class="btn-group mt-2 float-md-right" role="group" aria-label="Actions">
-                <a href="{{url('pages/create')}}" class="btn btn-primary">
+                <a href="{{route('pages.create')}}" class="btn btn-primary">
                     <span title="{{'New user'}}" class="ion-plus" aria-hidden="true"></span>
                     {{'New page'}}
                 </a>
@@ -45,8 +45,8 @@
                 <td>{{($menu->partner != null) ? $menu->partner->name : ""}}</td>
                 <td>{{($menu->after != null) ? $menu->afterItem->name : ""}}</td>
                 <td>
-                    <a class="mr-1 ml-1" href="{{url('/pages/' . $menu->id . '/edit')}}"><span title="{{'Edit page'}}" class="ion-edit font-size-120" aria-hidden="true"></span></a>
-                    <a class="mr-1 ml-1" href="{{url('/pages/'. $menu->id)}}"><span title="Show page" class="ion-eye font-size-120" aria-hidden="true"></span></a>
+                    <a class="mr-1 ml-1" href="{{route('pages.edit', $menu)}}"><span title="{{'Edit page'}}" class="ion-edit font-size-120" aria-hidden="true"></span></a>
+                    <a class="mr-1 ml-1" href="{{route('pages.show', $menu)}}"><span title="Show page" class="ion-eye font-size-120" aria-hidden="true"></span></a>
                 </td>
             </tr>
         @endforeach
