@@ -69,7 +69,7 @@
                                 </a>
                                 <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
                                     <a class="dropdown-item"
-                                       href="{{ route('users.show', [auth()->user(), 'back' => 'false']) }}">{{ 'Account overview' }}</a>
+                                       href="{{ route('beheer.users.show', [auth()->user(), 'back' => 'false']) }}">{{ 'Account overview' }}</a>
                                     <a class="dropdown-item" href="{{ route('logout') }}"
                                        onclick="event.preventDefault(); document.getElementById('logout-form').submit();">Logout</a>
                                     <form id="logout-form" action="{{ route('logout') }}" method="POST"

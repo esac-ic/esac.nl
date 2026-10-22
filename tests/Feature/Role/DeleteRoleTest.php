@@ -19,7 +19,7 @@ class DeleteRoleTest extends TestCase
         $role = Rol::factory()->create();
         $this->actingAs(User::factory()->withRole(Role::Administrator)->create());
 
-        $this->delete('rols/'.$role->id)->assertRedirect();
+        $this->delete('beheer/roles/'.$role->id)->assertRedirect();
 
         $this->assertSoftDeleted($role);
     }
@@ -30,6 +30,6 @@ class DeleteRoleTest extends TestCase
         $role = Rol::factory()->create();
         $this->actingAs(User::factory()->create());
 
-        $this->delete('rols/'.$role->id)->assertForbidden();
+        $this->delete('beheer/roles/'.$role->id)->assertForbidden();
     }
 }

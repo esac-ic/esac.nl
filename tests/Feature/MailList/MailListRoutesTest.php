@@ -18,8 +18,8 @@ class MailListRoutesTest extends TestCase
     {
         $admin = User::factory()->withRole(Role::Administrator)->create();
 
-        $this->actingAs($admin)->get('mailList/leden.esac.nl/edit')->assertNotFound();
-        $this->actingAs($admin)->patch('mailList/leden.esac.nl')->assertMethodNotAllowed();
+        $this->actingAs($admin)->get('beheer/mail-lists/leden.esac.nl/edit')->assertNotFound();
+        $this->actingAs($admin)->patch('beheer/mail-lists/leden.esac.nl')->assertMethodNotAllowed();
     }
 
     #[Test]
@@ -29,13 +29,13 @@ class MailListRoutesTest extends TestCase
         $admin = User::factory()->create();
         $admin->roles()->attach(Role::Administrator->value);
 
-        $this->actingAs($admin)->from(route('mailList.create'))
-            ->post(route('mailList.store'), ['address' => 'test'])
-            ->assertRedirect(route('mailList.create'))
+        $this->actingAs($admin)->from(route('beheer.mail-lists.create'))
+            ->post(route('beheer.mail-lists.store'), ['address' => 'test'])
+            ->assertRedirect(route('beheer.mail-lists.create'))
             ->assertSessionHas('error');
 
         $this->actingAs($admin)
-            ->deleteJson(route('mailList.members.destroy', ['test.esac.nl', 'a@example.com']))
+            ->deleteJson(route('beheer.mail-lists.members.destroy', ['test.esac.nl', 'a@example.com']))
             ->assertStatus(502)
             ->assertJsonPath('message', fn (string $message) => str_starts_with($message, 'Mailman failed: '));
     }

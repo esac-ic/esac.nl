@@ -4,7 +4,7 @@
 
 @section('content')
     <x-validation-errors />
-    <form class="form-horizontal" action="{{ $page->exists ? route('pages.update', $page) : route('pages.store') }}" method="POST">
+    <form class="form-horizontal" action="{{ $page->exists ? route('beheer.pages.update', $page) : route('beheer.pages.store') }}" method="POST">
         @csrf
         @method($page->exists ? 'PATCH' : 'POST')
         <x-card :title="$page->exists ? 'Edit menu page' : 'Add menu item'">
@@ -59,7 +59,7 @@
 
         <div class="my-4">
             <button type="submit" class="btn btn-primary">Save</button>
-            <a class="btn btn-danger btn-close" href="{{ $page->exists ? route('pages.show', $page) : route('pages.index') }}">Cancel</a>
+            <a class="btn btn-danger btn-close" href="{{ $page->exists ? route('beheer.pages.show', $page) : route('beheer.pages.index') }}">Cancel</a>
         </div>
     </form>
 @endsection

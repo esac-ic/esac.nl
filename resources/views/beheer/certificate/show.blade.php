@@ -6,9 +6,9 @@
 
 @section('content')
     <x-page-header title="Certificate">
-        <x-edit-button :href="route('certificates.edit', $certificate)" />
-        <x-back-button :href="route('certificates.index')" />
-        <x-delete-button :action="route('certificates.destroy', $certificate)" confirm="Are you sure you want to delete this certificate?" />
+        <x-edit-button :href="route('beheer.certificates.edit', $certificate)" />
+        <x-back-button :href="route('beheer.certificates.index')" />
+        <x-delete-button :action="route('beheer.certificates.destroy', $certificate)" confirm="Are you sure you want to delete this certificate?" />
     </x-page-header>
     <x-card title="Role" class="mt-4">
         <table class="table table-striped" style="width:100%">

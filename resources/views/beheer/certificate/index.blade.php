@@ -8,7 +8,7 @@
     @include('includes.flash')
 
     <x-page-header title="Certificate">
-        <x-button-link :href="route('certificates.create')" icon="plus">Make a new certificate</x-button-link>
+        <x-button-link :href="route('beheer.certificates.create')" icon="plus">Make a new certificate</x-button-link>
     </x-page-header>
     <x-data-table :columns="['Name', 'Abbreviation', 'Management']">
         @foreach ($certificates as $certificate)
@@ -16,8 +16,8 @@
                 <td>{{$certificate->name}}</td>
                 <td>{{$certificate->abbreviation}}</td>
                 <td>
-                    <x-icon-link :href="route('certificates.edit', $certificate)" icon="edit" title="Edit certificate" />
-                    <x-icon-link :href="route('certificates.show', $certificate)" icon="eye" title="Show certificate" />
+                    <x-icon-link :href="route('beheer.certificates.edit', $certificate)" icon="edit" title="Edit certificate" />
+                    <x-icon-link :href="route('beheer.certificates.show', $certificate)" icon="eye" title="Show certificate" />
                 </td>
             </tr>
         @endforeach

@@ -58,10 +58,10 @@ class AgendaApplicationFormController extends Controller implements HasMiddlewar
     {
         $agendaItem->register($request->validated('user'), $request->safe()->except('user'));
 
-        return to_route('forms.users.index', $agendaItem);
+        return to_route('beheer.agenda-items.registrations.index', $agendaItem);
     }
 
-    public function show(User $user, AgendaItem $agendaItem): View
+    public function show(AgendaItem $agendaItem, User $user): View
     {
         $applicationResponse = $agendaItem->getApplicationFormResponses()->whereBelongsTo($user)->firstOrFail();
 
@@ -77,7 +77,7 @@ class AgendaApplicationFormController extends Controller implements HasMiddlewar
 
         $applicationResponse->delete();
 
-        return to_route('forms.users.index', $agendaItem);
+        return to_route('beheer.agenda-items.registrations.index', $agendaItem);
     }
 
     public function exportData(AgendaItem $agendaItem, AgendaApplicationFormService $agendaApplicationFormService): StreamedResponse

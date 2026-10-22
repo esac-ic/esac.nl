@@ -1,7 +1,7 @@
 @extends('layouts.beheer')
 
 @section('content')
-    <x-form-card title="Add mailing list" :action="route('mailList.store')" method="POST" :cancel="route('mailList.index')">
+    <x-form-card title="Add mailing list" :action="route('beheer.mail-lists.store')" method="POST" :cancel="route('beheer.mail-lists.index')">
         <div class="form-group">
             <label for="address">Email</label>
             <div class="input-group">

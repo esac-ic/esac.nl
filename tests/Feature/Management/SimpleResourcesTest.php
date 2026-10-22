@@ -30,44 +30,55 @@ class SimpleResourcesTest extends TestCase
     {
         $book = ['title' => 'Alpine climbing', 'year' => 1990, 'type' => 'Guide', 'country' => 'CH', 'code' => 'A1'];
 
-        $this->actingAs($this->admin)->post('books', $book)->assertRedirect('books');
+        $this->actingAs($this->admin)->post('beheer/books', $book)->assertRedirect('beheer/books');
         $created = Book::sole();
         $this->assertSame('Alpine climbing', $created->title);
 
-        $this->get('books')->assertOk()->assertSee('Alpine climbing');
-        $this->patch("books/{$created->id}", ['title' => 'Ice climbing'] + $book)->assertRedirect('books');
+        $this->get('beheer/books')->assertOk()->assertSee('Alpine climbing');
+        $this->patch("beheer/books/{$created->id}", ['title' => 'Ice climbing'] + $book)->assertRedirect('beheer/books');
         $this->assertSame('Ice climbing', $created->fresh()->title);
 
-        $this->delete("books/{$created->id}")->assertRedirect('books');
+        $this->delete("beheer/books/{$created->id}")->assertRedirect('beheer/books');
         $this->assertSoftDeleted($created);
     }
 
     #[Test]
     public function certificates_can_be_managed()
     {
-        $this->actingAs($this->admin)->post('certificates', ['name' => 'Toprope', 'abbreviation' => 'TR'])->assertRedirect('certificates');
+        $this->actingAs($this->admin)->post('beheer/certificates', ['name' => 'Toprope', 'abbreviation' => 'TR'])->assertRedirect('beheer/certificates');
         $created = Certificate::sole();
 
-        $this->get('certificates')->assertOk()->assertSee('Toprope');
-        $this->patch("certificates/{$created->id}", ['name' => 'Lead', 'abbreviation' => 'L'])->assertRedirect('certificates');
+        $this->get('beheer/certificates')->assertOk()->assertSee('Toprope');
+        $this->patch("beheer/certificates/{$created->id}", ['name' => 'Lead', 'abbreviation' => 'L'])->assertRedirect('beheer/certificates');
         $this->assertSame('Lead', $created->fresh()->name);
 
-        $this->delete("certificates/{$created->id}")->assertRedirect('certificates');
+        $this->delete("beheer/certificates/{$created->id}")->assertRedirect('beheer/certificates');
         $this->assertSoftDeleted($created);
     }
 
     #[Test]
     public function agenda_item_categories_can_be_managed()
     {
-        $this->actingAs($this->admin)->post('agendaItemCategories', ['name' => 'Weekend'])->assertRedirect('agendaItemCategories');
+        $this->actingAs($this->admin)->post('beheer/agenda-item-categories', ['name' => 'Weekend'])->assertRedirect('beheer/agenda-item-categories');
         $created = AgendaItemCategory::sole();
 
-        $this->get('agendaItemCategories')->assertOk()->assertSee('Weekend');
-        $this->patch("agendaItemCategories/{$created->id}", ['name' => 'Trip'])->assertRedirect('agendaItemCategories');
+        $this->get('beheer/agenda-item-categories')->assertOk()->assertSee('Weekend');
+        $this->patch("beheer/agenda-item-categories/{$created->id}", ['name' => 'Trip'])->assertRedirect('beheer/agenda-item-categories');
         $this->assertSame('Trip', $created->fresh()->name);
 
-        $this->delete("agendaItemCategories/{$created->id}")->assertRedirect('agendaItemCategories');
+        $this->delete("beheer/agenda-item-categories/{$created->id}")->assertRedirect('beheer/agenda-item-categories');
         $this->assertSoftDeleted($created);
+    }
+
+    #[Test]
+    public function a_members_certificates_are_scoped_to_that_member()
+    {
+        $member = User::factory()->create();
+        [$held, $other] = [Certificate::create(['name' => 'Toprope', 'abbreviation' => 'TR']), Certificate::create(['name' => 'Lead', 'abbreviation' => 'L'])];
+        $member->certificates()->attach($held);
+
+        $this->actingAs($this->admin)->get(route('beheer.users.certificates.edit', [$member, $held]))->assertOk();
+        $this->get(route('beheer.users.certificates.edit', [$member, $other]))->assertNotFound();
     }
 
     #[Test]

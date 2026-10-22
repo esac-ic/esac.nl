@@ -19,7 +19,7 @@ class DeleteNewsItemTest extends TestCase
         $newsItem = NewsItem::factory()->create();
         $this->actingAs(User::factory()->withRole(Role::ActivityAdministrator)->create());
 
-        $this->delete('newsItems/'.$newsItem->id)->assertRedirect();
+        $this->delete('beheer/news-items/'.$newsItem->id)->assertRedirect();
 
         $this->assertSoftDeleted($newsItem);
     }

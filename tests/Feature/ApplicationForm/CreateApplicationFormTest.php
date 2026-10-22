@@ -43,7 +43,7 @@ class CreateApplicationFormTest extends TestCase
     {
         $this->actingAsRole($role);
 
-        $this->post('beheer/applicationForms', $this->body())->assertRedirect();
+        $this->post('beheer/application-forms', $this->body())->assertRedirect();
 
         $this->assertApplicationForm(ApplicationForm::sole(), $this->body());
     }
@@ -54,7 +54,7 @@ class CreateApplicationFormTest extends TestCase
     {
         $this->actingAsRole($role);
 
-        $this->post('beheer/applicationForms', $this->body())->assertForbidden();
+        $this->post('beheer/application-forms', $this->body())->assertForbidden();
 
         $this->assertDatabaseEmpty(ApplicationForm::class);
     }

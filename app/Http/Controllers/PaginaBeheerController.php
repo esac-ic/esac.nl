@@ -40,7 +40,7 @@ class PaginaBeheerController extends Controller implements HasMiddleware
         $menuItem->editable = true;
         $menuItem->save();
 
-        return to_route('pages.index')->with('message', 'Page is added');
+        return to_route('beheer.pages.index')->with('message', 'Page is added');
     }
 
     public function show(MenuItem $page): View
@@ -63,7 +63,7 @@ class PaginaBeheerController extends Controller implements HasMiddleware
         $this->fillMenuPosition($request, $page);
         $page->save();
 
-        return to_route('pages.index')->with('message', 'Page is edited');
+        return to_route('beheer.pages.index')->with('message', 'Page is edited');
     }
 
     public function destroy(MenuItem $page): RedirectResponse
@@ -76,7 +76,7 @@ class PaginaBeheerController extends Controller implements HasMiddleware
             $page->delete();
         }
 
-        return to_route('pages.index')->with('message', 'Menu item removed');
+        return to_route('beheer.pages.index')->with('message', 'Menu item removed');
     }
 
     private function fillMenuPosition(PageRequest $request, MenuItem $menuItem): void

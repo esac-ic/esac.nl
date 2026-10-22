@@ -38,7 +38,7 @@ class ApplicationFormController extends Controller implements HasMiddleware
     {
         DB::transaction(fn () => ApplicationForm::create($request->validated())->syncRows($request->input('rows', [])));
 
-        return to_route('beheer.applicationForms.index')->with('message', 'Application form added');
+        return to_route('beheer.application-forms.index')->with('message', 'Application form added');
     }
 
     public function show(ApplicationForm $applicationForm): View
@@ -58,7 +58,7 @@ class ApplicationFormController extends Controller implements HasMiddleware
             $applicationForm->syncRows($request->input('rows', []));
         });
 
-        return to_route('beheer.applicationForms.index')->with('message', 'Application form edited');
+        return to_route('beheer.application-forms.index')->with('message', 'Application form edited');
     }
 
     public function destroy(ApplicationForm $applicationForm): RedirectResponse
@@ -66,7 +66,7 @@ class ApplicationFormController extends Controller implements HasMiddleware
         $applicationForm->applicationFormRows->each->delete();
         $applicationForm->delete();
 
-        return to_route('beheer.applicationForms.index')->with('message', 'Application form removed');
+        return to_route('beheer.application-forms.index')->with('message', 'Application form removed');
     }
 
     private function form(ApplicationForm $applicationForm): View

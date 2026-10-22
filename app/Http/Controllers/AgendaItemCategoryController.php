@@ -35,7 +35,7 @@ class AgendaItemCategoryController extends Controller implements HasMiddleware
     {
         AgendaItemCategory::create($request->validated());
 
-        return to_route('agendaItemCategories.index')->with('message', 'Events category is added');
+        return to_route('beheer.agenda-item-categories.index')->with('message', 'Events category is added');
     }
 
     public function show(AgendaItemCategory $agendaItemCategory): View
@@ -52,13 +52,13 @@ class AgendaItemCategoryController extends Controller implements HasMiddleware
     {
         $agendaItemCategory->update($request->validated());
 
-        return to_route('agendaItemCategories.index')->with('message', 'Events category is edited');
+        return to_route('beheer.agenda-item-categories.index')->with('message', 'Events category is edited');
     }
 
     public function destroy(AgendaItemCategory $agendaItemCategory): RedirectResponse
     {
         $agendaItemCategory->delete();
 
-        return to_route('agendaItemCategories.index')->with('message', 'Events category is removed');
+        return to_route('beheer.agenda-item-categories.index')->with('message', 'Events category is removed');
     }
 }

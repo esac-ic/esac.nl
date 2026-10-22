@@ -35,7 +35,7 @@ class CertificateController extends Controller implements HasMiddleware
     {
         Certificate::create($request->validated());
 
-        return to_route('certificates.index')->with('message', 'Certificate added');
+        return to_route('beheer.certificates.index')->with('message', 'Certificate added');
     }
 
     public function show(Certificate $certificate): View
@@ -52,13 +52,13 @@ class CertificateController extends Controller implements HasMiddleware
     {
         $certificate->update($request->validated());
 
-        return to_route('certificates.index')->with('message', 'Certificate edited');
+        return to_route('beheer.certificates.index')->with('message', 'Certificate edited');
     }
 
     public function destroy(Certificate $certificate): RedirectResponse
     {
         $certificate->delete();
 
-        return to_route('certificates.index')->with('message', 'Certificate removed');
+        return to_route('beheer.certificates.index')->with('message', 'Certificate removed');
     }
 }

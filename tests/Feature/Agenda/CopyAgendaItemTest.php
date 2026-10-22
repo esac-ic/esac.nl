@@ -14,7 +14,7 @@ class CopyAgendaItemTest extends TestCase
 {
     use RefreshDatabase;
 
-    private $url = 'agendaItems/';
+    private $url = 'beheer/agenda-items/';
 
     private $user;
 

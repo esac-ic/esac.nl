@@ -8,13 +8,13 @@
     @include('includes.flash')
 
     <x-page-header :title="'Subscriptions: '.$users['agendaItemTitle']">
-        <a href="{{route('forms.admin.create', $agendaItemId)}}" class="btn btn-primary">
+        <a href="{{route('beheer.agenda-items.registrations.create', $agendaItemId)}}" class="btn btn-primary">
             <em class="ion-person-add"></em> {{'New subscription'}}
         </a>
-        <a href="{{route('forms.users.export', $users["agendaItemId"])}}" class="btn btn-primary">
+        <a href="{{route('beheer.agenda-items.registrations.export', $users["agendaItemId"])}}" class="btn btn-primary">
             <em class="ion-android-download"></em> {{'Export'}}
         </a>
-        <a href="{{route('agendaItems.index')}}" class="btn btn-primary">
+        <a href="{{route('beheer.agenda-items.index')}}" class="btn btn-primary">
             <em class="ion-android-arrow-back"></em> {{'Back'}}
         </a>
     </x-page-header>
@@ -35,8 +35,8 @@
                 <td>{{$user->getAddress()}}</td>
 
                 <td>
-                    <a href="{{route('forms.users.show', [$user->id, $agendaItemId])}}"><span title="{{'Show entered information'}}" class="ion-eye" aria-hidden="true"></span></a>
-                    <a href="#" id="delete_button" data-url="{{route('forms.destroy', [$users["agendaItemId"], $user["_signupId"]])}}"><span  class="ion-trash-a"></span></a>
+                    <a href="{{route('beheer.agenda-items.registrations.show', [$agendaItemId, $user->id])}}"><span title="{{'Show entered information'}}" class="ion-eye" aria-hidden="true"></span></a>
+                    <a href="#" id="delete_button" data-url="{{route('beheer.agenda-items.registrations.destroy', [$users["agendaItemId"], $user["_signupId"]])}}"><span  class="ion-trash-a"></span></a>
                 </td>
             </tr>
         @endforeach

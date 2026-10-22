@@ -5,7 +5,7 @@
 @section('title', $title)
 
 @section('content')
-    <x-form-card :model="$agendaItemCategory" resource="agendaItemCategories" :$title>
+    <x-form-card :model="$agendaItemCategory" resource="beheer.agenda-item-categories" :$title>
         <x-field name="name" label="Name" :value="$agendaItemCategory->name" required />
     </x-form-card>
 @endsection

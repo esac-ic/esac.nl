@@ -6,9 +6,9 @@
 
 @section('content')
     <x-page-header :title="$applicationForm->name">
-        <x-edit-button :href="route('beheer.applicationForms.edit', $applicationForm)" />
-        <x-back-button :href="route('beheer.applicationForms.index')" />
-        <x-delete-button :action="route('beheer.applicationForms.destroy', $applicationForm)" confirm="Are you sure you want to delete this application form?" />
+        <x-edit-button :href="route('beheer.application-forms.edit', $applicationForm)" />
+        <x-back-button :href="route('beheer.application-forms.index')" />
+        <x-delete-button :action="route('beheer.application-forms.destroy', $applicationForm)" confirm="Are you sure you want to delete this application form?" />
     </x-page-header>
     <x-card title="Form rows" class="mt-4">
         <table class="table table-striped" style="width:100%">

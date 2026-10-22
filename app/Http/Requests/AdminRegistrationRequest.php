@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests;
 
+use App\Models\AgendaItem;
 use Illuminate\Validation\Rule;
 
 /**
@@ -16,8 +17,13 @@ class AdminRegistrationRequest extends RegistrationRequest
             'user' => [
                 'required',
                 Rule::exists('users', 'id')->whereNull('lid_af')->whereNull('pending_user')->withoutTrashed(),
-                Rule::unique('application_responses', 'user_id')->where('agenda_id', $this->route('agendaItem')->id)->withoutTrashed(),
+                Rule::unique('application_responses', 'user_id')->where('agenda_id', $this->agendaItem()->id)->withoutTrashed(),
             ],
         ];
+    }
+
+    protected function agendaItem(): AgendaItem
+    {
+        return $this->route('agenda_item');
     }
 }

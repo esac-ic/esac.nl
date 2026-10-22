@@ -14,20 +14,20 @@ class PendingUserController extends Controller implements HasMiddleware
     public static function middleware(): array
     {
         return [
-            new Middleware('auth', except: ['storePendingUser']),
-            new Middleware('can:manage-members', except: ['storePendingUser']),
-            new Middleware('throttle:20,1', only: ['storePendingUser']),
+            new Middleware('auth', except: ['store']),
+            new Middleware('can:manage-members', except: ['store']),
+            new Middleware('throttle:20,1', only: ['store']),
         ];
     }
 
-    public function indexPendingMembers(): View
+    public function index(): View
     {
         return view('beheer.user.index_pending_users', [
             'users' => User::pending()->get(['id', 'firstname', 'lastname', 'email', 'preposition', 'kind_of_member']),
         ]);
     }
 
-    public function storePendingUser(StorePendingUserRequest $request): RedirectResponse
+    public function store(StorePendingUserRequest $request): RedirectResponse
     {
         User::createPending($request->safe()->except('g-recaptcha-response', 'privacy_policy', 'termsconditions'));
 
@@ -35,17 +35,17 @@ class PendingUserController extends Controller implements HasMiddleware
             ->with('message', 'Your membership request is pending, we will get back to you as soon as possible');
     }
 
-    public function removeAsPendingMember(User $user): RedirectResponse
+    public function destroy(User $user): RedirectResponse
     {
         $user->removeAsPendingMember();
 
-        return to_route('users.indexPendingMembers');
+        return to_route('beheer.pending-users.index');
     }
 
-    public function approveAsPendingMember(User $user): RedirectResponse
+    public function approve(User $user): RedirectResponse
     {
         $user->approveAsPendingMember();
 
-        return to_route('users.indexPendingMembers');
+        return to_route('beheer.pending-users.index');
     }
 }

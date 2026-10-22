@@ -15,8 +15,8 @@
                 <td>{{$user->email}}</td>
                 <td>{{trans('kind_of_member.' . $user->kind_of_member)}}</td>
                 <td>
-                    <x-icon-link :href="route('users.edit', $user)" icon="edit" title="Edit user" />
-                    <x-icon-link :href="route('users.show', $user)" icon="eye" title="Show user information" />
+                    <x-icon-link :href="route('beheer.users.edit', $user)" icon="edit" title="Edit user" />
+                    <x-icon-link :href="route('beheer.users.show', $user)" icon="eye" title="Show user information" />
                 </td>
             </tr>
         @endforeach

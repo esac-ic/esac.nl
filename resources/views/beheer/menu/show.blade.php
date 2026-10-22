@@ -6,10 +6,10 @@ Page
 
 @section('content')
     <x-page-header title="Page">
-        <x-button-link :href="route('pages.edit', $page)" icon="edit">Edit</x-button-link>
-        <x-button-link :href="route('pages.index')" icon="android-arrow-back">Back</x-button-link>
+        <x-button-link :href="route('beheer.pages.edit', $page)" icon="edit">Edit</x-button-link>
+        <x-button-link :href="route('beheer.pages.index')" icon="android-arrow-back">Back</x-button-link>
         @if($page->deletable)
-            <x-delete-button :action="route('pages.destroy', $page)" confirm="Are you sure you want to delete this page?" />
+            <x-delete-button :action="route('beheer.pages.destroy', $page)" confirm="Are you sure you want to delete this page?" />
         @endif
     </x-page-header>
     <div class="card mt-4">

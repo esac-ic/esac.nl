@@ -10,38 +10,38 @@
 
     <x-page-header title="View user">
         @if($user->isPendingMember() && auth()->user()->can('manage-members'))
-            {{ html()->form('POST', route('users.approveAsPendingMember', $user))->open() }}
+            {{ html()->form('POST', route('beheer.pending-users.approve', $user))->open() }}
             @method('PATCH')
             <button type="submit" class="btn btn-success"><em class="ion-checkmark"></em> {{'Approve as member'}}</button>
             {{ html()->form()->close() }}
         
             <form method="post"
-                  action="{{ route("users.removeAsPendingMember", $user) }}"
+                  action="{{ route("beheer.pending-users.destroy", $user) }}"
                   onsubmit="return confirm('Are you sure you want to remove {{$user->getName()}} as a pending member?');"
             >
                 @csrf
-                @method('PATCH')
+                @method('DELETE')
                 <button type="submit" class="btn btn-danger"><em class="ion-trash-a"></em> {{'Remove as pending'}}</button>
             </form>
         @else
             @can('manage-members')
                 @if($user->isOldMember())
-                    {{ html()->form('POST', route('users.makeActiveMember', $user))->open() }}
+                    {{ html()->form('POST', route('beheer.users.activate', $user))->open() }}
                     @method('PATCH')
                         <button type="submit" class="btn btn-success"><em class="ion-plus"></em> {{'Make active member'}}</button>
                     {{ html()->form()->close() }}
                 @endif
             @endcan
-            <x-button-link :href="route('users.edit', $user)" icon="edit">Edit</x-button-link>
+            <x-button-link :href="route('beheer.users.edit', $user)" icon="edit">Edit</x-button-link>
             @can('manage-certificates')
-                <x-button-link :href="route('users.certificates.create', $user)" icon="plus">Add certificate</x-button-link>
+                <x-button-link :href="route('beheer.users.certificates.create', $user)" icon="plus">Add certificate</x-button-link>
             @endcan
             @if(request('back') != "false")
-                <x-button-link :href="route('users.index')" icon="android-arrow-back">Back</x-button-link>
+                <x-button-link :href="route('beheer.users.index')" icon="android-arrow-back">Back</x-button-link>
             @endif
             @can('manage-members')
                 @if($user->isActiveMember())
-                    {{ html()->form('POST', route('users.removeAsActiveMember', $user))->open() }}
+                    {{ html()->form('POST', route('beheer.users.deactivate', $user))->open() }}
                     @method('PATCH')
                     <button type="submit" class="btn btn-danger"><em class="ion-trash-a"></em> {{'Remove as active member'}}</button>
                     {{ html()->form()->close() }}
@@ -170,11 +170,11 @@
                                 {{$certificate->abbreviation}}
                             </td>
                             <td>
-                                <a href="{{ route('users.certificates.edit', [$user, $certificate]) }}"><span title="Edit Certificate" class="ion-edit" aria-hidden="true"></span></a>
-                                <a href="{{ route('users.certificates.destroy', [$user, $certificate]) }}" onclick="event.preventDefault(); document.getElementById('delete-usercertificate-{{$certificate->id}}').submit();">
+                                <a href="{{ route('beheer.users.certificates.edit', [$user, $certificate]) }}"><span title="Edit Certificate" class="ion-edit" aria-hidden="true"></span></a>
+                                <a href="{{ route('beheer.users.certificates.destroy', [$user, $certificate]) }}" onclick="event.preventDefault(); document.getElementById('delete-usercertificate-{{$certificate->id}}').submit();">
                                     <span title="Remove Certificate" class="ion-trash-a" aria-hidden="true"></span>
                                 </a>
-                                {{ html()->form('POST', route('users.certificates.destroy', [$user, $certificate]))->id("delete-usercertificate-$certificate->id")->open() }}
+                                {{ html()->form('POST', route('beheer.users.certificates.destroy', [$user, $certificate]))->id("delete-usercertificate-$certificate->id")->open() }}
                                 @method('DELETE')
                                 {{ html()->form()->close() }}
                             </td>

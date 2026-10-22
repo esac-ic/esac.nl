@@ -6,11 +6,11 @@
 
 @section('content')
     <x-page-header title="News item">
-        <x-edit-button :href="route('newsItems.edit', $newsItem)" />
+        <x-edit-button :href="route('beheer.news-items.edit', $newsItem)" />
         @if(request('back') != 'false')
-            <x-back-button :href="route('newsItems.index')" :block="false" />
+            <x-back-button :href="route('beheer.news-items.index')" :block="false" />
         @endif
-        <x-delete-button :action="route('newsItems.destroy', $newsItem)" confirm="Are you sure you want to delete this news item?" />
+        <x-delete-button :action="route('beheer.news-items.destroy', $newsItem)" confirm="Are you sure you want to delete this news item?" />
     </x-page-header>
     <x-card title="General information" class="mt-4">
         <table class="table table-striped" style="width:100%">

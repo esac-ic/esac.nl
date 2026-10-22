@@ -7,7 +7,7 @@
     <x-validation-errors />
 
     <div id="app">
-        {{ html()->form($applicationForm->exists ? 'PUT' : 'POST', $applicationForm->exists ? route('beheer.applicationForms.update', $applicationForm) : route('beheer.applicationForms.store'))->open() }}
+        {{ html()->form($applicationForm->exists ? 'PUT' : 'POST', $applicationForm->exists ? route('beheer.application-forms.update', $applicationForm) : route('beheer.application-forms.store'))->open() }}
             <x-card title="Add an application form">
                 {{--hidden field with the amount of formrows--}}
                 <input name="amount_of_formrows" type="hidden" id="amount_of_formrows" value="0">
@@ -19,7 +19,7 @@
 
             <div class="my-4">
                 {{ html()->submit('Save')->class('btn btn-primary') }}
-                <a class="btn btn-danger btn-close" href="{{ $applicationForm->exists ? route('beheer.applicationForms.show', $applicationForm) : route('beheer.applicationForms.index') }}">
+                <a class="btn btn-danger btn-close" href="{{ $applicationForm->exists ? route('beheer.application-forms.show', $applicationForm) : route('beheer.application-forms.index') }}">
                     {{'Cancel'}}
                 </a>
             </div>

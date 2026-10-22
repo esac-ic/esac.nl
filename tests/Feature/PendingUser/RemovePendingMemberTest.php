@@ -29,9 +29,9 @@ class RemovePendingMemberTest extends TestCase
 
         Event::fake();
 
-        $response = $this->actingAs($this->admin)->patch(route('users.removeAsPendingMember', $user));
+        $response = $this->actingAs($this->admin)->delete(route('beheer.pending-users.destroy', $user));
 
-        $response->assertRedirect(route('users.indexPendingMembers'));
+        $response->assertRedirect(route('beheer.pending-users.index'));
         Event::assertDispatched(PendingUserRemoved::class);
 
         $this->assertNull(User::find($userId));

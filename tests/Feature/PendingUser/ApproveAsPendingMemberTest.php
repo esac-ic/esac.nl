@@ -29,9 +29,9 @@ class ApproveAsPendingMemberTest extends TestCase
 
         Event::fake();
 
-        $response = $this->actingAs($this->admin)->patch(route('users.approveAsPendingMember', $user));
+        $response = $this->actingAs($this->admin)->patch(route('beheer.pending-users.approve', $user));
 
-        $response->assertRedirect(route('users.indexPendingMembers'));
+        $response->assertRedirect(route('beheer.pending-users.index'));
         Event::assertDispatched(PendingUserApproved::class);
 
         $this->assertNull(User::find($userId)->pending_user);

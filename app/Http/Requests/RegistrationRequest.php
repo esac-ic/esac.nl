@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests;
 
+use App\Models\AgendaItem;
 use App\Models\ApplicationForm\ApplicationFormRow;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
@@ -13,7 +14,7 @@ class RegistrationRequest extends FormRequest
 {
     public function rules(): array
     {
-        $rows = $this->route('agendaItem')->getApplicationForm?->applicationFormRows()->with('applicationFormRowOptions')->get() ?? [];
+        $rows = $this->agendaItem()->getApplicationForm?->applicationFormRows()->with('applicationFormRowOptions')->get() ?? [];
 
         $rules = [];
         foreach ($rows as $row) {
@@ -21,6 +22,11 @@ class RegistrationRequest extends FormRequest
         }
 
         return $rules;
+    }
+
+    protected function agendaItem(): AgendaItem
+    {
+        return $this->route('agendaItem');
     }
 
     private function rulesFor(ApplicationFormRow $row): array

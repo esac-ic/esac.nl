@@ -27,7 +27,7 @@ class ApplicationFormIndexTest extends TestCase
     {
         $this->actingAsRole($role);
 
-        $this->get('beheer/applicationForms')->assertOk();
+        $this->get('beheer/application-forms')->assertOk();
     }
 
     #[Test]
@@ -36,7 +36,7 @@ class ApplicationFormIndexTest extends TestCase
     {
         $this->actingAsRole($role);
 
-        $this->get('beheer/applicationForms')->assertForbidden();
+        $this->get('beheer/application-forms')->assertForbidden();
     }
 
     #[Test]
@@ -44,6 +44,6 @@ class ApplicationFormIndexTest extends TestCase
     {
         $this->actingAsRole();
 
-        $this->get('beheer/applicationForms')->assertForbidden();
+        $this->get('beheer/application-forms')->assertForbidden();
     }
 }

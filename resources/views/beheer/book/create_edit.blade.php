@@ -5,7 +5,7 @@
 @section('title', $title)
 
 @section('content')
-    <x-form-card :model="$book" resource="books" :$title>
+    <x-form-card :model="$book" resource="beheer.books" :$title>
         <x-field name="title" label="Title" :value="$book->title" required />
         <div class="form-row">
             <x-field name="year" label="Year" type="number" :value="$book->year" col="3" required />

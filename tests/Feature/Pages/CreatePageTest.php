@@ -53,9 +53,9 @@ class CreatePageTest extends TestCase
     {
         $body = $this->body($overrides);
 
-        $this->post('pages', $body)
+        $this->post('beheer/pages', $body)
             ->assertSessionHasNoErrors()
-            ->assertRedirect('/pages');
+            ->assertRedirect('beheer/pages');
 
         $this->assertDatabaseHas(MenuItem::class, [
             'parent_id' => $isSubItem ? $this->parent->id : null,
@@ -70,11 +70,11 @@ class CreatePageTest extends TestCase
     public function an_edited_page_is_validated_when_its_url_name_is_unchanged()
     {
         $body = $this->body(['itemType' => 'standAlone', 'afterItem' => -1]);
-        $this->post('pages', $body)->assertValid();
+        $this->post('beheer/pages', $body)->assertValid();
         $page = MenuItem::query()->where('url_name', 'test')->sole();
 
-        $this->patch(route('pages.update', $page), [...$body, 'name' => ''])->assertInvalid('name');
-        $this->patch(route('pages.update', $page), [...$body, 'name' => 'New title'])->assertValid();
+        $this->patch(route('beheer.pages.update', $page), [...$body, 'name' => ''])->assertInvalid('name');
+        $this->patch(route('beheer.pages.update', $page), [...$body, 'name' => 'New title'])->assertValid();
         $this->assertSame('New title', $page->fresh()->name);
     }
 
@@ -83,7 +83,7 @@ class CreatePageTest extends TestCase
     {
         $this->actingAs(User::factory()->withRole(Role::Administrator, Role::ActivityAdministrator, Role::CertificateAdministrator)->create());
 
-        $this->post('pages', $this->body())->assertForbidden();
+        $this->post('beheer/pages', $this->body())->assertForbidden();
 
         $this->assertDatabaseCount(MenuItem::class, 1);
     }
@@ -91,8 +91,8 @@ class CreatePageTest extends TestCase
     #[Test]
     public function create_page_login_correct()
     {
-        $this->post('pages', $this->body())->assertSessionHasNoErrors();
-        $this->post('pages', $this->body(['url_name' => 'test2', 'login' => true]))->assertSessionHasNoErrors();
+        $this->post('beheer/pages', $this->body())->assertSessionHasNoErrors();
+        $this->post('beheer/pages', $this->body(['url_name' => 'test2', 'login' => true]))->assertSessionHasNoErrors();
 
         $this->assertDatabaseHas(MenuItem::class, ['url_name' => 'test', 'login' => false]);
         $this->assertDatabaseHas(MenuItem::class, ['url_name' => 'test2', 'login' => true]);
@@ -101,7 +101,7 @@ class CreatePageTest extends TestCase
     #[Test]
     public function create_page_no_after_item_correct()
     {
-        $this->post('pages', $this->body(['afterItem' => -1]))->assertSessionHasNoErrors();
+        $this->post('beheer/pages', $this->body(['afterItem' => -1]))->assertSessionHasNoErrors();
 
         $this->assertDatabaseHas(MenuItem::class, ['url_name' => 'test', 'after' => null]);
     }
@@ -109,7 +109,7 @@ class CreatePageTest extends TestCase
     #[Test]
     public function empty_body_meaningful_error()
     {
-        $this->post('pages')
+        $this->post('beheer/pages')
             ->assertRedirect()
             ->assertInvalid(['url_name', 'itemType', 'afterItem', 'name', 'content']);
 
@@ -119,7 +119,7 @@ class CreatePageTest extends TestCase
     #[Test]
     public function empty_body_meaningful_error_subitem()
     {
-        $this->post('pages', $this->body(['parentItem' => null]))
+        $this->post('beheer/pages', $this->body(['parentItem' => null]))
             ->assertRedirect()
             ->assertInvalid(['parentItem']);
 

@@ -41,7 +41,7 @@ class MailListController extends Controller implements HasMiddleware
 
         $this->mailman->storeMailList($data);
 
-        return to_route('mailList.index')->with('message', 'Mailing list added');
+        return to_route('beheer.mail-lists.index')->with('message', 'Mailing list added');
     }
 
     public function show(string $mailList): View
@@ -53,7 +53,7 @@ class MailListController extends Controller implements HasMiddleware
     {
         $this->mailman->deleteMailList($mailList);
 
-        return to_route('mailList.index');
+        return to_route('beheer.mail-lists.index');
     }
 
     public function addMember(Request $request, string $mailList): Response
@@ -82,6 +82,6 @@ class MailListController extends Controller implements HasMiddleware
         // One job per member, so a long list doesn't hit the worker's timeout and each member is retried on its own
         User::current()->get()->each(fn (User $user) => MemberMassMailListSyncJob::dispatch($user));
 
-        return to_route('mailList.index');
+        return to_route('beheer.mail-lists.index');
     }
 }

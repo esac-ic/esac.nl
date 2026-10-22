@@ -25,76 +25,89 @@ use Illuminate\Support\Facades\Route;
 Route::permanentRedirect('/', '/home');
 
 // Management
-Route::group(['as' => 'beheer.', 'prefix' => 'beheer/'], function () {
+Route::prefix('beheer')->name('beheer.')->group(function () {
     Route::get('home', [ManageController::class, 'index'])->name('home');
-    Route::resource('applicationForms', ApplicationFormController::class);
+
+    Route::controller(UserController::class)->prefix('users')->name('users.')->group(function () {
+        Route::get('export', 'exportUsers')->name('export');
+        Route::get('old-members', 'indexOldMembers')->name('old-members');
+        Route::get('old-members/export', 'exportOldUsers')->name('old-members.export');
+        Route::get('penno-export', 'pennoMemberExportSelect')->name('penno-export');
+        Route::get('penno-export/download', 'pennoMemberExport')->name('penno-export.download');
+        Route::patch('{user}/activate', 'makeActiveMember')->name('activate');
+        Route::patch('{user}/deactivate', 'removeAsActiveMember')->name('deactivate');
+    });
+
+    Route::resource('pending-users', PendingUserController::class)->only(['index', 'destroy'])->parameters(['pending-users' => 'user']);
+    Route::patch('pending-users/{user}/approve', [PendingUserController::class, 'approve'])->name('pending-users.approve');
+
+    Route::resource('users', UserController::class)->except('destroy');
+
+    Route::resource('certificates', CertificateController::class);
+    Route::scopeBindings()->group(fn () => Route::resource('users.certificates', UserCertificateController::class)->except(['index', 'show']));
+
+    Route::resource('roles', RolController::class)->parameters(['roles' => 'rol']);
+
+    Route::resource('agenda-items', AgendaItemController::class);
+    Route::post('agenda-items/{agenda_item}/copy', [AgendaItemController::class, 'copy'])->name('agenda-items.copy');
+    Route::resource('application-forms', ApplicationFormController::class);
+
+    Route::controller(AgendaApplicationFormController::class)->prefix('agenda-items/{agenda_item}/registrations')->name('agenda-items.registrations.')->group(function () {
+        Route::get('/', 'index')->name('index');
+        Route::get('create', 'registerUser')->name('create');
+        Route::post('/', 'saveRegistration')->name('store');
+        Route::get('export', 'exportData')->name('export');
+        Route::get('{user}', 'show')->name('show');
+    });
+    Route::delete('agenda-items/{agenda_item}/registrations/{application_response}', [AgendaApplicationFormController::class, 'destroy'])
+        ->name('agenda-items.registrations.destroy');
+
+    Route::resource('agenda-item-categories', AgendaItemCategoryController::class);
+    Route::resource('news-items', NewsItemController::class);
+
+    Route::resource('pages', PaginaBeheerController::class);
+    Route::controller(StorageController::class)->prefix('images')->name('images.')->group(function () {
+        Route::post('/', 'uploadImage')->name('store');
+    });
+
+    Route::get('books/export', [LibraryController::class, 'exportLibrary'])->name('books.export');
+    Route::resource('books', LibraryController::class);
+
+    Route::resource('mail-lists', MailListController::class)->except(['edit', 'update']);
+    Route::controller(MailListController::class)->prefix('mail-lists')->name('mail-lists.')->group(function () {
+        Route::post('sync', 'massMemberMailListSync')->name('sync');
+        Route::post('{mail_list}/members', 'addMember')->name('members.store');
+        Route::delete('{mail_list}/members/{member}', 'deleteMemberFromMailList')->name('members.destroy');
+    });
+
+    Route::controller(UserEventLogEntryController::class)->prefix('user-event-log')->name('user-event-log.')->group(function () {
+        Route::get('/', 'index')->name('index');
+        Route::post('export', 'export')->name('export');
+    });
+
     Route::singleton('settings', SettingsController::class);
 });
 
-// Members
-Route::get('users/old_members', [UserController::class, 'indexOldMembers'])->name('users.index-old-members');
-Route::get('users/pending_members', [PendingUserController::class, 'indexPendingMembers'])->name('users.indexPendingMembers');
-Route::get('users/exportUsers', [UserController::class, 'exportUsers'])->name('users.exportUsers');
-Route::get('users/pennoMemberExportView', [UserController::class, 'pennoMemberExportSelect'])->name('users.pennoMemberExportView');
-Route::get('users/pennoMemberExport', [UserController::class, 'pennoMemberExport'])->name('users.pennoMemberExport');
-Route::get('users/exportOldUsers', [UserController::class, 'exportOldUsers'])->name('users.exportOldUsers');
-Route::patch('users/{user}/removeAsActiveMember', [UserController::class, 'removeAsActiveMember'])->name('users.removeAsActiveMember');
-Route::patch('users/{user}/makeActiveMember', [UserController::class, 'makeActiveMember'])->name('users.makeActiveMember');
-Route::patch('users/{user}/removeAsPendingMember', [PendingUserController::class, 'removeAsPendingMember'])->name('users.removeAsPendingMember');
-Route::patch('users/{user}/approveAsPendingMember', [PendingUserController::class, 'approveAsPendingMember'])->name('users.approveAsPendingMember');
-
-// Member certificates
-Route::get('users/{user}/addCertificate', [UserCertificateController::class, 'addCertificate'])->name('users.certificates.create');
-Route::get('users/{user}/addCertificate/{certificate}', [UserCertificateController::class, 'editUserCertificate'])->name('users.certificates.edit');
-Route::post('users/{user}/addCertificate', [UserCertificateController::class, 'saveCertificate'])->name('users.certificates.store');
-Route::patch('users/{user}/addCertificate/{certificate}', [UserCertificateController::class, 'updateUserCertificate'])->name('users.certificates.update');
-Route::delete('users/{user}/addCertificate/{certificate}', [UserCertificateController::class, 'deleteUserCertificate'])->name('users.certificates.destroy');
-
-// Library
-Route::get('books/exportLibrary', [LibraryController::class, 'exportLibrary'])->name('books.export');
-
-// Resources
-Route::resource('users', UserController::class);
-Route::resource('rols', RolController::class);
-Route::resource('pages', PaginaBeheerController::class);
-Route::resource('certificates', CertificateController::class);
-Route::resource('agendaItems', AgendaItemController::class);
-Route::resource('agendaItemCategories', AgendaItemCategoryController::class);
-Route::resource('newsItems', NewsItemController::class);
-Route::resource('mailList', MailListController::class)->except(['edit', 'update']);
-Route::post('/signup', [PendingUserController::class, 'storePendingUser'])->name('user.signup');
-Route::resource('books', LibraryController::class);
-Route::post('images/upload', [StorageController::class, 'uploadImage'])->name('images.store');
-Route::post('agendaItems/{agendaItem}/copy', [AgendaItemController::class, 'copy'])->name('copyAgendaItem');
-
-Route::get('userEventLog', [UserEventLogEntryController::class, 'index'])->name('user-event-log-entry.index');
-Route::post('userEventLog/export', [UserEventLogEntryController::class, 'export'])->name('user-event-log-entry.export');
-
 // Event registrations
-Route::get('forms/{agendaItem}', [UserApplicationFormController::class, 'showRegistrationForm'])->name('forms.create');
-Route::delete('forms/{agendaItem}', [UserApplicationFormController::class, 'unregister'])->name('forms.unregister');
-Route::post('forms/{agendaItem}', [UserApplicationFormController::class, 'store'])->name('forms.store');
-Route::get('forms/admin/{agendaItem}', [AgendaApplicationFormController::class, 'registerUser'])->name('forms.admin.create');
-Route::post('forms/admin/{agendaItem}', [AgendaApplicationFormController::class, 'saveRegistration'])->name('forms.admin.store');
-Route::get('forms/users/{agendaItem}', [AgendaApplicationFormController::class, 'index'])->name('forms.users.index');
-Route::get('forms/users/{user}/detail/{agendaItem}', [AgendaApplicationFormController::class, 'show'])->name('forms.users.show');
-Route::get('forms/users/{agendaItem}/export', [AgendaApplicationFormController::class, 'exportData'])->name('forms.users.export');
-Route::delete('forms/{agendaItem}/remove/{applicationResponse}', [AgendaApplicationFormController::class, 'destroy'])->name('forms.destroy');
-
-// Mailing lists
-Route::delete('/mailList/{mailistid}/member/{memberid}', [MailListController::class, 'deleteMemberFromMailList'])->name('mailList.members.destroy');
-Route::post('/mailList/{mailistid}/member', [MailListController::class, 'addMember'])->name('mailList.members.store');
-Route::post('/mailList/massSync', [MailListController::class, 'massMemberMailListSync'])->name('mailList.massSync');
+Route::controller(UserApplicationFormController::class)->prefix('forms/{agendaItem}')->name('forms.')->group(function () {
+    Route::get('/', 'showRegistrationForm')->name('create');
+    Route::post('/', 'store')->name('store');
+    Route::delete('/', 'unregister')->name('unregister');
+});
 
 // Front end
-Route::get('/zekeringen', [FrontEndController::class, 'zekeringen'])->name('front-end.zekeringen');
-Route::get('/library', [FrontEndController::class, 'library'])->name('front-end.library');
-Route::get('/agenda', [FrontEndController::class, 'agenda'])->name('front-end.agenda');
-Route::get('/agenda/{agendaItem}', [FrontEndController::class, 'agendaDetailView'])->name('agenda.detail');
-Route::get('/signup', [FrontEndController::class, 'publicSubscribe'])->name('front-end.signup');
-Route::get('/home', [FrontEndController::class, 'home'])->name('front-end.home');
-Route::get('/news', [FrontEndController::class, 'news'])->name('front-end.news');
-Route::get('/news/{newsItem}', [FrontEndController::class, 'newsDetailView'])->name('front-end.news.detail');
-Route::get('/memberlist', [FrontEndController::class, 'memberList'])->name('front-end.memberlist');
-Route::get('/ical', [ICalController::class, 'getAgendaItemsICalObject'])->name('front-end.ical');
-Route::get('/{menuItem:url_name}', [FrontEndController::class, 'showPage'])->name('front-end.page');
+Route::post('signup', [PendingUserController::class, 'store'])->name('front-end.signup.store');
+Route::get('ical', [ICalController::class, 'getAgendaItemsICalObject'])->name('front-end.ical');
+
+Route::controller(FrontEndController::class)->name('front-end.')->group(function () {
+    Route::get('home', 'home')->name('home');
+    Route::get('agenda', 'agenda')->name('agenda');
+    Route::get('agenda/{agendaItem}', 'agendaDetailView')->name('agenda.detail');
+    Route::get('news', 'news')->name('news');
+    Route::get('news/{newsItem}', 'newsDetailView')->name('news.detail');
+    Route::get('library', 'library')->name('library');
+    Route::get('memberlist', 'memberList')->name('memberlist');
+    Route::get('zekeringen', 'zekeringen')->name('zekeringen');
+    Route::get('signup', 'publicSubscribe')->name('signup');
+    Route::get('{menuItem:url_name}', 'showPage')->name('page');
+});

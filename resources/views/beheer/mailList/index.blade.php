@@ -9,13 +9,13 @@
     
     <x-page-header title="Mailing list">
         <form method="post"
-              action="{{ route('mailList.massSync') }}"
+              action="{{ route('beheer.mail-lists.sync') }}"
               onsubmit="return confirm('Are you sure?\nThis action adds users to all maillists associated with their membership type.\nThis may cause people who have unsubscribed from a maillist to be readded.')"
         >
             @csrf
             <button title="{{'Sync member mail lists'}}" type="submit" class="btn btn-primary"><span class="ion-loop" aria-hidden="true"></span> {{'Sync member mail lists'}}</button>
         </form>    
-        <a href="{{route('mailList.create')}}" class="btn btn-primary" title="{{'New mailing list'}}">
+        <a href="{{route('beheer.mail-lists.create')}}" class="btn btn-primary" title="{{'New mailing list'}}">
             <span class="ion-plus" aria-hidden="true"></span>
             {{'New mailing list'}}
         </a>
@@ -27,7 +27,7 @@
                 <td>{{$mailingList->address}}</td>
                 <td>{{$mailingList->members_count}}</td>
                 <td>
-                    <a href="{{ route('mailList.show', $mailingList->address) }}"><span title="{{'Show mailing list'}}" class="ion-eye" aria-hidden="true"></span></a>
+                    <a href="{{ route('beheer.mail-lists.show', $mailingList->address) }}"><span title="{{'Show mailing list'}}" class="ion-eye" aria-hidden="true"></span></a>
                 </td>
             </tr>
         @endforeach
