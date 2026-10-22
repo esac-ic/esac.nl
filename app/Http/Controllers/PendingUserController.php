@@ -28,7 +28,7 @@ class PendingUserController extends Controller implements HasMiddleware
 
     public function storePendingUser(StorePendingUserRequest $request): RedirectResponse
     {
-        User::createPending($request->all());
+        User::createPending($request->safe()->except('g-recaptcha-response', 'privacy_policy', 'termsconditions'));
 
         return to_route('front-end.signup')
             ->with('message', 'Your membership request is pending, we will get back to you as soon as possible');

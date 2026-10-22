@@ -48,6 +48,8 @@ class RegisterNewMemberTest extends TestCase
             'emergency_country' => 'NL',
             'birthday' => Carbon::now()->subCenturies(2)->format('d-m-Y'),
             'iban' => 'BLNDj838474784848',
+            'password' => 'a-password',
+            'password_confirmation' => 'a-password',
             'incasso' => 1,
             'privacy_policy' => 1,
             'termsconditions' => 1,
@@ -96,7 +98,7 @@ class RegisterNewMemberTest extends TestCase
 
         $response->assertSessionHasErrors();
         $errors = session('errors');
-        $this->assertCount(21, $errors);
+        $this->assertCount(22, $errors);
 
         $this->assertEquals('Field email is required', $errors->get('email')[0]);
         $this->assertEquals('Field firstname is required', $errors->get('firstname')[0]);
