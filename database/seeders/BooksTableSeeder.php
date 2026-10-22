@@ -14,12 +14,12 @@ class BooksTableSeeder extends Seeder
      */
     public function run()
     {
-        $book = new Book();
-        $book->title = "Dit is een boek";
+        $book = new Book;
+        $book->title = 'Dit is een boek';
         $book->year = 2012;
-        $book->country = "Nederland";
-        $book->type = "Gidsje";
-        $book->code = "A301";
+        $book->country = 'Nederland';
+        $book->type = 'Gidsje';
+        $book->code = 'A301';
 
         $book->save();
     }

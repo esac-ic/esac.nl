@@ -17,6 +17,7 @@ class DatabaseSeeder extends Seeder
         // The dev setup seeds on every start; only an empty database gets the dev data
         if (User::query()->exists()) {
             $this->command?->info('The database already has users, skipping the seed data (migrate:fresh --seed reseeds it)');
+
             return;
         }
 

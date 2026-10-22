@@ -15,7 +15,7 @@ use Tests\TestCase;
  */
 class FormOldInputTest extends TestCase
 {
-    use RefreshDatabase, InspectsForms;
+    use InspectsForms, RefreshDatabase;
 
     protected function setUp(): void
     {

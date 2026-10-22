@@ -38,6 +38,6 @@ class ClearSeeder extends Seeder
         User::getQuery()->delete();
         Rol::getQuery()->delete();
         UserEventLogEntry::getQuery()->delete();
-        
+
     }
 }

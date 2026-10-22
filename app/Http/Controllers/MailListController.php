@@ -88,6 +88,7 @@ class MailListController extends Controller implements HasMiddleware
     {
         // One job per member, so a long list doesn't hit the worker's timeout and each member is retried on its own
         User::current()->get()->each(fn (User $user) => MemberMassMailListSyncJob::dispatch($user));
+
         return to_route('mailList.index');
     }
 }
