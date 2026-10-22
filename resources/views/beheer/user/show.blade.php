@@ -229,17 +229,14 @@
                 </div>
                 <div class="tab-pane fade" id="rols" role="tabpanel" aria-labelledby="tab4">
                     <table class="table table-striped" style="width:100%">
-                        @if(count($user->roles) > 0)
+                        @foreach($user->roles as $role)
                             <tr>
-                                <td rowspan="{{count($user->roles)}}">{{'Roles'}}</td>
-                                <td>{{$user->roles[0]->name}}</td>
+                                @if($loop->first)
+                                    <td rowspan="{{$loop->count}}">{{'Roles'}}</td>
+                                @endif
+                                <td>{{$role->name}}</td>
                             </tr>
-                            @for($i=1; $i<count($user->roles);$i++)
-                                <tr>
-                                    <td>{{$user->roles[$i]->name}}</td>
-                                </tr>
-                            @endfor
-                        @endif
+                        @endforeach
                     </table>
                 </div>
                 @endcan

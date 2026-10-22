@@ -28,23 +28,23 @@
                             @endif
                             <form class="text-left col-lg-8" role="form" method="POST" action="{{ route('login.store') }}">
                                 @csrf
-                                <div class="form-group {{ $errors->has('email') ? ' has-error' : '' }}">
+                                <div @class(['form-group', 'has-error' => $errors->has('email')])>
                                     <label for="email">{{'Email adress'}}</label>
                                     <input class="form-control form-control-lg" id="email" type="email" name="email" placeholder="{{'Email adress'}}" value="{{ old('email') }}" required autofocus>
-                                    @if ($errors->has('email'))
+                                    @error('email')
                                     <span class="help-block">
-                                    <strong>{{ $errors->first('email') }}</strong>
+                                    <strong>{{ $message }}</strong>
                                     </span>
-                                    @endif
+                                    @enderror
                                 </div>
-                                <div class="form-group {{ $errors->has('password') ? ' has-error' : '' }}">
+                                <div @class(['form-group', 'has-error' => $errors->has('password')])>
                                     <label for="password">{{'Password'}}</label>
                                     <input class="form-control form-control-lg" id="password" type="password" name="password" placeholder="{{'Password'}}" required>
-                                    @if ($errors->has('password'))
+                                    @error('password')
                                     <span class="help-block">
-                                    <strong>{{ $errors->first('password') }}</strong>
+                                    <strong>{{ $message }}</strong>
                                     </span>
-                                    @endif
+                                    @enderror
                                     <p class="text-muted text-small mt-2">{{'Forgot password?'}} <a href="{{ route('password.request') }}">{{'Reset password'}}</a></p>
                                 </div>
                                 <div>

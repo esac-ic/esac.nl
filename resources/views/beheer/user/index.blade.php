@@ -47,7 +47,7 @@
                 <td>{{$user->getName()}}</td>
                 <td>{{$user->email}}</td>
                 <td>{{trans('kind_of_member.' . $user->kind_of_member)}}</td>
-                <td>@for($i=0; $i<count($user->roles);$i++) {{$user->roles[$i]->id}}@endfor</td>
+                <td>@foreach($user->roles as $role) {{$role->id}}@endforeach</td>
                 <td>
                     <a class="mr-1 ml-1" href="{{route('users.edit', $user)}}"><span title="{{'Edit user'}}" class="ion-edit font-size-120" aria-hidden="true"></span></a>
                     <a class="mr-1 ml-1" href="{{route('users.show', $user)}}"><span title="{{'Show user information'}}" class="ion-eye font-size-120" aria-hidden="true"></span></a>
@@ -59,8 +59,8 @@
 
     <h5 class="mt-3 mb-0 bold">*{{'Roles'}}</h5>
     <ol>
-    @for($i=0; $i<count($roles);$i++)
-        <li>{{$roles[$i]->name}}</li>
-    @endfor
+    @foreach($roles as $role)
+        <li>{{$role->name}}</li>
+    @endforeach
     </ol>
 @endsection

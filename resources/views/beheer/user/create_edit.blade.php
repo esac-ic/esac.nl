@@ -11,13 +11,7 @@
 @section('content')
     @include('includes.flash')
 
-    @if ($errors->any())
-        <ul class="alert alert-danger">
-            @foreach ($errors->all() as $error)
-                <li>{{ $error}} </li>
-            @endforeach
-        </ul>
-    @endif
+    <x-validation-errors />
 
     <h1>{{$fields['title']}}</h1>
 
@@ -197,11 +191,7 @@
                 <div class="form-group">
                         @foreach($roles as $role)
                             <div class="form-check">
-                                @if($ownedRoles->contains($role->id))
-                                    <input class="form-check-input" type="checkbox" name="roles[]" value="{{$role->id}}" id="{{$role->id}}" checked>
-                                @else
-                                    <input class="form-check-input" type="checkbox" name="roles[]" value="{{$role->id}}" id="{{$role->id}}">
-                                @endif
+                                <input class="form-check-input" type="checkbox" name="roles[]" value="{{$role->id}}" id="{{$role->id}}" @checked($ownedRoles->contains($role->id))>
                                 <label class="form-check-label" for="{{$role->id}}">{{$role->name}}</label>
                             </div>
                         @endforeach

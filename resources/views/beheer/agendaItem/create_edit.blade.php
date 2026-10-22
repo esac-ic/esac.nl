@@ -10,13 +10,7 @@
 
 @section('content')
     @include('includes.flash')
-    @if ($errors->any())
-        <ul class="alert alert-danger">
-            @foreach ($errors->all() as $error)
-                <li>{{ $error}} </li>
-            @endforeach
-        </ul>
-    @endif
+    <x-validation-errors />
 
     {{ html()->form($fields['method'], $fields['url'])->acceptsFiles()->open() }}
     @include('beheer.agendaItem.create_edit_default_info')

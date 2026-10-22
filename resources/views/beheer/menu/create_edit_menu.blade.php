@@ -29,24 +29,15 @@
             <div class="form-group col-md-6">
                 <label for="itemType"> {{'Item type: '}} </label>
                 <select class="form-control" name="itemType" id="menuType">
-                    @if($page != null  &&$page->parent_id != null)
-                        <option value="standAlone">{{'Standalone menu item'}}</option>
-                        <option value="subItem" selected>{{'Sub menu item'}}</option>
-                    @else
-                        <option value="standAlone" selected>{{'Standalone menu item'}}</option>
-                        <option value="subItem">{{'Sub menu item'}}</option>
-                    @endif
+                    <option value="standAlone" @selected($page?->parent_id == null)>{{'Standalone menu item'}}</option>
+                    <option value="subItem" @selected($page?->parent_id != null)>{{'Sub menu item'}}</option>
                 </select>
             </div>
             <div id="parentItemBox" class="col-md-6 hidden">
                 <label for="parentItem"> {{'If page is a sub page, who is the parent?'}} </label>
                 <select class="form-control" name="parentItem" id="parentItem">
                     @foreach($pages as $item)
-                        @if($page != null  && $item->id === $page->parent_id)
-                            <option value="{{$item->id}}" selected >{{$item->name}}</option>
-                        @else
-                            <option value="{{$item->id}}">{{$item->name}}</option>
-                        @endif
+                        <option value="{{$item->id}}" @selected($item->id === $page?->parent_id)>{{$item->name}}</option>
                     @endforeach
                 </select>
             </div>
