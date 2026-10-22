@@ -2,7 +2,6 @@
 
 namespace Database\Seeders;
 
-use App\Services\Mailman;
 use App\Models\AgendaItem;
 use App\Models\AgendaItemCategory;
 use App\Models\ApplicationForm\ApplicationForm;
@@ -15,7 +14,6 @@ use App\Models\Rol;
 use App\Models\User;
 use App\Models\UserEventLogEntry;
 use App\Models\Zekering;
-use Exception;
 use Illuminate\Database\Seeder;
 
 /** Empties data from database */
@@ -26,15 +24,8 @@ class ClearSeeder extends Seeder
      *
      * @return void
      */
-    public function run(Mailman $mailman)
+    public function run()
     {
-        // Clean out the mail lists (because without this each local re-seed keeps cluttering the mail lists with non-existent users)
-        try {
-            collect($mailman->getAllMailListIds())->each($mailman->deleteAllUsersFromMailList(...));
-        } catch (Exception $e) {
-            \Log::error($e->getMessage());
-        }
-        
         Zekering::getQuery()->delete();
         Certificate::getQuery()->delete();
         MenuItem::getQuery()->delete();
