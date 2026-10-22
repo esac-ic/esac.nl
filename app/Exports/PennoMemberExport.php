@@ -17,40 +17,33 @@ class PennoMemberExport extends SpreadsheetExport
 
     public function collection(): Collection
     {
-        $users = User::query()->current()->where('created_at', '>=', $this->fromDate->copy()->utc())->get($this->columns());
+        return User::query()->current()->where('created_at', '>=', $this->fromDate->copy()->utc())->get();
+    }
 
-        return $users->map(function (User $user) {
-            $export = $user->toArray();
-            $export['iban'] = str_replace(' ', '', $export['iban']);
-            // Remove the time component of the created_at field:
-            $export['created_at'] = $user->created_at->tz(config('app.display_timezone'))->toDateString();
-            $export['incasso'] = $user->incasso ? 'Yes' : 'No';
-
-            return $export;
-        });
+    /**
+     * @param  User  $user
+     */
+    public function map(mixed $user): array
+    {
+        return [
+            $user->id,
+            $user->email,
+            $user->firstname,
+            $user->preposition,
+            $user->lastname,
+            $user->city,
+            $user->country,
+            $user->kind_of_member?->value,
+            str_replace(' ', '', (string) $user->iban),
+            $user->bic,
+            $user->incasso ? 'Yes' : 'No',
+            $user->created_at->tz(config('app.display_timezone'))->toDateString(),
+        ];
     }
 
     public function title(): string
     {
         return 'Non administrated members';
-    }
-
-    private function columns(): array
-    {
-        return [
-            'id',
-            'email',
-            'firstname',
-            'preposition',
-            'lastname',
-            'city',
-            'country',
-            'kind_of_member',
-            'iban',
-            'bic',
-            'incasso',
-            'created_at',
-        ];
     }
 
     public function headings(): array

@@ -9,9 +9,15 @@ class OldUsersExport extends SpreadsheetExport
 {
     public function collection(): Collection
     {
-        $oldUsers = User::query()->old()->get(['id', 'firstname', 'preposition', 'lastname', 'created_at', 'lid_af']);
+        return User::query()->old()->get(['id', 'firstname', 'preposition', 'lastname', 'created_at', 'lid_af']);
+    }
 
-        return $oldUsers->map(fn ($user) => $user->toArray());
+    /**
+     * @param  User  $user
+     */
+    public function map(mixed $user): array
+    {
+        return [$user->id, $user->firstname, $user->preposition, $user->lastname, $user->created_at, $user->lid_af->toDateString()];
     }
 
     public function title(): string

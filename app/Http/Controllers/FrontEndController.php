@@ -35,7 +35,7 @@ class FrontEndController extends Controller
 
     public function zekeringen(): View|RedirectResponse
     {
-        $menuItem = MenuItem::query()->firstWhere('url_name', MenuItem::ZEKERINGURL);
+        $menuItem = MenuItem::query()->where('url_name', MenuItem::ZEKERINGURL)->firstOrFail();
 
         if (Gate::denies('view', $menuItem)) {
             return to_route('login');
@@ -83,7 +83,7 @@ class FrontEndController extends Controller
 
     public function memberList(): View|RedirectResponse
     {
-        $menuItem = MenuItem::query()->firstWhere('url_name', MenuItem::MEMBERLISTURL);
+        $menuItem = MenuItem::query()->where('url_name', MenuItem::MEMBERLISTURL)->firstOrFail();
 
         if (Gate::denies('view', $menuItem)) {
             return to_route('login');
@@ -120,6 +120,6 @@ class FrontEndController extends Controller
 
     private function pageContent(string $urlName): ?string
     {
-        return MenuItem::query()->firstWhere('url_name', $urlName)->content;
+        return MenuItem::query()->where('url_name', $urlName)->value('content');
     }
 }
