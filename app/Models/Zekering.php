@@ -20,6 +20,6 @@ class Zekering extends Model
 
     public function children(): HasMany
     {
-        return $this->hasMany(Zekering::class, 'parent_id', 'id')->where('id', '!=', 'parent_id')->orderBy('id', 'asc');
+        return $this->hasMany(Zekering::class, 'parent_id', 'id')->whereColumn('id', '!=', 'parent_id')->orderBy('id', 'asc');
     }
 }
