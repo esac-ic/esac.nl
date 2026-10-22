@@ -26,7 +26,14 @@ DB\_HOST, DB\_PORT, DB\_DATABASE, DB\_USERNAME and DB\_PASSWORD
 ### Development environment (Docker, easiest and works on any OS)
 The easiest method is using Docker, on windows this is the easiest with [Docker Desktop](https://www.docker.com/products/docker-desktop/). No local PHP, Composer, Node or MySQL required, and no problems pinning PHP/Node versions.
 
-On windows: use WSL and clone it on a WSL native path (otherwise the performace is shit)
+On windows: use WSL and make sure to clone to a WSL native path for performance reasons (ie `~/`(easiest) or `/home/yourusername`)
+<details>
+    <summary>What is a WSL native path?</summary>
+
+On WSL you have 2 places where you can store/edit files:
+ - **WSL native**: Files in the linux file system, an actual xtf4 file system, like your `/home/<username>`, `~/` or `/root`. On ubuntu run `cd ~/` and continue with the next steps, then you will use a WSL Native path.
+ - **Windows Mounted**: Files in /mnt/c are files on you windows computer, reading these is slow because it accesses them using a local network. Try to not use this when not necessary. 
+</details>
 
 `compose.override.yaml` works on top of `compose.yaml`, it only uses the override when run locally and not in github actions. 
 
