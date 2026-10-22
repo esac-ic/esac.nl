@@ -29,18 +29,18 @@
                         </span>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="{{ route('users.show', [Auth::user(), 'back' => 'false']) }}">
+                        <a class="nav-link" href="{{ route('users.show', [auth()->user(), 'back' => 'false']) }}">
                             {{ 'Account overview' }}
                         </a>
                     </li>
-                    @if (Auth::guest())
+                    @guest
                         <li class="nav-item">
                             <a href="{{ route('login') }}" class="nav-link">
                             Login
                             </a>
                         </li>
                     @else
-                        @if(\Illuminate\Support\Facades\Auth::user()->hasRole(\App\Enums\Role::Administrator->value,\App\Enums\Role::ActivityAdministrator->value,\App\Enums\Role::ContentAdministrator->value,\App\Enums\Role::CertificateAdministrator->value))
+                        @can('access-admin')
                             <hr class="my-3">
 
                             <li class="nav-item active">
@@ -53,24 +53,28 @@
                                 Dashboard
                                 </a>
                             </li>
-                        @endif
-                        @if(\Illuminate\Support\Facades\Auth::user()->hasRole(\App\Enums\Role::Administrator->value,\App\Enums\Role::CertificateAdministrator->value))
+                        @endcan
+                        @can('view-members')
                             <li class="nav-item dropdown">
                                 <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                     {{'Members'}}
                                 </a>
                                 <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
                                     <a class="dropdown-item" href="{{ route('users.index') }}">{{'Current members'}}</a>
-                                    @if(\Illuminate\Support\Facades\Auth::user()->hasRole(\App\Enums\Role::Administrator->value))
+                                    @can('manage-members')
                                         <a class="dropdown-item" href="{{ route('users.index-old-members') }}">{{'Old members'}}</a>
                                         <a class="dropdown-item" href="{{ route('users.indexPendingMembers') }}">{{'Pending users'}}</a>
+                                    @endcan
+                                    @can('manage-roles')
                                         <a class="dropdown-item" href="{{ route('rols.index') }}">{{'Roles'}}</a>
-                                    @endif
-                                    <a class="dropdown-item" href="{{ route('certificates.index') }}">{{'Certificates'}}</a>
+                                    @endcan
+                                    @can('manage-certificates')
+                                        <a class="dropdown-item" href="{{ route('certificates.index') }}">{{'Certificates'}}</a>
+                                    @endcan
                                 </div>
                             </li>
-                        @endif
-                        @if(\Illuminate\Support\Facades\Auth::user()->hasRole(\App\Enums\Role::ContentAdministrator->value,\App\Enums\Role::ActivityAdministrator->value))
+                        @endcan
+                        @can('manage-agenda')
                             <li class="nav-item dropdown">
                                 <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                     {{'Activities'}}
@@ -78,13 +82,13 @@
                                 <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
                                     <a class="dropdown-item" href="{{ route('agendaItems.index') }}">{{'Events'}}</a>
                                     <a class="dropdown-item" href="{{ route('beheer.applicationForms.index') }}">{{'Application forms'}}</a>
-                                    @if(\Illuminate\Support\Facades\Auth::user()->hasRole(\App\Enums\Role::Administrator->value))
+                                    @can('manage-agenda-categories')
                                         <a class="dropdown-item" href="{{ route('agendaItemCategories.index') }}">{{'Event categories'}}</a>
-                                    @endif
+                                    @endcan
                                 </div>
                             </li>
-                        @endif
-                        @if(\Illuminate\Support\Facades\Auth::user()->hasRole(\App\Enums\Role::ContentAdministrator->value))
+                        @endcan
+                        @can('manage-pages')
                             <li class="nav-item dropdown">
                                 <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                     {{'Content'}}
@@ -92,30 +96,34 @@
                                 <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
                                     <a class="dropdown-item" href="{{ route('pages.index') }}">{{'Page management'}}</a>
                                     <a class="dropdown-item" href="{{ route('newsItems.index') }}">{{'News items'}}</a>
-                                    @if(\Illuminate\Support\Facades\Auth::user()->hasRole(\App\Enums\Role::Administrator->value))
+                                    @can('manage-library')
                                         <a class="dropdown-item" href="{{ route('books.index') }}">{{'Books'}}</a>
-                                    @endif
+                                    @endcan
                                 </div>
                             </li>
-                        @endif
-                        @if(\Illuminate\Support\Facades\Auth::user()->hasRole(\App\Enums\Role::Administrator->value))
+                        @endcan
+                        @can('manage-mail-lists')
                             <li class="nav-item">
                                 <a href="{{ route('mailList.index') }}" class="nav-link">
                                     {{'Mailing lists'}}
                                 </a>
                             </li>
+                        @endcan
+                        @can('view-user-event-log')
                             <li class="nav-item">
                                 <a href="{{ route('user-event-log-entry.index') }}" class="nav-link">
                                     {{'User event log'}}
                                 </a>
                             </li>
+                        @endcan
+                        @can('manage-settings')
                             <li class="nav-item">
                                 <a href="{{ route('beheer.settings.index') }}" class="nav-link">
                                     {{'Setting'}}
                                 </a>
                             </li>
-                        @endif
-                    @endif
+                        @endcan
+                    @endguest
                 </ul>
               </div>
             </nav>

@@ -1,6 +1,5 @@
 <?php
 
-use App\Http\Middleware\Authorize;
 use App\Http\Middleware\CheckKillswitch;
 use Illuminate\Cookie\Middleware\AddQueuedCookiesToResponse;
 use Illuminate\Cookie\Middleware\EncryptCookies;
@@ -29,10 +28,6 @@ return Application::configure(basePath: dirname(__DIR__))
             AddQueuedCookiesToResponse::class,
             StartSession::class,
             PreventRequestForgery::class,
-        ]);
-
-        $middleware->alias([
-            'authorize' => Authorize::class,
         ]);
 
         $middleware->redirectUsersTo(fn () => route('front-end.home'));

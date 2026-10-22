@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Enums\Role;
 use App\Models\MenuItem;
 use App\Repositories\MenuRepository;
 use Illuminate\Contracts\View\View;
@@ -18,7 +17,7 @@ class PaginaBeheerController extends Controller implements HasMiddleware
     {
         return [
             'auth',
-            new Middleware('authorize:' . Role::ContentAdministrator->value),
+            new Middleware('can:manage-pages'),
         ];
     }
 

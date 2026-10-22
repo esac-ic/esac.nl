@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers\ApplicationForm;
 
-use App\Enums\Role;
 use App\Exports\AgendaRegistrationExport;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\ApplicationFormRowVueResource;
@@ -17,7 +16,7 @@ use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Routing\Controllers\HasMiddleware;
 use Illuminate\Routing\Controllers\Middleware;
-use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Gate;
 use Illuminate\View\View;
 use Symfony\Component\HttpFoundation\StreamedResponse;
 
@@ -27,7 +26,7 @@ class AgendaApplicationFormController extends Controller implements HasMiddlewar
     {
         return [
             'auth',
-            new Middleware('authorize:' . Role::ContentAdministrator->value . ',' . Role::ActivityAdministrator->value, except: ['destroy']),
+            new Middleware('can:manage-agenda', except: ['destroy']),
         ];
     }
 
@@ -103,14 +102,10 @@ class AgendaApplicationFormController extends Controller implements HasMiddlewar
      */
     public function destroy($Agenda_id, $applicationResponseId): RedirectResponse
     {
-        $applicationReponse = ApplicationResponse::find($applicationResponseId);
-        if (!Auth::user()->hasRole(Role::ActivityAdministrator->value)) {
-            if (Auth::user()->id != $applicationReponse->user_id) {
-                abort(401);
-            }
-        }
+        $registration = ApplicationResponse::findOrFail($applicationResponseId);
+        Gate::authorize('delete-registration', $registration);
 
-        ApplicationResponse::destroy($applicationResponseId);
+        $registration->delete();
         return to_route('forms.users.index', $Agenda_id);
     }
 

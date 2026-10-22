@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Enums\Role;
 use App\Models\AgendaItem;
 use App\Models\AgendaItemCategory;
 use App\Repositories\AgendaItemRepository;
@@ -23,7 +22,7 @@ class AgendaItemController extends Controller implements HasMiddleware
     {
         return [
             'auth',
-            new Middleware('authorize:' . Role::ContentAdministrator->value . ',' . Role::ActivityAdministrator->value),
+            new Middleware('can:manage-agenda'),
         ];
     }
 
