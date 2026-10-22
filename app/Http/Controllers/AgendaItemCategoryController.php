@@ -2,13 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\AgendaItemCategoryRequest;
 use App\Models\AgendaItemCategory;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
-use Illuminate\Http\Request;
 use Illuminate\Routing\Controllers\HasMiddleware;
 use Illuminate\Routing\Controllers\Middleware;
-use Illuminate\Support\Facades\Session;
 
 class AgendaItemCategoryController extends Controller implements HasMiddleware
 {
@@ -22,61 +21,58 @@ class AgendaItemCategoryController extends Controller implements HasMiddleware
 
     public function index(): View
     {
-        $agendaItemCategories = AgendaItemCategory::all(['id', 'name']);
-        return view('beheer.agendaItemCategory.index', compact('agendaItemCategories'));
+        return view('beheer.agendaItemCategory.index', [
+            'agendaItemCategories' => AgendaItemCategory::all(['id', 'name']),
+        ]);
     }
 
     public function create(): View
     {
-        $fields = ['title' => 'Add an event category',
-            'method' => 'POST',
-            'url' => route('agendaItemCategories.store')];
-        $agendaItemCategory = null;
-        return view('beheer.agendaItemCategory.create_edit', compact(['fields', 'agendaItemCategory']));
+        return view('beheer.agendaItemCategory.create_edit', [
+            'agendaItemCategory' => null,
+            'fields' => [
+                'title' => 'Add an event category',
+                'method' => 'POST',
+                'url' => route('agendaItemCategories.store'),
+            ],
+        ]);
     }
 
-    public function store(Request $request): RedirectResponse
+    public function store(AgendaItemCategoryRequest $request): RedirectResponse
     {
-        AgendaItemCategory::create($this->validateInput($request));
+        AgendaItemCategory::create($request->validated());
 
-        Session::flash("message", 'Events category is added');
-        return to_route('agendaItemCategories.index');
+        return to_route('agendaItemCategories.index')->with('message', 'Events category is added');
     }
 
     public function show(AgendaItemCategory $agendaItemCategory): View
     {
-        return view('beheer.agendaItemCategory.show', compact('agendaItemCategory'));
+        return view('beheer.agendaItemCategory.show', ['agendaItemCategory' => $agendaItemCategory]);
     }
 
     public function edit(AgendaItemCategory $agendaItemCategory): View
     {
-        $fields = ['title' => 'Edit category',
-            'method' => 'PATCH',
-            'url' => route('agendaItemCategories.update', $agendaItemCategory)];
-
-        return view('beheer.agendaItemCategory.create_edit', compact('fields', 'agendaItemCategory'));
+        return view('beheer.agendaItemCategory.create_edit', [
+            'agendaItemCategory' => $agendaItemCategory,
+            'fields' => [
+                'title' => 'Edit category',
+                'method' => 'PATCH',
+                'url' => route('agendaItemCategories.update', $agendaItemCategory),
+            ],
+        ]);
     }
 
-    public function update(Request $request, AgendaItemCategory $agendaItemCategory): RedirectResponse
+    public function update(AgendaItemCategoryRequest $request, AgendaItemCategory $agendaItemCategory): RedirectResponse
     {
-        $agendaItemCategory->update($this->validateInput($request));
+        $agendaItemCategory->update($request->validated());
 
-        Session::flash("message", 'Events category is edited');
-        return to_route('agendaItemCategories.index');
+        return to_route('agendaItemCategories.index')->with('message', 'Events category is edited');
     }
 
     public function destroy(AgendaItemCategory $agendaItemCategory): RedirectResponse
     {
         $agendaItemCategory->delete();
 
-        Session::flash("message", 'Events category is removed');
-        return to_route('agendaItemCategories.index');
-    }
-
-    private function validateInput(Request $request): array
-    {
-        return $request->validate([
-            'name' => 'required|max:255',
-        ]);
+        return to_route('agendaItemCategories.index')->with('message', 'Events category is removed');
     }
 }
