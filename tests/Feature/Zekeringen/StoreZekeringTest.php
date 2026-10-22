@@ -17,7 +17,7 @@ class StoreZekeringTest extends TestCase
 
         $this->actingAs($user)->post(route('api.zekeringen.store'), ['text' => 'Top'])->assertRedirect(route('front-end.zekeringen'));
         $parent = Zekering::sole();
-        $this->actingAs($user)->post(route('api.subzekering.store'), ['text' => 'Reply', 'parent_id' => $parent->id])->assertOk();
+        $this->actingAs($user)->post(route('api.subzekeringen.store'), ['text' => 'Reply', 'parent_id' => $parent->id])->assertOk();
 
         $this->assertEquals(
             [

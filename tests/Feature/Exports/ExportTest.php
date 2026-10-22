@@ -52,7 +52,7 @@ class ExportTest extends TestCase
     {
         User::factory()->count(2)->lidAf()->create();
 
-        [$sheet, $rows] = $this->readSpreadsheet($this->get('beheer/users/old-members/export'), 'Old members.xlsx');
+        [$sheet, $rows] = $this->readSpreadsheet($this->get('beheer/old-members/export'), 'Old members.xlsx');
 
         $this->assertSame('Old members', $sheet);
         $this->assertSame(['#', 'First name', 'Preposition', 'Last name', 'User created at', 'User removed at'], $rows[0]);
@@ -65,7 +65,7 @@ class ExportTest extends TestCase
         User::factory()->create(['created_at' => now()->subDays(10)]);
         User::factory()->create(['created_at' => now()->subDay()]);
 
-        $response = $this->get('beheer/users/penno-export/download?days_ago=5');
+        $response = $this->post('beheer/penno-export', ['days_ago' => 5]);
         $exportDate = today()->subDays(5)->toDateString();
 
         [$sheet, $rows] = $this->readSpreadsheet($response, "Members (created after $exportDate).xlsx");

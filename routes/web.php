@@ -11,9 +11,13 @@ use App\Http\Controllers\ICalController;
 use App\Http\Controllers\LibraryController;
 use App\Http\Controllers\MailListController;
 use App\Http\Controllers\ManageController;
+use App\Http\Controllers\MemberExportController;
+use App\Http\Controllers\MembershipController;
 use App\Http\Controllers\NewsItemController;
+use App\Http\Controllers\OldMemberController;
 use App\Http\Controllers\PaginaBeheerController;
 use App\Http\Controllers\PendingUserController;
+use App\Http\Controllers\PennoExportController;
 use App\Http\Controllers\RolController;
 use App\Http\Controllers\SettingsController;
 use App\Http\Controllers\StorageController;
@@ -28,15 +32,11 @@ Route::permanentRedirect('/', '/home');
 Route::prefix('beheer')->name('beheer.')->group(function () {
     Route::get('home', [ManageController::class, 'index'])->name('home');
 
-    Route::controller(UserController::class)->prefix('users')->name('users.')->group(function () {
-        Route::get('export', 'exportUsers')->name('export');
-        Route::get('old-members', 'indexOldMembers')->name('old-members');
-        Route::get('old-members/export', 'exportOldUsers')->name('old-members.export');
-        Route::get('penno-export', 'pennoMemberExportSelect')->name('penno-export');
-        Route::get('penno-export/download', 'pennoMemberExport')->name('penno-export.download');
-        Route::patch('{user}/activate', 'makeActiveMember')->name('activate');
-        Route::patch('{user}/deactivate', 'removeAsActiveMember')->name('deactivate');
-    });
+    Route::get('users/export', MemberExportController::class)->name('users.export');
+    Route::singleton('users.membership', MembershipController::class)->creatable()->only(['store', 'destroy']);
+    Route::get('old-members/export', [OldMemberController::class, 'export'])->name('old-members.export');
+    Route::resource('old-members', OldMemberController::class)->only('index');
+    Route::resource('penno-export', PennoExportController::class)->only(['create', 'store']);
 
     Route::resource('pending-users', PendingUserController::class)->only(['index', 'destroy'])->parameters(['pending-users' => 'user']);
     Route::patch('pending-users/{user}/approve', [PendingUserController::class, 'approve'])->name('pending-users.approve');

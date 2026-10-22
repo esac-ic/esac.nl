@@ -42,9 +42,9 @@ class ZekeringController extends Controller implements HasMiddleware
         return response(['msg' => 'Sub zekering created'], 200);
     }
 
-    public function destroy(int $id): Response
+    public function destroy(Zekering $zekering): Response
     {
-        Zekering::destroy($id);
+        $zekering->delete();
 
         return response('', 200);
     }

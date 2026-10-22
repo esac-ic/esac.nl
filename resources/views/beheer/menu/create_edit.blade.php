@@ -71,12 +71,12 @@
                 $("#afterItem").empty();
                 if($( "#menuType" ).val() === "subItem" ){
                     $( "#parentItemBox" ).show();
-                    $.getJSON("{{ route('api.menuItems.index') }}?type=" + $('#menuType').val() + "&parentId=" + $('#parentItem').val() , function(data){
+                    $.getJSON("{{ route('api.menu-items.index') }}?type=" + $('#menuType').val() + "&parentId=" + $('#parentItem').val() , function(data){
                         fillAfterDropDownMenu(data);
                     });
                 } else {
                     $( "#parentItemBox" ).hide();
-                    $.getJSON("{{ route('api.menuItems.index') }}?type=" + $('#menuType').val(), function(data){
+                    $.getJSON("{{ route('api.menu-items.index') }}?type=" + $('#menuType').val(), function(data){
                         fillAfterDropDownMenu(data);
                     });
                 }
@@ -93,7 +93,7 @@
             });
 
             $('#parentItem').change(function(){
-                $.getJSON("{{ route('api.menuItems.index') }}?type=" + $('#menuType').val() + "&parentId=" + $('#parentItem').val() , function(data){
+                $.getJSON("{{ route('api.menu-items.index') }}?type=" + $('#menuType').val() + "&parentId=" + $('#parentItem').val() , function(data){
                     fillAfterDropDownMenu(data);
                 });
             });
