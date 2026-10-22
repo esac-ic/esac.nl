@@ -37,7 +37,7 @@ class StorePendingUserTest extends TestCase
             'iban' => '123456789',
         ];
 
-        $this->post(route('user.signup'), [
+        $this->post(route('front-end.signup.store'), [
             ...$details,
             'password' => 'a-password',
             'password_confirmation' => 'a-password',
@@ -57,7 +57,7 @@ class StorePendingUserTest extends TestCase
         Http::fake(['www.google.com/recaptcha/*' => Http::response(['success' => false])]);
         Event::fake();
 
-        $this->post(route('user.signup'), ['g-recaptcha-response' => 'invalid'])
+        $this->post(route('front-end.signup.store'), ['g-recaptcha-response' => 'invalid'])
             ->assertInvalid(['g-recaptcha-response' => "'I'm not a robot' validation failed, please try again"]);
 
         Event::assertNotDispatched(PendingUserCreated::class);

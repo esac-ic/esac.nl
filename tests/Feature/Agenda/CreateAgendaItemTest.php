@@ -53,7 +53,7 @@ class CreateAgendaItemTest extends TestCase
         $this->actingAsActivityAdministrator();
         $body = $this->body(['title' => $text, 'text' => $text, 'short_description' => $text]);
 
-        $this->post('agendaItems', $body)->assertRedirect();
+        $this->post('beheer/agenda-items', $body)->assertRedirect();
 
         $this->assertDatabaseHas(AgendaItem::class, [
             'title' => $text,
@@ -68,7 +68,7 @@ class CreateAgendaItemTest extends TestCase
         Storage::fake('public');
         $this->actingAsActivityAdministrator();
 
-        $this->post('agendaItems', $this->body([
+        $this->post('beheer/agenda-items', $this->body([
             'applicationForm' => null,
             'thumbnail' => UploadedFile::fake()->image('photo.png', 1000, 1000),
         ]))->assertRedirect();
@@ -81,7 +81,7 @@ class CreateAgendaItemTest extends TestCase
     {
         $this->actingAs(User::factory()->create());
 
-        $this->post('agendaItems', $this->body())->assertForbidden();
+        $this->post('beheer/agenda-items', $this->body())->assertForbidden();
     }
 
     #[Test]
@@ -89,7 +89,7 @@ class CreateAgendaItemTest extends TestCase
     {
         $this->actingAsActivityAdministrator();
 
-        $this->post('agendaItems', $this->body(['title' => '']))->assertInvalid('title');
+        $this->post('beheer/agenda-items', $this->body(['title' => '']))->assertInvalid('title');
 
         $this->assertDatabaseEmpty(AgendaItem::class);
     }

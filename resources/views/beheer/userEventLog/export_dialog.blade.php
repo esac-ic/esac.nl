@@ -11,7 +11,7 @@
             </div>    
         
             <div class="modal-body">
-                <form name="export-user-events-form" id="export-user-events-form" method="post" action="{{ route('user-event-log-entry.export') }}">
+                <form name="export-user-events-form" id="export-user-events-form" method="post" action="{{ route('beheer.user-event-log.export') }}">
                     @csrf    
                     
                     <div class="form-row">

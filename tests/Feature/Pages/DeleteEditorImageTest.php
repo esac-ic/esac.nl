@@ -17,7 +17,7 @@ class DeleteEditorImageTest extends TestCase
         Storage::fake('public')->put('image_uploads/a.jpg', 'a');
         $admin = User::factory()->withRole(Role::ContentAdministrator)->create();
 
-        $this->actingAs($admin)->delete('images/delete?path=/storage/image_uploads/a.jpg')->assertOk();
+        $this->actingAs($admin)->delete('beheer/images?path=/storage/image_uploads/a.jpg')->assertOk();
 
         Storage::disk('public')->assertMissing('image_uploads/a.jpg');
     }

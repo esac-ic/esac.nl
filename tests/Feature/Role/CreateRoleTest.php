@@ -22,7 +22,7 @@ class CreateRoleTest extends TestCase
     #[Test]
     public function an_admin_can_create_a_role()
     {
-        $this->post('rols', ['name' => 'test role'])->assertRedirect();
+        $this->post('beheer/roles', ['name' => 'test role'])->assertRedirect();
 
         $this->assertDatabaseHas(Rol::class, ['name' => 'test role']);
     }
@@ -32,13 +32,13 @@ class CreateRoleTest extends TestCase
     {
         $this->actingAs(User::factory()->create());
 
-        $this->post('rols', ['name' => 'test role'])->assertForbidden();
+        $this->post('beheer/roles', ['name' => 'test role'])->assertForbidden();
     }
 
     #[Test]
     public function a_role_can_not_be_created_without_required_fields()
     {
-        $this->post('rols')
+        $this->post('beheer/roles')
             ->assertRedirect()
             ->assertInvalid(['name' => 'Field name is required'])
             ->assertOnlyInvalid(['name']);

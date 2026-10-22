@@ -36,7 +36,7 @@ class ExportTest extends TestCase
         User::factory()->count(2)->create();
         User::factory()->lidAf()->create();
 
-        [$sheet, $rows] = $this->readSpreadsheet($this->get('users/exportUsers'), 'Members.xlsx');
+        [$sheet, $rows] = $this->readSpreadsheet($this->get('beheer/users/export'), 'Members.xlsx');
 
         $this->assertSame('Active members', $sheet);
         $this->assertSame('#', $rows[0][0]);
@@ -51,7 +51,7 @@ class ExportTest extends TestCase
     {
         User::factory()->count(2)->lidAf()->create();
 
-        [$sheet, $rows] = $this->readSpreadsheet($this->get('users/exportOldUsers'), 'Old members.xlsx');
+        [$sheet, $rows] = $this->readSpreadsheet($this->get('beheer/users/old-members/export'), 'Old members.xlsx');
 
         $this->assertSame('Old members', $sheet);
         $this->assertSame(['#', 'First name', 'Preposition', 'Last name', 'User created at', 'User removed at'], $rows[0]);
@@ -64,7 +64,7 @@ class ExportTest extends TestCase
         User::factory()->create(['created_at' => now()->subDays(10)]);
         User::factory()->create(['created_at' => now()->subDay()]);
 
-        $response = $this->get('users/pennoMemberExport?days_ago=5');
+        $response = $this->get('beheer/users/penno-export/download?days_ago=5');
         $exportDate = today()->subDays(5)->toDateString();
 
         [$sheet, $rows] = $this->readSpreadsheet($response, "Members (created after $exportDate).xlsx");
@@ -80,7 +80,7 @@ class ExportTest extends TestCase
     {
         Book::create(['title' => 'Alpine climbing', 'year' => 1990, 'country' => 'CH', 'type' => 'Guide', 'code' => 'A1']);
 
-        [$sheet, $rows] = $this->readSpreadsheet($this->get('books/exportLibrary'), 'Library.xlsx');
+        [$sheet, $rows] = $this->readSpreadsheet($this->get('beheer/books/export'), 'Library.xlsx');
 
         $this->assertSame('Books', $sheet);
         $this->assertSame(['#', 'Title', 'Year', 'Type', 'Country', 'Code'], $rows[0]);
@@ -94,7 +94,7 @@ class ExportTest extends TestCase
         UserEventLogEntry::factory()->count(3)->create(['user_id' => $this->admin->id, 'created_at' => now()]);
         UserEventLogEntry::factory()->create(['user_id' => $this->admin->id, 'created_at' => now()->subWeek()]);
 
-        $response = $this->post('userEventLog/export', [
+        $response = $this->post('beheer/user-event-log/export', [
             'startDate' => now()->subDay()->format('d-m-Y H:i'),
             'endDate' => now()->addDay()->format('d-m-Y H:i'),
         ]);
@@ -122,7 +122,7 @@ class ExportTest extends TestCase
             'inschrijf_form_id' => $form->id,
         ]);
 
-        $response = $this->get("forms/users/{$agendaItem->id}/export");
+        $response = $this->get("beheer/agenda-items/{$agendaItem->id}/registrations/export");
 
         [$sheet, $rows] = $this->readSpreadsheet($response, 'Trip-to-Font.xlsx');
 

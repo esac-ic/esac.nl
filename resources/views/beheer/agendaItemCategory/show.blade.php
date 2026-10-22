@@ -6,9 +6,9 @@
 
 @section('content')
     <x-page-header title="Event category">
-        <x-edit-button :href="route('agendaItemCategories.edit', $agendaItemCategory)" />
-        <x-back-button :href="route('agendaItemCategories.index')" />
-        <x-delete-button :action="route('agendaItemCategories.destroy', $agendaItemCategory)" confirm="Are you sure you want to delete this agenda item category?" />
+        <x-edit-button :href="route('beheer.agenda-item-categories.edit', $agendaItemCategory)" />
+        <x-back-button :href="route('beheer.agenda-item-categories.index')" />
+        <x-delete-button :action="route('beheer.agenda-item-categories.destroy', $agendaItemCategory)" confirm="Are you sure you want to delete this agenda item category?" />
     </x-page-header>
     <x-card title="Event category" class="mt-4">
         Name: {{ $agendaItemCategory->name }}

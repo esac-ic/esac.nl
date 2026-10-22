@@ -35,8 +35,8 @@ class RemoveAsActiveMemberTest extends TestCase
         Event::fake();
         Model::setEventDispatcher($initialDispenser);
 
-        $response = $this->actingAs($this->admin)->patch(route('users.removeAsActiveMember', $user));
-        $response->assertRedirect(route('users.show', $user));
+        $response = $this->actingAs($this->admin)->patch(route('beheer.users.deactivate', $user));
+        $response->assertRedirect(route('beheer.users.show', $user));
         Event::assertDispatched(MemberBecameOldMember::class);
 
         $this->assertNotNull(User::find($userId)->lid_af);

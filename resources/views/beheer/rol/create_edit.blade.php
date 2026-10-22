@@ -5,7 +5,7 @@
 @section('title', $title)
 
 @section('content')
-    <x-form-card :model="$rol" resource="rols" :$title>
+    <x-form-card :model="$rol" resource="beheer.roles" :$title>
         <x-field name="name" label="Name" :value="$rol->name" required />
     </x-form-card>
 @endsection

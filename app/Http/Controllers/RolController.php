@@ -33,7 +33,7 @@ class RolController extends Controller implements HasMiddleware
     {
         Rol::create($request->validated());
 
-        return to_route('rols.index')->with('message', 'Role added');
+        return to_route('beheer.roles.index')->with('message', 'Role added');
     }
 
     public function show(Rol $rol): View
@@ -50,13 +50,13 @@ class RolController extends Controller implements HasMiddleware
     {
         $rol->update($request->validated());
 
-        return to_route('rols.index')->with('message', 'Role edited');
+        return to_route('beheer.roles.index')->with('message', 'Role edited');
     }
 
     public function destroy(Rol $rol): RedirectResponse
     {
         $rol->delete();
 
-        return to_route('rols.index')->with('message', 'Role removed');
+        return to_route('beheer.roles.index')->with('message', 'Role removed');
     }
 }

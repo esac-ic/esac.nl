@@ -37,7 +37,7 @@ class LibraryController extends Controller implements HasMiddleware
     {
         Book::create($request->validated());
 
-        return to_route('books.index')->with('message', 'Book added');
+        return to_route('beheer.books.index')->with('message', 'Book added');
     }
 
     public function show(Book $book): View
@@ -54,14 +54,14 @@ class LibraryController extends Controller implements HasMiddleware
     {
         $book->update($request->validated());
 
-        return to_route('books.index')->with('message', 'Book edited');
+        return to_route('beheer.books.index')->with('message', 'Book edited');
     }
 
     public function destroy(Book $book): RedirectResponse
     {
         $book->delete();
 
-        return to_route('books.index')->with('message', 'Book removed');
+        return to_route('beheer.books.index')->with('message', 'Book removed');
     }
 
     public function exportLibrary(LibraryExport $libraryExport): StreamedResponse

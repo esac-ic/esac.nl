@@ -115,7 +115,7 @@ class RegisterForAgendaItemTest extends TestCase
     {
         $agendaItem = $this->agendaItemWithForm();
 
-        $this->post('/forms/admin/'.$agendaItem->id, ['user' => User::factory()->create()->id] + $this->answers($agendaItem))
+        $this->post(route('beheer.agenda-items.registrations.store', $agendaItem), ['user' => User::factory()->create()->id] + $this->answers($agendaItem))
             ->assertForbidden();
     }
 
@@ -127,7 +127,7 @@ class RegisterForAgendaItemTest extends TestCase
         $agendaItem = $this->agendaItemWithForm();
         $answers = $this->answers($agendaItem);
 
-        $this->post('/forms/admin/'.$agendaItem->id, ['user' => $userToRegister->id] + $answers)->assertRedirect();
+        $this->post(route('beheer.agenda-items.registrations.store', $agendaItem), ['user' => $userToRegister->id] + $answers)->assertRedirect();
 
         $this->assertRegistered($userToRegister, $agendaItem, $answers);
     }

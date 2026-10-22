@@ -8,8 +8,8 @@
     @include('includes.flash')
 
     <x-page-header title="Books">
-        <x-button-link :href="route('books.create')" icon="plus">New book</x-button-link>
-        <x-button-link :href="route('books.export')" icon="android-download">Export books</x-button-link>
+        <x-button-link :href="route('beheer.books.create')" icon="plus">New book</x-button-link>
+        <x-button-link :href="route('beheer.books.export')" icon="android-download">Export books</x-button-link>
     </x-page-header>
     <x-data-table :columns="['Title', 'Year', 'Country', 'Type', 'Code', 'Management']">
         @foreach ($books as $book)
@@ -20,8 +20,8 @@
                 <td>{{$book->type}}</td>
                 <td>{{$book->code}}</td>
                 <td>
-                    <x-icon-link :href="route('books.edit', $book)" icon="edit" title="Edit book" />
-                    <x-icon-link :href="route('books.show', $book)" icon="eye" title="Show book" />
+                    <x-icon-link :href="route('beheer.books.edit', $book)" icon="edit" title="Edit book" />
+                    <x-icon-link :href="route('beheer.books.show', $book)" icon="eye" title="Show book" />
                 </td>
             </tr>
         @endforeach

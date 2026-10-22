@@ -34,7 +34,7 @@ class CreateNewsItemTest extends TestCase
     #[DataProvider('newsItems')]
     public function create_news_item(array $body)
     {
-        $this->post('newsItems', $body)->assertRedirect();
+        $this->post('beheer/news-items', $body)->assertRedirect();
 
         $this->assertDatabaseHas(NewsItem::class, $body);
     }
@@ -44,7 +44,7 @@ class CreateNewsItemTest extends TestCase
     {
         Storage::fake('public');
 
-        $this->post('newsItems', [
+        $this->post('beheer/news-items', [
             'title' => 'test nieuws',
             'text' => 'test nieuws',
             'author' => 'Gebruiker1',
@@ -59,7 +59,7 @@ class CreateNewsItemTest extends TestCase
     #[Test]
     public function a_news_item_needs_an_author()
     {
-        $this->post('newsItems', ['title' => 'test nieuws', 'text' => 'test nieuws'])->assertInvalid('author');
+        $this->post('beheer/news-items', ['title' => 'test nieuws', 'text' => 'test nieuws'])->assertInvalid('author');
 
         $this->assertDatabaseEmpty(NewsItem::class);
     }

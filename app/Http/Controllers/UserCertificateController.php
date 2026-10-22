@@ -20,7 +20,7 @@ class UserCertificateController extends Controller implements HasMiddleware
         ];
     }
 
-    public function addCertificate(User $user): View
+    public function create(User $user): View
     {
         return view('beheer.user.addCertificate', [
             'user' => $user,
@@ -29,14 +29,14 @@ class UserCertificateController extends Controller implements HasMiddleware
         ]);
     }
 
-    public function saveCertificate(UserCertificateRequest $request, User $user): RedirectResponse
+    public function store(UserCertificateRequest $request, User $user): RedirectResponse
     {
         $user->certificates()->attach($request->input('certificate_id'));
 
-        return to_route('users.show', $user);
+        return to_route('beheer.users.show', $user);
     }
 
-    public function editUserCertificate(User $user, Certificate $certificate): View
+    public function edit(User $user, Certificate $certificate): View
     {
         return view('beheer.user.addCertificate', [
             'user' => $user,
@@ -45,18 +45,18 @@ class UserCertificateController extends Controller implements HasMiddleware
         ]);
     }
 
-    public function updateUserCertificate(UserCertificateRequest $request, User $user, Certificate $certificate): RedirectResponse
+    public function update(UserCertificateRequest $request, User $user, Certificate $certificate): RedirectResponse
     {
         $user->certificates()->detach($certificate->id);
         $user->certificates()->attach($request->input('certificate_id'));
 
-        return to_route('users.show', $user);
+        return to_route('beheer.users.show', $user);
     }
 
-    public function deleteUserCertificate(User $user, Certificate $certificate): RedirectResponse
+    public function destroy(User $user, Certificate $certificate): RedirectResponse
     {
         $user->certificates()->detach($certificate->id);
 
-        return to_route('users.show', $user);
+        return to_route('beheer.users.show', $user);
     }
 }

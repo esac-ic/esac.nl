@@ -29,7 +29,7 @@
                         </span>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="{{ route('users.show', [auth()->user(), 'back' => 'false']) }}">
+                        <a class="nav-link" href="{{ route('beheer.users.show', [auth()->user(), 'back' => 'false']) }}">
                             {{ 'Account overview' }}
                         </a>
                     </li>
@@ -49,47 +49,47 @@
                     @endcan
                     @can('view-members')
                         <x-nav-dropdown label="Members">
-                            <a class="dropdown-item" href="{{ route('users.index') }}">{{'Current members'}}</a>
+                            <a class="dropdown-item" href="{{ route('beheer.users.index') }}">{{'Current members'}}</a>
                             @can('manage-members')
-                                <a class="dropdown-item" href="{{ route('users.index-old-members') }}">{{'Old members'}}</a>
-                                <a class="dropdown-item" href="{{ route('users.indexPendingMembers') }}">{{'Pending users'}}</a>
+                                <a class="dropdown-item" href="{{ route('beheer.users.old-members') }}">{{'Old members'}}</a>
+                                <a class="dropdown-item" href="{{ route('beheer.pending-users.index') }}">{{'Pending users'}}</a>
                             @endcan
                             @can('manage-roles')
-                                <a class="dropdown-item" href="{{ route('rols.index') }}">{{'Roles'}}</a>
+                                <a class="dropdown-item" href="{{ route('beheer.roles.index') }}">{{'Roles'}}</a>
                             @endcan
                             @can('manage-certificates')
-                                <a class="dropdown-item" href="{{ route('certificates.index') }}">{{'Certificates'}}</a>
+                                <a class="dropdown-item" href="{{ route('beheer.certificates.index') }}">{{'Certificates'}}</a>
                             @endcan
                         </x-nav-dropdown>
                     @endcan
                     @can('manage-agenda')
                         <x-nav-dropdown label="Activities">
-                            <a class="dropdown-item" href="{{ route('agendaItems.index') }}">{{'Events'}}</a>
-                            <a class="dropdown-item" href="{{ route('beheer.applicationForms.index') }}">{{'Application forms'}}</a>
+                            <a class="dropdown-item" href="{{ route('beheer.agenda-items.index') }}">{{'Events'}}</a>
+                            <a class="dropdown-item" href="{{ route('beheer.application-forms.index') }}">{{'Application forms'}}</a>
                             @can('manage-agenda-categories')
-                                <a class="dropdown-item" href="{{ route('agendaItemCategories.index') }}">{{'Event categories'}}</a>
+                                <a class="dropdown-item" href="{{ route('beheer.agenda-item-categories.index') }}">{{'Event categories'}}</a>
                             @endcan
                         </x-nav-dropdown>
                     @endcan
                     @can('manage-pages')
                         <x-nav-dropdown label="Content">
-                            <a class="dropdown-item" href="{{ route('pages.index') }}">{{'Page management'}}</a>
-                            <a class="dropdown-item" href="{{ route('newsItems.index') }}">{{'News items'}}</a>
+                            <a class="dropdown-item" href="{{ route('beheer.pages.index') }}">{{'Page management'}}</a>
+                            <a class="dropdown-item" href="{{ route('beheer.news-items.index') }}">{{'News items'}}</a>
                             @can('manage-library')
-                                <a class="dropdown-item" href="{{ route('books.index') }}">{{'Books'}}</a>
+                                <a class="dropdown-item" href="{{ route('beheer.books.index') }}">{{'Books'}}</a>
                             @endcan
                         </x-nav-dropdown>
                     @endcan
                     @can('manage-mail-lists')
                         <li class="nav-item">
-                            <a href="{{ route('mailList.index') }}" class="nav-link">
+                            <a href="{{ route('beheer.mail-lists.index') }}" class="nav-link">
                                 {{'Mailing lists'}}
                             </a>
                         </li>
                     @endcan
                     @can('view-user-event-log')
                         <li class="nav-item">
-                            <a href="{{ route('user-event-log-entry.index') }}" class="nav-link">
+                            <a href="{{ route('beheer.user-event-log.index') }}" class="nav-link">
                                 {{'User event log'}}
                             </a>
                         </li>

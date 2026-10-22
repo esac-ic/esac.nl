@@ -30,7 +30,7 @@ function uploadFile (file, summernote) {
     data.append('image', file);
 
     axios
-        .post('/images/upload', data)
+        .post('/beheer/images', data)
         .then(response => {
             $(summernote).summernote('insertImage', response.data);
         });
@@ -46,7 +46,7 @@ function deleteFile ($target) {
         }
 
         axios
-            .delete('/images/delete', {params: {
+            .delete('/beheer/images', {params: {
                     path: path,
                 }});
     }

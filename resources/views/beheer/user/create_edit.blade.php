@@ -15,7 +15,7 @@
 
     <h1>{{ $title }}</h1>
 
-    {{ html()->form($user->exists ? 'PATCH' : 'POST', $user->exists ? route('users.update', $user) : route('users.store'))->open() }}
+    {{ html()->form($user->exists ? 'PATCH' : 'POST', $user->exists ? route('beheer.users.update', $user) : route('beheer.users.store'))->open() }}
     <x-card title="Personal" class="mt-4" id="personal-info">
         <div class="form-row">
             <x-field name="firstname" label="First name" :value="$user->firstname" col="5" required :disabled="auth()->user()->cannot('manage-members')" />
@@ -86,7 +86,7 @@
     @endcan
     <div class="my-4">
         {{ html()->submit('Save')->class('btn btn-primary') }}
-        <a class="btn btn-danger" href="{{ $user->exists ? route('users.show', $user) : route('users.index') }}">{{'Cancel'}}</a>
+        <a class="btn btn-danger" href="{{ $user->exists ? route('beheer.users.show', $user) : route('beheer.users.index') }}">{{'Cancel'}}</a>
     </div>
 
     {{ html()->form()->close() }}

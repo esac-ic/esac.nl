@@ -43,7 +43,7 @@ class NewsItemController extends Controller implements HasMiddleware
             $this->uploadAndResizeImage($request, $newsItem);
         }
 
-        return to_route('newsItems.index')->with('message', 'News item added');
+        return to_route('beheer.news-items.index')->with('message', 'News item added');
     }
 
     public function show(NewsItem $newsItem): View
@@ -64,14 +64,14 @@ class NewsItemController extends Controller implements HasMiddleware
             $this->uploadAndResizeImage($request, $newsItem);
         }
 
-        return to_route('newsItems.index')->with('message', 'News item edited');
+        return to_route('beheer.news-items.index')->with('message', 'News item edited');
     }
 
     public function destroy(NewsItem $newsItem): RedirectResponse
     {
         $newsItem->delete();
 
-        return to_route('newsItems.index')->with('message', 'News item removed');
+        return to_route('beheer.news-items.index')->with('message', 'News item removed');
     }
 
     private function uploadAndResizeImage(Request $request, NewsItem $newsItem): void

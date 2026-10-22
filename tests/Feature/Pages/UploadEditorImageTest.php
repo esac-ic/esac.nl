@@ -20,9 +20,9 @@ class UploadEditorImageTest extends TestCase
         $admin->roles()->attach(Role::ContentAdministrator->value);
         $this->actingAs($admin);
 
-        $this->post('images/upload', ['image' => UploadedFile::fake()->createWithContent('shell.php', '<?php echo 1;')])
+        $this->post('beheer/images', ['image' => UploadedFile::fake()->createWithContent('shell.php', '<?php echo 1;')])
             ->assertInvalid('image');
-        $this->post('images/upload', ['image' => UploadedFile::fake()->image('photo.jpg')])->assertOk();
+        $this->post('beheer/images', ['image' => UploadedFile::fake()->image('photo.jpg')])->assertOk();
 
         $this->assertCount(1, Storage::disk('public')->files('image_uploads'));
     }

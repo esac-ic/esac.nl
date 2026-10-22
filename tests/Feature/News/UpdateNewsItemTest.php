@@ -20,7 +20,7 @@ class UpdateNewsItemTest extends TestCase
         $body = ['title' => 'test news', 'text' => 'test nieuws', 'author' => 'Gebruiker1'];
         $this->actingAs(User::factory()->withRole(Role::ActivityAdministrator)->create());
 
-        $this->patch('newsItems/'.$newsItem->id, $body)->assertRedirect();
+        $this->patch('beheer/news-items/'.$newsItem->id, $body)->assertRedirect();
 
         $this->assertDatabaseHas(NewsItem::class, ['id' => $newsItem->id, ...$body]);
     }

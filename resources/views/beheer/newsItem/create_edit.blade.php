@@ -9,14 +9,14 @@
         @include('includes.flash')
         <x-validation-errors />
 
-        {{ html()->form($newsItem->exists ? 'PATCH' : 'POST', $newsItem->exists ? route('newsItems.update', $newsItem) : route('newsItems.store'))->acceptsFiles()->open() }}
+        {{ html()->form($newsItem->exists ? 'PATCH' : 'POST', $newsItem->exists ? route('beheer.news-items.update', $newsItem) : route('beheer.news-items.store'))->acceptsFiles()->open() }}
         <x-card :$title>
             <x-field name="title" label="Title" :value="$newsItem->title" required />
             <div class="form-group">
                 <label for="author">Author</label>
                 <auto-complete-field
                         name="author"
-                        url="{{ route('user.autoComplete') }}"
+                        url="{{ route('api.users.autoComplete') }}"
                         placeholder="Author"
                         value="{{ $newsItem->author }}">
                 </auto-complete-field>
@@ -34,7 +34,7 @@
         <div class="my-4">
             {{ html()->submit('Save')->class('btn btn-primary') }}
             {{ html()->form()->close() }}
-            <a class="btn btn-danger btn-close" href="{{ $newsItem->exists ? route('newsItems.show', $newsItem) : route('newsItems.index') }}">Cancel</a>
+            <a class="btn btn-danger btn-close" href="{{ $newsItem->exists ? route('beheer.news-items.show', $newsItem) : route('beheer.news-items.index') }}">Cancel</a>
         </div>
     </div>
 @endsection

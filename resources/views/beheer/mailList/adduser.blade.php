@@ -64,7 +64,7 @@
         function addUsersToMailList() {
             var mailListId = '{{$mailList->id}}';
             $.ajax({
-                url: '{{ route('mailList.members.store', '__list__') }}'.replace('__list__', mailListId),
+                url: '{{ route('beheer.mail-lists.members.store', '__list__') }}'.replace('__list__', mailListId),
                 data: {
                     userIds: selectedUserIds,
                     _token: window.Laravel.csrfToken

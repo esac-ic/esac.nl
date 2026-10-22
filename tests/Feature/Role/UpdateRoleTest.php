@@ -25,7 +25,7 @@ class UpdateRoleTest extends TestCase
     #[Test]
     public function an_admin_can_update_a_role()
     {
-        $this->patch('rols/'.$this->role->id, ['name' => 'test role'])->assertRedirect();
+        $this->patch('beheer/roles/'.$this->role->id, ['name' => 'test role'])->assertRedirect();
 
         $this->assertSame('test role', $this->role->refresh()->name);
     }
@@ -35,13 +35,13 @@ class UpdateRoleTest extends TestCase
     {
         $this->actingAs(User::factory()->create());
 
-        $this->patch('rols/'.$this->role->id, ['name' => 'test role'])->assertForbidden();
+        $this->patch('beheer/roles/'.$this->role->id, ['name' => 'test role'])->assertForbidden();
     }
 
     #[Test]
     public function a_role_can_not_be_updated_without_required_fields()
     {
-        $this->patch('rols/'.$this->role->id)
+        $this->patch('beheer/roles/'.$this->role->id)
             ->assertRedirect()
             ->assertInvalid(['name' => 'Field name is required'])
             ->assertOnlyInvalid(['name']);

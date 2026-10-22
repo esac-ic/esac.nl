@@ -6,11 +6,11 @@
 
 @section('content')
     <x-page-header title="Agenda item">
-        <x-edit-button :href="route('agendaItems.edit', $agendaItem)" />
+        <x-edit-button :href="route('beheer.agenda-items.edit', $agendaItem)" />
         @if(request('back') != 'false')
-            <x-back-button :href="route('agendaItems.index')" :block="false" />
+            <x-back-button :href="route('beheer.agenda-items.index')" :block="false" />
         @endif
-        <x-delete-button :action="route('agendaItems.destroy', $agendaItem)" confirm="Are you sure you want to delete this agenda item?" />
+        <x-delete-button :action="route('beheer.agenda-items.destroy', $agendaItem)" confirm="Are you sure you want to delete this agenda item?" />
     </x-page-header>
     <x-card title="Event general information" class="mt-4">
         <table class="table table-striped" style="width:100%">

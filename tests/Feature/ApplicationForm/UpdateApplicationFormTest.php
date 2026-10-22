@@ -25,7 +25,7 @@ class UpdateApplicationFormTest extends TestCase
     {
         parent::setUp();
         $this->applicationForm = ApplicationForm::factory()->create();
-        $this->url = 'beheer/applicationForms/'.$this->applicationForm->id;
+        $this->url = 'beheer/application-forms/'.$this->applicationForm->id;
     }
 
     #[Test]
@@ -83,11 +83,11 @@ class UpdateApplicationFormTest extends TestCase
 
         // A browser posts a checked checkbox as "on" and leaves an unchecked one out.
         $this->put($this->url, ['name' => 'test name', 'rows' => [$question + ['required' => 'on']]])
-            ->assertRedirectToRoute('beheer.applicationForms.index');
+            ->assertRedirectToRoute('beheer.application-forms.index');
         $this->assertTrue($row->fresh()->required);
 
         $this->put($this->url, ['name' => 'test name', 'rows' => [$question]])
-            ->assertRedirectToRoute('beheer.applicationForms.index');
+            ->assertRedirectToRoute('beheer.application-forms.index');
         $this->assertFalse($row->fresh()->required);
     }
 }

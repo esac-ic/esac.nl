@@ -9,7 +9,7 @@
 
     <x-page-header title="Old members">
         @can('manage-members')
-            <x-button-link :href="route('users.exportOldUsers')" icon="android-download">Export old members</x-button-link>
+            <x-button-link :href="route('beheer.users.old-members.export')" icon="android-download">Export old members</x-button-link>
         @endcan
     </x-page-header>
     <x-data-table :columns="['Name', 'Email address', 'Type of member', 'Management']">
@@ -23,8 +23,8 @@
                     @endisset
                 </td>
                 <td>
-                    <x-icon-link :href="route('users.edit', $user)" icon="edit" title="Edit user" />
-                    <x-icon-link :href="route('users.show', $user)" icon="eye" title="Show user information" />
+                    <x-icon-link :href="route('beheer.users.edit', $user)" icon="edit" title="Edit user" />
+                    <x-icon-link :href="route('beheer.users.show', $user)" icon="eye" title="Show user information" />
                 </td>
             </tr>
         @endforeach

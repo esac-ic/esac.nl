@@ -24,7 +24,7 @@ class UserApplicationFormController extends Controller implements HasMiddleware
     public function showRegistrationForm(Request $request, AgendaItem $agendaItem): View|RedirectResponse
     {
         if ($error = $this->registrationError($agendaItem, $request->user())) {
-            return to_route('agenda.detail', $agendaItem)->with('error', $error);
+            return to_route('front-end.agenda.detail', $agendaItem)->with('error', $error);
         }
 
         $applicationForm = $agendaItem->getApplicationForm;
@@ -33,7 +33,7 @@ class UserApplicationFormController extends Controller implements HasMiddleware
             'rows' => ApplicationFormRowVueResource::collection($applicationForm->applicationFormRows),
             'route' => route('forms.store', $agendaItem),
             'applicationForm' => $applicationForm,
-            'cancleRoute' => route('agenda.detail', $agendaItem),
+            'cancleRoute' => route('front-end.agenda.detail', $agendaItem),
             'curPageName' => $applicationForm->name,
         ]);
     }
@@ -41,12 +41,12 @@ class UserApplicationFormController extends Controller implements HasMiddleware
     public function store(RegistrationRequest $request, AgendaItem $agendaItem): RedirectResponse
     {
         if ($error = $this->registrationError($agendaItem, $request->user())) {
-            return to_route('agenda.detail', $agendaItem)->with('error', $error);
+            return to_route('front-end.agenda.detail', $agendaItem)->with('error', $error);
         }
 
         $agendaItem->register($request->user()->id, $request->validated());
 
-        return to_route('agenda.detail', $agendaItem);
+        return to_route('front-end.agenda.detail', $agendaItem);
     }
 
     public function unregister(Request $request, AgendaItem $agendaItem): RedirectResponse

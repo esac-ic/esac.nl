@@ -8,15 +8,15 @@
     @include('includes.flash')
 
     <x-page-header title="Event categories">
-        <x-button-link :href="route('agendaItemCategories.create')" icon="plus">New category</x-button-link>
+        <x-button-link :href="route('beheer.agenda-item-categories.create')" icon="plus">New category</x-button-link>
     </x-page-header>
     <x-data-table :columns="['Name', 'Beheer']">
         @foreach ($agendaItemCategories as $category)
             <tr>
                 <td>{{$category->name}}</td>
                 <td>
-                    <x-icon-link :href="route('agendaItemCategories.edit', $category)" icon="edit" title="Edit category" />
-                    <x-icon-link :href="route('agendaItemCategories.show', $category)" icon="eye" title="Show category" />
+                    <x-icon-link :href="route('beheer.agenda-item-categories.edit', $category)" icon="edit" title="Edit category" />
+                    <x-icon-link :href="route('beheer.agenda-item-categories.show', $category)" icon="eye" title="Show category" />
                 </td>
             </tr>
         @endforeach

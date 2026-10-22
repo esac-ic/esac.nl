@@ -56,7 +56,7 @@ class UserController extends Controller implements HasMiddleware
         $user->save();
         $user->roles()->sync($request->input('roles', []));
 
-        return to_route('users.index')->with('message', 'User is added');
+        return to_route('beheer.users.index')->with('message', 'User is added');
     }
 
     public function show(User $user): View
@@ -86,17 +86,17 @@ class UserController extends Controller implements HasMiddleware
         }
 
         if ($request->user()->is($user)) {
-            return to_route('users.show', [$user, 'back' => 'false']);
+            return to_route('beheer.users.show', [$user, 'back' => 'false']);
         }
 
-        return to_route('users.index')->with('message', 'Changes to user have been saved');
+        return to_route('beheer.users.index')->with('message', 'Changes to user have been saved');
     }
 
     public function removeAsActiveMember(User $user): RedirectResponse
     {
         $user->removeAsActiveMember();
 
-        return to_route('users.show', $user);
+        return to_route('beheer.users.show', $user);
     }
 
     public function exportUsers(UsersExport $usersExport): StreamedResponse
@@ -129,9 +129,9 @@ class UserController extends Controller implements HasMiddleware
     {
         // This only fails when the member is already active or has no email address.
         if ($user->makeActiveMember()) {
-            return to_route('users.show', $user);
+            return to_route('beheer.users.show', $user);
         }
 
-        return to_route('users.index-old-members')->with('error', 'Failed to make member active');
+        return to_route('beheer.users.old-members')->with('error', 'Failed to make member active');
     }
 }

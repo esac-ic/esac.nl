@@ -33,9 +33,9 @@ class MakeActiveMemberTest extends TestCase
 
         Event::fake();
 
-        $response = $this->actingAs($this->admin)->patch(route('users.makeActiveMember', $user));
+        $response = $this->actingAs($this->admin)->patch(route('beheer.users.activate', $user));
 
-        $response->assertRedirect(route('users.show', $user));
+        $response->assertRedirect(route('beheer.users.show', $user));
         Event::assertDispatched(OldMemberBecameMember::class);
 
         $this->assertNull(User::find($userId)->lid_af); // use User::find instead of $user to check if the user is properly updated in the db
@@ -49,8 +49,8 @@ class MakeActiveMemberTest extends TestCase
 
         Event::fake();
 
-        $response = $this->actingAs($this->admin)->patch(route('users.makeActiveMember', $user));
-        $response->assertRedirect(route('users.index-old-members'));
+        $response = $this->actingAs($this->admin)->patch(route('beheer.users.activate', $user));
+        $response->assertRedirect(route('beheer.users.old-members'));
         Event::assertNotDispatched(OldMemberBecameMember::class);
     }
 
@@ -65,8 +65,8 @@ class MakeActiveMemberTest extends TestCase
 
         Event::fake();
 
-        $response = $this->actingAs($this->admin)->patch(route('users.makeActiveMember', $user));
-        $response->assertRedirect(route('users.index-old-members'));
+        $response = $this->actingAs($this->admin)->patch(route('beheer.users.activate', $user));
+        $response->assertRedirect(route('beheer.users.old-members'));
         Event::assertNotDispatched(OldMemberBecameMember::class);
 
         $this->assertNotNull(User::find($userId)->lid_af);
@@ -81,8 +81,8 @@ class MakeActiveMemberTest extends TestCase
 
         Event::fake();
 
-        $response = $this->actingAs($this->admin)->patch(route('users.makeActiveMember', $user));
-        $response->assertRedirect(route('users.index-old-members'));
+        $response = $this->actingAs($this->admin)->patch(route('beheer.users.activate', $user));
+        $response->assertRedirect(route('beheer.users.old-members'));
         Event::assertNotDispatched(OldMemberBecameMember::class);
     }
 }

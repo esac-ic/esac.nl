@@ -9,15 +9,15 @@
 
     <x-page-header title="Current members">
         @can('manage-members')
-            <a href="{{route('users.create')}}" class="btn btn-primary" title="{{'New user'}}">
+            <a href="{{route('beheer.users.create')}}" class="btn btn-primary" title="{{'New user'}}">
                 <span class="ion-person-add" aria-hidden="true"></span>
                 {{'New user'}}
             </a>
-            <a href="{{route('users.pennoMemberExportView')}}" class="btn btn-primary" title="{{'Export only the fields needed for the financial administration'}}" >
+            <a href="{{route('beheer.users.penno-export')}}" class="btn btn-primary" title="{{'Export only the fields needed for the financial administration'}}" >
                 <span class="ion-android-download" aria-hidden="true"></span>
                 {{'Penno export'}}
             </a>
-            <a href="{{route('users.exportUsers')}}" class="btn btn-primary" title="{{'Export all active members'}}">
+            <a href="{{route('beheer.users.export')}}" class="btn btn-primary" title="{{'Export all active members'}}">
                 <span class="ion-android-download" aria-hidden="true"></span>
                 {{'Export members'}}
             </a>
@@ -31,8 +31,8 @@
                 <td>{{trans('kind_of_member.' . $user->kind_of_member)}}</td>
                 <td>@foreach($user->roles as $role) {{$role->id}}@endforeach</td>
                 <td>
-                    <x-icon-link :href="route('users.edit', $user)" icon="edit" title="Edit user" />
-                    <x-icon-link :href="route('users.show', $user)" icon="eye" title="Show user information" />
+                    <x-icon-link :href="route('beheer.users.edit', $user)" icon="edit" title="Edit user" />
+                    <x-icon-link :href="route('beheer.users.show', $user)" icon="eye" title="Show user information" />
                 </td>
             </tr>
         @endforeach

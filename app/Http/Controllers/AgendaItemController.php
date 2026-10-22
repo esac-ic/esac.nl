@@ -43,7 +43,7 @@ class AgendaItemController extends Controller implements HasMiddleware
         $agendaItem->save();
         $this->handleImage($request, $agendaItem);
 
-        return to_route('agendaItems.index')->with('message', 'Event added');
+        return to_route('beheer.agenda-items.index')->with('message', 'Event added');
     }
 
     public function show(AgendaItem $agendaItem): View
@@ -63,7 +63,7 @@ class AgendaItemController extends Controller implements HasMiddleware
             ->save();
         $this->handleImage($request, $agendaItem);
 
-        return to_route('agendaItems.index')->with('message', 'Event edited');
+        return to_route('beheer.agenda-items.index')->with('message', 'Event edited');
     }
 
     public function destroy(AgendaItem $agendaItem): RedirectResponse
@@ -74,14 +74,14 @@ class AgendaItemController extends Controller implements HasMiddleware
             Storage::disk('public')->delete($agendaItem->image_url);
         }
 
-        return to_route('agendaItems.index')->with('message', 'Event removed');
+        return to_route('beheer.agenda-items.index')->with('message', 'Event removed');
     }
 
     public function copy(Request $request, AgendaItem $agendaItem): RedirectResponse
     {
         $newAgendaItem = $agendaItem->copyFor($request->user());
 
-        return to_route('agendaItems.edit', $newAgendaItem);
+        return to_route('beheer.agenda-items.edit', $newAgendaItem);
     }
 
     private function form(AgendaItem $agendaItem): View

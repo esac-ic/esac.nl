@@ -22,7 +22,7 @@ class DeleteApplicationFormTest extends TestCase
         $applicationForm = ApplicationForm::factory()->create();
         $this->actingAsRole($role);
 
-        $this->delete('beheer/applicationForms/'.$applicationForm->id)->assertRedirect();
+        $this->delete('beheer/application-forms/'.$applicationForm->id)->assertRedirect();
 
         $this->assertSoftDeleted($applicationForm);
     }
@@ -34,6 +34,6 @@ class DeleteApplicationFormTest extends TestCase
         $applicationForm = ApplicationForm::factory()->create();
         $this->actingAsRole($role);
 
-        $this->delete('beheer/applicationForms/'.$applicationForm->id)->assertForbidden();
+        $this->delete('beheer/application-forms/'.$applicationForm->id)->assertForbidden();
     }
 }
