@@ -22,8 +22,9 @@ class MenuItemSeeder extends Seeder
             [MenuItem::ZEKERINGURL, 'Zekeringen', true, 'Zekeringen content'],
         ];
 
-        foreach ($pages as [$urlName, $name, $login, $content]) {
+        foreach ($pages as $index => [$urlName, $name, $login, $content]) {
             MenuItem::query()->forceCreate([
+                'position' => ($index + 1) * 10,
                 'url_name' => $urlName,
                 'name' => $name,
                 'login' => $login,

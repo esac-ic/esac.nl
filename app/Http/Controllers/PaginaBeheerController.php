@@ -22,13 +22,14 @@ class PaginaBeheerController extends Controller implements HasMiddleware
     public function index(): View
     {
         return view('beheer.menu.index', [
-            'pages' => MenuItem::all(['name', 'id', 'after', 'parent_id']),
+            'pages' => MenuItem::query()->with('parent')->orderBy('parent_id')->ordered()->get(),
         ]);
     }
 
     public function create(): View
     {
-        return $this->form(new MenuItem);
+        // A new page goes last in its menu, unless another position is chosen.
+        return $this->form(new MenuItem(['position' => MenuItem::query()->max('position') + 10]));
     }
 
     public function store(PageRequest $request): RedirectResponse
@@ -47,7 +48,7 @@ class PaginaBeheerController extends Controller implements HasMiddleware
     {
         return view('beheer.menu.show', [
             'page' => $page,
-            'subItems' => MenuItem::query()->inMenu()->where('parent_id', $page->id)->get(),
+            'subItems' => MenuItem::query()->inMenu()->where('parent_id', $page->id)->ordered()->get(),
         ]);
     }
 
@@ -71,7 +72,6 @@ class PaginaBeheerController extends Controller implements HasMiddleware
         if ($page->deletable) {
             // Remove the references from the other menu items.
             MenuItem::query()->where('parent_id', $page->id)->update(['parent_id' => null]);
-            MenuItem::query()->where('after', $page->id)->update(['after' => null]);
 
             $page->delete();
         }
@@ -82,7 +82,7 @@ class PaginaBeheerController extends Controller implements HasMiddleware
     private function fillMenuPosition(PageRequest $request, MenuItem $menuItem): void
     {
         $menuItem->parent_id = $request->validated('itemType') === 'subItem' ? $request->validated('parentItem') : null;
-        $menuItem->after = $request->validated('afterItem');
+        $menuItem->position = $request->validated('position');
         $menuItem->login = $request->validated('login');
         $menuItem->menu_item = $request->validated('menu_item');
     }

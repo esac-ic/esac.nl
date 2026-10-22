@@ -18,8 +18,7 @@ class PageRequest extends FormRequest
             'itemType' => ['required', Rule::in(['standAlone', 'subItem'])],
             'name' => ['required', 'max:255'],
             'content' => [$fixed, 'required'],
-            // -1 means the item is first in its menu.
-            'afterItem' => [Rule::excludeIf($this->input('afterItem') == -1), 'required', Rule::exists('menu_items', 'id')],
+            'position' => ['required', 'integer', 'min:0'],
             'parentItem' => ['exclude_unless:itemType,subItem', 'required', Rule::exists('menu_items', 'id')],
             'login' => ['boolean'],
             'menu_item' => ['boolean'],

@@ -44,11 +44,7 @@
                 </div>
             </div>
             <div class="form-row" id="menuSettingRow2">
-                <div class="form-group col-md-6">
-                    <label for="afterItem"> After which menu item </label>
-                    <select class="form-control" name="afterItem" id="afterItem">
-                    </select>
-                </div>
+                <x-field name="position" label="Position in the menu (lower comes first)" type="number" :value="$page->position" col="6" required />
             </div>
         </x-card>
         @if(! $page->exists || $page->editable)
@@ -67,56 +63,16 @@
 @push('scripts')
     <script type="module">
         $(document).ready(function() {
-            $( "#menuType" ).change(function() {
-                $("#afterItem").empty();
-                if($( "#menuType" ).val() === "subItem" ){
-                    $( "#parentItemBox" ).show();
-                    $.getJSON("{{ route('api.menu-items.index') }}?type=" + $('#menuType').val() + "&parentId=" + $('#parentItem').val() , function(data){
-                        fillAfterDropDownMenu(data);
-                    });
-                } else {
-                    $( "#parentItemBox" ).hide();
-                    $.getJSON("{{ route('api.menu-items.index') }}?type=" + $('#menuType').val(), function(data){
-                        fillAfterDropDownMenu(data);
-                    });
-                }
+            $('#menuType').change(function() {
+                $('#parentItemBox').toggle($('#menuType').val() === 'subItem');
             });
 
             $('#menuItem').change(function () {
-                if($('#menuItem').is(':checked')){
-                    $('#menuSettingRow1').show();
-                    $('#menuSettingRow2').show();
-                } else {
-                    $('#menuSettingRow1').hide();
-                    $('#menuSettingRow2').hide();
-                }
+                $('#menuSettingRow1, #menuSettingRow2').toggle($('#menuItem').is(':checked'));
             });
 
-            $('#parentItem').change(function(){
-                $.getJSON("{{ route('api.menu-items.index') }}?type=" + $('#menuType').val() + "&parentId=" + $('#parentItem').val() , function(data){
-                    fillAfterDropDownMenu(data);
-                });
-            });
-
-            $( "#menuType" ).change();
-            $( "#menuItem" ).change();
+            $('#menuType').change();
+            $('#menuItem').change();
         });
-
-
-        function fillAfterDropDownMenu(data){
-            $("#afterItem").empty();
-            $("#afterItem").append('<option value="-1" selected>Not after an item</option>');
-            $.each(data, function(){
-                @if($page->after != null)
-                if(this.id == {{$page->after}}){
-                    $("#afterItem").append('<option value="'+ this.id +'" selected>'+ this.name +'</option>');
-                } else {
-                    $("#afterItem").append('<option value="' + this.id + '">' + this.name + '</option>');
-                }
-                @else
-                    $("#afterItem").append('<option value="'+ this.id +'">'+ this.name +'</option>');
-                @endif
-            });
-        }
     </script>
 @endpush
