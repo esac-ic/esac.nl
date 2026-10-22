@@ -2,13 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\RoleRequest;
 use App\Models\Rol;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
-use Illuminate\Http\Request;
 use Illuminate\Routing\Controllers\HasMiddleware;
 use Illuminate\Routing\Controllers\Middleware;
-use Illuminate\Support\Facades\Session;
 
 class RolController extends Controller implements HasMiddleware
 {
@@ -20,68 +19,58 @@ class RolController extends Controller implements HasMiddleware
         ];
     }
 
-    //gives the rol views
     public function index(): View
     {
-        $rols = Rol::all(['name', 'id']);
-        return view('beheer.rol.index', compact('rols'));
+        return view('beheer.rol.index', ['rols' => Rol::all(['name', 'id'])]);
     }
 
-    //show create screen
     public function create(): View
     {
-        $fields = ['title' => 'Add a role',
-            'method' => 'POST',
-            'url' => route('rols.store')];
-        $rol = null;
-        return view('beheer.rol.create_edit', compact('fields', 'rol'));
+        return view('beheer.rol.create_edit', [
+            'rol' => null,
+            'fields' => [
+                'title' => 'Add a role',
+                'method' => 'POST',
+                'url' => route('rols.store'),
+            ],
+        ]);
     }
 
-    //store rol
-    public function store(Request $request): RedirectResponse
+    public function store(RoleRequest $request): RedirectResponse
     {
-        Rol::create($this->validateInput($request));
+        Rol::create($request->validated());
 
-        Session::flash("message", 'Role added');
-        return to_route('rols.index');
+        return to_route('rols.index')->with('message', 'Role added');
     }
 
-    public function show(Request $request, Rol $rol): View
+    public function show(Rol $rol): View
     {
-        return view('beheer.rol.show', compact('rol'));
+        return view('beheer.rol.show', ['rol' => $rol]);
     }
 
-    //show edit screen
-    public function edit(Request $request, Rol $rol): View
+    public function edit(Rol $rol): View
     {
-        $fields = ['title' => 'Edit role',
-            'method' => 'PATCH',
-            'url' => route('rols.update', $rol)];
-
-        return view('beheer.rol.create_edit', compact('fields', 'rol'));
+        return view('beheer.rol.create_edit', [
+            'rol' => $rol,
+            'fields' => [
+                'title' => 'Edit role',
+                'method' => 'PATCH',
+                'url' => route('rols.update', $rol),
+            ],
+        ]);
     }
 
-    //update rol
-    public function update(Request $request, Rol $rol): RedirectResponse
+    public function update(RoleRequest $request, Rol $rol): RedirectResponse
     {
-        $rol->update($this->validateInput($request));
+        $rol->update($request->validated());
 
-        Session::flash("message", 'Role edited');
-        return to_route('rols.index');
+        return to_route('rols.index')->with('message', 'Role edited');
     }
 
-    public function destroy(Request $request, Rol $rol): RedirectResponse
+    public function destroy(Rol $rol): RedirectResponse
     {
         $rol->delete();
 
-        Session::flash("message", 'Role removed');
-        return to_route('rols.index');
-    }
-
-    private function validateInput(Request $request): array
-    {
-        return $request->validate([
-            'name' => 'required|max:255',
-        ]);
+        return to_route('rols.index')->with('message', 'Role removed');
     }
 }

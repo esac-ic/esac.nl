@@ -20,15 +20,16 @@ class ApiController extends Controller implements HasMiddleware
 
     public function getMenuItems(Request $request): array
     {
-        $menuItemQeury = MenuItem::query();
+        $menuItems = MenuItem::query();
         if ($request->has('type')) {
-            if ($request->input('type') === "subItem") {
-                $menuItemQeury->where('parent_id', '=', intval($request->input('parentId')));
+            if ($request->input('type') === 'subItem') {
+                $menuItems->where('parent_id', $request->integer('parentId'));
             } else {
-                $menuItemQeury->where('parent_id', '=', null);
+                $menuItems->whereNull('parent_id');
             }
         }
-        return MenuItemResource::collection($menuItemQeury->get())->resolve($request);
+
+        return MenuItemResource::collection($menuItems->get())->resolve($request);
     }
 
     public function getUsers(): array

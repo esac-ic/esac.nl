@@ -10,13 +10,12 @@ use App\Models\ApplicationForm\ApplicationResponse;
 use App\Models\ApplicationForm\ApplicationResponseRow;
 use App\Models\User;
 use App\Services\AgendaApplicationFormService;
+use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use Illuminate\Http\Response;
 use Illuminate\Routing\Controllers\HasMiddleware;
 use Illuminate\Routing\Controllers\Middleware;
 use Illuminate\Support\Facades\Gate;
-use Illuminate\View\View;
 use Symfony\Component\HttpFoundation\StreamedResponse;
 
 class AgendaApplicationFormController extends Controller implements HasMiddleware
@@ -29,24 +28,17 @@ class AgendaApplicationFormController extends Controller implements HasMiddlewar
         ];
     }
 
-    /**
-     * @param AgendaItem $agendaItem
-     * @param AgendaApplicationFormService $agendaApplicationFormService
-     * @return View
-     */
     public function index(AgendaItem $agendaItem, AgendaApplicationFormService $agendaApplicationFormService): View
     {
-        $users = $agendaApplicationFormService->getRegisteredUsers($agendaItem);
-        $agendaItemId = $agendaItem->id;
-
-        return view("forms.inschrijven_show", compact('users', 'agendaItemId'));
+        return view('forms.inschrijven_show', [
+            'users' => $agendaApplicationFormService->getRegisteredUsers($agendaItem),
+            'agendaItemId' => $agendaItem->id,
+        ]);
     }
 
     public function registerUser(AgendaItem $agendaItem): View
     {
-        //retrieves all the rows of the form
         $applicationForm = $agendaItem->getApplicationForm;
-        $rows = ApplicationFormRowVueResource::collection($applicationForm->applicationFormRows);
         $users = [];
         $registeredUsers = [];
 
@@ -55,18 +47,19 @@ class AgendaApplicationFormController extends Controller implements HasMiddlewar
         }
 
         foreach (User::current()->get(['id', 'firstname', 'lastname']) as $user) {
-            if (!in_array($user->id, $registeredUsers)) {
+            if (! in_array($user->id, $registeredUsers)) {
                 $users[$user->id] = $user->getName();
             }
         }
-        return view("forms.inschrijven_admin", compact('rows', 'applicationForm', 'users', 'agendaItem'));
+
+        return view('forms.inschrijven_admin', [
+            'rows' => ApplicationFormRowVueResource::collection($applicationForm->applicationFormRows),
+            'applicationForm' => $applicationForm,
+            'users' => $users,
+            'agendaItem' => $agendaItem,
+        ]);
     }
 
-    /**
-     * @param Request $request
-     * @param AgendaItem $agendaItem
-     * @return RedirectResponse
-     */
     public function saveRegistration(Request $request, AgendaItem $agendaItem): RedirectResponse
     {
         $agendaItem->register($request['user'], $request->except(['_token', 'user']));
@@ -74,48 +67,31 @@ class AgendaApplicationFormController extends Controller implements HasMiddlewar
         return to_route('forms.users.index', $agendaItem);
     }
 
-    /**
-     * @param User $user
-     * @param AgendaItem $agendaItem
-     * @return View
-     */
     public function show(User $user, AgendaItem $agendaItem): View
     {
         $applicationResponse = ApplicationResponse::query()
             ->where('agenda_id', $agendaItem->id)
             ->where('user_id', $user->id)
             ->firstOrFail();
-        $applicationDataRows = ApplicationResponseRow::where('application_response_id', $applicationResponse->id)->get();
-        $agendaId = $agendaItem->id;
 
-        return view('forms.inschrijven_details', compact('agendaId', 'applicationDataRows'));
+        return view('forms.inschrijven_details', [
+            'agendaId' => $agendaItem->id,
+            'applicationDataRows' => ApplicationResponseRow::where('application_response_id', $applicationResponse->id)->get(),
+        ]);
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param $Agenda_id
-     * @param $applicationResponseId
-     * @return Response
-     */
-    public function destroy($Agenda_id, $applicationResponseId): RedirectResponse
+    public function destroy(AgendaItem $agendaItem, ApplicationResponse $applicationResponse): RedirectResponse
     {
-        $registration = ApplicationResponse::findOrFail($applicationResponseId);
-        Gate::authorize('delete-registration', $registration);
+        Gate::authorize('delete-registration', $applicationResponse);
 
-        $registration->delete();
-        return to_route('forms.users.index', $Agenda_id);
+        $applicationResponse->delete();
+
+        return to_route('forms.users.index', $agendaItem);
     }
 
-    /**
-     * @param int $agendaId
-     * @param AgendaApplicationFormService $agendaApplicationFormService
-     * @return StreamedResponse
-     */
-    public function exportData(int $agendaId, AgendaApplicationFormService $agendaApplicationFormService): StreamedResponse
+    public function exportData(AgendaItem $agendaItem, AgendaApplicationFormService $agendaApplicationFormService): StreamedResponse
     {
-        $agendaItem = AgendaItem::findOrFail($agendaId);
         return new AgendaRegistrationExport($agendaApplicationFormService, $agendaItem)
-            ->download(preg_replace('/[^a-zA-Z0-9]+/', '-', $agendaItem->title) . '.xlsx');
+            ->download(preg_replace('/[^a-zA-Z0-9]+/', '-', $agendaItem->title).'.xlsx');
     }
 }

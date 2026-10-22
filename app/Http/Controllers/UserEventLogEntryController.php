@@ -9,6 +9,7 @@ use Illuminate\Http\Request;
 use Illuminate\Routing\Controllers\HasMiddleware;
 use Illuminate\Routing\Controllers\Middleware;
 use Illuminate\Support\Carbon;
+use Symfony\Component\HttpFoundation\StreamedResponse;
 
 class UserEventLogEntryController extends Controller implements HasMiddleware
 {
@@ -20,20 +21,22 @@ class UserEventLogEntryController extends Controller implements HasMiddleware
         ];
     }
 
-    public function index(): View 
+    public function index(): View
     {
-        $events = UserEventLogEntry::all();
-        $eventTypes = UserEventLogEntry::distinct('event_type')->pluck('event_type')->sort();
-        return view('beheer.userEventLog.index', compact('events', 'eventTypes'));
+        return view('beheer.userEventLog.index', [
+            'events' => UserEventLogEntry::all(),
+            'eventTypes' => UserEventLogEntry::distinct('event_type')->pluck('event_type')->sort(),
+        ]);
     }
-    
-    public function export(Request $request)
-    {
-        $eventTypes = $request->eventTypes;
-        $startDate = Carbon::parse($request->startDate);
-        $endDate = Carbon::parse($request->endDate);
 
-        $export = new UserEventLogExport($eventTypes, $startDate, $endDate);
-        return $export->download($export->fileName() . '.xlsx');
+    public function export(Request $request): StreamedResponse
+    {
+        $export = new UserEventLogExport(
+            $request->input('eventTypes'),
+            Carbon::parse($request->input('startDate')),
+            Carbon::parse($request->input('endDate')),
+        );
+
+        return $export->download($export->fileName().'.xlsx');
     }
 }

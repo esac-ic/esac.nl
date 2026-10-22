@@ -3,12 +3,13 @@
 namespace App\Http\Controllers;
 
 use App\Exports\LibraryExport;
+use App\Http\Requests\BookRequest;
 use App\Models\Book;
 use Illuminate\Contracts\View\View;
-use Illuminate\Http\Request;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Routing\Controllers\HasMiddleware;
 use Illuminate\Routing\Controllers\Middleware;
-use Illuminate\Support\Facades\Session;
+use Symfony\Component\HttpFoundation\StreamedResponse;
 
 class LibraryController extends Controller implements HasMiddleware
 {
@@ -22,70 +23,63 @@ class LibraryController extends Controller implements HasMiddleware
 
     public function index(): View
     {
-        $books = Book::all(['title', 'id', 'type', 'code', 'year', 'country']);
-        return view('beheer.book.index', compact('books'));
+        return view('beheer.book.index', [
+            'books' => Book::all(['title', 'id', 'type', 'code', 'year', 'country']),
+        ]);
     }
 
     public function create(): View
     {
-        $fields = [
-            'title' => 'Add a book',
-            'method' => 'POST',
-            'url' => route('books.store'),
-        ];
-        $book = null;
-        return view('beheer.book.create_edit', compact('fields', 'book'));
+        return view('beheer.book.create_edit', [
+            'book' => null,
+            'fields' => [
+                'title' => 'Add a book',
+                'method' => 'POST',
+                'url' => route('books.store'),
+            ],
+        ]);
     }
 
-    public function store(Request $request)
+    public function store(BookRequest $request): RedirectResponse
     {
-        Book::create($this->validateInput($request));
-        Session::flash("message", 'Book added');
-        return to_route('books.index');
+        Book::create($request->validated());
+
+        return to_route('books.index')->with('message', 'Book added');
     }
 
     public function show(Book $book): View
     {
-        return view('beheer.book.show', compact('book'));
+        return view('beheer.book.show', ['book' => $book]);
     }
 
     public function edit(Book $book): View
     {
-        $fields = [
-            'title' => 'Edit book',
-            'method' => 'PATCH',
-            'url' => route('books.update', $book->id),
-        ];
-        return view('beheer.book.create_edit', compact('fields', 'book'));
+        return view('beheer.book.create_edit', [
+            'book' => $book,
+            'fields' => [
+                'title' => 'Edit book',
+                'method' => 'PATCH',
+                'url' => route('books.update', $book),
+            ],
+        ]);
     }
 
-    public function update(Request $request, Book $book)
+    public function update(BookRequest $request, Book $book): RedirectResponse
     {
-        $book->update($this->validateInput($request));
-        Session::flash("message", 'Book edited');
-        return to_route('books.index');
+        $book->update($request->validated());
+
+        return to_route('books.index')->with('message', 'Book edited');
     }
 
-    public function destroy(Book $book)
+    public function destroy(Book $book): RedirectResponse
     {
         $book->delete();
-        Session::flash("message", 'Book removed');
-        return to_route('books.index');
-    }
-    
-    public function exportLibrary(LibraryExport $libraryExport)
-    {
-        return $libraryExport->download('Library.xlsx');
+
+        return to_route('books.index')->with('message', 'Book removed');
     }
 
-    private function validateInput(Request $request): array
+    public function exportLibrary(LibraryExport $libraryExport): StreamedResponse
     {
-        return $request->validate([
-            'title' => 'required|max:255',
-            'year' => 'integer',
-            'type' => 'required|max:255',
-            'country' => 'required|max:255',
-            'code' => 'required|max:255',
-        ]);
+        return $libraryExport->download('Library.xlsx');
     }
 }
