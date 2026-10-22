@@ -14,7 +14,6 @@
                 <form name="export-user-events-form" id="export-user-events-form" method="post" action="{{ route('user-event-log-entry.export') }}">
                     @csrf    
                     
-                    <!-- checkboxes for event types -->
                     <div class="form-row">
                         <div class="form-group">
                             <label>{{"Event types"}}</label>
@@ -27,7 +26,6 @@
                         </div>
                     </div>
                     
-                    <!-- Start and end date selection -->
                     <div class="form-row">
                         <div class="form-group col-md-6">
                             <label for="startDate">Start date</label>
@@ -61,7 +59,7 @@
 </div>
     
 @section('modal_javascript')
-    <!-- not entirely sure what these scripts do -->
+    {{-- Date-time pickers for the period, keeping the end date after the start date --}}
     <script src="{{mix("js/vendor/moment.js")}}"></script>
     <script src="{{mix("js/vendor/tempusdominus.js")}}"></script>
 
@@ -92,10 +90,6 @@
             $("#endDateBox").on("change.datetimepicker", function (e) {
                 $('#startDateBox').datetimepicker('maxDate', e.date);
             });
-        });
-        
-        $(document).ready(function() {
-            $('#content_en').summernote(summernoteSettings);
         });
     </script>
 @endsection
