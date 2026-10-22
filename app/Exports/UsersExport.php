@@ -9,16 +9,10 @@ class UsersExport extends SpreadsheetExport
 {
     public function collection(): Collection
     {
-        $activeUsers = User::current()->with('certificates')->get();
-        $exportData = [];
-        foreach ($activeUsers as $user) {
-            $user->makeHidden(['updated_at', 'lid_af', 'pending_user', 'deleted_at']);
-            $data = $user->toArray();
-            $data['certificates'] = $user->getCertificationsAbbreviations();
-            array_push($exportData, $data);
-        }
-
-        return new Collection($exportData);
+        return User::current()->with('certificates')->get()->map(fn (User $user) => [
+            ...$user->makeHidden(['updated_at', 'lid_af', 'pending_user', 'deleted_at'])->toArray(),
+            'certificates' => $user->getCertificationsAbbreviations(),
+        ]);
     }
 
     public function title(): string

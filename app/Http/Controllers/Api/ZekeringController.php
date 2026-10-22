@@ -23,7 +23,7 @@ class ZekeringController extends Controller implements HasMiddleware
 
     public function getZekeringen(): array
     {
-        $zekeringen = Zekering::where('has_parent', false)->orderBy('id', 'desc')->with('children')->get();
+        $zekeringen = Zekering::where('has_parent', false)->latest('id')->with('children')->get();
 
         return ['zekeringen' => ZekeringResource::collection($zekeringen)];
     }
