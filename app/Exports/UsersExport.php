@@ -40,7 +40,7 @@ class UsersExport extends SpreadsheetExport
             $user->kind_of_member?->value,
             $user->iban,
             $user->bic,
-            $user->incasso,
+            $user->direct_debit,
             $user->remark,
             $user->created_at,
             $user->getCertificationsAbbreviations(),

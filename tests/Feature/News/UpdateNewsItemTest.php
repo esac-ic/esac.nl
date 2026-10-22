@@ -2,7 +2,7 @@
 
 namespace Tests\Feature\News;
 
-use App\Enums\Role;
+use App\Enums\AdminRole;
 use App\Models\NewsItem;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -18,9 +18,9 @@ class UpdateNewsItemTest extends TestCase
     {
         $newsItem = NewsItem::factory()->create();
         $body = ['title' => 'test news', 'text' => 'test nieuws', 'author' => 'Gebruiker1'];
-        $this->actingAs(User::factory()->withRole(Role::ActivityAdministrator)->create());
+        $this->actingAs(User::factory()->withRole(AdminRole::ActivityAdministrator)->create());
 
-        $this->patch('beheer/news-items/'.$newsItem->id, $body)->assertRedirect();
+        $this->patch('admin/news-items/'.$newsItem->id, $body)->assertRedirect();
 
         $this->assertDatabaseHas(NewsItem::class, ['id' => $newsItem->id, ...$body]);
     }

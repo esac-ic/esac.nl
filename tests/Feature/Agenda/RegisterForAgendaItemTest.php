@@ -2,8 +2,8 @@
 
 namespace Tests\Feature\Agenda;
 
+use App\Enums\AdminRole;
 use App\Enums\FormRowType;
-use App\Enums\Role;
 use App\Models\AgendaItem;
 use App\Models\ApplicationForm\ApplicationForm;
 use App\Models\ApplicationForm\ApplicationFormRow;
@@ -58,8 +58,8 @@ class RegisterForAgendaItemTest extends TestCase
         $response = ApplicationResponse::sole();
 
         $this->assertEquals($user->id, $response->user_id);
-        $this->assertEquals($agendaItem->id, $response->agenda_id);
-        $this->assertEquals($agendaItem->application_form_id, $response->inschrijf_form_id);
+        $this->assertEquals($agendaItem->id, $response->agenda_item_id);
+        $this->assertEquals($agendaItem->application_form_id, $response->application_form_id);
         $this->assertEquals($answers, $response->rows->pluck('value', 'application_form_row_id')->all());
     }
 
@@ -91,8 +91,8 @@ class RegisterForAgendaItemTest extends TestCase
         $agendaItem = $this->agendaItemWithForm();
         ApplicationResponse::factory()->create([
             'user_id' => $this->user->id,
-            'agenda_id' => $agendaItem->id,
-            'inschrijf_form_id' => $agendaItem->application_form_id,
+            'agenda_item_id' => $agendaItem->id,
+            'application_form_id' => $agendaItem->application_form_id,
         ]);
 
         $this->get('/forms/'.$agendaItem->id)
@@ -116,19 +116,19 @@ class RegisterForAgendaItemTest extends TestCase
     {
         $agendaItem = $this->agendaItemWithForm();
 
-        $this->post(route('beheer.agenda-items.registrations.store', $agendaItem), ['user' => User::factory()->create()->id] + $this->answers($agendaItem))
+        $this->post(route('admin.agenda-items.registrations.store', $agendaItem), ['user' => User::factory()->create()->id] + $this->answers($agendaItem))
             ->assertForbidden();
     }
 
     #[Test]
     public function register_user_for_agenda_item_as_administrator(): void
     {
-        $this->actingAs(User::factory()->withRole(Role::ContentAdministrator)->create());
+        $this->actingAs(User::factory()->withRole(AdminRole::ContentAdministrator)->create());
         $userToRegister = User::factory()->create();
         $agendaItem = $this->agendaItemWithForm();
         $answers = $this->answers($agendaItem);
 
-        $this->post(route('beheer.agenda-items.registrations.store', $agendaItem), ['user' => $userToRegister->id] + $answers)->assertRedirect();
+        $this->post(route('admin.agenda-items.registrations.store', $agendaItem), ['user' => $userToRegister->id] + $answers)->assertRedirect();
 
         $this->assertRegistered($userToRegister, $agendaItem, $answers);
     }

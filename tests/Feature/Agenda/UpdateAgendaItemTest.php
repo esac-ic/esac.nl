@@ -2,7 +2,7 @@
 
 namespace Tests\Feature\Agenda;
 
-use App\Enums\Role;
+use App\Enums\AdminRole;
 use App\Models\AgendaItem;
 use App\Models\AgendaItemCategory;
 use App\Models\ApplicationForm\ApplicationForm;
@@ -16,7 +16,7 @@ class UpdateAgendaItemTest extends TestCase
 {
     use RefreshDatabase;
 
-    private $url = 'beheer/agenda-items';
+    private $url = 'admin/agenda-items';
 
     private $agendaItem;
 
@@ -25,7 +25,7 @@ class UpdateAgendaItemTest extends TestCase
     protected function setUp(): void
     {
         parent::setUp();
-        $this->user = User::factory()->withRole(Role::ActivityAdministrator)->create();
+        $this->user = User::factory()->withRole(AdminRole::ActivityAdministrator)->create();
         $this->actingAs($this->user);
     }
 
@@ -39,7 +39,7 @@ class UpdateAgendaItemTest extends TestCase
             'title' => 'test agenda',
             'text' => 'test agenda',
             'short_description' => 'test agenda',
-            'category' => $agendaItemCategory->id,
+            'agenda_item_category_id' => $agendaItemCategory->id,
             'applicationForm' => ApplicationForm::factory()->create()->id,
             'subscription_end_date' => Carbon::now()->addDays(2),
             'end_date' => Carbon::now()->addDays(3),
@@ -54,6 +54,6 @@ class UpdateAgendaItemTest extends TestCase
 
         $this->assertEquals($body['text'], $agendaItem->text);
         $this->assertEquals($body['title'], $agendaItem->title);
-        $this->assertEquals($body['category'], $agendaItem->agendaItemCategory->id);
+        $this->assertEquals($body['agenda_item_category_id'], $agendaItem->agendaItemCategory->id);
     }
 }

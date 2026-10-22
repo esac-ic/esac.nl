@@ -23,45 +23,45 @@ class LibraryController extends Controller implements HasMiddleware
 
     public function index(): View
     {
-        return view('beheer.book.index', [
+        return view('admin.books.index', [
             'books' => Book::all(['title', 'id', 'type', 'code', 'year', 'country']),
         ]);
     }
 
     public function create(): View
     {
-        return view('beheer.book.create_edit', ['book' => new Book]);
+        return view('admin.books.create_edit', ['book' => new Book]);
     }
 
     public function store(BookRequest $request): RedirectResponse
     {
         Book::query()->create($request->validated());
 
-        return to_route('beheer.books.index')->with('message', 'Book added');
+        return to_route('admin.books.index')->with('message', 'Book added');
     }
 
     public function show(Book $book): View
     {
-        return view('beheer.book.show', ['book' => $book]);
+        return view('admin.books.show', ['book' => $book]);
     }
 
     public function edit(Book $book): View
     {
-        return view('beheer.book.create_edit', ['book' => $book]);
+        return view('admin.books.create_edit', ['book' => $book]);
     }
 
     public function update(BookRequest $request, Book $book): RedirectResponse
     {
         $book->update($request->validated());
 
-        return to_route('beheer.books.index')->with('message', 'Book edited');
+        return to_route('admin.books.index')->with('message', 'Book edited');
     }
 
     public function destroy(Book $book): RedirectResponse
     {
         $book->delete();
 
-        return to_route('beheer.books.index')->with('message', 'Book removed');
+        return to_route('admin.books.index')->with('message', 'Book removed');
     }
 
     public function exportLibrary(LibraryExport $libraryExport): StreamedResponse

@@ -7,8 +7,8 @@
         <form class="text-left col-lg-8" role="form" method="POST" action="{{ route('password.email') }}">
             @csrf
             <div @class(['form-group', 'has-error' => $errors->has('email')])>
-                <label for="email">Email adress</label>
-                <input class="form-control form-control-lg" id="email" type="email" name="email" placeholder="Email adress" value="{{ old('email') }}" required autofocus>
+                <label for="email">Email address</label>
+                <input class="form-control form-control-lg" id="email" type="email" name="email" placeholder="Email address" value="{{ old('email') }}" required autofocus>
                 @error('email')
                 <span class="help-block">
                 <strong>Email address not known</strong>

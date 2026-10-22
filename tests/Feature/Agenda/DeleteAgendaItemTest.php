@@ -2,7 +2,7 @@
 
 namespace Tests\Feature\Agenda;
 
-use App\Enums\Role;
+use App\Enums\AdminRole;
 use App\Models\AgendaItem;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -13,7 +13,7 @@ class DeleteAgendaItemTest extends TestCase
 {
     use RefreshDatabase;
 
-    private $url = 'beheer/agenda-items';
+    private $url = 'admin/agenda-items';
 
     private $agendaItem;
 
@@ -22,7 +22,7 @@ class DeleteAgendaItemTest extends TestCase
     protected function setUp(): void
     {
         parent::setUp();
-        $this->user = User::factory()->withRole(Role::ActivityAdministrator)->create();
+        $this->user = User::factory()->withRole(AdminRole::ActivityAdministrator)->create();
         $this->actingAs($this->user);
     }
 

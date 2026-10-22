@@ -17,7 +17,7 @@ class StorePendingUserRequest extends FormRequest
             ...$this->memberDetailRules(),
             'password' => ['required', 'confirmed', Password::defaults()],
             'g-recaptcha-response' => ['required', new Recaptcha],
-            'incasso' => ['accepted'],
+            'direct_debit' => ['accepted'],
             'privacy_policy' => ['required'],
             'termsconditions' => ['required'],
         ];
@@ -28,6 +28,6 @@ class StorePendingUserRequest extends FormRequest
      */
     protected function prepareForValidation(): void
     {
-        $this->merge(['incasso' => $this->boolean('incasso')]);
+        $this->merge(['direct_debit' => $this->boolean('direct_debit')]);
     }
 }

@@ -2,7 +2,7 @@
 
 namespace Tests\Feature\Agenda;
 
-use App\Enums\Role;
+use App\Enums\AdminRole;
 use App\Models\AgendaItem;
 use App\Models\AgendaItemCategory;
 use App\Models\ApplicationForm\ApplicationForm;
@@ -20,7 +20,7 @@ class CreateAgendaItemTest extends TestCase
 
     private function actingAsActivityAdministrator(): void
     {
-        $this->actingAs(User::factory()->withRole(Role::ActivityAdministrator)->create());
+        $this->actingAs(User::factory()->withRole(AdminRole::ActivityAdministrator)->create());
     }
 
     private function body(array $overrides = []): array
@@ -29,7 +29,7 @@ class CreateAgendaItemTest extends TestCase
             'title' => 'test agenda',
             'text' => 'test agenda',
             'short_description' => 'test agenda',
-            'category' => AgendaItemCategory::factory()->create()->id,
+            'agenda_item_category_id' => AgendaItemCategory::factory()->create()->id,
             'applicationForm' => ApplicationForm::factory()->create()->id,
             'subscription_end_date' => now()->addDays(2),
             'end_date' => now()->addDays(3),
@@ -53,12 +53,12 @@ class CreateAgendaItemTest extends TestCase
         $this->actingAsActivityAdministrator();
         $body = $this->body(['title' => $text, 'text' => $text, 'short_description' => $text]);
 
-        $this->post('beheer/agenda-items', $body)->assertRedirect();
+        $this->post('admin/agenda-items', $body)->assertRedirect();
 
         $this->assertDatabaseHas(AgendaItem::class, [
             'title' => $text,
             'text' => $text,
-            'category' => $body['category'],
+            'agenda_item_category_id' => $body['agenda_item_category_id'],
         ]);
     }
 
@@ -68,7 +68,7 @@ class CreateAgendaItemTest extends TestCase
         Storage::fake('public');
         $this->actingAsActivityAdministrator();
 
-        $this->post('beheer/agenda-items', $this->body([
+        $this->post('admin/agenda-items', $this->body([
             'applicationForm' => null,
             'thumbnail' => UploadedFile::fake()->image('photo.png', 1000, 1000),
         ]))->assertRedirect();
@@ -81,7 +81,7 @@ class CreateAgendaItemTest extends TestCase
     {
         $this->actingAs(User::factory()->create());
 
-        $this->post('beheer/agenda-items', $this->body())->assertForbidden();
+        $this->post('admin/agenda-items', $this->body())->assertForbidden();
     }
 
     #[Test]
@@ -89,7 +89,7 @@ class CreateAgendaItemTest extends TestCase
     {
         $this->actingAsActivityAdministrator();
 
-        $this->post('beheer/agenda-items', $this->body(['title' => '']))->assertInvalid('title');
+        $this->post('admin/agenda-items', $this->body(['title' => '']))->assertInvalid('title');
 
         $this->assertDatabaseEmpty(AgendaItem::class);
     }

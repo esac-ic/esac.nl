@@ -2,8 +2,8 @@
 
 namespace Tests\Feature\ApplicationForm;
 
+use App\Enums\AdminRole;
 use App\Enums\FormRowType;
-use App\Enums\Role;
 use App\Models\ApplicationForm\ApplicationForm;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use PHPUnit\Framework\Attributes\DataProvider;
@@ -39,22 +39,22 @@ class CreateApplicationFormTest extends TestCase
 
     #[Test]
     #[DataProvider('managingRoles')]
-    public function application_form_managers_can_create_an_application_form(Role $role): void
+    public function application_form_managers_can_create_an_application_form(AdminRole $role): void
     {
         $this->actingAsRole($role);
 
-        $this->post('beheer/application-forms', $this->body())->assertRedirect();
+        $this->post('admin/application-forms', $this->body())->assertRedirect();
 
         $this->assertApplicationForm(ApplicationForm::sole(), $this->body());
     }
 
     #[Test]
     #[DataProvider('otherRoles')]
-    public function other_roles_can_not_create_an_application_form(Role $role): void
+    public function other_roles_can_not_create_an_application_form(AdminRole $role): void
     {
         $this->actingAsRole($role);
 
-        $this->post('beheer/application-forms', $this->body())->assertForbidden();
+        $this->post('admin/application-forms', $this->body())->assertForbidden();
 
         $this->assertDatabaseEmpty(ApplicationForm::class);
     }

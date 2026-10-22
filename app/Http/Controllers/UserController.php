@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Enums\KindOfMember;
 use App\Http\Requests\UserRequest;
-use App\Models\Rol;
+use App\Models\Role;
 use App\Models\User;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
@@ -27,15 +27,15 @@ class UserController extends Controller implements HasMiddleware
 
     public function index(): View
     {
-        return view('beheer.user.index', [
+        return view('admin.users.index', [
             'users' => User::query()->current()->with('roles')->get(['id', 'firstname', 'lastname', 'email', 'preposition', 'kind_of_member']),
-            'roles' => Rol::all(),
+            'roles' => Role::all(),
         ]);
     }
 
     public function create(): View
     {
-        return view('beheer.user.create_edit', ['user' => new User, 'roles' => Rol::all(), 'kindsOfMember' => KindOfMember::options()]);
+        return view('admin.users.create_edit', ['user' => new User, 'roles' => Role::all(), 'kindsOfMember' => KindOfMember::options()]);
     }
 
     public function store(UserRequest $request): RedirectResponse
@@ -43,21 +43,21 @@ class UserController extends Controller implements HasMiddleware
         $user = User::query()->create($request->validated());
         $user->roles()->sync($request->input('roles', []));
 
-        return to_route('beheer.users.index')->with('message', 'User is added');
+        return to_route('admin.users.index')->with('message', 'User is added');
     }
 
     public function show(User $user): View
     {
         Gate::authorize('view', $user);
 
-        return view('beheer.user.show', ['user' => $user]);
+        return view('admin.users.show', ['user' => $user]);
     }
 
     public function edit(User $user): View
     {
         Gate::authorize('update', $user);
 
-        return view('beheer.user.create_edit', ['user' => $user, 'roles' => Rol::all(), 'kindsOfMember' => KindOfMember::options()]);
+        return view('admin.users.create_edit', ['user' => $user, 'roles' => Role::all(), 'kindsOfMember' => KindOfMember::options()]);
     }
 
     public function update(UserRequest $request, User $user): RedirectResponse
@@ -69,9 +69,9 @@ class UserController extends Controller implements HasMiddleware
         }
 
         if ($request->user()->is($user)) {
-            return to_route('beheer.users.show', $user);
+            return to_route('admin.users.show', $user);
         }
 
-        return to_route('beheer.users.index')->with('message', 'Changes to user have been saved');
+        return to_route('admin.users.index')->with('message', 'Changes to user have been saved');
     }
 }

@@ -23,7 +23,7 @@ class LoginTest extends TestCase
     public static function blockedMembers(): array
     {
         return [
-            'old member' => ['lidAf', 'Old members can not login'],
+            'old member' => ['oldMember', 'Old members can not login'],
             'pending member' => ['pending', 'Pending members can not login'],
         ];
     }
@@ -89,7 +89,7 @@ class LoginTest extends TestCase
     #[Test]
     public function an_old_member_with_a_wrong_password_gets_the_generic_error()
     {
-        $this->login(User::factory()->lidAf()->create(), 'wrong')->assertInvalid('email');
+        $this->login(User::factory()->oldMember()->create(), 'wrong')->assertInvalid('email');
 
         $this->assertNotSame('Old members can not login', session('errors')->first('email'));
     }

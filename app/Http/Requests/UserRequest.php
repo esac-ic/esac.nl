@@ -29,7 +29,7 @@ class UserRequest extends FormRequest
      */
     protected function prepareForValidation(): void
     {
-        $this->merge(['incasso' => $this->boolean('incasso')]);
+        $this->merge(['direct_debit' => $this->boolean('direct_debit')]);
 
         $user = $this->route('user');
 
@@ -49,7 +49,7 @@ class UserRequest extends FormRequest
                 'confirmed',
                 Password::defaults(),
             ],
-            'incasso' => ['boolean'],
+            'direct_debit' => ['boolean'],
             'remark' => ['nullable'],
             'kind_of_member' => [Rule::requiredIf($this->isAdministrator()), Rule::enum(KindOfMember::class)],
         ];

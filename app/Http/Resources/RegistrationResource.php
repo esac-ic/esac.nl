@@ -19,8 +19,8 @@ class RegistrationResource extends JsonResource
             'name' => $this->agendaItem->title,
             'startDate' => $this->agendaItem->start_date->format('d-m-Y H:i'),
             'actions' => '
-                    <a href="'.route('beheer.agenda-items.registrations.show', [$this->agenda_id, $this->resource]).'"><span title="'.'Show entered information'.'" class="ion-eye" aria-hidden="true"></span></a>
-                    <a href="#" id="delete_button" data-url="'.route('beheer.agenda-items.registrations.destroy', [$this->agenda_id, $this->resource]).'"><span  class="ion-trash-a"></span></a>
+                    <a href="'.route('admin.agenda-items.registrations.show', [$this->agenda_item_id, $this->resource]).'"><span title="'.'Show entered information'.'" class="ion-eye" aria-hidden="true"></span></a>
+                    <a href="#" id="delete_button" data-url="'.route('admin.agenda-items.registrations.destroy', [$this->agenda_item_id, $this->resource]).'"><span  class="ion-trash-a"></span></a>
                 ',
         ];
     }

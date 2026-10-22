@@ -32,7 +32,7 @@ class AgendaApplicationFormController extends Controller implements HasMiddlewar
 
     public function index(AgendaItem $agendaItem): View
     {
-        return view('forms.inschrijven_show', [
+        return view('admin.registrations.index', [
             'agendaItem' => $agendaItem,
             // Anonymised registrations still count, but have no one to list
             'registrations' => $agendaItem->registrations()->whereNotNull('user_id')->with('user')->get(),
@@ -49,7 +49,7 @@ class AgendaApplicationFormController extends Controller implements HasMiddlewar
             ->get(['id', 'firstname', 'preposition', 'lastname'])
             ->mapWithKeys(fn (User $user) => [$user->id => $user->getName()]);
 
-        return view('forms.inschrijven_admin', [
+        return view('admin.registrations.create', [
             'rows' => ApplicationFormRowResource::collection($applicationForm->applicationFormRows),
             'applicationForm' => $applicationForm,
             'users' => $users->all(),
@@ -61,12 +61,12 @@ class AgendaApplicationFormController extends Controller implements HasMiddlewar
     {
         $agendaItem->register($request->validated('user'), $request->safe()->except('user'));
 
-        return to_route('beheer.agenda-items.registrations.index', $agendaItem);
+        return to_route('admin.agenda-items.registrations.index', $agendaItem);
     }
 
     public function show(AgendaItem $agendaItem, ApplicationResponse $registration): View
     {
-        return view('forms.inschrijven_details', [
+        return view('admin.registrations.show', [
             'rows' => $registration->rows()->with('formRow')->get(),
         ]);
     }
@@ -77,7 +77,7 @@ class AgendaApplicationFormController extends Controller implements HasMiddlewar
 
         $registration->delete();
 
-        return to_route('beheer.agenda-items.registrations.index', $agendaItem);
+        return to_route('admin.agenda-items.registrations.index', $agendaItem);
     }
 
     public function export(AgendaItem $agendaItem): StreamedResponse

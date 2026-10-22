@@ -21,12 +21,12 @@ class SettingsController extends Controller implements HasMiddleware
 
     public function show(): View
     {
-        return view('beheer.settings.show', ['settings' => Setting::all()]);
+        return view('admin.settings.show', ['settings' => Setting::all()]);
     }
 
     public function edit(): View
     {
-        return view('beheer.settings.edit', ['settings' => Setting::all()]);
+        return view('admin.settings.edit', ['settings' => Setting::all()]);
     }
 
     public function update(SettingsRequest $request): RedirectResponse
@@ -36,6 +36,6 @@ class SettingsController extends Controller implements HasMiddleware
             Setting::query()->where('name', $name)->update(['value' => $value ?? '']);
         }
 
-        return to_route('beheer.settings.show')->with('message', 'Settings updated');
+        return to_route('admin.settings.show')->with('message', 'Settings updated');
     }
 }

@@ -29,7 +29,7 @@ class UserApplicationFormController extends Controller implements HasMiddleware
 
         $applicationForm = $agendaItem->applicationForm->load('applicationFormRows.applicationFormRowOptions');
 
-        return view('forms.inschrijven', [
+        return view('registrations.create', [
             'rows' => ApplicationFormRowResource::collection($applicationForm->applicationFormRows),
             'route' => route('forms.store', $agendaItem),
             'applicationForm' => $applicationForm,

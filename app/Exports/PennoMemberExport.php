@@ -36,7 +36,7 @@ class PennoMemberExport extends SpreadsheetExport
             $user->kind_of_member?->value,
             str_replace(' ', '', (string) $user->iban),
             $user->bic,
-            $user->incasso ? 'Yes' : 'No',
+            $user->direct_debit ? 'Yes' : 'No',
             $user->created_at->tz(config('app.display_timezone'))->toDateString(),
         ];
     }

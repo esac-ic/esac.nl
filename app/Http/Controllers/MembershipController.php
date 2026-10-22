@@ -26,10 +26,10 @@ class MembershipController extends Controller implements HasMiddleware
     {
         // This only fails when the member is already active or has no email address.
         if ($user->makeActiveMember()) {
-            return to_route('beheer.users.show', $user);
+            return to_route('admin.users.show', $user);
         }
 
-        return to_route('beheer.old-members.index')->with('error', 'Failed to make member active');
+        return to_route('admin.old-members.index')->with('error', 'Failed to make member active');
     }
 
     public function destroy(Request $request, User $user): RedirectResponse
@@ -44,6 +44,6 @@ class MembershipController extends Controller implements HasMiddleware
             return to_route('front-end.home');
         }
 
-        return to_route('beheer.users.show', $user);
+        return to_route('admin.users.show', $user);
     }
 }

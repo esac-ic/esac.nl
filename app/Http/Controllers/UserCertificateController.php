@@ -22,7 +22,7 @@ class UserCertificateController extends Controller implements HasMiddleware
 
     public function create(User $user): View
     {
-        return view('beheer.user.addCertificate', [
+        return view('admin.users.certificate', [
             'user' => $user,
             'certificate' => null,
             'certificates' => Certificate::query()->orderBy('name')->whereKeyNot($user->certificates->modelKeys())->pluck('name', 'id')->all(),
@@ -33,12 +33,12 @@ class UserCertificateController extends Controller implements HasMiddleware
     {
         $user->certificates()->attach($request->input('certificate_id'));
 
-        return to_route('beheer.users.show', $user);
+        return to_route('admin.users.show', $user);
     }
 
     public function edit(User $user, Certificate $certificate): View
     {
-        return view('beheer.user.addCertificate', [
+        return view('admin.users.certificate', [
             'user' => $user,
             'certificate' => $certificate,
             'certificates' => Certificate::query()->orderBy('name')->pluck('name', 'id')->all(),
@@ -50,13 +50,13 @@ class UserCertificateController extends Controller implements HasMiddleware
         $user->certificates()->detach($certificate->id);
         $user->certificates()->attach($request->input('certificate_id'));
 
-        return to_route('beheer.users.show', $user);
+        return to_route('admin.users.show', $user);
     }
 
     public function destroy(User $user, Certificate $certificate): RedirectResponse
     {
         $user->certificates()->detach($certificate->id);
 
-        return to_route('beheer.users.show', $user);
+        return to_route('admin.users.show', $user);
     }
 }

@@ -85,7 +85,7 @@
                     <i class="h5 ion-chevron-right"></i>
                 </a>
                 <div id="accordion-panel-2" class="collapse" role="tabpanel">
-                    @include('includes.privacyPolicy')
+                    @include('includes.privacy_policy')
                 </div>
             </div>
             <div class="accordion-item">
@@ -119,8 +119,8 @@
                 {{ html()->label('Accept the Privacy Policy', 'privacy_policy')->class('form-check-label') }}
             </div>
             <div class="form-check">
-                {{ html()->checkbox('incasso')->class('form-check-input')->id('incasso') }}
-                {{ html()->label('Accept Automatic Collection', 'incasso')->class('form-check-label') }}
+                {{ html()->checkbox('direct_debit')->class('form-check-input')->id('direct_debit') }}
+                {{ html()->label('Accept Automatic Collection', 'direct_debit')->class('form-check-label') }}
             </div>
             <div class="form-check">
                 {{ html()->checkbox('termsconditions')->class('form-check-input')->id('termsconditions') }}

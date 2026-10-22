@@ -2,7 +2,7 @@
 
 namespace Tests\Feature\News;
 
-use App\Enums\Role;
+use App\Enums\AdminRole;
 use App\Models\NewsItem;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -17,9 +17,9 @@ class DeleteNewsItemTest extends TestCase
     public function delete_news_item()
     {
         $newsItem = NewsItem::factory()->create();
-        $this->actingAs(User::factory()->withRole(Role::ActivityAdministrator)->create());
+        $this->actingAs(User::factory()->withRole(AdminRole::ActivityAdministrator)->create());
 
-        $this->delete('beheer/news-items/'.$newsItem->id)->assertRedirect();
+        $this->delete('admin/news-items/'.$newsItem->id)->assertRedirect();
 
         $this->assertSoftDeleted($newsItem);
     }

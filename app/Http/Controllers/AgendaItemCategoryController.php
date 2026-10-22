@@ -21,44 +21,44 @@ class AgendaItemCategoryController extends Controller implements HasMiddleware
 
     public function index(): View
     {
-        return view('beheer.agendaItemCategory.index', [
+        return view('admin.agenda-item-categories.index', [
             'agendaItemCategories' => AgendaItemCategory::all(['id', 'name']),
         ]);
     }
 
     public function create(): View
     {
-        return view('beheer.agendaItemCategory.create_edit', ['agendaItemCategory' => new AgendaItemCategory]);
+        return view('admin.agenda-item-categories.create_edit', ['agendaItemCategory' => new AgendaItemCategory]);
     }
 
     public function store(AgendaItemCategoryRequest $request): RedirectResponse
     {
         AgendaItemCategory::query()->create($request->validated());
 
-        return to_route('beheer.agenda-item-categories.index')->with('message', 'Events category is added');
+        return to_route('admin.agenda-item-categories.index')->with('message', 'Events category is added');
     }
 
     public function show(AgendaItemCategory $agendaItemCategory): View
     {
-        return view('beheer.agendaItemCategory.show', ['agendaItemCategory' => $agendaItemCategory]);
+        return view('admin.agenda-item-categories.show', ['agendaItemCategory' => $agendaItemCategory]);
     }
 
     public function edit(AgendaItemCategory $agendaItemCategory): View
     {
-        return view('beheer.agendaItemCategory.create_edit', ['agendaItemCategory' => $agendaItemCategory]);
+        return view('admin.agenda-item-categories.create_edit', ['agendaItemCategory' => $agendaItemCategory]);
     }
 
     public function update(AgendaItemCategoryRequest $request, AgendaItemCategory $agendaItemCategory): RedirectResponse
     {
         $agendaItemCategory->update($request->validated());
 
-        return to_route('beheer.agenda-item-categories.index')->with('message', 'Events category is edited');
+        return to_route('admin.agenda-item-categories.index')->with('message', 'Events category is edited');
     }
 
     public function destroy(AgendaItemCategory $agendaItemCategory): RedirectResponse
     {
         $agendaItemCategory->delete();
 
-        return to_route('beheer.agenda-item-categories.index')->with('message', 'Events category is removed');
+        return to_route('admin.agenda-item-categories.index')->with('message', 'Events category is removed');
     }
 }

@@ -2,8 +2,8 @@
 
 namespace Database\Seeders;
 
+use App\Enums\AdminRole;
 use App\Enums\FormRowType;
-use App\Enums\Role;
 use App\Models\AgendaItem;
 use App\Models\AgendaItemCategory;
 use App\Models\ApplicationForm\ApplicationForm;
@@ -35,12 +35,12 @@ class DatabaseSeeder extends Seeder
         $this->call([RoleSeeder::class, MenuItemSeeder::class]);
 
         $admin = User::factory()
-            ->withRole(Role::Administrator, Role::ContentAdministrator, Role::ActivityAdministrator)
+            ->withRole(AdminRole::Administrator, AdminRole::ContentAdministrator, AdminRole::ActivityAdministrator)
             ->create(['email' => 'test@esac.nl', 'password' => 'test', 'firstname' => 'Piet', 'preposition' => 'van', 'lastname' => 'Jansen']);
         User::factory()->member()->create(['email' => 'member@esac.nl', 'password' => 'test']);
         $members = User::factory()->count(20)->create();
-        User::factory()->count(3)->create(['lid_af' => now()->subYear()]);
-        User::factory()->count(2)->create(['pending_user' => today()]);
+        User::factory()->count(3)->create(['membership_ended_on' => now()->subYear()]);
+        User::factory()->count(2)->create(['pending_since' => today()]);
 
         $certificates = Certificate::factory()->count(3)->create();
         $members->random(8)->each(fn (User $member) => $member->certificates()->attach($certificates->random()));
@@ -66,7 +66,7 @@ class DatabaseSeeder extends Seeder
             ->create();
 
         $agendaItems->whereNotNull('application_form_id')->each(fn (AgendaItem $agendaItem) => $members->random(5)->each(
-            fn (User $member) => ApplicationResponse::factory()->for($member)->for($agendaItem)->create(['inschrijf_form_id' => $form->id]),
+            fn (User $member) => ApplicationResponse::factory()->for($member)->for($agendaItem)->create(['application_form_id' => $form->id]),
         ));
 
         NewsItem::factory()->count(6)->create();

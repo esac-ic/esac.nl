@@ -45,7 +45,7 @@ class RegisterNewMemberTest extends TestCase
             'iban' => 'BLNDj838474784848',
             'password' => 'a-password',
             'password_confirmation' => 'a-password',
-            'incasso' => 1,
+            'direct_debit' => 1,
             'privacy_policy' => 1,
             'termsconditions' => 1,
             'g-recaptcha-response' => 'ikbenvalid',
@@ -60,7 +60,7 @@ class RegisterNewMemberTest extends TestCase
         ]);
         $user = User::sole();
         $this->assertEquals($body['birthday'], $user->birthday->format('d-m-Y'));
-        $this->assertNotNull($user->pending_user);
+        $this->assertNotNull($user->pending_since);
     }
 
     #[Test]
@@ -83,7 +83,7 @@ class RegisterNewMemberTest extends TestCase
                 'birthday' => 'Field birthday is required',
                 'iban' => 'Field IBAN is required',
                 'g-recaptcha-response' => "'I'm not a robot' validation is required",
-                'incasso' => 'The Automatic Collection field must be accepted.',
+                'direct_debit' => 'The Automatic Collection field must be accepted.',
                 'privacy_policy' => 'Field Privacy Policy is required',
                 'termsconditions' => 'Field Terms and Conditions is required',
             ]);

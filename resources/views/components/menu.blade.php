@@ -46,7 +46,7 @@
                         @else
                             @can('access-admin')
                                 <li class="nav-item">
-                                    <a class="nav-link" href="{{ route('beheer.home') }}" class="nav-link">
+                                    <a class="nav-link" href="{{ route('admin.home') }}" class="nav-link">
                                         Management
                                     </a>
                                 </li>
@@ -58,7 +58,7 @@
                                 </a>
                                 <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
                                     <a class="dropdown-item"
-                                       href="{{ route('beheer.users.show', auth()->user()) }}">Account overview</a>
+                                       href="{{ route('admin.users.show', auth()->user()) }}">Account overview</a>
                                     <a class="dropdown-item" href="{{ route('logout') }}"
                                        onclick="event.preventDefault(); document.getElementById('logout-form').submit();">Logout</a>
                                     <form id="logout-form" action="{{ route('logout') }}" method="POST"

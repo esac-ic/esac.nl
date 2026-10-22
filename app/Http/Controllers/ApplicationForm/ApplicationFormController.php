@@ -24,7 +24,7 @@ class ApplicationFormController extends Controller implements HasMiddleware
 
     public function index(): View
     {
-        return view('beheer.applicationForm.index', [
+        return view('admin.application-forms.index', [
             'applicationForms' => ApplicationForm::all(),
         ]);
     }
@@ -38,12 +38,12 @@ class ApplicationFormController extends Controller implements HasMiddleware
     {
         DB::transaction(fn () => ApplicationForm::query()->create($request->safe()->only('name'))->syncRows($request->validated('rows', [])));
 
-        return to_route('beheer.application-forms.index')->with('message', 'Application form added');
+        return to_route('admin.application-forms.index')->with('message', 'Application form added');
     }
 
     public function show(ApplicationForm $applicationForm): View
     {
-        return view('beheer.applicationForm.show', ['applicationForm' => $applicationForm->load('applicationFormRows.applicationFormRowOptions')]);
+        return view('admin.application-forms.show', ['applicationForm' => $applicationForm->load('applicationFormRows.applicationFormRowOptions')]);
     }
 
     public function edit(ApplicationForm $applicationForm): View
@@ -58,7 +58,7 @@ class ApplicationFormController extends Controller implements HasMiddleware
             $applicationForm->syncRows($request->validated('rows', []));
         });
 
-        return to_route('beheer.application-forms.index')->with('message', 'Application form edited');
+        return to_route('admin.application-forms.index')->with('message', 'Application form edited');
     }
 
     public function destroy(ApplicationForm $applicationForm): RedirectResponse
@@ -66,12 +66,12 @@ class ApplicationFormController extends Controller implements HasMiddleware
         $applicationForm->applicationFormRows->each->delete();
         $applicationForm->delete();
 
-        return to_route('beheer.application-forms.index')->with('message', 'Application form removed');
+        return to_route('admin.application-forms.index')->with('message', 'Application form removed');
     }
 
     private function form(ApplicationForm $applicationForm): View
     {
-        return view('beheer.applicationForm.create_edit', [
+        return view('admin.application-forms.create_edit', [
             'applicationForm' => $applicationForm->load('applicationFormRows.applicationFormRowOptions'),
             'rows' => ApplicationFormRowResource::collection($applicationForm->applicationFormRows),
         ]);

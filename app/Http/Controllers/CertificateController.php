@@ -21,44 +21,44 @@ class CertificateController extends Controller implements HasMiddleware
 
     public function index(): View
     {
-        return view('beheer.certificate.index', [
+        return view('admin.certificates.index', [
             'certificates' => Certificate::all(['id', 'name']),
         ]);
     }
 
     public function create(): View
     {
-        return view('beheer.certificate.create_edit', ['certificate' => new Certificate]);
+        return view('admin.certificates.create_edit', ['certificate' => new Certificate]);
     }
 
     public function store(CertificateRequest $request): RedirectResponse
     {
         Certificate::query()->create($request->validated());
 
-        return to_route('beheer.certificates.index')->with('message', 'Certificate added');
+        return to_route('admin.certificates.index')->with('message', 'Certificate added');
     }
 
     public function show(Certificate $certificate): View
     {
-        return view('beheer.certificate.show', ['certificate' => $certificate]);
+        return view('admin.certificates.show', ['certificate' => $certificate]);
     }
 
     public function edit(Certificate $certificate): View
     {
-        return view('beheer.certificate.create_edit', ['certificate' => $certificate]);
+        return view('admin.certificates.create_edit', ['certificate' => $certificate]);
     }
 
     public function update(CertificateRequest $request, Certificate $certificate): RedirectResponse
     {
         $certificate->update($request->validated());
 
-        return to_route('beheer.certificates.index')->with('message', 'Certificate edited');
+        return to_route('admin.certificates.index')->with('message', 'Certificate edited');
     }
 
     public function destroy(Certificate $certificate): RedirectResponse
     {
         $certificate->delete();
 
-        return to_route('beheer.certificates.index')->with('message', 'Certificate removed');
+        return to_route('admin.certificates.index')->with('message', 'Certificate removed');
     }
 }

@@ -2,7 +2,7 @@
 
 namespace Tests\Concerns;
 
-use App\Enums\Role;
+use App\Enums\AdminRole;
 use App\Models\ApplicationForm\ApplicationForm;
 use App\Models\User;
 
@@ -11,20 +11,20 @@ trait ManagesApplicationForms
     public static function managingRoles(): array
     {
         return [
-            'content administrator' => [Role::ContentAdministrator],
-            'activity administrator' => [Role::ActivityAdministrator],
+            'content administrator' => [AdminRole::ContentAdministrator],
+            'activity administrator' => [AdminRole::ActivityAdministrator],
         ];
     }
 
     public static function otherRoles(): array
     {
         return [
-            'administrator' => [Role::Administrator],
-            'certificate administrator' => [Role::CertificateAdministrator],
+            'administrator' => [AdminRole::Administrator],
+            'certificate administrator' => [AdminRole::CertificateAdministrator],
         ];
     }
 
-    private function actingAsRole(Role ...$roles): void
+    private function actingAsRole(AdminRole ...$roles): void
     {
         $this->actingAs(User::factory()->withRole(...$roles)->create());
     }
