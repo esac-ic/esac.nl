@@ -75,9 +75,6 @@ class MenuItem extends Model
         return ! $this->login || Auth::check();
     }
 
-    /**
-     * @return mixed[]
-     */
     public static function sortMenuList($menuList): array
     {
         $newList = [];
