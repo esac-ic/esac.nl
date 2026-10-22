@@ -1,7 +1,7 @@
 @extends('layouts.beheer')
 
 @section('title')
-{{'Info of ' . $user->getName()}}
+Info of {{ $user->getName() }}
 @endsection
 
 

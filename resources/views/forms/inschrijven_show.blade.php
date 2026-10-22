@@ -1,7 +1,7 @@
 @extends('layouts.beheer')
 
 @section('title')
-{{ 'Subscriptions: '.$agendaItem->title }}
+Subscriptions: {{ $agendaItem->title }}
 @endsection
 
 @section('content')
