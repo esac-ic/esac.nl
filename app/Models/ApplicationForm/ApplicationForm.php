@@ -30,13 +30,13 @@ class ApplicationForm extends Model
         foreach ($rows as $rowData) {
             if (array_key_exists('id', $rowData) === true) {
                 $row = ApplicationFormRow::find($rowData['id']);
-                $row->update($rowData);
             } else {
-                $row = new ApplicationFormRow($rowData);
+                $row = new ApplicationFormRow();
                 $row->application_form_id = $this->id;
-                $row->required = array_key_exists('required', $rowData);
-                $row->save();
             }
+            $row->fill($rowData);
+            $row->required = $rowData['required'] ?? false;
+            $row->save();
             $row->syncOptions($rowData['options'] ?? []);
             $applicationFormRowIds[] = $row->id;
         }

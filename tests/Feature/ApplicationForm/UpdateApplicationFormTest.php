@@ -135,6 +135,26 @@ class UpdateApplicationFormTest extends TestCase
         $response->assertStatus(403);
     }
 
+    #[Test]
+    public function a_question_can_be_made_mandatory_and_optional_again(): void
+    {
+        $row = ApplicationFormRow::factory()->create([
+            'application_form_id' => $this->applicationForm->id,
+            'type' => ApplicationFormRow::FORM_TYPE_TEXT,
+            'required' => false,
+        ]);
+        $question = ['id' => $row->id, 'name' => $row->name, 'type' => $row->type];
+
+        // A browser posts a checked checkbox as "on" and leaves an unchecked one out.
+        $this->put($this->url, ['name' => 'test name', 'rows' => [$question + ['required' => 'on']]])
+            ->assertRedirect(route('beheer.applicationForms.index'));
+        $this->assertTrue($row->fresh()->required);
+
+        $this->put($this->url, ['name' => 'test name', 'rows' => [$question]])
+            ->assertRedirect(route('beheer.applicationForms.index'));
+        $this->assertFalse($row->fresh()->required);
+    }
+
     private function assertApplicationForm(ApplicationForm $applicationForm, array $data)
     {
         $this->assertEquals($data['name'], $applicationForm->name);
