@@ -4,6 +4,7 @@ services:
     build:
       context: .
       target: dev
+    env_file: !override []
     environment:
       SERVER_NAME: localhost:80
       CADDY_EXTRA_CONFIG: ""
