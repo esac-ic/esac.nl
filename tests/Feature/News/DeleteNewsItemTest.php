@@ -37,6 +37,6 @@ class DeleteNewsItemTest extends TestCase
 
         $response->assertStatus(302);
 
-        $this->assertNull(NewsItem::find($newsItem->id));
+        $this->assertSoftDeleted($newsItem);
     }
 }

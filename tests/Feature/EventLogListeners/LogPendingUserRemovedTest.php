@@ -19,17 +19,16 @@ class LogPendingUserRemovedTest extends TestCase
 
         $event = new PendingUserRemoved($user, $user->getName());
 
-        $this->assertEquals(0, UserEventLogEntry::all()->count());
+        $this->assertDatabaseEmpty(UserEventLogEntry::class);
 
         $listener = new LogUserEvent;
         $listener->handle($event);
 
-        $this->assertEquals(1, UserEventLogEntry::all()->count());
-        $logEntry = UserEventLogEntry::all()->first();
+        $logEntry = UserEventLogEntry::sole();
 
         // assert correct event format
         $this->assertNull($logEntry->user);
-        $this->assertEquals((new \ReflectionClass(PendingUserRemoved::class))->getShortName(), $logEntry->event_type);
+        $this->assertEquals(class_basename(PendingUserRemoved::class), $logEntry->event_type);
         $this->assertEquals($user->getName().' was removed as a pending member', $logEntry->event_details);
     }
 }

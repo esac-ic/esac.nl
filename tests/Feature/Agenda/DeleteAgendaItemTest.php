@@ -36,6 +36,6 @@ class DeleteAgendaItemTest extends TestCase
 
         $response->assertStatus(302);
 
-        $this->assertNull(AgendaItem::find($agendaItem->id));
+        $this->assertModelMissing($agendaItem);
     }
 }

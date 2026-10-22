@@ -19,17 +19,16 @@ class LogPendingUserCreatedTest extends TestCase
 
         $event = new PendingUserCreated($user);
 
-        $this->assertEquals(0, UserEventLogEntry::all()->count());
+        $this->assertDatabaseEmpty(UserEventLogEntry::class);
 
         $listener = new LogUserEvent;
         $listener->handle($event);
 
-        $this->assertEquals(1, UserEventLogEntry::all()->count());
-        $logEntry = UserEventLogEntry::all()->first();
+        $logEntry = UserEventLogEntry::sole();
 
         // assert correct event format
         $this->assertTrue($user->is($logEntry->user));
-        $this->assertEquals((new \ReflectionClass(PendingUserCreated::class))->getShortName(), $logEntry->event_type);
+        $this->assertEquals(class_basename(PendingUserCreated::class), $logEntry->event_type);
         $this->assertEquals('New pending user: '.$user->getName(), $logEntry->event_details);
     }
 

@@ -39,7 +39,7 @@ class DeleteAgendaRegistrationTest extends TestCase
 
         $response->assertStatus(302);
 
-        $this->assertNull(ApplicationResponse::find($applicationResponse->id));
+        $this->assertSoftDeleted($applicationResponse);
     }
 
     #[Test]
@@ -57,6 +57,6 @@ class DeleteAgendaRegistrationTest extends TestCase
         $response->assertStatus(302);
 
         $response->assertSessionHas('message', 'The registration date has expired, so you can no longer unsubscribe.');
-        $this->assertNotNull(ApplicationResponse::find($applicationResponse->id));
+        $this->assertNotSoftDeleted($applicationResponse);
     }
 }

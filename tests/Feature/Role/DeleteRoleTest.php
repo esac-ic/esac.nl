@@ -35,7 +35,7 @@ class DeleteRoleTest extends TestCase
 
         $response->assertStatus(302);
 
-        $this->assertNull(Rol::find($role->id));
+        $this->assertSoftDeleted($role);
     }
 
     #[Test]
