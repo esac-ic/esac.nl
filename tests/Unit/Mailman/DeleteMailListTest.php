@@ -21,7 +21,7 @@ class DeleteMailListTest extends TestCase
     {
         Http::fake(['http://mailman.test/3.1/lists/test.esac.nl' => Http::response()]);
 
-        $this->app->make(Mailman::class)->deleteMailList("test.esac.nl");
+        $this->app->make(Mailman::class)->deleteMailList('test.esac.nl');
 
         Http::assertSent(fn (Request $request) => $request->method() === 'DELETE'
             && $request->url() === 'http://mailman.test/3.1/lists/test.esac.nl');
@@ -31,10 +31,10 @@ class DeleteMailListTest extends TestCase
     {
         Http::fake(['http://mailman.test/3.1/lists/test.esac.nl' => Http::response('{"title": "404 Not Found", "description": "404 Not Found"}', 404)]);
 
-        //the service shouldn't handle exception
+        // the service shouldn't handle exception
         $this->expectException(RequestException::class);
         $this->expectExceptionCode(404);
 
-        $this->app->make(Mailman::class)->deleteMailList("test.esac.nl");
+        $this->app->make(Mailman::class)->deleteMailList('test.esac.nl');
     }
 }

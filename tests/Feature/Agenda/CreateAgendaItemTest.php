@@ -19,6 +19,7 @@ class CreateAgendaItemTest extends TestCase
     use RefreshDatabase;
 
     private $url = 'agendaItems';
+
     private $agendaItem;
 
     private $user;
@@ -29,20 +30,17 @@ class CreateAgendaItemTest extends TestCase
         $this->user = $user = User::factory()->create();
 
         $this->be($user);
-
-        session()->start();
     }
 
     #[Test]
-    public function CreateAgendaItem()
+    public function create_agenda_item()
     {
-        //Attach
+        // Attach
         $this->user->roles()->attach(Role::ActivityAdministrator->value);
 
         $agendaItemCategory = AgendaItemCategory::factory()->create();
 
         $body = [
-            '_token' => csrf_token(),
             'title' => 'test agenda',
             'text' => 'test agenda',
             'short_description' => 'test agenda',
@@ -84,14 +82,14 @@ class CreateAgendaItemTest extends TestCase
         $this->assertSame([400, 300], array_slice(getimagesize(Storage::disk('public')->path($agendaItem->image_url)), 0, 2));
     }
 
-    public function CreateAgendaWithIncorrectRole()
+    #[Test]
+    public function create_agenda_with_incorrect_role()
     {
-        //Login as User with incorrect role
+        // Login as User with incorrect role
         $this->user->roles()->detach();
 
         $agendaItemCategory = AgendaItemCategory::factory()->create();
         $body = [
-            '_token' => csrf_token(),
             'title' => 'test agenda',
             'text' => 'test agenda',
             'short_description' => 'test agenda',
@@ -106,13 +104,13 @@ class CreateAgendaItemTest extends TestCase
 
     }
 
-    public function CreateAgendaWithEmptyFields()
+    #[Test]
+    public function create_agenda_with_empty_fields()
     {
         $this->user->roles()->attach(Role::ActivityAdministrator->value);
 
         $agendaItemCategory = AgendaItemCategory::factory()->create();
         $body = [
-            '_token' => csrf_token(),
             'title' => '',
             'text' => 'test agenda',
             'short_description' => 'test agenda',
@@ -123,18 +121,19 @@ class CreateAgendaItemTest extends TestCase
             'start_date' => Carbon::now()->addDays(1),
         ];
         $response = $this->post($this->url, $body);
-        $response->assertStatus(500);
+        $response->assertSessionHasErrors('title');
+        $this->assertSame(0, AgendaItem::count());
     }
 
-    public function CreateAgendaItemWithEmoji()
+    #[Test]
+    public function create_agenda_item_with_emoji()
     {
-        //Attach
+        // Attach
         $this->user->roles()->attach(Role::ActivityAdministrator->value);
 
         $agendaItemCategory = AgendaItemCategory::factory()->create();
 
         $body = [
-            '_token' => csrf_token(),
             'title' => 'test agenda 😀',
             'text' => 'test agenda 😀',
             'short_description' => 'test agenda 😀',

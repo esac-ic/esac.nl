@@ -10,27 +10,14 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 use PHPUnit\Framework\Attributes\Test;
 use Tests\TestCase;
 
-/**
- * Class CreateApplicationFormTest
- * @package Tests\Feature
- */
 class CreateApplicationFormTest extends TestCase
 {
     use RefreshDatabase;
 
-    /**
-     * @var User
-     */
     private $user;
 
-    /**
-     * @var string
-     */
     const URL = 'beheer/applicationForms';
 
-    /**
-     * @return void
-     */
     protected function setUp(): void
     {
         parent::setUp();
@@ -38,8 +25,6 @@ class CreateApplicationFormTest extends TestCase
 
         $user->roles()->attach(Role::ContentAdministrator->value);
         $this->be($user);
-
-        session()->start();
     }
 
     #[Test]
@@ -168,10 +153,6 @@ class CreateApplicationFormTest extends TestCase
         $response->assertStatus(403);
     }
 
-    /**
-     * @param ApplicationForm $applicationForm
-     * @param array $data
-     */
     private function assertApplicationForm(ApplicationForm $applicationForm, array $data)
     {
         $this->assertEquals($data['name'], $applicationForm->name);

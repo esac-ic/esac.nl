@@ -9,32 +9,16 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 use PHPUnit\Framework\Attributes\Test;
 use Tests\TestCase;
 
-/**
- * Class ApplicationFormIndexTest
- * @package Tests\Feature
- */
 class ApplicationFormIndexTest extends TestCase
 {
     use RefreshDatabase;
 
-    /**
-     * @var ApplicationForm
-     */
     private $applicationForm;
 
-    /**
-     * @var User
-     */
     private $user;
 
-    /**
-     * @var string
-     */
     const URL = 'beheer/applicationForms';
 
-    /**
-     * @return void
-     */
     protected function setUp(): void
     {
         parent::setUp();
@@ -44,8 +28,6 @@ class ApplicationFormIndexTest extends TestCase
         $this->be($user);
 
         $this->applicationForm = ApplicationForm::factory()->create();
-
-        session()->start();
     }
 
     #[Test]

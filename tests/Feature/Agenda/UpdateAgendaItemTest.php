@@ -17,11 +17,9 @@ class UpdateAgendaItemTest extends TestCase
     use RefreshDatabase;
 
     private $url = 'agendaItems';
+
     private $agendaItem;
 
-    /**
-     * @var
-     */
     private $user;
 
     protected function setUp(): void
@@ -30,18 +28,15 @@ class UpdateAgendaItemTest extends TestCase
         $this->user = $user = User::factory()->create();
         $user->roles()->attach(Role::ActivityAdministrator->value);
         $this->be($user);
-
-        session()->start();
     }
 
     #[Test]
-    public function UpdateAgendaItemTest()
+    public function update_agenda_item_test()
     {
         $agendaItem = AgendaItem::factory()->create();
         $agendaItemCategory = AgendaItemCategory::factory()->create();
 
         $body = [
-            '_token' => csrf_token(),
             'title' => 'test agenda',
             'text' => 'test agenda',
             'short_description' => 'test agenda',
@@ -52,7 +47,7 @@ class UpdateAgendaItemTest extends TestCase
             'start_date' => Carbon::now()->addDays(1),
         ];
 
-        $response = $this->patch($this->url . "/" . $agendaItem->id, $body);
+        $response = $this->patch($this->url.'/'.$agendaItem->id, $body);
 
         $response->assertStatus(302);
 

@@ -1,6 +1,7 @@
 <?php
 
 namespace Tests\Feature\News;
+
 use App\Enums\Role;
 use App\Models\NewsItem;
 use App\Models\User;
@@ -13,7 +14,9 @@ class DeleteNewsItemTest extends TestCase
     use RefreshDatabase;
 
     private $url = 'newsItems';
+
     private $newsItem;
+
     private $user;
 
     protected function setUp(): void
@@ -23,15 +26,14 @@ class DeleteNewsItemTest extends TestCase
 
         $user->roles()->attach(Role::ActivityAdministrator->value);
         $this->be($user);
-
-        session()->start();
     }
 
     #[Test]
-    public function DeleteNewsItem(){
+    public function delete_news_item()
+    {
         $newsItem = NewsItem::factory()->create();
 
-        $response = $this->delete($this->url . '/' . $newsItem->id);
+        $response = $this->delete($this->url.'/'.$newsItem->id);
 
         $response->assertStatus(302);
 

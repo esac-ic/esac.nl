@@ -9,7 +9,7 @@ use App\Models\ApplicationForm\ApplicationResponseRow;
 use App\Services\AgendaApplicationFormService;
 use Carbon\Carbon;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Support\Facades\Artisan;
+use PHPUnit\Framework\Attributes\Test;
 use Tests\TestCase;
 
 class RemoveOldApplicationResponseTest extends TestCase
@@ -27,11 +27,12 @@ class RemoveOldApplicationResponseTest extends TestCase
         return $applicationResponse;
     }
 
-    public function testAnonymiseTheRegistrationsOfAnEventThatEnded3YearsAgo()
+    #[Test]
+    public function the_registrations_of_an_event_that_ended_three_years_ago_are_anonymised()
     {
-        $applicationResponse = $this->registrationForEventThatEnded(Carbon::now()->subYears(3));
+        $applicationResponse = $this->registrationForEventThatEnded(now()->subYears(3));
 
-        Artisan::call('remove:oldApplications');
+        $this->artisan('remove:oldApplications');
 
         $applicationResponse->refresh();
         $this->assertNull($applicationResponse->user_id);
@@ -40,24 +41,25 @@ class RemoveOldApplicationResponseTest extends TestCase
         $this->assertSame([], app(AgendaApplicationFormService::class)->getRegisteredUsers($applicationResponse->agendaItem)['userdata']);
     }
 
-    public function testKeepTheRegistrationsOfAnEventThatEnded1YearAgo()
+    #[Test]
+    public function the_registrations_of_an_event_that_ended_a_year_ago_are_kept()
     {
-        $applicationResponse = $this->registrationForEventThatEnded(Carbon::now()->subYear());
-        $applicationResponse->created_at = Carbon::now()->subYears(3);
-        $applicationResponse->save();
+        $applicationResponse = $this->registrationForEventThatEnded(now()->subYear());
+        $applicationResponse->forceFill(['created_at' => now()->subYears(3)])->save();
 
-        Artisan::call('remove:oldApplications');
+        $this->artisan('remove:oldApplications');
 
         $this->assertNotNull($applicationResponse->fresh()->user_id);
         $this->assertSame(2, ApplicationResponseRow::count());
     }
 
-    public function testDeleteACancelledRegistrationOfAnEventThatEnded3YearsAgo()
+    #[Test]
+    public function a_cancelled_registration_of_an_event_that_ended_three_years_ago_is_deleted()
     {
-        $applicationResponse = $this->registrationForEventThatEnded(Carbon::now()->subYears(3));
+        $applicationResponse = $this->registrationForEventThatEnded(now()->subYears(3));
         $applicationResponse->delete();
 
-        Artisan::call('remove:oldApplications');
+        $this->artisan('remove:oldApplications');
 
         $this->assertSame(0, ApplicationResponse::withTrashed()->count());
         $this->assertSame(0, ApplicationResponseRow::withTrashed()->count());
