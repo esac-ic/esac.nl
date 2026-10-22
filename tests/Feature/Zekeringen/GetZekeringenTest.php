@@ -11,43 +11,17 @@ class GetZekeringenTest extends TestCase
 {
     use RefreshDatabase;
 
-    private string $url = 'api/zekeringen';
-
-    protected function setUp(): void
+    public function test_the_api_lists_the_top_level_zekeringen_with_their_replies()
     {
-        parent::setUp();
+        $zekering = Zekering::factory()->has(Zekering::factory(), 'children')->create();
+        $other = Zekering::factory()->create();
 
-        $this->be(User::factory()->create());
-        session()->start();
-    }
-
-    public function test_api_returns_zekeringen_with_their_sub_zekeringen()
-    {
-        $zekering = Zekering::factory()->create();
-        $subZekering = Zekering::factory()->childOf($zekering)->create();
-        $otherZekering = Zekering::factory()->create();
-
-        $response = $this->get($this->url);
-        $response->assertStatus(200);
-        $zekeringen = collect($response->json('zekeringen'))->keyBy('id');
-
-        $this->assertCount(2, $zekeringen);
-        $this->assertEquals([$subZekering->id], array_column($zekeringen[$zekering->id]['children'], 'id'));
-        $this->assertEmpty($zekeringen[$otherZekering->id]['children']);
-    }
-
-    public function test_zekering_that_is_its_own_parent_is_not_its_own_sub_zekering()
-    {
-        $zekering = Zekering::factory()->create();
-        $zekering->parent_id = $zekering->id;
-        $zekering->save();
-        $subZekering = Zekering::factory()->childOf($zekering)->create();
-
-        $response = $this->get($this->url);
-        $response->assertStatus(200);
-        $zekeringen = $response->json('zekeringen');
-
-        $this->assertCount(1, $zekeringen);
-        $this->assertEquals([$subZekering->id], array_column($zekeringen[0]['children'], 'id'));
+        $this->actingAs(User::factory()->create())->get(route('api.zekeringen.index'))
+            ->assertOk()
+            ->assertJsonCount(2, 'zekeringen')
+            ->assertJsonPath('zekeringen.0.id', $other->id)
+            ->assertJsonPath('zekeringen.0.children', [])
+            ->assertJsonPath('zekeringen.1.id', $zekering->id)
+            ->assertJsonPath('zekeringen.1.children.0.id', $zekering->children->sole()->id);
     }
 }

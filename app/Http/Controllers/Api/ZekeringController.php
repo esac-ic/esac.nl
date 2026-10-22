@@ -23,21 +23,21 @@ class ZekeringController extends Controller implements HasMiddleware
 
     public function getZekeringen(): array
     {
-        $zekeringen = Zekering::query()->where('has_parent', false)->latest('id')->with('children')->get();
+        $zekeringen = Zekering::query()->whereNull('parent_id')->latest('id')->with('children')->get();
 
         return ['zekeringen' => ZekeringResource::collection($zekeringen)];
     }
 
     public function storeZekering(ZekeringRequest $request): RedirectResponse
     {
-        $this->createZekering($request, $request->has('parent'), $request->input('parent'));
+        $request->user()->zekeringen()->create($request->validated());
 
         return to_route('front-end.zekeringen');
     }
 
     public function storeSubZekering(ZekeringRequest $request): Response
     {
-        $this->createZekering($request, true, $request->input('parent_id'));
+        $request->user()->zekeringen()->create($request->validated());
 
         return response(['msg' => 'Sub zekering created'], 200);
     }
@@ -47,16 +47,5 @@ class ZekeringController extends Controller implements HasMiddleware
         $zekering->delete();
 
         return response('', 200);
-    }
-
-    private function createZekering(ZekeringRequest $request, bool $hasParent, $parentId): void
-    {
-        $zekering = new Zekering;
-        $zekering->text = $request->input('text');
-        $zekering->created_by = $request->user()->id;
-        $zekering->score = 1;
-        $zekering->parent_id = $hasParent ? $parentId : null;
-        $zekering->has_parent = $hasParent;
-        $zekering->save();
     }
 }
