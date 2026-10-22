@@ -73,10 +73,10 @@ class AgendaItem extends Model
         $newAgendaItem->created_by = $creator->id;
         $newAgendaItem->save();
 
-        if ($this->image_url !== null && $this->image_url !== '') {
-            $oldPath = $this->image_url;
-            $newPath = str_replace($this->id, $newAgendaItem->id, $oldPath);
-            Storage::disk('public')->copy($oldPath, $newPath);
+        if ($this->image_url !== '') {
+            // Named after the new item, so each item has its own file to replace or delete.
+            $newPath = 'agendaItem/'.$newAgendaItem->id.'-thumbnail.'.pathinfo($this->image_url, PATHINFO_EXTENSION);
+            Storage::disk('public')->copy($this->image_url, $newPath);
             $newAgendaItem->image_url = $newPath;
             $newAgendaItem->save();
         }
