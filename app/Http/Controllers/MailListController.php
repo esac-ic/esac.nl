@@ -6,13 +6,11 @@ use App\Jobs\MemberMassMailListSyncJob;
 use App\Models\User;
 use App\Services\Mailman;
 use Illuminate\Contracts\View\View;
-use Illuminate\Http\Client\RequestException;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Routing\Controllers\HasMiddleware;
 use Illuminate\Routing\Controllers\Middleware;
-use Illuminate\Support\Facades\Log;
 use Illuminate\Validation\Rule;
 
 class MailListController extends Controller implements HasMiddleware
@@ -48,14 +46,7 @@ class MailListController extends Controller implements HasMiddleware
     {
         $data = $request->validate(['address' => ['required', 'alpha_dash', 'max:255']]);
 
-        try {
-            $this->mailman->storeMailList($data);
-        } catch (RequestException $e) {
-            $message = "Error {$e->getCode()}: {$e->getMessage()}";
-            Log::error($message, ['exception' => $e]);
-
-            return to_route('mailList.index')->with('error', $message);
-        }
+        $this->mailman->storeMailList($data);
 
         return to_route('mailList.index')->with('message', 'Mailing list added');
     }
