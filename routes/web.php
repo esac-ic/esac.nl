@@ -25,7 +25,7 @@ use Illuminate\Support\Facades\Route;
 Route::permanentRedirect('/', '/home');
 
 //Admin routes
-Route::group(['as' => 'beheer.', 'prefix' => 'beheer/', 'middleware' => 'auth'], function () {
+Route::group(['as' => 'beheer.', 'prefix' => 'beheer/'], function () {
     Route::get('home', [ManageController::class, 'index'])->name('home');
     Route::resource('applicationForms', ApplicationFormController::class);
 
