@@ -7,13 +7,10 @@ use Illuminate\Console\Attributes\Description;
 use Illuminate\Console\Attributes\Signature;
 use Illuminate\Console\Command;
 
-#[Description('Removes the data of old users except their name from the database if they are old user for more than 2 years')]
+#[Description('Erase all but the name of members who left longer ago than the retention period')]
 #[Signature('remove:oldUsers')]
 class RemoveOldUsers extends Command
 {
-    /**
-     * Execute the console command.
-     */
     public function handle(): void
     {
         User::query()

@@ -10,7 +10,6 @@ use App\Models\Setting;
 use App\Models\User;
 use App\Services\Mailman;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Mockery;
 use Mockery\MockInterface;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\Test;
@@ -29,7 +28,7 @@ class HandleMemberTypeChangedTest extends TestCase
     {
         parent::setUp();
 
-        $this->mockedMailman = Mockery::mock(Mailman::class);
+        $this->mockedMailman = $this->mock(Mailman::class);
         $this->user = User::factory()->member()->create();
         $this->fakeMailListSettings();
     }
