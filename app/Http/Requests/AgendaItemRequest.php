@@ -14,7 +14,7 @@ class AgendaItemRequest extends FormRequest
             'short_description' => 'required|max:100',
             'text' => 'required',
             'thumbnail' => 'nullable|image|mimes:jpeg,png,jpg|max:10240',
-            'category' => 'required|numeric|min:1',
+            'category' => 'required|exists:agenda_item_categories,id',
             'applicationForm' => ['nullable', Rule::exists('application_forms', 'id')->withoutTrashed()],
             'subscription_end_date' => ['exclude_without:applicationForm', 'required', 'date'],
             'start_date' => 'required|date',

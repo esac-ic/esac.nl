@@ -32,14 +32,7 @@ class MailListController extends Controller implements HasMiddleware
 
     public function create(): View
     {
-        return view('beheer.mailList.create_edit', [
-            'fields' => [
-                'title' => 'Add mailing list',
-                'method' => 'POST',
-                'url' => route('mailList.store'),
-            ],
-            'mailList' => null,
-        ]);
+        return view('beheer.mailList.create');
     }
 
     public function store(Request $request): RedirectResponse

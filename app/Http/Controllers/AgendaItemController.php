@@ -32,9 +32,7 @@ class AgendaItemController extends Controller implements HasMiddleware
 
     public function create(): View
     {
-        $fields = $this->getFields('POST', route('agendaItems.store'), 'Add an event');
-
-        return $this->renderCreateEditView(null, $fields);
+        return $this->form(new AgendaItem);
     }
 
     public function store(AgendaItemRequest $request): RedirectResponse
@@ -55,14 +53,12 @@ class AgendaItemController extends Controller implements HasMiddleware
 
     public function edit(AgendaItem $agendaItem): View
     {
-        $fields = $this->getFields('PATCH', route('agendaItems.update', $agendaItem), 'Edit event');
-
-        return $this->renderCreateEditView($agendaItem, $fields);
+        return $this->form($agendaItem);
     }
 
     public function update(AgendaItemRequest $request, AgendaItem $agendaItem): RedirectResponse
     {
-        $agendaItem->fill($request->safe()->only(['title', 'text', 'short_description', 'category']))
+        $agendaItem->fill($request->safe()->only(['title', 'text', 'short_description', 'category', 'start_date', 'end_date']))
             ->fillFromForm($request->validated())
             ->save();
         $this->handleImage($request, $agendaItem);
@@ -88,22 +84,9 @@ class AgendaItemController extends Controller implements HasMiddleware
         return to_route('agendaItems.edit', $newAgendaItem);
     }
 
-    private function getFields(string $method, string $url, string $title): array
-    {
-        return [
-            'title_info' => 'Event general information',
-            'title_content' => 'Event item content',
-            'title_image' => 'Event item thumbnail',
-            'title' => $title,
-            'method' => $method,
-            'url' => $url,
-        ];
-    }
-
-    private function renderCreateEditView(?AgendaItem $agendaItem, array $fields): View
+    private function form(AgendaItem $agendaItem): View
     {
         return view('beheer.agendaItem.create_edit', [
-            'fields' => $fields,
             'agendaItem' => $agendaItem,
             'agendaItemCategories' => AgendaItemCategory::query()->orderBy('name')->pluck('name', 'id')->all(),
             'applicationForms' => ApplicationForm::query()->orderBy('name')->pluck('name', 'id')->all(),

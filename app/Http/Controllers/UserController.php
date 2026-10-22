@@ -47,25 +47,14 @@ class UserController extends Controller implements HasMiddleware
 
     public function create(): View
     {
-        return view('beheer.user.create_edit', [
-            'fields' => [
-                'title' => 'Add user',
-                'method' => 'POST',
-                'url' => route('users.store'),
-            ],
-            'user' => null,
-            'roles' => Rol::all(),
-            'ownedRoles' => collect(),
-        ]);
+        return view('beheer.user.create_edit', ['user' => new User, 'roles' => Rol::all()]);
     }
 
     public function store(UserRequest $request): RedirectResponse
     {
         $user = User::fromForm($request->validated());
         $user->save();
-        if ($request->filled('roles')) {
-            $user->roles()->sync($request->input('roles'));
-        }
+        $user->roles()->sync($request->input('roles', []));
 
         return to_route('users.index')->with('message', 'User is added');
     }
@@ -81,16 +70,7 @@ class UserController extends Controller implements HasMiddleware
     {
         Gate::authorize('update', $user);
 
-        return view('beheer.user.create_edit', [
-            'fields' => [
-                'title' => 'Edit user',
-                'method' => 'PATCH',
-                'url' => route('users.update', $user),
-            ],
-            'user' => $user,
-            'roles' => Rol::all(),
-            'ownedRoles' => $user->roles,
-        ]);
+        return view('beheer.user.create_edit', ['user' => $user, 'roles' => Rol::all()]);
     }
 
     public function update(UserRequest $request, User $user, Mailman $mailman): RedirectResponse

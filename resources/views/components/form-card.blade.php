@@ -1,13 +1,18 @@
-@props(['fields', 'cancel', 'files' => false])
+@props(['title', 'model' => null, 'resource' => null, 'action' => null, 'method' => null, 'cancel' => null])
+@php
+    $action ??= $model->exists ? route("$resource.update", $model) : route("$resource.store");
+    $method ??= $model->exists ? 'PATCH' : 'POST';
+    $cancel ??= $model->exists ? route("$resource.show", $model) : route("$resource.index");
+@endphp
 @include('includes.flash')
 <x-validation-errors />
 
 <div class="card">
     <div class="card-header">
-        <h3>{{ $fields['title'] }}</h3>
+        <h3>{{ $title }}</h3>
     </div>
     <div class="card-body">
-        {{ html()->form($fields['method'], $fields['url'])->if($files, fn ($form) => $form->acceptsFiles())->open() }}
+        {{ html()->form($method, $action)->open() }}
         {{ $slot }}
     </div>
 </div>

@@ -30,14 +30,7 @@ class LibraryController extends Controller implements HasMiddleware
 
     public function create(): View
     {
-        return view('beheer.book.create_edit', [
-            'book' => null,
-            'fields' => [
-                'title' => 'Add a book',
-                'method' => 'POST',
-                'url' => route('books.store'),
-            ],
-        ]);
+        return view('beheer.book.create_edit', ['book' => new Book]);
     }
 
     public function store(BookRequest $request): RedirectResponse
@@ -54,14 +47,7 @@ class LibraryController extends Controller implements HasMiddleware
 
     public function edit(Book $book): View
     {
-        return view('beheer.book.create_edit', [
-            'book' => $book,
-            'fields' => [
-                'title' => 'Edit book',
-                'method' => 'PATCH',
-                'url' => route('books.update', $book),
-            ],
-        ]);
+        return view('beheer.book.create_edit', ['book' => $book]);
     }
 
     public function update(BookRequest $request, Book $book): RedirectResponse

@@ -91,7 +91,7 @@
                     @endcan
                     @can('manage-settings')
                         <li class="nav-item">
-                            <a href="{{ route('beheer.settings.index') }}" class="nav-link">
+                            <a href="{{ route('beheer.settings.show') }}" class="nav-link">
                                 {{'Setting'}}
                             </a>
                         </li>

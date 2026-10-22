@@ -26,14 +26,7 @@ class RolController extends Controller implements HasMiddleware
 
     public function create(): View
     {
-        return view('beheer.rol.create_edit', [
-            'rol' => null,
-            'fields' => [
-                'title' => 'Add a role',
-                'method' => 'POST',
-                'url' => route('rols.store'),
-            ],
-        ]);
+        return view('beheer.rol.create_edit', ['rol' => new Rol]);
     }
 
     public function store(RoleRequest $request): RedirectResponse
@@ -50,14 +43,7 @@ class RolController extends Controller implements HasMiddleware
 
     public function edit(Rol $rol): View
     {
-        return view('beheer.rol.create_edit', [
-            'rol' => $rol,
-            'fields' => [
-                'title' => 'Edit role',
-                'method' => 'PATCH',
-                'url' => route('rols.update', $rol),
-            ],
-        ]);
+        return view('beheer.rol.create_edit', ['rol' => $rol]);
     }
 
     public function update(RoleRequest $request, Rol $rol): RedirectResponse

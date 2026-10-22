@@ -113,7 +113,6 @@ class User extends Authenticatable
     public static function fromForm(array $data): self
     {
         $user = new self($data);
-        $user->birthday = Carbon::parse($data['birthday'])->startOfMinute();
         $user->incasso = array_key_exists('incasso', $data);
 
         return $user;
@@ -140,7 +139,6 @@ class User extends Authenticatable
      */
     public function updateFromForm(array $data): void
     {
-        $data['birthday'] = Carbon::parse($data['birthday'])->startOfMinute();
         $data['incasso'] = array_key_exists('incasso', $data);
 
         $oldKindOfMember = $this->kind_of_member;

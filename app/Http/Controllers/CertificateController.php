@@ -28,14 +28,7 @@ class CertificateController extends Controller implements HasMiddleware
 
     public function create(): View
     {
-        return view('beheer.certificate.create_edit', [
-            'certificate' => null,
-            'fields' => [
-                'title' => 'Add a new certificate',
-                'method' => 'POST',
-                'url' => route('certificates.store'),
-            ],
-        ]);
+        return view('beheer.certificate.create_edit', ['certificate' => new Certificate]);
     }
 
     public function store(CertificateRequest $request): RedirectResponse
@@ -52,14 +45,7 @@ class CertificateController extends Controller implements HasMiddleware
 
     public function edit(Certificate $certificate): View
     {
-        return view('beheer.certificate.create_edit', [
-            'certificate' => $certificate,
-            'fields' => [
-                'title' => 'Add a new certificate',
-                'method' => 'PATCH',
-                'url' => route('certificates.update', $certificate),
-            ],
-        ]);
+        return view('beheer.certificate.create_edit', ['certificate' => $certificate]);
     }
 
     public function update(CertificateRequest $request, Certificate $certificate): RedirectResponse

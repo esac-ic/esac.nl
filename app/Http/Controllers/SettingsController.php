@@ -19,9 +19,9 @@ class SettingsController extends Controller implements HasMiddleware
         ];
     }
 
-    public function index(): View
+    public function show(): View
     {
-        return view('beheer.settings.index', ['settings' => Setting::all()]);
+        return view('beheer.settings.show', ['settings' => Setting::all()]);
     }
 
     public function edit(): View
@@ -31,14 +31,11 @@ class SettingsController extends Controller implements HasMiddleware
 
     public function update(Request $request): RedirectResponse
     {
-        $settings = Setting::all();
-        foreach ($request->input('setting', []) as $key => $value) {
-            $setting = $settings->firstWhere('name', $key);
+        foreach ($request->input('setting', []) as $name => $value) {
             // Empty inputs arrive as null, and the column holds an empty string
-            $setting->value = $value ?? '';
-            $setting->save();
+            Setting::where('name', $name)->update(['value' => $value ?? '']);
         }
 
-        return to_route('beheer.settings.index')->with('message', 'Settings updated');
+        return to_route('beheer.settings.show')->with('message', 'Settings updated');
     }
 }

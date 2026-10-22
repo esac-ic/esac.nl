@@ -63,10 +63,7 @@ class AgendaApplicationFormController extends Controller implements HasMiddlewar
 
     public function show(User $user, AgendaItem $agendaItem): View
     {
-        $applicationResponse = ApplicationResponse::query()
-            ->where('agenda_id', $agendaItem->id)
-            ->where('user_id', $user->id)
-            ->firstOrFail();
+        $applicationResponse = $agendaItem->getApplicationFormResponses()->whereBelongsTo($user)->firstOrFail();
 
         return view('forms.inschrijven_details', [
             'agendaId' => $agendaItem->id,

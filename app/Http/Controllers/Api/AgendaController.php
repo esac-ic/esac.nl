@@ -30,39 +30,19 @@ class AgendaController extends Controller
                 // Only the current user's registration, to show whether they signed up.
                 'getApplicationFormResponses' => fn ($query) => $query->where('user_id', $request->user()?->id),
             ])
-            ->withCount('getApplicationFormResponses');
-
-        $limit = $request->integer('limit', 9);
-        $start = $request->integer('start');
-
-        // Apply filters
-        if ($category = $request->integer('category')) {
-            $agendaItemQuery->where('category', $category);
-        }
-
-        if ($startDate = $request->date('startDate', 'd-m-Y', config('app.display_timezone'))?->startOfDay()->utc()) {
-            $agendaItemQuery->where(function ($query) use ($startDate) {
-                $query->where('start_date', '>=', $startDate)
-                    ->orWhere('end_date', '>=', $startDate);
-            });
-        }
-
-        if ($endDate = $request->date('endDate', 'd-m-Y', config('app.display_timezone'))?->endOfDay()->utc()) {
-            $agendaItemQuery->where('start_date', '<=', $endDate);
-        }
-
-        $agendaItemQuery->oldest('start_date');
-
-        $agendaItemCount = $agendaItemQuery->count();
-
-        $agendaItems = $agendaItemQuery
-            ->skip($start)
-            ->take($limit)
-            ->get();
+            ->withCount('getApplicationFormResponses')
+            ->when($request->integer('category'), fn ($query, $category) => $query->where('category', $category))
+            ->when($request->date('startDate', 'd-m-Y', config('app.display_timezone'))?->startOfDay()->utc(), fn ($query, $startDate) => $query->where(
+                fn ($query) => $query->where('start_date', '>=', $startDate)->orWhere('end_date', '>=', $startDate)
+            ))
+            ->when($request->date('endDate', 'd-m-Y', config('app.display_timezone'))?->endOfDay()->utc(), fn ($query, $endDate) => $query->where('start_date', '<=', $endDate))
+            ->oldest('start_date');
 
         return response()->json([
-            'agendaItemCount' => $agendaItemCount,
-            'agendaItems' => AgendaItemResource::collection($agendaItems),
+            'agendaItemCount' => $agendaItemQuery->count(),
+            'agendaItems' => AgendaItemResource::collection(
+                $agendaItemQuery->skip($request->integer('start'))->take($request->integer('limit', 9))->get()
+            ),
         ]);
     }
 

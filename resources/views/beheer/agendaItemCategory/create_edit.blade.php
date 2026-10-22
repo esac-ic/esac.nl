@@ -1,11 +1,11 @@
 @extends('layouts.beheer')
 
-@section('title')
-{{$fields['title']}}
-@endsection
+@php($title = $agendaItemCategory->exists ? 'Edit category' : 'Add an event category')
+
+@section('title', $title)
 
 @section('content')
-    <x-form-card :$fields :cancel="$agendaItemCategory === null ? route('agendaItemCategories.index') : route('agendaItemCategories.show', $agendaItemCategory)">
-        <x-field name="name" label="Name" :value="$agendaItemCategory?->name" required />
+    <x-form-card :model="$agendaItemCategory" resource="agendaItemCategories" :$title>
+        <x-field name="name" label="Name" :value="$agendaItemCategory->name" required />
     </x-form-card>
 @endsection
