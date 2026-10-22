@@ -8,13 +8,12 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\SoftDeletes;
-use Illuminate\Support\Collection;
 
 #[Fillable([
     'name',
     'parent_id',
     'url_name',
-    'after',
+    'position',
     'menu_item',
     'content',
 ])]
@@ -55,14 +54,6 @@ class MenuItem extends Model
     }
 
     /**
-     * @return BelongsTo<MenuItem, $this>
-     */
-    public function afterItem(): BelongsTo
-    {
-        return $this->belongsTo(MenuItem::class, 'after');
-    }
-
-    /**
      * Items that are shown in the menu.
      */
     #[Scope]
@@ -71,36 +62,9 @@ class MenuItem extends Model
         $query->where('menu_item', true);
     }
 
-    public static function sortMenuList(Collection $menuList): array
+    #[Scope]
+    protected function ordered(Builder $query): void
     {
-        $newList = [];
-        // get a menu item which is not after one
-        $firstItem = $menuList->where('after', '=', null)->first();
-        if ($firstItem == null) {
-            if (count($menuList) == 0) {
-                return $newList;
-            }
-            // there aren't any menu items witch don't have a menu after so we take the first item from te menu item
-            $firstItem = $menuList[0];
-        }
-
-        array_push($newList, $firstItem);
-
-        for ($i = 0; $i < count($newList); $i++) {
-            $newItems = $menuList->where('after', '=', $newList[$i]->id);
-
-            // check if there are new menu item which are after the previos menu item.
-            if (count($newItems) === 0) {
-                $newItems = $menuList->where('after', '=', null);
-            }
-
-            foreach ($newItems as $item) {
-                if (! in_array($item, $newList)) {
-                    array_push($newList, $item);
-                }
-            }
-        }
-
-        return $newList;
+        $query->orderBy('position')->orderBy('id');
     }
 }

@@ -32,7 +32,7 @@ class CreatePageTest extends TestCase
             'url_name' => 'test',
             'itemType' => 'subItem',
             'parentItem' => $this->parent->id,
-            'afterItem' => $this->parent->id,
+            'position' => 20,
             'name' => 'Test title',
             'content' => 'Very cool test content.',
         ], $overrides);
@@ -60,7 +60,7 @@ class CreatePageTest extends TestCase
         $this->assertDatabaseHas(MenuItem::class, [
             'parent_id' => $isSubItem ? $this->parent->id : null,
             'url_name' => $body['url_name'],
-            'after' => $body['afterItem'],
+            'position' => 20,
             'name' => $body['name'],
             'content' => $body['content'],
         ]);
@@ -69,7 +69,7 @@ class CreatePageTest extends TestCase
     #[Test]
     public function an_edited_page_is_validated_when_its_url_name_is_unchanged()
     {
-        $body = $this->body(['itemType' => 'standAlone', 'afterItem' => -1]);
+        $body = $this->body(['itemType' => 'standAlone']);
         $this->post('beheer/pages', $body)->assertValid();
         $page = MenuItem::query()->where('url_name', 'test')->sole();
 
@@ -99,11 +99,12 @@ class CreatePageTest extends TestCase
     }
 
     #[Test]
-    public function create_page_no_after_item_correct()
+    public function the_menu_shows_the_pages_by_position()
     {
-        $this->post('beheer/pages', $this->body(['afterItem' => -1]))->assertSessionHasNoErrors();
+        $this->post('beheer/pages', $this->body(['url_name' => 'second', 'name' => 'Second', 'itemType' => 'standAlone', 'position' => 20, 'menu_item' => true]));
+        $this->post('beheer/pages', $this->body(['url_name' => 'first', 'name' => 'First', 'itemType' => 'standAlone', 'position' => 5, 'menu_item' => true]));
 
-        $this->assertDatabaseHas(MenuItem::class, ['url_name' => 'test', 'after' => null]);
+        $this->get('second')->assertSeeInOrder(['navbar-nav', 'Parent', 'First', 'Second']);
     }
 
     #[Test]
@@ -111,7 +112,7 @@ class CreatePageTest extends TestCase
     {
         $this->post('beheer/pages')
             ->assertRedirect()
-            ->assertInvalid(['url_name', 'itemType', 'afterItem', 'name', 'content']);
+            ->assertInvalid(['url_name', 'itemType', 'position', 'name', 'content']);
 
         $this->assertDatabaseCount(MenuItem::class, 1);
     }

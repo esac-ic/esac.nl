@@ -22,7 +22,7 @@ Page
                 <x-detail-row label="Sub item of">{{ $page->parent?->name }}</x-detail-row>
                 <x-detail-row label="URL name">{{$page->url_name}}</x-detail-row>
                 <x-detail-row label="User needs to be logged in to view the page">{{($page->login)? 'Yes' : 'No'}}</x-detail-row>
-                <x-detail-row label="After menu item">{{ $page->afterItem?->name }}</x-detail-row>
+                <x-detail-row label="Position">{{ $page->position }}</x-detail-row>
                 @foreach($subItems as $subItem)
                     <tr>
                         @if($loop->first)
