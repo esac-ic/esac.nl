@@ -42,15 +42,8 @@ class PaginaBeheerController extends Controller implements HasMiddleware
 
     public function store(PageRequest $request): RedirectResponse
     {
-        $data = $request->all();
-        $menuItem = new MenuItem($data);
-        if ($data['itemType'] === 'subItem') {
-            $menuItem->parent_id = $data['parentItem'];
-        }
-        $menuItem->url_name = $data['url_name'];
-        $menuItem->after = $data['afterItem'] == -1 ? null : $data['afterItem'];
-        $menuItem->login = array_key_exists('login', $data);
-        $menuItem->menu_item = array_key_exists('menu_item', $data);
+        $menuItem = new MenuItem($request->safe()->only(['name', 'url_name', 'content']));
+        $this->fillMenuPosition($request, $menuItem);
         // These can only be changed in the database.
         $menuItem->deletable = true;
         $menuItem->editable = true;
@@ -83,16 +76,9 @@ class PaginaBeheerController extends Controller implements HasMiddleware
 
     public function update(PageRequest $request, MenuItem $page): RedirectResponse
     {
-        $data = $request->all();
-        $page->update($data);
-
-        $page->parent_id = $data['itemType'] === 'subItem' ? $data['parentItem'] : null;
-        if ($page->editable) {
-            $page->url_name = $data['url_name'];
-        }
-        $page->menu_item = array_key_exists('menu_item', $data);
-        $page->after = $data['afterItem'] == -1 ? null : $data['afterItem'];
-        $page->login = array_key_exists('login', $data);
+        // The request excludes the URL name and content of pages that aren't editable.
+        $page->fill($request->safe()->only(['name', 'url_name', 'content']));
+        $this->fillMenuPosition($request, $page);
         $page->save();
 
         return to_route('pages.index')->with('message', 'Page is edited');
@@ -109,5 +95,13 @@ class PaginaBeheerController extends Controller implements HasMiddleware
         }
 
         return to_route('pages.index')->with('message', 'Menu item removed');
+    }
+
+    private function fillMenuPosition(PageRequest $request, MenuItem $menuItem): void
+    {
+        $menuItem->parent_id = $request->validated('itemType') === 'subItem' ? $request->validated('parentItem') : null;
+        $menuItem->after = $request->validated('afterItem');
+        $menuItem->login = $request->has('login');
+        $menuItem->menu_item = $request->has('menu_item');
     }
 }

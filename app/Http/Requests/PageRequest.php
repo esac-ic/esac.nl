@@ -15,11 +15,12 @@ class PageRequest extends FormRequest
 
         return [
             'url_name' => [$fixed, 'required', 'max:255', Rule::unique('menu_items', 'url_name')->ignore($page)],
-            'itemType' => 'required',
+            'itemType' => ['required', Rule::in(['standAlone', 'subItem'])],
             'name' => 'required|max:255',
             'content' => [$fixed, 'required'],
-            'afterItem' => 'required',
-            'parentItem' => 'required_if:itemType,subItem',
+            // -1 means the item is first in its menu.
+            'afterItem' => [Rule::excludeIf($this->input('afterItem') == -1), 'required', Rule::exists('menu_items', 'id')],
+            'parentItem' => ['exclude_unless:itemType,subItem', 'required', Rule::exists('menu_items', 'id')],
         ];
     }
 }
