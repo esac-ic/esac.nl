@@ -26,8 +26,16 @@ services:
       CADDY_SERVER_EXTRA_DIRECTIVES: |
         header X-Frame-Options "SAMEORIGIN"
         header X-Content-Type-Options "nosniff"
-        # Uploads are served as files, never run as PHP
+        header Strict-Transport-Security "max-age=31536000"
+        # Mix versions the built assets with ?id=<hash>
+        @versioned {
+          path /css/* /js/*
+          query id=*
+        }
+        header @versioned Cache-Control "public, max-age=604800"
+        # Uploads are served as files, never run as PHP; thumbnails are replaced under the same name
         @storage path /storage/*
+        header @storage Cache-Control "public, max-age=3600"
         handle @storage {
           file_server
         }
