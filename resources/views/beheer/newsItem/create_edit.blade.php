@@ -20,7 +20,7 @@
             </ul>
         @endif
 
-        {{ html()->form($fields['method'], url($fields['url']))->acceptsFiles()->open() }}
+        {{ html()->form($fields['method'], $fields['url'])->acceptsFiles()->open() }}
         <div class="card">
             <div class="card-header">
                 <h3>{{$fields['title']}}</h3>
@@ -56,7 +56,7 @@
         <div class="my-4">
             {{ html()->submit('Save')->class('btn btn-primary') }}
             {{ html()->form()->close() }}
-            <a class="btn btn-danger btn-close" href="{{ ($newsItem == null) ? ('/newsItems') : ('/newsItems/' . $newsItem->id)}}">Cancel</a>
+            <a class="btn btn-danger btn-close" href="{{ $newsItem === null ? route('newsItems.index') : route('newsItems.show', $newsItem) }}">Cancel</a>
         </div>
     </div>
 @endsection

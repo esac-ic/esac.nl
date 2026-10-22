@@ -20,7 +20,7 @@
     @endif
 
     <div id="app">
-        {{ html()->form($fields['method'], url($fields['url']))->open() }}
+        {{ html()->form($fields['method'], $fields['url'])->open() }}
             <div class="card">
                 <div class="card-header">
                     <h3>{{$fields['title']}}</h3>

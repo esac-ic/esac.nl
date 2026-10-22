@@ -43,8 +43,8 @@ class RegistrationController extends Controller implements HasMiddleware
                     'name' => $applicationRespons->agendaItem->title,
                     'startDate' => Carbon::parse($applicationRespons->agendaItem->startDate)->format('d-m-Y H:i'),
                     'actions' => '
-                        <a href="' . url('/forms/users/' . $user->id . '/detail/' . $applicationRespons->agenda_id) . '"><span title="' . 'Show entered information' . '" class="ion-eye" aria-hidden="true"></span></a>
-                        <a href="#" id="delete_button" data-url="' . url('/forms/' . $applicationRespons->agenda_id . '/remove/' . $applicationRespons->id) . '"><span  class="ion-trash-a"></span></a>
+                        <a href="' . route('forms.users.show', [$user, $applicationRespons->agenda_id]) . '"><span title="' . 'Show entered information' . '" class="ion-eye" aria-hidden="true"></span></a>
+                        <a href="#" id="delete_button" data-url="' . route('forms.destroy', [$applicationRespons->agenda_id, $applicationRespons]) . '"><span  class="ion-trash-a"></span></a>
                     ',
                 ]);
             }

@@ -32,7 +32,7 @@ class NewsItemController extends Controller implements HasMiddleware
 
     public function create(): View
     {
-        $fields = ['title' => 'Add a news item ', 'method' => 'POST', 'url' => '/newsItems'];
+        $fields = ['title' => 'Add a news item ', 'method' => 'POST', 'url' => route('newsItems.store')];
         $newsItem = null;
         return view('beheer.newsItem.create_edit', compact('fields', 'newsItem'));
     }
@@ -46,7 +46,7 @@ class NewsItemController extends Controller implements HasMiddleware
         }
 
         Session::flash("message", 'News item added');
-        return redirect('/newsItems');
+        return to_route('newsItems.index');
     }
 
     public function show(Request $request, NewsItem $newsItem): View
@@ -56,7 +56,7 @@ class NewsItemController extends Controller implements HasMiddleware
 
     public function edit(Request $request, NewsItem $newsItem): View
     {
-        $fields = ['title' => 'Edit news item ', 'method' => 'PATCH', 'url' => '/newsItems/' . $newsItem->id];
+        $fields = ['title' => 'Edit news item ', 'method' => 'PATCH', 'url' => route('newsItems.update', $newsItem)];
         return view('beheer.newsItem.create_edit', compact('fields', 'newsItem'));
     }
 
@@ -69,7 +69,7 @@ class NewsItemController extends Controller implements HasMiddleware
         }
 
         Session::flash("message", 'News item edited');
-        return redirect('/newsItems');
+        return to_route('newsItems.index');
     }
 
     public function destroy(Request $request, NewsItem $newsItem): RedirectResponse
@@ -77,7 +77,7 @@ class NewsItemController extends Controller implements HasMiddleware
         $newsItem->delete();
 
         Session::flash("message", 'News item removed');
-        return redirect('/newsItems');
+        return to_route('newsItems.index');
     }
 
     private function uploadAndResizeImage(Request $request, $newsItem): void

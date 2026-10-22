@@ -21,12 +21,12 @@
 
         <div class="col-md-6">
             <div class="btn-group mt-2 float-md-right" role="group" aria-label="Actions">
-                <a href="{{url('books/create')}}" class="btn btn-primary">
+                <a href="{{route('books.create')}}" class="btn btn-primary">
                     <span title="{{'New book'}}" class="ion-plus" aria-hidden="true"></span>
                     {{'New book'}}
                 </a>
                 
-                <a href="{{url('books/exportLibrary')}}" class="btn btn-primary">
+                <a href="{{ route('books.export') }}" class="btn btn-primary">
                     <span title="{{'Export library'}}" class="ion-android-download" aria-hidden="true"></span>
                     {{'Export books'}}
                 </a>
@@ -55,8 +55,8 @@
                 <td>{{$book->type}}</td>
                 <td>{{$book->code}}</td>
                 <td>
-                    <a class="mr-1 ml-1" href="{{url('/books/' . $book->id . '/edit')}}"><span title="{{'Edit book'}}" class="ion-edit font-size-120" aria-hidden="true"></span></a>
-                    <a class="mr-1 ml-1" href="{{url('/books/'. $book->id)}}"><span title="Show book" class="ion-eye font-size-120" aria-hidden="true"></span></a>
+                    <a class="mr-1 ml-1" href="{{route('books.edit', $book)}}"><span title="{{'Edit book'}}" class="ion-edit font-size-120" aria-hidden="true"></span></a>
+                    <a class="mr-1 ml-1" href="{{route('books.show', $book)}}"><span title="Show book" class="ion-eye font-size-120" aria-hidden="true"></span></a>
                 </td>
             </tr>
         @endforeach

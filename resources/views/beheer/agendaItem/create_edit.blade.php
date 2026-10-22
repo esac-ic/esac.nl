@@ -20,7 +20,7 @@
         </ul>
     @endif
 
-    {{ html()->form($fields['method'], url($fields['url']))->acceptsFiles()->open() }}
+    {{ html()->form($fields['method'], $fields['url'])->acceptsFiles()->open() }}
     @include('beheer.agendaItem.create_edit_default_info')
     @include('beheer.agendaItem.create_edit_image')
     @include('beheer.agendaItem.create_edit_content')
@@ -28,7 +28,7 @@
     <div class="my-4">
         {{ html()->submit('Save')->class('btn btn-primary') }}
         {{ html()->form()->close() }}
-        <a class="btn btn-danger btn-close" href="{{ ($agendaItem == null) ? ('/agendaItems') : ('/agendaItems/' . $agendaItem->id)}}">{{'Cancel'}}</a>
+        <a class="btn btn-danger btn-close" href="{{ $agendaItem === null ? route('agendaItems.index') : route('agendaItems.show', $agendaItem) }}">{{'Cancel'}}</a>
     </div>
 @endsection
 

@@ -74,7 +74,7 @@ class ApplicationFormController extends Controller implements HasMiddleware
         $applicationFormRepository->create($request->all());
 
         Session::flash("message", 'Application form added');
-        return redirect()->route('beheer.applicationForms.index');
+        return to_route('beheer.applicationForms.index');
     }
 
     /**
@@ -129,7 +129,7 @@ class ApplicationFormController extends Controller implements HasMiddleware
         $applicationFormRepository->update($id, $request->all());
 
         Session::flash("message", 'Application form edited');
-        return redirect()->route('beheer.applicationForms.index');
+        return to_route('beheer.applicationForms.index');
     }
 
     /**
@@ -144,6 +144,6 @@ class ApplicationFormController extends Controller implements HasMiddleware
         $applicationFormRepository->delete($id);
 
         Session::flash("message", 'Application form edited');
-        return redirect()->route('beheer.applicationForms.index');
+        return to_route('beheer.applicationForms.index');
     }
 }

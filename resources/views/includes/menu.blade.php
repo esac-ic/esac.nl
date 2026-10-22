@@ -35,13 +35,13 @@
                                     <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
                                         @foreach($menu->getSubMenuItem($menuItem->id) as $subItem)
                                             <a class="dropdown-item"
-                                               href="{{url('/'. $subItem->urlName)}}">{{$subItem->name}}</a>
+                                               href="{{ route('front-end.page', $subItem->urlName) }}">{{$subItem->name}}</a>
                                         @endforeach
                                     </div>
                                 </li>
                             @else
                                 <li class="nav-item">
-                                    <a class="nav-link" href="{{url('/'. $menuItem->urlName)}}">{{$menuItem->name}}</a>
+                                    <a class="nav-link" href="{{ route('front-end.page', $menuItem->urlName) }}">{{$menuItem->name}}</a>
                                 </li>
                             @endif
                         @endforeach
@@ -50,14 +50,14 @@
                     <ul class="navbar-nav">
                         @if (Auth::guest())
                             <li class="nav-item mr-2">
-                                <a class="nav-link" href="{{ url('/login') }}" class="nav-link">
+                                <a class="nav-link" href="{{ route('login') }}" class="nav-link">
                                     Login
                                 </a>
                             </li>
                         @else
                             @if(Auth::user()->hasBackendRights())
                                 <li class="nav-item">
-                                    <a class="nav-link" href="{{ url('beheer/home') }}" class="nav-link">
+                                    <a class="nav-link" href="{{ route('beheer.home') }}" class="nav-link">
                                         {{'Management'}}
                                     </a>
                                 </li>
@@ -69,10 +69,10 @@
                                 </a>
                                 <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
                                     <a class="dropdown-item"
-                                       href="{{ url('/users/'. Auth::user()->id) . '?back=false'}}">{{ 'Account overview' }}</a>
-                                    <a class="dropdown-item" href="{{ url('/logout') }}"
+                                       href="{{ route('users.show', [Auth::user(), 'back' => 'false']) }}">{{ 'Account overview' }}</a>
+                                    <a class="dropdown-item" href="{{ route('logout') }}"
                                        onclick="event.preventDefault(); document.getElementById('logout-form').submit();">Logout</a>
-                                    <form id="logout-form" action="{{ url('/logout') }}" method="POST"
+                                    <form id="logout-form" action="{{ route('logout') }}" method="POST"
                                           style="display: none;">
                                         @csrf
                                     </form>
@@ -80,7 +80,7 @@
                             </li>
                         @endif @if (Auth::guest())
                             <li class="nav-item d-flex align-items-center">
-                                <a class="btn btn-info text-dark" href="/signup">{{ 'Become a member' }}</a>
+                                <a class="btn btn-info text-dark" href="{{ route('front-end.signup') }}">{{ 'Become a member' }}</a>
                             </li>
                         @endif
                     </ul>

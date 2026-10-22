@@ -22,7 +22,7 @@
         <div class="col-md-6">
             <div class="btn-group mt-2 float-md-right" role="group" aria-label="Actions">
             @if($user->isPendingMember() and \Illuminate\Support\Facades\Auth::user()->hasRole(\App\Enums\Role::Administrator->value))
-                {{ html()->form('POST', url('/users/'.$user->id . '/approveAsPendingMember'))->open() }}
+                {{ html()->form('POST', route('users.approveAsPendingMember', $user))->open() }}
                 @method('PATCH')
                 <button type="submit" class="btn btn-success"><em class="ion-checkmark"></em> {{'Approve as member'}}</button>
                 {{ html()->form()->close() }}
@@ -37,30 +37,30 @@
                 </form>
             @else
                 @if($user->isOldMember() and \Illuminate\Support\Facades\Auth::user()->hasRole(\App\Enums\Role::Administrator->value))
-                    {{ html()->form('POST', url('/users/'.$user->id . '/makeActiveMember'))->open() }}
+                    {{ html()->form('POST', route('users.makeActiveMember', $user))->open() }}
                     @method('PATCH')
                         <button type="submit" class="btn btn-success"><em class="ion-plus"></em> {{'Make active member'}}</button>
                     {{ html()->form()->close() }}
                 @endif
-                <a href="{{url('/users/'.$user->id . '/edit' )}}" class="btn btn-primary">
+                <a href="{{route('users.edit', $user)}}" class="btn btn-primary">
                     <span title="{{'Edit'}}" class="ion-edit" aria-hidden="true"></span>
                     {{'Edit'}}
                 </a>
                 @if(\Illuminate\Support\Facades\Auth::user()->hasRole(\App\Enums\Role::Administrator->value,\App\Enums\Role::CertificateAdministrator->value))
-                    <a href="{{url('/users/'.$user->id . '/addCertificate' )}}" class="btn btn-primary">
+                    <a href="{{ route('users.certificates.create', $user) }}" class="btn btn-primary">
                         <span title="{{'Add certificate'}}" class="ion-plus" aria-hidden="true"></span>
                         {{'Add certificate'}}
                     </a>
                 @endif
                 @if(app('request')->input('back') != "false")
-                    <a href="{{url('/users/')}}" class="btn btn-primary">
+                    <a href="{{route('users.index')}}" class="btn btn-primary">
                         <span title="{{'Back'}}" class="ion-android-arrow-back" aria-hidden="true"></span>
                         {{'Back'}}
                     </a>
                 @endif
                 @if(\Illuminate\Support\Facades\Auth::user()->hasRole(\App\Enums\Role::Administrator->value))
                     @if($user->isActiveMember())
-                        {{ html()->form('POST', url('/users/'.$user->id . '/removeAsActiveMember'))->open() }}
+                        {{ html()->form('POST', route('users.removeAsActiveMember', $user))->open() }}
                         @method('PATCH')
                         <button type="submit" class="btn btn-danger"><em class="ion-trash-a"></em> {{'Remove as active member'}}</button>
                         {{ html()->form()->close() }}
@@ -268,11 +268,11 @@
                                     {{$certificate->abbreviation}}
                                 </td>
                                 <td>
-                                    <a href="{{url('/users/' . $user->id . '/addCertificate/' . $certificate->id)}}"><span title="Edit Certificate" class="ion-edit" aria-hidden="true"></span></a>
-                                    <a href="{{url('/users/' . $user->id . '/addCertificate/' . $certificate->id)}}" onclick="event.preventDefault(); document.getElementById('delete-usercertificate-{{$certificate->id}}').submit();">
+                                    <a href="{{ route('users.certificates.edit', [$user, $certificate]) }}"><span title="Edit Certificate" class="ion-edit" aria-hidden="true"></span></a>
+                                    <a href="{{ route('users.certificates.destroy', [$user, $certificate]) }}" onclick="event.preventDefault(); document.getElementById('delete-usercertificate-{{$certificate->id}}').submit();">
                                         <span title="Remove Certificate" class="ion-trash-a" aria-hidden="true"></span>
                                     </a>
-                                    {{ html()->form('POST', url('/users/' . $user->id . '/addCertificate/' . $certificate->id))->id("delete-usercertificate-$certificate->id")->open() }}
+                                    {{ html()->form('POST', route('users.certificates.destroy', [$user, $certificate]))->id("delete-usercertificate-$certificate->id")->open() }}
                                     @method('DELETE')
                                     {{ html()->form()->close() }}
                                 </td>
@@ -311,7 +311,7 @@
         $('#registrations_table').DataTable({
             "order": [[ 1, "asc" ]],
             "ajax": {
-                'url' : '{{url('api/user/registrations?user_id=' . $user->id)}}',
+                'url' : '{{ route('api.user.registrations', ['user_id' => $user->id]) }}',
                 "dataSrc": ""
             },
             "columns": [

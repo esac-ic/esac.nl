@@ -64,7 +64,7 @@ class UserController extends Controller implements HasMiddleware
     {
         $fields = ['title' => 'Add user',
             'method' => 'POST',
-            'url' => '/users'];
+            'url' => route('users.store')];
         $user = null;
         $roles = Rol::all();
         $ownedRoles = collect();
@@ -81,7 +81,7 @@ class UserController extends Controller implements HasMiddleware
 
         Session::flash("message", 'User is added');
 
-        return redirect('/users');
+        return to_route('users.index');
     }
 
     public function show(User $user)
@@ -98,7 +98,7 @@ class UserController extends Controller implements HasMiddleware
 
         $fields = ['title' => 'Edit user',
             'method' => 'PATCH',
-            'url' => '/users/' . $user->id];
+            'url' => route('users.update', $user)];
 
         $roles = Rol::all();
         $ownedRoles = $user->roles;
@@ -119,11 +119,11 @@ class UserController extends Controller implements HasMiddleware
         }
 
         if (Auth::user()->id === $user->id) {
-            return redirect('/users/' . $user->id . '?back=false');
+            return to_route('users.show', [$user, 'back' => 'false']);
         } else {
             Session::flash("message", 'Changes to user have been saved');
 
-            return redirect('/users');
+            return to_route('users.index');
         }
     }
 
@@ -131,7 +131,7 @@ class UserController extends Controller implements HasMiddleware
     {
         $user->removeAsActiveMember();
 
-        return redirect('/users/' . $user->id);
+        return to_route('users.show', $user);
     }
 
     public function exportUsers(UsersExport $usersExport)
@@ -161,12 +161,12 @@ class UserController extends Controller implements HasMiddleware
     {
         if ($user->makeActiveMember()) //this should never fail unless some validation fails somewhere or the intended flow of the website breaks
         {
-            return redirect('/users/' . $user->id);
+            return to_route('users.show', $user);
         }
         else
         {
             Session::flash("error", 'Failed to make member active');
-            return redirect(route('users.index-old-members'));
+            return to_route('users.index-old-members');
         }
     }
 }

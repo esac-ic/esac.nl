@@ -13,7 +13,6 @@ use App\Repositories\UserRepository;
 use App\Services\AgendaApplicationFormService;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Redirect;
 
 class FrontEndController extends Controller
 {
@@ -64,7 +63,7 @@ class FrontEndController extends Controller
         $content = $menuItem->content;
 
         if (!$menuItem->show()) {
-            return Redirect::to('/login');
+            return to_route('login');
         }
 
         return view("front-end.zekeringen", compact('curPageName', 'content'));
@@ -115,7 +114,7 @@ class FrontEndController extends Controller
         $content = $menuItem->content;
 
         if (!$menuItem->show()) {
-            return Redirect::to('/login');
+            return to_route('login');
         }
 
         return view('front-end.memberlist', compact('users', 'curPageName', 'content'));
@@ -143,7 +142,7 @@ class FrontEndController extends Controller
             abort(404);
         }
         if (!$menuItem->show()) {
-            return Redirect::to('/login');
+            return to_route('login');
         }
 
         $curPageName = $menuItem->name;

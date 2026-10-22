@@ -43,6 +43,6 @@ class SettingsController extends Controller implements HasMiddleware
         }
 
         Session::flash("message", 'Settings updated');
-        return redirect('/beheer/settings');
+        return to_route('beheer.settings.index');
     }
 }

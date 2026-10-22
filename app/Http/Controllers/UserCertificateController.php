@@ -35,7 +35,7 @@ class UserCertificateController extends Controller implements HasMiddleware
     {
         $fields = ['title' => 'Add certificate',
             'method' => 'POST',
-            'url' => '/users/' . $user->id . '/addCertificate'];
+            'url' => route('users.certificates.store', $user)];
 
         $certificates = [];
 
@@ -57,14 +57,14 @@ class UserCertificateController extends Controller implements HasMiddleware
         $this->validateInput($request);
         $this->_userRepository->addCertificate($user->id, $request->all());
 
-        return redirect('/users/' . $user->id);
+        return to_route('users.show', $user);
     }
 
     public function editUserCertificate(Request $request, User $user, Certificate $certificate): View
     {
         $fields = ['title' => 'Edit certificate',
             'method' => 'PATCH',
-            'url' => '/users/' . $user->id . '/addCertificate/' . $certificate->id];
+            'url' => route('users.certificates.update', [$user, $certificate])];
 
         $certificates = [];
 
@@ -82,14 +82,14 @@ class UserCertificateController extends Controller implements HasMiddleware
         $this->validateInput($request);
         $user->certificates()->detach($certificate->id);
         $this->_userRepository->addCertificate($user->id, $request->all());
-        return redirect('/users/' . $user->id);
+        return to_route('users.show', $user);
     }
 
     public function deleteUserCertificate(Request $request, User $user, Certificate $certificate): RedirectResponse
     {
         $user->certificates()->detach($certificate->id);
 
-        return redirect('/users/' . $user->id);
+        return to_route('users.show', $user);
     }
 
     private function validateInput(Request $request): void

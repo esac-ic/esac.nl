@@ -12,11 +12,11 @@
 
         <div class="col-md-6">
             <div class="btn-group mt-2 float-md-right" role="group" aria-label="Actions">
-                <a href="{{url('/newsItems/'.$newsItem->id . '/edit' )}}" class="btn btn-primary">
+                <a href="{{route('newsItems.edit', $newsItem)}}" class="btn btn-primary">
                     <em class="ion-edit"></em> {{'Edit'}}
                 </a>
                 @if(app('request')->input('back') != 'false')
-                    <a href="{{url('/newsItems/')}}" class="btn btn-primary">
+                    <a href="{{route('newsItems.index')}}" class="btn btn-primary">
                         <em class="ion-android-arrow-back"></em> {{'Back'}}
                     </a>
                 @endif

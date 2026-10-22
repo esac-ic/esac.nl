@@ -24,7 +24,7 @@
             <h3>{{$fields['title']}}</h3>
         </div>
         <div class="card-body">
-            {{ html()->form($fields['method'], url($fields['url']))->open() }}
+            {{ html()->form($fields['method'], $fields['url'])->open() }}
             <div class="form-group">
                 {{ html()->label('Title', 'title') }}
                 {{ html()->text('title', ($book != null) ? $book->title : "")->class('form-control')->required() }}
@@ -53,6 +53,6 @@
     <div class="my-4">
         {{ html()->submit('Save')->class('btn btn-primary') }}
         {{ html()->form()->close() }}
-        <a class="btn btn-danger btn-close" href="{{ ($book == null) ? ('/books') : ('/books/' . $book->id)}}">{{'Cancel'}}</a>
+        <a class="btn btn-danger btn-close" href="{{ $book === null ? route('books.index') : route('books.show', $book) }}">{{'Cancel'}}</a>
     </div>
 @endsection
