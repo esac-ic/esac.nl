@@ -47,16 +47,19 @@ services:
 
   worker:
     <<: *app
-    command: ["php", "artisan", "queue:work"]
-    # The image's health check probes Caddy, which only runs in the app service
-    healthcheck:
-      disable: true
+    # Restarts hourly (compose brings it back) and gives up on a job after 3 tries
+    command: ["php", "artisan", "queue:work", "--tries=3", "--max-time=3600"]
+    # The image's health check probes Caddy, which only runs in the app service; check the database connection instead
+    healthcheck: &artisan-healthcheck
+      test: ["CMD", "php", "artisan", "db:monitor"]
+      interval: 60s
+      retries: 3
+      start_period: 30s
 
   scheduler:
     <<: *app
     command: ["php", "artisan", "schedule:work"]
-    healthcheck:
-      disable: true
+    healthcheck: *artisan-healthcheck
 
   mysql:
     image: mysql:9.7
