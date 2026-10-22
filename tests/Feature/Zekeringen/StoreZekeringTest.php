@@ -21,10 +21,10 @@ class StoreZekeringTest extends TestCase
 
         $this->assertEquals(
             [
-                ['text' => 'Top', 'created_by' => $user->id, 'score' => 1, 'parent_id' => null, 'has_parent' => 0],
-                ['text' => 'Reply', 'created_by' => $user->id, 'score' => 1, 'parent_id' => $parent->id, 'has_parent' => 1],
+                ['text' => 'Top', 'created_by' => $user->id, 'score' => 1, 'parent_id' => null],
+                ['text' => 'Reply', 'created_by' => $user->id, 'score' => 1, 'parent_id' => $parent->id],
             ],
-            Zekering::orderBy('id')->get(['text', 'created_by', 'score', 'parent_id', 'has_parent'])->toArray(),
+            Zekering::query()->orderBy('id')->get(['text', 'created_by', 'score', 'parent_id'])->toArray(),
         );
     }
 }

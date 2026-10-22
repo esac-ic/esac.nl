@@ -158,6 +158,14 @@ class User extends Authenticatable
     }
 
     /**
+     * @return HasMany<Zekering, $this>
+     */
+    public function zekeringen(): HasMany
+    {
+        return $this->hasMany(Zekering::class, 'created_by');
+    }
+
+    /**
      * @return HasMany<ApplicationResponse, $this>
      */
     public function applicationResponses(): HasMany

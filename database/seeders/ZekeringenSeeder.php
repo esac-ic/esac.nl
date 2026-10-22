@@ -20,7 +20,6 @@ class ZekeringenSeeder extends Seeder
         $zekering->created_by = 1;
         $zekering->score = 1;
         $zekering->parent_id = 1;
-        $zekering->has_parent = 0;
 
         // add zekering(en)
         $zekering->save();
@@ -30,7 +29,6 @@ class ZekeringenSeeder extends Seeder
         $zekering->created_by = 1;
         $zekering->score = 1;
         $zekering->parent_id = 2;
-        $zekering->has_parent = 0;
 
         // add zekering(en)
         $zekering->save();
@@ -40,7 +38,6 @@ class ZekeringenSeeder extends Seeder
         $zekering->created_by = 1;
         $zekering->score = 1;
         $zekering->parent_id = 2;
-        $zekering->has_parent = 1;
 
         // add zekering(en)
         $zekering->save();
