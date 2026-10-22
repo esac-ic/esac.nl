@@ -105,8 +105,8 @@ class AgendaItemController extends Controller implements HasMiddleware
         return view('beheer.agendaItem.create_edit', [
             'fields' => $fields,
             'agendaItem' => $agendaItem,
-            'agendaItemCategories' => AgendaItemCategory::query()->pluck('name', 'id')->all(),
-            'applicationForms' => ApplicationForm::query()->pluck('name', 'id')->all(),
+            'agendaItemCategories' => AgendaItemCategory::query()->orderBy('name')->pluck('name', 'id')->all(),
+            'applicationForms' => ApplicationForm::query()->orderBy('name')->pluck('name', 'id')->all(),
         ]);
     }
 

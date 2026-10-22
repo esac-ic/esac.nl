@@ -36,7 +36,7 @@ class PaginaBeheerController extends Controller implements HasMiddleware
                 'method' => 'POST',
                 'url' => route('pages.store'),
             ],
-            'pages' => MenuItem::all(),
+            'pages' => MenuItem::query()->orderBy('name')->get(),
         ]);
     }
 
@@ -77,7 +77,7 @@ class PaginaBeheerController extends Controller implements HasMiddleware
                 'method' => 'PATCH',
                 'url' => route('pages.update', $page),
             ],
-            'pages' => MenuItem::all(),
+            'pages' => MenuItem::query()->orderBy('name')->get(),
         ]);
     }
 

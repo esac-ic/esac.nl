@@ -28,7 +28,7 @@ class UserCertificateController extends Controller implements HasMiddleware
                 'method' => 'POST',
                 'url' => route('users.certificates.store', $user),
             ],
-            'certificates' => Certificate::query()->whereKeyNot($user->certificates->modelKeys())->pluck('name', 'id')->all(),
+            'certificates' => Certificate::query()->orderBy('name')->whereKeyNot($user->certificates->modelKeys())->pluck('name', 'id')->all(),
             'userCertificate' => null,
         ]);
     }
@@ -48,7 +48,7 @@ class UserCertificateController extends Controller implements HasMiddleware
                 'method' => 'PATCH',
                 'url' => route('users.certificates.update', [$user, $certificate]),
             ],
-            'certificates' => Certificate::query()->pluck('name', 'id')->all(),
+            'certificates' => Certificate::query()->orderBy('name')->pluck('name', 'id')->all(),
             'userCertificate' => $user->certificates()->find($certificate->id),
         ]);
     }
