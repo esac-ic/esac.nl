@@ -21,7 +21,7 @@
 
         <div class="col-md-6">
             <div class="btn-group mt-2 float-md-right" role="group" aria-label="Actions">
-                <a href="{{url('agendaItemCategories/create')}}" class="btn btn-primary">
+                <a href="{{route('agendaItemCategories.create')}}" class="btn btn-primary">
                     <span title="{{'New user'}}" class="ion-plus" aria-hidden="true"></span>
                     {{'New category'}}
                 </a>
@@ -41,8 +41,8 @@
             <tr>
                 <td>{{$category->name}}</td>
                 <td>
-                    <a class="mr-1 ml-1" href="{{url('/agendaItemCategories/' . $category->id . '/edit')}}"><span title="{{'Edit category'}}" class="ion-edit font-size-120" aria-hidden="true"></span></a>
-                    <a class="mr-1 ml-1" href="{{url('/agendaItemCategories/'. $category->id)}}"><span title="Show category" class="ion-eye font-size-120" aria-hidden="true"></span></a>
+                    <a class="mr-1 ml-1" href="{{route('agendaItemCategories.edit', $category)}}"><span title="{{'Edit category'}}" class="ion-edit font-size-120" aria-hidden="true"></span></a>
+                    <a class="mr-1 ml-1" href="{{route('agendaItemCategories.show', $category)}}"><span title="Show category" class="ion-eye font-size-120" aria-hidden="true"></span></a>
                 </td>
             </tr>
         @endforeach

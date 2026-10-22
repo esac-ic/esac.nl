@@ -47,20 +47,20 @@ class PendingUserController extends Controller implements HasMiddleware
         
         Session::flash("message", 'Your membership request is pending, we will get back to you as soon as possible');
 
-        return redirect('/signup');
+        return to_route('front-end.signup');
     }
 
     public function removeAsPendingMember(Request $request, User $user)
     {
         $user->removeAsPendingMember();
 
-        return redirect('users/pending_members');
+        return to_route('users.indexPendingMembers');
     }
 
     public function approveAsPendingMember(Request $request, User $user)
     {
         $user->approveAsPendingMember();
         
-        return redirect('users/pending_members');
+        return to_route('users.indexPendingMembers');
     }
 }

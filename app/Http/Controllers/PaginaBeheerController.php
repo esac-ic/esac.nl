@@ -45,7 +45,7 @@ class PaginaBeheerController extends Controller implements HasMiddleware
             'title_menu' => 'Add menu item ',
             'title_page' => 'Add page',
             'method' => 'POST',
-            'url' => '/pages'];
+            'url' => route('pages.store')];
         $page = null;
         $pages = $this->_menuRepository->all();
         return view('beheer.menu.create_edit', compact(['page', 'fields', 'pages']));
@@ -59,7 +59,7 @@ class PaginaBeheerController extends Controller implements HasMiddleware
         $this->_menuRepository->create($request->all());
 
         Session::flash("message", 'Page is added');
-        return redirect('/pages');
+        return to_route('pages.index');
     }
 
     public function show(Request $request, MenuItem $page): View
@@ -75,7 +75,7 @@ class PaginaBeheerController extends Controller implements HasMiddleware
             'title_menu' => 'Edit menu page',
             'title_page' => 'Edit page',
             'method' => 'PATCH',
-            'url' => '/pages/' . $page->id];
+            'url' => route('pages.update', $page)];
         $pages = $this->_menuRepository->all();
         return view('beheer.menu.create_edit', compact(['page', 'fields', 'pages']));
     }
@@ -90,7 +90,7 @@ class PaginaBeheerController extends Controller implements HasMiddleware
         $this->_menuRepository->update($page->id, $request->all());
 
         Session::flash("message", 'Page is edited');
-        return redirect('/pages');
+        return to_route('pages.index');
     }
 
     public function destroy(Request $request, MenuItem $page): RedirectResponse
@@ -98,7 +98,7 @@ class PaginaBeheerController extends Controller implements HasMiddleware
         $this->_menuRepository->delete($page->id);
         Session::flash("message", 'Menu item removed');
 
-        return redirect('/pages');
+        return to_route('pages.index');
     }
 
     private function validateData(Request $request): void

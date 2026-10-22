@@ -31,7 +31,7 @@ class CertificateController extends Controller implements HasMiddleware
     {
         $fields = ['title' => 'Add a new certificate',
             'method' => 'POST',
-            'url' => '/certificates'];
+            'url' => route('certificates.store')];
         $certificate = null;
         return view("beheer.certificate.create_edit", compact('certificate', 'fields'));
     }
@@ -41,7 +41,7 @@ class CertificateController extends Controller implements HasMiddleware
         Certificate::create($this->validateInput($request));
 
         Session::flash("message", 'Certificate added');
-        return redirect('/certificates');
+        return to_route('certificates.index');
     }
 
     public function show(Certificate $certificate): View
@@ -53,7 +53,7 @@ class CertificateController extends Controller implements HasMiddleware
     {
         $fields = ['title' => 'Add a new certificate',
             'method' => 'PATCH',
-            'url' => '/certificates/' . $certificate->id];
+            'url' => route('certificates.update', $certificate)];
 
         return view("beheer.certificate.create_edit", compact('certificate', 'fields'));
     }
@@ -63,7 +63,7 @@ class CertificateController extends Controller implements HasMiddleware
         $certificate->update($this->validateInput($request));
 
         Session::flash("message", 'Certificate edited');
-        return redirect('/certificates');
+        return to_route('certificates.index');
     }
 
     public function destroy(Certificate $certificate): RedirectResponse
@@ -71,7 +71,7 @@ class CertificateController extends Controller implements HasMiddleware
         $certificate->delete();
 
         Session::flash("message", 'Certificate removed');
-        return redirect('/certificates');
+        return to_route('certificates.index');
     }
 
     private function validateInput(Request $request): array

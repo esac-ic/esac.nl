@@ -48,7 +48,7 @@ class MailListController extends Controller implements HasMiddleware
     {
         $fields = ['title' => 'Add mailing list',
             'method' => 'POST',
-            'url' => '/mailList'];
+            'url' => route('mailList.store')];
         $mailList = null;
         return view('beheer.mailList.create_edit', compact('fields', 'mailList'));
     }
@@ -66,7 +66,7 @@ class MailListController extends Controller implements HasMiddleware
             Log::error($msg, ['exception' => $e]);
         }
 
-        return redirect('/mailList');
+        return to_route('mailList.index');
     }
 
     public function show(Request $request, $mailList): View
@@ -79,7 +79,7 @@ class MailListController extends Controller implements HasMiddleware
     {
         $this->_mailListFacade->deleteMailList($mailList);
 
-        return redirect('/mailList');
+        return to_route('mailList.index');
     }
 
     public function addMember(Request $request, $mailList): string
@@ -103,6 +103,6 @@ class MailListController extends Controller implements HasMiddleware
         $users = $this->userRepository->getCurrentUsers(); //should give user objects
         
         MemberMassMailListSyncJob::dispatch($users); //add all these users to the maillists corresponding to their member types.
-        return redirect('/mailList');
+        return to_route('mailList.index');
     }
 }

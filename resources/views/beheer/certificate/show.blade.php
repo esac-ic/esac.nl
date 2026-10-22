@@ -12,10 +12,10 @@
 
         <div class="col-md-6">
             <div class="btn-group mt-2 float-md-right" role="group" aria-label="Actions">
-                <a href="{{url('/certificates/'.$certificate->id . '/edit' )}}" class="btn btn-primary">
+                <a href="{{route('certificates.edit', $certificate)}}" class="btn btn-primary">
                     <em class="ion-edit"></em> {{'Edit'}}
                 </a>
-                <a href="{{url('/certificates/')}}" class="btn btn-block btn-primary">
+                <a href="{{route('certificates.index')}}" class="btn btn-block btn-primary">
                     <em class="ion-android-arrow-back"></em> Back
                 </a>
                 <form method="post"

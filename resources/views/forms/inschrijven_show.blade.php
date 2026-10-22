@@ -19,13 +19,13 @@
 
         <div class="col-md-6">
             <div class="btn-group mt-2 float-md-right" role="group" aria-label="Actions">
-                <a href="{{url('forms/admin/' . $agendaItemId)}}" class="btn btn-primary">
+                <a href="{{route('forms.admin.create', $agendaItemId)}}" class="btn btn-primary">
                     <em class="ion-person-add"></em> {{'New subscription'}}
                 </a>
-                <a href="{{url('forms/users/'.$users["agendaItemId"].'/export')}}" class="btn btn-primary">
+                <a href="{{route('forms.users.export', $users["agendaItemId"])}}" class="btn btn-primary">
                     <em class="ion-android-download"></em> {{'Export'}}
                 </a>
-                <a href="{{url('/agendaItems/')}}" class="btn btn-primary">
+                <a href="{{route('agendaItems.index')}}" class="btn btn-primary">
                     <em class="ion-android-arrow-back"></em> {{'Back'}}
                 </a>
             </div>
@@ -48,8 +48,8 @@
                 <td>{{$user->getAddress()}}</td>
 
                 <td>
-                    <a href="{{url('/forms/users/'. $user->id . '/detail/'. $agendaItemId)}}"><span title="{{'Show entered information'}}" class="ion-eye" aria-hidden="true"></span></a>
-                    <a href="#" id="delete_button" data-url="{{url('/forms/'.$users["agendaItemId"].'/remove/'.$user["_signupId"])}}"><span  class="ion-trash-a"></span></a>
+                    <a href="{{route('forms.users.show', [$user->id, $agendaItemId])}}"><span title="{{'Show entered information'}}" class="ion-eye" aria-hidden="true"></span></a>
+                    <a href="#" id="delete_button" data-url="{{route('forms.destroy', [$users["agendaItemId"], $user["_signupId"]])}}"><span  class="ion-trash-a"></span></a>
                 </td>
             </tr>
         @endforeach

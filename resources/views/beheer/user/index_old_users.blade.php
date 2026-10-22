@@ -30,7 +30,7 @@
         @if(\Illuminate\Support\Facades\Auth::user()->hasRole(\App\Enums\Role::Administrator->value))
         <div class="col-md-6">
             <div class="btn-group mt-2 float-md-right" role="group" aria-label="Actions">
-                <a href="{{url('users/exportOldUsers')}}" class="btn btn-primary">
+                <a href="{{ route('users.exportOldUsers') }}" class="btn btn-primary">
                     <span title="{{'New user'}}" class="ion-android-download" aria-hidden="true"></span>
                     {{'Export old members'}}
                 </a>
@@ -59,8 +59,8 @@
                     @endisset
                 </td>
                 <td>
-                    <a class="mr-1 ml-1" href="{{url('/users/' . $user->id . '/edit')}}"><span title="{{'Edit user'}}" class="ion-edit font-size-120" aria-hidden="true"></span></a>
-                    <a class="mr-1 ml-1" href="{{url('/users/'. $user->id)}}"><span title="{{'Show user information'}}" class="ion-eye font-size-120" aria-hidden="true"></span></a>
+                    <a class="mr-1 ml-1" href="{{route('users.edit', $user)}}"><span title="{{'Edit user'}}" class="ion-edit font-size-120" aria-hidden="true"></span></a>
+                    <a class="mr-1 ml-1" href="{{route('users.show', $user)}}"><span title="{{'Show user information'}}" class="ion-eye font-size-120" aria-hidden="true"></span></a>
                 </td>
             </tr>
         @endforeach

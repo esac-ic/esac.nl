@@ -77,7 +77,7 @@ class AgendaApplicationFormController extends Controller implements HasMiddlewar
     ): RedirectResponse {
         $repository->storeRegistration($request->except(['_token', 'user']), $agendaItem, $request['user']);
 
-        return redirect('/forms/users/' . $agendaItem->id);
+        return to_route('forms.users.index', $agendaItem);
     }
 
     /**
@@ -111,7 +111,7 @@ class AgendaApplicationFormController extends Controller implements HasMiddlewar
         }
 
         ApplicationResponse::destroy($applicationResponseId);
-        return redirect('forms/users/' . $Agenda_id);
+        return to_route('forms.users.index', $Agenda_id);
     }
 
     /**

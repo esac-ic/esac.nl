@@ -26,7 +26,7 @@
                                 {{ session('status') }}
                             </div>
                             @endif
-                            <form class="text-left col-lg-8" role="form" method="POST" action="{{ url('/login') }}">
+                            <form class="text-left col-lg-8" role="form" method="POST" action="{{ route('login.store') }}">
                                 @csrf
                                 <div class="form-group {{ $errors->has('email') ? ' has-error' : '' }}">
                                     <label for="email">{{'Email adress'}}</label>
@@ -45,7 +45,7 @@
                                     <strong>{{ $errors->first('password') }}</strong>
                                     </span>
                                     @endif
-                                    <p class="text-muted text-small mt-2">{{'Forgot password?'}} <a href="{{ url('/password/reset') }}">{{'Reset password'}}</a></p>
+                                    <p class="text-muted text-small mt-2">{{'Forgot password?'}} <a href="{{ route('password.request') }}">{{'Reset password'}}</a></p>
                                 </div>
                                 <div>
                                     <div class="custom-control custom-checkbox align-items-center">

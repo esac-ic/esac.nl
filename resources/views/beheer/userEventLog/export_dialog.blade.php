@@ -11,7 +11,7 @@
             </div>    
         
             <div class="modal-body">
-                <form name="export-user-events-form" id="export-user-events-form" method="post" action="{{url('userEventLog/export')}}">
+                <form name="export-user-events-form" id="export-user-events-form" method="post" action="{{ route('user-event-log-entry.export') }}">
                     @csrf    
                     
                     <!-- checkboxes for event types -->

@@ -34,7 +34,7 @@ class ZekeringController extends Controller implements HasMiddleware
 
         $zekeringenRepository->create($request->all());
 
-        return redirect('/zekeringen');
+        return to_route('front-end.zekeringen');
     }
 
     public function storeSubZekering(Request $request, ZekeringenRepository $zekeringenRepository): Response
