@@ -28,16 +28,7 @@ class PaginaBeheerController extends Controller implements HasMiddleware
 
     public function create(): View
     {
-        return view('beheer.menu.create_edit', [
-            'page' => null,
-            'fields' => [
-                'title_menu' => 'Add menu item ',
-                'title_page' => 'Add page',
-                'method' => 'POST',
-                'url' => route('pages.store'),
-            ],
-            'pages' => MenuItem::query()->orderBy('name')->get(),
-        ]);
+        return $this->form(new MenuItem);
     }
 
     public function store(PageRequest $request): RedirectResponse
@@ -62,16 +53,7 @@ class PaginaBeheerController extends Controller implements HasMiddleware
 
     public function edit(MenuItem $page): View
     {
-        return view('beheer.menu.create_edit', [
-            'page' => $page,
-            'fields' => [
-                'title_menu' => 'Edit menu page',
-                'title_page' => 'Edit page',
-                'method' => 'PATCH',
-                'url' => route('pages.update', $page),
-            ],
-            'pages' => MenuItem::query()->orderBy('name')->get(),
-        ]);
+        return $this->form($page);
     }
 
     public function update(PageRequest $request, MenuItem $page): RedirectResponse
@@ -103,5 +85,13 @@ class PaginaBeheerController extends Controller implements HasMiddleware
         $menuItem->after = $request->validated('afterItem');
         $menuItem->login = $request->has('login');
         $menuItem->menu_item = $request->has('menu_item');
+    }
+
+    private function form(MenuItem $page): View
+    {
+        return view('beheer.menu.create_edit', [
+            'page' => $page,
+            'pages' => MenuItem::query()->orderBy('name')->get(),
+        ]);
     }
 }

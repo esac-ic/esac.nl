@@ -51,12 +51,10 @@ class AgendaItem extends Model
     }
 
     /**
-     * Sets the dates, registration form and climbing flag from the event form's validated data.
+     * Sets the registration form and climbing flag from the event form's validated data.
      */
     public function fillFromForm(array $data): static
     {
-        $this->start_date = $data['start_date'];
-        $this->end_date = $data['end_date'];
         $this->application_form_id = $data['applicationForm'] ?? null;
         $this->subscription_end_date = $data['subscription_end_date'] ?? null;
         $this->climbing_activity = $data['climbing_activity'] ?? false;
@@ -144,6 +142,14 @@ class AgendaItem extends Model
     public function getApplicationFormResponses(): HasMany
     {
         return $this->hasMany(ApplicationResponse::class, 'agenda_id');
+    }
+
+    public function isRegistered(User $user): bool
+    {
+        return $this->getApplicationFormResponses()
+            ->whereBelongsTo($user)
+            ->where('inschrijf_form_id', $this->application_form_id)
+            ->exists();
     }
 
     public function canRegister(): bool

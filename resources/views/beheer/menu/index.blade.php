@@ -14,8 +14,8 @@
         @foreach ($pages as $menu)
             <tr>
                 <td>{{$menu->name}}</td>
-                <td>{{($menu->partner != null) ? $menu->partner->name : ""}}</td>
-                <td>{{($menu->after != null) ? $menu->afterItem->name : ""}}</td>
+                <td>{{ $menu->partner?->name }}</td>
+                <td>{{ $menu->afterItem?->name }}</td>
                 <td>
                     <x-icon-link :href="route('pages.edit', $menu)" icon="edit" title="Edit page" />
                     <x-icon-link :href="route('pages.show', $menu)" icon="eye" title="Show page" />

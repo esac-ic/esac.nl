@@ -1,24 +1,24 @@
 @extends('layouts.beheer')
 
-@section('title')
-{{$fields['title']}}
-@endsection
+@php($title = $newsItem->exists ? 'Edit news item' : 'Add a news item')
+
+@section('title', $title)
 
 @section('content')
     <div id="app">
         @include('includes.flash')
         <x-validation-errors />
 
-        {{ html()->form($fields['method'], $fields['url'])->acceptsFiles()->open() }}
-        <x-card :title="$fields['title']">
-            <x-field name="title" label="Title" :value="$newsItem?->title" required />
+        {{ html()->form($newsItem->exists ? 'PATCH' : 'POST', $newsItem->exists ? route('newsItems.update', $newsItem) : route('newsItems.store'))->acceptsFiles()->open() }}
+        <x-card :$title>
+            <x-field name="title" label="Title" :value="$newsItem->title" required />
             <div class="form-group">
                 <label for="author">Author</label>
                 <auto-complete-field
                         name="author"
                         url="{{ route('user.autoComplete') }}"
                         placeholder="Author"
-                        value="{{ $newsItem?->author }}">
+                        value="{{ $newsItem->author }}">
                 </auto-complete-field>
             </div>
             <span>{{'Image'}}</span>
@@ -28,13 +28,13 @@
                     <label class="custom-file-label" for="customFile">Choose file</label>
                 </div>
             </div>
-            <x-field name="text" id="content" label="News message" type="textarea" :value="$newsItem?->text" />
+            <x-field name="text" id="content" label="News message" type="textarea" :value="$newsItem->text" />
         </x-card>
 
         <div class="my-4">
             {{ html()->submit('Save')->class('btn btn-primary') }}
             {{ html()->form()->close() }}
-            <a class="btn btn-danger btn-close" href="{{ $newsItem === null ? route('newsItems.index') : route('newsItems.show', $newsItem) }}">Cancel</a>
+            <a class="btn btn-danger btn-close" href="{{ $newsItem->exists ? route('newsItems.show', $newsItem) : route('newsItems.index') }}">Cancel</a>
         </div>
     </div>
 @endsection

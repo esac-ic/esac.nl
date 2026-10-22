@@ -32,10 +32,7 @@ class NewsItemController extends Controller implements HasMiddleware
 
     public function create(): View
     {
-        return view('beheer.newsItem.create_edit', [
-            'newsItem' => null,
-            'fields' => ['title' => 'Add a news item ', 'method' => 'POST', 'url' => route('newsItems.store')],
-        ]);
+        return view('beheer.newsItem.create_edit', ['newsItem' => new NewsItem]);
     }
 
     public function store(NewsItemRequest $request): RedirectResponse
@@ -56,10 +53,7 @@ class NewsItemController extends Controller implements HasMiddleware
 
     public function edit(NewsItem $newsItem): View
     {
-        return view('beheer.newsItem.create_edit', [
-            'newsItem' => $newsItem,
-            'fields' => ['title' => 'Edit news item ', 'method' => 'PATCH', 'url' => route('newsItems.update', $newsItem)],
-        ]);
+        return view('beheer.newsItem.create_edit', ['newsItem' => $newsItem]);
     }
 
     public function update(NewsItemRequest $request, NewsItem $newsItem): RedirectResponse

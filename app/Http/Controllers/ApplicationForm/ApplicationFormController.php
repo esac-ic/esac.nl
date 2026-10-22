@@ -30,20 +30,12 @@ class ApplicationFormController extends Controller implements HasMiddleware
 
     public function create(): View
     {
-        return view('beheer.applicationForm.create_edit', [
-            'fields' => [
-                'title' => 'Add an application form',
-                'method' => 'POST',
-                'url' => route('beheer.applicationForms.store'),
-            ],
-            'applicationForm' => null,
-            'rows' => [],
-        ]);
+        return $this->form(new ApplicationForm);
     }
 
     public function store(ApplicationFormStoreRequest $request): RedirectResponse
     {
-        ApplicationForm::create($request->all())->syncRows($request->input('rows', []));
+        ApplicationForm::create($request->validated())->syncRows($request->input('rows', []));
 
         return to_route('beheer.applicationForms.index')->with('message', 'Application form added');
     }
@@ -55,20 +47,12 @@ class ApplicationFormController extends Controller implements HasMiddleware
 
     public function edit(ApplicationForm $applicationForm): View
     {
-        return view('beheer.applicationForm.create_edit', [
-            'fields' => [
-                'title' => 'Add an application form',
-                'method' => 'PUT',
-                'url' => route('beheer.applicationForms.update', $applicationForm),
-            ],
-            'applicationForm' => $applicationForm,
-            'rows' => ApplicationFormRowVueResource::collection($applicationForm->applicationFormRows),
-        ]);
+        return $this->form($applicationForm);
     }
 
     public function update(ApplicationFormStoreRequest $request, ApplicationForm $applicationForm): RedirectResponse
     {
-        $applicationForm->update($request->all());
+        $applicationForm->update($request->validated());
         $applicationForm->syncRows($request->input('rows', []));
 
         return to_route('beheer.applicationForms.index')->with('message', 'Application form edited');
@@ -80,5 +64,13 @@ class ApplicationFormController extends Controller implements HasMiddleware
         $applicationForm->delete();
 
         return to_route('beheer.applicationForms.index')->with('message', 'Application form removed');
+    }
+
+    private function form(ApplicationForm $applicationForm): View
+    {
+        return view('beheer.applicationForm.create_edit', [
+            'applicationForm' => $applicationForm,
+            'rows' => ApplicationFormRowVueResource::collection($applicationForm->applicationFormRows),
+        ]);
     }
 }

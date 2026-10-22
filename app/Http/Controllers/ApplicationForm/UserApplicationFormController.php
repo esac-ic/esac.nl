@@ -6,7 +6,6 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\RegistrationRequest;
 use App\Http\Resources\ApplicationFormRowVueResource;
 use App\Models\AgendaItem;
-use App\Models\ApplicationForm\ApplicationResponse;
 use App\Models\User;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
@@ -56,10 +55,7 @@ class UserApplicationFormController extends Controller implements HasMiddleware
             return back()->with('message', 'The registration date has expired, so you can no longer unsubscribe.');
         }
 
-        ApplicationResponse::query()
-            ->where('agenda_id', $agendaItem->id)
-            ->where('user_id', $request->user()->id)
-            ->delete();
+        $agendaItem->getApplicationFormResponses()->whereBelongsTo($request->user())->delete();
 
         return back()->with('message', 'You successfully unsubscribed from the event.');
     }
@@ -72,7 +68,7 @@ class UserApplicationFormController extends Controller implements HasMiddleware
         return match (true) {
             ! $agendaItem->canRegister() => 'The registration date has expired, so you can no longer subscribe.',
             $agendaItem->application_form_id === null => 'ERROR: No registration form available for this activity.',
-            $agendaItem->getApplicationFormResponses()->where('user_id', $user->id)->exists() => 'You have already signed up for this event.',
+            $agendaItem->isRegistered($user) => 'You have already signed up for this event.',
             default => null,
         };
     }

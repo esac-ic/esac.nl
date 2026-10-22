@@ -23,13 +23,9 @@ class UserCertificateController extends Controller implements HasMiddleware
     public function addCertificate(User $user): View
     {
         return view('beheer.user.addCertificate', [
-            'fields' => [
-                'title' => 'Add certificate',
-                'method' => 'POST',
-                'url' => route('users.certificates.store', $user),
-            ],
+            'user' => $user,
+            'certificate' => null,
             'certificates' => Certificate::query()->orderBy('name')->whereKeyNot($user->certificates->modelKeys())->pluck('name', 'id')->all(),
-            'userCertificate' => null,
         ]);
     }
 
@@ -43,13 +39,9 @@ class UserCertificateController extends Controller implements HasMiddleware
     public function editUserCertificate(User $user, Certificate $certificate): View
     {
         return view('beheer.user.addCertificate', [
-            'fields' => [
-                'title' => 'Edit certificate',
-                'method' => 'PATCH',
-                'url' => route('users.certificates.update', [$user, $certificate]),
-            ],
+            'user' => $user,
+            'certificate' => $certificate,
             'certificates' => Certificate::query()->orderBy('name')->pluck('name', 'id')->all(),
-            'userCertificate' => $user->certificates()->find($certificate->id),
         ]);
     }
 

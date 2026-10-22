@@ -28,14 +28,7 @@ class AgendaItemCategoryController extends Controller implements HasMiddleware
 
     public function create(): View
     {
-        return view('beheer.agendaItemCategory.create_edit', [
-            'agendaItemCategory' => null,
-            'fields' => [
-                'title' => 'Add an event category',
-                'method' => 'POST',
-                'url' => route('agendaItemCategories.store'),
-            ],
-        ]);
+        return view('beheer.agendaItemCategory.create_edit', ['agendaItemCategory' => new AgendaItemCategory]);
     }
 
     public function store(AgendaItemCategoryRequest $request): RedirectResponse
@@ -52,14 +45,7 @@ class AgendaItemCategoryController extends Controller implements HasMiddleware
 
     public function edit(AgendaItemCategory $agendaItemCategory): View
     {
-        return view('beheer.agendaItemCategory.create_edit', [
-            'agendaItemCategory' => $agendaItemCategory,
-            'fields' => [
-                'title' => 'Edit category',
-                'method' => 'PATCH',
-                'url' => route('agendaItemCategories.update', $agendaItemCategory),
-            ],
-        ]);
+        return view('beheer.agendaItemCategory.create_edit', ['agendaItemCategory' => $agendaItemCategory]);
     }
 
     public function update(AgendaItemCategoryRequest $request, AgendaItemCategory $agendaItemCategory): RedirectResponse

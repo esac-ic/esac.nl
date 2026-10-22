@@ -28,11 +28,7 @@ Route::permanentRedirect('/', '/home');
 Route::group(['as' => 'beheer.', 'prefix' => 'beheer/'], function () {
     Route::get('home', [ManageController::class, 'index'])->name('home');
     Route::resource('applicationForms', ApplicationFormController::class);
-
-    // Settings
-    Route::get('/settings', [SettingsController::class, 'index'])->name('settings.index');
-    Route::put('/settings', [SettingsController::class, 'update'])->name('settings.update');
-    Route::get('/settings/edit', [SettingsController::class, 'edit'])->name('settings.edit');
+    Route::singleton('settings', SettingsController::class);
 });
 
 // Members

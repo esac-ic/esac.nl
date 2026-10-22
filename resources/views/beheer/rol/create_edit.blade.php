@@ -1,11 +1,11 @@
 @extends('layouts.beheer')
 
-@section('title')
-{{$fields['title']}}
-@endsection
+@php($title = $rol->exists ? 'Edit role' : 'Add a role')
+
+@section('title', $title)
 
 @section('content')
-    <x-form-card :$fields :cancel="$rol === null ? route('rols.index') : route('rols.show', $rol)">
-        <x-field name="name" label="Name" :value="$rol?->name" required />
+    <x-form-card :model="$rol" resource="rols" :$title>
+        <x-field name="name" label="Name" :value="$rol->name" required />
     </x-form-card>
 @endsection
