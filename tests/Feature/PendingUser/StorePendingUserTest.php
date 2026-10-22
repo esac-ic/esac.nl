@@ -45,13 +45,13 @@ class StorePendingUserTest extends TestCase
         Event::fake();
         Http::fake(['www.google.com/recaptcha/*' => Http::response(['success' => true])]);
 
-        $this->assertEquals(0, User::all()->count());
+        $this->assertDatabaseEmpty(User::class);
 
         $response = $this->post(route('user.signup'), $requestData);
 
         $response->assertRedirect(route('front-end.signup'));
         Event::assertDispatched(PendingUserCreated::class);
-        $this->assertEquals(1, User::all()->count());
+        $this->assertDatabaseCount(User::class, 1);
 
         $user = User::first();
 

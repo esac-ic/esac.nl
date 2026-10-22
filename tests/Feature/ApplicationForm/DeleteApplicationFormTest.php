@@ -37,7 +37,7 @@ class DeleteApplicationFormTest extends TestCase
 
         $response->assertStatus(302);
 
-        $this->assertNull(ApplicationForm::find($this->applicationForm->id));
+        $this->assertSoftDeleted($this->applicationForm);
     }
 
     #[Test]
@@ -49,7 +49,7 @@ class DeleteApplicationFormTest extends TestCase
 
         $response->assertStatus(302);
 
-        $this->assertNull(ApplicationForm::find($this->applicationForm->id));
+        $this->assertSoftDeleted($this->applicationForm);
     }
 
     #[Test]
