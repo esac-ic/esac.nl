@@ -4,9 +4,9 @@ namespace App\Listeners;
 
 use App\Events\LoggableUserEventInterface;
 use App\Models\UserEventLogEntry;
-use Illuminate\Contracts\Queue\ShouldQueue;
+use Illuminate\Contracts\Queue\ShouldQueueAfterCommit;
 
-class LogUserEvent implements ShouldQueue
+class LogUserEvent implements ShouldQueueAfterCommit
 {
     /**
      * Add the event to the user event log.
