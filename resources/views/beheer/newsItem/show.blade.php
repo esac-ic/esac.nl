@@ -43,7 +43,7 @@
                 </tr>
                 <tr>
                     <td>{{'Created at'}}</td>
-                    <td>{{ $newsItem->created_at->format('d-m-Y h:i') }}</td>
+                    <td>{{ $newsItem->created_at->tz(config('app.display_timezone'))->format('d-m-Y h:i') }}</td>
                 </tr>
                 <tr>
                     <td>{{'Created by'}}</td>

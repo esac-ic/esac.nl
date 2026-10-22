@@ -26,7 +26,7 @@
                 {{ html()->label('Start date', 'startDate') }}
                 <div class="input-group date" id="startDateBox" data-target-input="nearest">
                     <input type='text' class="form-control datetimepicker-input" id="startDate" name="startDate"
-                           data-target="#startDateBox" value="{{ now()->addHour()->format('d-m-Y') }}"
+                           data-target="#startDateBox" value="{{ now(config('app.display_timezone'))->format('d-m-Y') }}"
                            required/>
                     <div class="input-group-append" data-target="#startDateBox" data-toggle="datetimepicker">
                         <div class="input-group-text"><i class="ion-calendar"></i></div>

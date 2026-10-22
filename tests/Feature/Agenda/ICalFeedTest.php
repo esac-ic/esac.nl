@@ -12,7 +12,7 @@ class ICalFeedTest extends TestCase
     use RefreshDatabase;
 
     #[Test]
-    public function the_feed_lists_the_agenda_items_of_the_last_year_onward_in_local_time()
+    public function the_feed_lists_the_agenda_items_of_the_last_year_onward_in_utc()
     {
         $this->travelTo('2026-06-01');
         $item = AgendaItem::factory()->create([
@@ -32,10 +32,11 @@ class ICalFeedTest extends TestCase
 
         $ics = str_replace("\r\n ", '', $response->getContent());
         $this->assertSame(2, substr_count($ics, 'BEGIN:VEVENT'));
-        $this->assertStringContainsString('BEGIN:VTIMEZONE', $ics);
         $this->assertStringContainsString('SUMMARY:Climbing weekend', $ics);
-        $this->assertStringContainsString("DTSTART:20260501T100000\r\n", $ics);
-        $this->assertStringContainsString("DTEND:20260503T183000\r\n", $ics);
+        // Amsterdam summer and winter time.
+        $this->assertStringContainsString("DTSTART:20260501T080000Z\r\n", $ics);
+        $this->assertStringContainsString("DTEND:20260503T163000Z\r\n", $ics);
+        $this->assertStringContainsString("DTSTART:20261231T230000Z\r\n", $ics);
         $this->assertStringContainsString('UID:agenda-item-'.$item->id.'@localhost', $ics);
         $this->assertStringContainsString('Bring a rope & harness', $ics);
         $this->assertStringContainsString('Meer informatie: '.url('/agenda/'.$item->id), $ics);

@@ -12,18 +12,18 @@ class PennoMemberExport extends SpreadsheetExport
 
     public function __construct(int $daysAgo)
     {
-        $this->fromDate = Carbon::today()->subDays($daysAgo);
+        $this->fromDate = Carbon::today(config('app.display_timezone'))->subDays($daysAgo);
     }
 
     public function collection(): Collection
     {
-        $users = User::current()->where('created_at', '>=', $this->fromDate)->get($this->columns());
+        $users = User::current()->where('created_at', '>=', $this->fromDate->copy()->utc())->get($this->columns());
 
         return $users->map(function (User $user) {
             $export = $user->toArray();
             $export['iban'] = str_replace(' ', '', $export['iban']);
             // Remove the time component of the created_at field:
-            $export['created_at'] = $user->created_at->toDateString();
+            $export['created_at'] = $user->created_at->tz(config('app.display_timezone'))->toDateString();
             $export['incasso'] = $user->incasso ? 'Yes' : 'No';
 
             return $export;

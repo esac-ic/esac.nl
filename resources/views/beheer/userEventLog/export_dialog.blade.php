@@ -32,7 +32,7 @@
                         <div class="form-group col-md-6">
                             <label for="startDate">Start date</label>
                             <div class="input-group date" id="startDateBox" data-target-input="nearest">
-                                <input type='text' class="form-control datetimepicker-input" id="startDate" name="startDate" data-target="#startDateBox" value="{{ now()->addHour()->subWeeks(1)->format('d-m-Y H:i') }}" required/>
+                                <input type='text' class="form-control datetimepicker-input" id="startDate" name="startDate" data-target="#startDateBox" value="{{ now(config('app.display_timezone'))->subWeeks(1)->format('d-m-Y H:i') }}" required/>
                                 <div class="input-group-append" data-target="#startDateBox" data-toggle="datetimepicker">
                                     <div class="input-group-text"><i class="ion-calendar"></i></div>
                                 </div>
@@ -41,7 +41,7 @@
                         <div class="form-group col-md-6">
                             <label for="endDate">End date</label>
                             <div class="input-group date" id="endDateBox" data-target-input="nearest">
-                                <input type='text' class="form-control datetimepicker-input" id="endDate" name="endDate" data-target="#endDateBox" value="{{ now()->addHour()->format('d-m-Y H:i') }}" required/>
+                                <input type='text' class="form-control datetimepicker-input" id="endDate" name="endDate" data-target="#endDateBox" value="{{ now(config('app.display_timezone'))->format('d-m-Y H:i') }}" required/>
                                 <div class="input-group-append" data-target="#endDateBox" data-toggle="datetimepicker">
                                     <div class="input-group-text"><i class="ion-calendar"></i></div>
                                 </div>
