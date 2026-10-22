@@ -11,6 +11,8 @@ use App\Events\PendingUserCreated;
 use App\Events\PendingUserRemoved;
 use App\Models\ApplicationForm\ApplicationResponse;
 use Carbon\Carbon;
+use Illuminate\Database\Eloquent\Attributes\Fillable;
+use Illuminate\Database\Eloquent\Attributes\Hidden;
 use Illuminate\Database\Eloquent\Attributes\Scope;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Casts\Attribute;
@@ -25,50 +27,39 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use RuntimeException;
 
+#[Fillable([
+    'email',
+    'password',
+    'firstname',
+    'preposition',
+    'lastname',
+    'street',
+    'house_number',
+    'city',
+    'zipcode',
+    'country',
+    'phone_number',
+    'phone_number_alt',
+    'emergency_number',
+    'emergency_house_number',
+    'emergency_street',
+    'emergency_city',
+    'emergency_zipcode',
+    'emergency_country',
+    'birthday',
+    'kind_of_member',
+    'iban',
+    'bic',
+    'incasso',
+    'remark',
+])]
+#[Hidden([
+    'password',
+    'remember_token',
+])]
 class User extends Authenticatable
 {
     use Notifiable, HasFactory, SoftDeletes;
-    
-    /**
-     * The attributes that are mass assignable.
-     *
-     * @var array
-     */
-    protected $fillable = [
-        'email',
-        'password',
-        'firstname',
-        'preposition',
-        'lastname',
-        'street',
-        'house_number',
-        'city',
-        'zipcode',
-        'country',
-        'phone_number',
-        'phone_number_alt',
-        'emergency_number',
-        'emergency_house_number',
-        'emergency_street',
-        'emergency_city',
-        'emergency_zipcode',
-        'emergency_country',
-        'birthday',
-        'kind_of_member',
-        'iban',
-        'bic',
-        'incasso',
-        'remark',
-    ];
-
-    /**
-     * The attributes that should be hidden for arrays.
-     *
-     * @var array
-     */
-    protected $hidden = [
-        'password', 'remember_token',
-    ];
     
     /**
      * All possible member types.
@@ -86,9 +77,12 @@ class User extends Authenticatable
         "relationship",
     ];
     
-    protected $casts = [
-        'birthday' => 'date',
-    ];
+    protected function casts(): array
+    {
+        return [
+            'birthday' => 'date',
+        ];
+    }
 
     /**
      * Members who are neither old nor pending.

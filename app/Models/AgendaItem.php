@@ -6,32 +6,39 @@ use App\Models\ApplicationForm\ApplicationForm;
 use App\Models\ApplicationForm\ApplicationResponse;
 use App\Models\ApplicationForm\ApplicationResponseRow;
 use Carbon\Carbon;
+use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Attributes\Scope;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Support\Facades\Storage;
 
+#[Fillable([
+    'title',
+    'text',
+    'short_description',
+    'subscription_end_date',
+    'start_date',
+    'end_date',
+    'image_url',
+    'category',
+    'climbing_activity',
+])]
 class AgendaItem extends Model
 {
     use HasFactory;
 
-    protected $fillable = [
-        'title',
-        'text',
-        'short_description',
-        'subscription_end_date',
-        'start_date',
-        'end_date',
-        'image_url',
-        'category',
-        'climbing_activity',
-    ];
-
-    protected $casts = [
-        'climbing_activity' => 'boolean',
-    ];
+    protected function casts(): array
+    {
+        return [
+            'climbing_activity' => 'boolean',
+            'start_date' => 'datetime',
+            'end_date' => 'datetime',
+            'subscription_end_date' => 'datetime',
+        ];
+    }
 
     /**
      * Events that start today or later, the first one first.
@@ -111,12 +118,12 @@ class AgendaItem extends Model
         return $this->hasOne(ApplicationForm::class, 'id', "application_form_id");
     }
 
-    public function agendaItemCategory()
+    public function agendaItemCategory(): HasOne
     {
         return $this->hasOne(AgendaItemCategory::class, 'id', 'category')->withTrashed();
     }
 
-    public function getCreatedBy()
+    public function getCreatedBy(): HasOne
     {
         return $this->hasOne(User::class, 'id', 'created_by');
     }
@@ -130,17 +137,13 @@ class AgendaItem extends Model
         }
     }
 
-    public function getApplicationFormResponses()
+    public function getApplicationFormResponses(): HasMany
     {
         return $this->hasMany(ApplicationResponse::class, 'agenda_id');
     }
 
-    public function canRegister()
+    public function canRegister(): bool
     {
-        if ($this->subscription_end_date < Carbon::now()) {
-            return false;
-        } else {
-            return true;
-        }
+        return ! ($this->subscription_end_date < Carbon::now());
     }
 }
