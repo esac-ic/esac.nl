@@ -9,12 +9,12 @@ use App\Exports\UsersExport;
 use App\Http\Requests\UserRequest;
 use App\Models\Rol;
 use App\Models\User;
-use App\Services\Mailman;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controllers\HasMiddleware;
 use Illuminate\Routing\Controllers\Middleware;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Gate;
 use Symfony\Component\HttpFoundation\StreamedResponse;
 
@@ -34,7 +34,7 @@ class UserController extends Controller implements HasMiddleware
     public function index(): View
     {
         return view('beheer.user.index', [
-            'users' => User::current()->with('roles')->get(['id', 'firstname', 'lastname', 'email', 'preposition', 'kind_of_member']),
+            'users' => User::query()->current()->with('roles')->get(['id', 'firstname', 'lastname', 'email', 'preposition', 'kind_of_member']),
             'roles' => Rol::all(),
         ]);
     }
@@ -42,7 +42,7 @@ class UserController extends Controller implements HasMiddleware
     public function indexOldMembers(): View
     {
         return view('beheer.user.index_old_users', [
-            'users' => User::old()->get(['id', 'firstname', 'lastname', 'email', 'preposition', 'kind_of_member']),
+            'users' => User::query()->old()->get(['id', 'firstname', 'lastname', 'email', 'preposition', 'kind_of_member']),
         ]);
     }
 
@@ -74,12 +74,8 @@ class UserController extends Controller implements HasMiddleware
         return view('beheer.user.create_edit', ['user' => $user, 'roles' => Rol::all(), 'kindsOfMember' => KindOfMember::options()]);
     }
 
-    public function update(UserRequest $request, User $user, Mailman $mailman): RedirectResponse
+    public function update(UserRequest $request, User $user): RedirectResponse
     {
-        if ($user->email != $request['email']) {
-            $mailman->updateUserEmailForAllMailList($user, $user->email, $request['email']);
-        }
-
         $user->updateFromForm($request->validated());
 
         if ($request->user()->can('manage-members')) {
@@ -93,9 +89,17 @@ class UserController extends Controller implements HasMiddleware
         return to_route('beheer.users.index')->with('message', 'Changes to user have been saved');
     }
 
-    public function removeAsActiveMember(User $user): RedirectResponse
+    public function removeAsActiveMember(Request $request, User $user): RedirectResponse
     {
         $user->removeAsActiveMember();
+
+        if ($request->user()->is($user)) {
+            Auth::logout();
+            $request->session()->invalidate();
+            $request->session()->regenerateToken();
+
+            return to_route('front-end.home');
+        }
 
         return to_route('beheer.users.show', $user);
     }

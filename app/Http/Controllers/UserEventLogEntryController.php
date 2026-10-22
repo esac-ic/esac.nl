@@ -24,7 +24,7 @@ class UserEventLogEntryController extends Controller implements HasMiddleware
     {
         return view('beheer.userEventLog.index', [
             'events' => UserEventLogEntry::all(),
-            'eventTypes' => UserEventLogEntry::distinct('event_type')->pluck('event_type')->sort(),
+            'eventTypes' => UserEventLogEntry::query()->distinct('event_type')->pluck('event_type')->sort(),
         ]);
     }
 

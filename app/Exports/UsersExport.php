@@ -9,7 +9,7 @@ class UsersExport extends SpreadsheetExport
 {
     public function collection(): Collection
     {
-        return User::current()->with('certificates')->get()->map(fn (User $user) => [
+        return User::query()->current()->with('certificates')->get()->map(fn (User $user) => [
             ...$user->makeHidden(['updated_at', 'lid_af', 'pending_user', 'deleted_at'])->toArray(),
             'certificates' => $user->getCertificationsAbbreviations(),
         ]);

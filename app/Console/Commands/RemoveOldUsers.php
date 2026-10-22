@@ -3,7 +3,6 @@
 namespace App\Console\Commands;
 
 use App\Models\User;
-use Carbon\Carbon;
 use Illuminate\Console\Attributes\Description;
 use Illuminate\Console\Attributes\Signature;
 use Illuminate\Console\Command;
@@ -18,7 +17,7 @@ class RemoveOldUsers extends Command
     public function handle(): void
     {
         User::query()
-            ->whereDate('lid_af', '<', Carbon::now()->subYears(config('custom.old_users_save_period')))
+            ->whereDate('lid_af', '<', now()->subYears(config('custom.old_users_save_period')))
             ->update([
                 'email' => null,
                 'password' => null,

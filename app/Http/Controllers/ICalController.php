@@ -19,7 +19,7 @@ class ICalController extends Controller
         $host = parse_url(config('app.url'), PHP_URL_HOST);
 
         // Old events only bloat the feed, so skip those that ended over a year ago.
-        $agendaItems = AgendaItem::where('end_date', '>=', now()->subYear()->startOfDay())->get();
+        $agendaItems = AgendaItem::query()->where('end_date', '>=', now()->subYear()->startOfDay())->get();
 
         foreach ($agendaItems as $agendaItem) {
             $event = new Event(new UniqueIdentifier('agenda-item-'.$agendaItem->id.'@'.$host));

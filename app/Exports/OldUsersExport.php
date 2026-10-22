@@ -9,7 +9,7 @@ class OldUsersExport extends SpreadsheetExport
 {
     public function collection(): Collection
     {
-        $oldUsers = User::old()->get(['id', 'firstname', 'preposition', 'lastname', 'created_at', 'lid_af']);
+        $oldUsers = User::query()->old()->get(['id', 'firstname', 'preposition', 'lastname', 'created_at', 'lid_af']);
 
         return $oldUsers->map(fn ($user) => $user->toArray());
     }

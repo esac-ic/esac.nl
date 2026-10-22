@@ -33,7 +33,7 @@ class SettingsController extends Controller implements HasMiddleware
     {
         foreach ($request->input('setting', []) as $name => $value) {
             // Empty inputs arrive as null, and the column holds an empty string
-            Setting::where('name', $name)->update(['value' => $value ?? '']);
+            Setting::query()->where('name', $name)->update(['value' => $value ?? '']);
         }
 
         return to_route('beheer.settings.show')->with('message', 'Settings updated');

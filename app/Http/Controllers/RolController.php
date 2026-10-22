@@ -31,7 +31,7 @@ class RolController extends Controller implements HasMiddleware
 
     public function store(RoleRequest $request): RedirectResponse
     {
-        Rol::create($request->validated());
+        Rol::query()->create($request->validated());
 
         return to_route('beheer.roles.index')->with('message', 'Role added');
     }

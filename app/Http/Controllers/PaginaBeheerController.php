@@ -47,7 +47,7 @@ class PaginaBeheerController extends Controller implements HasMiddleware
     {
         return view('beheer.menu.show', [
             'page' => $page,
-            'subItems' => MenuItem::inMenu()->where('parent_id', $page->id)->get(),
+            'subItems' => MenuItem::query()->inMenu()->where('parent_id', $page->id)->get(),
         ]);
     }
 
@@ -70,8 +70,8 @@ class PaginaBeheerController extends Controller implements HasMiddleware
     {
         if ($page->deletable) {
             // Remove the references from the other menu items.
-            MenuItem::where('parent_id', $page->id)->update(['parent_id' => null]);
-            MenuItem::where('after', $page->id)->update(['after' => null]);
+            MenuItem::query()->where('parent_id', $page->id)->update(['parent_id' => null]);
+            MenuItem::query()->where('after', $page->id)->update(['after' => null]);
 
             $page->delete();
         }

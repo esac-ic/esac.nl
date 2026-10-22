@@ -23,7 +23,7 @@ class UserController extends Controller implements HasMiddleware
     {
         $term = '%'.addcslashes((string) $request->input('term'), '%_\\').'%';
 
-        $users = User::current()
+        $users = User::query()->current()
             ->whereAny(['firstname', 'lastname'], 'like', $term)
             ->get(['firstname', 'lastname'])
             ->map(fn (User $user) => ['text' => $user->firstname.' '.$user->lastname]);

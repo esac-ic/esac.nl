@@ -36,7 +36,7 @@ class ApplicationFormController extends Controller implements HasMiddleware
 
     public function store(ApplicationFormStoreRequest $request): RedirectResponse
     {
-        DB::transaction(fn () => ApplicationForm::create($request->safe()->only('name'))->syncRows($request->validated('rows', [])));
+        DB::transaction(fn () => ApplicationForm::query()->create($request->safe()->only('name'))->syncRows($request->validated('rows', [])));
 
         return to_route('beheer.application-forms.index')->with('message', 'Application form added');
     }

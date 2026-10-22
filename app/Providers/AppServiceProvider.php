@@ -53,7 +53,7 @@ class AppServiceProvider extends ServiceProvider
 
         Gate::define('manage-agenda', fn (User $user) => $user->hasRole(Role::ContentAdministrator, Role::ActivityAdministrator));
         Gate::define('manage-agenda-categories', fn (User $user) => $user->hasRole(Role::Administrator));
-        Gate::define('delete-registration', fn (User $user, ApplicationResponse $registration) => $registration->user_id == $user->id
+        Gate::define('delete-registration', fn (User $user, ApplicationResponse $registration) => $registration->user()->is($user)
             || $user->hasRole(Role::ActivityAdministrator));
         Gate::define('manage-zekeringen', fn (User $user) => $user->hasRole(Role::ActivityAdministrator));
 

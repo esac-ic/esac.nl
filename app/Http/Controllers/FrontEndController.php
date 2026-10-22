@@ -11,6 +11,7 @@ use App\Models\User;
 use App\Services\AgendaApplicationFormService;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Support\Facades\Gate;
 
 class FrontEndController extends Controller
 {
@@ -44,9 +45,9 @@ class FrontEndController extends Controller
 
     public function zekeringen(): View|RedirectResponse
     {
-        $menuItem = MenuItem::firstWhere('url_name', MenuItem::ZEKERINGURL);
+        $menuItem = MenuItem::query()->firstWhere('url_name', MenuItem::ZEKERINGURL);
 
-        if (! $menuItem->show()) {
+        if (Gate::denies('view', $menuItem)) {
             return to_route('login');
         }
 
@@ -69,7 +70,7 @@ class FrontEndController extends Controller
         return view('front-end.news', [
             'curPageName' => 'News',
             'content' => $this->pageContent(MenuItem::NEWSURL),
-            'newsItems' => NewsItem::latest('id')->paginate(9),
+            'newsItems' => NewsItem::query()->latest('id')->paginate(9),
         ]);
     }
 
@@ -92,14 +93,14 @@ class FrontEndController extends Controller
 
     public function memberList(): View|RedirectResponse
     {
-        $menuItem = MenuItem::firstWhere('url_name', MenuItem::MEMBERLISTURL);
+        $menuItem = MenuItem::query()->firstWhere('url_name', MenuItem::MEMBERLISTURL);
 
-        if (! $menuItem->show()) {
+        if (Gate::denies('view', $menuItem)) {
             return to_route('login');
         }
 
         return view('front-end.memberlist', [
-            'users' => User::current()->get(['firstname', 'lastname', 'email', 'preposition', 'kind_of_member', 'phone_number']),
+            'users' => User::query()->current()->get(['firstname', 'lastname', 'email', 'preposition', 'kind_of_member', 'phone_number']),
             'curPageName' => 'Members list',
             'content' => $menuItem->content,
         ]);
@@ -111,13 +112,13 @@ class FrontEndController extends Controller
             'newsItems' => NewsItem::query()->latest('id')->take(3)->get(),
             'content' => $this->pageContent(MenuItem::HOMEURL),
             'curPageName' => 'Home',
-            'agendaItems' => AgendaItem::upcoming()->withCount('registrations')->take(4)->get(),
+            'agendaItems' => AgendaItem::query()->upcoming()->withCount('registrations')->take(4)->get(),
         ]);
     }
 
     public function showPage(MenuItem $menuItem): View|RedirectResponse
     {
-        if (! $menuItem->show()) {
+        if (Gate::denies('view', $menuItem)) {
             return to_route('login');
         }
 
@@ -129,6 +130,6 @@ class FrontEndController extends Controller
 
     private function pageContent(string $urlName): ?string
     {
-        return MenuItem::firstWhere('url_name', $urlName)->content;
+        return MenuItem::query()->firstWhere('url_name', $urlName)->content;
     }
 }

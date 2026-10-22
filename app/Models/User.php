@@ -5,6 +5,7 @@ namespace App\Models;
 use App\Enums\KindOfMember;
 use App\Enums\Role;
 use App\Events\MemberBecameOldMember;
+use App\Events\MemberEmailChanged;
 use App\Events\MemberKindChanged;
 use App\Events\OldMemberBecameMember;
 use App\Events\PendingUserApproved;
@@ -22,7 +23,6 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
@@ -131,9 +131,12 @@ class User extends Authenticatable
 
         $oldKindOfMember = $this->kind_of_member;
 
-        // Update before dispatching the event, so Mailman can't desync when the kind of member and email change together.
         $this->update($data);
 
+        // The lists move to the new email address before the kind of member's lists change.
+        if ($this->wasChanged('email')) {
+            MemberEmailChanged::dispatch($this, $this->getPrevious()['email']);
+        }
         if ($this->kind_of_member !== $oldKindOfMember) {
             MemberKindChanged::dispatch($this, $oldKindOfMember, $this->kind_of_member);
         }
@@ -238,10 +241,6 @@ class User extends Authenticatable
         DB::table(config('session.table'))->where('user_id', $this->id)->delete();
 
         $this->roles()->detach();
-
-        if (Auth::user()->is($this)) {
-            Auth::logout();
-        }
 
         MemberBecameOldMember::dispatch($this);
     }
