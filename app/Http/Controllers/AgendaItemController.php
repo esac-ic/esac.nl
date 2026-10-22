@@ -39,7 +39,7 @@ class AgendaItemController extends Controller implements HasMiddleware
 
     public function store(AgendaItemRequest $request): RedirectResponse
     {
-        $agendaItem = new AgendaItem($request->validated())->fillFromForm($request->all());
+        $agendaItem = new AgendaItem($request->validated())->fillFromForm($request->validated());
         $agendaItem->image_url = '';
         $agendaItem->created_by = $request->user()->id;
         $agendaItem->save();
@@ -63,7 +63,7 @@ class AgendaItemController extends Controller implements HasMiddleware
     public function update(AgendaItemRequest $request, AgendaItem $agendaItem): RedirectResponse
     {
         $agendaItem->fill($request->safe()->only(['title', 'text', 'short_description', 'category']))
-            ->fillFromForm($request->all())
+            ->fillFromForm($request->validated())
             ->save();
         $this->handleImage($request, $agendaItem);
 

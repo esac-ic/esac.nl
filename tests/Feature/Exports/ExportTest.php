@@ -99,8 +99,8 @@ class ExportTest extends TestCase
         UserEventLogEntry::factory()->create(['user_id' => $this->admin->id, 'created_at' => Carbon::now()->subWeek()]);
 
         $response = $this->actingAs($this->admin)->post('userEventLog/export', [
-            'startDate' => Carbon::now()->subDay()->toDateTimeString(),
-            'endDate' => Carbon::now()->addDay()->toDateTimeString(),
+            'startDate' => Carbon::now()->subDay()->format('d-m-Y H:i'),
+            'endDate' => Carbon::now()->addDay()->format('d-m-Y H:i'),
         ]);
 
         [$sheet, $rows] = $this->readSpreadsheet($response);

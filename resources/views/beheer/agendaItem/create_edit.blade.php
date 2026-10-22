@@ -64,16 +64,12 @@
     });
 
     $('#applicationForm').change(function(){
-        if($('#applicationForm').val() === "0"){
+        if($('#applicationForm').val() === ""){
             $('#subscription_endDate_box').hide();
         } else {
             $('#subscription_endDate_box').show();
         }
     })
-    $("#applicationForm").prepend('<option value="0">No application form</option>');
-    @if($agendaItem === null || $agendaItem->application_form_id === null)
-        $("#applicationForm").val('0');
-    @endif
     $("#applicationForm").change();
 </script>
 @endpush
