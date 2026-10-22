@@ -37,6 +37,6 @@ class ApiController extends Controller implements HasMiddleware
 
     public function getUsers(): array
     {
-        return ['aaData' => MemberResource::collection(User::current()->get(['id', 'email', 'firstname', 'preposition', 'lastname']))];
+        return ['aaData' => MemberResource::collection(User::query()->current()->get(['id', 'email', 'firstname', 'preposition', 'lastname']))];
     }
 }

@@ -32,7 +32,7 @@ class SettingsController extends Controller implements HasMiddleware
     public function update(Request $request): RedirectResponse
     {
         foreach ($request->input('setting', []) as $name => $value) {
-            Setting::where('name', $name)->update(['value' => $value]);
+            Setting::query()->where('name', $name)->update(['value' => $value]);
         }
 
         return to_route('beheer.settings.show')->with('message', 'Settings updated');

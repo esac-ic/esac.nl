@@ -3,9 +3,9 @@
 namespace Tests\Feature\User;
 
 use App\Enums\Role;
+use App\Events\MemberEmailChanged;
 use App\Events\MemberKindChanged;
 use App\Models\User;
-use App\Services\Mailman;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Event;
@@ -50,37 +50,37 @@ class UpdateUserTest extends TestCase
 
     public function test_admin_updates_self_email_unchanged()
     {
-        $this->mock(Mailman::class)->shouldNotReceive('updateUserEmailForAllMailList');
         $data = self::DETAILS + ['email' => $this->admin->email, 'firstname' => 'New', 'lastname' => 'Second', 'kind_of_member' => $this->admin->kind_of_member->value];
 
         $this->actingAs($this->admin)->patch(route('beheer.users.update', $this->admin), $data)
             ->assertRedirect(route('beheer.users.show', [$this->admin, 'back' => 'false']));
 
         Event::assertNotDispatched(MemberKindChanged::class);
+        Event::assertNotDispatched(MemberEmailChanged::class);
         $this->assertUpdated($this->admin, $data);
     }
 
     public function test_admin_updates_self_email_changed()
     {
-        $this->mock(Mailman::class)->shouldReceive('updateUserEmailForAllMailList')->once();
         $data = self::DETAILS + ['email' => 'Second@esac.nl', 'firstname' => 'New', 'lastname' => 'Second', 'kind_of_member' => $this->admin->kind_of_member->value];
 
         $this->actingAs($this->admin)->patch(route('beheer.users.update', $this->admin), $data)
             ->assertRedirect(route('beheer.users.show', [$this->admin, 'back' => 'false']));
 
         Event::assertNotDispatched(MemberKindChanged::class);
+        Event::assertDispatched(MemberEmailChanged::class);
         $this->assertUpdated($this->admin, $data);
     }
 
     public function test_admin_updates_other_member()
     {
-        $this->mock(Mailman::class)->shouldReceive('updateUserEmailForAllMailList');
         $data = self::DETAILS + ['email' => 'Second@esac.nl', 'firstname' => 'New', 'lastname' => 'Second', 'kind_of_member' => 'reunist'];
 
         $this->actingAs($this->admin)->patch(route('beheer.users.update', $this->member), $data)
             ->assertRedirect(route('beheer.users.index'));
 
         Event::assertDispatched(MemberKindChanged::class);
+        Event::assertDispatched(MemberEmailChanged::class);
         $this->assertUpdated($this->member, $data);
         $this->assertSame($this->member->password, $this->member->fresh()->password);
     }
@@ -97,7 +97,6 @@ class UpdateUserTest extends TestCase
 
     public function test_member_updates_self()
     {
-        $this->mock(Mailman::class)->shouldReceive('updateUserEmailForAllMailList')->once();
         $data = self::DETAILS + ['email' => 'Second@esac.nl']
             + Arr::only($this->member->attributesToArray(), ['firstname', 'preposition', 'lastname', 'kind_of_member', 'remark']);
 
@@ -105,12 +104,12 @@ class UpdateUserTest extends TestCase
             ->assertRedirect(route('beheer.users.show', [$this->member, 'back' => 'false']));
 
         Event::assertNotDispatched(MemberKindChanged::class);
+        Event::assertDispatched(MemberEmailChanged::class);
         $this->assertUpdated($this->member, $data);
     }
 
     public function test_member_cannot_update_forbidden_fields()
     {
-        $this->mock(Mailman::class)->shouldReceive('updateUserEmailForAllMailList')->once();
         $forbidden = Arr::only($this->member->attributesToArray(), ['firstname', 'preposition', 'lastname', 'kind_of_member', 'remark']);
         $data = self::DETAILS + ['email' => 'Second@esac.nl'] + array_fill_keys(array_keys($forbidden), 'Second');
 
@@ -118,18 +117,19 @@ class UpdateUserTest extends TestCase
             ->assertRedirect(route('beheer.users.show', [$this->member, 'back' => 'false']));
 
         Event::assertNotDispatched(MemberKindChanged::class);
+        Event::assertDispatched(MemberEmailChanged::class);
         $this->assertUpdated($this->member, $forbidden + $data);
     }
 
     public function test_member_cannot_update_others()
     {
-        $this->mock(Mailman::class)->shouldNotReceive('updateUserEmailForAllMailList');
         $before = $this->admin->fresh()->getAttributes();
 
         $this->actingAs($this->member)->patch(route('beheer.users.update', $this->admin), self::DETAILS + ['email' => 'Second@esac.nl'])
             ->assertForbidden();
 
         Event::assertNotDispatched(MemberKindChanged::class);
+        Event::assertNotDispatched(MemberEmailChanged::class);
         $this->assertSame($before, $this->admin->fresh()->getAttributes());
     }
 

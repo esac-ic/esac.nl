@@ -5,7 +5,6 @@ namespace App\Models;
 use App\Casts\DisplayDateTime;
 use App\Models\ApplicationForm\ApplicationForm;
 use App\Models\ApplicationForm\ApplicationResponse;
-use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Attributes\Scope;
 use Illuminate\Database\Eloquent\Builder;
@@ -157,6 +156,6 @@ class AgendaItem extends Model
 
     public function canRegister(): bool
     {
-        return ! ($this->subscription_end_date < Carbon::now());
+        return $this->subscription_end_date?->isFuture() ?? false;
     }
 }

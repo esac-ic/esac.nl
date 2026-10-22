@@ -35,7 +35,7 @@ class LibraryController extends Controller implements HasMiddleware
 
     public function store(BookRequest $request): RedirectResponse
     {
-        Book::create($request->validated());
+        Book::query()->create($request->validated());
 
         return to_route('beheer.books.index')->with('message', 'Book added');
     }

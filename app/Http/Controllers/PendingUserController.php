@@ -23,7 +23,7 @@ class PendingUserController extends Controller implements HasMiddleware
     public function index(): View
     {
         return view('beheer.user.index_pending_users', [
-            'users' => User::pending()->get(['id', 'firstname', 'lastname', 'email', 'preposition', 'kind_of_member']),
+            'users' => User::query()->pending()->get(['id', 'firstname', 'lastname', 'email', 'preposition', 'kind_of_member']),
         ]);
     }
 

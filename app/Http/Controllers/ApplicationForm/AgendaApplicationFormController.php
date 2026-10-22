@@ -40,7 +40,7 @@ class AgendaApplicationFormController extends Controller implements HasMiddlewar
     {
         $applicationForm = $agendaItem->applicationForm;
 
-        $users = User::current()
+        $users = User::query()->current()
             ->whereNotIn('id', $agendaItem->registrations->pluck('user_id'))
             ->orderBy('firstname')->orderBy('lastname')
             ->get(['id', 'firstname', 'preposition', 'lastname'])
@@ -67,7 +67,7 @@ class AgendaApplicationFormController extends Controller implements HasMiddlewar
 
         return view('forms.inschrijven_details', [
             'agendaId' => $agendaItem->id,
-            'applicationDataRows' => ApplicationResponseRow::where('application_response_id', $applicationResponse->id)->get(),
+            'applicationDataRows' => ApplicationResponseRow::query()->where('application_response_id', $applicationResponse->id)->get(),
         ]);
     }
 

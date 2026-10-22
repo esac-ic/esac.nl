@@ -33,7 +33,7 @@ class CertificateController extends Controller implements HasMiddleware
 
     public function store(CertificateRequest $request): RedirectResponse
     {
-        Certificate::create($request->validated());
+        Certificate::query()->create($request->validated());
 
         return to_route('beheer.certificates.index')->with('message', 'Certificate added');
     }

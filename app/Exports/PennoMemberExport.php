@@ -3,7 +3,7 @@
 namespace App\Exports;
 
 use App\Models\User;
-use Carbon\Carbon;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection;
 
 class PennoMemberExport extends SpreadsheetExport
@@ -12,12 +12,12 @@ class PennoMemberExport extends SpreadsheetExport
 
     public function __construct(int $daysAgo)
     {
-        $this->fromDate = Carbon::today(config('app.display_timezone'))->subDays($daysAgo);
+        $this->fromDate = today(config('app.display_timezone'))->subDays($daysAgo);
     }
 
     public function collection(): Collection
     {
-        $users = User::current()->where('created_at', '>=', $this->fromDate->copy()->utc())->get($this->columns());
+        $users = User::query()->current()->where('created_at', '>=', $this->fromDate->copy()->utc())->get($this->columns());
 
         return $users->map(function (User $user) {
             $export = $user->toArray();

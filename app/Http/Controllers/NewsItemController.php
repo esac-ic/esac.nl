@@ -37,7 +37,7 @@ class NewsItemController extends Controller implements HasMiddleware
 
     public function store(NewsItemRequest $request): RedirectResponse
     {
-        $newsItem = NewsItem::create($request->validated());
+        $newsItem = NewsItem::query()->create($request->validated());
 
         if ($request->hasFile('thumbnail')) {
             $this->uploadAndResizeImage($request, $newsItem);

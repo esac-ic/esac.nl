@@ -19,7 +19,7 @@ class MemberMassMailListSyncJob implements ShouldQueue
     {
         Log::info('Performing a mass mail list sync');
 
-        foreach (User::current()->get() as $user) {
+        foreach (User::query()->current()->get() as $user) {
             if ($mailLists = $user->kind_of_member->mailLists()) {
                 $mailman->addUserToSpecifiedMailLists($user->email, $user->getName(), $mailLists);
             }

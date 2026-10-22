@@ -3,6 +3,7 @@
 namespace App\Listeners;
 
 use App\Events\MemberBecameOldMember;
+use App\Events\MemberEmailChanged;
 use App\Events\MemberKindChanged;
 use App\Events\OldMemberBecameMember;
 use App\Events\PendingUserApproved;
@@ -41,6 +42,11 @@ class UpdateMemberTypeMaillists implements ShouldQueueAfterCommit
     public function handlePendingUserApproved(PendingUserApproved $event): void
     {
         $this->addUserToMailLists($event->user);
+    }
+
+    public function handleMemberEmailChanged(MemberEmailChanged $event): void
+    {
+        $this->mailman->updateUserEmailForAllMailList($event->user, $event->previousEmail, $event->user->email);
     }
 
     public function handleMemberBecameOldMember(MemberBecameOldMember $event): void

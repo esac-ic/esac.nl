@@ -8,7 +8,6 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\SoftDeletes;
-use Illuminate\Support\Facades\Auth;
 
 #[Fillable([
     'name',
@@ -69,14 +68,6 @@ class MenuItem extends Model
     protected function inMenu(Builder $query): void
     {
         $query->where('menu_item', true);
-    }
-
-    /**
-     * Whether the current visitor may see the page.
-     */
-    public function show(): bool
-    {
-        return ! $this->login || Auth::check();
     }
 
     public static function sortMenuList($menuList): array

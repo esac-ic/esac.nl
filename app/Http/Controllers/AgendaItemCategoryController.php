@@ -33,7 +33,7 @@ class AgendaItemCategoryController extends Controller implements HasMiddleware
 
     public function store(AgendaItemCategoryRequest $request): RedirectResponse
     {
-        AgendaItemCategory::create($request->validated());
+        AgendaItemCategory::query()->create($request->validated());
 
         return to_route('beheer.agenda-item-categories.index')->with('message', 'Events category is added');
     }

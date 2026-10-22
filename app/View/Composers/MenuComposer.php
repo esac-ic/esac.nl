@@ -12,11 +12,11 @@ class MenuComposer
      */
     public function compose(View $view): void
     {
-        $menuItems = MenuItem::sortMenuList(MenuItem::inMenu()->whereNull('parent_id')->get());
+        $menuItems = MenuItem::sortMenuList(MenuItem::query()->inMenu()->whereNull('parent_id')->get());
 
         $subMenuItems = [];
         foreach ($menuItems as $menuItem) {
-            $subMenuItems[$menuItem->id] = MenuItem::sortMenuList(MenuItem::inMenu()->where('parent_id', $menuItem->id)->get());
+            $subMenuItems[$menuItem->id] = MenuItem::sortMenuList(MenuItem::query()->inMenu()->where('parent_id', $menuItem->id)->get());
         }
 
         $view->with(compact('menuItems', 'subMenuItems'));
