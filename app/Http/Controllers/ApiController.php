@@ -8,6 +8,7 @@ use App\Models\MenuItem;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controllers\HasMiddleware;
+use Illuminate\Routing\Controllers\Middleware;
 
 class ApiController extends Controller implements HasMiddleware
 {
@@ -15,6 +16,8 @@ class ApiController extends Controller implements HasMiddleware
     {
         return [
             'auth',
+            new Middleware('can:manage-pages', only: ['getMenuItems']),
+            new Middleware('can:manage-mail-lists', only: ['getUsers']),
         ];
     }
 
