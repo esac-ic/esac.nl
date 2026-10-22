@@ -28,7 +28,7 @@ class RegistrationController extends Controller implements HasMiddleware
             ])
             ->findOrFail($request->input('user_id'));
 
-        Gate::authorize('update', $user);
+        Gate::authorize('view', $user);
 
         return response()->json(RegistrationResource::collection($user->applicationResponses));
     }
