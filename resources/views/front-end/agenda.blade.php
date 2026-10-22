@@ -10,29 +10,29 @@
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title">{{ 'Export agenda'}}</h5>
+                    <h5 class="modal-title">Export agenda</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
                 <div class="modal-body">
-                    <p>{{ 'By clicking one of the links below it is possible to synchronize all ESAC activities with your own agenda.' }}</p>
+                    <p>By clicking one of the links below it is possible to synchronize all ESAC activities with your own agenda.</p>
                     <table class="table table-striped">
                         <tr>
                             <td class="align-middle">Apple</td>
-                            <td><a href="webcal://esac.nl/ical" class="btn btn-outline-primary btn-sm">Connect</a></td>
+                            <td><a href="{{ str(route('front-end.ical'))->replaceMatches('#^https?://#', 'webcal://') }}" class="btn btn-outline-primary btn-sm">Connect</a></td>
                         </tr>
                         <tr>
                             <td class="align-middle">Google Calendar</td>
-                            <td><a href="https://calendar.google.com/calendar/r?cid=http://esac.nl/ical" class="btn btn-outline-primary btn-sm">Connect</a></td>
+                            <td><a href="https://calendar.google.com/calendar/r?cid={{ urlencode(route('front-end.ical')) }}" class="btn btn-outline-primary btn-sm">Connect</a></td>
                         </tr>
                         <tr>
                             <td class="align-middle">Windows + Outlook</td>
-                            <td><a href="webcal://esac.nl/ical" class="btn btn-outline-primary btn-sm">Connect</a></td>
+                            <td><a href="{{ str(route('front-end.ical'))->replaceMatches('#^https?://#', 'webcal://') }}" class="btn btn-outline-primary btn-sm">Connect</a></td>
                         </tr>
                         <tr>
-                            <td class="align-middle">{{ 'Other' }} (iCal URL)</td>
-                            <td>esac.nl/ical</td>
+                            <td class="align-middle">Other (iCal URL)</td>
+                            <td>{{ route('front-end.ical') }}</td>
                         </tr>
                     </table>
                 </div>

@@ -3,7 +3,7 @@
     <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">{{'Add members'}}</h5>
+                <h5 class="modal-title" id="exampleModalLabel">Add members</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
@@ -14,8 +14,8 @@
                     <thead>
                     <tr>
                         <td></td>
-                        <td><strong>{{'Name'}}</strong></td>
-                        <td><strong>{{'Email address'}}</strong></td>
+                        <td><strong>Name</strong></td>
+                        <td><strong>Email address</strong></td>
                     </tr>
                     </thead>
                     <tbody></tbody>
@@ -23,7 +23,7 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                <button id="addUsers" class="btn btn-primary float-right">{{ 'Add members' }}</button>
+                <button id="addUsers" class="btn btn-primary float-right">Add members</button>
             </div>
         </div>
     </div>

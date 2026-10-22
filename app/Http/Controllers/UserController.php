@@ -69,7 +69,7 @@ class UserController extends Controller implements HasMiddleware
         }
 
         if ($request->user()->is($user)) {
-            return to_route('beheer.users.show', [$user, 'back' => 'false']);
+            return to_route('beheer.users.show', $user);
         }
 
         return to_route('beheer.users.index')->with('message', 'Changes to user have been saved');

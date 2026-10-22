@@ -1,7 +1,7 @@
 @extends('layouts.beheer')
 
 @section('title')
-    {{ 'Edit settings' }}
+    Edit settings
 @endsection
 
 @section('content')
@@ -14,7 +14,7 @@
 
     <div class="my-4">
         {{ html()->submit('Save')->class('btn btn-primary') }}
-        <a class="btn btn-danger btn-close" href="{{ route('beheer.settings.show') }}">{{'Cancel'}}</a>
+        <a class="btn btn-danger btn-close" href="{{ route('beheer.settings.show') }}">Cancel</a>
         {{ html()->form()->close() }}
     </div>
 @endsection

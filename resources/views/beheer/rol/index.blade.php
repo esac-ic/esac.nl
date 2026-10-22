@@ -1,12 +1,10 @@
 @extends('layouts.beheer')
 
 @section('title')
-{{'Roles'}}
+Roles
 @endsection
 
 @section('content')
-    @include('includes.flash')
-
     <x-page-header title="Roles">
         <x-slot:intro><p>Warning: don't add or remove roles without discussing with the IC</p></x-slot:intro>
         <x-button-link :href="route('beheer.roles.create')" icon="plus">New role</x-button-link>

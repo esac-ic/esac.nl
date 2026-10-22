@@ -1,12 +1,10 @@
 @extends('layouts.beheer')
 
 @section('title')
-{{'Event categories'}}
+Event categories
 @endsection
 
 @section('content')
-    @include('includes.flash')
-
     <x-page-header title="Event categories">
         <x-button-link :href="route('beheer.agenda-item-categories.create')" icon="plus">New category</x-button-link>
     </x-page-header>

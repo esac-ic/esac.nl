@@ -12,13 +12,15 @@ class MenuComposer
      */
     public function compose(View $view): void
     {
-        $menuItems = MenuItem::sortMenuList(MenuItem::query()->inMenu()->whereNull('parent_id')->get());
+        $itemsByParent = MenuItem::query()->inMenu()->get()->groupBy('parent_id');
 
-        $subMenuItems = [];
-        foreach ($menuItems as $menuItem) {
-            $subMenuItems[$menuItem->id] = MenuItem::sortMenuList(MenuItem::query()->inMenu()->where('parent_id', $menuItem->id)->get());
-        }
+        $menuItems = MenuItem::sortMenuList($itemsByParent->get('', collect()));
 
-        $view->with(compact('menuItems', 'subMenuItems'));
+        $view->with([
+            'menuItems' => $menuItems,
+            'subMenuItems' => collect($menuItems)->mapWithKeys(fn (MenuItem $item) => [
+                $item->id => MenuItem::sortMenuList($itemsByParent->get($item->id, collect())),
+            ])->all(),
+        ]);
     }
 }

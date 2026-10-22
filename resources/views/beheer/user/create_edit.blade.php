@@ -5,8 +5,6 @@
 @section('title', $title)
 
 @section('content')
-    @include('includes.flash')
-
     <x-validation-errors />
 
     <h1>{{ $title }}</h1>
@@ -82,7 +80,7 @@
     @endcan
     <div class="my-4">
         {{ html()->submit('Save')->class('btn btn-primary') }}
-        <a class="btn btn-danger" href="{{ $user->exists ? route('beheer.users.show', $user) : route('beheer.users.index') }}">{{'Cancel'}}</a>
+        <a class="btn btn-danger" href="{{ $user->exists ? route('beheer.users.show', $user) : route('beheer.users.index') }}">Cancel</a>
     </div>
 
     {{ html()->form()->close() }}

@@ -31,20 +31,20 @@
                             <div class="col-auto">
                                 @if($agendaItem->application_form_id != null)
                                     @guest
-                                        {{'Please log in to register'}}
+                                        Please log in to register
                                     @else
                                         @if($agendaItem->canRegister())
                                             @if($registrations->contains('user_id', auth()->id()))
                                                 <form method="POST" action="{{ route('forms.unregister', $agendaItem) }}">
                                                     @csrf
                                                     @method('DELETE')
-                                                    <button type="submit" class="btn btn-outline-danger">{{ 'Unregister' }}</button>
+                                                    <button type="submit" class="btn btn-outline-danger">Unregister</button>
                                                 </form>
                                             @else
-                                                <a class="btn btn-outline-primary" href="{{ route('forms.create', $agendaItem) }}">{{'Register now'}}</a>
+                                                <a class="btn btn-outline-primary" href="{{ route('forms.create', $agendaItem) }}">Register now</a>
                                             @endif
                                         @else
-                                        {{'Registration not possible'}}
+                                        Registration not possible
                                         @endif
                                     @endguest
                                 @endif
@@ -56,10 +56,10 @@
             <div class="col-lg-8 d-flex flex-wrap">
                 <div class="card w-100">
                     <div class="card-body">
-                        <h4 class="card-title">{{'General information'}}</h4>
+                        <h4 class="card-title">General information</h4>
                         <p class="card-text">{!! $agendaItem->text !!}</p>
                         @if($agendaItem->application_form_id != null && auth()->check())
-                            <h4 class="card-title">{{'Registrations'}}</h4>
+                            <h4 class="card-title">Registrations</h4>
                             <ol class="column-count-lg-3">
                                 @foreach($registrations as $registration)
                                     <li>{{ $registration->user->getName() }}
@@ -72,7 +72,7 @@
                         @endif
                     </div>
                     <div class="card-footer bg-white p-3">
-                        <a class="btn btn-outline-primary" href="{{ route('front-end.agenda') }}"><span class="ion-android-arrow-back"></span> {{ 'Back to the agenda' }}</a>
+                        <a class="btn btn-outline-primary" href="{{ route('front-end.agenda') }}"><span class="ion-android-arrow-back"></span> Back to the agenda</a>
                     </div>
                 </div>
             </div>

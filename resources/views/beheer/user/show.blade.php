@@ -6,13 +6,11 @@
 
 
 @section('content')
-    @include('includes.flash')
-
     <x-page-header title="View user">
         @if($user->isPendingMember() && auth()->user()->can('manage-members'))
             {{ html()->form('POST', route('beheer.pending-users.approve', $user))->open() }}
             @method('PATCH')
-            <button type="submit" class="btn btn-success"><em class="ion-checkmark"></em> {{'Approve as member'}}</button>
+            <button type="submit" class="btn btn-success"><em class="ion-checkmark"></em> Approve as member</button>
             {{ html()->form()->close() }}
         
             <form method="post"
@@ -21,13 +19,13 @@
             >
                 @csrf
                 @method('DELETE')
-                <button type="submit" class="btn btn-danger"><em class="ion-trash-a"></em> {{'Remove as pending'}}</button>
+                <button type="submit" class="btn btn-danger"><em class="ion-trash-a"></em> Remove as pending</button>
             </form>
         @else
             @can('manage-members')
                 @if($user->isOldMember())
                     {{ html()->form('POST', route('beheer.users.membership.store', $user))->open() }}
-                        <button type="submit" class="btn btn-success"><em class="ion-plus"></em> {{'Make active member'}}</button>
+                        <button type="submit" class="btn btn-success"><em class="ion-plus"></em> Make active member</button>
                     {{ html()->form()->close() }}
                 @endif
             @endcan
@@ -35,14 +33,14 @@
             @can('manage-certificates')
                 <x-button-link :href="route('beheer.users.certificates.create', $user)" icon="plus">Add certificate</x-button-link>
             @endcan
-            @if(request('back') != "false")
+            @can('view-members')
                 <x-button-link :href="route('beheer.users.index')" icon="android-arrow-back">Back</x-button-link>
-            @endif
+            @endcan
             @can('manage-members')
                 @if($user->isActiveMember())
                     {{ html()->form('POST', route('beheer.users.membership.destroy', $user))->open() }}
                     @method('DELETE')
-                    <button type="submit" class="btn btn-danger"><em class="ion-trash-a"></em> {{'Remove as active member'}}</button>
+                    <button type="submit" class="btn btn-danger"><em class="ion-trash-a"></em> Remove as active member</button>
                     {{ html()->form()->close() }}
                 @endif
             @endcan
@@ -52,23 +50,23 @@
         <ul class="nav nav-tabs" id="myTab" role="tablist">
             @can('update', $user)
             <li class="nav-item">
-                <a class="nav-link active" id="tab1" data-toggle="tab" href="#tab1-content" role="tab" aria-controls="tab1-content" aria-selected="true">{{'Personal'}}</a>
+                <a class="nav-link active" id="tab1" data-toggle="tab" href="#tab1-content" role="tab" aria-controls="tab1-content" aria-selected="true">Personal</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" id="tab2" data-toggle="tab" href="#tab2-content" role="tab" aria-controls="tab2-content" aria-selected="false">{{'Financial'}}</a>
+                <a class="nav-link" id="tab2" data-toggle="tab" href="#tab2-content" role="tab" aria-controls="tab2-content" aria-selected="false">Financial</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" id="tab3" data-toggle="tab" href="#tab3-content" role="tab" aria-controls="tab3-content" aria-selected="false">{{'Emergency info'}}</a>
+                <a class="nav-link" id="tab3" data-toggle="tab" href="#tab3-content" role="tab" aria-controls="tab3-content" aria-selected="false">Emergency info</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" id="tab4" data-toggle="tab" href="#rols" role="tab" aria-controls="rols" aria-selected="false">{{'Roles'}}</a>
+                <a class="nav-link" id="tab4" data-toggle="tab" href="#rols" role="tab" aria-controls="rols" aria-selected="false">Roles</a>
             </li>
             @endcan
             <li class="nav-item">
-                <a @class(['nav-link', 'active' => auth()->user()->cannot('update', $user)]) id="tab5" data-toggle="tab" href="#certifications" role="tab" aria-controls="certifications" aria-selected="false">{{'Certificates' }}</a>
+                <a @class(['nav-link', 'active' => auth()->user()->cannot('update', $user)]) id="tab5" data-toggle="tab" href="#certifications" role="tab" aria-controls="certifications" aria-selected="false">Certificates</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" id="tab6" data-toggle="tab" href="#registrations" role="tab" aria-controls="registrations" aria-selected="false">{{'Registrations' }}</a>
+                <a class="nav-link" id="tab6" data-toggle="tab" href="#registrations" role="tab" aria-controls="registrations" aria-selected="false">Registrations</a>
             </li>
         </ul>
         <div class="tab-content space-sm">
@@ -85,7 +83,7 @@
                     <x-detail-row label="City">{{$user->city}}</x-detail-row>
                     <x-detail-row label="Postal code">{{$user->zipcode}}</x-detail-row>
                     <tr>
-                        <td>{{'Country'}}</td>
+                        <td>Country</td>
                         <td>
                             @isset($user->country)
                             {{trans('countries.' . $user->country)}}
@@ -95,14 +93,14 @@
                     <x-detail-row label="Alternative phone number">{{$user->phone_number_alt}}</x-detail-row>
                     <x-detail-row label="Birthdate">{{ $user->birthday?->format('d-m-Y') }}</x-detail-row>
                     <tr>
-                        <td>{{'Kind of member'}}</td>
+                        <td>Kind of member</td>
                         <td>
                             {{ $user->kind_of_member?->label() }}
                         </td>
                     </tr>
                     <x-detail-row label="Remarks">{{$user->remark}}</x-detail-row>
-                    <x-detail-row label="User created at">{{ $user->created_at?->tz(config('app.display_timezone'))->format('d-m-Y') }}</x-detail-row>
-                    <x-detail-row label="User updated at">{{ $user->updated_at?->tz(config('app.display_timezone'))->format('d-m-Y') }}</x-detail-row>
+                    <x-detail-row label="User created at"><x-local-time :value="$user->created_at" format="d-m-Y" /></x-detail-row>
+                    <x-detail-row label="User updated at"><x-local-time :value="$user->updated_at" format="d-m-Y" /></x-detail-row>
                     <x-detail-row label="ID">{{ $user->id}}</x-detail-row>
                     @isset($user->lid_af)
                     <tr>
@@ -134,7 +132,7 @@
                     @foreach($user->roles as $role)
                         <tr>
                             @if($loop->first)
-                                <td rowspan="{{$loop->count}}">{{'Roles'}}</td>
+                                <td rowspan="{{$loop->count}}">Roles</td>
                             @endif
                             <td>{{$role->name}}</td>
                         </tr>
@@ -147,13 +145,13 @@
                     <thead>
                     <tr>
                         <td>
-                            <strong>{{'Name'}}</strong>
+                            <strong>Name</strong>
                         </td>
                         <td>
-                            <strong>{{'Abbreviation'}}</strong>
+                            <strong>Abbreviation</strong>
                         </td>
                         <td>
-                            <strong>{{'Management'}}</strong>
+                            <strong>Management</strong>
                         </td>
                     </tr>
                     </thead>
@@ -185,13 +183,13 @@
                     <thead>
                     <tr>
                         <td>
-                            <strong>{{'Name'}}</strong>
+                            <strong>Name</strong>
                         </td>
                         <td>
-                            <strong>{{'Start date'}}</strong>
+                            <strong>Start date</strong>
                         </td>
                         <td>
-                            <strong>{{'Action'}}</strong>
+                            <strong>Action</strong>
                         </td>
                     </tr>
                     </thead>
@@ -219,7 +217,7 @@
             ]
         });
         $(document).on('click','#delete_button',function(){
-            if(confirm("{{'Are you sure you want do remove your registration for this event?'}}")){
+            if(confirm("Are you sure you want do remove your registration for this event?")){
                 var url = $(this).attr('data-url');
                 $.ajax({
                     url: url,

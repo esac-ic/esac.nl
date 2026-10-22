@@ -30,7 +30,7 @@ class AppServiceProvider extends ServiceProvider
         // A queue worker runs many jobs in one process, so each job reads the settings afresh.
         Queue::before(fn () => Once::flush());
 
-        View::composer('includes.menu', MenuComposer::class);
+        View::composer('components.menu', MenuComposer::class);
         View::composer('includes.footer', fn ($view) => $view->with(
             'footerPhoneNumber',
             Setting::valueOf(SettingKey::FooterPhoneNumber),

@@ -1,12 +1,10 @@
 @extends('layouts.beheer')
 
 @section('title')
-{{'Application forms'}}
+Application forms
 @endsection
 
 @section('content')
-    @include('includes.flash')
-
     <x-page-header title="Application forms">
         <x-button-link :href="route('beheer.application-forms.create')" icon="plus">New application form</x-button-link>
     </x-page-header>

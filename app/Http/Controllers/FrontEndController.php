@@ -112,7 +112,7 @@ class FrontEndController extends Controller
             return to_route('login');
         }
 
-        return view('front-end.templade', [
+        return view('front-end.page', [
             'content' => $menuItem->content,
             'curPageName' => $menuItem->name,
         ]);

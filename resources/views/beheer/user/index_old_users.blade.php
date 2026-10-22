@@ -1,12 +1,10 @@
 @extends('layouts.beheer')
 
 @section('title')
-{{'Old members'}}
+Old members
 @endsection
 
 @section('content')
-    @include('includes.flash')
-
     <x-page-header title="Old members">
         @can('manage-members')
             <x-button-link :href="route('beheer.old-members.export')" icon="android-download">Export old members</x-button-link>

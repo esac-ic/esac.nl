@@ -1,12 +1,10 @@
 @extends('layouts.beheer')
 
 @section('title')
-{{'Certificate'}}
+Certificate
 @endsection
 
 @section('content')
-    @include('includes.flash')
-
     <x-page-header title="Certificate">
         <x-button-link :href="route('beheer.certificates.create')" icon="plus">Make a new certificate</x-button-link>
     </x-page-header>

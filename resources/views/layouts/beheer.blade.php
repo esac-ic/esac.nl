@@ -2,10 +2,7 @@
 
 @section('main')
 
-@component('includes.menu')
-    @slot('navClass', 'bg-dark position-fixed')
-    @slot('navId', '')
-@endcomponent
+<x-menu nav-class="bg-dark position-fixed" />
 
 <div class="container-fluid mt-5 mt-lg-0">
     <div class="row">
@@ -20,12 +17,12 @@
                 <ul class="navbar-nav mr-auto mt-2 mt-lg-0 flex-lg-column">
                     <li class="nav-item active">
                         <span class="nav-link">
-                            {{ 'User' }}
+                            User
                         </span>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="{{ route('beheer.users.show', [auth()->user(), 'back' => 'false']) }}">
-                            {{ 'Account overview' }}
+                        <a class="nav-link" href="{{ route('beheer.users.show', auth()->user()) }}">
+                            Account overview
                         </a>
                     </li>
                     @can('access-admin')
@@ -33,7 +30,7 @@
 
                         <li class="nav-item active">
                             <span class="nav-link">
-                                {{ 'Management' }}
+                                Management
                             </span>
                         </li>
                         <li class="nav-item">
@@ -44,55 +41,55 @@
                     @endcan
                     @can('view-members')
                         <x-nav-dropdown label="Members">
-                            <a class="dropdown-item" href="{{ route('beheer.users.index') }}">{{'Current members'}}</a>
+                            <a class="dropdown-item" href="{{ route('beheer.users.index') }}">Current members</a>
                             @can('manage-members')
-                                <a class="dropdown-item" href="{{ route('beheer.old-members.index') }}">{{'Old members'}}</a>
-                                <a class="dropdown-item" href="{{ route('beheer.pending-users.index') }}">{{'Pending users'}}</a>
+                                <a class="dropdown-item" href="{{ route('beheer.old-members.index') }}">Old members</a>
+                                <a class="dropdown-item" href="{{ route('beheer.pending-users.index') }}">Pending users</a>
                             @endcan
                             @can('manage-roles')
-                                <a class="dropdown-item" href="{{ route('beheer.roles.index') }}">{{'Roles'}}</a>
+                                <a class="dropdown-item" href="{{ route('beheer.roles.index') }}">Roles</a>
                             @endcan
                             @can('manage-certificates')
-                                <a class="dropdown-item" href="{{ route('beheer.certificates.index') }}">{{'Certificates'}}</a>
+                                <a class="dropdown-item" href="{{ route('beheer.certificates.index') }}">Certificates</a>
                             @endcan
                         </x-nav-dropdown>
                     @endcan
                     @can('manage-agenda')
                         <x-nav-dropdown label="Activities">
-                            <a class="dropdown-item" href="{{ route('beheer.agenda-items.index') }}">{{'Events'}}</a>
-                            <a class="dropdown-item" href="{{ route('beheer.application-forms.index') }}">{{'Application forms'}}</a>
+                            <a class="dropdown-item" href="{{ route('beheer.agenda-items.index') }}">Events</a>
+                            <a class="dropdown-item" href="{{ route('beheer.application-forms.index') }}">Application forms</a>
                             @can('manage-agenda-categories')
-                                <a class="dropdown-item" href="{{ route('beheer.agenda-item-categories.index') }}">{{'Event categories'}}</a>
+                                <a class="dropdown-item" href="{{ route('beheer.agenda-item-categories.index') }}">Event categories</a>
                             @endcan
                         </x-nav-dropdown>
                     @endcan
                     @can('manage-pages')
                         <x-nav-dropdown label="Content">
-                            <a class="dropdown-item" href="{{ route('beheer.pages.index') }}">{{'Page management'}}</a>
-                            <a class="dropdown-item" href="{{ route('beheer.news-items.index') }}">{{'News items'}}</a>
+                            <a class="dropdown-item" href="{{ route('beheer.pages.index') }}">Page management</a>
+                            <a class="dropdown-item" href="{{ route('beheer.news-items.index') }}">News items</a>
                             @can('manage-library')
-                                <a class="dropdown-item" href="{{ route('beheer.books.index') }}">{{'Books'}}</a>
+                                <a class="dropdown-item" href="{{ route('beheer.books.index') }}">Books</a>
                             @endcan
                         </x-nav-dropdown>
                     @endcan
                     @can('manage-mail-lists')
                         <li class="nav-item">
                             <a href="{{ route('beheer.mail-lists.index') }}" class="nav-link">
-                                {{'Mailing lists'}}
+                                Mailing lists
                             </a>
                         </li>
                     @endcan
                     @can('view-user-event-log')
                         <li class="nav-item">
                             <a href="{{ route('beheer.user-event-log.index') }}" class="nav-link">
-                                {{'User event log'}}
+                                User event log
                             </a>
                         </li>
                     @endcan
                     @can('manage-settings')
                         <li class="nav-item">
                             <a href="{{ route('beheer.settings.show') }}" class="nav-link">
-                                {{'Setting'}}
+                                Setting
                             </a>
                         </li>
                     @endcan
@@ -102,6 +99,7 @@
         </div>
         <div class="col-lg-10 offset-lg-2">
             <section class="mt-4">
+            @include('includes.flash')
             @yield('content')
             </section>
         </div>
