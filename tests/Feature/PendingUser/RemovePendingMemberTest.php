@@ -2,7 +2,7 @@
 
 namespace Tests\Feature\PendingUser;
 
-use App\Enums\Role;
+use App\Enums\AdminRole;
 use App\Events\PendingUserRemoved;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -19,7 +19,7 @@ class RemovePendingMemberTest extends TestCase
     {
         parent::setUp();
 
-        $this->admin = User::factory()->withRole(Role::Administrator)->create();
+        $this->admin = User::factory()->withRole(AdminRole::Administrator)->create();
     }
 
     public function test_remove_pending_member()
@@ -29,9 +29,9 @@ class RemovePendingMemberTest extends TestCase
 
         Event::fake();
 
-        $response = $this->actingAs($this->admin)->delete(route('beheer.pending-users.destroy', $user));
+        $response = $this->actingAs($this->admin)->delete(route('admin.pending-users.destroy', $user));
 
-        $response->assertRedirect(route('beheer.pending-users.index'));
+        $response->assertRedirect(route('admin.pending-users.index'));
         Event::assertDispatched(PendingUserRemoved::class);
 
         $this->assertNull(User::find($userId));

@@ -19,7 +19,7 @@ class AgendaItemFactory extends Factory
             'text' => fake()->text(),
             'short_description' => fake()->word(),
             'created_by' => User::factory(),
-            'category' => AgendaItemCategory::factory(),
+            'agenda_item_category_id' => AgendaItemCategory::factory(),
             'start_date' => fake()->date(),
             'end_date' => fake()->date(),
             'subscription_end_date' => fake()->date(),

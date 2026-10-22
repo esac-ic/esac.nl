@@ -17,8 +17,8 @@ class ApplicationResponseFactory extends Factory
     {
         return [
             'user_id' => User::factory(),
-            'inschrijf_form_id' => ApplicationForm::factory(),
-            'agenda_id' => AgendaItem::factory(),
+            'application_form_id' => ApplicationForm::factory(),
+            'agenda_item_id' => AgendaItem::factory(),
         ];
     }
 }

@@ -2,8 +2,8 @@
 
 namespace App\Models;
 
+use App\Enums\AdminRole;
 use App\Enums\KindOfMember;
-use App\Enums\Role;
 use App\Events\MemberBecameOldMember;
 use App\Events\MemberEmailChanged;
 use App\Events\MemberKindChanged;
@@ -49,7 +49,7 @@ use RuntimeException;
     'kind_of_member',
     'iban',
     'bic',
-    'incasso',
+    'direct_debit',
     'remark',
 ])]
 #[Hidden([
@@ -65,9 +65,9 @@ class User extends Authenticatable
         return [
             'password' => 'hashed',
             'birthday' => 'date',
-            'lid_af' => 'date:Y-m-d',
-            'pending_user' => 'date:Y-m-d',
-            'incasso' => 'boolean',
+            'membership_ended_on' => 'date:Y-m-d',
+            'pending_since' => 'date:Y-m-d',
+            'direct_debit' => 'boolean',
             'kind_of_member' => KindOfMember::class,
         ];
     }
@@ -78,19 +78,19 @@ class User extends Authenticatable
     #[Scope]
     protected function current(Builder $query): void
     {
-        $query->whereNull('lid_af')->whereNull('pending_user');
+        $query->whereNull('membership_ended_on')->whereNull('pending_since');
     }
 
     #[Scope]
     protected function old(Builder $query): void
     {
-        $query->whereNotNull('lid_af');
+        $query->whereNotNull('membership_ended_on');
     }
 
     #[Scope]
     protected function pending(Builder $query): void
     {
-        $query->whereNotNull('pending_user');
+        $query->whereNotNull('pending_since');
     }
 
     public static function createPending(array $data): self
@@ -98,9 +98,9 @@ class User extends Authenticatable
         $user = new self($data);
 
         // A date column, so the date in Amsterdam rather than in UTC.
-        $user->pending_user = today(config('app.display_timezone'));
+        $user->pending_since = today(config('app.display_timezone'));
         $user->kind_of_member = KindOfMember::Member;
-        $user->lid_af = null;
+        $user->membership_ended_on = null;
 
         $user->save();
 
@@ -128,11 +128,11 @@ class User extends Authenticatable
     }
 
     /**
-     * @return BelongsToMany<Rol, $this>
+     * @return BelongsToMany<Role, $this>
      */
     public function roles(): BelongsToMany
     {
-        return $this->belongsToMany(Rol::class);
+        return $this->belongsToMany(Role::class);
     }
 
     /**
@@ -160,7 +160,7 @@ class User extends Authenticatable
         return $this->hasMany(ApplicationResponse::class);
     }
 
-    public function hasRole(Role ...$roles): bool
+    public function hasRole(AdminRole ...$roles): bool
     {
         foreach ($roles as $role) {
             if ($this->roles->contains($role->value)) {
@@ -205,22 +205,22 @@ class User extends Authenticatable
 
     public function isOldMember(): bool
     {
-        return $this->lid_af !== null;
+        return $this->membership_ended_on !== null;
     }
 
     public function isPendingMember(): bool
     {
-        return $this->pending_user !== null;
+        return $this->pending_since !== null;
     }
 
     public function isActiveMember(): bool
     {
-        return $this->lid_af === null && $this->pending_user === null;
+        return $this->membership_ended_on === null && $this->pending_since === null;
     }
 
     public function removeAsActiveMember(): void
     {
-        $this->lid_af = today(config('app.display_timezone'));
+        $this->membership_ended_on = today(config('app.display_timezone'));
         $this->save();
 
         $this->roles()->detach();
@@ -244,7 +244,7 @@ class User extends Authenticatable
         }
 
         DB::transaction(function () {
-            $this->lid_af = null;
+            $this->membership_ended_on = null;
             $this->save();
             OldMemberBecameMember::dispatch($this);
         });
@@ -255,7 +255,7 @@ class User extends Authenticatable
     public function approveAsPendingMember(): void
     {
         DB::transaction(function () {
-            $this->pending_user = null;
+            $this->pending_since = null;
             $this->save();
             PendingUserApproved::dispatch($this);
         });

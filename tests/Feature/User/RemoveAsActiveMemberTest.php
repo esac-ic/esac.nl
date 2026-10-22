@@ -2,7 +2,7 @@
 
 namespace Tests\Feature\User;
 
-use App\Enums\Role;
+use App\Enums\AdminRole;
 use App\Events\MemberBecameOldMember;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Model;
@@ -20,7 +20,7 @@ class RemoveAsActiveMemberTest extends TestCase
     {
         parent::setUp();
 
-        $this->admin = User::factory()->withRole(Role::Administrator)->create();
+        $this->admin = User::factory()->withRole(AdminRole::Administrator)->create();
     }
 
     public function test_remove_as_active_member()
@@ -28,17 +28,17 @@ class RemoveAsActiveMemberTest extends TestCase
         $user = User::factory()->create();
         $userId = $user->id;
 
-        $this->assertNull($user->lid_af); // sanity check in case the factory breaks
+        $this->assertNull($user->membership_ended_on); // sanity check in case the factory breaks
 
         // fake events, but make sure the model events are handled normally
         $initialDispenser = Event::getFacadeRoot();
         Event::fake();
         Model::setEventDispatcher($initialDispenser);
 
-        $response = $this->actingAs($this->admin)->delete(route('beheer.users.membership.destroy', $user));
-        $response->assertRedirect(route('beheer.users.show', $user));
+        $response = $this->actingAs($this->admin)->delete(route('admin.users.membership.destroy', $user));
+        $response->assertRedirect(route('admin.users.show', $user));
         Event::assertDispatched(MemberBecameOldMember::class);
 
-        $this->assertNotNull(User::find($userId)->lid_af);
+        $this->assertNotNull(User::find($userId)->membership_ended_on);
     }
 }

@@ -2,7 +2,7 @@
 
 namespace Tests\Feature\MailList;
 
-use App\Enums\Role;
+use App\Enums\AdminRole;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Http;
@@ -17,15 +17,15 @@ class MailListRoutesTest extends TestCase
     public function mailman_failures_are_shown_instead_of_a_server_error()
     {
         Http::fake(['*' => Http::response(['title' => 'List exists'], 400)]);
-        $admin = User::factory()->withRole(Role::Administrator)->create();
+        $admin = User::factory()->withRole(AdminRole::Administrator)->create();
 
-        $this->actingAs($admin)->from(route('beheer.mail-lists.create'))
-            ->post(route('beheer.mail-lists.store'), ['address' => 'test'])
-            ->assertRedirect(route('beheer.mail-lists.create'))
+        $this->actingAs($admin)->from(route('admin.mail-lists.create'))
+            ->post(route('admin.mail-lists.store'), ['address' => 'test'])
+            ->assertRedirect(route('admin.mail-lists.create'))
             ->assertSessionHas('error');
 
         $this->actingAs($admin)
-            ->deleteJson(route('beheer.mail-lists.members.destroy', ['test.esac.nl', 'a@example.com']))
+            ->deleteJson(route('admin.mail-lists.members.destroy', ['test.esac.nl', 'a@example.com']))
             ->assertStatus(502)
             ->assertJsonPath('message', fn (string $message) => str_starts_with($message, 'Mailman failed: '));
     }

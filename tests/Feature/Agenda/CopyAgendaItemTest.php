@@ -2,7 +2,7 @@
 
 namespace Tests\Feature\Agenda;
 
-use App\Enums\Role;
+use App\Enums\AdminRole;
 use App\Models\AgendaItem;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -14,14 +14,14 @@ class CopyAgendaItemTest extends TestCase
 {
     use RefreshDatabase;
 
-    private $url = 'beheer/agenda-items/';
+    private $url = 'admin/agenda-items/';
 
     private $user;
 
     protected function setUp(): void
     {
         parent::setUp();
-        $this->user = User::factory()->withRole(Role::ActivityAdministrator)->create();
+        $this->user = User::factory()->withRole(AdminRole::ActivityAdministrator)->create();
 
         $this->be($this->user);
     }
@@ -42,7 +42,7 @@ class CopyAgendaItemTest extends TestCase
         $this->assertEquals($agendaItem->subscription_end_date, $newAgendaItem->subscription_end_date);
         $this->assertEquals($agendaItem->start_date, $newAgendaItem->start_date);
         $this->assertEquals($agendaItem->end_date, $newAgendaItem->end_date);
-        $this->assertEquals($agendaItem->category, $newAgendaItem->category);
+        $this->assertEquals($agendaItem->agenda_item_category_id, $newAgendaItem->agenda_item_category_id);
         $this->assertEquals($agendaItem->climbing_activity, $newAgendaItem->climbing_activity);
 
         $this->assertEquals($agendaItem->title, $newAgendaItem->title);

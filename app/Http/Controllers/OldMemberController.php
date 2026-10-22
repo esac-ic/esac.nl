@@ -21,7 +21,7 @@ class OldMemberController extends Controller implements HasMiddleware
 
     public function index(): View
     {
-        return view('beheer.user.index_old_users', [
+        return view('admin.users.index_old_users', [
             'users' => User::query()->old()->get(['id', 'firstname', 'lastname', 'email', 'preposition', 'kind_of_member']),
         ]);
     }

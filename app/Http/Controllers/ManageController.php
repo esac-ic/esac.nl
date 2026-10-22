@@ -18,6 +18,6 @@ class ManageController extends Controller implements HasMiddleware
 
     public function index(): View
     {
-        return view('beheer.home');
+        return view('admin.home');
     }
 }

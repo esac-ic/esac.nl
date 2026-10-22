@@ -2,7 +2,7 @@
 
 namespace Tests\Feature\Authorization;
 
-use App\Enums\Role;
+use App\Enums\AdminRole;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Gate;
@@ -20,8 +20,8 @@ class AbilitiesTest extends TestCase
     public static function users(): array
     {
         return [
-            'administrator' => [Role::Administrator, true, [true, true, true, false]],
-            'certificate administrator' => [Role::CertificateAdministrator, true, [true, false, true, false]],
+            'administrator' => [AdminRole::Administrator, true, [true, true, true, false]],
+            'certificate administrator' => [AdminRole::CertificateAdministrator, true, [true, false, true, false]],
             'member' => [null, true, [false, false, false, false]],
             'guest' => [null, false, [false, false, false, false]],
         ];
@@ -29,7 +29,7 @@ class AbilitiesTest extends TestCase
 
     #[Test]
     #[DataProvider('users')]
-    public function a_user_has_the_abilities_of_their_role(?Role $role, bool $loggedIn, array $expected)
+    public function a_user_has_the_abilities_of_their_role(?AdminRole $role, bool $loggedIn, array $expected)
     {
         $user = $loggedIn ? User::factory()->create() : null;
         if ($role !== null) {

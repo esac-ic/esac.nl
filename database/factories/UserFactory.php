@@ -2,8 +2,8 @@
 
 namespace Database\Factories;
 
+use App\Enums\AdminRole;
 use App\Enums\KindOfMember;
-use App\Enums\Role;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Facades\Hash;
@@ -47,14 +47,14 @@ class UserFactory extends Factory
             'kind_of_member' => fake()->randomElement(KindOfMember::cases()),
             'iban' => fake()->iban(),
             'bic' => fake()->swiftBicNumber(),
-            'incasso' => fake()->boolean(),
+            'direct_debit' => fake()->boolean(),
             'remark' => fake()->sentence(),
         ];
     }
 
-    public function withRole(Role ...$roles): static
+    public function withRole(AdminRole ...$roles): static
     {
-        return $this->afterCreating(fn (User $user) => $user->roles()->attach(array_map(fn (Role $role) => $role->value, $roles)));
+        return $this->afterCreating(fn (User $user) => $user->roles()->attach(array_map(fn (AdminRole $role) => $role->value, $roles)));
     }
 
     public function member(): static
@@ -92,15 +92,15 @@ class UserFactory extends Factory
         return $this->state(['kind_of_member' => 'relationship']);
     }
 
-    public function lidAf(): static
+    public function oldMember(): static
     {
-        return $this->state(fn () => ['lid_af' => fake()->dateTimeThisDecade()]);
+        return $this->state(fn () => ['membership_ended_on' => fake()->dateTimeThisDecade()]);
     }
 
     public function pending(): static
     {
         return $this->state(fn () => [
-            'pending_user' => fake()->dateTimeThisMonth(),
+            'pending_since' => fake()->dateTimeThisMonth(),
             'kind_of_member' => 'member',
         ]);
     }

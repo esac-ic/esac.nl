@@ -13,7 +13,7 @@ enum FormRowType: string
     case CheckBox = 'checkbox';
     case Select = 'select';
     case Radio = 'radio';
-    case MultiCheckBox = 'checkboxen';
+    case MultiCheckBox = 'checkboxes';
 
     /**
      * Whether the question has options to choose from.

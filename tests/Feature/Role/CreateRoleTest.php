@@ -2,8 +2,8 @@
 
 namespace Tests\Feature\Role;
 
-use App\Enums\Role;
-use App\Models\Rol;
+use App\Enums\AdminRole;
+use App\Models\Role;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use PHPUnit\Framework\Attributes\Test;
@@ -16,15 +16,15 @@ class CreateRoleTest extends TestCase
     protected function setUp(): void
     {
         parent::setUp();
-        $this->actingAs(User::factory()->withRole(Role::Administrator)->create());
+        $this->actingAs(User::factory()->withRole(AdminRole::Administrator)->create());
     }
 
     #[Test]
     public function an_admin_can_create_a_role()
     {
-        $this->post('beheer/roles', ['name' => 'test role'])->assertRedirect();
+        $this->post('admin/roles', ['name' => 'test role'])->assertRedirect();
 
-        $this->assertDatabaseHas(Rol::class, ['name' => 'test role']);
+        $this->assertDatabaseHas(Role::class, ['name' => 'test role']);
     }
 
     #[Test]
@@ -32,13 +32,13 @@ class CreateRoleTest extends TestCase
     {
         $this->actingAs(User::factory()->create());
 
-        $this->post('beheer/roles', ['name' => 'test role'])->assertForbidden();
+        $this->post('admin/roles', ['name' => 'test role'])->assertForbidden();
     }
 
     #[Test]
     public function a_role_can_not_be_created_without_required_fields()
     {
-        $this->post('beheer/roles')
+        $this->post('admin/roles')
             ->assertRedirect()
             ->assertInvalid(['name' => 'Field name is required'])
             ->assertOnlyInvalid(['name']);

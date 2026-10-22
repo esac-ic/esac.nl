@@ -2,7 +2,7 @@
 
 namespace Tests\Feature\PendingUser;
 
-use App\Enums\Role;
+use App\Enums\AdminRole;
 use App\Events\PendingUserApproved;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -19,7 +19,7 @@ class ApproveAsPendingMemberTest extends TestCase
     {
         parent::setUp();
 
-        $this->admin = User::factory()->withRole(Role::Administrator)->create();
+        $this->admin = User::factory()->withRole(AdminRole::Administrator)->create();
     }
 
     public function test_approve_pending_member()
@@ -29,11 +29,11 @@ class ApproveAsPendingMemberTest extends TestCase
 
         Event::fake();
 
-        $response = $this->actingAs($this->admin)->patch(route('beheer.pending-users.approve', $user));
+        $response = $this->actingAs($this->admin)->patch(route('admin.pending-users.approve', $user));
 
-        $response->assertRedirect(route('beheer.pending-users.index'));
+        $response->assertRedirect(route('admin.pending-users.index'));
         Event::assertDispatched(PendingUserApproved::class);
 
-        $this->assertNull(User::find($userId)->pending_user);
+        $this->assertNull(User::find($userId)->pending_since);
     }
 }

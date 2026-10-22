@@ -42,14 +42,14 @@ class StorePendingUserTest extends TestCase
             'password' => 'a-password',
             'password_confirmation' => 'a-password',
             'g-recaptcha-response' => 'True',
-            'incasso' => 'True',
+            'direct_debit' => 'True',
             'privacy_policy' => 'True',
             'termsconditions' => 'True',
         ])->assertRedirectToRoute('front-end.signup');
 
         Event::assertDispatched(PendingUserCreated::class);
         $this->assertDatabaseCount(User::class, 1);
-        $this->assertDatabaseHas(User::class, [...$details, 'birthday' => '1990-01-01 00:00:00', 'incasso' => 1]);
+        $this->assertDatabaseHas(User::class, [...$details, 'birthday' => '1990-01-01 00:00:00', 'direct_debit' => 1]);
     }
 
     public function test_a_failed_captcha_is_rejected()

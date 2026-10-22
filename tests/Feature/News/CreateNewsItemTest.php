@@ -2,7 +2,7 @@
 
 namespace Tests\Feature\News;
 
-use App\Enums\Role;
+use App\Enums\AdminRole;
 use App\Models\NewsItem;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -19,7 +19,7 @@ class CreateNewsItemTest extends TestCase
     protected function setUp(): void
     {
         parent::setUp();
-        $this->actingAs(User::factory()->withRole(Role::ActivityAdministrator)->create());
+        $this->actingAs(User::factory()->withRole(AdminRole::ActivityAdministrator)->create());
     }
 
     public static function newsItems(): array
@@ -34,7 +34,7 @@ class CreateNewsItemTest extends TestCase
     #[DataProvider('newsItems')]
     public function create_news_item(array $body)
     {
-        $this->post('beheer/news-items', $body)->assertRedirect();
+        $this->post('admin/news-items', $body)->assertRedirect();
 
         $this->assertDatabaseHas(NewsItem::class, $body);
     }
@@ -44,7 +44,7 @@ class CreateNewsItemTest extends TestCase
     {
         Storage::fake('public');
 
-        $this->post('beheer/news-items', [
+        $this->post('admin/news-items', [
             'title' => 'test nieuws',
             'text' => 'test nieuws',
             'author' => 'Gebruiker1',
@@ -59,7 +59,7 @@ class CreateNewsItemTest extends TestCase
     #[Test]
     public function a_news_item_needs_an_author()
     {
-        $this->post('beheer/news-items', ['title' => 'test nieuws', 'text' => 'test nieuws'])->assertInvalid('author');
+        $this->post('admin/news-items', ['title' => 'test nieuws', 'text' => 'test nieuws'])->assertInvalid('author');
 
         $this->assertDatabaseEmpty(NewsItem::class);
     }

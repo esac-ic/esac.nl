@@ -24,7 +24,7 @@ class PennoExportController extends Controller implements HasMiddleware
 
     public function create(): View
     {
-        return view('beheer.user.penno_member_export');
+        return view('admin.users.penno_member_export');
     }
 
     public function store(Request $request): StreamedResponse

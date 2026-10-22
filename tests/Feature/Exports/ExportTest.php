@@ -2,8 +2,8 @@
 
 namespace Tests\Feature\Exports;
 
+use App\Enums\AdminRole;
 use App\Enums\FormRowType;
-use App\Enums\Role;
 use App\Models\AgendaItem;
 use App\Models\ApplicationForm\ApplicationForm;
 use App\Models\ApplicationForm\ApplicationFormRow;
@@ -27,7 +27,7 @@ class ExportTest extends TestCase
     {
         parent::setUp();
 
-        $this->admin = User::factory()->withRole(Role::Administrator, Role::ActivityAdministrator)->create();
+        $this->admin = User::factory()->withRole(AdminRole::Administrator, AdminRole::ActivityAdministrator)->create();
         $this->actingAs($this->admin);
     }
 
@@ -35,9 +35,9 @@ class ExportTest extends TestCase
     public function members_export_lists_the_active_members()
     {
         User::factory()->count(2)->create();
-        User::factory()->lidAf()->create();
+        User::factory()->oldMember()->create();
 
-        [$sheet, $rows] = $this->readSpreadsheet($this->get('beheer/users/export'), 'Members.xlsx');
+        [$sheet, $rows] = $this->readSpreadsheet($this->get('admin/users/export'), 'Members.xlsx');
 
         $this->assertSame('Active members', $sheet);
         $this->assertSame('#', $rows[0][0]);
@@ -50,9 +50,9 @@ class ExportTest extends TestCase
     #[Test]
     public function old_members_export_lists_the_old_members()
     {
-        User::factory()->count(2)->lidAf()->create();
+        User::factory()->count(2)->oldMember()->create();
 
-        [$sheet, $rows] = $this->readSpreadsheet($this->get('beheer/old-members/export'), 'Old members.xlsx');
+        [$sheet, $rows] = $this->readSpreadsheet($this->get('admin/old-members/export'), 'Old members.xlsx');
 
         $this->assertSame('Old members', $sheet);
         $this->assertSame(['#', 'First name', 'Preposition', 'Last name', 'User created at', 'User removed at'], $rows[0]);
@@ -65,7 +65,7 @@ class ExportTest extends TestCase
         User::factory()->create(['created_at' => now()->subDays(10)]);
         User::factory()->create(['created_at' => now()->subDay()]);
 
-        $response = $this->post('beheer/penno-export', ['days_ago' => 5]);
+        $response = $this->post('admin/penno-export', ['days_ago' => 5]);
         $exportDate = today()->subDays(5)->toDateString();
 
         [$sheet, $rows] = $this->readSpreadsheet($response, "Members (created after $exportDate).xlsx");
@@ -81,7 +81,7 @@ class ExportTest extends TestCase
     {
         Book::create(['title' => 'Alpine climbing', 'year' => 1990, 'country' => 'CH', 'type' => 'Guide', 'code' => 'A1']);
 
-        [$sheet, $rows] = $this->readSpreadsheet($this->get('beheer/books/export'), 'Library.xlsx');
+        [$sheet, $rows] = $this->readSpreadsheet($this->get('admin/books/export'), 'Library.xlsx');
 
         $this->assertSame('Books', $sheet);
         $this->assertSame(['#', 'Title', 'Year', 'Type', 'Country', 'Code'], $rows[0]);
@@ -95,7 +95,7 @@ class ExportTest extends TestCase
         UserEventLogEntry::factory()->count(3)->create(['user_id' => $this->admin->id, 'created_at' => now()]);
         UserEventLogEntry::factory()->create(['user_id' => $this->admin->id, 'created_at' => now()->subWeek()]);
 
-        $response = $this->post('beheer/user-event-log/export', [
+        $response = $this->post('admin/user-event-log/export', [
             'startDate' => now()->subDay()->format('d-m-Y H:i'),
             'endDate' => now()->addDay()->format('d-m-Y H:i'),
         ]);
@@ -119,11 +119,11 @@ class ExportTest extends TestCase
         ]);
         $agendaItem = AgendaItem::factory()->create(['title' => 'Trip to Font', 'application_form_id' => $form->id]);
         ApplicationResponse::factory()->count(2)->create([
-            'agenda_id' => $agendaItem->id,
-            'inschrijf_form_id' => $form->id,
+            'agenda_item_id' => $agendaItem->id,
+            'application_form_id' => $form->id,
         ]);
 
-        $response = $this->get("beheer/agenda-items/{$agendaItem->id}/registrations/export");
+        $response = $this->get("admin/agenda-items/{$agendaItem->id}/registrations/export");
 
         [$sheet, $rows] = $this->readSpreadsheet($response, 'trip-to-font.xlsx');
 

@@ -2,8 +2,8 @@
 
 namespace Tests\Feature\Role;
 
-use App\Enums\Role;
-use App\Models\Rol;
+use App\Enums\AdminRole;
+use App\Models\Role;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use PHPUnit\Framework\Attributes\Test;
@@ -16,10 +16,10 @@ class DeleteRoleTest extends TestCase
     #[Test]
     public function a_role_can_be_deleted_by_an_admin()
     {
-        $role = Rol::factory()->create();
-        $this->actingAs(User::factory()->withRole(Role::Administrator)->create());
+        $role = Role::factory()->create();
+        $this->actingAs(User::factory()->withRole(AdminRole::Administrator)->create());
 
-        $this->delete('beheer/roles/'.$role->id)->assertRedirect();
+        $this->delete('admin/roles/'.$role->id)->assertRedirect();
 
         $this->assertSoftDeleted($role);
     }
@@ -27,9 +27,9 @@ class DeleteRoleTest extends TestCase
     #[Test]
     public function a_user_can_not_delete_a_role()
     {
-        $role = Rol::factory()->create();
+        $role = Role::factory()->create();
         $this->actingAs(User::factory()->create());
 
-        $this->delete('beheer/roles/'.$role->id)->assertForbidden();
+        $this->delete('admin/roles/'.$role->id)->assertForbidden();
     }
 }

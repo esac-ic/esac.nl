@@ -12,8 +12,8 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 #[Fillable([
-    'agenda_id',
-    'inschrijf_form_id',
+    'agenda_item_id',
+    'application_form_id',
     'user_id',
 ])]
 class ApplicationResponse extends Model
@@ -33,7 +33,7 @@ class ApplicationResponse extends Model
      */
     public function agendaItem(): BelongsTo
     {
-        return $this->belongsTo(AgendaItem::class, 'agenda_id');
+        return $this->belongsTo(AgendaItem::class, 'agenda_item_id');
     }
 
     /**

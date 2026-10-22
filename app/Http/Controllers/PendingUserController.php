@@ -22,7 +22,7 @@ class PendingUserController extends Controller implements HasMiddleware
 
     public function index(): View
     {
-        return view('beheer.user.index_pending_users', [
+        return view('admin.users.index_pending_users', [
             'users' => User::query()->pending()->get(['id', 'firstname', 'lastname', 'email', 'preposition', 'kind_of_member']),
         ]);
     }
@@ -39,13 +39,13 @@ class PendingUserController extends Controller implements HasMiddleware
     {
         $user->removeAsPendingMember();
 
-        return to_route('beheer.pending-users.index');
+        return to_route('admin.pending-users.index');
     }
 
     public function approve(User $user): RedirectResponse
     {
         $user->approveAsPendingMember();
 
-        return to_route('beheer.pending-users.index');
+        return to_route('admin.pending-users.index');
     }
 }

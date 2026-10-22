@@ -2,19 +2,19 @@
 
 namespace Database\Seeders;
 
-use App\Enums\Role;
-use App\Models\Rol;
+use App\Enums\AdminRole;
+use App\Models\Role;
 use Illuminate\Database\Seeder;
 
 /**
- * The roles, with the ids the Role enum uses.
+ * The roles, with the ids the AdminRole enum uses.
  */
 class RoleSeeder extends Seeder
 {
     public function run(): void
     {
-        Rol::query()->upsert(
-            collect(Role::cases())->map(fn (Role $role) => ['id' => $role->value, 'name' => str($role->name)->headline()->lower()->ucfirst()])->all(),
+        Role::query()->upsert(
+            collect(AdminRole::cases())->map(fn (AdminRole $role) => ['id' => $role->value, 'name' => str($role->name)->headline()->lower()->ucfirst()])->all(),
             ['id'],
         );
     }

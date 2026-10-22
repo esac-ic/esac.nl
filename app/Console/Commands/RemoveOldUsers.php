@@ -14,7 +14,7 @@ class RemoveOldUsers extends Command
     public function handle(): void
     {
         User::query()
-            ->whereDate('lid_af', '<', now()->subYears(config('app.old_user_retention_years')))
+            ->whereDate('membership_ended_on', '<', now()->subYears(config('app.old_user_retention_years')))
             ->update([
                 'email' => null,
                 'password' => null,
@@ -35,7 +35,7 @@ class RemoveOldUsers extends Command
                 'kind_of_member' => null,
                 'iban' => null,
                 'bic' => null,
-                'incasso' => false,
+                'direct_debit' => false,
                 'remark' => null,
             ]);
     }

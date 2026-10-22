@@ -2,7 +2,7 @@
 
 namespace Tests\Feature\Pages;
 
-use App\Enums\Role;
+use App\Enums\AdminRole;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Http\UploadedFile;
@@ -17,12 +17,12 @@ class UploadEditorImageTest extends TestCase
     {
         Storage::fake('public');
         $admin = User::factory()->create();
-        $admin->roles()->attach(Role::ContentAdministrator->value);
+        $admin->roles()->attach(AdminRole::ContentAdministrator->value);
         $this->actingAs($admin);
 
-        $this->post('beheer/images', ['image' => UploadedFile::fake()->createWithContent('shell.php', '<?php echo 1;')])
+        $this->post('admin/images', ['image' => UploadedFile::fake()->createWithContent('shell.php', '<?php echo 1;')])
             ->assertInvalid('image');
-        $this->post('beheer/images', ['image' => UploadedFile::fake()->image('photo.jpg')])->assertOk();
+        $this->post('admin/images', ['image' => UploadedFile::fake()->image('photo.jpg')])->assertOk();
 
         $this->assertCount(1, Storage::disk('public')->files('image_uploads'));
     }

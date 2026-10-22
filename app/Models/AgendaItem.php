@@ -23,7 +23,7 @@ use Illuminate\Support\Facades\Storage;
     'start_date',
     'end_date',
     'image_url',
-    'category',
+    'agenda_item_category_id',
     'climbing_activity',
 ])]
 class AgendaItem extends Model
@@ -88,7 +88,7 @@ class AgendaItem extends Model
     {
         DB::transaction(function () use ($userId, $answers) {
             $applicationResponse = $this->registrations()->create([
-                'inschrijf_form_id' => $this->application_form_id,
+                'application_form_id' => $this->application_form_id,
                 'user_id' => $userId,
             ]);
 
@@ -118,7 +118,7 @@ class AgendaItem extends Model
      */
     public function agendaItemCategory(): BelongsTo
     {
-        return $this->belongsTo(AgendaItemCategory::class, 'category')->withTrashed();
+        return $this->belongsTo(AgendaItemCategory::class)->withTrashed();
     }
 
     /**
@@ -143,14 +143,14 @@ class AgendaItem extends Model
      */
     public function registrations(): HasMany
     {
-        return $this->hasMany(ApplicationResponse::class, 'agenda_id');
+        return $this->hasMany(ApplicationResponse::class, 'agenda_item_id');
     }
 
     public function isRegistered(User $user): bool
     {
         return $this->registrations()
             ->whereBelongsTo($user)
-            ->where('inschrijf_form_id', $this->application_form_id)
+            ->where('application_form_id', $this->application_form_id)
             ->exists();
     }
 

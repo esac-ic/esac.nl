@@ -31,7 +31,7 @@ class AgendaController extends Controller
                 'registrations' => fn ($query) => $query->where('user_id', $request->user()?->id),
             ])
             ->withCount('registrations')
-            ->when($request->integer('category'), fn ($query, $category) => $query->where('category', $category))
+            ->when($request->integer('category'), fn ($query, $category) => $query->where('agenda_item_category_id', $category))
             ->when($request->date('startDate', 'd-m-Y', config('app.display_timezone'))?->startOfDay()->utc(), fn ($query, $startDate) => $query->where(
                 fn ($query) => $query->where('start_date', '>=', $startDate)->orWhere('end_date', '>=', $startDate)
             ))

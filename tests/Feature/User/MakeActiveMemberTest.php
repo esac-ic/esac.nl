@@ -2,7 +2,7 @@
 
 namespace Tests\Feature\User;
 
-use App\Enums\Role;
+use App\Enums\AdminRole;
 use App\Events\OldMemberBecameMember;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -20,44 +20,44 @@ class MakeActiveMemberTest extends TestCase
     {
         parent::setUp();
 
-        $this->admin = User::factory()->withRole(Role::Administrator)->create();
+        $this->admin = User::factory()->withRole(AdminRole::Administrator)->create();
     }
 
     public function test_make_old_member_active_member()
     {
         $user = User::factory()->create();
-        $user->lid_af = Carbon::now();
+        $user->membership_ended_on = Carbon::now();
         $user->save();
 
         $userId = $user->id;
 
         Event::fake();
 
-        $response = $this->actingAs($this->admin)->post(route('beheer.users.membership.store', $user));
+        $response = $this->actingAs($this->admin)->post(route('admin.users.membership.store', $user));
 
-        $response->assertRedirect(route('beheer.users.show', $user));
+        $response->assertRedirect(route('admin.users.show', $user));
         Event::assertDispatched(OldMemberBecameMember::class);
 
-        $this->assertNull(User::find($userId)->lid_af); // use User::find instead of $user to check if the user is properly updated in the db
+        $this->assertNull(User::find($userId)->membership_ended_on); // use User::find instead of $user to check if the user is properly updated in the db
     }
 
     public function test_make_active_member_active()
     {
         $user = User::factory()->create();
-        $user->lid_af = null;
+        $user->membership_ended_on = null;
         $user->save();
 
         Event::fake();
 
-        $response = $this->actingAs($this->admin)->post(route('beheer.users.membership.store', $user));
-        $response->assertRedirect(route('beheer.old-members.index'));
+        $response = $this->actingAs($this->admin)->post(route('admin.users.membership.store', $user));
+        $response->assertRedirect(route('admin.old-members.index'));
         Event::assertNotDispatched(OldMemberBecameMember::class);
     }
 
     public function test_make_member_without_email_active()
     {
         $user = User::factory()->create();
-        $user->lid_af = Carbon::now();
+        $user->membership_ended_on = Carbon::now();
         $user->email = null;
         $user->save();
 
@@ -65,24 +65,24 @@ class MakeActiveMemberTest extends TestCase
 
         Event::fake();
 
-        $response = $this->actingAs($this->admin)->post(route('beheer.users.membership.store', $user));
-        $response->assertRedirect(route('beheer.old-members.index'));
+        $response = $this->actingAs($this->admin)->post(route('admin.users.membership.store', $user));
+        $response->assertRedirect(route('admin.old-members.index'));
         Event::assertNotDispatched(OldMemberBecameMember::class);
 
-        $this->assertNotNull(User::find($userId)->lid_af);
+        $this->assertNotNull(User::find($userId)->membership_ended_on);
     }
 
     public function test_make_active_member_without_email_active()
     {
         $user = User::factory()->create();
-        $user->lid_af = null;
+        $user->membership_ended_on = null;
         $user->email = null;
         $user->save();
 
         Event::fake();
 
-        $response = $this->actingAs($this->admin)->post(route('beheer.users.membership.store', $user));
-        $response->assertRedirect(route('beheer.old-members.index'));
+        $response = $this->actingAs($this->admin)->post(route('admin.users.membership.store', $user));
+        $response->assertRedirect(route('admin.old-members.index'));
         Event::assertNotDispatched(OldMemberBecameMember::class);
     }
 }

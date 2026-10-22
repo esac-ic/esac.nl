@@ -8,8 +8,8 @@
             @csrf
             <input type="hidden" name="token" value="{{ $token }}">
             <div @class(['form-group', 'has-error' => $errors->has('email')])>
-                <label for="email">Email adress</label>
-                <input class="form-control form-control-lg" id="email" type="email" name="email" placeholder="Email adress" value="{{ $email ?? old('email') }}" required autofocus>
+                <label for="email">Email address</label>
+                <input class="form-control form-control-lg" id="email" type="email" name="email" placeholder="Email address" value="{{ $email ?? old('email') }}" required autofocus>
                 @error('email')
                 <span class="help-block">
                 <strong>{{ $message }}</strong>

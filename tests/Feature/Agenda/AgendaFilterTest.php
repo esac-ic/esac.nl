@@ -2,7 +2,7 @@
 
 namespace Tests\Feature\Agenda;
 
-use App\Enums\Role;
+use App\Enums\AdminRole;
 use App\Models\AgendaItem;
 use App\Models\AgendaItemCategory;
 use App\Models\User;
@@ -21,7 +21,7 @@ class AgendaFilterTest extends TestCase
     protected function setUp(): void
     {
         parent::setUp();
-        $this->user = User::factory()->withRole(Role::Administrator)->create();
+        $this->user = User::factory()->withRole(AdminRole::Administrator)->create();
         $this->actingAs($this->user);
     }
 
@@ -30,7 +30,7 @@ class AgendaFilterTest extends TestCase
     {
         $agendaItemCategory = AgendaItemCategory::factory()->create();
         $agendaItem = AgendaItem::factory()->create();
-        $agendaItem->category = $agendaItemCategory->id;
+        $agendaItem->agenda_item_category_id = $agendaItemCategory->id;
         $agendaItem->save();
 
         AgendaItem::factory()->create();

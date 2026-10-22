@@ -2,7 +2,7 @@
 
 namespace Tests\Feature\ApplicationForm;
 
-use App\Enums\Role;
+use App\Enums\AdminRole;
 use App\Models\ApplicationForm\ApplicationForm;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use PHPUnit\Framework\Attributes\DataProvider;
@@ -23,20 +23,20 @@ class ApplicationFormIndexTest extends TestCase
 
     #[Test]
     #[DataProvider('managingRoles')]
-    public function application_form_managers_can_view_the_page(Role $role): void
+    public function application_form_managers_can_view_the_page(AdminRole $role): void
     {
         $this->actingAsRole($role);
 
-        $this->get('beheer/application-forms')->assertOk();
+        $this->get('admin/application-forms')->assertOk();
     }
 
     #[Test]
     #[DataProvider('otherRoles')]
-    public function other_roles_can_not_view_the_page(Role $role): void
+    public function other_roles_can_not_view_the_page(AdminRole $role): void
     {
         $this->actingAsRole($role);
 
-        $this->get('beheer/application-forms')->assertForbidden();
+        $this->get('admin/application-forms')->assertForbidden();
     }
 
     #[Test]
@@ -44,6 +44,6 @@ class ApplicationFormIndexTest extends TestCase
     {
         $this->actingAsRole();
 
-        $this->get('beheer/application-forms')->assertForbidden();
+        $this->get('admin/application-forms')->assertForbidden();
     }
 }

@@ -2,7 +2,7 @@
 
 namespace Tests\Feature\User;
 
-use App\Enums\Role;
+use App\Enums\AdminRole;
 use App\Events\MemberEmailChanged;
 use App\Events\MemberKindChanged;
 use App\Models\User;
@@ -44,7 +44,7 @@ class UpdateUserTest extends TestCase
         parent::setUp();
         Event::fake();
 
-        $this->admin = User::factory()->member()->withRole(Role::Administrator)->create(['email' => 'initial@esac.nl']);
+        $this->admin = User::factory()->member()->withRole(AdminRole::Administrator)->create(['email' => 'initial@esac.nl']);
         $this->member = User::factory()->member()->create(['email' => 'Initial']);
     }
 
@@ -52,8 +52,8 @@ class UpdateUserTest extends TestCase
     {
         $data = self::DETAILS + ['email' => $this->admin->email, 'firstname' => 'New', 'lastname' => 'Second', 'kind_of_member' => $this->admin->kind_of_member->value];
 
-        $this->actingAs($this->admin)->patch(route('beheer.users.update', $this->admin), $data)
-            ->assertRedirect(route('beheer.users.show', $this->admin));
+        $this->actingAs($this->admin)->patch(route('admin.users.update', $this->admin), $data)
+            ->assertRedirect(route('admin.users.show', $this->admin));
 
         Event::assertNotDispatched(MemberKindChanged::class);
         Event::assertNotDispatched(MemberEmailChanged::class);
@@ -64,8 +64,8 @@ class UpdateUserTest extends TestCase
     {
         $data = self::DETAILS + ['email' => 'Second@esac.nl', 'firstname' => 'New', 'lastname' => 'Second', 'kind_of_member' => $this->admin->kind_of_member->value];
 
-        $this->actingAs($this->admin)->patch(route('beheer.users.update', $this->admin), $data)
-            ->assertRedirect(route('beheer.users.show', $this->admin));
+        $this->actingAs($this->admin)->patch(route('admin.users.update', $this->admin), $data)
+            ->assertRedirect(route('admin.users.show', $this->admin));
 
         Event::assertNotDispatched(MemberKindChanged::class);
         Event::assertDispatched(MemberEmailChanged::class);
@@ -76,8 +76,8 @@ class UpdateUserTest extends TestCase
     {
         $data = self::DETAILS + ['email' => 'Second@esac.nl', 'firstname' => 'New', 'lastname' => 'Second', 'kind_of_member' => 'reunist'];
 
-        $this->actingAs($this->admin)->patch(route('beheer.users.update', $this->member), $data)
-            ->assertRedirect(route('beheer.users.index'));
+        $this->actingAs($this->admin)->patch(route('admin.users.update', $this->member), $data)
+            ->assertRedirect(route('admin.users.index'));
 
         Event::assertDispatched(MemberKindChanged::class);
         Event::assertDispatched(MemberEmailChanged::class);
@@ -89,9 +89,9 @@ class UpdateUserTest extends TestCase
     {
         $data = ['password' => 'new-password'] + self::DETAILS + ['email' => $this->admin->email, 'firstname' => 'New', 'lastname' => 'Second', 'kind_of_member' => $this->admin->kind_of_member->value];
 
-        $this->actingAs($this->admin)->patch(route('beheer.users.update', $this->admin), $data)->assertInvalid('password');
+        $this->actingAs($this->admin)->patch(route('admin.users.update', $this->admin), $data)->assertInvalid('password');
 
-        $this->actingAs($this->admin)->patch(route('beheer.users.update', $this->admin), [...$data, 'password_confirmation' => 'new-password'])->assertValid();
+        $this->actingAs($this->admin)->patch(route('admin.users.update', $this->admin), [...$data, 'password_confirmation' => 'new-password'])->assertValid();
         $this->assertTrue(Hash::check('new-password', $this->admin->fresh()->password));
     }
 
@@ -100,8 +100,8 @@ class UpdateUserTest extends TestCase
         $data = self::DETAILS + ['email' => 'Second@esac.nl']
             + Arr::only($this->member->attributesToArray(), ['firstname', 'preposition', 'lastname', 'kind_of_member', 'remark']);
 
-        $this->actingAs($this->member)->patch(route('beheer.users.update', $this->member), $data)
-            ->assertRedirect(route('beheer.users.show', $this->member));
+        $this->actingAs($this->member)->patch(route('admin.users.update', $this->member), $data)
+            ->assertRedirect(route('admin.users.show', $this->member));
 
         Event::assertNotDispatched(MemberKindChanged::class);
         Event::assertDispatched(MemberEmailChanged::class);
@@ -113,8 +113,8 @@ class UpdateUserTest extends TestCase
         $forbidden = Arr::only($this->member->attributesToArray(), ['firstname', 'preposition', 'lastname', 'kind_of_member', 'remark']);
         $data = self::DETAILS + ['email' => 'Second@esac.nl'] + array_fill_keys(array_keys($forbidden), 'Second');
 
-        $this->actingAs($this->member)->patch(route('beheer.users.update', $this->member), $data)
-            ->assertRedirect(route('beheer.users.show', $this->member));
+        $this->actingAs($this->member)->patch(route('admin.users.update', $this->member), $data)
+            ->assertRedirect(route('admin.users.show', $this->member));
 
         Event::assertNotDispatched(MemberKindChanged::class);
         Event::assertDispatched(MemberEmailChanged::class);
@@ -125,7 +125,7 @@ class UpdateUserTest extends TestCase
     {
         $before = $this->admin->fresh()->getAttributes();
 
-        $this->actingAs($this->member)->patch(route('beheer.users.update', $this->admin), self::DETAILS + ['email' => 'Second@esac.nl'])
+        $this->actingAs($this->member)->patch(route('admin.users.update', $this->admin), self::DETAILS + ['email' => 'Second@esac.nl'])
             ->assertForbidden();
 
         Event::assertNotDispatched(MemberKindChanged::class);

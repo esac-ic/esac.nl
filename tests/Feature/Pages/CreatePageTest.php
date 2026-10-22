@@ -2,7 +2,7 @@
 
 namespace Tests\Feature\Pages;
 
-use App\Enums\Role;
+use App\Enums\AdminRole;
 use App\Models\MenuItem;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -19,7 +19,7 @@ class CreatePageTest extends TestCase
     protected function setUp(): void
     {
         parent::setUp();
-        $this->actingAs(User::factory()->withRole(Role::ContentAdministrator)->create());
+        $this->actingAs(User::factory()->withRole(AdminRole::ContentAdministrator)->create());
         $this->parent = MenuItem::query()->forceCreate([
             'name' => 'Parent', 'url_name' => 'parent', 'content' => 'Parent', 'login' => false,
             'menu_item' => true, 'deletable' => true, 'editable' => true,
@@ -53,9 +53,9 @@ class CreatePageTest extends TestCase
     {
         $body = $this->body($overrides);
 
-        $this->post('beheer/pages', $body)
+        $this->post('admin/pages', $body)
             ->assertSessionHasNoErrors()
-            ->assertRedirect('beheer/pages');
+            ->assertRedirect('admin/pages');
 
         $this->assertDatabaseHas(MenuItem::class, [
             'parent_id' => $isSubItem ? $this->parent->id : null,
@@ -70,20 +70,20 @@ class CreatePageTest extends TestCase
     public function an_edited_page_is_validated_when_its_url_name_is_unchanged()
     {
         $body = $this->body(['itemType' => 'standAlone']);
-        $this->post('beheer/pages', $body)->assertValid();
+        $this->post('admin/pages', $body)->assertValid();
         $page = MenuItem::query()->where('url_name', 'test')->sole();
 
-        $this->patch(route('beheer.pages.update', $page), [...$body, 'name' => ''])->assertInvalid('name');
-        $this->patch(route('beheer.pages.update', $page), [...$body, 'name' => 'New title'])->assertValid();
+        $this->patch(route('admin.pages.update', $page), [...$body, 'name' => ''])->assertInvalid('name');
+        $this->patch(route('admin.pages.update', $page), [...$body, 'name' => 'New title'])->assertValid();
         $this->assertSame('New title', $page->fresh()->name);
     }
 
     #[Test]
     public function no_role_no_create_page()
     {
-        $this->actingAs(User::factory()->withRole(Role::Administrator, Role::ActivityAdministrator, Role::CertificateAdministrator)->create());
+        $this->actingAs(User::factory()->withRole(AdminRole::Administrator, AdminRole::ActivityAdministrator, AdminRole::CertificateAdministrator)->create());
 
-        $this->post('beheer/pages', $this->body())->assertForbidden();
+        $this->post('admin/pages', $this->body())->assertForbidden();
 
         $this->assertDatabaseCount(MenuItem::class, 1);
     }
@@ -91,8 +91,8 @@ class CreatePageTest extends TestCase
     #[Test]
     public function create_page_login_correct()
     {
-        $this->post('beheer/pages', $this->body())->assertSessionHasNoErrors();
-        $this->post('beheer/pages', $this->body(['url_name' => 'test2', 'login' => true]))->assertSessionHasNoErrors();
+        $this->post('admin/pages', $this->body())->assertSessionHasNoErrors();
+        $this->post('admin/pages', $this->body(['url_name' => 'test2', 'login' => true]))->assertSessionHasNoErrors();
 
         $this->assertDatabaseHas(MenuItem::class, ['url_name' => 'test', 'login' => false]);
         $this->assertDatabaseHas(MenuItem::class, ['url_name' => 'test2', 'login' => true]);
@@ -101,8 +101,8 @@ class CreatePageTest extends TestCase
     #[Test]
     public function the_menu_shows_the_pages_by_position()
     {
-        $this->post('beheer/pages', $this->body(['url_name' => 'second', 'name' => 'Second', 'itemType' => 'standAlone', 'position' => 20, 'menu_item' => true]));
-        $this->post('beheer/pages', $this->body(['url_name' => 'first', 'name' => 'First', 'itemType' => 'standAlone', 'position' => 5, 'menu_item' => true]));
+        $this->post('admin/pages', $this->body(['url_name' => 'second', 'name' => 'Second', 'itemType' => 'standAlone', 'position' => 20, 'menu_item' => true]));
+        $this->post('admin/pages', $this->body(['url_name' => 'first', 'name' => 'First', 'itemType' => 'standAlone', 'position' => 5, 'menu_item' => true]));
 
         $this->get('second')->assertSeeInOrder(['navbar-nav', 'Parent', 'First', 'Second']);
     }
@@ -110,7 +110,7 @@ class CreatePageTest extends TestCase
     #[Test]
     public function empty_body_meaningful_error()
     {
-        $this->post('beheer/pages')
+        $this->post('admin/pages')
             ->assertRedirect()
             ->assertInvalid(['url_name', 'itemType', 'position', 'name', 'content']);
 
@@ -120,7 +120,7 @@ class CreatePageTest extends TestCase
     #[Test]
     public function empty_body_meaningful_error_subitem()
     {
-        $this->post('beheer/pages', $this->body(['parentItem' => null]))
+        $this->post('admin/pages', $this->body(['parentItem' => null]))
             ->assertRedirect()
             ->assertInvalid(['parentItem']);
 

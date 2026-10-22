@@ -9,7 +9,7 @@ return [
     'attributes' => [
         'privacy_policy' => 'Privacy Policy',
         'termsconditions' => 'Terms and Conditions',
-        'incasso' => 'Automatic Collection',
+        'direct_debit' => 'Automatic Collection',
         'iban' => 'IBAN',
         'bic' => 'BIC',
     ],

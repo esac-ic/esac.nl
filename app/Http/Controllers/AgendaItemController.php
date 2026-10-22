@@ -27,7 +27,7 @@ class AgendaItemController extends Controller implements HasMiddleware
 
     public function index(): View
     {
-        return view('beheer.agendaItem.index');
+        return view('admin.agenda-items.index');
     }
 
     public function create(): View
@@ -43,12 +43,12 @@ class AgendaItemController extends Controller implements HasMiddleware
         $agendaItem->save();
         $this->handleImage($request, $agendaItem);
 
-        return to_route('beheer.agenda-items.index')->with('message', 'Event added');
+        return to_route('admin.agenda-items.index')->with('message', 'Event added');
     }
 
     public function show(AgendaItem $agendaItem): View
     {
-        return view('beheer.agendaItem.show', ['agendaItem' => $agendaItem]);
+        return view('admin.agenda-items.show', ['agendaItem' => $agendaItem]);
     }
 
     public function edit(AgendaItem $agendaItem): View
@@ -58,12 +58,12 @@ class AgendaItemController extends Controller implements HasMiddleware
 
     public function update(AgendaItemRequest $request, AgendaItem $agendaItem): RedirectResponse
     {
-        $agendaItem->fill($request->safe()->only(['title', 'text', 'short_description', 'category', 'start_date', 'end_date']))
+        $agendaItem->fill($request->safe()->only(['title', 'text', 'short_description', 'agenda_item_category_id', 'start_date', 'end_date']))
             ->fillFromForm($request->validated())
             ->save();
         $this->handleImage($request, $agendaItem);
 
-        return to_route('beheer.agenda-items.index')->with('message', 'Event edited');
+        return to_route('admin.agenda-items.index')->with('message', 'Event edited');
     }
 
     public function destroy(AgendaItem $agendaItem): RedirectResponse
@@ -74,19 +74,19 @@ class AgendaItemController extends Controller implements HasMiddleware
             Storage::disk('public')->delete($agendaItem->image_url);
         }
 
-        return to_route('beheer.agenda-items.index')->with('message', 'Event removed');
+        return to_route('admin.agenda-items.index')->with('message', 'Event removed');
     }
 
     public function copy(Request $request, AgendaItem $agendaItem): RedirectResponse
     {
         $newAgendaItem = $agendaItem->copyFor($request->user());
 
-        return to_route('beheer.agenda-items.edit', $newAgendaItem);
+        return to_route('admin.agenda-items.edit', $newAgendaItem);
     }
 
     private function form(AgendaItem $agendaItem): View
     {
-        return view('beheer.agendaItem.create_edit', [
+        return view('admin.agenda-items.create_edit', [
             'agendaItem' => $agendaItem,
             'agendaItemCategories' => AgendaItemCategory::query()->orderBy('name')->pluck('name', 'id')->all(),
             'applicationForms' => ApplicationForm::query()->orderBy('name')->pluck('name', 'id')->all(),

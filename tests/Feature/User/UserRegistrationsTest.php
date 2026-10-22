@@ -2,7 +2,7 @@
 
 namespace Tests\Feature\User;
 
-use App\Enums\Role;
+use App\Enums\AdminRole;
 use App\Models\AgendaItem;
 use App\Models\ApplicationForm\ApplicationResponse;
 use App\Models\User;
@@ -20,9 +20,9 @@ class UserRegistrationsTest extends TestCase
         $member = User::factory()->create();
         ApplicationResponse::factory()->create([
             'user_id' => $member->id,
-            'agenda_id' => AgendaItem::factory()->create(['title' => 'Ice climbing weekend']),
+            'agenda_item_id' => AgendaItem::factory()->create(['title' => 'Ice climbing weekend']),
         ]);
-        $admin = User::factory()->withRole(Role::CertificateAdministrator)->create();
+        $admin = User::factory()->withRole(AdminRole::CertificateAdministrator)->create();
 
         $this->actingAs($admin)
             ->getJson(route('api.registrations.index', ['user_id' => $member->id]))

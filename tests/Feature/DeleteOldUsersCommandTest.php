@@ -35,7 +35,7 @@ class DeleteOldUsersCommandTest extends TestCase
     #[Test]
     public function the_details_of_members_who_left_three_years_ago_are_removed()
     {
-        $user = User::factory()->create(['lid_af' => now()->subYears(3)]);
+        $user = User::factory()->create(['membership_ended_on' => now()->subYears(3)]);
 
         $this->artisan('remove:oldUsers');
 
@@ -45,13 +45,13 @@ class DeleteOldUsersCommandTest extends TestCase
         foreach (self::PERSONAL_DETAILS as $attribute) {
             $this->assertNull($user->$attribute, $attribute);
         }
-        $this->assertEquals(0, $user->incasso);
+        $this->assertEquals(0, $user->direct_debit);
     }
 
     #[Test]
     public function the_details_of_members_who_left_a_year_ago_are_kept()
     {
-        $user = User::factory()->create(['lid_af' => now()->subYear()]);
+        $user = User::factory()->create(['membership_ended_on' => now()->subYear()]);
 
         $this->artisan('remove:oldUsers');
 
