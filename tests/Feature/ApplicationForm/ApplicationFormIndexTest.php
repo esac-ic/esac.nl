@@ -5,37 +5,20 @@ namespace Tests\Feature\ApplicationForm;
 use App\Enums\Role;
 use App\Models\ApplicationForm\ApplicationForm;
 use App\Models\User;
-use Illuminate\Foundation\Testing\DatabaseMigrations;
-use Illuminate\Support\Facades\Artisan;
+use Illuminate\Foundation\Testing\RefreshDatabase;
 use PHPUnit\Framework\Attributes\Test;
 use Tests\TestCase;
 
-/**
- * Class ApplicationFormIndexTest
- * @package Tests\Feature
- */
 class ApplicationFormIndexTest extends TestCase
 {
-    use DatabaseMigrations;
+    use RefreshDatabase;
 
-    /**
-     * @var ApplicationForm
-     */
     private $applicationForm;
 
-    /**
-     * @var User
-     */
     private $user;
 
-    /**
-     * @var string
-     */
     const URL = 'beheer/applicationForms';
 
-    /**
-     * @return void
-     */
     protected function setUp(): void
     {
         parent::setUp();
@@ -45,17 +28,6 @@ class ApplicationFormIndexTest extends TestCase
         $this->be($user);
 
         $this->applicationForm = ApplicationForm::factory()->create();
-
-        session()->start();
-    }
-
-    /**
-     * @return void
-     */
-    protected function tearDown(): void
-    {
-        Artisan::call('migrate:fresh');
-        parent::tearDown();
     }
 
     #[Test]

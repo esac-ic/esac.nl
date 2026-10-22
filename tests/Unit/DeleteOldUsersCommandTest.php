@@ -3,91 +3,61 @@
 namespace Tests\Unit;
 
 use App\Models\User;
-use Carbon\Carbon;
-use Illuminate\Foundation\Testing\DatabaseMigrations;
-use Illuminate\Support\Facades\Artisan;
+use Illuminate\Foundation\Testing\RefreshDatabase;
+use PHPUnit\Framework\Attributes\Test;
 use Tests\TestCase;
 
 class DeleteOldUsersCommandTest extends TestCase
 {
-    use DatabaseMigrations;
+    use RefreshDatabase;
 
-    protected function setUp(): void
+    private const array PERSONAL_DETAILS = [
+        'street',
+        'house_number',
+        'city',
+        'zipcode',
+        'country',
+        'phone_number',
+        'phone_number_alt',
+        'emergency_number',
+        'emergency_house_number',
+        'emergency_street',
+        'emergency_city',
+        'emergency_zipcode',
+        'emergency_country',
+        'birthday',
+        'kind_of_member',
+        'iban',
+        'bic',
+        'remark',
+    ];
+
+    #[Test]
+    public function the_details_of_members_who_left_three_years_ago_are_removed()
     {
-        parent::setUp();
-        Artisan::call('db:seed');
+        $user = User::factory()->create(['lid_af' => now()->subYears(3)]);
 
-    }
+        $this->artisan('remove:oldUsers');
 
-    protected function tearDown(): void
-    {
-        Artisan::call('migrate:reset');
-        parent::tearDown();
-    }
-
-    public function testDeleteOldUserWichIsLidAfFor3Years()
-    {
-        $id = 1;
-        $user = User::find($id);
-        $user->lid_af = Carbon::now()->subYears(3);
-        $user->save();
-
-        Artisan::call("remove:oldUsers");
-
-        $user = User::find($id);
-        $this->assertNotEquals(null, $user);
-        $this->assertNotEquals(null, $user->firstname);
-        $this->assertNotEquals(null, $user->lastname);
-        $this->assertEquals(null, $user->street);
-        $this->assertEquals(null, $user->house_number);
-        $this->assertEquals(null, $user->city);
-        $this->assertEquals(null, $user->zipcode);
-        $this->assertEquals(null, $user->country);
-        $this->assertEquals(null, $user->phone_number);
-        $this->assertEquals(null, $user->phone_number_alt);
-        $this->assertEquals(null, $user->emergency_number);
-        $this->assertEquals(null, $user->emergency_house_number);
-        $this->assertEquals(null, $user->emergency_street);
-        $this->assertEquals(null, $user->emergency_city);
-        $this->assertEquals(null, $user->emergency_zipcode);
-        $this->assertEquals(null, $user->emergency_country);
-        $this->assertEquals(null, $user->birthday);
-        $this->assertEquals(null, $user->kind_of_member);
-        $this->assertEquals(null, $user->iban);
-        $this->assertEquals(null, $user->bic);
-        $this->assertEquals(null, $user->remark);
+        $user = User::find($user->id);
+        $this->assertNotNull($user->firstname);
+        $this->assertNotNull($user->lastname);
+        foreach (self::PERSONAL_DETAILS as $attribute) {
+            $this->assertNull($user->$attribute, $attribute);
+        }
         $this->assertEquals(0, $user->incasso);
     }
 
-    public function testDeleteOldUserWichIsLidAfFor1Years()
+    #[Test]
+    public function the_details_of_members_who_left_a_year_ago_are_kept()
     {
-        $id = 1;
-        $user = User::find($id);
-        $user->lid_af = Carbon::now()->subYears(1);
-        $user->save();
+        $user = User::factory()->create(['lid_af' => now()->subYear()]);
 
-        Artisan::call("remove:oldUsers");
+        $this->artisan('remove:oldUsers');
 
-        $user = User::find($id);
-        $this->assertNotEquals(null, $user);
-        $this->assertNotEquals(null, $user->firstname);
-        $this->assertNotEquals(null, $user->lastname);
-        $this->assertNotEquals(null, $user->street);
-        $this->assertNotEquals(null, $user->house_number);
-        $this->assertNotEquals(null, $user->city);
-        $this->assertNotEquals(null, $user->zipcode);
-        $this->assertNotEquals(null, $user->country);
-        $this->assertNotEquals(null, $user->phone_number);
-        $this->assertNotEquals(null, $user->phone_number_alt);
-        $this->assertNotEquals(null, $user->emergency_number);
-        $this->assertNotEquals(null, $user->emergency_house_number);
-        $this->assertNotEquals(null, $user->emergency_street);
-        $this->assertNotEquals(null, $user->emergency_city);
-        $this->assertNotEquals(null, $user->emergency_zipcode);
-        $this->assertNotEquals(null, $user->emergency_country);
-        $this->assertNotEquals(null, $user->birthday);
-        $this->assertNotEquals(null, $user->kind_of_member);
-        $this->assertNotEquals(null, $user->iban);
-        $this->assertNotEquals(null, $user->remark);
+        $user = User::find($user->id);
+        foreach (['firstname', 'lastname', ...self::PERSONAL_DETAILS] as $attribute) {
+            $this->assertNotNull($user->$attribute, $attribute);
+        }
     }
 }

@@ -5,21 +5,18 @@ namespace Tests\Feature\Agenda;
 use App\Enums\Role;
 use App\Models\AgendaItem;
 use App\Models\User;
-use Illuminate\Foundation\Testing\DatabaseMigrations;
-use Illuminate\Support\Facades\Artisan;
+use Illuminate\Foundation\Testing\RefreshDatabase;
 use PHPUnit\Framework\Attributes\Test;
 use Tests\TestCase;
 
 class DeleteAgendaItemTest extends TestCase
 {
-    use DatabaseMigrations;
+    use RefreshDatabase;
 
     private $url = 'agendaItems';
+
     private $agendaItem;
 
-    /**
-     * @var
-     */
     private $user;
 
     protected function setUp(): void
@@ -28,21 +25,14 @@ class DeleteAgendaItemTest extends TestCase
         $this->user = $user = User::factory()->create();
         $user->roles()->attach(Role::ActivityAdministrator->value);
         $this->be($user);
-
-        session()->start();
     }
 
-    protected function tearDown(): void
-    {
-        Artisan::call('migrate:reset');
-        parent::tearDown();
-    }
     #[Test]
-    public function DeleteAgendaItem()
+    public function delete_agenda_item()
     {
         $agendaItem = AgendaItem::factory()->create();
 
-        $response = $this->delete($this->url . '/' . $agendaItem->id);
+        $response = $this->delete($this->url.'/'.$agendaItem->id);
 
         $response->assertStatus(302);
 

@@ -7,53 +7,29 @@ use App\Models\ApplicationForm\ApplicationForm;
 use App\Models\ApplicationForm\ApplicationFormRow;
 use App\Models\ApplicationForm\ApplicationFormRowOption;
 use App\Models\User;
-use Illuminate\Foundation\Testing\DatabaseMigrations;
-use Illuminate\Support\Facades\Artisan;
+use Illuminate\Foundation\Testing\RefreshDatabase;
 use PHPUnit\Framework\Attributes\Test;
 use Tests\TestCase;
 
 class UpdateApplicationFormTest extends TestCase
 {
-    use DatabaseMigrations;
+    use RefreshDatabase;
 
-    /**
-     * @var User
-     */
     private $user;
 
-    /**
-     * @var ApplicationForm
-     */
     private $applicationForm;
 
-    /**
-     * @var string
-     */
     private $url = 'beheer/applicationForms';
 
-    /**
-     * @return void
-     */
     protected function setUp(): void
     {
         parent::setUp();
         $this->applicationForm = ApplicationForm::factory()->create();
         $this->user = $user = User::factory()->create();
-        $this->url .= "/" . $this->applicationForm->id;
+        $this->url .= '/'.$this->applicationForm->id;
 
         $user->roles()->attach(Role::ContentAdministrator->value);
         $this->be($user);
-
-        session()->start();
-    }
-
-    /**
-     * @return void
-     */
-    protected function tearDown(): void
-    {
-        Artisan::call('migrate:fresh');
-        parent::tearDown();
     }
 
     #[Test]
@@ -159,10 +135,6 @@ class UpdateApplicationFormTest extends TestCase
         $response->assertStatus(403);
     }
 
-    /**
-     * @param ApplicationForm $applicationForm
-     * @param array $data
-     */
     private function assertApplicationForm(ApplicationForm $applicationForm, array $data)
     {
         $this->assertEquals($data['name'], $applicationForm->name);

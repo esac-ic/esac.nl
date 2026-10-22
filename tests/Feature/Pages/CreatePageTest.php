@@ -5,23 +5,16 @@ namespace Tests\Feature\Pages;
 use App\Enums\Role;
 use App\Models\MenuItem;
 use App\Models\User;
-use Illuminate\Foundation\Testing\DatabaseMigrations;
-use Illuminate\Support\Facades\Artisan;
+use Illuminate\Foundation\Testing\RefreshDatabase;
 use PHPUnit\Framework\Attributes\Test;
 use Tests\TestCase;
 
 class CreatePageTest extends TestCase
 {
-    use DatabaseMigrations;
+    use RefreshDatabase;
 
-    /**
-     * @var string
-     */
     private $url = 'pages';
 
-    /**
-     * @var
-     */
     private $user;
 
     protected function setUp(): void
@@ -31,19 +24,8 @@ class CreatePageTest extends TestCase
 
         $user->roles()->attach(Role::ContentAdministrator->value);
         $this->be($user);
-
-        session()->start();
     }
 
-    protected function tearDown(): void
-    {
-        Artisan::call('migrate:reset');
-        parent::tearDown();
-    }
-
-    /**
-     * Tests whether an admin user can create a new page.
-     */
     #[Test]
     public function admin_can_create_page()
     {
@@ -54,7 +36,6 @@ class CreatePageTest extends TestCase
             'afterItem' => 0,
             'name' => 'Test titel',
             'content' => 'Hele leuke test inhoud.',
-            '_token' => csrf_token(),
         ];
 
         $response = $this->post($this->url, $body);
@@ -70,6 +51,7 @@ class CreatePageTest extends TestCase
         $this->assertEquals($body['content'], $menuItem->content);
     }
 
+    #[Test]
     public function admin_can_create_page_with_emoji()
     {
         $body = [
@@ -79,7 +61,6 @@ class CreatePageTest extends TestCase
             'afterItem' => 0,
             'name' => 'Test title 😀',
             'content' => 'Hele leuke test inhoud. 😀',
-            '_token' => csrf_token(),
         ];
 
         $response = $this->post($this->url, $body);
@@ -95,9 +76,6 @@ class CreatePageTest extends TestCase
         $this->assertEquals($body['content'], $menuItem->content);
     }
 
-    /**
-     * Tests whether users without content admin role cannot create a new page.
-     */
     #[Test]
     public function no_role_no_create_page()
     {
@@ -108,7 +86,6 @@ class CreatePageTest extends TestCase
             'afterItem' => 0,
             'name' => 'Test titel',
             'content' => 'Very cool test content.',
-            '_token' => csrf_token(),
         ];
 
         // Give the user all roles except for content admin.
@@ -125,9 +102,6 @@ class CreatePageTest extends TestCase
         $this->assertTrue(MenuItem::count() == 0);
     }
 
-    /**
-     * Tests whether the page content is set correctly when type SubItem.
-     */
     #[Test]
     public function create_page_subitem_content_correct()
     {
@@ -138,7 +112,6 @@ class CreatePageTest extends TestCase
             'afterItem' => 0,
             'name' => 'Test title',
             'content' => 'Very cool test content.',
-            '_token' => csrf_token(),
         ];
 
         $response = $this->post($this->url, $body);
@@ -154,9 +127,6 @@ class CreatePageTest extends TestCase
         $this->assertEquals($menuItem->content, $body['content']);
     }
 
-    /**
-     * Tests whether the page content is set correctly when type Standalone.
-     */
     #[Test]
     public function create_page_standalone_content_correct()
     {
@@ -166,7 +136,6 @@ class CreatePageTest extends TestCase
             'afterItem' => 0,
             'name' => 'Test title',
             'content' => 'Very cool test content.',
-            '_token' => csrf_token(),
         ];
 
         $response = $this->post($this->url, $body);
@@ -182,9 +151,6 @@ class CreatePageTest extends TestCase
         $this->assertEquals($menuItem->content, $body['content']);
     }
 
-    /**
-     * Tests whether the login required field gets set correctly.
-     */
     #[Test]
     public function create_page_login_correct()
     {
@@ -195,7 +161,6 @@ class CreatePageTest extends TestCase
             'afterItem' => 0,
             'name' => 'Test title',
             'content' => 'Very cool test content.',
-            '_token' => csrf_token(),
         ];
 
         $response = $this->post($this->url, $body);
@@ -217,11 +182,8 @@ class CreatePageTest extends TestCase
         $this->assertTrue((bool) $menuItem->login);
     }
 
-    /**
-     * Tests whether the login required field gets set correctly.
-     */
     #[Test]
-    public function create_page_no_afterItem_correct()
+    public function create_page_no_after_item_correct()
     {
         $body = [
             'url_name' => 'test',
@@ -230,7 +192,6 @@ class CreatePageTest extends TestCase
             'afterItem' => -1,
             'name' => 'Test title',
             'content' => 'Very cool test content.',
-            '_token' => csrf_token(),
         ];
 
         $response = $this->post($this->url, $body);
@@ -252,15 +213,10 @@ class CreatePageTest extends TestCase
         $this->assertTrue((bool) $menuItem->login);
     }
 
-    /**
-     * Tests whether a redirect is returned and the session contains errors for each of the required fields when
-     * fields are missing in the body.
-     */
     #[Test]
     public function empty_body_meaningful_error()
     {
         $body = [
-            '_token' => csrf_token(),
         ];
 
         $response = $this->post($this->url, $body);
@@ -281,9 +237,6 @@ class CreatePageTest extends TestCase
         $this->assertTrue(MenuItem::count() == 0);
     }
 
-    /**
-     * Tests whether a redirect is returned and the session contains error for parentItem when itemType is subItem.
-     */
     #[Test]
     public function empty_body_meaningful_error_subitem()
     {
@@ -293,7 +246,6 @@ class CreatePageTest extends TestCase
             'afterItem' => 0,
             'name' => 'Test title',
             'content' => 'Very cool test content.',
-            '_token' => csrf_token(),
         ];
 
         $response = $this->post($this->url, $body);

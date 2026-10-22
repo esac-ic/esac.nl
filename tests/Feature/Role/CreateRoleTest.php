@@ -5,23 +5,16 @@ namespace Tests\Feature\Role;
 use App\Enums\Role;
 use App\Models\Rol;
 use App\Models\User;
-use Illuminate\Foundation\Testing\DatabaseMigrations;
-use Illuminate\Support\Facades\Artisan;
+use Illuminate\Foundation\Testing\RefreshDatabase;
 use PHPUnit\Framework\Attributes\Test;
 use Tests\TestCase;
 
 class CreateRoleTest extends TestCase
 {
-    use DatabaseMigrations;
+    use RefreshDatabase;
 
-    /**
-     * @var string
-     */
     private $url = 'rols';
 
-    /**
-     * @var
-     */
     private $user;
 
     protected function setUp(): void
@@ -31,14 +24,6 @@ class CreateRoleTest extends TestCase
 
         $user->roles()->attach(Role::Administrator->value);
         $this->be($user);
-
-        session()->start();
-    }
-
-    protected function tearDown(): void
-    {
-        Artisan::call('migrate:reset');
-        parent::tearDown();
     }
 
     #[Test]
@@ -46,7 +31,6 @@ class CreateRoleTest extends TestCase
     {
         $body = [
             'name' => 'test role',
-            '_token' => csrf_token(),
         ];
 
         $response = $this->post($this->url, $body);
@@ -63,7 +47,6 @@ class CreateRoleTest extends TestCase
     {
         $body = [
             'name' => 'test role',
-            '_token' => csrf_token(),
         ];
 
         $this->user->roles()->detach();
@@ -77,7 +60,6 @@ class CreateRoleTest extends TestCase
     public function a_role_can_not_be_created_without_required_fields()
     {
         $body = [
-            '_token' => csrf_token(),
         ];
 
         $response = $this->post($this->url, $body);
@@ -88,6 +70,6 @@ class CreateRoleTest extends TestCase
         $errors = session('errors');
 
         $this->assertCount(1, $errors);
-        $this->assertEquals("Field name is required", $errors->get('name')[0]);
+        $this->assertEquals('Field name is required', $errors->get('name')[0]);
     }
 }

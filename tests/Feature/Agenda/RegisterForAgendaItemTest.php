@@ -9,14 +9,13 @@ use App\Models\ApplicationForm\ApplicationFormRow;
 use App\Models\ApplicationForm\ApplicationResponse;
 use App\Models\User;
 use Carbon\Carbon;
-use Illuminate\Foundation\Testing\DatabaseMigrations;
-use Illuminate\Support\Facades\Artisan;
+use Illuminate\Foundation\Testing\RefreshDatabase;
 use PHPUnit\Framework\Attributes\Test;
 use Tests\TestCase;
 
 class RegisterForAgendaItemTest extends TestCase
 {
-    use DatabaseMigrations;
+    use RefreshDatabase;
 
     private $url = '/forms/';
 
@@ -28,20 +27,12 @@ class RegisterForAgendaItemTest extends TestCase
         $this->user = $user = User::factory()->create();
 
         $this->be($user);
-
-        session()->start();
-    }
-
-    protected function tearDown(): void
-    {
-        Artisan::call('migrate:reset');
-        parent::tearDown();
     }
 
     #[Test]
     public function show_event_registration_form_for_not_existing_agenda_item()
     {
-        $response = $this->get($this->url . 3424);
+        $response = $this->get($this->url. 3424);
 
         $response->assertStatus(404);
     }
@@ -52,7 +43,7 @@ class RegisterForAgendaItemTest extends TestCase
         $agendaItem = AgendaItem::factory()->create();
         $agendaItem->subscription_end_date = Carbon::now()->addWeek();
         $agendaItem->save();
-        $response = $this->get($this->url . $agendaItem->id);
+        $response = $this->get($this->url.$agendaItem->id);
 
         $response->assertStatus(200);
         $response->assertViewHas('error', 'ERROR: No registration form available for this activity.');
@@ -64,7 +55,7 @@ class RegisterForAgendaItemTest extends TestCase
         $agendaItem = AgendaItem::factory()->create();
         $agendaItem->subscription_end_date = Carbon::now()->subWeek();
         $agendaItem->save();
-        $response = $this->get($this->url . $agendaItem->id);
+        $response = $this->get($this->url.$agendaItem->id);
 
         $response->assertStatus(200);
         $response->assertViewHas('error', 'The registration date has expired, so you can no longer subscribe.');
@@ -86,7 +77,7 @@ class RegisterForAgendaItemTest extends TestCase
             'inschrijf_form_id' => $applicationForm->id,
         ]);
 
-        $response = $this->get($this->url . $agendaItem->id);
+        $response = $this->get($this->url.$agendaItem->id);
 
         $response->assertStatus(200);
         $response->assertViewHas('error', 'You have already signed up for this event.');
@@ -117,11 +108,11 @@ class RegisterForAgendaItemTest extends TestCase
 
         $body = [
             $applicationFormRowNumber->id => 2342,
-            $applicationFormRowText->id => "hello",
-            $applicationFormRowTextBox->id => "hello",
+            $applicationFormRowText->id => 'hello',
+            $applicationFormRowTextBox->id => 'hello',
         ];
 
-        $response = $this->post($this->url . $agendaItem->id, $body);
+        $response = $this->post($this->url.$agendaItem->id, $body);
 
         $response->assertStatus(302);
 
@@ -167,11 +158,11 @@ class RegisterForAgendaItemTest extends TestCase
         $body = [
             'user' => $userToRegister->id,
             $applicationFormRowNumber->id => 2342,
-            $applicationFormRowText->id => "hello",
-            $applicationFormRowTextBox->id => "hello",
+            $applicationFormRowText->id => 'hello',
+            $applicationFormRowTextBox->id => 'hello',
         ];
 
-        $response = $this->post($this->url . 'admin/' . $agendaItem->id, $body);
+        $response = $this->post($this->url.'admin/'.$agendaItem->id, $body);
 
         $response->assertStatus(403);
     }
@@ -204,11 +195,11 @@ class RegisterForAgendaItemTest extends TestCase
         $body = [
             'user' => $userToRegister->id,
             $applicationFormRowNumber->id => 2342,
-            $applicationFormRowText->id => "hello",
-            $applicationFormRowTextBox->id => "hello",
+            $applicationFormRowText->id => 'hello',
+            $applicationFormRowTextBox->id => 'hello',
         ];
 
-        $response = $this->post($this->url . 'admin/' . $agendaItem->id, $body);
+        $response = $this->post($this->url.'admin/'.$agendaItem->id, $body);
 
         $response->assertStatus(302);
 
