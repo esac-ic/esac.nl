@@ -35,7 +35,11 @@
                                     @else
                                         @if($agendaItem->canRegister())
                                             @if(array_key_exists(auth()->id(), $users))
-                                                <a class="btn btn-outline-danger" href="{{ route('forms.unregister', $agendaItem) }}">{{ 'Unregister' }} </a>
+                                                <form method="POST" action="{{ route('forms.unregister', $agendaItem) }}">
+                                                    @csrf
+                                                    @method('DELETE')
+                                                    <button type="submit" class="btn btn-outline-danger">{{ 'Unregister' }}</button>
+                                                </form>
                                             @else
                                                 <a class="btn btn-outline-primary" href="{{ route('forms.create', $agendaItem) }}">{{'Register now'}}</a>
                                             @endif
