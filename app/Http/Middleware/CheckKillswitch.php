@@ -5,10 +5,11 @@ namespace App\Http\Middleware;
 use App\Models\Setting;
 use Closure;
 use Illuminate\Http\Request;
+use Symfony\Component\HttpFoundation\Response;
 
 class CheckKillswitch
 {
-    protected $excludedRoutes = [
+    protected array $excludedRoutes = [
         'beheer/*',
         'login',
     ];
@@ -16,11 +17,9 @@ class CheckKillswitch
     /**
      * Handle an incoming request.
      *
-     * @param Request $request
-     * @param  \Closure  $next
-     * @return mixed
+     * @param  Closure(Request): (Response)  $next
      */
-    public function handle($request, Closure $next)
+    public function handle(Request $request, Closure $next): Response
     {
         if (app(Setting::SINGELTONNAME)->getsetting(Setting::SETTING_KILLSWITCH) && !$request->is($this->excludedRoutes)) {
             $curPageName = 'Website offline';

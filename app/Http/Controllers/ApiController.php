@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Resources\MemberResource;
+use App\Http\Resources\MenuItemResource;
 use App\Models\MenuItem;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -26,28 +28,11 @@ class ApiController extends Controller implements HasMiddleware
                 $menuItemQeury->where('parent_id', '=', null);
             }
         }
-        $entries = $menuItemQeury->get();
-        $menuItems = [];
-        foreach ($entries as $menuItem) {
-            array_push($menuItems, [
-                "id" => $menuItem->id,
-                "name" => $menuItem->name,
-            ]);
-        }
-        return $menuItems;
+        return MenuItemResource::collection($menuItemQeury->get())->resolve($request);
     }
 
     public function getUsers(): array
     {
-        $users = [];
-        foreach (User::current()->get(['id', 'email', 'firstname', 'preposition', 'lastname']) as $user) {
-            array_push($users, [
-                'id' => $user->id,
-                'name' => $user->getName(),
-                'email' => $user->email,
-            ]);
-        }
-
-        return ['aaData' => $users];
+        return ['aaData' => MemberResource::collection(User::current()->get(['id', 'email', 'firstname', 'preposition', 'lastname']))];
     }
 }

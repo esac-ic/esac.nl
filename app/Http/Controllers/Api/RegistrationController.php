@@ -3,8 +3,9 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Http\Resources\RegistrationResource;
 use App\Models\User;
-use Carbon\Carbon;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controllers\HasMiddleware;
 use Illuminate\Support\Facades\Gate;
@@ -18,7 +19,7 @@ class RegistrationController extends Controller implements HasMiddleware
         ];
     }
 
-    public function registrationsByUser(Request $request)
+    public function registrationsByUser(Request $request): JsonResponse
     {
         $user = User::query()
             ->with([
@@ -29,19 +30,6 @@ class RegistrationController extends Controller implements HasMiddleware
 
         Gate::authorize('update', $user);
 
-        $registrations = [];
-        foreach ($user->applicationResponses as $applicationRespons) {
-            array_push($registrations, [
-                'name' => $applicationRespons->agendaItem->title,
-                'startDate' => Carbon::parse($applicationRespons->agendaItem->start_date)->format('d-m-Y H:i'),
-                'actions' => '
-                    <a href="' . route('forms.users.show', [$user, $applicationRespons->agenda_id]) . '"><span title="' . 'Show entered information' . '" class="ion-eye" aria-hidden="true"></span></a>
-                    <a href="#" id="delete_button" data-url="' . route('forms.destroy', [$applicationRespons->agenda_id, $applicationRespons]) . '"><span  class="ion-trash-a"></span></a>
-                ',
-            ]);
-        }
-
-        return response()
-            ->json($registrations);
+        return response()->json(RegistrationResource::collection($user->applicationResponses));
     }
 }
