@@ -29,7 +29,7 @@ class ApplicationForm extends Model
 
         foreach ($rows as $rowData) {
             if (array_key_exists('id', $rowData) === true) {
-                $row = ApplicationFormRow::find($rowData['id']);
+                $row = $this->applicationFormRows()->findOrFail($rowData['id']);
             } else {
                 $row = new ApplicationFormRow();
                 $row->application_form_id = $this->id;

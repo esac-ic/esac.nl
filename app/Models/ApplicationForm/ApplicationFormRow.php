@@ -46,7 +46,7 @@ class ApplicationFormRow extends Model
 
         foreach ($options as $optionData) {
             if (array_key_exists('id', $optionData)) {
-                $option = ApplicationFormRowOption::find($optionData['id']);
+                $option = $this->applicationFormRowOptions()->findOrFail($optionData['id']);
                 $option->update($optionData);
             } else {
                 $option = $this->applicationFormRowOptions()->create($optionData);
