@@ -43,7 +43,7 @@ class RegisterForAgendaItemTest extends TestCase
     public function show_event_registration_form_for_agenda_item_without_registration_form()
     {
         $agendaItem = AgendaItem::factory()->create();
-        $agendaItem->subscription_endDate = Carbon::now()->addWeek();
+        $agendaItem->subscription_end_date = Carbon::now()->addWeek();
         $agendaItem->save();
         $response = $this->get($this->url . $agendaItem->id);
 
@@ -55,7 +55,7 @@ class RegisterForAgendaItemTest extends TestCase
     public function show_event_registration_form_for_agenda_item_with_past_subscription_date()
     {
         $agendaItem = AgendaItem::factory()->create();
-        $agendaItem->subscription_endDate = Carbon::now()->subWeek();
+        $agendaItem->subscription_end_date = Carbon::now()->subWeek();
         $agendaItem->save();
         $response = $this->get($this->url . $agendaItem->id);
 
@@ -70,7 +70,7 @@ class RegisterForAgendaItemTest extends TestCase
         $applicationForm = ApplicationForm::factory()->create();
 
         $agendaItem->application_form_id = $applicationForm->id;
-        $agendaItem->subscription_endDate = Carbon::now()->addWeek();
+        $agendaItem->subscription_end_date = Carbon::now()->addWeek();
         $agendaItem->save();
 
         ApplicationResponse::create([
@@ -92,7 +92,7 @@ class RegisterForAgendaItemTest extends TestCase
         $applicationForm = ApplicationForm::factory()->create();
 
         $agendaItem->application_form_id = $applicationForm->id;
-        $agendaItem->subscription_endDate = Carbon::now()->addWeek();
+        $agendaItem->subscription_end_date = Carbon::now()->addWeek();
         $agendaItem->save();
 
         $applicationFormRowNumber = ApplicationFormRow::factory()->create([
@@ -141,7 +141,7 @@ class RegisterForAgendaItemTest extends TestCase
         $applicationForm = ApplicationForm::factory()->create();
 
         $agendaItem->application_form_id = $applicationForm->id;
-        $agendaItem->subscription_endDate = Carbon::now()->addWeek();
+        $agendaItem->subscription_end_date = Carbon::now()->addWeek();
         $agendaItem->save();
 
         $applicationFormRowNumber = ApplicationFormRow::factory()->create([
@@ -178,7 +178,7 @@ class RegisterForAgendaItemTest extends TestCase
         $applicationForm = ApplicationForm::factory()->create();
 
         $agendaItem->application_form_id = $applicationForm->id;
-        $agendaItem->subscription_endDate = Carbon::now()->addWeek();
+        $agendaItem->subscription_end_date = Carbon::now()->addWeek();
         $agendaItem->save();
 
         $applicationFormRowNumber = ApplicationFormRow::factory()->create([

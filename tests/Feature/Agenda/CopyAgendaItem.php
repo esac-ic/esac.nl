@@ -46,14 +46,14 @@ class CopyAgendaItem extends TestCase
         $this->assertCount(2, $agendaItems);
         $newAgendaItem = $agendaItems[1];
 
-        $this->assertEquals($agendaItem->subscription_endDate, $newAgendaItem->subscription_endDate);
-        $this->assertEquals($agendaItem->startDate, $newAgendaItem->startDate);
-        $this->assertEquals($agendaItem->endDate, $newAgendaItem->endDate);
+        $this->assertEquals($agendaItem->subscription_end_date, $newAgendaItem->subscription_end_date);
+        $this->assertEquals($agendaItem->start_date, $newAgendaItem->start_date);
+        $this->assertEquals($agendaItem->end_date, $newAgendaItem->end_date);
         $this->assertEquals($agendaItem->category, $newAgendaItem->category);
         $this->assertEquals($agendaItem->climbing_activity, $newAgendaItem->climbing_activity);
 
         $this->assertEquals($agendaItem->title, $newAgendaItem->title);
         $this->assertEquals($agendaItem->text, $newAgendaItem->text);
-        $this->assertEquals($agendaItem->shortDescription, $newAgendaItem->shortDescription);
+        $this->assertEquals($agendaItem->short_description, $newAgendaItem->short_description);
     }
 }

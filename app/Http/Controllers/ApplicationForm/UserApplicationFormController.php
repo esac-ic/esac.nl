@@ -29,7 +29,7 @@ class UserApplicationFormController extends Controller implements HasMiddleware
         $user_id = Auth::user()->id;
 
         //check if the date has expired
-        $agendaEndDate = new \DateTime($agendaItem->subscription_endDate);
+        $agendaEndDate = new \DateTime($agendaItem->subscription_end_date);
         $now = new \DateTime();
         if ($agendaEndDate < $now) {
             $error = 'The registration date has expired, so you can no longer subscribe.';
@@ -95,7 +95,7 @@ class UserApplicationFormController extends Controller implements HasMiddleware
 
     public function unregister(AgendaItem $agendaItem, int $fromAgendaItem = 1): RedirectResponse
     {
-        if (Carbon::parse($agendaItem->subscription_endDate) < Carbon::now()) {
+        if (Carbon::parse($agendaItem->subscription_end_date) < Carbon::now()) {
             Session::flash("message", 'The registration date has expired, so you can no longer unsubscribe.');
 
             if ($fromAgendaItem == 1) {

@@ -15,7 +15,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 #[Fillable([
     'text',
-    'createdBy',
+    'created_by',
     'score',
     'parent_id',
     'has_parent',

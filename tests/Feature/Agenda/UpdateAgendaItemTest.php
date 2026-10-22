@@ -44,12 +44,12 @@ class UpdateAgendaItemTest extends TestCase
             '_token' => csrf_token(),
             'title' => 'test agenda',
             'text' => 'test agenda',
-            'shortDescription' => 'test agenda',
+            'short_description' => 'test agenda',
             'category' => $agendaItemCategory->id,
             'applicationForm' => ApplicationForm::factory()->create()->id,
-            'subscription_endDate' => Carbon::now()->addDays(2),
-            'endDate' => Carbon::now()->addDays(3),
-            'startDate' => Carbon::now()->addDays(1),
+            'subscription_end_date' => Carbon::now()->addDays(2),
+            'end_date' => Carbon::now()->addDays(3),
+            'start_date' => Carbon::now()->addDays(1),
         ];
 
         $response = $this->patch($this->url . "/" . $agendaItem->id, $body);

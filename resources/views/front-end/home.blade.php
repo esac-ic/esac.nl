@@ -68,12 +68,12 @@
                     <a href="{{ route('agenda.detail', $agendaItem) }}">
                         <img class="card-img-top " src="{{$agendaItem->getImageUrl()}}" alt="Card image cap">
                     </a>
-                    <span class="card-date position-absolute bg-light py-1 px-3 rounded">{{\Carbon\Carbon::parse($agendaItem->startDate)->format('d M')}}</span>
+                    <span class="card-date position-absolute bg-light py-1 px-3 rounded">{{\Carbon\Carbon::parse($agendaItem->start_date)->format('d M')}}</span>
                     <div class="card-body">
                     <a href="{{ route('agenda.detail', $agendaItem) }}">
 
                             <h4 class="card-title">{{$agendaItem->title}}</h4>
-                            <p class="card-text text-body">{{$agendaItem->shortDescription}}</p>
+                            <p class="card-text text-body">{{$agendaItem->short_description}}</p>
                     </a>
                     </div>
                     @if($agendaItem->application_form_id != null)

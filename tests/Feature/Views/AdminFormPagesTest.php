@@ -106,13 +106,13 @@ class AdminFormPagesTest extends TestCase
     {
         $this->assertForm($this->get('pages/create')->assertOk(), 'POST', 'pages');
 
-        $page = MenuItem::forceCreate(['name' => 'Over ons', 'urlName' => 'over-ons', 'content' => '<p>Wij</p>', 'menuItem' => true, 'login' => false, 'deletable' => true, 'editable' => true]);
+        $page = MenuItem::forceCreate(['name' => 'Over ons', 'url_name' => 'over-ons', 'content' => '<p>Wij</p>', 'menu_item' => true, 'login' => false, 'deletable' => true, 'editable' => true]);
         $response = $this->get("pages/$page->id/edit")->assertOk();
 
         $this->assertForm($response, 'PATCH', "pages/$page->id");
         $this->assertFieldValue($response, 'name', 'Over ons');
         $this->assertFieldValue($response, 'content', '<p>Wij</p>');
-        $this->assertChecked($response, 'menuItem');
+        $this->assertChecked($response, 'menu_item');
         $this->assertChecked($response, 'login', false);
     }
 

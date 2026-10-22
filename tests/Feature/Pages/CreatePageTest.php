@@ -41,7 +41,7 @@ class CreatePageTest extends TestCase
     public function admin_can_create_page()
     {
         $body = [
-            'urlName' => 'test',
+            'url_name' => 'test',
             'itemType' => 'subItem',
             'parentItem' => 0,
             'afterItem' => 0,
@@ -66,7 +66,7 @@ class CreatePageTest extends TestCase
     public function admin_can_create_page_with_emoji()
     {
         $body = [
-            'urlName' => 'test',
+            'url_name' => 'test',
             'itemType' => 'subItem',
             'parentItem' => 0,
             'afterItem' => 0,
@@ -95,7 +95,7 @@ class CreatePageTest extends TestCase
     public function no_role_no_create_page()
     {
         $body = [
-            'urlName' => 'test',
+            'url_name' => 'test',
             'itemType' => 'subItem',
             'parentItem' => 0,
             'afterItem' => 0,
@@ -125,7 +125,7 @@ class CreatePageTest extends TestCase
     public function create_page_subitem_content_correct()
     {
         $body = [
-            'urlName' => 'test',
+            'url_name' => 'test',
             'itemType' => 'subItem',
             'parentItem' => 0,
             'afterItem' => 0,
@@ -141,7 +141,7 @@ class CreatePageTest extends TestCase
         $menuItem = MenuItem::all()->last();
 
         $this->assertEquals($menuItem->parent_id, $body['parentItem']);
-        $this->assertEquals($menuItem->urlName, $body['urlName']);
+        $this->assertEquals($menuItem->url_name, $body['url_name']);
         $this->assertEquals($menuItem->after, $body['afterItem']);
         $this->assertEquals($menuItem->name, $body['name']);
         $this->assertEquals($menuItem->content, $body['content']);
@@ -154,7 +154,7 @@ class CreatePageTest extends TestCase
     public function create_page_standalone_content_correct()
     {
         $body = [
-            'urlName' => 'test',
+            'url_name' => 'test',
             'itemType' => 'standAlone',
             'afterItem' => 0,
             'name' => 'Test title',
@@ -169,7 +169,7 @@ class CreatePageTest extends TestCase
         $menuItem = MenuItem::all()->last();
 
         $this->assertNull($menuItem->parent_id);
-        $this->assertEquals($menuItem->urlName, $body['urlName']);
+        $this->assertEquals($menuItem->url_name, $body['url_name']);
         $this->assertEquals($menuItem->after, $body['afterItem']);
         $this->assertEquals($menuItem->name, $body['name']);
         $this->assertEquals($menuItem->content, $body['content']);
@@ -182,7 +182,7 @@ class CreatePageTest extends TestCase
     public function create_page_login_correct()
     {
         $body = [
-            'urlName' => 'test',
+            'url_name' => 'test',
             'itemType' => 'subItem',
             'parentItem' => 0,
             'afterItem' => 0,
@@ -199,7 +199,7 @@ class CreatePageTest extends TestCase
         $response->assertSessionHasNoErrors();
         $this->assertFalse((bool) $menuItem->login);
 
-        $body['urlName'] = 'test2';
+        $body['url_name'] = 'test2';
         $body['login'] = true;
         $response = $this->post($this->url, $body);
 
@@ -217,7 +217,7 @@ class CreatePageTest extends TestCase
     public function create_page_no_afterItem_correct()
     {
         $body = [
-            'urlName' => 'test',
+            'url_name' => 'test',
             'itemType' => 'subItem',
             'parentItem' => 0,
             'afterItem' => -1,
@@ -234,7 +234,7 @@ class CreatePageTest extends TestCase
         $response->assertSessionHasNoErrors();
         $this->assertNull($menuItem->after);
 
-        $body['urlName'] = 'test2';
+        $body['url_name'] = 'test2';
         $body['login'] = true;
         $response = $this->post($this->url, $body);
 
@@ -263,7 +263,7 @@ class CreatePageTest extends TestCase
 
         // Session must contain an error for each of the missing fields.
         $response->assertSessionHasErrors([
-            'urlName',
+            'url_name',
             'itemType',
             'afterItem',
             'name',
@@ -281,7 +281,7 @@ class CreatePageTest extends TestCase
     public function empty_body_meaningful_error_subitem()
     {
         $body = [
-            'urlName' => 'test',
+            'url_name' => 'test',
             'itemType' => 'subItem',
             'afterItem' => 0,
             'name' => 'Test title',

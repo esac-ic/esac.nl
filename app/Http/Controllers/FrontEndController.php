@@ -28,7 +28,7 @@ class FrontEndController extends Controller
     {
         $categories = [];
         $curPageName = 'Events';
-        $menuItem = $this->_menuItemRepository->findby('urlName', MenuItem::AGENDAURL);
+        $menuItem = $this->_menuItemRepository->findby('url_name', MenuItem::AGENDAURL);
         $content = $menuItem->content;
 
         foreach (AgendaItemCategory::all() as $category) {
@@ -59,7 +59,7 @@ class FrontEndController extends Controller
     public function zekeringen()
     {
         $curPageName = 'Zekeringen';
-        $menuItem = $this->_menuItemRepository->findby('urlName', MenuItem::ZEKERINGURL);
+        $menuItem = $this->_menuItemRepository->findby('url_name', MenuItem::ZEKERINGURL);
         $content = $menuItem->content;
 
         if (!$menuItem->show()) {
@@ -71,7 +71,7 @@ class FrontEndController extends Controller
 
     public function publicSubscribe(): View
     {
-        $menuItem = $this->_menuItemRepository->findby('urlName', MenuItem::SUBSCRIBEURL);
+        $menuItem = $this->_menuItemRepository->findby('url_name', MenuItem::SUBSCRIBEURL);
         $content = $menuItem->content;
         $curPageName = 'Subscribe as member';
         return view("front-end.subscribe", compact('curPageName', 'content'));
@@ -81,7 +81,7 @@ class FrontEndController extends Controller
     {
         $newsItems = NewsItem::orderBy('id', 'desc')->paginate(9);
         $curPageName = 'News';
-        $menuItem = $this->_menuItemRepository->findby('urlName', MenuItem::NEWSURL);
+        $menuItem = $this->_menuItemRepository->findby('url_name', MenuItem::NEWSURL);
         $content = $menuItem->content;
 
         return view("front-end.news", compact('curPageName', 'content', 'newsItems'));
@@ -90,7 +90,7 @@ class FrontEndController extends Controller
     public function newsDetailView(Request $request, NewsItem $newsItem): View
     {
         $curPageName = $newsItem->title;
-        $menuItem = $this->_menuItemRepository->findby('urlName', MenuItem::NEWSURL);
+        $menuItem = $this->_menuItemRepository->findby('url_name', MenuItem::NEWSURL);
         $content = $menuItem->content;
 
         return view("front-end.news_detail", compact('newsItem', 'curPageName'));
@@ -100,7 +100,7 @@ class FrontEndController extends Controller
     {
         $books = Book::all();
         $curPageName = 'Library';
-        $menuItem = $this->_menuItemRepository->findby('urlName', MenuItem::LIBRARYURL);
+        $menuItem = $this->_menuItemRepository->findby('url_name', MenuItem::LIBRARYURL);
         $content = $menuItem->content;
 
         return view("front-end.library", compact('curPageName', 'content', 'books'));
@@ -108,9 +108,9 @@ class FrontEndController extends Controller
 
     public function memberlist()
     {
-        $users = $this->_userRepository->getCurrentUsers(['firstname', 'lastname', 'email', 'preposition', 'kind_of_member', 'phonenumber']);
+        $users = $this->_userRepository->getCurrentUsers(['firstname', 'lastname', 'email', 'preposition', 'kind_of_member', 'phone_number']);
         $curPageName = 'Members list';
-        $menuItem = $this->_menuItemRepository->findby('urlName', MenuItem::MEMBERLISTURL);
+        $menuItem = $this->_menuItemRepository->findby('url_name', MenuItem::MEMBERLISTURL);
         $content = $menuItem->content;
 
         if (!$menuItem->show()) {
@@ -126,7 +126,7 @@ class FrontEndController extends Controller
         $agendaItems = $this->_agendaRepository->getFirstXItems(4);
         $curPageName = 'Home';
         $menuItem = MenuItem::query()
-            ->where('urlName', '=', MenuItem::HOMEURL)
+            ->where('url_name', '=', MenuItem::HOMEURL)
             ->first();
         $content = $menuItem->content;
 
@@ -136,7 +136,7 @@ class FrontEndController extends Controller
     //displays the page which is requested.
     public function showPage(Request $request, $menuItemUrl)
     {
-        $menuItem = $this->_menuItemRepository->findby('urlName', $menuItemUrl);
+        $menuItem = $this->_menuItemRepository->findby('url_name', $menuItemUrl);
 
         if ($menuItem === null) {
             abort(404);

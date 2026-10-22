@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Http\Resources\ZekeringResource;
 use App\Repositories\ZekeringenRepository;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -24,7 +25,7 @@ class ZekeringController extends Controller implements HasMiddleware
     {
         $zekeringen = $zekeringenRepository->findBy('has_parent', false)->with('children')->get();
 
-        return ['zekeringen' => $zekeringen];
+        return ['zekeringen' => ZekeringResource::collection($zekeringen)];
     }
 
     public function storeZekering(Request $request, ZekeringenRepository $zekeringenRepository): RedirectResponse
