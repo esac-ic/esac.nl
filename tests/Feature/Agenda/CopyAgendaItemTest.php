@@ -6,6 +6,7 @@ use App\Enums\Role;
 use App\Models\AgendaItem;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Support\Facades\Storage;
 use PHPUnit\Framework\Attributes\Test;
 use Tests\TestCase;
 
@@ -48,5 +49,19 @@ class CopyAgendaItemTest extends TestCase
         $this->assertEquals($agendaItem->title, $newAgendaItem->title);
         $this->assertEquals($agendaItem->text, $newAgendaItem->text);
         $this->assertEquals($agendaItem->short_description, $newAgendaItem->short_description);
+    }
+
+    #[Test]
+    public function a_copy_gets_its_own_image_file()
+    {
+        Storage::fake('public')->put('agendaItem/1-thumbnail.jpg', 'image');
+        // A copy of a copy still has the image name of the original.
+        $agendaItem = AgendaItem::factory()->create(['image_url' => 'agendaItem/1-thumbnail.jpg']);
+
+        $this->post($this->url.$agendaItem->id.'/copy');
+
+        $copy = AgendaItem::query()->latest('id')->first();
+        $this->assertSame("agendaItem/{$copy->id}-thumbnail.jpg", $copy->image_url);
+        Storage::disk('public')->assertExists([$agendaItem->image_url, $copy->image_url]);
     }
 }
