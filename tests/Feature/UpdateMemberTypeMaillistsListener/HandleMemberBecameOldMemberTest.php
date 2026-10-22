@@ -20,7 +20,7 @@ class HandleMemberBecameOldMemberTest extends TestCase
     public function an_old_member_is_removed_from_all_mail_lists()
     {
         $user = User::factory()->create();
-        $mailman = Mockery::mock(Mailman::class);
+        $mailman = $this->mock(Mailman::class);
         $mailman->shouldReceive('deleteUserForAllMailList')
             ->with(Mockery::on(fn ($argument) => $user->is($argument)))
             ->once();

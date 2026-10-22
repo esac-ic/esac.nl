@@ -7,13 +7,10 @@ use Illuminate\Console\Attributes\Description;
 use Illuminate\Console\Attributes\Signature;
 use Illuminate\Console\Command;
 
-#[Description('Remove old application that are older then x years')]
+#[Description('Delete the event registrations older than the retention period')]
 #[Signature('remove:oldApplications')]
 class RemoveOldApplications extends Command
 {
-    /**
-     * Execute the console command.
-     */
     public function handle(): void
     {
         ApplicationResponse::query()

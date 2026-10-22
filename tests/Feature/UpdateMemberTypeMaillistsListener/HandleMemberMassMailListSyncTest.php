@@ -7,7 +7,6 @@ use App\Jobs\MemberMassMailListSyncJob;
 use App\Models\User;
 use App\Services\Mailman;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Mockery;
 use PHPUnit\Framework\Attributes\Test;
 use Tests\Concerns\FakesMailListSettings;
 use Tests\TestCase;
@@ -28,7 +27,7 @@ class HandleMemberMassMailListSyncTest extends TestCase
     {
         $user = User::factory()->member()->create();
 
-        $mailman = Mockery::mock(Mailman::class);
+        $mailman = $this->mock(Mailman::class);
         $mailman->shouldNotReceive('removeUserFromSpecifiedMailLists');
         $mailman->shouldReceive('addUserToSpecifiedMailLists')
             ->with($user->email, $user->getName(), ['member.esac.nl'])
@@ -44,7 +43,7 @@ class HandleMemberMassMailListSyncTest extends TestCase
             User::factory()->create(['kind_of_member' => $kind]);
         }
 
-        $mailman = Mockery::mock(Mailman::class);
+        $mailman = $this->mock(Mailman::class);
         $mailman->shouldNotReceive('removeUserFromSpecifiedMailLists');
         foreach (User::all() as $user) {
             $mailman->shouldReceive('addUserToSpecifiedMailLists')
