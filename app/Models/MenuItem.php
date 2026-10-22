@@ -12,34 +12,20 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 #[Fillable([
     'name',
     'parent_id',
-    'url_name',
+    'slug',
     'position',
-    'menu_item',
+    'show_in_menu',
     'content',
 ])]
 class MenuItem extends Model
 {
     use SoftDeletes;
 
-    const HOMEURL = 'home';
-
-    const ZEKERINGURL = 'zekeringen';
-
-    const SUBSCRIBEURL = 'signup';
-
-    const NEWSURL = 'news';
-
-    const MEMBERLISTURL = 'memberlist';
-
-    const AGENDAURL = 'agenda';
-
-    const LIBRARYURL = 'library';
-
     protected function casts(): array
     {
         return [
-            'login' => 'boolean',
-            'menu_item' => 'boolean',
+            'requires_login' => 'boolean',
+            'show_in_menu' => 'boolean',
             'deletable' => 'boolean',
             'editable' => 'boolean',
         ];
@@ -59,7 +45,7 @@ class MenuItem extends Model
     #[Scope]
     protected function inMenu(Builder $query): void
     {
-        $query->where('menu_item', true);
+        $query->where('show_in_menu', true);
     }
 
     #[Scope]

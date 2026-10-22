@@ -10,7 +10,7 @@ use Illuminate\Validation\ValidationException;
 use Laravel\Fortify\Fortify;
 
 /**
- * Old and pending members can't log in. They only get told so after entering their correct password.
+ * Former and pending members can't log in. They only get told so after entering their correct password.
  */
 class EnsureMemberCanLogIn
 {
@@ -19,12 +19,12 @@ class EnsureMemberCanLogIn
         $user = User::query()->where(Fortify::username(), $request->input(Fortify::username()))->first();
 
         if ($user?->password !== null && Hash::check($request->input('password'), $user->password)) {
-            if ($user->isOldMember()) {
-                throw ValidationException::withMessages([Fortify::username() => 'Old members can not login']);
+            if ($user->isFormerMember()) {
+                throw ValidationException::withMessages([Fortify::username() => "Former members can't log in"]);
             }
 
             if ($user->isPendingMember()) {
-                throw ValidationException::withMessages([Fortify::username() => 'Pending members can not login']);
+                throw ValidationException::withMessages([Fortify::username() => "Pending members can't log in"]);
             }
         }
 

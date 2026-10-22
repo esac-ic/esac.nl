@@ -8,10 +8,10 @@ use App\Models\User;
 class MenuItemPolicy
 {
     /**
-     * Pages marked "login" are for members only.
+     * Pages that require a login are for members only.
      */
     public function view(?User $user, MenuItem $menuItem): bool
     {
-        return ! $menuItem->login || $user !== null;
+        return ! $menuItem->requires_login || $user !== null;
     }
 }

@@ -1,14 +1,12 @@
 {
   "private": true,
   "scripts": {
-    "start": "npm run development && php artisan serve",
-    "dev": "npm run development",
-    "development": "mix",
+    "start": "npm run dev && php artisan serve",
+    "dev": "mix",
     "watch": "mix watch",
     "watch-poll": "mix watch -- --watch-options-poll=1000",
     "hot": "mix watch --hot",
-    "prod": "npm run production",
-    "production": "mix --production"
+    "build": "mix --production"
   },
   "devDependencies": {
     "axios": "^0.27.2",

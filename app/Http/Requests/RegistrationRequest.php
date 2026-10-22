@@ -2,47 +2,47 @@
 
 namespace App\Http\Requests;
 
-use App\Enums\FormRowType;
-use App\Models\AgendaItem;
-use App\Models\ApplicationForm\ApplicationFormRow;
+use App\Enums\FormFieldType;
+use App\Models\Event;
+use App\Models\RegistrationFormField;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 
 /**
- * The answers to an event's registration form, keyed by the form row id.
+ * The answers to an event's registration form, keyed by the field id.
  */
 class RegistrationRequest extends FormRequest
 {
     public function rules(): array
     {
-        $rows = $this->agendaItem()->applicationForm?->applicationFormRows()->with('applicationFormRowOptions')->get() ?? [];
+        $fields = $this->event()->registrationForm?->fields()->with('options')->get() ?? [];
 
         $rules = [];
-        foreach ($rows as $row) {
-            $rules += $this->rulesFor($row);
+        foreach ($fields as $field) {
+            $rules += $this->rulesFor($field);
         }
 
         return $rules;
     }
 
-    protected function agendaItem(): AgendaItem
+    protected function event(): Event
     {
-        return $this->route('agendaItem');
+        return $this->route('event');
     }
 
-    private function rulesFor(ApplicationFormRow $row): array
+    private function rulesFor(RegistrationFormField $field): array
     {
-        $presence = $row->required ? 'required' : 'nullable';
-        $options = Rule::in($row->applicationFormRowOptions->pluck('value')->all());
+        $presence = $field->required ? 'required' : 'nullable';
+        $options = Rule::in($field->options->pluck('value')->all());
 
-        return match ($row->type) {
-            FormRowType::Number => [$row->id => [$presence, 'numeric']],
-            FormRowType::CheckBox => [$row->id => $row->required ? ['accepted'] : ['nullable', Rule::in(['on', '0'])]],
-            FormRowType::Select => [$row->id => [$presence, $options]],
+        return match ($field->type) {
+            FormFieldType::Number => [$field->id => [$presence, 'numeric']],
+            FormFieldType::Checkbox => [$field->id => $field->required ? ['accepted'] : ['nullable', Rule::in(['on', '0'])]],
+            FormFieldType::Select => [$field->id => [$presence, $options]],
             // Radio buttons and checkboxes are posted as arrays.
-            FormRowType::Radio => [$row->id => [$presence, 'array', 'max:1'], $row->id.'.*' => [$options]],
-            FormRowType::MultiCheckBox => [$row->id => [$presence, 'array'], $row->id.'.*' => [$options]],
-            default => [$row->id => [$presence, 'string']],
+            FormFieldType::Radio => [$field->id => [$presence, 'array', 'max:1'], $field->id.'.*' => [$options]],
+            FormFieldType::Checkboxes => [$field->id => [$presence, 'array'], $field->id.'.*' => [$options]],
+            default => [$field->id => [$presence, 'string']],
         };
     }
 }

@@ -10,7 +10,7 @@
                 <label for="password">Password</label>
                 <input class="form-control form-control-lg" id="password" type="password" name="password" required autofocus autocomplete="current-password">
                 @error('password')
-                <span class="help-block"><strong>{{ $message }}</strong></span>
+                <span class="invalid-feedback d-block"><strong>{{ $message }}</strong></span>
                 @enderror
             </div>
             <div class="text-center mt-3">

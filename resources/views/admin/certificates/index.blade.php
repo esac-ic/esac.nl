@@ -1,14 +1,14 @@
 @extends('layouts.admin')
 
 @section('title')
-Certificate
+Certificates
 @endsection
 
 @section('content')
-    <x-page-header title="Certificate">
-        <x-button-link :href="route('admin.certificates.create')" icon="plus">Make a new certificate</x-button-link>
+    <x-page-header title="Certificates">
+        <x-button-link :href="route('admin.certificates.create')" icon="plus">New certificate</x-button-link>
     </x-page-header>
-    <x-data-table :columns="['Name', 'Abbreviation', 'Management']">
+    <x-data-table datatable :columns="['Name', 'Abbreviation', 'Actions']">
         @foreach ($certificates as $certificate)
             <tr>
                 <td>{{$certificate->name}}</td>

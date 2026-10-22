@@ -21,21 +21,21 @@ class ZekeringController extends Controller implements HasMiddleware
         ];
     }
 
-    public function getZekeringen(): array
+    public function index(): array
     {
         $zekeringen = Zekering::query()->whereNull('parent_id')->latest('id')->with('children')->get();
 
         return ['zekeringen' => ZekeringResource::collection($zekeringen)];
     }
 
-    public function storeZekering(ZekeringRequest $request): RedirectResponse
+    public function store(ZekeringRequest $request): RedirectResponse
     {
         $request->user()->zekeringen()->create($request->validated());
 
-        return to_route('front-end.zekeringen');
+        return to_route('zekeringen');
     }
 
-    public function storeSubZekering(ZekeringRequest $request): Response
+    public function storeChild(ZekeringRequest $request): Response
     {
         $request->user()->zekeringen()->create($request->validated());
 

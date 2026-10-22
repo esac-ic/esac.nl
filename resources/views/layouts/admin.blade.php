@@ -13,7 +13,7 @@
     <div class="row">
         <div class="col-lg-2 fixed-left px-0 pt-lg-5 h-lg-100" style="z-index:100">
             <nav class="navbar navbar-expand-lg navbar-light bg-white border-right h-lg-100">
-                <a class="navbar-brand d-lg-none" href="{{ route('admin.home') }}">Dashboard</a>
+                <a class="navbar-brand d-lg-none" href="{{ route('admin.dashboard') }}">Dashboard</a>
                 <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarDashboard" aria-controls="navbarDashboard" aria-expanded="false" aria-label="Toggle navigation">
                     <span class="ion-ios-arrow-down h4"></span>
                 </button>
@@ -26,7 +26,7 @@
                         </span>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="{{ route('admin.users.show', auth()->user()) }}">
+                        <a class="nav-link" href="{{ route('admin.members.show', auth()->user()) }}">
                             Account overview
                         </a>
                     </li>
@@ -35,21 +35,21 @@
 
                         <li class="nav-item active">
                             <span class="nav-link">
-                                Management
+                                Admin
                             </span>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="{{ route('admin.home') }}">
+                            <a class="nav-link" href="{{ route('admin.dashboard') }}">
                             Dashboard
                             </a>
                         </li>
                     @endcan
                     @can('view-members')
                         <x-nav-dropdown label="Members">
-                            <a class="dropdown-item" href="{{ route('admin.users.index') }}">Current members</a>
+                            <a class="dropdown-item" href="{{ route('admin.members.index') }}">Current members</a>
                             @can('manage-members')
-                                <a class="dropdown-item" href="{{ route('admin.old-members.index') }}">Old members</a>
-                                <a class="dropdown-item" href="{{ route('admin.pending-users.index') }}">Pending users</a>
+                                <a class="dropdown-item" href="{{ route('admin.former-members.index') }}">Former members</a>
+                                <a class="dropdown-item" href="{{ route('admin.pending-members.index') }}">Pending members</a>
                             @endcan
                             @can('manage-roles')
                                 <a class="dropdown-item" href="{{ route('admin.roles.index') }}">Roles</a>
@@ -59,18 +59,18 @@
                             @endcan
                         </x-nav-dropdown>
                     @endcan
-                    @can('manage-agenda')
-                        <x-nav-dropdown label="Activities">
-                            <a class="dropdown-item" href="{{ route('admin.agenda-items.index') }}">Events</a>
-                            <a class="dropdown-item" href="{{ route('admin.application-forms.index') }}">Application forms</a>
-                            @can('manage-agenda-categories')
-                                <a class="dropdown-item" href="{{ route('admin.agenda-item-categories.index') }}">Event categories</a>
+                    @can('manage-events')
+                        <x-nav-dropdown label="Events">
+                            <a class="dropdown-item" href="{{ route('admin.events.index') }}">Events</a>
+                            <a class="dropdown-item" href="{{ route('admin.registration-forms.index') }}">Registration forms</a>
+                            @can('manage-event-categories')
+                                <a class="dropdown-item" href="{{ route('admin.event-categories.index') }}">Event categories</a>
                             @endcan
                         </x-nav-dropdown>
                     @endcan
                     @can('manage-pages')
                         <x-nav-dropdown label="Content">
-                            <a class="dropdown-item" href="{{ route('admin.pages.index') }}">Page management</a>
+                            <a class="dropdown-item" href="{{ route('admin.pages.index') }}">Pages</a>
                             <a class="dropdown-item" href="{{ route('admin.news-items.index') }}">News items</a>
                             @can('manage-library')
                                 <a class="dropdown-item" href="{{ route('admin.books.index') }}">Books</a>
@@ -80,21 +80,21 @@
                     @can('manage-mail-lists')
                         <li class="nav-item">
                             <a href="{{ route('admin.mail-lists.index') }}" class="nav-link">
-                                Mailing lists
+                                Mail lists
                             </a>
                         </li>
                     @endcan
-                    @can('view-user-event-log')
+                    @can('view-member-log')
                         <li class="nav-item">
-                            <a href="{{ route('admin.user-event-log.index') }}" class="nav-link">
-                                User event log
+                            <a href="{{ route('admin.member-log.index') }}" class="nav-link">
+                                Member log
                             </a>
                         </li>
                     @endcan
                     @can('manage-settings')
                         <li class="nav-item">
                             <a href="{{ route('admin.settings.show') }}" class="nav-link">
-                                Setting
+                                Settings
                             </a>
                         </li>
                     @endcan
@@ -116,7 +116,7 @@
 <script src="{{mix("js/vendor/datatables.js")}}"></script>
 <script src="{{mix("js/vendor/summernote.js")}}"></script>
 <script>
-    $('#users').DataTable();
+    $('.js-datatable').DataTable();
 
     $(document).ready(function() {
         let $lastClick;

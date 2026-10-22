@@ -70,8 +70,8 @@ jobs:
         php artisan key:generate
         php artisan storage:link
 
-    - name: NPM build
-      run: npm run prod
+    - name: Build front-end assets
+      run: npm run build
 
     - name: Execute tests (Unit and Feature tests) via PHPUnit
       run: vendor/bin/phpunit -c phpunit.xml --coverage-clover=coverage.xml

@@ -12,13 +12,13 @@ class CheckKillswitch
 {
     public function handle(Request $request, Closure $next): Response
     {
-        // The admin pages, the API for admins and Fortify's login, logout and password routes stay available.
-        $excluded = $request->is('admin/*')
+        // The admin pages (also under their old /beheer URLs), the API for admins and Fortify's login, logout and password routes stay available.
+        $excluded = $request->is('admin/*', 'beheer', 'beheer/*')
             || ($request->is('api/*') && $request->user()?->can('access-admin'))
             || $request->routeIs('login', 'login.*', 'logout', 'password.*');
 
         if (! $excluded && Setting::isEnabled(SettingKey::Killswitch)) {
-            return response()->view('errors.killswitch', ['curPageName' => 'Website offline'], 404);
+            return response()->view('errors.killswitch', ['pageTitle' => 'Website offline'], 404);
         }
 
         return $next($request);

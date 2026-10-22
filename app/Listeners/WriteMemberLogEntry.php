@@ -1,0 +1,23 @@
+<?php
+
+namespace App\Listeners;
+
+use App\Events\LogsToMemberLog;
+use App\Models\MemberLogEntry;
+use Illuminate\Contracts\Queue\ShouldQueueAfterCommit;
+
+class WriteMemberLogEntry implements ShouldQueueAfterCommit
+{
+    /**
+     * Adds the event to the member log.
+     */
+    public function handle(LogsToMemberLog $event): void
+    {
+        $logEntry = new MemberLogEntry([
+            'type' => class_basename($event),
+            'details' => $event->logDetails(),
+        ]);
+        $logEntry->user()->associate($event->loggedUser());
+        $logEntry->save();
+    }
+}

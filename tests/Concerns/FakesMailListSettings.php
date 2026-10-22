@@ -2,11 +2,11 @@
 
 namespace Tests\Concerns;
 
-use App\Enums\KindOfMember;
+use App\Enums\MemberType;
 use App\Models\Setting;
 
 /**
- * Gives every kind of member its own mail list in the settings.
+ * Gives every member type its own mail list in the settings.
  */
 trait FakesMailListSettings
 {
@@ -14,28 +14,28 @@ trait FakesMailListSettings
     {
         Setting::truncate();
 
-        foreach (KindOfMember::cases() as $kind) {
+        foreach (MemberType::cases() as $type) {
             Setting::create([
-                'name' => $kind->mailListSetting()->value,
-                'value' => $this->mailListOf($kind),
+                'name' => $type->mailListSetting()->value,
+                'value' => $this->mailListOf($type),
             ]);
         }
     }
 
-    private function mailListOf(KindOfMember $kind): string
+    private function mailListOf(MemberType $type): string
     {
-        return "$kind->value.esac.nl";
+        return "$type->value.esac.nl";
     }
 
-    public static function kindsOfMember(): array
+    public static function memberTypes(): array
     {
-        return collect(KindOfMember::cases())->mapWithKeys(fn (KindOfMember $kind) => [$kind->value => [$kind]])->all();
+        return collect(MemberType::cases())->mapWithKeys(fn (MemberType $type) => [$type->value => [$type]])->all();
     }
 
-    public static function kindChanges(): array
+    public static function memberTypeChanges(): array
     {
-        return collect(KindOfMember::cases())
-            ->crossJoin(KindOfMember::cases())
+        return collect(MemberType::cases())
+            ->crossJoin(MemberType::cases())
             ->reject(fn (array $change) => $change[0] === $change[1])
             ->mapWithKeys(fn (array $change) => ["{$change[0]->value} to {$change[1]->value}" => $change])
             ->all();

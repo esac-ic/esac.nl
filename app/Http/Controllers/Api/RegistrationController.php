@@ -23,10 +23,10 @@ class RegistrationController extends Controller implements HasMiddleware
     {
         $request->validate(['user_id' => ['required', 'integer']]);
 
-        $user = User::query()->with('applicationResponses.agendaItem')->findOrFail($request->integer('user_id'));
+        $user = User::query()->with('registrations.event')->findOrFail($request->integer('user_id'));
 
         Gate::authorize('view', $user);
 
-        return response()->json(RegistrationResource::collection($user->applicationResponses));
+        return response()->json(RegistrationResource::collection($user->registrations));
     }
 }

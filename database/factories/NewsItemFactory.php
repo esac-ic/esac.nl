@@ -14,9 +14,9 @@ class NewsItemFactory extends Factory
     {
         return [
             'title' => fake()->title(),
-            'text' => fake()->text(),
-            'image_url' => '',
-            'thumbnail_url' => '',
+            'body' => fake()->text(),
+            'image_path' => '',
+            'thumbnail_path' => '',
             'author' => fake()->firstName(),
         ];
     }

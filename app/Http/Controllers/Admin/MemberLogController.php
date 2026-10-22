@@ -1,0 +1,49 @@
+<?php
+
+namespace App\Http\Controllers\Admin;
+
+use App\Exports\MemberLogExport;
+use App\Http\Controllers\Controller;
+use App\Models\MemberLogEntry;
+use Illuminate\Contracts\View\View;
+use Illuminate\Http\Request;
+use Illuminate\Routing\Controllers\HasMiddleware;
+use Illuminate\Routing\Controllers\Middleware;
+use Symfony\Component\HttpFoundation\StreamedResponse;
+
+class MemberLogController extends Controller implements HasMiddleware
+{
+    public static function middleware(): array
+    {
+        return [
+            'auth',
+            new Middleware('can:view-member-log'),
+        ];
+    }
+
+    public function index(): View
+    {
+        return view('admin.member-log.index', [
+            'entries' => MemberLogEntry::all(),
+            'types' => MemberLogEntry::query()->distinct('type')->pluck('type')->sort(),
+        ]);
+    }
+
+    public function export(Request $request): StreamedResponse
+    {
+        $request->validate([
+            'types' => ['nullable', 'array'],
+            'types.*' => ['string'],
+            'start_date' => ['required', 'date_format:d-m-Y H:i'],
+            'end_date' => ['required', 'date_format:d-m-Y H:i'],
+        ]);
+
+        $export = new MemberLogExport(
+            $request->input('types'),
+            $request->date('start_date', 'd-m-Y H:i', config('app.display_timezone'))->utc(),
+            $request->date('end_date', 'd-m-Y H:i', config('app.display_timezone'))->utc(),
+        );
+
+        return $export->download($export->fileName().'.xlsx');
+    }
+}

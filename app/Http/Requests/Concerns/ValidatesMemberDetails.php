@@ -2,7 +2,7 @@
 
 namespace App\Http\Requests\Concerns;
 
-use App\Rules\EmailDomainValidator;
+use App\Rules\NotBlockedEmailDomain;
 use Illuminate\Validation\Rule;
 
 trait ValidatesMemberDetails
@@ -18,11 +18,11 @@ trait ValidatesMemberDetails
                 'email',
                 'max:255',
                 Rule::unique('users')->ignore($ignoreUserId),
-                new EmailDomainValidator,
+                new NotBlockedEmailDomain,
             ],
-            'firstname' => ['required', 'max:255'],
+            'first_name' => ['required', 'max:255'],
             'preposition' => ['nullable', 'max:255'],
-            'lastname' => ['required', 'max:255'],
+            'last_name' => ['required', 'max:255'],
             'street' => ['required', 'max:255'],
             'house_number' => ['required', 'max:255'],
             'city' => ['required', 'max:255'],

@@ -7,7 +7,7 @@ use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 /**
- * A member as the mailing list and member pickers read it.
+ * A member as the mail list and member pickers read it.
  *
  * @mixin User
  */
@@ -17,7 +17,7 @@ class MemberResource extends JsonResource
     {
         return [
             'id' => $this->id,
-            'name' => $this->getName(),
+            'name' => $this->name,
             'email' => $this->email,
         ];
     }

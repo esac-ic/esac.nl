@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Enums\PageSlug;
 use App\Models\MenuItem;
 use Illuminate\Database\Seeder;
 
@@ -13,23 +14,23 @@ class MenuItemSeeder extends Seeder
     public function run(): void
     {
         $pages = [
-            [MenuItem::HOMEURL, 'Home', false, '<h2 class="card-title">Welcome</h2><p class="card-text">Welcome to the ESAC, the student climbing and mountaineering club of Eindhoven.</p>'],
-            [MenuItem::AGENDAURL, 'Agenda', false, 'Agenda content'],
-            [MenuItem::MEMBERLISTURL, 'Members list', true, 'Members list content'],
-            [MenuItem::NEWSURL, 'News', false, 'News content'],
-            [MenuItem::SUBSCRIBEURL, 'Subscribe as member', false, 'Subscribe content'],
-            [MenuItem::LIBRARYURL, 'Library', false, 'Library content'],
-            [MenuItem::ZEKERINGURL, 'Zekeringen', true, 'Zekeringen content'],
+            [PageSlug::Home, 'Home', false, '<h2 class="card-title">Welcome</h2><p class="card-text">Welcome to the ESAC, the student climbing and mountaineering club of Eindhoven.</p>'],
+            [PageSlug::Events, 'Events', false, 'Events content'],
+            [PageSlug::Members, 'Members list', true, 'Members list content'],
+            [PageSlug::News, 'News', false, 'News content'],
+            [PageSlug::SignUp, 'Become a member', false, 'Sign-up content'],
+            [PageSlug::Library, 'Library', false, 'Library content'],
+            [PageSlug::Zekeringen, 'Zekeringen', true, 'Zekeringen content'],
         ];
 
-        foreach ($pages as $index => [$urlName, $name, $login, $content]) {
+        foreach ($pages as $index => [$slug, $name, $requiresLogin, $content]) {
             MenuItem::query()->forceCreate([
                 'position' => ($index + 1) * 10,
-                'url_name' => $urlName,
+                'slug' => $slug->value,
                 'name' => $name,
-                'login' => $login,
+                'requires_login' => $requiresLogin,
                 'content' => $content,
-                'menu_item' => true,
+                'show_in_menu' => true,
                 'deletable' => false,
                 'editable' => true,
             ]);

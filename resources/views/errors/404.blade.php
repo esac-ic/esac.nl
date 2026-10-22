@@ -1,5 +1,5 @@
 @extends('layouts.app',[
-    'curPageName' => 'Page not found'
+    'pageTitle' => 'Page not found'
 ])
 
 @section('content')

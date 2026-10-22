@@ -1,7 +1,7 @@
 @extends('layouts.master')
 
 @section('title')
-{{ $curPageName }}
+{{ $pageTitle }}
 @endsection
 
 @section('main')

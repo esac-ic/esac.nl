@@ -14,10 +14,10 @@ class DeleteNewsItemTest extends TestCase
     use RefreshDatabase;
 
     #[Test]
-    public function delete_news_item()
+    public function a_content_administrator_can_delete_a_news_item()
     {
         $newsItem = NewsItem::factory()->create();
-        $this->actingAs(User::factory()->withRole(AdminRole::ActivityAdministrator)->create());
+        $this->actingAs(User::factory()->withRole(AdminRole::EventAdministrator)->create());
 
         $this->delete('admin/news-items/'.$newsItem->id)->assertRedirect();
 

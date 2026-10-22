@@ -21,17 +21,17 @@ class CreatePageTest extends TestCase
         parent::setUp();
         $this->actingAs(User::factory()->withRole(AdminRole::ContentAdministrator)->create());
         $this->parent = MenuItem::query()->forceCreate([
-            'name' => 'Parent', 'url_name' => 'parent', 'content' => 'Parent', 'login' => false,
-            'menu_item' => true, 'deletable' => true, 'editable' => true,
+            'name' => 'Parent', 'slug' => 'parent', 'content' => 'Parent', 'requires_login' => false,
+            'show_in_menu' => true, 'deletable' => true, 'editable' => true,
         ]);
     }
 
     private function body(array $overrides = []): array
     {
         return array_merge([
-            'url_name' => 'test',
-            'itemType' => 'subItem',
-            'parentItem' => $this->parent->id,
+            'slug' => 'test',
+            'menu_level' => 'child',
+            'parent_id' => $this->parent->id,
             'position' => 20,
             'name' => 'Test title',
             'content' => 'Very cool test content.',
@@ -43,13 +43,13 @@ class CreatePageTest extends TestCase
         return [
             'sub item' => [[], true],
             'sub item with emoji' => [['name' => 'Test title 😀', 'content' => 'Hele leuke test inhoud. 😀'], true],
-            'standalone' => [['itemType' => 'standAlone', 'parentItem' => null], false],
+            'standalone' => [['menu_level' => 'top', 'parent_id' => null], false],
         ];
     }
 
     #[Test]
     #[DataProvider('validPages')]
-    public function admin_can_create_page_with_correct_content(array $overrides, bool $isSubItem)
+    public function a_content_administrator_can_create_a_page(array $overrides, bool $isSubItem)
     {
         $body = $this->body($overrides);
 
@@ -59,7 +59,7 @@ class CreatePageTest extends TestCase
 
         $this->assertDatabaseHas(MenuItem::class, [
             'parent_id' => $isSubItem ? $this->parent->id : null,
-            'url_name' => $body['url_name'],
+            'slug' => $body['slug'],
             'position' => 20,
             'name' => $body['name'],
             'content' => $body['content'],
@@ -67,11 +67,11 @@ class CreatePageTest extends TestCase
     }
 
     #[Test]
-    public function an_edited_page_is_validated_when_its_url_name_is_unchanged()
+    public function an_edited_page_is_validated_when_its_slug_is_unchanged()
     {
-        $body = $this->body(['itemType' => 'standAlone']);
+        $body = $this->body(['menu_level' => 'top']);
         $this->post('admin/pages', $body)->assertValid();
-        $page = MenuItem::query()->where('url_name', 'test')->sole();
+        $page = MenuItem::query()->where('slug', 'test')->sole();
 
         $this->patch(route('admin.pages.update', $page), [...$body, 'name' => ''])->assertInvalid('name');
         $this->patch(route('admin.pages.update', $page), [...$body, 'name' => 'New title'])->assertValid();
@@ -79,9 +79,9 @@ class CreatePageTest extends TestCase
     }
 
     #[Test]
-    public function no_role_no_create_page()
+    public function other_roles_can_not_create_a_page()
     {
-        $this->actingAs(User::factory()->withRole(AdminRole::Administrator, AdminRole::ActivityAdministrator, AdminRole::CertificateAdministrator)->create());
+        $this->actingAs(User::factory()->withRole(AdminRole::Administrator, AdminRole::EventAdministrator, AdminRole::CertificateAdministrator)->create());
 
         $this->post('admin/pages', $this->body())->assertForbidden();
 
@@ -89,40 +89,40 @@ class CreatePageTest extends TestCase
     }
 
     #[Test]
-    public function create_page_login_correct()
+    public function a_page_can_require_a_login()
     {
         $this->post('admin/pages', $this->body())->assertSessionHasNoErrors();
-        $this->post('admin/pages', $this->body(['url_name' => 'test2', 'login' => true]))->assertSessionHasNoErrors();
+        $this->post('admin/pages', $this->body(['slug' => 'test2', 'requires_login' => true]))->assertSessionHasNoErrors();
 
-        $this->assertDatabaseHas(MenuItem::class, ['url_name' => 'test', 'login' => false]);
-        $this->assertDatabaseHas(MenuItem::class, ['url_name' => 'test2', 'login' => true]);
+        $this->assertDatabaseHas(MenuItem::class, ['slug' => 'test', 'requires_login' => false]);
+        $this->assertDatabaseHas(MenuItem::class, ['slug' => 'test2', 'requires_login' => true]);
     }
 
     #[Test]
     public function the_menu_shows_the_pages_by_position()
     {
-        $this->post('admin/pages', $this->body(['url_name' => 'second', 'name' => 'Second', 'itemType' => 'standAlone', 'position' => 20, 'menu_item' => true]));
-        $this->post('admin/pages', $this->body(['url_name' => 'first', 'name' => 'First', 'itemType' => 'standAlone', 'position' => 5, 'menu_item' => true]));
+        $this->post('admin/pages', $this->body(['slug' => 'second', 'name' => 'Second', 'menu_level' => 'top', 'position' => 20, 'show_in_menu' => true]));
+        $this->post('admin/pages', $this->body(['slug' => 'first', 'name' => 'First', 'menu_level' => 'top', 'position' => 5, 'show_in_menu' => true]));
 
         $this->get('second')->assertSeeInOrder(['navbar-nav', 'Parent', 'First', 'Second']);
     }
 
     #[Test]
-    public function empty_body_meaningful_error()
+    public function a_page_needs_the_required_fields()
     {
         $this->post('admin/pages')
             ->assertRedirect()
-            ->assertInvalid(['url_name', 'itemType', 'position', 'name', 'content']);
+            ->assertInvalid(['slug', 'menu_level', 'position', 'name', 'content']);
 
         $this->assertDatabaseCount(MenuItem::class, 1);
     }
 
     #[Test]
-    public function empty_body_meaningful_error_subitem()
+    public function a_child_page_needs_a_parent()
     {
-        $this->post('admin/pages', $this->body(['parentItem' => null]))
+        $this->post('admin/pages', $this->body(['parent_id' => null]))
             ->assertRedirect()
-            ->assertInvalid(['parentItem']);
+            ->assertInvalid(['parent_id']);
 
         $this->assertDatabaseCount(MenuItem::class, 1);
     }

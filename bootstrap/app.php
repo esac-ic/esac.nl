@@ -22,7 +22,7 @@ return Application::configure(basePath: dirname(__DIR__))
             CheckKillswitch::class,
         ]);
 
-        $middleware->redirectUsersTo(fn () => route('front-end.home'));
+        $middleware->redirectUsersTo(fn () => route('home'));
     })
     ->withExceptions(function (Exceptions $exceptions): void {
         $exceptions->shouldRenderJsonWhen(

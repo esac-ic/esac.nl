@@ -4,7 +4,7 @@ namespace App\Providers;
 
 use App\Enums\AdminRole;
 use App\Enums\SettingKey;
-use App\Models\ApplicationForm\ApplicationResponse;
+use App\Models\Registration;
 use App\Models\Setting;
 use App\Models\User;
 use App\View\Composers\MenuComposer;
@@ -44,25 +44,25 @@ class AppServiceProvider extends ServiceProvider
     {
         Gate::defaultDenialResponse(Response::deny('You do not have sufficient access to view this page'));
 
-        Gate::define('access-admin', fn (User $user) => $user->hasBackendRights());
+        Gate::define('access-admin', fn (User $user) => $user->hasAnyRole());
 
         Gate::define('view-members', fn (User $user) => $user->hasRole(AdminRole::Administrator, AdminRole::CertificateAdministrator));
         Gate::define('manage-members', fn (User $user) => $user->hasRole(AdminRole::Administrator));
         Gate::define('manage-roles', fn (User $user) => $user->hasRole(AdminRole::Administrator));
         Gate::define('manage-certificates', fn (User $user) => $user->hasRole(AdminRole::Administrator, AdminRole::CertificateAdministrator));
 
-        Gate::define('manage-agenda', fn (User $user) => $user->hasRole(AdminRole::ContentAdministrator, AdminRole::ActivityAdministrator));
-        Gate::define('manage-agenda-categories', fn (User $user) => $user->hasRole(AdminRole::Administrator));
-        Gate::define('delete-registration', fn (User $user, ApplicationResponse $registration) => $registration->user()->is($user)
-            || $user->hasRole(AdminRole::ActivityAdministrator));
-        Gate::define('manage-zekeringen', fn (User $user) => $user->hasRole(AdminRole::ActivityAdministrator));
+        Gate::define('manage-events', fn (User $user) => $user->hasRole(AdminRole::ContentAdministrator, AdminRole::EventAdministrator));
+        Gate::define('manage-event-categories', fn (User $user) => $user->hasRole(AdminRole::Administrator));
+        Gate::define('delete-registration', fn (User $user, Registration $registration) => $registration->user()->is($user)
+            || $user->hasRole(AdminRole::EventAdministrator));
+        Gate::define('manage-zekeringen', fn (User $user) => $user->hasRole(AdminRole::EventAdministrator));
 
-        Gate::define('manage-news', fn (User $user) => $user->hasRole(AdminRole::ContentAdministrator, AdminRole::ActivityAdministrator));
+        Gate::define('manage-news', fn (User $user) => $user->hasRole(AdminRole::ContentAdministrator, AdminRole::EventAdministrator));
         Gate::define('manage-pages', fn (User $user) => $user->hasRole(AdminRole::ContentAdministrator));
         Gate::define('manage-library', fn (User $user) => $user->hasRole(AdminRole::Administrator));
 
         Gate::define('manage-mail-lists', fn (User $user) => $user->hasRole(AdminRole::Administrator));
-        Gate::define('view-user-event-log', fn (User $user) => $user->hasRole(AdminRole::Administrator));
+        Gate::define('view-member-log', fn (User $user) => $user->hasRole(AdminRole::Administrator));
         Gate::define('manage-settings', fn (User $user) => $user->hasRole(AdminRole::Administrator));
     }
 }
