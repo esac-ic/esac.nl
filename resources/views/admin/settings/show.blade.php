@@ -1,11 +1,11 @@
 @extends('layouts.admin')
 
 @section('title')
-    Setting
+    Settings
 @endsection
 
 @section('content')
-    <x-page-header title="Setting">
+    <x-page-header title="Settings">
         <a class="mr-1 ml-1" href="{{ route('admin.settings.edit') }}" class="btn btn-primary">
             <span title="Edit settings" class="ion-edit font-size-120" aria-hidden="true"></span>
             Edit settings

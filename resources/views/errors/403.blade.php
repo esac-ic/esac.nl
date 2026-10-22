@@ -1,5 +1,5 @@
 @extends('layouts.app',[
-    'curPageName' => 'No access'
+    'pageTitle' => 'No access'
 ])
 
 @section('content')

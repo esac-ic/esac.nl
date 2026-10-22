@@ -10,8 +10,8 @@ return new class extends Migration
      */
     public function up(): void
     {
-        // Old and pending members can't log in, so their remember-me cookies and sessions stop working too
-        $users = DB::table('users')->whereNotNull('lid_af')->orWhereNotNull('pending_user');
+        // Former and pending members can't log in, so their remember-me cookies and sessions stop working too
+        $users = DB::table('users')->whereNotNull('membership_ended_on')->orWhereNotNull('pending_since');
 
         DB::table('sessions')->whereIn('user_id', $users->clone()->select('id'))->delete();
         $users->update(['remember_token' => null]);

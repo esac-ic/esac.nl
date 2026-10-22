@@ -8,7 +8,7 @@ News items
     <x-page-header title="News items">
         <x-button-link :href="route('admin.news-items.create')" icon="plus">New news item</x-button-link>
     </x-page-header>
-    <x-data-table id="newsItems" :columns="['Title', 'Created by', 'Created at', 'Management']">
+    <x-data-table id="news-items-table" :columns="['Title', 'Created by', 'Created at', 'Actions']">
         @foreach ($newsItems as $newsItem)
             <tr>
                 <td>{{$newsItem->title}}</td>
@@ -26,7 +26,7 @@ News items
 @push('scripts')
     @vite(['resources/assets/js/vendor/datatables.js'])
     <script type="module">
-        $('#newsItems').DataTable({
+        $('#news-items-table').DataTable({
             columnDefs: [
                 {type: 'de_datetime', targets: 1},
                 {type: 'de_datetime', targets: 2},

@@ -5,19 +5,21 @@ namespace Tests\Feature\Zekeringen;
 use App\Models\User;
 use App\Models\Zekering;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use PHPUnit\Framework\Attributes\Test;
 use Tests\TestCase;
 
 class StoreZekeringTest extends TestCase
 {
     use RefreshDatabase;
 
-    public function test_store_zekering_and_sub_zekering()
+    #[Test]
+    public function a_member_can_post_a_zekering_and_a_reply()
     {
         $user = User::factory()->create();
 
-        $this->actingAs($user)->post(route('api.zekeringen.store'), ['text' => 'Top'])->assertRedirect(route('front-end.zekeringen'));
+        $this->actingAs($user)->post(route('api.zekeringen.store'), ['text' => 'Top'])->assertRedirect(route('zekeringen'));
         $parent = Zekering::sole();
-        $this->actingAs($user)->post(route('api.subzekeringen.store'), ['text' => 'Reply', 'parent_id' => $parent->id])->assertOk();
+        $this->actingAs($user)->post(route('api.zekeringen.children.store'), ['text' => 'Reply', 'parent_id' => $parent->id])->assertOk();
 
         $this->assertEquals(
             [

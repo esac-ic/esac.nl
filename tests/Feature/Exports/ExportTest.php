@@ -3,14 +3,14 @@
 namespace Tests\Feature\Exports;
 
 use App\Enums\AdminRole;
-use App\Enums\FormRowType;
-use App\Models\AgendaItem;
-use App\Models\ApplicationForm\ApplicationForm;
-use App\Models\ApplicationForm\ApplicationFormRow;
-use App\Models\ApplicationForm\ApplicationResponse;
+use App\Enums\FormFieldType;
 use App\Models\Book;
+use App\Models\Event;
+use App\Models\MemberLogEntry;
+use App\Models\Registration;
+use App\Models\RegistrationForm;
+use App\Models\RegistrationFormField;
 use App\Models\User;
-use App\Models\UserEventLogEntry;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Testing\TestResponse;
 use OpenSpout\Reader\XLSX\Reader;
@@ -27,7 +27,7 @@ class ExportTest extends TestCase
     {
         parent::setUp();
 
-        $this->admin = User::factory()->withRole(AdminRole::Administrator, AdminRole::ActivityAdministrator)->create();
+        $this->admin = User::factory()->withRole(AdminRole::Administrator, AdminRole::EventAdministrator)->create();
         $this->actingAs($this->admin);
     }
 
@@ -35,9 +35,9 @@ class ExportTest extends TestCase
     public function members_export_lists_the_active_members()
     {
         User::factory()->count(2)->create();
-        User::factory()->oldMember()->create();
+        User::factory()->former()->create();
 
-        [$sheet, $rows] = $this->readSpreadsheet($this->get('admin/users/export'), 'Members.xlsx');
+        [$sheet, $rows] = $this->readSpreadsheet($this->get('admin/members/export'), 'Members.xlsx');
 
         $this->assertSame('Active members', $sheet);
         $this->assertSame('#', $rows[0][0]);
@@ -48,14 +48,14 @@ class ExportTest extends TestCase
     }
 
     #[Test]
-    public function old_members_export_lists_the_old_members()
+    public function former_members_export_lists_the_former_members()
     {
-        User::factory()->count(2)->oldMember()->create();
+        User::factory()->count(2)->former()->create();
 
-        [$sheet, $rows] = $this->readSpreadsheet($this->get('admin/old-members/export'), 'Old members.xlsx');
+        [$sheet, $rows] = $this->readSpreadsheet($this->get('admin/former-members/export'), 'Former members.xlsx');
 
-        $this->assertSame('Old members', $sheet);
-        $this->assertSame(['#', 'First name', 'Preposition', 'Last name', 'User created at', 'User removed at'], $rows[0]);
+        $this->assertSame('Former members', $sheet);
+        $this->assertSame(['#', 'First name', 'Preposition', 'Last name', 'Member since', 'Membership ended on'], $rows[0]);
         $this->assertCount(1 + 2, $rows);
     }
 
@@ -70,18 +70,18 @@ class ExportTest extends TestCase
 
         [$sheet, $rows] = $this->readSpreadsheet($response, "Members (created after $exportDate).xlsx");
 
-        $this->assertSame('Non administrated members', $sheet);
+        $this->assertSame('New members', $sheet);
         $this->assertCount(12, $rows[0]);
         // The admin and the member created yesterday
         $this->assertCount(1 + 2, $rows);
     }
 
     #[Test]
-    public function library_export_lists_the_books()
+    public function books_export_lists_the_books()
     {
         Book::create(['title' => 'Alpine climbing', 'year' => 1990, 'country' => 'CH', 'type' => 'Guide', 'code' => 'A1']);
 
-        [$sheet, $rows] = $this->readSpreadsheet($this->get('admin/books/export'), 'Library.xlsx');
+        [$sheet, $rows] = $this->readSpreadsheet($this->get('admin/books/export'), 'Books.xlsx');
 
         $this->assertSame('Books', $sheet);
         $this->assertSame(['#', 'Title', 'Year', 'Type', 'Country', 'Code'], $rows[0]);
@@ -90,44 +90,44 @@ class ExportTest extends TestCase
     }
 
     #[Test]
-    public function event_log_export_lists_the_entries_in_the_period()
+    public function member_log_export_lists_the_entries_in_the_period()
     {
-        UserEventLogEntry::factory()->count(3)->create(['user_id' => $this->admin->id, 'created_at' => now()]);
-        UserEventLogEntry::factory()->create(['user_id' => $this->admin->id, 'created_at' => now()->subWeek()]);
+        MemberLogEntry::factory()->count(3)->create(['user_id' => $this->admin->id, 'created_at' => now()]);
+        MemberLogEntry::factory()->create(['user_id' => $this->admin->id, 'created_at' => now()->subWeek()]);
 
-        $response = $this->post('admin/user-event-log/export', [
-            'startDate' => now()->subDay()->format('d-m-Y H:i'),
-            'endDate' => now()->addDay()->format('d-m-Y H:i'),
+        $response = $this->post('admin/member-log/export', [
+            'start_date' => now()->subDay()->format('d-m-Y H:i'),
+            'end_date' => now()->addDay()->format('d-m-Y H:i'),
         ]);
 
         [$sheet, $rows] = $this->readSpreadsheet($response);
 
-        $this->assertStringStartsWith('Event Log (', $sheet);
-        $this->assertSame(['Time', 'Event Type', 'User name', 'Event Details'], $rows[0]);
-        $this->assertSame($this->admin->getName(), $rows[1][2]);
+        $this->assertStringStartsWith('Member log (', $sheet);
+        $this->assertSame(['Time', 'Type', 'Member', 'Details'], $rows[0]);
+        $this->assertSame($this->admin->name, $rows[1][2]);
         $this->assertCount(1 + 3, $rows);
     }
 
     #[Test]
-    public function registrations_export_lists_the_registered_users_and_their_answers()
+    public function registrations_export_lists_the_registered_members_and_their_answers()
     {
-        $form = ApplicationForm::factory()->create();
-        ApplicationFormRow::factory()->create([
-            'application_form_id' => $form->id,
+        $form = RegistrationForm::factory()->create();
+        RegistrationFormField::factory()->create([
+            'registration_form_id' => $form->id,
             'name' => 'Diet',
-            'type' => FormRowType::Text,
+            'type' => FormFieldType::Text,
         ]);
-        $agendaItem = AgendaItem::factory()->create(['title' => 'Trip to Font', 'application_form_id' => $form->id]);
-        ApplicationResponse::factory()->count(2)->create([
-            'agenda_item_id' => $agendaItem->id,
-            'application_form_id' => $form->id,
+        $event = Event::factory()->create(['title' => 'Trip to Font', 'registration_form_id' => $form->id]);
+        Registration::factory()->count(2)->create([
+            'event_id' => $event->id,
+            'registration_form_id' => $form->id,
         ]);
 
-        $response = $this->get("admin/agenda-items/{$agendaItem->id}/registrations/export");
+        $response = $this->get("admin/events/{$event->id}/registrations/export");
 
         [$sheet, $rows] = $this->readSpreadsheet($response, 'trip-to-font.xlsx');
 
-        $this->assertSame('Subscriptions', $sheet);
+        $this->assertSame('Registrations', $sheet);
         $this->assertSame('First name', $rows[0][0]);
         $this->assertSame('Diet', $rows[0][10]);
         $this->assertCount(1 + 2, $rows);

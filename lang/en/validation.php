@@ -8,8 +8,8 @@ return [
     'required' => 'Field :attribute is required',
     'attributes' => [
         'privacy_policy' => 'Privacy Policy',
-        'termsconditions' => 'Terms and Conditions',
-        'direct_debit' => 'Automatic Collection',
+        'terms_and_conditions' => 'Terms and Conditions',
+        'direct_debit' => 'direct debit',
         'iban' => 'IBAN',
         'bic' => 'BIC',
     ],

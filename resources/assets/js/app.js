@@ -27,7 +27,7 @@ function uploadFile (file, summernote) {
     data.append('image', file);
 
     axios
-        .post('/admin/images', data)
+        .post('/admin/editor-images', data)
         .then(response => {
             $(summernote).summernote('insertImage', response.data);
         });

@@ -11,8 +11,8 @@ return new class extends Migration
      */
     public function up(): void
     {
-        // remove:oldApplications anonymises old registrations by unlinking the member
-        Schema::table('application_responses', function (Blueprint $table) {
+        // registrations:prune anonymises old registrations by unlinking the member
+        Schema::table('registrations', function (Blueprint $table) {
             $table->unsignedInteger('user_id')->nullable()->change();
         });
     }
@@ -22,7 +22,7 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::table('application_responses', function (Blueprint $table) {
+        Schema::table('registrations', function (Blueprint $table) {
             $table->unsignedInteger('user_id')->nullable(false)->change();
         });
     }

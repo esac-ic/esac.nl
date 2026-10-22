@@ -1,4 +1,4 @@
-@if ($curPageName == "Home")
+@if (request()->routeIs('home'))
 <section class="bg-dark text-white height-70 border-bottom">
     <img id="background" alt="Header image" src="" class="bg-image opacity-70">
     <div class="container">
@@ -23,55 +23,55 @@ var headerHome = [{
     background: 'header-img1.jpeg',
     heading: 'Stunts and more',
     message: 'With the Stuntcommittee we organize stunts during events such as abseiling, zip lining and climbing.',
-    buttonUrl: '{{ route('front-end.page', 'stunt') }}',
+    buttonUrl: '{{ route('pages.show', 'stunt') }}',
     buttonText: 'More Information'
 }, {
     background: 'header-img2.jpeg',
     heading: 'Ski mountaineering introduction',
     message: 'Regularly, an introductory course to the ski mountaineering is organized during the winter week.',
-    buttonUrl: '{{ route('front-end.page', 'alpenwinter') }}',
+    buttonUrl: '{{ route('pages.show', 'alpenwinter') }}',
     buttonText: 'More Information'
 }, {
     background: 'header-img3.jpeg',
     heading: 'Climbing weekends in Belgium',
     message: 'The ESAC annually organizes over 20 climbing weekends to Belgium, Germany or beyond.',
-    buttonUrl: '{{ route('front-end.page', 'buitenklimmen') }}',
+    buttonUrl: '{{ route('pages.show', 'buitenklimmen') }}',
     buttonText: 'More Information'
 }, {
     background: 'header-img4.jpeg',
     heading: 'Climbing competition',
     message: 'The EPlaKKa is held every year to determine who is the best climber of the ESAC.',
-    buttonUrl: '{{ route('front-end.page', 'klimwedstrijden') }}',
+    buttonUrl: '{{ route('pages.show', 'klimwedstrijden') }}',
     buttonText: 'More Information'
 }, {
     background: 'header-img5.jpeg',
     heading: 'Ski in the Alps',
     message: 'During the carnival holiday the ESAC leaves travels a week to the Alps to enjoy the snow.',
-    buttonUrl: '{{ route('front-end.page', 'alpenwinter') }}',
+    buttonUrl: '{{ route('pages.show', 'alpenwinter') }}',
     buttonText: 'More Information'
 },  {
     background: 'header-img7.jpeg',
     heading: 'Mountaineering courses',
     message: 'The NSAC offers courses at various levels with the ultimate goal of making alpine trips independently.',
-    buttonUrl: '{{ route('front-end.page', 'alpenzomer') }}',
+    buttonUrl: '{{ route('pages.show', 'alpenzomer') }}',
     buttonText: 'More Information'
 }, {
     background: 'header-img8.jpeg',
     heading: 'Mountaineering',
     message: 'Mountaineering is the king discipline in mountain sports where all facets come together.',
-    buttonUrl: '{{ route('front-end.page', 'alpenzomer') }}',
+    buttonUrl: '{{ route('pages.show', 'alpenzomer') }}',
     buttonText: 'More Information'
 }, {
     background: 'header-img9.jpeg',
     heading: 'Fun!',
     message: 'During and after climbing there is of course also place for good food and social activities.',
-    buttonUrl: '{{ route('front-end.agenda') }}',
+    buttonUrl: '{{ route('events.index') }}',
     buttonText: 'More Information'
 }, {
     background: 'header-img10.jpeg',
     heading: 'Bouldering',
     message: 'In addition to sports climbing, we also do a lot of bouldering, including in Fontainebleau.',
-    buttonUrl: '{{ route('front-end.agenda') }}',
+    buttonUrl: '{{ route('events.index') }}',
     buttonText: 'More Information'
     }
 ];

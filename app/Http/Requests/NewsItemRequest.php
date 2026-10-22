@@ -10,7 +10,7 @@ class NewsItemRequest extends FormRequest
     {
         return [
             'title' => ['required', 'max:255'],
-            'text' => ['required'],
+            'body' => ['required'],
             'author' => ['required', 'max:255'],
             'thumbnail' => ['nullable', 'image', 'max:10240'],
         ];

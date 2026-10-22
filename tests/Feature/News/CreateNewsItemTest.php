@@ -19,20 +19,20 @@ class CreateNewsItemTest extends TestCase
     protected function setUp(): void
     {
         parent::setUp();
-        $this->actingAs(User::factory()->withRole(AdminRole::ActivityAdministrator)->create());
+        $this->actingAs(User::factory()->withRole(AdminRole::EventAdministrator)->create());
     }
 
     public static function newsItems(): array
     {
         return [
-            'plain' => [['title' => 'test nieuws', 'text' => 'test nieuws', 'author' => 'Gebruiker1']],
-            'emoji' => [['title' => 'test news 😀', 'text' => 'test nieuws 😀', 'author' => 'Gebruiker1']],
+            'plain' => [['title' => 'test nieuws', 'body' => 'test nieuws', 'author' => 'Gebruiker1']],
+            'emoji' => [['title' => 'test news 😀', 'body' => 'test nieuws 😀', 'author' => 'Gebruiker1']],
         ];
     }
 
     #[Test]
     #[DataProvider('newsItems')]
-    public function create_news_item(array $body)
+    public function a_content_administrator_can_create_a_news_item(array $body)
     {
         $this->post('admin/news-items', $body)->assertRedirect();
 
@@ -46,20 +46,20 @@ class CreateNewsItemTest extends TestCase
 
         $this->post('admin/news-items', [
             'title' => 'test nieuws',
-            'text' => 'test nieuws',
+            'body' => 'test nieuws',
             'author' => 'Gebruiker1',
             'thumbnail' => UploadedFile::fake()->image('photo.jpg', 1600, 1200),
         ])->assertRedirect();
         $newsItem = NewsItem::sole();
 
-        $this->assertSame([1200, 500], array_slice(getimagesize(Storage::disk('public')->path($newsItem->image_url)), 0, 2));
-        $this->assertSame([400, 300], array_slice(getimagesize(Storage::disk('public')->path($newsItem->thumbnail_url)), 0, 2));
+        $this->assertSame([1200, 500], array_slice(getimagesize(Storage::disk('public')->path($newsItem->image_path)), 0, 2));
+        $this->assertSame([400, 300], array_slice(getimagesize(Storage::disk('public')->path($newsItem->thumbnail_path)), 0, 2));
     }
 
     #[Test]
     public function a_news_item_needs_an_author()
     {
-        $this->post('admin/news-items', ['title' => 'test nieuws', 'text' => 'test nieuws'])->assertInvalid('author');
+        $this->post('admin/news-items', ['title' => 'test nieuws', 'body' => 'test nieuws'])->assertInvalid('author');
 
         $this->assertDatabaseEmpty(NewsItem::class);
     }

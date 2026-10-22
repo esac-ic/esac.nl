@@ -20,15 +20,15 @@ Page
             <table class="table table-striped" style="width:100%">
                 <x-detail-row label="Name">{{$page->name}}</x-detail-row>
                 <x-detail-row label="Sub item of">{{ $page->parent?->name }}</x-detail-row>
-                <x-detail-row label="URL name">{{$page->url_name}}</x-detail-row>
-                <x-detail-row label="User needs to be logged in to view the page">{{($page->login)? 'Yes' : 'No'}}</x-detail-row>
+                <x-detail-row label="Slug">{{$page->slug}}</x-detail-row>
+                <x-detail-row label="Requires login">{{ $page->requires_login ? 'Yes' : 'No' }}</x-detail-row>
                 <x-detail-row label="Position">{{ $page->position }}</x-detail-row>
-                @foreach($subItems as $subItem)
+                @foreach($children as $child)
                     <tr>
                         @if($loop->first)
                             <td rowspan="{{ $loop->count }}">Submenu items</td>
                         @endif
-                        <td>{{ $subItem->name }}</td>
+                        <td>{{ $child->name }}</td>
                     </tr>
                 @endforeach
             </table>

@@ -1,7 +1,7 @@
 //api
 export const FORM_TYPE_SELECT = 'select';
 export const FORM_TYPE_RADIO = 'radio';
-export const FORM_TYPE_TEXT_BOX = 'textBox';
+export const FORM_TYPE_TEXT_BOX = 'textarea';
 export const FORM_TYPE_CHECK_BOX = 'checkbox';
 export const FORM_TYPE_CHECK_BOXES = 'checkboxes';
 export const FORM_TYPE_NUMBER = 'number';

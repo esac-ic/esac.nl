@@ -9,6 +9,6 @@ enum AdminRole: int
 {
     case Administrator = 1;
     case ContentAdministrator = 2;
-    case ActivityAdministrator = 3;
+    case EventAdministrator = 3;
     case CertificateAdministrator = 4;
 }

@@ -8,7 +8,7 @@ use Illuminate\View\View;
 class MenuComposer
 {
     /**
-     * Gives the menu its ordered top-level items and, per item id, its ordered sub items.
+     * Gives the menu its ordered top-level items and, per item id, its ordered child items.
      */
     public function compose(View $view): void
     {
@@ -18,7 +18,7 @@ class MenuComposer
 
         $view->with([
             'menuItems' => $menuItems,
-            'subMenuItems' => $menuItems->mapWithKeys(fn (MenuItem $item) => [
+            'childMenuItems' => $menuItems->mapWithKeys(fn (MenuItem $item) => [
                 $item->id => $itemsByParent->get($item->id, collect()),
             ])->all(),
         ]);

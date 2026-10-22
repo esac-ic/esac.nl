@@ -3,7 +3,7 @@
 namespace Database\Factories;
 
 use App\Enums\AdminRole;
-use App\Enums\KindOfMember;
+use App\Enums\MemberType;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Facades\Hash;
@@ -27,8 +27,8 @@ class UserFactory extends Factory
         return [
             'email' => $email,
             'password' => static::$password ??= Hash::make('password'),
-            'firstname' => $firstName,
-            'lastname' => $lastName,
+            'first_name' => $firstName,
+            'last_name' => $lastName,
             'preposition' => $preposition,
             'street' => fake()->streetName(),
             'house_number' => fake()->randomNumber(),
@@ -44,7 +44,7 @@ class UserFactory extends Factory
             'emergency_zipcode' => fake()->postcode(),
             'emergency_country' => fake()->country(),
             'birthday' => fake()->date(),
-            'kind_of_member' => fake()->randomElement(KindOfMember::cases()),
+            'member_type' => fake()->randomElement(MemberType::cases()),
             'iban' => fake()->iban(),
             'bic' => fake()->swiftBicNumber(),
             'direct_debit' => fake()->boolean(),
@@ -59,40 +59,40 @@ class UserFactory extends Factory
 
     public function member(): static
     {
-        return $this->state(['kind_of_member' => 'member']);
+        return $this->state(['member_type' => 'member']);
     }
 
-    public function reunist(): static
+    public function alumnus(): static
     {
-        return $this->state(['kind_of_member' => 'reunist']);
+        return $this->state(['member_type' => 'alumnus']);
     }
 
-    public function extraordinary_participant(): static
+    public function extraordinaryMember(): static
     {
-        return $this->state(['kind_of_member' => 'extraordinary_member']);
+        return $this->state(['member_type' => 'extraordinary_member']);
     }
 
-    public function honorary_member(): static
+    public function honoraryMember(): static
     {
-        return $this->state(['kind_of_member' => 'honorary_member']);
+        return $this->state(['member_type' => 'honorary_member']);
     }
 
-    public function member_of_merit(): static
+    public function memberOfMerit(): static
     {
-        return $this->state(['kind_of_member' => 'member_of_merit']);
+        return $this->state(['member_type' => 'member_of_merit']);
     }
 
     public function trainer(): static
     {
-        return $this->state(['kind_of_member' => 'trainer']);
+        return $this->state(['member_type' => 'trainer']);
     }
 
     public function relationship(): static
     {
-        return $this->state(['kind_of_member' => 'relationship']);
+        return $this->state(['member_type' => 'relationship']);
     }
 
-    public function oldMember(): static
+    public function former(): static
     {
         return $this->state(fn () => ['membership_ended_on' => fake()->dateTimeThisDecade()]);
     }
@@ -101,7 +101,7 @@ class UserFactory extends Factory
     {
         return $this->state(fn () => [
             'pending_since' => fake()->dateTimeThisMonth(),
-            'kind_of_member' => 'member',
+            'member_type' => 'member',
         ]);
     }
 }

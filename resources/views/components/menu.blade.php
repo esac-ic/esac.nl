@@ -14,23 +14,23 @@
                 <div class="collapse navbar-collapse justify-content-between" id="navbarNav">
                     <ul class="navbar-nav">
                         @foreach($menuItems as $menuItem)
-                            @if(count($subMenuItems[$menuItem->id]) > 0)
+                            @if(count($childMenuItems[$menuItem->id]) > 0)
                                 {{--has submenu items so it wil be a dropdown menu--}}
                                 <li class="nav-item dropdown">
-                                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink"
+                                    <a class="nav-link dropdown-toggle" href="#" id="menu-dropdown-{{ $menuItem->id }}"
                                        data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                         {{$menuItem->name}}
                                     </a>
-                                    <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-                                        @foreach($subMenuItems[$menuItem->id] as $subItem)
+                                    <div class="dropdown-menu" aria-labelledby="menu-dropdown-{{ $menuItem->id }}">
+                                        @foreach($childMenuItems[$menuItem->id] as $childItem)
                                             <a class="dropdown-item"
-                                               href="{{ route('front-end.page', $subItem->url_name) }}">{{$subItem->name}}</a>
+                                               href="{{ route('pages.show', $childItem->slug) }}">{{$childItem->name}}</a>
                                         @endforeach
                                     </div>
                                 </li>
                             @else
                                 <li class="nav-item">
-                                    <a class="nav-link" href="{{ route('front-end.page', $menuItem->url_name) }}">{{$menuItem->name}}</a>
+                                    <a class="nav-link" href="{{ route('pages.show', $menuItem->slug) }}">{{$menuItem->name}}</a>
                                 </li>
                             @endif
                         @endforeach
@@ -46,19 +46,19 @@
                         @else
                             @can('access-admin')
                                 <li class="nav-item">
-                                    <a class="nav-link" href="{{ route('admin.home') }}" class="nav-link">
-                                        Management
+                                    <a class="nav-link" href="{{ route('admin.dashboard') }}" class="nav-link">
+                                        Admin
                                     </a>
                                 </li>
                             @endcan
                             <li class="nav-item dropdown mr-2">
-                                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink"
+                                <a class="nav-link dropdown-toggle" href="#" id="account-dropdown"
                                    data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                    {{ auth()->user()->firstname }}
+                                    {{ auth()->user()->first_name }}
                                 </a>
-                                <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                                <div class="dropdown-menu" aria-labelledby="account-dropdown">
                                     <a class="dropdown-item"
-                                       href="{{ route('admin.users.show', auth()->user()) }}">Account overview</a>
+                                       href="{{ route('admin.members.show', auth()->user()) }}">Account overview</a>
                                     <a class="dropdown-item" href="{{ route('logout') }}"
                                        onclick="event.preventDefault(); document.getElementById('logout-form').submit();">Logout</a>
                                     <form id="logout-form" action="{{ route('logout') }}" method="POST"
@@ -69,7 +69,7 @@
                             </li>
                         @endguest @guest
                             <li class="nav-item d-flex align-items-center">
-                                <a class="btn btn-info text-dark" href="{{ route('front-end.signup') }}">Become a member</a>
+                                <a class="btn btn-info text-dark" href="{{ route('signup.create') }}">Become a member</a>
                             </li>
                         @endguest
                     </ul>

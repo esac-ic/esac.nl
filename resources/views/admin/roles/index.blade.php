@@ -9,7 +9,7 @@ Roles
         <x-slot:intro><p>Warning: don't add or remove roles without discussing with the IC</p></x-slot:intro>
         <x-button-link :href="route('admin.roles.create')" icon="plus">New role</x-button-link>
     </x-page-header>
-    <x-data-table :columns="['Name', 'Management']">
+    <x-data-table datatable :columns="['Name', 'Actions']">
         @foreach ($roles as $role)
             <tr>
                 <td>{{$role->name}}</td>

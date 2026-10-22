@@ -9,7 +9,7 @@ Books
         <x-button-link :href="route('admin.books.create')" icon="plus">New book</x-button-link>
         <x-button-link :href="route('admin.books.export')" icon="android-download">Export books</x-button-link>
     </x-page-header>
-    <x-data-table :columns="['Title', 'Year', 'Country', 'Type', 'Code', 'Management']">
+    <x-data-table datatable :columns="['Title', 'Year', 'Country', 'Type', 'Code', 'Actions']">
         @foreach ($books as $book)
             <tr>
                 <td>{{$book->title}}</td>

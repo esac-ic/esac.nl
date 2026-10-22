@@ -35,7 +35,7 @@ class MailmanTest extends TestCase
             ['id' => 'lid.esac.nl', 'address' => 'lid@esac.nl', 'members_count' => 5, 'name' => 'Lid', 'members' => []],
             ['id' => 'nieuwsbrief.esac.nl', 'address' => 'nieuwsbrief@esac.nl', 'members_count' => 48, 'name' => 'Nieuwsbrief', 'members' => []],
             ['id' => 'reunist.esac.nl', 'address' => 'reunist@esac.nl', 'members_count' => 0, 'name' => 'Reunist', 'members' => []],
-        ], $this->mailman()->getAllMailLists()->map->toArray()->all());
+        ], $this->mailman()->mailLists()->map->toArray()->all());
     }
 
     public static function mailLists(): array
@@ -55,7 +55,7 @@ class MailmanTest extends TestCase
             "$this->mailmanUrl/lists" => Http::response($this->collectionPayload(array_map(fn ($name) => $this->mailListPayload($name), $names))),
         ]);
 
-        $this->assertSame(array_map(fn ($name) => "$name.esac.nl", $names), $this->mailman()->getAllMailListIds());
+        $this->assertSame(array_map(fn ($name) => "$name.esac.nl", $names), $this->mailman()->mailListIds());
     }
 
     public static function members(): array
@@ -82,7 +82,7 @@ class MailmanTest extends TestCase
             )),
         ]);
 
-        $mailList = $this->mailman()->getMailList('lid.esac.nl');
+        $mailList = $this->mailman()->mailList('lid.esac.nl');
 
         $this->assertSame(['lid.esac.nl', 'lid@esac.nl', count($members), 'Lid'], [$mailList->id, $mailList->address, $mailList->members_count, $mailList->name]);
         $this->assertSame(
@@ -96,7 +96,7 @@ class MailmanTest extends TestCase
     {
         Http::fake(["$this->mailmanUrl/lists*" => Http::response()]);
 
-        $this->mailman()->storeMailList('test');
+        $this->mailman()->createMailList('test');
         $this->mailman()->deleteMailList('test.esac.nl');
 
         Http::assertSent(fn (Request $request) => $request->method() === 'POST'
@@ -114,7 +114,7 @@ class MailmanTest extends TestCase
         $this->expectException(RequestException::class);
         $this->expectExceptionCode(400);
 
-        $this->mailman()->storeMailList('duplicate');
+        $this->mailman()->createMailList('duplicate');
     }
 
     #[Test]
@@ -126,7 +126,7 @@ class MailmanTest extends TestCase
         ]);
 
         $this->mailman()->addMember('lid.esac.nl', 'member@esac.nl', 'Member');
-        $this->mailman()->deleteMemberFromMailList('lid.esac.nl', 'member@esac.nl');
+        $this->mailman()->removeMember('lid.esac.nl', 'member@esac.nl');
 
         Http::assertSentCount(2);
     }

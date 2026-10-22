@@ -5,13 +5,15 @@ namespace Tests\Feature\Zekeringen;
 use App\Models\User;
 use App\Models\Zekering;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use PHPUnit\Framework\Attributes\Test;
 use Tests\TestCase;
 
 class GetZekeringenTest extends TestCase
 {
     use RefreshDatabase;
 
-    public function test_the_api_lists_the_top_level_zekeringen_with_their_replies()
+    #[Test]
+    public function the_api_lists_the_top_level_zekeringen_with_their_replies()
     {
         $zekering = Zekering::factory()->has(Zekering::factory(), 'children')->create();
         $other = Zekering::factory()->create();

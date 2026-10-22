@@ -14,11 +14,11 @@ class UpdateNewsItemTest extends TestCase
     use RefreshDatabase;
 
     #[Test]
-    public function update_news_item()
+    public function a_content_administrator_can_update_a_news_item()
     {
         $newsItem = NewsItem::factory()->create();
-        $body = ['title' => 'test news', 'text' => 'test nieuws', 'author' => 'Gebruiker1'];
-        $this->actingAs(User::factory()->withRole(AdminRole::ActivityAdministrator)->create());
+        $body = ['title' => 'test news', 'body' => 'test nieuws', 'author' => 'Gebruiker1'];
+        $this->actingAs(User::factory()->withRole(AdminRole::EventAdministrator)->create());
 
         $this->patch('admin/news-items/'.$newsItem->id, $body)->assertRedirect();
 

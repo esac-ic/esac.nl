@@ -105,8 +105,8 @@ services:
     hostname: mailman
     environment:
       MM_HOSTNAME: "0.0.0.0"
-      MAILMAN_REST_USER: ${MAIL_MAN_USERNAME}
-      MAILMAN_REST_PASSWORD: ${MAIL_MAN_PASSWORD}
+      MAILMAN_REST_USER: ${MAILMAN_USERNAME}
+      MAILMAN_REST_PASSWORD: ${MAILMAN_PASSWORD}
     ports:
       - "127.0.0.1:${FORWARD_MAILMAN_PORT:-8001}:8001"
     volumes:
@@ -120,8 +120,8 @@ services:
   mailman-setup:
     image: curlimages/curl:8.11.1
     environment:
-      AUTH: ${MAIL_MAN_USERNAME}:${MAIL_MAN_PASSWORD}
-      API: ${MAIL_MAN_URL}
+      AUTH: ${MAILMAN_USERNAME}:${MAILMAN_PASSWORD}
+      API: ${MAILMAN_URL}
     entrypoint: ["sh", "-ec"]
     command:
       - |

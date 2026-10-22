@@ -8,16 +8,16 @@ use Illuminate\Support\Collection;
 
 class PennoMemberExport extends SpreadsheetExport
 {
-    private Carbon $fromDate;
+    private Carbon $since;
 
     public function __construct(int $daysAgo)
     {
-        $this->fromDate = today(config('app.display_timezone'))->subDays($daysAgo);
+        $this->since = today(config('app.display_timezone'))->subDays($daysAgo);
     }
 
     public function collection(): Collection
     {
-        return User::query()->current()->where('created_at', '>=', $this->fromDate->copy()->utc())->get();
+        return User::query()->active()->where('created_at', '>=', $this->since->copy()->utc())->get();
     }
 
     /**
@@ -28,12 +28,12 @@ class PennoMemberExport extends SpreadsheetExport
         return [
             $user->id,
             $user->email,
-            $user->firstname,
+            $user->first_name,
             $user->preposition,
-            $user->lastname,
+            $user->last_name,
             $user->city,
             $user->country,
-            $user->kind_of_member?->value,
+            $user->member_type?->value,
             str_replace(' ', '', (string) $user->iban),
             $user->bic,
             $user->direct_debit ? 'Yes' : 'No',
@@ -43,7 +43,7 @@ class PennoMemberExport extends SpreadsheetExport
 
     public function title(): string
     {
-        return 'Non administrated members';
+        return 'New members';
     }
 
     public function headings(): array
@@ -56,16 +56,16 @@ class PennoMemberExport extends SpreadsheetExport
             'Last name',
             'City',
             'Country',
-            'Kind of member',
+            'Member type',
             'IBAN',
             'BIC',
-            'Accept Automatic Collection',
-            'User created at',
+            'Direct debit',
+            'Member since',
         ];
     }
 
-    public function getFromDate(): Carbon
+    public function since(): Carbon
     {
-        return $this->fromDate;
+        return $this->since;
     }
 }

@@ -17,7 +17,7 @@ class AbilitiesTest extends TestCase
     /**
      * A user, and whether they may access-admin, manage-members, manage-certificates and manage-pages.
      */
-    public static function users(): array
+    public static function membersByRole(): array
     {
         return [
             'administrator' => [AdminRole::Administrator, true, [true, true, true, false]],
@@ -28,8 +28,8 @@ class AbilitiesTest extends TestCase
     }
 
     #[Test]
-    #[DataProvider('users')]
-    public function a_user_has_the_abilities_of_their_role(?AdminRole $role, bool $loggedIn, array $expected)
+    #[DataProvider('membersByRole')]
+    public function a_member_has_the_abilities_of_their_role(?AdminRole $role, bool $loggedIn, array $expected)
     {
         $user = $loggedIn ? User::factory()->create() : null;
         if ($role !== null) {

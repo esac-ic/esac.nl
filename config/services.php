@@ -36,10 +36,10 @@ return [
     ],
 
     'mailman' => [
-        'url' => env('MAIL_MAN_URL'),
-        'domain' => env('MAIL_MAN_DOMAIN', '@esac.nl'),
-        'username' => env('MAIL_MAN_USERNAME'),
-        'password' => env('MAIL_MAN_PASSWORD'),
+        'url' => env('MAILMAN_URL'),
+        'list_domain' => env('MAILMAN_LIST_DOMAIN', '@esac.nl'),
+        'username' => env('MAILMAN_USERNAME'),
+        'password' => env('MAILMAN_PASSWORD'),
     ],
 
     'recaptcha' => [
