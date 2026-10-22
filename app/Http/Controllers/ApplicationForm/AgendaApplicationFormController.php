@@ -46,7 +46,7 @@ class AgendaApplicationFormController extends Controller implements HasMiddlewar
             array_push($registeredUsers, $registeredUser->user_id);
         }
 
-        foreach (User::current()->orderBy('firstname')->orderBy('lastname')->get(['id', 'firstname', 'lastname']) as $user) {
+        foreach (User::current()->orderBy('firstname')->orderBy('lastname')->get(['id', 'firstname', 'preposition', 'lastname']) as $user) {
             if (! in_array($user->id, $registeredUsers)) {
                 $users[$user->id] = $user->getName();
             }
