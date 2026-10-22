@@ -1,20 +1,6 @@
 # syntax=docker/dockerfile:1
 
-FROM composer:2 AS vendor
-WORKDIR /app
-COPY composer.json composer.lock ./
-RUN composer install --no-dev --no-scripts --no-autoloader --prefer-dist --no-interaction --ignore-platform-reqs
-COPY . .
-RUN composer dump-autoload --no-dev --optimize --no-scripts
-
-FROM node:24-trixie-slim AS assets
-WORKDIR /app
-COPY package.json package-lock.json ./
-RUN npm ci --no-audit --no-fund
-COPY . .
-RUN npm run production
-
-FROM dunglas/frankenphp:1.13.2-php8.5.12-trixie
+FROM dunglas/frankenphp:1.13.2-php8.5.12-trixie AS base
 
 # The MySQL client loads database/schema/mysql-schema.sql when migrating an empty database.
 # MySQL's certificate is self-signed, so the client keeps TLS but doesn't verify it.
@@ -25,6 +11,24 @@ RUN apt-get update \
     && install-php-extensions pdo_mysql gd zip opcache pcntl \
     && cp "$PHP_INI_DIR/php.ini-production" "$PHP_INI_DIR/php.ini" \
     && setcap CAP_NET_BIND_SERVICE=+eip /usr/local/bin/frankenphp
+
+# Composer runs on the runtime image, so it checks the platform requirements against its PHP extensions.
+FROM base AS vendor
+COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
+WORKDIR /app
+COPY composer.json composer.lock ./
+RUN composer install --no-dev --no-scripts --no-autoloader --prefer-dist --no-interaction
+COPY . .
+RUN composer dump-autoload --no-dev --optimize --no-scripts
+
+FROM node:24-trixie-slim AS assets
+WORKDIR /app
+COPY package.json package-lock.json ./
+RUN npm ci --no-audit --no-fund
+COPY . .
+RUN npm run production
+
+FROM base
 
 COPY infra/php.ini "$PHP_INI_DIR/conf.d/zz-esac.ini"
 
