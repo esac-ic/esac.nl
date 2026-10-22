@@ -6,13 +6,7 @@
 
 @section('content')
     @include('includes.flash')
-    @if ($errors->any())
-        <ul class="alert alert-danger">
-            @foreach ($errors->all() as $error)
-                <li>{{ $error}} </li>
-            @endforeach
-        </ul>
-    @endif
+    <x-validation-errors />
 
     <div id="app">
         {{ html()->form($fields['method'], $fields['url'])->open() }}
