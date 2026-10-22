@@ -2,10 +2,9 @@
 
 namespace App\Http\Controllers;
 
-use App\CustomClasses\MailList\MailListFacade;
+use App\Services\Mailman;
 use App\Jobs\MemberMassMailListSyncJob;
 use App\Models\User;
-use App\Repositories\UserRepository;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\Client\RequestException;
 use Illuminate\Http\RedirectResponse;
@@ -30,14 +29,14 @@ class MailListController extends Controller implements HasMiddleware
      *
      * @return void
      */
-    public function __construct(private readonly MailListFacade $_mailListFacade, private readonly UserRepository $userRepository)
+    public function __construct(private readonly Mailman $mailman)
     {
     }
 
     //gives the mail list views
     public function index(): View
     {
-        $mailLists = $this->_mailListFacade->getAllMailLists()->all();
+        $mailLists = $this->mailman->getAllMailLists()->all();
 
         return view('beheer.mailList.index', compact('mailLists'));
     }
@@ -56,7 +55,7 @@ class MailListController extends Controller implements HasMiddleware
     public function store(Request $request): RedirectResponse
     {
         try {
-            $this->_mailListFacade->storeMailList($request->all());
+            $this->mailman->storeMailList($request->all());
             Session::flash("message", 'Mailing list added');
         } catch (RequestException $e) {
             $code = $e->getCode();
@@ -70,13 +69,13 @@ class MailListController extends Controller implements HasMiddleware
 
     public function show(Request $request, $mailList): View
     {
-        $mailList = $this->_mailListFacade->getMailList($mailList);
+        $mailList = $this->mailman->getMailList($mailList);
         return view('beheer.mailList.show', compact('mailList'));
     }
 
     public function destroy(Request $request, $mailList): RedirectResponse
     {
-        $this->_mailListFacade->deleteMailList($mailList);
+        $this->mailman->deleteMailList($mailList);
 
         return to_route('mailList.index');
     }
@@ -85,7 +84,7 @@ class MailListController extends Controller implements HasMiddleware
     {
         $users = User::find($request->input('userIds'));
         foreach ($users as $user) {
-            $this->_mailListFacade->addMember($mailList, $user->email, $user->getName());
+            $this->mailman->addMember($mailList, $user->email, $user->getName());
         }
 
         return "";
@@ -93,13 +92,13 @@ class MailListController extends Controller implements HasMiddleware
 
     public function deleteMemberFromMailList($mailList, $member): void
     {
-        $this->_mailListFacade->deleteMemberFromMailList($mailList, $member);
+        $this->mailman->deleteMemberFromMailList($mailList, $member);
     }
 
     
     public function massMemberMailListSync(): RedirectResponse
     {
-        $users = $this->userRepository->getCurrentUsers(); //should give user objects
+        $users = User::current()->get(); //should give user objects
         
         MemberMassMailListSyncJob::dispatch($users); //add all these users to the maillists corresponding to their member types.
         return to_route('mailList.index');

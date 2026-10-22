@@ -6,7 +6,6 @@ use App\Http\Controllers\Controller;
 use App\Http\Resources\ApplicationFormRowVueResource;
 use App\Models\AgendaItem;
 use App\Models\ApplicationForm\ApplicationResponse;
-use App\Repositories\ApplicationFormRepositories\ApplicationFormRegistrationRepository;
 use Carbon\Carbon;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
@@ -72,7 +71,7 @@ class UserApplicationFormController extends Controller implements HasMiddleware
         );
     }
 
-    public function store(Request $request, AgendaItem $agendaItem, ApplicationFormRegistrationRepository $repository): View|RedirectResponse
+    public function store(Request $request, AgendaItem $agendaItem): View|RedirectResponse
     {
         //check if the user has already signed up
         $signup = ApplicationResponse::where('user_id', Auth::user()->id)
@@ -87,7 +86,7 @@ class UserApplicationFormController extends Controller implements HasMiddleware
             return view("forms.inschrijven_error", compact('error', 'curPageName'));
         }
 
-        $repository->storeRegistration($request->except(['_token']), $agendaItem, Auth::user()->id);
+        $agendaItem->register(Auth::user()->id, $request->except(['_token']));
         $user = Auth::user();
 
         return to_route('agenda.detail', $agendaItem);

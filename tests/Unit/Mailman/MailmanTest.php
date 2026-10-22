@@ -1,14 +1,14 @@
 <?php
 
-namespace Tests\Unit\MailListFacade;
+namespace Tests\Unit\Mailman;
 
-use App\CustomClasses\MailList\MailMan;
+use App\Services\Mailman;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Http;
 use PHPUnit\Framework\Attributes\Test;
 use Tests\TestCase;
 
-class MailManTest extends TestCase
+class MailmanTest extends TestCase
 {
     #[Test]
     public function requests_work_without_configured_credentials()
@@ -18,6 +18,6 @@ class MailManTest extends TestCase
         Config::set('services.mailman.password', null);
         Http::fake(['mailman.test/*' => Http::response(['entries' => []])]);
 
-        $this->assertSame([], new MailMan()->get('/lists')->get('entries'));
+        $this->assertSame([], $this->app->make(Mailman::class)->getAllMailListIds());
     }
 }

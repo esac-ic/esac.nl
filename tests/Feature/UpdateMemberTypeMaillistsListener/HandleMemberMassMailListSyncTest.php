@@ -2,7 +2,7 @@
 
 namespace Tests\Feature\UpdateMemberTypeMaillistsListener;
 
-use App\CustomClasses\MailList\MailListFacade;
+use App\Services\Mailman;
 use App\Jobs\MemberMassMailListSyncJob;
 use App\Models\Setting;
 use App\Models\User;
@@ -17,7 +17,7 @@ class HandleMemberMassMailListSyncTest extends TestCase
 {
     use RefreshDatabase;
     
-    private $mockedMailListFacade;
+    private $mockedMailman;
     private User  $user;
     private array $mailLists = [
         'member' => [
@@ -54,7 +54,7 @@ class HandleMemberMassMailListSyncTest extends TestCase
     {
         parent::setUp();
         
-        $this->mockedMailListFacade = Mockery::mock(MailListFacade::class);
+        $this->mockedMailman = Mockery::mock(Mailman::class);
         $this->user = User::factory()->member()->create();
 
         Setting::query()->delete();
@@ -63,8 +63,8 @@ class HandleMemberMassMailListSyncTest extends TestCase
     
     public function test_add_single_normal_member()
     {
-        $this->mockedMailListFacade->shouldNotReceive('removeUserFromSpecifiedMailLists');
-        $this->mockedMailListFacade->shouldReceive('addUserToSpecifiedMailLists')
+        $this->mockedMailman->shouldNotReceive('removeUserFromSpecifiedMailLists');
+        $this->mockedMailman->shouldReceive('addUserToSpecifiedMailLists')
             ->with($this->user->email, $this->user->getName(), ['member.esac.nl'])
             ->once();
 
@@ -72,7 +72,7 @@ class HandleMemberMassMailListSyncTest extends TestCase
         $this->user->save();
         
         $job = new MemberMassMailListSyncJob(User::all());
-        $job->handle($this->mockedMailListFacade);
+        $job->handle($this->mockedMailman);
     }
 
     //Reasonable order of magnitude for a big mail list
@@ -83,18 +83,18 @@ class HandleMemberMassMailListSyncTest extends TestCase
         User::factory()->member()->count(199)->create();
 
 
-        $this->mockedMailListFacade->shouldNotReceive('removeUserFromSpecifiedMailLists');
+        $this->mockedMailman->shouldNotReceive('removeUserFromSpecifiedMailLists');
 
         foreach (User::all() as $user)
         {
-            $this->mockedMailListFacade->shouldReceive('addUserToSpecifiedMailLists')
+            $this->mockedMailman->shouldReceive('addUserToSpecifiedMailLists')
                 ->with($user->email, $user->getName(), ['member.esac.nl'])
                 ->once();
         }
         
         $job = new MemberMassMailListSyncJob(User::all());
         
-        $job->handle($this->mockedMailListFacade);
+        $job->handle($this->mockedMailman);
     }
     
     public function test_add_mix_of_members()
@@ -109,10 +109,10 @@ class HandleMemberMassMailListSyncTest extends TestCase
         User::factory()->trainer()->create();
         User::factory()->relationship()->create();
         
-        $this->mockedMailListFacade->shouldNotReceive('removeUserFromSpecifiedMailLists');
+        $this->mockedMailman->shouldNotReceive('removeUserFromSpecifiedMailLists');
 
 
-        $this->mockedMailListFacade->shouldReceive('addUserToSpecifiedMailLists')
+        $this->mockedMailman->shouldReceive('addUserToSpecifiedMailLists')
             ->withArgs(function ($email, $name, $lists) {
                 assertEquals([
                     $this->mailLists[User::firstWhere('email', $email)->kind_of_member]['value']
@@ -122,6 +122,6 @@ class HandleMemberMassMailListSyncTest extends TestCase
             ->times(User::count());
 
         $job = new MemberMassMailListSyncJob(User::all());
-        $job->handle($this->mockedMailListFacade);
+        $job->handle($this->mockedMailman);
     }
 }

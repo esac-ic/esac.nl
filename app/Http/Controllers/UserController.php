@@ -2,14 +2,13 @@
 
 namespace App\Http\Controllers;
 
-use App\CustomClasses\MailList\MailListFacade;
+use App\Services\Mailman;
 use App\Exports\OldUsersExport;
 use App\Exports\PennoMemberExport;
 use App\Exports\UsersExport;
 use App\Http\Requests\UserRequest;
 use App\Models\Rol;
 use App\Models\User;
-use App\Repositories\UserRepository;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controllers\HasMiddleware;
 use Illuminate\Routing\Controllers\Middleware;
@@ -30,21 +29,10 @@ class UserController extends Controller implements HasMiddleware
         ];
     }
 
-    private UserRepository $_userRepository;
-    /**
-     * Create a new controller instance.
-     *
-     * @return void
-     */
-    public function __construct(UserRepository $userRepository)
-    {
-        $this->_userRepository = $userRepository;
-    }
-
     //gives the user views
     public function index()
     {
-        $users = $this->_userRepository->getCurrentUsers(array('id', 'firstname', 'lastname', 'email', 'preposition', 'kind_of_member'), ['roles']);
+        $users = User::current()->with('roles')->get(['id', 'firstname', 'lastname', 'email', 'preposition', 'kind_of_member']);
         $roles = Rol::all();
 
         return view('beheer.user.index', compact('users', 'roles'));
@@ -53,7 +41,7 @@ class UserController extends Controller implements HasMiddleware
     //gives the old users view
     public function indexOldMembers()
     {
-        $users = $this->_userRepository->getOldUsers(array('id', 'firstname', 'lastname', 'email', 'preposition', 'kind_of_member'));
+        $users = User::old()->get(['id', 'firstname', 'lastname', 'email', 'preposition', 'kind_of_member']);
 
         return view('beheer.user.index_old_users', compact('users'));
     }
@@ -73,9 +61,10 @@ class UserController extends Controller implements HasMiddleware
     //store user
     public function store(UserRequest $request)
     {
-        $user = $this->_userRepository->create($request->all());
+        $user = User::fromForm($request->all());
+        $user->save();
         if ($request->get('roles') != null) {
-            $this->_userRepository->addRols($user->id, $request->get('roles'));
+            $user->roles()->sync($request->get('roles'));
         }
 
         Session::flash("message", 'User is added');
@@ -105,16 +94,16 @@ class UserController extends Controller implements HasMiddleware
     }
 
     //update user
-    public function update(UserRequest $request, User $user, MailListFacade $mailListFacade)
+    public function update(UserRequest $request, User $user, Mailman $mailman)
     {
         if ($user->email != $request['email']) {
-            $mailListFacade->updateUserEmailForAllMailList($user, $user->email, $request['email']);
+            $mailman->updateUserEmailForAllMailList($user, $user->email, $request['email']);
         }
         
-        $this->_userRepository->update($user->id, $request->all());
+        $user->updateFromForm($request->all());
         
         if (Auth::user()->can('manage-members')) {
-            $this->_userRepository->addRols($user->id, $request->get('roles', []));
+            $user->roles()->sync($request->get('roles', []));
         }
 
         if (Auth::user()->id === $user->id) {
@@ -141,12 +130,12 @@ class UserController extends Controller implements HasMiddleware
     {
         return view('beheer.user.penno_member_export');
     }
-    public function pennoMemberExport(Request $request, UserRepository $userRepository)
+    public function pennoMemberExport(Request $request)
     {
         $request->validate([
             'days_ago' => 'required|integer|min:0'
         ]);
-        $export = new PennoMemberExport($userRepository, $request->integer('days_ago'));
+        $export = new PennoMemberExport($request->integer('days_ago'));
         $exportDate = $export->getFromDate()->toDateString();
         return $export->download("Members (created after $exportDate).xlsx");
     }

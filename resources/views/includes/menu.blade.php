@@ -24,8 +24,8 @@
                 
                 <div class="collapse navbar-collapse justify-content-between" id="navbarNav">
                     <ul class="navbar-nav">
-                        @foreach($menu->getMenuItems() as $menuItem)
-                            @if(count($menu->getSubMenuItem($menuItem->id)) > 0)
+                        @foreach($menuItems as $menuItem)
+                            @if(count($subMenuItems[$menuItem->id]) > 0)
                                 {{--has submenu items so it wil be a dropdown menu--}}
                                 <li class="nav-item dropdown">
                                     <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink"
@@ -33,7 +33,7 @@
                                         {{$menuItem->name}}
                                     </a>
                                     <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-                                        @foreach($menu->getSubMenuItem($menuItem->id) as $subItem)
+                                        @foreach($subMenuItems[$menuItem->id] as $subItem)
                                             <a class="dropdown-item"
                                                href="{{ route('front-end.page', $subItem->url_name) }}">{{$subItem->name}}</a>
                                         @endforeach

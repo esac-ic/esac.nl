@@ -3,10 +3,9 @@
 namespace Tests\Feature\EventLogListeners;
 
 use App\Events\PendingUserCreated;
-use App\Listeners\LogPendingUserCreated;
+use App\Listeners\LogUserEvent;
 use App\Models\User;
 use App\Models\UserEventLogEntry;
-use App\Repositories\UserEventLogEntryRepository;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
@@ -22,7 +21,7 @@ class LogPendingUserCreatedTest extends TestCase
         
         $this->assertEquals(0, UserEventLogEntry::all()->count());
         
-        $listener = new LogPendingUserCreated($this->app->make(UserEventLogEntryRepository::class));
+        $listener = new LogUserEvent();
         $listener->handle($event);
         
         $this->assertEquals(1, UserEventLogEntry::all()->count());
@@ -32,5 +31,14 @@ class LogPendingUserCreatedTest extends TestCase
         $this->assertTrue($user->is($logEntry->user));
         $this->assertEquals((new \ReflectionClass(PendingUserCreated::class))->getShortName(),  $logEntry->event_type);
         $this->assertEquals("New pending user: " . $user->getName(), $logEntry->event_details);
+    }
+
+    public function test_dispatching_the_event_logs_it()
+    {
+        $user = User::factory()->create();
+
+        PendingUserCreated::dispatch($user);
+
+        $this->assertEquals("New pending user: " . $user->getName(), UserEventLogEntry::sole()->event_details);
     }
 }

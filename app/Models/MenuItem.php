@@ -3,6 +3,8 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Attributes\Fillable;
+use Illuminate\Database\Eloquent\Attributes\Scope;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Facades\Auth;
@@ -39,15 +41,13 @@ class MenuItem extends Model
         return $this->hasOne(MenuItem::class, 'id', 'after');
     }
 
-    //return the menu items wich aren't sub menus
-    public function getMenuItems()
+    /**
+     * Items that are shown in the menu.
+     */
+    #[Scope]
+    protected function inMenu(Builder $query): void
     {
-        return MenuItem::query()->where('parent_id', '=', null)->where('menu_item', '=', true)->get();
-    }
-
-    public function getSubMenuItems($id)
-    {
-        return MenuItem::query()->where('parent_id', '=', $id)->where('menu_item', '=', true)->get();
+        $query->where('menu_item', true);
     }
 
     public function show(): bool
@@ -64,7 +64,7 @@ class MenuItem extends Model
     /**
      * @return mixed[]
      */
-    public function sortMeunuList($menuList): array
+    public static function sortMenuList($menuList): array
     {
         $newList = [];
         //get a menu item which is not after one
