@@ -93,21 +93,6 @@ class AgendaApplicationFormService
         ];
     }
 
-    public function getRegisteredUserIds(AgendaItem $agendaItem): array
-    {
-        // This method now only returns user IDs
-        $applicationResponses = $agendaItem->getApplicationFormResponses;
-
-        // Map user data
-        $userdataIds = $applicationResponses->map(function ($response) {
-            $user = $response->user;
-
-            return $user->id;
-        })->all();
-
-        return $userdataIds;
-    }
-
     public function getExportData(AgendaItem $agendaItem): Collection
     {
         $users = $this->getRegisteredUsersWithResponses($agendaItem);

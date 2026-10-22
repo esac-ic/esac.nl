@@ -51,22 +51,15 @@ class AgendaItem extends Model
     }
 
     /**
-     * Sets the dates, registration form and climbing flag from the event form's data.
+     * Sets the dates, registration form and climbing flag from the event form's validated data.
      */
     public function fillFromForm(array $data): static
     {
         $this->start_date = $data['start_date'];
         $this->end_date = $data['end_date'];
-
-        if ($data['applicationForm'] != 0) {
-            $this->subscription_end_date = $data['subscription_end_date'];
-            $this->application_form_id = $data['applicationForm'];
-        } else {
-            $this->subscription_end_date = null;
-            $this->application_form_id = null;
-        }
-
-        $this->climbing_activity = array_key_exists('climbing_activity', $data);
+        $this->application_form_id = $data['applicationForm'] ?? null;
+        $this->subscription_end_date = $data['subscription_end_date'] ?? null;
+        $this->climbing_activity = $data['climbing_activity'] ?? false;
 
         return $this;
     }

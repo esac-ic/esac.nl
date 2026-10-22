@@ -26,7 +26,7 @@
         <div class="form-row">
             <div class="form-group col-md-6">
                 {{ html()->label('Application form', 'applicationForm') }}
-                {{ html()->select('applicationForm', $applicationForms, ($agendaItem != null) ? $agendaItem->application_form_id : "")->class('form-control')->required()->id('applicationForm') }}
+                {{ html()->select('applicationForm', ['' => 'No application form'] + $applicationForms, $agendaItem?->application_form_id)->class('form-control')->id('applicationForm') }}
             </div>
             <div class="form-group col-md-6" id="subscription_endDate_box">
                 {{ html()->label('Last possible registration date', 'subscription_endDate') }}

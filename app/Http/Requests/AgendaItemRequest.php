@@ -3,6 +3,7 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class AgendaItemRequest extends FormRequest
 {
@@ -14,9 +15,11 @@ class AgendaItemRequest extends FormRequest
             'text' => 'required',
             'thumbnail' => 'nullable|image|mimes:jpeg,png,jpg|max:10240',
             'category' => 'required|numeric|min:1',
-            'applicationForm' => 'required|numeric|min:0',
-            'end_date' => 'required|date',
+            'applicationForm' => ['nullable', Rule::exists('application_forms', 'id')->withoutTrashed()],
+            'subscription_end_date' => ['exclude_without:applicationForm', 'required', 'date'],
             'start_date' => 'required|date',
+            'end_date' => 'required|date|after_or_equal:start_date',
+            'climbing_activity' => 'boolean',
         ];
     }
 }
