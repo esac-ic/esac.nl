@@ -11,6 +11,7 @@ use Illuminate\Auth\Access\Response;
 use Illuminate\Pagination\Paginator;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Queue;
+use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\View;
 use Illuminate\Support\Once;
 use Illuminate\Support\ServiceProvider;
@@ -24,6 +25,12 @@ class AppServiceProvider extends ServiceProvider
     public function boot(): void
     {
         $this->defineGates();
+
+        // The member routes only find the members in the state that the route is for.
+        Route::bind('pending_member', fn (string $id) => User::query()->pending()->findOrFail($id));
+        Route::bind('active_member', fn (string $id) => User::query()->active()->findOrFail($id));
+        // Anonymized former members have no email address, so they can't come back.
+        Route::bind('former_member', fn (string $id) => User::query()->former()->whereNotNull('email')->findOrFail($id));
 
         Paginator::useBootstrapFour();
 
