@@ -57,14 +57,14 @@ import AgendaPagination from './AgendaPagination.vue';
         mounted () {
             this.fetchAgendaItems();
             
-            this.titleText = 'Activities';
+            this.titleText = 'Events';
             this.exportText = 'Export';
             this.filterText = 'Filters';
         },
         data() {
             return {
                 description: window.DESCRIPTION,
-                titleText: 'Activities',
+                titleText: 'Events',
                 exportText: 'Exporteren',
                 filterText: "Filters",
             }

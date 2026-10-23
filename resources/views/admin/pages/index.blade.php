@@ -11,7 +11,7 @@
         @foreach ($pages as $page)
             <tr>
                 <td>{{ $page->parent_id ? '— ' : '' }}{{ $page->name }}</td>
-                <td>{{ $pages->firstWhere('id', $page->parent_id)?->name }}</td>
+                <td>{{ $page->parent?->name }}</td>
                 <td>
                     <form class="d-inline" method="POST" action="{{ route('admin.pages.move', $page) }}">
                         @csrf

@@ -24,11 +24,11 @@ class PageController extends Controller implements HasMiddleware
 
     public function index(): View
     {
-        $pages = MenuItem::query()->ordered()->get();
+        $pages = MenuItem::query()->whereNull('parent_id')->with(['children' => fn ($query) => $query->ordered()])->ordered()->get();
 
         // Each top-level page is followed by its sub pages, in menu order.
         return view('admin.pages.index', [
-            'pages' => $pages->whereNull('parent_id')->flatMap(fn (MenuItem $page) => [$page, ...$pages->where('parent_id', $page->id)]),
+            'pages' => $pages->flatMap(fn (MenuItem $page) => [$page, ...$page->children]),
         ]);
     }
 
