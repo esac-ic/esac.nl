@@ -66,13 +66,13 @@ class RegisterForEventTest extends TestCase
     #[Test]
     public function the_registration_form_of_a_missing_event_is_not_found()
     {
-        $this->get('/forms/3424')->assertNotFound();
+        $this->get('/events/3424/registration')->assertNotFound();
     }
 
     #[Test]
     public function an_event_without_a_registration_form_can_not_be_registered_for()
     {
-        $this->get('/forms/'.$this->openEvent()->id)
+        $this->get('/events/'.$this->openEvent()->id.'/registration')
             ->assertRedirect()
             ->assertSessionHas('error', 'This event has no registration form.');
     }
@@ -80,7 +80,7 @@ class RegisterForEventTest extends TestCase
     #[Test]
     public function registration_is_closed_after_the_registration_deadline()
     {
-        $this->get('/forms/'.$this->openEvent(['registration_deadline' => now()->subWeek()])->id)
+        $this->get('/events/'.$this->openEvent(['registration_deadline' => now()->subWeek()])->id.'/registration')
             ->assertRedirect()
             ->assertSessionHas('error', 'The registration deadline has passed, so you can no longer register.');
     }
@@ -95,7 +95,7 @@ class RegisterForEventTest extends TestCase
             'registration_form_id' => $event->registration_form_id,
         ]);
 
-        $this->get('/forms/'.$event->id)
+        $this->get('/events/'.$event->id.'/registration')
             ->assertRedirect()
             ->assertSessionHas('error', 'You are already registered for this event.');
     }
@@ -106,7 +106,7 @@ class RegisterForEventTest extends TestCase
         $event = $this->eventWithRegistrationForm();
         $answers = $this->answers($event);
 
-        $this->post('/forms/'.$event->id, $answers)->assertRedirect();
+        $this->post('/events/'.$event->id.'/registration', $answers)->assertRedirect();
 
         $this->assertRegistered($this->user, $event, $answers);
     }
@@ -144,8 +144,8 @@ class RegisterForEventTest extends TestCase
         ]);
         $otherFormsRow = RegistrationFormField::factory()->create();
 
-        $this->post('/forms/'.$event->id, [$required->id => 'not a number'])->assertInvalid([$required->id]);
-        $this->post('/forms/'.$event->id, $this->answers($event) + [$required->id => 3, $otherFormsRow->id => 'x'])->assertValid();
+        $this->post('/events/'.$event->id.'/registration', [$required->id => 'not a number'])->assertInvalid([$required->id]);
+        $this->post('/events/'.$event->id.'/registration', $this->answers($event) + [$required->id => 3, $otherFormsRow->id => 'x'])->assertValid();
 
         $this->assertNotContains($otherFormsRow->id, Registration::sole()->answers->pluck('registration_form_field_id'));
     }

@@ -13,7 +13,6 @@ use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Routing\Controllers\HasMiddleware;
 use Illuminate\Routing\Controllers\Middleware;
-use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Str;
 use Symfony\Component\HttpFoundation\StreamedResponse;
 
@@ -25,8 +24,8 @@ class EventRegistrationController extends Controller implements HasMiddleware
     public static function middleware(): array
     {
         return [
-            'auth',
             new Middleware('can:manage-events', except: ['destroy']),
+            new Middleware('can:delete-registration', only: ['destroy']),
         ];
     }
 
@@ -72,8 +71,6 @@ class EventRegistrationController extends Controller implements HasMiddleware
 
     public function destroy(Event $event, Registration $registration): RedirectResponse
     {
-        Gate::authorize('delete-registration', $registration);
-
         $registration->delete();
 
         return back();

@@ -10,9 +10,9 @@
         <x-card :title="$page->exists ? 'Edit menu page' : 'Add menu item'">
             <div class="form-row">
                 <x-field name="name" label="Name" :value="$page->name" col="6" required />
-                @if(! $page->exists || $page->editable)
+                @unless($page->hasFixedSlug())
                     <x-field name="slug" label="URL" :value="$page->slug" col="6" required />
-                @endif
+                @endunless
             </div>
             <div class="form-row">
                 <div class="col-md-6">
@@ -34,7 +34,7 @@
         </x-card>
         @if(! $page->exists || $page->editable)
             <x-card :title="$page->exists ? 'Edit page' : 'Add page'" class="mt-4">
-                <x-field name="content" label="Content" type="textarea" :value="$page->content" />
+                <x-field name="content" label="Content" type="textarea" :data-images-url="route('admin.editor-images.store')" :value="$page->content" />
             </x-card>
         @endif
 

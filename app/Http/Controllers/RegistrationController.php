@@ -9,20 +9,12 @@ use App\Models\User;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use Illuminate\Routing\Controllers\HasMiddleware;
 
 /**
  * A member registering for an event, or cancelling their registration.
  */
-class RegistrationController extends Controller implements HasMiddleware
+class RegistrationController extends Controller
 {
-    public static function middleware(): array
-    {
-        return [
-            'auth',
-        ];
-    }
-
     public function create(Request $request, Event $event): View|RedirectResponse
     {
         if ($error = $this->registrationError($event, $request->user())) {

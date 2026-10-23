@@ -55,7 +55,7 @@ class UpdateMemberTest extends TestCase
         $data = self::DETAILS + ['email' => $this->admin->email, 'first_name' => 'New', 'last_name' => 'Second', 'member_type' => $this->admin->member_type->value];
 
         $this->actingAs($this->admin)->patch(route('admin.members.update', $this->admin), $data)
-            ->assertRedirect(route('admin.members.show', $this->admin));
+            ->assertRedirect(route('admin.members.index'));
 
         Event::assertNotDispatched(MemberTypeChanged::class);
         Event::assertNotDispatched(MemberEmailChanged::class);
@@ -68,7 +68,7 @@ class UpdateMemberTest extends TestCase
         $data = self::DETAILS + ['email' => 'Second@esac.nl', 'first_name' => 'New', 'last_name' => 'Second', 'member_type' => $this->admin->member_type->value];
 
         $this->actingAs($this->admin)->patch(route('admin.members.update', $this->admin), $data)
-            ->assertRedirect(route('admin.members.show', $this->admin));
+            ->assertRedirect(route('admin.members.index'));
 
         Event::assertNotDispatched(MemberTypeChanged::class);
         Event::assertDispatched(MemberEmailChanged::class);
@@ -98,34 +98,6 @@ class UpdateMemberTest extends TestCase
 
         $this->actingAs($this->admin)->patch(route('admin.members.update', $this->admin), [...$data, 'password_confirmation' => 'new-password'])->assertValid();
         $this->assertTrue(Hash::check('new-password', $this->admin->fresh()->password));
-    }
-
-    #[Test]
-    public function a_member_can_update_their_own_details()
-    {
-        $data = self::DETAILS + ['email' => 'Second@esac.nl']
-            + Arr::only($this->member->attributesToArray(), ['first_name', 'preposition', 'last_name', 'member_type', 'remark']);
-
-        $this->actingAs($this->member)->patch(route('admin.members.update', $this->member), $data)
-            ->assertRedirect(route('admin.members.show', $this->member));
-
-        Event::assertNotDispatched(MemberTypeChanged::class);
-        Event::assertDispatched(MemberEmailChanged::class);
-        $this->assertUpdated($this->member, $data);
-    }
-
-    #[Test]
-    public function a_member_can_not_change_the_admin_only_fields()
-    {
-        $forbidden = Arr::only($this->member->attributesToArray(), ['first_name', 'preposition', 'last_name', 'member_type', 'remark']);
-        $data = self::DETAILS + ['email' => 'Second@esac.nl'] + array_fill_keys(array_keys($forbidden), 'Second');
-
-        $this->actingAs($this->member)->patch(route('admin.members.update', $this->member), $data)
-            ->assertRedirect(route('admin.members.show', $this->member));
-
-        Event::assertNotDispatched(MemberTypeChanged::class);
-        Event::assertDispatched(MemberEmailChanged::class);
-        $this->assertUpdated($this->member, $forbidden + $data);
     }
 
     #[Test]

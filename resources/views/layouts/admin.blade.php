@@ -26,24 +26,22 @@
                         </span>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="{{ route('admin.members.show', auth()->user()) }}">
+                        <a class="nav-link" href="{{ route('account.show') }}">
                             Account overview
                         </a>
                     </li>
-                    @can('access-admin')
-                        <hr class="my-3">
+                    <hr class="my-3">
 
-                        <li class="nav-item active">
-                            <span class="nav-link">
-                                Admin
-                            </span>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="{{ route('admin.dashboard') }}">
-                            Dashboard
-                            </a>
-                        </li>
-                    @endcan
+                    <li class="nav-item active">
+                        <span class="nav-link">
+                            Admin
+                        </span>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ route('admin.dashboard') }}">
+                        Dashboard
+                        </a>
+                    </li>
                     @can('view-members')
                         <x-nav-dropdown label="Members">
                             <a class="dropdown-item" href="{{ route('admin.members.index') }}">Current members</a>

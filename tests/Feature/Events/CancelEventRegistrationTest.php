@@ -29,7 +29,7 @@ class CancelEventRegistrationTest extends TestCase
     {
         $registration = $this->registration('+1 week');
 
-        $this->delete('forms/'.$registration->event_id)->assertRedirect();
+        $this->delete('events/'.$registration->event_id.'/registration')->assertRedirect();
 
         $this->assertSoftDeleted($registration);
     }
@@ -39,7 +39,7 @@ class CancelEventRegistrationTest extends TestCase
     {
         $registration = $this->registration('-1 week');
 
-        $this->delete('forms/'.$registration->event_id)
+        $this->delete('events/'.$registration->event_id.'/registration')
             ->assertRedirect()
             ->assertSessionHas('message', 'The registration deadline has passed, so you can no longer unregister.');
 

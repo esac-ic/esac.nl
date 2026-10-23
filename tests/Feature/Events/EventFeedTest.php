@@ -24,7 +24,7 @@ class EventFeedTest extends TestCase
         Event::factory()->create(['start_date' => '2027-01-01', 'end_date' => '2027-01-01']);
         Event::factory()->create(['start_date' => '2025-05-01', 'end_date' => '2025-05-02']);
 
-        $response = $this->get('/ical');
+        $response = $this->get('/events.ics');
 
         $response->assertOk();
         $response->assertHeader('Content-Type', 'text/calendar; charset=utf-8');
@@ -39,6 +39,6 @@ class EventFeedTest extends TestCase
         $this->assertStringContainsString("DTSTART:20261231T230000Z\r\n", $ics);
         $this->assertStringContainsString('UID:agenda-item-'.$item->id.'@localhost', $ics);
         $this->assertStringContainsString('Bring a rope & harness', $ics);
-        $this->assertStringContainsString('More information: '.url('/agenda/'.$item->id), $ics);
+        $this->assertStringContainsString('More information: '.url('/events/'.$item->id), $ics);
     }
 }

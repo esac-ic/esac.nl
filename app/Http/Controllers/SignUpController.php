@@ -8,21 +8,12 @@ use App\Models\MenuItem;
 use App\Models\User;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
-use Illuminate\Routing\Controllers\HasMiddleware;
-use Illuminate\Routing\Controllers\Middleware;
 
 /**
  * The public membership sign-up, which makes a pending member.
  */
-class SignUpController extends Controller implements HasMiddleware
+class SignUpController extends Controller
 {
-    public static function middleware(): array
-    {
-        return [
-            new Middleware('throttle:5,1', only: ['store']),
-        ];
-    }
-
     public function create(): View
     {
         return view('site.signup', [

@@ -8,19 +8,9 @@ use App\Http\Resources\ZekeringResource;
 use App\Models\Zekering;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Response;
-use Illuminate\Routing\Controllers\HasMiddleware;
-use Illuminate\Routing\Controllers\Middleware;
 
-class ZekeringController extends Controller implements HasMiddleware
+class ZekeringController extends Controller
 {
-    public static function middleware(): array
-    {
-        return [
-            'auth',
-            new Middleware('can:manage-zekeringen', only: ['destroy']),
-        ];
-    }
-
     public function index(): array
     {
         $zekeringen = Zekering::query()->whereNull('parent_id')->latest('id')->with('children')->get();

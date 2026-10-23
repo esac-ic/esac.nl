@@ -116,4 +116,14 @@ class CreatePageTest extends TestCase
 
         $this->assertDatabaseCount(MenuItem::class, 1);
     }
+
+    #[Test]
+    public function a_page_can_not_take_a_reserved_or_malformed_slug()
+    {
+        foreach (['events', 'agenda', 'admin', 'Test', 'a/b'] as $slug) {
+            $this->post('admin/pages', $this->body(['slug' => $slug]))->assertInvalid('slug');
+        }
+
+        $this->assertDatabaseCount(MenuItem::class, 1);
+    }
 }

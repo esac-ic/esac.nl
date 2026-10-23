@@ -9,9 +9,9 @@ use Illuminate\Support\Facades\Route;
 Route::get('agenda', [EventController::class, 'index'])->name('events.index');
 Route::get('agendaCategories', [EventCategoryController::class, 'index'])->name('event-categories.index');
 
-Route::controller(ZekeringController::class)->group(function () {
+Route::middleware('auth')->controller(ZekeringController::class)->group(function () {
     Route::get('zekeringen', 'index')->name('zekeringen.index');
     Route::post('zekeringen', 'store')->name('zekeringen.store');
     Route::post('subzekering', 'storeChild')->name('zekeringen.children.store');
-    Route::delete('zekeringen/{zekering}', 'destroy')->name('zekeringen.destroy');
+    Route::delete('zekeringen/{zekering}', 'destroy')->name('zekeringen.destroy')->can('manage-zekeringen');
 });

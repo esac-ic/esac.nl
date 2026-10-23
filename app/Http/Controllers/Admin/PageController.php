@@ -17,7 +17,6 @@ class PageController extends Controller implements HasMiddleware
     public static function middleware(): array
     {
         return [
-            'auth',
             new Middleware('can:manage-pages'),
         ];
     }
@@ -64,7 +63,7 @@ class PageController extends Controller implements HasMiddleware
 
     public function update(PageRequest $request, MenuItem $page): RedirectResponse
     {
-        // The request excludes the slug and content of pages that aren't editable.
+        // The request excludes a fixed slug, and the content of pages that aren't editable.
         $page->fill($request->safe()->only(['name', 'slug', 'content']));
         $this->fillMenuPosition($request, $page);
         $page->save();
