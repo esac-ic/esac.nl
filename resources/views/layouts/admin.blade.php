@@ -88,7 +88,7 @@
                     @endcan
                     @can('manage-settings')
                         <li class="nav-item">
-                            <a href="{{ route('admin.settings.show') }}" class="nav-link">
+                            <a href="{{ route('admin.settings.edit') }}" class="nav-link">
                                 Settings
                             </a>
                         </li>

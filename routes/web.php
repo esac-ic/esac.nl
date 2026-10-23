@@ -77,7 +77,7 @@ Route::prefix('admin')->name('admin.')->group(function () {
         Route::post('export', 'export')->name('export');
     });
 
-    Route::singleton('settings', SettingsController::class);
+    Route::singleton('settings', SettingsController::class)->only(['edit', 'update']);
 });
 
 // A member's registration for an event
