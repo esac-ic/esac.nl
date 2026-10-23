@@ -38,7 +38,7 @@ class HandleMemberTypeChangedTest extends TestCase
     {
         Setting::where('name', SettingKey::MemberMailLists->value)->first()
             ->update(['value' => 'first-member;second-member;third-member;fourth-member']);
-        Setting::where('name', SettingKey::AlumnusMailLists->value)->first()
+        Setting::where('name', SettingKey::ReunistMailLists->value)->first()
             ->update(['value' => 'first-reunist;second-reunist;third-reunist;fourth-reunist']);
 
         // Removing before adding keeps the member on lists that both kinds share.
@@ -52,7 +52,7 @@ class HandleMemberTypeChangedTest extends TestCase
             ->ordered();
 
         new SyncMemberMailLists($this->mockedMailman)
-            ->handleMemberTypeChanged(new MemberTypeChanged($this->user, MemberType::Member, MemberType::Alumnus));
+            ->handleMemberTypeChanged(new MemberTypeChanged($this->user, MemberType::Member, MemberType::Reunist));
     }
 
     #[Test]

@@ -62,14 +62,14 @@ class UserFactory extends Factory
         return $this->state(['member_type' => 'member']);
     }
 
-    public function alumnus(): static
+    public function reunist(): static
     {
-        return $this->state(['member_type' => 'alumnus']);
+        return $this->state(['member_type' => 'reunist']);
     }
 
-    public function extraordinaryMember(): static
+    public function extraordinaryParticipant(): static
     {
-        return $this->state(['member_type' => 'extraordinary_member']);
+        return $this->state(['member_type' => 'extraordinary_participant']);
     }
 
     public function honoraryMember(): static
@@ -77,9 +77,9 @@ class UserFactory extends Factory
         return $this->state(['member_type' => 'honorary_member']);
     }
 
-    public function memberOfMerit(): static
+    public function memberOfService(): static
     {
-        return $this->state(['member_type' => 'member_of_merit']);
+        return $this->state(['member_type' => 'member_of_service']);
     }
 
     public function trainer(): static
