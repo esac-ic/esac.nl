@@ -2,6 +2,7 @@
 
 namespace Tests\Feature\MemberLog;
 
+use App\Enums\MemberLogType;
 use App\Events\MembershipEnded;
 use App\Events\MembershipRestored;
 use App\Events\MemberSignedUp;
@@ -39,7 +40,7 @@ class WriteMemberLogEntryTest extends TestCase
 
         $logEntry = MemberLogEntry::sole();
         $this->assertTrue($user->is($logEntry->user));
-        $this->assertSame(class_basename($eventClass), $logEntry->type);
+        $this->assertSame(new $eventClass($user)->logType(), $logEntry->type);
         $this->assertSame(sprintf($details, $user->name), $logEntry->details);
     }
 
@@ -52,7 +53,7 @@ class WriteMemberLogEntryTest extends TestCase
 
         $logEntry = MemberLogEntry::sole();
         $this->assertNull($logEntry->user);
-        $this->assertSame('SignUpRejected', $logEntry->type);
+        $this->assertSame(MemberLogType::SignUpRejected, $logEntry->type);
         $this->assertSame($user->name.' was removed as a pending member', $logEntry->details);
     }
 

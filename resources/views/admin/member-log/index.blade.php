@@ -11,7 +11,7 @@ Member log
     <x-data-table datatable :data-order="json_encode([[1, 'desc']])" :columns="['Type', 'Time', 'Details']">
         @foreach ($entries as $entry)
             <tr>
-                <td>{{$entry->type}}</td>
+                <td>{{ $entry->type->label() }}</td>
                 <td><x-local-time :value="$entry->created_at" format="Y-m-d H:i:s" /></td>
                 <td>{{$entry->details}}</td>
             </tr>

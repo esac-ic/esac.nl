@@ -48,7 +48,7 @@ class MemberLogExport extends SpreadsheetExport
     {
         return [
             $entry->created_at,
-            $entry->type,
+            $entry->type->label(),
             $entry->user->name ?? 'Account deleted',
             $entry->details,
         ];

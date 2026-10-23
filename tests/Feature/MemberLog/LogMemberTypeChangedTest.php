@@ -2,6 +2,7 @@
 
 namespace Tests\Feature\MemberLog;
 
+use App\Enums\MemberLogType;
 use App\Enums\MemberType;
 use App\Events\MemberTypeChanged;
 use App\Listeners\WriteMemberLogEntry;
@@ -27,7 +28,7 @@ class LogMemberTypeChangedTest extends TestCase
 
         $logEntry = MemberLogEntry::sole();
         $this->assertTrue($user->is($logEntry->user));
-        $this->assertSame('MemberTypeChanged', $logEntry->type);
+        $this->assertSame(MemberLogType::MemberTypeChanged, $logEntry->type);
         $this->assertSame($user->name." changed from {$from->value} to {$to->value}", $logEntry->details);
     }
 }

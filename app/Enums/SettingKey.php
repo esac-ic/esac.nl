@@ -7,15 +7,15 @@ namespace App\Enums;
  */
 enum SettingKey: string
 {
-    case BlockedEmailDomains = 'BLOCKED_EMAIL_DOMAINS';
-    case Killswitch = 'KILLSWITCH';
-    case FooterPhoneNumber = 'FOOTER_PHONE_NUMBER';
-    case MemberMailLists = 'MEMBER_MAIL_LISTS';
-    case ExtraordinaryParticipantMailLists = 'EXTRAORDINARY_PARTICIPANT_MAIL_LISTS';
-    case ReunistMailLists = 'REUNIST_MAIL_LISTS';
-    case HonoraryMemberMailLists = 'HONORARY_MEMBER_MAIL_LISTS';
-    case MemberOfServiceMailLists = 'MEMBER_OF_SERVICE_MAIL_LISTS';
-    case TrainerMailLists = 'TRAINER_MAIL_LISTS';
-    case RelationshipMailLists = 'RELATIONSHIP_MAIL_LISTS';
+    case BlockedEmailDomains = 'blocked_email_domains';
+    case Killswitch = 'killswitch';
+    case FooterPhoneNumber = 'footer_phone_number';
+    case MemberMailLists = 'member_mail_lists';
+    case ExtraordinaryParticipantMailLists = 'extraordinary_participant_mail_lists';
+    case ReunistMailLists = 'reunist_mail_lists';
+    case HonoraryMemberMailLists = 'honorary_member_mail_lists';
+    case MemberOfServiceMailLists = 'member_of_service_mail_lists';
+    case TrainerMailLists = 'trainer_mail_lists';
+    case RelationshipMailLists = 'relationship_mail_lists';
 
 }

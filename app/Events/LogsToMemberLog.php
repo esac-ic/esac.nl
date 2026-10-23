@@ -2,6 +2,7 @@
 
 namespace App\Events;
 
+use App\Enums\MemberLogType;
 use App\Models\User;
 
 /**
@@ -9,6 +10,8 @@ use App\Models\User;
  */
 interface LogsToMemberLog
 {
+    public function logType(): MemberLogType;
+
     /**
      * The details of the entry.
      */
