@@ -7,8 +7,10 @@ use App\Http\Requests\PageRequest;
 use App\Models\MenuItem;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Request;
 use Illuminate\Routing\Controllers\HasMiddleware;
 use Illuminate\Routing\Controllers\Middleware;
+use Illuminate\Validation\Rule;
 
 class PageController extends Controller implements HasMiddleware
 {
@@ -22,15 +24,17 @@ class PageController extends Controller implements HasMiddleware
 
     public function index(): View
     {
+        $pages = MenuItem::query()->ordered()->get();
+
+        // Each top-level page is followed by its sub pages, in menu order.
         return view('admin.pages.index', [
-            'pages' => MenuItem::query()->with('parent')->orderBy('parent_id')->ordered()->get(),
+            'pages' => $pages->whereNull('parent_id')->flatMap(fn (MenuItem $page) => [$page, ...$pages->where('parent_id', $page->id)]),
         ]);
     }
 
     public function create(): View
     {
-        // A new page goes last in its menu, unless another position is chosen.
-        return $this->form(new MenuItem(['position' => MenuItem::query()->max('position') + 10]));
+        return $this->form(new MenuItem);
     }
 
     public function store(PageRequest $request): RedirectResponse
@@ -49,7 +53,7 @@ class PageController extends Controller implements HasMiddleware
     {
         return view('admin.pages.show', [
             'page' => $page,
-            'children' => MenuItem::query()->inMenu()->where('parent_id', $page->id)->ordered()->get(),
+            'children' => $page->children()->inMenu()->ordered()->get(),
         ]);
     }
 
@@ -72,7 +76,7 @@ class PageController extends Controller implements HasMiddleware
     {
         if ($page->deletable) {
             // Remove the references from the other menu items.
-            MenuItem::query()->where('parent_id', $page->id)->update(['parent_id' => null]);
+            $page->children()->update(['parent_id' => null]);
 
             $page->delete();
         }
@@ -80,10 +84,20 @@ class PageController extends Controller implements HasMiddleware
         return to_route('admin.pages.index')->with('message', 'Menu item removed');
     }
 
+    public function move(Request $request, MenuItem $page): RedirectResponse
+    {
+        $page->move($request->validate(['direction' => ['required', Rule::in(['up', 'down'])]])['direction']);
+
+        return to_route('admin.pages.index');
+    }
+
     private function fillMenuPosition(PageRequest $request, MenuItem $menuItem): void
     {
-        $menuItem->parent_id = $request->validated('menu_level') === 'child' ? $request->validated('parent_id') : null;
-        $menuItem->position = $request->validated('position');
+        $menuItem->parent_id = $request->validated('parent_id');
+        // A new page, or one that moves to another menu, goes last.
+        if (! $menuItem->exists || $menuItem->isDirty('parent_id')) {
+            $menuItem->position = MenuItem::query()->where('parent_id', $menuItem->parent_id)->max('position') + 1;
+        }
         $menuItem->requires_login = $request->validated('requires_login');
         $menuItem->show_in_menu = $request->validated('show_in_menu');
     }
@@ -92,7 +106,8 @@ class PageController extends Controller implements HasMiddleware
     {
         return view('admin.pages.form', [
             'page' => $page,
-            'pages' => MenuItem::query()->orderBy('name')->get(),
+            // A page with sub pages stays top-level.
+            'parents' => $page->children()->exists() ? null : MenuItem::query()->whereNull('parent_id')->whereKeyNot($page->id)->orderBy('name')->get(),
         ]);
     }
 }

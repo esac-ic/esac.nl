@@ -64,6 +64,7 @@ Route::prefix('admin')->name('admin.')->group(function () {
     Route::resource('news-items', NewsItemController::class);
 
     Route::resource('pages', PageController::class);
+    Route::patch('pages/{page}/move', [PageController::class, 'move'])->name('pages.move');
     Route::controller(EditorImageController::class)->prefix('editor-images')->name('editor-images.')->group(function () {
         Route::post('/', 'store')->name('store');
     });

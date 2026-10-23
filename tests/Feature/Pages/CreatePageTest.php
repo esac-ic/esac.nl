@@ -30,9 +30,7 @@ class CreatePageTest extends TestCase
     {
         return array_merge([
             'slug' => 'test',
-            'menu_level' => 'child',
             'parent_id' => $this->parent->id,
-            'position' => 20,
             'name' => 'Test title',
             'content' => 'Very cool test content.',
         ], $overrides);
@@ -43,7 +41,7 @@ class CreatePageTest extends TestCase
         return [
             'sub item' => [[], true],
             'sub item with emoji' => [['name' => 'Test title 😀', 'content' => 'Hele leuke test inhoud. 😀'], true],
-            'standalone' => [['menu_level' => 'top', 'parent_id' => null], false],
+            'top-level page' => [['parent_id' => null], false],
         ];
     }
 
@@ -60,7 +58,6 @@ class CreatePageTest extends TestCase
         $this->assertDatabaseHas(MenuItem::class, [
             'parent_id' => $isSubItem ? $this->parent->id : null,
             'slug' => $body['slug'],
-            'position' => 20,
             'name' => $body['name'],
             'content' => $body['content'],
         ]);
@@ -69,7 +66,7 @@ class CreatePageTest extends TestCase
     #[Test]
     public function an_edited_page_is_validated_when_its_slug_is_unchanged()
     {
-        $body = $this->body(['menu_level' => 'top']);
+        $body = $this->body(['parent_id' => null]);
         $this->post('admin/pages', $body)->assertValid();
         $page = MenuItem::query()->where('slug', 'test')->sole();
 
@@ -99,12 +96,15 @@ class CreatePageTest extends TestCase
     }
 
     #[Test]
-    public function the_menu_shows_the_pages_by_position()
+    public function a_new_page_goes_last_in_the_menu_and_can_be_moved_up()
     {
-        $this->post('admin/pages', $this->body(['slug' => 'second', 'name' => 'Second', 'menu_level' => 'top', 'position' => 20, 'show_in_menu' => true]));
-        $this->post('admin/pages', $this->body(['slug' => 'first', 'name' => 'First', 'menu_level' => 'top', 'position' => 5, 'show_in_menu' => true]));
-
+        $this->post('admin/pages', $this->body(['slug' => 'first', 'name' => 'First', 'parent_id' => null, 'show_in_menu' => true]));
+        $this->post('admin/pages', $this->body(['slug' => 'second', 'name' => 'Second', 'parent_id' => null, 'show_in_menu' => true]));
         $this->get('second')->assertSeeInOrder(['navbar-nav', 'Parent', 'First', 'Second']);
+
+        $this->patch(route('admin.pages.move', MenuItem::query()->where('slug', 'second')->sole()), ['direction' => 'up']);
+
+        $this->get('second')->assertSeeInOrder(['navbar-nav', 'Parent', 'Second', 'First']);
     }
 
     #[Test]
@@ -112,17 +112,7 @@ class CreatePageTest extends TestCase
     {
         $this->post('admin/pages')
             ->assertRedirect()
-            ->assertInvalid(['slug', 'menu_level', 'position', 'name', 'content']);
-
-        $this->assertDatabaseCount(MenuItem::class, 1);
-    }
-
-    #[Test]
-    public function a_child_page_needs_a_parent()
-    {
-        $this->post('admin/pages', $this->body(['parent_id' => null]))
-            ->assertRedirect()
-            ->assertInvalid(['parent_id']);
+            ->assertInvalid(['slug', 'name', 'content']);
 
         $this->assertDatabaseCount(MenuItem::class, 1);
     }

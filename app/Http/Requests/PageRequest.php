@@ -15,11 +15,10 @@ class PageRequest extends FormRequest
 
         return [
             'slug' => [$fixed, 'required', 'max:255', Rule::unique('menu_items', 'slug')->ignore($page)],
-            'menu_level' => ['required', Rule::in(['top', 'child'])],
             'name' => ['required', 'max:255'],
             'content' => [$fixed, 'required'],
-            'position' => ['required', 'integer', 'min:0'],
-            'parent_id' => ['exclude_unless:menu_level,child', 'required', Rule::exists('menu_items', 'id')],
+            // The menu has two levels: a sub page's parent is a top-level page, and a page with sub pages stays top-level.
+            'parent_id' => [Rule::prohibitedIf($page?->children()->exists() ?? false), 'nullable', Rule::exists('menu_items', 'id')->whereNull('parent_id')->when($page, fn ($rule) => $rule->whereNot('id', $page->id))],
             'requires_login' => ['boolean'],
             'show_in_menu' => ['boolean'],
         ];
