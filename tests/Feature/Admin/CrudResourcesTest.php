@@ -8,7 +8,7 @@ use App\Models\Certificate;
 use App\Models\EventCategory;
 use App\Models\User;
 use App\Settings\SiteSettings;
-use Database\Seeders\MenuItemSeeder;
+use Database\Seeders\PageSeeder;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use PHPUnit\Framework\Attributes\Test;
 use Tests\TestCase;
@@ -106,7 +106,7 @@ class CrudResourcesTest extends TestCase
     #[Test]
     public function the_library_and_front_pages_list_their_content()
     {
-        $this->seed(MenuItemSeeder::class);
+        $this->seed(PageSeeder::class);
         Book::create(['title' => 'Alpine climbing', 'year' => 1990, 'type' => 'Guide', 'country' => 'CH', 'code' => 'A1']);
 
         $this->actingAs($this->admin)->get('library')->assertOk()->assertSee('Alpine climbing');

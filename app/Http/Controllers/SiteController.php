@@ -5,8 +5,8 @@ namespace App\Http\Controllers;
 use App\Enums\PageSlug;
 use App\Models\Book;
 use App\Models\Event;
-use App\Models\MenuItem;
 use App\Models\NewsItem;
+use App\Models\Page;
 use App\Models\User;
 use Illuminate\Auth\AuthenticationException;
 use Illuminate\Contracts\View\View;
@@ -17,7 +17,7 @@ class SiteController extends Controller
     {
         return view('site.events.index', [
             'pageTitle' => 'Events',
-            'content' => $this->pageContent(PageSlug::Events),
+            'content' => Page::contentFor(PageSlug::Events),
         ]);
     }
 
@@ -35,7 +35,7 @@ class SiteController extends Controller
     {
         return view('site.zekeringen', [
             'pageTitle' => 'Zekeringen',
-            'content' => $this->pageContent(PageSlug::Zekeringen),
+            'content' => Page::contentFor(PageSlug::Zekeringen),
         ]);
     }
 
@@ -43,7 +43,7 @@ class SiteController extends Controller
     {
         return view('site.news.index', [
             'pageTitle' => 'News',
-            'content' => $this->pageContent(PageSlug::News),
+            'content' => Page::contentFor(PageSlug::News),
             'newsItems' => NewsItem::query()->latest('id')->paginate(9),
         ]);
     }
@@ -60,7 +60,7 @@ class SiteController extends Controller
     {
         return view('site.library', [
             'pageTitle' => 'Library',
-            'content' => $this->pageContent(PageSlug::Library),
+            'content' => Page::contentFor(PageSlug::Library),
             'books' => Book::all(),
         ]);
     }
@@ -70,7 +70,7 @@ class SiteController extends Controller
         return view('site.members', [
             'users' => User::query()->active()->get(['first_name', 'last_name', 'email', 'preposition', 'member_type', 'phone_number']),
             'pageTitle' => 'Members list',
-            'content' => $this->pageContent(PageSlug::Members),
+            'content' => Page::contentFor(PageSlug::Members),
         ]);
     }
 
@@ -78,34 +78,22 @@ class SiteController extends Controller
     {
         return view('site.home', [
             'newsItems' => NewsItem::query()->latest('id')->take(3)->get(),
-            'content' => $this->pageContent(PageSlug::Home),
+            'content' => Page::contentFor(PageSlug::Home),
             'pageTitle' => 'Home',
             'events' => Event::query()->upcoming()->withCount('registrations')->take(4)->get(),
         ]);
     }
 
-    public function showPage(MenuItem $menuItem): View
+    public function showPage(Page $page): View
     {
-        $this->requireLoginFor($menuItem);
-
-        return view('site.page', [
-            'content' => $menuItem->content,
-            'pageTitle' => $menuItem->name,
-        ]);
-    }
-
-    private function pageContent(PageSlug $slug): ?string
-    {
-        return MenuItem::query()->where('slug', $slug)->value('content');
-    }
-
-    /**
-     * Sends a guest to the login page, and back here afterwards, when the page is for members only.
-     */
-    private function requireLoginFor(MenuItem $page): void
-    {
+        // Sends a guest to the login page, and back here afterwards, when the page is for members only.
         if ($page->requires_login && auth()->guest()) {
             throw new AuthenticationException;
         }
+
+        return view('site.page', [
+            'content' => $page->content,
+            'pageTitle' => $page->name,
+        ]);
     }
 }

@@ -13,24 +13,24 @@
                 
                 <div class="collapse navbar-collapse justify-content-between" id="site-menu">
                     <ul class="navbar-nav">
-                        @foreach($menuItems as $menuItem)
-                            @if($menuItem->children->isNotEmpty())
-                                {{--has submenu items so it wil be a dropdown menu--}}
+                        @foreach($pages as $page)
+                            @if($page->children->isNotEmpty())
+                                {{-- A page with sub pages is a dropdown menu. --}}
                                 <li class="nav-item dropdown">
-                                    <a class="nav-link dropdown-toggle" href="#" id="menu-dropdown-{{ $menuItem->id }}"
+                                    <a class="nav-link dropdown-toggle" href="#" id="menu-dropdown-{{ $page->id }}"
                                        data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                        {{$menuItem->name}}
+                                        {{$page->name}}
                                     </a>
-                                    <div class="dropdown-menu" aria-labelledby="menu-dropdown-{{ $menuItem->id }}">
-                                        @foreach($menuItem->children as $childItem)
+                                    <div class="dropdown-menu" aria-labelledby="menu-dropdown-{{ $page->id }}">
+                                        @foreach($page->children as $child)
                                             <a class="dropdown-item"
-                                               href="{{ route('pages.show', $childItem->slug) }}">{{$childItem->name}}</a>
+                                               href="{{ route('pages.show', $child) }}">{{$child->name}}</a>
                                         @endforeach
                                     </div>
                                 </li>
                             @else
                                 <li class="nav-item">
-                                    <a class="nav-link" href="{{ route('pages.show', $menuItem->slug) }}">{{$menuItem->name}}</a>
+                                    <a class="nav-link" href="{{ route('pages.show', $page) }}">{{$page->name}}</a>
                                 </li>
                             @endif
                         @endforeach

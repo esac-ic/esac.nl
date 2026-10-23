@@ -112,5 +112,5 @@ Route::controller(SiteController::class)->group(function () {
     Route::get('news', 'news')->name('news.index');
     Route::get('news/{news_item}', 'showNewsItem')->name('news.show');
     Route::get('library', 'library')->name('library');
-    Route::get('{menu_item:slug}', 'showPage')->name('pages.show');
+    Route::get('{page:slug}', 'showPage')->name('pages.show');
 });

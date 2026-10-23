@@ -25,7 +25,7 @@ Page
                 @foreach($children as $child)
                     <tr>
                         @if($loop->first)
-                            <td rowspan="{{ $loop->count }}">Submenu items</td>
+                            <td rowspan="{{ $loop->count }}">Sub pages</td>
                         @endif
                         <td>{{ $child->name }}</td>
                     </tr>

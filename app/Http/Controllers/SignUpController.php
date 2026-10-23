@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Enums\PageSlug;
 use App\Http\Requests\SignUpRequest;
-use App\Models\MenuItem;
+use App\Models\Page;
 use App\Models\User;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
@@ -18,7 +18,7 @@ class SignUpController extends Controller
     {
         return view('site.sign-up', [
             'pageTitle' => 'Become a member',
-            'content' => MenuItem::query()->where('slug', PageSlug::SignUp)->value('content'),
+            'content' => Page::contentFor(PageSlug::SignUp),
         ]);
     }
 
