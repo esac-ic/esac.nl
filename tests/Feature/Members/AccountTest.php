@@ -18,6 +18,7 @@ class AccountTest extends TestCase
     /** The member details every test submits; the password stays unchanged when it's empty. */
     private const DETAILS = [
         'password' => '',
+        'current_password' => 'password',
         'email' => 'Second@esac.nl',
         'street' => 'Second',
         'house_number' => '2',
@@ -68,13 +69,22 @@ class AccountTest extends TestCase
         $this->assertUpdated($forbidden + self::DETAILS);
     }
 
+    #[Test]
+    public function a_new_email_address_takes_the_current_password()
+    {
+        $this->actingAs($this->member)->patch(route('account.update'), ['current_password' => 'wrong'] + self::DETAILS)
+            ->assertInvalid('current_password');
+
+        $this->assertSame('initial@esac.nl', $this->member->fresh()->email);
+    }
+
     private function assertUpdated(array $data): void
     {
         $user = $this->member->fresh();
 
         $this->assertSame('1990-02-02', $user->birthday->toDateString());
         $this->assertSame($this->member->password, $user->password);
-        $expected = Arr::except($data, ['password', 'birthday']);
+        $expected = Arr::except($data, ['password', 'current_password', 'birthday']);
         $this->assertEquals($expected, Arr::only($user->attributesToArray(), array_keys($expected)));
     }
 }

@@ -7,6 +7,7 @@ use App\Events\MembershipEnded;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Event;
 use PHPUnit\Framework\Attributes\Test;
 use Tests\TestCase;
@@ -42,5 +43,17 @@ class EndMembershipTest extends TestCase
         Event::assertDispatched(MembershipEnded::class);
 
         $this->assertNotNull(User::find($userId)->membership_ended_on);
+    }
+
+    #[Test]
+    public function ending_a_membership_logs_the_member_out_everywhere()
+    {
+        $user = User::factory()->create(['remember_token' => 'remembered']);
+        DB::table('sessions')->insert(['id' => 'session', 'user_id' => $user->id, 'payload' => '', 'last_activity' => time()]);
+
+        $this->actingAs($this->admin)->delete(route('admin.members.membership.destroy', $user));
+
+        $this->assertNotSame('remembered', $user->fresh()->getRememberToken());
+        $this->assertDatabaseMissing('sessions', ['user_id' => $user->id]);
     }
 }
