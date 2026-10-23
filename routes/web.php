@@ -79,6 +79,9 @@ Route::prefix('admin')->name('admin.')->middleware(['auth', 'can:access-admin'])
 Route::middleware('auth')->group(function () {
     Route::singleton('account', AccountController::class);
 
+    Route::get('members', [SiteController::class, 'members'])->name('members.index');
+    Route::get('zekeringen', [SiteController::class, 'zekeringen'])->name('zekeringen');
+
     // A member's registration for an event
     Route::controller(RegistrationController::class)->prefix('events/{event}/registration')->name('events.registration.')->group(function () {
         Route::get('/', 'create')->name('create');
@@ -108,7 +111,5 @@ Route::controller(SiteController::class)->group(function () {
     Route::get('news', 'news')->name('news.index');
     Route::get('news/{news_item}', 'showNewsItem')->name('news.show');
     Route::get('library', 'library')->name('library');
-    Route::get('members', 'members')->name('members.index');
-    Route::get('zekeringen', 'zekeringen')->name('zekeringen');
     Route::get('{menu_item:slug}', 'showPage')->name('pages.show');
 });

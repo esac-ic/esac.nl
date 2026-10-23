@@ -74,7 +74,7 @@
             }
         },
         mounted(){
-            this.canAddSubzekering = this.zekering.children.length < 4 && LOGDIN === "1";
+            this.canAddSubzekering = this.zekering.children.length < 4;
             this.canDelete = ADMIN === "1";
         }
     }

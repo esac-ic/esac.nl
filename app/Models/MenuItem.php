@@ -16,6 +16,7 @@ use Illuminate\Support\Facades\DB;
     'name',
     'parent_id',
     'slug',
+    'requires_login',
     'show_in_menu',
     'content',
 ])]

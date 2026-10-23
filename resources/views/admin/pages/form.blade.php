@@ -20,10 +20,12 @@
                         {{ html()->checkbox('show_in_menu', ! session()->hasOldInput() && $page->show_in_menu)->class('form-check-input') }}
                         {{ html()->label('Show page in menu', 'show_in_menu')->class('form-check-label') }}
                     </div>
-                    <div class="form-group form-check">
-                        {{ html()->checkbox('requires_login', ! session()->hasOldInput() && $page->requires_login)->class('form-check-input')->id('requires_login') }}
-                        {{ html()->label('Only members who are logged in can view the page', 'requires_login')->class('form-check-label') }}
-                    </div>
+                    @unless($page->hasFixedSlug())
+                        <div class="form-group form-check">
+                            {{ html()->checkbox('requires_login', ! session()->hasOldInput() && $page->requires_login)->class('form-check-input')->id('requires_login') }}
+                            {{ html()->label('Only members who are logged in can view the page', 'requires_login')->class('form-check-label') }}
+                        </div>
+                    @endunless
                 </div>
             </div>
             @isset($parents)
