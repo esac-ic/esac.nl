@@ -11,10 +11,12 @@ Registration forms
     <x-data-table datatable :columns="['Name', 'Actions']">
         @foreach ($registrationForms as $registrationForm)
             <tr>
-                <td>{{$registrationForm->name}}</td>
+                <td><a href="{{ route('admin.registration-forms.show', $registrationForm) }}">{{ $registrationForm->name }}</a></td>
                 <td>
-                    <x-icon-link :href="route('admin.registration-forms.edit', $registrationForm)" icon="edit" title="Edit registration form" />
-                    <x-icon-link :href="route('admin.registration-forms.show', $registrationForm)" icon="eye" title="Show registration form" />
+                    <x-actions-menu :label="$registrationForm->name">
+                        <x-actions-menu.item :href="route('admin.registration-forms.show', $registrationForm)" icon="eye">View</x-actions-menu.item>
+                        <x-actions-menu.item :href="route('admin.registration-forms.edit', $registrationForm)" icon="edit">Edit</x-actions-menu.item>
+                    </x-actions-menu>
                 </td>
             </tr>
         @endforeach

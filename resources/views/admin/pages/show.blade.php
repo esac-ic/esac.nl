@@ -5,15 +5,14 @@ Page
 @endsection
 
 @section('content')
-    <x-page-header title="Page">
+    <x-page-header title="Page" :back="route('admin.pages.index')" back-label="Pages">
         <x-button-link :href="route('admin.pages.edit', $page)" icon="edit">Edit</x-button-link>
-        <x-button-link :href="route('admin.pages.index')" icon="android-arrow-back">Back</x-button-link>
         @if($page->deletable)
-            <x-delete-button :action="route('admin.pages.destroy', $page)" confirm="Are you sure you want to delete this page?" />
+            <x-delete-button :action="route('admin.pages.destroy', $page)" title="Remove page" :confirm="'Remove the page '.$page->name.'?'.($page->children()->exists() ? ' Its sub pages become top-level pages.' : '')" />
         @endif
     </x-page-header>
     <x-card :title="'Page '.$page->name" class="mt-4">
-        <table class="table table-striped" style="width:100%">
+        <table class="table table-striped mb-0">
             <x-detail-row label="Name">{{$page->name}}</x-detail-row>
             <x-detail-row label="Sub page of">{{ $page->parent?->name }}</x-detail-row>
             <x-detail-row label="URL">{{$page->slug}}</x-detail-row>

@@ -5,10 +5,9 @@
 @endsection
 
 @section('content')
-    <x-page-header :title="$mailList->name">
+    <x-page-header :title="$mailList->name" :back="route('admin.mail-lists.index')" back-label="Mail lists">
         <x-button-link href="#" icon="plus" data-toggle="modal" data-target="#add-members-modal">Add members</x-button-link>
-        <x-button-link :href="route('admin.mail-lists.index')" icon="android-arrow-back">Back</x-button-link>
-        <x-delete-button :action="route('admin.mail-lists.destroy', $mailList->id)" confirm="Are you sure you want to delete the mail list?" />
+        <x-delete-button :action="route('admin.mail-lists.destroy', $mailList->id)" title="Delete mail list" :confirm="'Delete '.$mailList->address.'? Mail to it stops arriving, and this can\'t be undone.'" button="Delete" />
     </x-page-header>
     <x-card title="Mail list" class="mt-4">
         <table class="table table-striped dt-responsive nowrap">
@@ -23,7 +22,9 @@
                     <td>{{$member->address}}</td>
                     <td>{{$member->name}}</td>
                     <td>
-                        <x-delete-button icon :action="route('admin.mail-lists.members.destroy', [$mailList->id, $member->address])" :confirm="'Are you sure you want to remove this member from '.$mailList->address.'?'">Remove member</x-delete-button>
+                        <x-actions-menu :label="$member->address">
+                            <x-actions-menu.delete :action="route('admin.mail-lists.members.destroy', [$mailList->id, $member->address])" title="Remove from mail list" :confirm="'Remove '.$member->address.' from '.$mailList->address.'?'">Remove from list</x-actions-menu.delete>
+                        </x-actions-menu>
                     </td>
                 </tr>
             @endforeach

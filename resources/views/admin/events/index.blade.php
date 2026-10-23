@@ -18,18 +18,20 @@
     <x-data-table datatable :data-order="json_encode([[1, 'asc']])" :columns="['Title', 'Start date', 'End date', 'Actions']">
         @foreach ($events as $event)
             <tr>
-                <td>{{ $event->title }}</td>
+                <td><a href="{{ route('admin.events.show', $event) }}">{{ $event->title }}</a></td>
                 <td data-order="{{ $event->start_date->timestamp }}">{{ $event->start_date->format('d-m-Y H:i') }}</td>
                 <td data-order="{{ $event->end_date->timestamp }}">{{ $event->end_date->format('d-m-Y H:i') }}</td>
                 <td>
-                    <x-icon-link :href="route('admin.events.edit', $event)" icon="edit" title="Edit event" />
-                    <x-icon-link :href="route('admin.events.show', $event)" icon="eye" title="Show event" />
-                    @if ($event->registration_form_id)
-                        @can('manage-registrations')
-                            <x-icon-link :href="route('admin.events.registrations.index', $event)" icon="android-list" title="Show registrations" />
-                        @endcan
-                    @endif
-                    <x-icon-link :href="route('admin.events.create', ['copy' => $event])" icon="ios-copy" title="New event based on this one" />
+                    <x-actions-menu :label="$event->title">
+                        <x-actions-menu.item :href="route('admin.events.show', $event)" icon="eye">View</x-actions-menu.item>
+                        <x-actions-menu.item :href="route('admin.events.edit', $event)" icon="edit">Edit</x-actions-menu.item>
+                        @if ($event->registration_form_id)
+                            @can('manage-registrations')
+                                <x-actions-menu.item :href="route('admin.events.registrations.index', $event)" icon="android-list">Registrations</x-actions-menu.item>
+                            @endcan
+                        @endif
+                        <x-actions-menu.item :href="route('admin.events.create', ['copy' => $event])" icon="ios-copy">New event based on this</x-actions-menu.item>
+                    </x-actions-menu>
                 </td>
             </tr>
         @endforeach

@@ -6,10 +6,10 @@ Mail lists
 
 @section('content')
     <x-page-header title="Mail lists">
-        <form method="post"
-              action="{{ route('admin.mail-lists.sync') }}"
-              onsubmit="return confirm('Are you sure?\nThis action adds the members to all mail lists of their member type.\nThis may add people again who unsubscribed from a mail list.')"
-        >
+        <form method="post" action="{{ route('admin.mail-lists.sync') }}"
+              data-confirm-title="Sync member mail lists"
+              data-confirm="Add every member to the mail lists of their member type? This also adds people back who unsubscribed from a list."
+              data-confirm-button="Sync" data-confirm-danger="false">
             @csrf
             <button title="Sync member mail lists" type="submit" class="btn btn-primary"><span class="ion-loop" aria-hidden="true"></span> Sync member mail lists</button>
         </form>    
@@ -18,11 +18,13 @@ Mail lists
     <x-data-table datatable :columns="['Name', 'Email', 'Member count', 'Actions']">
         @foreach ($mailLists as $mailList)
             <tr>
-                <td>{{$mailList->name}}</td>
+                <td><a href="{{ route('admin.mail-lists.show', $mailList->id) }}">{{ $mailList->name }}</a></td>
                 <td>{{$mailList->address}}</td>
                 <td>{{$mailList->members_count}}</td>
                 <td>
-                    <x-icon-link :href="route('admin.mail-lists.show', $mailList->id)" icon="eye" title="Show mail list" />
+                    <x-actions-menu :label="$mailList->name">
+                        <x-actions-menu.item :href="route('admin.mail-lists.show', $mailList->id)" icon="eye">View members</x-actions-menu.item>
+                    </x-actions-menu>
                 </td>
             </tr>
         @endforeach
