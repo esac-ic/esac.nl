@@ -31,7 +31,7 @@ use Illuminate\Support\Facades\Route;
 Route::permanentRedirect('/', '/home');
 
 Route::prefix('admin')->name('admin.')->group(function () {
-    Route::get('home', DashboardController::class)->name('dashboard');
+    Route::get('/', DashboardController::class)->name('dashboard');
 
     Route::get('members/export', MemberExportController::class)->name('members.export');
     Route::singleton('members.membership', MembershipController::class)->creatable()->only(['store', 'destroy'])->parameters(['members' => 'user']);
