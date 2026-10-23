@@ -12,7 +12,7 @@ permissions:
 
 env:
   DB_HOST: 127.0.0.1
-  DB_DATABASE: esac
+  DB_DATABASE: esac_testing
   DB_USERNAME: mysql
   DB_PASSWORD: mysql
   HAS_CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN != '' }}
@@ -113,6 +113,7 @@ jobs:
     - name: Build and push Docker image
       uses: docker/build-push-action@c3c9e263c25d99ce0380d002d59b67737d91b0dc # v7.4.0
       with:
+        target: production
         push: ${{ github.event_name != 'pull_request' }}
         pull: true
         tags: ${{ steps.meta.outputs.tags }}
