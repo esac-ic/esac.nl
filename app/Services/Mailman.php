@@ -87,7 +87,7 @@ class Mailman
     public function mailListsOf(string $member): Collection
     {
         // Mailman answers 404 when the member is on no list.
-        $response = $this->http()->post('/lists/find', ['subscriber' => $member])->throwUnlessStatus(404);
+        $response = $this->http()->post('/lists/find', ['subscriber' => $member])->throwUnless(fn ($response) => $response->notFound());
 
         return $response->notFound() ? collect() : $response->collect('entries')->map($this->toMailList(...));
     }
@@ -115,7 +115,7 @@ class Mailman
      */
     public function removeMember(string $mailListId, string $memberEmail): void
     {
-        $this->http()->delete("/lists/$mailListId/member/$memberEmail")->throwUnlessStatus(404);
+        $this->http()->delete("/lists/$mailListId/member/$memberEmail")->throwUnless(fn ($response) => $response->notFound());
     }
 
     /**
@@ -132,7 +132,7 @@ class Mailman
             'pre_verified' => true,
             'pre_confirmed' => true,
             'pre_approved' => true,
-        ])->throwUnlessStatus(409);
+        ])->throwUnless(fn ($response) => $response->conflict());
     }
 
     /** @throws RequestException */
