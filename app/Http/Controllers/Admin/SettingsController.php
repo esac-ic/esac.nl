@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Enums\MemberType;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\SettingsRequest;
 use App\Models\Setting;
@@ -20,14 +21,12 @@ class SettingsController extends Controller implements HasMiddleware
         ];
     }
 
-    public function show(): View
-    {
-        return view('admin.settings.show', ['settings' => Setting::all()]);
-    }
-
     public function edit(): View
     {
-        return view('admin.settings.edit', ['settings' => Setting::all()]);
+        return view('admin.settings.edit', [
+            'settings' => Setting::query()->pluck('value', 'name'),
+            'memberTypes' => MemberType::cases(),
+        ]);
     }
 
     public function update(SettingsRequest $request): RedirectResponse
@@ -37,6 +36,6 @@ class SettingsController extends Controller implements HasMiddleware
             Setting::query()->where('name', $name)->update(['value' => $value ?? '']);
         }
 
-        return to_route('admin.settings.show')->with('message', 'Settings updated');
+        return to_route('admin.settings.edit')->with('message', 'Settings updated');
     }
 }
