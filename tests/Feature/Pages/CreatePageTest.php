@@ -78,7 +78,7 @@ class CreatePageTest extends TestCase
     #[Test]
     public function other_roles_can_not_create_a_page()
     {
-        $this->actingAs(User::factory()->withRole(AdminRole::Administrator, AdminRole::EventAdministrator, AdminRole::CertificateAdministrator)->create());
+        $this->actingAs(User::factory()->withRole(AdminRole::EventAdministrator, AdminRole::CertificateAdministrator)->create());
 
         $this->post('admin/pages', $this->body())->assertForbidden();
 

@@ -24,8 +24,7 @@ class EventRegistrationController extends Controller implements HasMiddleware
     public static function middleware(): array
     {
         return [
-            new Middleware('can:manage-events', except: ['destroy']),
-            new Middleware('can:delete-registration', only: ['destroy']),
+            new Middleware('can:manage-registrations'),
         ];
     }
 

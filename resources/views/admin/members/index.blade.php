@@ -29,7 +29,9 @@ Current members
                 <td>{{ $user->member_type?->label() }}</td>
                 <td>@foreach($user->roles as $role) {{$role->id}}@endforeach</td>
                 <td>
-                    <x-icon-link :href="route('admin.members.edit', $user)" icon="edit" title="Edit member" />
+                    @can('manage-members')
+                        <x-icon-link :href="route('admin.members.edit', $user)" icon="edit" title="Edit member" />
+                    @endcan
                     <x-icon-link :href="route('admin.members.show', $user)" icon="eye" title="Show member" />
                 </td>
             </tr>

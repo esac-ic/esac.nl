@@ -11,15 +11,15 @@ trait ManagesRegistrationForms
     public static function managingRoles(): array
     {
         return [
+            'administrator' => [AdminRole::Administrator],
             'content administrator' => [AdminRole::ContentAdministrator],
-            'activity administrator' => [AdminRole::EventAdministrator],
+            'event administrator' => [AdminRole::EventAdministrator],
         ];
     }
 
     public static function otherRoles(): array
     {
         return [
-            'administrator' => [AdminRole::Administrator],
             'certificate administrator' => [AdminRole::CertificateAdministrator],
         ];
     }
