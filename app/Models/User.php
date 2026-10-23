@@ -219,13 +219,16 @@ class User extends Authenticatable
         return $this->membership_ended_on === null && $this->pending_since === null;
     }
 
+    /**
+     * Ends the membership and logs the former member out everywhere: their sessions and remember-me cookies stop working.
+     */
     public function endMembership(): void
     {
         $this->membership_ended_on = today(config('app.display_timezone'));
         $this->roles = collect();
-        // Logs them out everywhere: their sessions and remember-me cookies stop working
         $this->setRememberToken(Str::random(60));
         $this->save();
+
         DB::table(config('session.table'))->where('user_id', $this->id)->delete();
 
         MembershipEnded::dispatch($this);

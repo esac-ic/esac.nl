@@ -32,7 +32,7 @@ class AccountController extends Controller
 
     public function update(AccountRequest $request): RedirectResponse
     {
-        $request->user()->updateFromForm($request->validated());
+        $request->user()->updateFromForm($request->safe()->except('current_password'));
 
         return to_route('account.show');
     }

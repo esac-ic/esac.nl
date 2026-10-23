@@ -30,6 +30,12 @@ class AccountRequest extends FormRequest
             // Leaving the password empty keeps the current one.
             'password' => [Rule::excludeIf($this->isNotFilled('password')), 'required', 'confirmed', Password::defaults()],
             'direct_debit' => ['boolean'],
+            // A new email address or password takes the current password, so a session left open isn't enough to take over the account.
+            'current_password' => [
+                Rule::excludeIf($this->isNotFilled('password') && $this->input('email') === $this->user()->email),
+                'required',
+                'current_password',
+            ],
         ];
     }
 }
