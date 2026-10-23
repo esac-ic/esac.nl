@@ -5,7 +5,6 @@ namespace App\Http\Requests;
 use App\Http\Requests\Concerns\ValidatesMemberDetails;
 use App\Rules\Recaptcha;
 use Illuminate\Foundation\Http\FormRequest;
-use Illuminate\Validation\Rules\Password;
 
 class SignUpRequest extends FormRequest
 {
@@ -15,19 +14,11 @@ class SignUpRequest extends FormRequest
     {
         return [
             ...$this->memberDetailRules(),
-            'password' => ['required', 'confirmed', Password::defaults()],
-            'g-recaptcha-response' => ['required', new Recaptcha],
+            'password' => $this->passwordRules(),
+            'g-recaptcha-response' => ['required', new Recaptcha, 'exclude'],
             'direct_debit' => ['accepted'],
-            'privacy_policy' => ['required'],
-            'terms_and_conditions' => ['required'],
+            'privacy_policy' => ['accepted', 'exclude'],
+            'terms_and_conditions' => ['accepted', 'exclude'],
         ];
-    }
-
-    /**
-     * An unchecked checkbox isn't posted.
-     */
-    protected function prepareForValidation(): void
-    {
-        $this->merge(['direct_debit' => $this->boolean('direct_debit')]);
     }
 }

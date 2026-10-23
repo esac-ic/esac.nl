@@ -17,7 +17,7 @@ class EventRegistrationsExport extends SpreadsheetExport
     public function collection(): Collection
     {
         // Anonymised registrations have no one to export
-        return $this->event->registrations()->whereNotNull('user_id')->with(['user', 'answers'])->get();
+        return $this->event->registrations()->whereNotNull('user_id')->with(['user', 'answers.field'])->get();
     }
 
     /**
@@ -38,7 +38,7 @@ class EventRegistrationsExport extends SpreadsheetExport
             $user->email,
             $user->phone_number,
             $user->birthday?->format('d-m-Y'),
-            ...$this->fields()->map(fn (RegistrationFormField $field) => $registration->answers->firstWhere('registration_form_field_id', $field->id)?->value),
+            ...$this->fields()->map(fn (RegistrationFormField $field) => $registration->answers->firstWhere('registration_form_field_id', $field->id)?->formatted_value),
         ];
     }
 

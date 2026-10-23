@@ -84,8 +84,8 @@ class SignUpFormTest extends TestCase
                 'iban' => 'Field IBAN is required',
                 'g-recaptcha-response' => "'I'm not a robot' validation is required",
                 'direct_debit' => 'The direct debit field must be accepted.',
-                'privacy_policy' => 'Field Privacy Policy is required',
-                'terms_and_conditions' => 'Field Terms and Conditions is required',
+                'privacy_policy' => 'The Privacy Policy field must be accepted.',
+                'terms_and_conditions' => 'The Terms and Conditions field must be accepted.',
             ]);
 
         $this->assertCount(22, session('errors'));

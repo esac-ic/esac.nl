@@ -35,12 +35,8 @@ class RegistrationFormField extends Model
         $optionIds = [];
 
         foreach ($options as $optionData) {
-            if (array_key_exists('id', $optionData)) {
-                $option = $this->options()->findOrFail($optionData['id']);
-                $option->update($optionData);
-            } else {
-                $option = $this->options()->create($optionData);
-            }
+            $option = $this->options()->findOrNew($optionData['id'] ?? null);
+            $option->fill($optionData)->save();
             $optionIds[] = $option->id;
         }
 

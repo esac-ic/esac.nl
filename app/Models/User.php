@@ -234,20 +234,18 @@ class User extends Authenticatable
 
     public function restoreMembership(): void
     {
-        DB::transaction(function () {
-            $this->membership_ended_on = null;
-            $this->save();
-            MembershipRestored::dispatch($this);
-        });
+        $this->membership_ended_on = null;
+        $this->save();
+
+        MembershipRestored::dispatch($this);
     }
 
     public function approveSignUp(): void
     {
-        DB::transaction(function () {
-            $this->pending_since = null;
-            $this->save();
-            SignUpApproved::dispatch($this);
-        });
+        $this->pending_since = null;
+        $this->save();
+
+        SignUpApproved::dispatch($this);
     }
 
     /**

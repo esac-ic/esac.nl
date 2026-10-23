@@ -17,9 +17,10 @@ class StoreZekeringTest extends TestCase
     {
         $user = User::factory()->create();
 
-        $this->actingAs($user)->post(route('api.zekeringen.store'), ['text' => 'Top'])->assertRedirect(route('zekeringen'));
+        $this->actingAs($user)->from(route('zekeringen'))->post(route('zekeringen.store'), ['text' => ' '])->assertRedirect(route('zekeringen'))->assertSessionHasErrors('text');
+        $this->actingAs($user)->post(route('zekeringen.store'), ['text' => 'Top'])->assertRedirect(route('zekeringen'));
         $parent = Zekering::sole();
-        $this->actingAs($user)->post(route('api.zekeringen.children.store'), ['text' => 'Reply', 'parent_id' => $parent->id])->assertOk();
+        $this->actingAs($user)->post(route('api.zekeringen.children.store'), ['text' => 'Reply', 'parent_id' => $parent->id])->assertCreated();
 
         $this->assertEquals(
             [

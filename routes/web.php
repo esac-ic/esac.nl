@@ -25,6 +25,7 @@ use App\Http\Controllers\EventFeedController;
 use App\Http\Controllers\RegistrationController;
 use App\Http\Controllers\SignUpController;
 use App\Http\Controllers\SiteController;
+use App\Http\Controllers\ZekeringController;
 use Illuminate\Support\Facades\Route;
 
 Route::resourceParameters(['members' => 'user', 'pending-members' => 'pending_member']);
@@ -82,6 +83,7 @@ Route::middleware('auth')->group(function () {
 
     Route::get('members', [SiteController::class, 'members'])->name('members.index');
     Route::get('zekeringen', [SiteController::class, 'zekeringen'])->name('zekeringen');
+    Route::post('zekeringen', [ZekeringController::class, 'store'])->name('zekeringen.store');
 
     // A member's registration for an event
     Route::controller(RegistrationController::class)->prefix('events/{event}/registration')->name('events.registration.')->group(function () {
