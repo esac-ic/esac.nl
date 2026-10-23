@@ -27,12 +27,12 @@ class MailListMemberController extends Controller implements HasMiddleware
 
     public function store(Request $request, string $mailList): RedirectResponse
     {
-        $request->validate([
+        $memberIds = $request->validate([
             'member_ids' => ['required', 'array'],
             'member_ids.*' => ['integer', Rule::exists('users', 'id')],
-        ]);
+        ])['member_ids'];
 
-        foreach (User::query()->findMany($request->input('member_ids')) as $member) {
+        foreach (User::query()->findMany($memberIds) as $member) {
             $this->mailman->addMember($mailList, $member->email, $member->name);
         }
 
