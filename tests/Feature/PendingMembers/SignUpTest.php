@@ -66,4 +66,13 @@ class SignUpTest extends TestCase
         Event::assertNotDispatched(MemberSignedUp::class);
         Http::assertSent(fn ($request) => $request['response'] === 'invalid');
     }
+
+    #[Test]
+    public function a_sign_up_on_a_blocked_email_domain_is_rejected()
+    {
+        Http::fake(['www.google.com/recaptcha/*' => Http::response(['success' => true])]);
+
+        $this->post(route('sign-up.store'), ['email' => 'student@student.tue.nl'])
+            ->assertInvalid(['email' => 'Email addresses ending in @student.tue.nl']);
+    }
 }

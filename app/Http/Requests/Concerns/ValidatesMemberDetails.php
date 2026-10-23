@@ -2,7 +2,7 @@
 
 namespace App\Http\Requests\Concerns;
 
-use App\Rules\NotBlockedEmailDomain;
+use App\Settings\SiteSettings;
 use Illuminate\Validation\Rule;
 use Symfony\Component\Intl\Countries;
 
@@ -19,7 +19,7 @@ trait ValidatesMemberDetails
                 'email',
                 'max:255',
                 Rule::unique('users')->ignore($ignoreUserId),
-                new NotBlockedEmailDomain,
+                'doesnt_end_with:'.collect(app(SiteSettings::class)->blocked_email_domains)->map(fn (string $domain) => "@$domain")->implode(','),
             ],
             'first_name' => ['required', 'max:255'],
             'preposition' => ['nullable', 'max:255'],

@@ -3,17 +3,14 @@
 namespace App\Providers;
 
 use App\Enums\AdminRole;
-use App\Enums\SettingKey;
-use App\Models\Setting;
 use App\Models\User;
+use App\Settings\SiteSettings;
 use App\View\Composers\MenuComposer;
 use Illuminate\Auth\Access\Response;
 use Illuminate\Pagination\Paginator;
 use Illuminate\Support\Facades\Gate;
-use Illuminate\Support\Facades\Queue;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\View;
-use Illuminate\Support\Once;
 use Illuminate\Support\ServiceProvider;
 use Symfony\Component\Intl\Countries;
 
@@ -34,9 +31,6 @@ class AppServiceProvider extends ServiceProvider
 
         Paginator::useBootstrapFour();
 
-        // A queue worker runs many jobs in one process, so each job reads the settings afresh.
-        Queue::before(fn () => Once::flush());
-
         // Kosovo has no official ISO code yet, so it's only listed with the user-assigned XK.
         Countries::withUserAssigned(true);
 
@@ -44,7 +38,7 @@ class AppServiceProvider extends ServiceProvider
         View::composer(['site.sign-up', 'components.member-fields', 'components.member-tabs'], fn ($view) => $view->with('countries', Countries::getNames()));
         View::composer('includes.footer', fn ($view) => $view->with(
             'footerPhoneNumber',
-            Setting::valueOf(SettingKey::FooterPhoneNumber),
+            app(SiteSettings::class)->footer_phone_number,
         ));
     }
 

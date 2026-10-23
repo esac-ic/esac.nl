@@ -14,6 +14,9 @@ return [
         'bic' => 'BIC',
     ],
     'custom' => [
+        'email' => [
+            'doesnt_end_with' => 'Email addresses ending in :values can not be used, so that you keep receiving our emails after you graduate',
+        ],
         'g-recaptcha-response' => [
             'required' => "'I'm not a robot' validation is required",
         ],
