@@ -34,14 +34,14 @@ class MemberLogController extends Controller implements HasMiddleware
         $request->validate([
             'types' => ['nullable', 'array'],
             'types.*' => ['string'],
-            'start_date' => ['required', 'date_format:d-m-Y H:i'],
-            'end_date' => ['required', 'date_format:d-m-Y H:i'],
+            'start_date' => ['required', 'date'],
+            'end_date' => ['required', 'date', 'after_or_equal:start_date'],
         ]);
 
         $export = new MemberLogExport(
             $request->input('types'),
-            $request->date('start_date', 'd-m-Y H:i', config('app.display_timezone'))->utc(),
-            $request->date('end_date', 'd-m-Y H:i', config('app.display_timezone'))->utc(),
+            $request->date('start_date', tz: config('app.display_timezone'))->utc(),
+            $request->date('end_date', tz: config('app.display_timezone'))->utc(),
         );
 
         return $export->download($export->fileName().'.xlsx');

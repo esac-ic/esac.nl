@@ -96,8 +96,8 @@ class ExportTest extends TestCase
         MemberLogEntry::factory()->create(['user_id' => $this->admin->id, 'created_at' => now()->subWeek()]);
 
         $response = $this->post('admin/member-log/export', [
-            'start_date' => now()->subDay()->format('d-m-Y H:i'),
-            'end_date' => now()->addDay()->format('d-m-Y H:i'),
+            'start_date' => now()->subDay()->toDateTimeLocalString('minute'),
+            'end_date' => now()->addDay()->toDateTimeLocalString('minute'),
         ]);
 
         [$sheet, $rows] = $this->readSpreadsheet($response);

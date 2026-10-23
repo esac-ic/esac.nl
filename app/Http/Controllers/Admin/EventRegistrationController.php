@@ -76,7 +76,7 @@ class EventRegistrationController extends Controller implements HasMiddleware
 
         $registration->delete();
 
-        return to_route('admin.events.registrations.index', $event);
+        return back();
     }
 
     public function export(Event $event): StreamedResponse

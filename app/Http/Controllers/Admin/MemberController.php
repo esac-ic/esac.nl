@@ -51,7 +51,7 @@ class MemberController extends Controller implements HasMiddleware
     {
         Gate::authorize('view', $user);
 
-        return view('admin.members.show', ['user' => $user]);
+        return view('admin.members.show', ['user' => $user->load('registrations.event')]);
     }
 
     public function edit(User $user): View

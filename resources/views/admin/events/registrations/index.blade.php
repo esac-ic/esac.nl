@@ -34,7 +34,11 @@ Registrations: {{ $event->title }}
 
                 <td>
                     <a href="{{ route('admin.events.registrations.show', [$event, $registration]) }}"><span title="Show entered information" class="ion-eye" aria-hidden="true"></span></a>
-                    <a href="#" class="js-delete-registration" data-destroy-url="{{ route('admin.events.registrations.destroy', [$event, $registration]) }}"><span  class="ion-trash-a"></span></a>
+                    <form class="d-inline" method="post" action="{{ route('admin.events.registrations.destroy', [$event, $registration]) }}" onsubmit="return confirm('Are you sure you want to remove this registration?');">
+                        @csrf
+                        @method('DELETE')
+                        <button type="submit" class="btn btn-link p-0"><span title="Remove registration" class="ion-trash-a" aria-hidden="true"></span></button>
+                    </form>
                 </td>
             </tr>
         @endforeach
@@ -42,24 +46,3 @@ Registrations: {{ $event->title }}
     </table>
 @endsection
 
-@push('scripts')
-    <script>
-        $(document).on('click', '.js-delete-registration', function(){
-            var url = $(this).attr('data-destroy-url');
-            $.ajax({
-                url: url,
-                beforeSend: function(request) {
-                    request.setRequestHeader("X-CSRF-TOKEN", $('meta[name="csrf-token"]').attr('content'));
-                },
-                method: 'DELETE',
-                contentType: 'application/json',
-                success: function() {
-                    window.location.reload();
-                },
-                error: function() {
-                    window.location.reload();
-                }
-            });
-        });
-    </script>
-@endpush

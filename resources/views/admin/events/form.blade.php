@@ -2,28 +2,18 @@
 
 @section('title', $event->exists ? 'Edit event' : 'New event')
 
-@push('styles')
-<link rel="stylesheet" type="text/css" href="{{mix("css/vendor/tempusdominus.css")}}">
-@endpush
-
 @section('content')
     <x-validation-errors />
 
     {{ html()->form($event->exists ? 'PATCH' : 'POST', $event->exists ? route('admin.events.update', $event) : route('admin.events.store'))->acceptsFiles()->open() }}
     <x-card title="General information">
         <div class="form-row">
-            <div class="form-group col-md-6">
-                <x-date-picker name="start_date" id="startDate" label="Start date" :value="($event->start_date ?? now(config('app.display_timezone')))->format('d-m-Y H:i')" />
-            </div>
-            <div class="form-group col-md-6">
-                <x-date-picker name="end_date" id="endDate" label="End date" :value="($event->end_date ?? now(config('app.display_timezone')))->format('d-m-Y H:i')" />
-            </div>
+            <x-field type="datetime-local" name="start_date" label="Start date" :value="($event->start_date ?? now(config('app.display_timezone')))->toDateTimeLocalString('minute')" col="6" required />
+            <x-field type="datetime-local" name="end_date" label="End date" :value="($event->end_date ?? now(config('app.display_timezone')))->toDateTimeLocalString('minute')" col="6" required />
         </div>
         <div class="form-row">
             <x-field name="registration_form_id" label="Registration form" :options="['' => 'No registration form'] + $registrationForms" :value="$event->registration_form_id" col="6" />
-            <div class="form-group col-md-6" id="registration-deadline-group">
-                <x-date-picker name="registration_deadline" id="registration_deadline" label="Registration deadline" :value="($event->exists ? ($event->registration_deadline ?? now(config('app.display_timezone'))) : now(config('app.display_timezone'))->subDays(7))->format('d-m-Y H:i')" />
-            </div>
+            <x-field type="datetime-local" name="registration_deadline" label="Registration deadline (with a registration form)" :value="($event->exists ? ($event->registration_deadline ?? now(config('app.display_timezone'))) : now(config('app.display_timezone'))->subDays(7))->toDateTimeLocalString('minute')" col="6" />
         </div>
         <div class="form-row">
             <x-field name="event_category_id" label="Category" :options="$eventCategories" :value="$event->event_category_id" col="6" required />
@@ -36,16 +26,13 @@
     <x-card title="Image" class="mt-4">
         <span>Image</span>
         <div class="form-group mt-2">
-            <div class="custom-file">
-                <input type="file" class="custom-file-input" id="thumbnail" name="thumbnail" @required(! $event->exists)>
-                <label class="custom-file-label" for="thumbnail">Choose file</label>
-            </div>
+            <input type="file" class="form-control-file" id="thumbnail" name="thumbnail" @required(! $event->exists)>
         </div>
     </x-card>
     <x-card title="Content" class="mt-4">
         <x-field name="title" label="Title" :value="$event->title" required />
         <x-field name="short_description" label="Short description (max. 100 characters)" :value="$event->short_description" required maxlength="100" />
-        <x-field name="text" label="Content" type="textarea" :value="$event->text" />
+        <x-field name="text" id="content" label="Content" type="textarea" :value="$event->text" />
     </x-card>
 
     <div class="my-4">
@@ -55,53 +42,3 @@
     </div>
 @endsection
 
-@push('scripts')
-<script src="{{mix("js/vendor/moment.js")}}"></script>
-<script src="{{mix("js/vendor/tempusdominus.js")}}"></script>
-<script>
-    $('.custom-file-input').on('change', function() {
-        let fileName = $(this).val().split('\\').pop();
-        $(this).next('.custom-file-label').addClass("selected").html(fileName);
-    });
-    $('#startDateBox, #endDateBox, #registration_deadlineBox').datetimepicker({
-        icons: {
-            time: 'ion-clock',
-            date: 'ion-calendar',
-            up: 'ion-android-arrow-up',
-            down: 'ion-android-arrow-down',
-            previous: 'ion-chevron-left',
-            next: 'ion-chevron-right',
-            today: 'ion-calendar',
-            clear: 'ion-trash-a',
-            close: 'ion-close'
-        }
-    });
-
-    $(function () {
-        $('#startDateBox').datetimepicker();
-        $('#startDateBox').datetimepicker();
-        $('#endDateBox').datetimepicker({
-            useCurrent: false
-        });
-        $("#startDateBox").on("change.datetimepicker", function (e) {
-            $('#endDateBox').datetimepicker('minDate', e.date);
-        });
-        $("#endDateBox").on("change.datetimepicker", function (e) {
-            $('#startDateBox').datetimepicker('maxDate', e.date);
-        });
-    });
-
-    $(document).ready(function() {
-        $('#text').summernote(summernoteSettings);
-    });
-
-    $('#registration_form_id').change(function(){
-        if($('#registration_form_id').val() === ""){
-            $('#registration-deadline-group').hide();
-        } else {
-            $('#registration-deadline-group').show();
-        }
-    })
-    $("#registration_form_id").change();
-</script>
-@endpush
