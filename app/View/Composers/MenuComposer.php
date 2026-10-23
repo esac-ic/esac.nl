@@ -8,19 +8,15 @@ use Illuminate\View\View;
 class MenuComposer
 {
     /**
-     * Gives the menu its ordered top-level items and, per item id, its ordered child items.
+     * Gives the menu its ordered top-level items with their ordered child items.
      */
     public function compose(View $view): void
     {
-        $itemsByParent = MenuItem::query()->inMenu()->ordered()->get()->groupBy('parent_id');
-
-        $menuItems = $itemsByParent->get('', collect());
-
-        $view->with([
-            'menuItems' => $menuItems,
-            'childMenuItems' => $menuItems->mapWithKeys(fn (MenuItem $item) => [
-                $item->id => $itemsByParent->get($item->id, collect()),
-            ])->all(),
-        ]);
+        $view->with('menuItems', MenuItem::query()
+            ->inMenu()
+            ->whereNull('parent_id')
+            ->with(['children' => fn ($query) => $query->inMenu()->ordered()])
+            ->ordered()
+            ->get());
     }
 }
