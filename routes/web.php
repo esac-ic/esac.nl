@@ -90,8 +90,8 @@ Route::middleware('auth')->group(function () {
     });
 });
 
-Route::get('sign-up', [SignUpController::class, 'create'])->name('signup.create');
-Route::post('sign-up', [SignUpController::class, 'store'])->name('signup.store')->middleware('throttle:20,1');
+Route::get('sign-up', [SignUpController::class, 'create'])->name('sign-up.create');
+Route::post('sign-up', [SignUpController::class, 'store'])->name('sign-up.store')->middleware('throttle:20,1');
 
 Route::get('events.ics', EventFeedController::class)->name('events.feed');
 // Calendar apps keep polling the URL they subscribed to, and not all of them follow redirects.
@@ -101,7 +101,7 @@ Route::get('ical', EventFeedController::class);
 Route::permanentRedirect('agenda', '/events');
 Route::permanentRedirect('agenda/{event}', '/events/{event}');
 Route::permanentRedirect('memberlist', '/members');
-Route::get('signup', fn () => to_route('signup.create', status: 301));
+Route::get('signup', fn () => to_route('sign-up.create', status: 301));
 Route::get('forms/{event}', fn (string $event) => to_route('events.registration.create', $event, 301));
 
 Route::controller(SiteController::class)->group(function () {
@@ -109,9 +109,9 @@ Route::controller(SiteController::class)->group(function () {
     Route::get('events', 'events')->name('events.index');
     Route::get('events/{event}', 'showEvent')->name('events.show');
     Route::get('news', 'news')->name('news.index');
-    Route::get('news/{newsItem}', 'showNewsItem')->name('news.show');
+    Route::get('news/{news_item}', 'showNewsItem')->name('news.show');
     Route::get('library', 'library')->name('library');
     Route::get('members', 'members')->name('members.index');
     Route::get('zekeringen', 'zekeringen')->name('zekeringen');
-    Route::get('{menuItem:slug}', 'showPage')->name('pages.show');
+    Route::get('{menu_item:slug}', 'showPage')->name('pages.show');
 });

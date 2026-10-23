@@ -9,11 +9,11 @@
         <div class="col-lg-2 fixed-left px-0 pt-lg-5 h-lg-100" style="z-index:100">
             <nav class="navbar navbar-expand-lg navbar-light bg-white border-right h-lg-100">
                 <a class="navbar-brand d-lg-none" href="{{ route('admin.dashboard') }}">Dashboard</a>
-                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarDashboard" aria-controls="navbarDashboard" aria-expanded="false" aria-label="Toggle navigation">
+                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#admin-menu" aria-controls="admin-menu" aria-expanded="false" aria-label="Toggle navigation">
                     <span class="ion-ios-arrow-down h4"></span>
                 </button>
 
-              <div class="collapse navbar-collapse align-self-start" id="navbarDashboard">
+              <div class="collapse navbar-collapse align-self-start" id="admin-menu">
                 <ul class="navbar-nav mr-auto mt-2 mt-lg-0 flex-lg-column">
                     <li class="nav-item active">
                         <span class="nav-link">

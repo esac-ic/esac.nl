@@ -20,9 +20,9 @@
                         <form v-if="checkIfCurrentUserSignedUp()" method="POST" :action="agenda.registrationUrl">
                             <input type="hidden" name="_method" value="DELETE">
                             <input type="hidden" name="_token" :value="csrfToken">
-                            <button type="submit" class="btn btn-outline-danger">{{unregisterText}}</button>
+                            <button type="submit" class="btn btn-outline-danger">Unregister</button>
                         </form>
-                        <a v-if="!checkIfCurrentUserSignedUp()" class="btn btn-outline-primary" :href="agenda.registrationUrl">{{registerText}}</a>
+                        <a v-if="!checkIfCurrentUserSignedUp()" class="btn btn-outline-primary" :href="agenda.registrationUrl">Register now</a>
                     </div>
                 </div>
             </div>
@@ -44,16 +44,9 @@
         },
         data() {
             return {
-                unregisterText: 'Unregister',
-                registerText: 'Register now',
                 csrfToken: window.Laravel.csrfToken,
             }
         },
-        mounted() {
-            this.unregisterText = 'Unregister'
-            this.registerText = 'Register now'
-
-        }
     }
 </script>
 
