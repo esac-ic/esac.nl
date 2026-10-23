@@ -64,7 +64,7 @@
                             </div>
                             <div class="col-auto">
                                 @guest
-                                    Please log in to register
+                                    <a class="btn btn-outline-primary" href="{{ route('login') }}">Log in to register</a>
                                 @else
                                     @if($event->isRegistrationOpen())
                                         <a class="btn btn-outline-primary" href="{{ route('events.registration.create', $event) }}">Register now</a>

@@ -8,16 +8,15 @@
                     <img class="card-img-top" src="{{$event->image_url}}" alt="">
                     <div class="card-body">
                         <h3 class="card-title">{{$event->title}}</h3>
-                        <p class="card-text">
-                            From
-                            <span class="badge badge-secondary font-size-100">{{ $event->start_date->format('d M H:i') }}</span>
-                            to
-                            <span class="badge badge-secondary font-size-100">{{ $event->end_date->format('d M H:i') }}</span>
+                        @php($sameDay = $event->start_date->isSameDay($event->end_date))
+                        <p class="card-text mb-2">
+                            <span class="ion-calendar text-muted mr-1" aria-hidden="true"></span>
+                            {{ $event->start_date->format('D j M Y, H:i') }} –
+                            {{ $event->end_date->format($sameDay ? 'H:i' : 'D j M Y, H:i') }}
                         </p>
                         @if($event->isRegistrationOpen())
-                            <p class="card-text">
-                                Registration closes
-                                <span class="badge badge-secondary font-size-100">{{ $event->registration_deadline->format('d M H:i') }}</span>
+                            <p class="card-text text-muted">
+                                Registration closes {{ $event->registration_deadline->format('D j M, H:i') }}
                             </p>
                         @endif
                     </div>
@@ -31,7 +30,7 @@
                             <div class="col-auto">
                                 @if($event->registration_form_id != null)
                                     @guest
-                                        Please log in to register
+                                        <a class="btn btn-outline-primary" href="{{ route('login') }}">Log in to register</a>
                                     @else
                                         @if($event->isRegistrationOpen())
                                             @if($registrations->contains('user_id', auth()->id()))
@@ -61,18 +60,20 @@
                         @if($event->registration_form_id != null && auth()->check())
                             <h4 class="card-title">Registrations</h4>
                             <ol class="column-count-lg-3">
-                                @foreach($registrations as $registration)
+                                @forelse($registrations as $registration)
                                     <li>{{ $registration->user->name }}
                                         @if($event->shows_certificates && $registration->user->certificates->isNotEmpty())
                                             ({{ $registration->user->certificate_abbreviations }})
                                         @endif
                                     </li>
-                                @endforeach
+                                @empty
+                                    <p class="text-muted">No registrations yet.</p>
+                                @endforelse
                             </ol>
                         @endif
                     </div>
                     <div class="card-footer bg-white p-3">
-                        <a class="btn btn-outline-primary" href="{{ route('events.index') }}"><span class="ion-android-arrow-back"></span> Back to the events</a>
+                        <a class="btn btn-outline-primary" href="{{ route('events.index') }}"><span class="ion-android-arrow-back" aria-hidden="true"></span> Back to events</a>
                     </div>
                 </div>
             </div>
