@@ -1,15 +1,20 @@
+# Local dev only: Compose loads this automatically, so never copy it to the production server
 services:
   app:
     image: esac-app-dev
     build:
       context: .
       target: dev
-    env_file: !override []
+    # Your user id, so created files are yours (on Linux, set UID/GID in .env if `id -u` isn't 1000)
+    user: "${UID:-1000}:${GID:-1000}"
+    # Laravel reads the mounted .env itself, so edits apply without recreating the container
+    env_file: !reset []
     environment:
-      SERVER_NAME: localhost:80
+      # Any host, so 127.0.0.1 and your LAN IP work too
+      SERVER_NAME: :80
       CADDY_EXTRA_CONFIG: ""
       CADDY_GLOBAL_OPTIONS: "auto_https off"
-      XDEBUG_MODE: ${SAIL_XDEBUG_MODE:-off}
+      XDEBUG_MODE: ${XDEBUG_MODE:-off}
       XDEBUG_CONFIG: client_host=host.docker.internal
     extra_hosts:
       - host.docker.internal:host-gateway
@@ -17,35 +22,47 @@ services:
       - "${APP_PORT:-8000}:80"
     volumes: !override
       - .:/app
+    restart: !reset
+    # Lets `up --wait` return once the site loads; the first start takes a few minutes
+    healthcheck:
+      test: ["CMD", "curl", "-fso", "/dev/null", "http://localhost/login"]
+      start_period: 10m
+      start_interval: 2s
     depends_on:
       mailpit:
         condition: service_started
-      mailman:
-        condition: service_healthy
+      mailman-setup:
+        condition: service_completed_successfully
+
+  # Rebuilds the CSS and JS on every change
+  assets:
+    image: esac-app-dev
+    build:
+      context: .
+      target: dev
+    user: "${UID:-1000}:${GID:-1000}"
+    volumes:
+      - .:/app
+    entrypoint: ["sh", "-c"]
+    command:
+      - |
+        [ package-lock.json -ot node_modules/.package-lock.json ] || npm ci --no-audit --no-fund
+        exec npm run watch
+    # The image's healthcheck probes FrankenPHP, which doesn't run here
+    healthcheck:
+      disable: true
 
   mysql:
     ports:
       - "${FORWARD_DB_PORT:-3306}:3306"
-
-  mysql-test:
-    image: mysql:8.4
-    environment:
-      MYSQL_DATABASE: ${DB_DATABASE}
-      MYSQL_USER: ${DB_USERNAME}
-      MYSQL_PASSWORD: ${DB_PASSWORD}
-      MYSQL_RANDOM_ROOT_PASSWORD: "yes"
-    command: --innodb-buffer-pool-size=128M --performance-schema=OFF --max-connections=30
-    tmpfs:
-      - /var/lib/mysql
-    healthcheck:
-      test: ["CMD-SHELL", "mysqladmin ping -h 127.0.0.1 --silent"]
-      interval: 5s
-      retries: 20
-    profiles:
-      - test
+    # Creates the test database along with a new volume
+    configs:
+      - source: test-db
+        target: /docker-entrypoint-initdb.d/test-db.sql
+    restart: !reset
 
   mailpit:
-    image: axllent/mailpit:latest
+    image: axllent/mailpit:v1.32.0
     ports:
       - "${FORWARD_MAILPIT_PORT:-1025}:1025"
       - "${FORWARD_MAILPIT_DASHBOARD_PORT:-8025}:8025"
@@ -60,11 +77,36 @@ services:
     ports:
       - "${FORWARD_MAILMAN_PORT:-8001}:8001"
     volumes:
-      - sail-mailman:/opt/mailman
+      - mailman-data:/opt/mailman
     healthcheck:
       test: ["CMD", "bash", "-c", "cat < /dev/null > /dev/tcp/localhost/8001"]
-      retries: 3
-      timeout: 5s
+      start_period: 2m
+      start_interval: 2s
+
+  # Creates the mailing lists the member sync expects, if missing
+  mailman-setup:
+    image: curlimages/curl:8.11.1
+    environment:
+      AUTH: ${MAIL_MAN_USERNAME:-restadmin}:${MAIL_MAN_PASSWORD:-restpass}
+    entrypoint: ["sh", "-ec"]
+    command:
+      - |
+        api=http://mailman:8001/3.1
+        curl -sfu "$$AUTH" "$$api/domains/esac.nl" -o /dev/null \
+          || curl -sfu "$$AUTH" "$$api/domains" -d mail_host=esac.nl -o /dev/null
+        for list in alle-leden nieuwsbrief reunist; do
+          curl -sfu "$$AUTH" "$$api/lists/$$list@esac.nl" -o /dev/null \
+            || curl -sfu "$$AUTH" "$$api/lists" -d "fqdn_listname=$$list@esac.nl" -o /dev/null
+        done
+    depends_on:
+      mailman:
+        condition: service_healthy
+
+configs:
+  test-db:
+    content: |
+      CREATE DATABASE IF NOT EXISTS esac_testing;
+      GRANT ALL ON esac_testing.* TO '${DB_USERNAME}'@'%';
 
 volumes:
-  sail-mailman:
+  mailman-data:
