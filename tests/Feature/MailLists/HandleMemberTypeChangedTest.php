@@ -40,7 +40,7 @@ class HandleMemberTypeChangedTest extends TestCase
             MemberType::Reunist->value => ['first-reunist', 'second-reunist', 'third-reunist', 'fourth-reunist'],
         ]]);
 
-        // Removing before adding keeps the member on lists that both kinds share.
+        // The lists of the old member type are left before those of the new one are joined.
         $this->mockedMailman->shouldReceive('removeFromMailLists')
             ->with($this->user->email, ['first-member', 'second-member', 'third-member', 'fourth-member'])
             ->once()

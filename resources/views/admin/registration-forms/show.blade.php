@@ -11,11 +11,11 @@
         <x-delete-button :action="route('admin.registration-forms.destroy', $registrationForm)" confirm="Are you sure you want to delete this registration form?" />
     </x-page-header>
     <x-card title="Fields" class="mt-4">
-        <x-data-table :columns="['Name', 'Type', 'Value required', 'Options']">
+        <x-data-table :columns="['Name', 'Type', 'Required', 'Options']">
             @foreach($registrationForm->fields as $field)
                 <tr>
                     <td>{{$field->name}}</td>
-                    <td>{{$field->type}}</td>
+                    <td>{{ $field->type->label() }}</td>
                     <td>{{ $field->required ? 'Yes' : 'No' }}</td>
                     <td>
                         @if ($field->options->count() > 0)

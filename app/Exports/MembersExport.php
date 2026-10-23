@@ -73,7 +73,7 @@ class MembersExport extends SpreadsheetExport
             'Emergency city',
             'Emergency postal code',
             'Emergency country',
-            'Birthdate',
+            'Date of birth',
             'Member type',
             'IBAN',
             'BIC',

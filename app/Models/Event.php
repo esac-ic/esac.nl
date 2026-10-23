@@ -136,7 +136,7 @@ class Event extends Model
     {
         return Attribute::get(fn (): string => $this->image_path != ''
             ? Storage::disk('public')->url($this->image_path)
-            : '/img/default_agenda_item_cover.jpg');
+            : '/img/default-event-cover.jpg');
     }
 
     /**

@@ -2,7 +2,7 @@
 <div {{ $attributes->class('card') }}>
     <div class="position-relative">
         @if($newsItem->image_path != "")
-            <img class="card-img-top" src="{{ $newsItem->image_url }}" alt="Card image cap">
+            <img class="card-img-top" src="{{ $newsItem->image_url }}" alt="">
         @endif
         <span class="card-date position-absolute bg-light py-1 px-3 rounded"><x-local-time :value="$newsItem->created_at" format="d M" /></span>
     </div>

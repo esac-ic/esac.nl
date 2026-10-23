@@ -46,7 +46,7 @@
             <div class="col-sm-12 d-flex flex-wrap">
                 <div class="card w-100 position-relative">
                     <a href="{{ route('events.show', $event) }}">
-                        <img class="card-img-top " src="{{$event->image_url}}" alt="Card image cap">
+                        <img class="card-img-top " src="{{$event->image_url}}" alt="">
                     </a>
                     <span class="card-date position-absolute bg-light py-1 px-3 rounded">{{ $event->start_date->format('d M') }}</span>
                     <div class="card-body">

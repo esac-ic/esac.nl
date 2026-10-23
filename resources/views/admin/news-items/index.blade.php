@@ -8,7 +8,7 @@ News items
     <x-page-header title="News items">
         <x-button-link :href="route('admin.news-items.create')" icon="plus">New news item</x-button-link>
     </x-page-header>
-    <x-data-table datatable :columns="['Title', 'Created by', 'Created at', 'Actions']">
+    <x-data-table datatable :columns="['Title', 'Author', 'Created at', 'Actions']">
         @foreach ($newsItems as $newsItem)
             <tr>
                 <td>{{$newsItem->title}}</td>

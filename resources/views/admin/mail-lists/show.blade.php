@@ -14,7 +14,7 @@
         <table class="table table-striped dt-responsive nowrap">
             <x-detail-row label="Name">{{$mailList->name}}</x-detail-row>
             <x-detail-row label="Email">{{$mailList->address}}</x-detail-row>
-            <x-detail-row label="Members count">{{$mailList->members_count}}</x-detail-row>
+            <x-detail-row label="Member count">{{$mailList->members_count}}</x-detail-row>
         </table>
         <h4> Members</h4>
         <x-data-table datatable :columns="['Email', 'Name', 'Actions']">

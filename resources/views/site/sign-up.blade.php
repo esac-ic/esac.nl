@@ -10,7 +10,7 @@
 
     <x-card title="Privacy Policy and direct debit" class="mt-4">
         <div class="accordion">
-            <details class="accordion-item" name="signup-terms">
+            <details class="accordion-item" name="sign-up-terms">
                 <summary>
                     <h5>Terms and Conditions</h5>
                     <i class="h5 ion-chevron-right"></i>
@@ -20,14 +20,14 @@
                 <p>Being a student and being in the possession of a sports card of the Student Sports Centre Eindhoven are mandatory for all new members of the ESAC.</p>
                 <p>If you participate in mountain sports activities, having an insurance which covers (extreme) mountain sports is mandatory. NKBV membership and insurance are strongly recommended. Other insurances are also possible, but you should thoroughly check the policy. You can’t hold the ESAC liable for any possible damage or injuries.</p>
             </details>
-            <details class="accordion-item" name="signup-terms">
+            <details class="accordion-item" name="sign-up-terms">
                 <summary>
                     <h5>Privacy Policy</h5>
                     <i class="h5 ion-chevron-right"></i>
                 </summary>
                 @include('includes.privacy-policy')
             </details>
-            <details class="accordion-item" name="signup-terms">
+            <details class="accordion-item" name="sign-up-terms">
                 <summary>
                     <h5>Agreement Direct Debit SEPA</h5>
                     <i class="h5 ion-chevron-right"></i>
