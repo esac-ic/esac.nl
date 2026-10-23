@@ -16,7 +16,7 @@ class AccountController extends Controller
     public function show(Request $request): View
     {
         return view('account.show', [
-            'user' => $request->user()->load('roles', 'certificates', 'registrations.event'),
+            'user' => $request->user()->load('certificates', 'registrations.event'),
             'pageTitle' => 'Account overview',
         ]);
     }
