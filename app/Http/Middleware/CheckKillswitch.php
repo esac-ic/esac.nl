@@ -12,9 +12,8 @@ class CheckKillswitch
 {
     public function handle(Request $request, Closure $next): Response
     {
-        // The admin pages, the API for admins and Fortify's login, logout and password routes stay available.
+        // The admin pages and Fortify's login, logout and password routes stay available.
         $excluded = $request->is('admin', 'admin/*')
-            || ($request->is('api/*') && $request->user()?->can('access-admin'))
             || $request->routeIs('login', 'login.*', 'logout', 'password.*');
 
         if (! $excluded && Setting::isEnabled(SettingKey::Killswitch)) {

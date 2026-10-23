@@ -7,7 +7,6 @@ use App\Models\User;
 use App\Services\Mailman;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use Illuminate\Http\Response;
 use Illuminate\Routing\Controllers\HasMiddleware;
 use Illuminate\Routing\Controllers\Middleware;
 use Illuminate\Validation\Rule;
@@ -27,7 +26,7 @@ class MailListMemberController extends Controller implements HasMiddleware
 
     public function __construct(private readonly Mailman $mailman) {}
 
-    public function store(Request $request, string $mailList): Response
+    public function store(Request $request, string $mailList): RedirectResponse
     {
         $request->validate([
             'member_ids' => ['required', 'array'],
@@ -38,7 +37,7 @@ class MailListMemberController extends Controller implements HasMiddleware
             $this->mailman->addMember($mailList, $member->email, $member->name);
         }
 
-        return response()->noContent();
+        return back();
     }
 
     public function destroy(string $mailList, string $member): RedirectResponse

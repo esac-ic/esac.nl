@@ -8,68 +8,31 @@
     <x-page-header title="Events">
         <x-button-link :href="route('admin.events.create')" icon="plus">New event</x-button-link>
     </x-page-header>
-    <div class="row mb-3">
-        <x-field type="date" name="startDate" label="Start date" :value="today(config('app.display_timezone'))->toDateString()" col="3" />
-    </div>
+    <form method="get" action="{{ route('admin.events.index') }}" class="form-row align-items-end mb-3">
+        <x-field type="date" name="start_date" label="Ending on or after" :value="$startDate" col="3" />
+        <div class="form-group col-md-3">
+            <button type="submit" class="btn btn-primary">Filter</button>
+        </div>
+    </form>
 
-    <x-data-table id="events-table" :columns="['Title', 'Start date', 'End date', 'Actions']" />
+    <x-data-table datatable :data-order="json_encode([[1, 'asc']])" :columns="['Title', 'Start date', 'End date', 'Actions']">
+        @foreach ($events as $event)
+            <tr>
+                <td>{{ $event->title }}</td>
+                <td data-order="{{ $event->start_date->timestamp }}">{{ $event->start_date->format('d-m-Y H:i') }}</td>
+                <td data-order="{{ $event->end_date->timestamp }}">{{ $event->end_date->format('d-m-Y H:i') }}</td>
+                <td>
+                    <x-icon-link :href="route('admin.events.edit', $event)" icon="edit" title="Edit event" />
+                    <x-icon-link :href="route('admin.events.show', $event)" icon="eye" title="Show event" />
+                    @if ($event->registration_form_id)
+                        <x-icon-link :href="route('admin.events.registrations.index', $event)" icon="android-list" title="Show registrations" />
+                    @endif
+                    <form class="d-inline" method="post" action="{{ route('admin.events.copy', $event) }}">
+                        @csrf
+                        <button type="submit" class="btn btn-link p-0 mr-1 ml-1"><span title="Copy event" class="ion-ios-copy font-size-120" aria-hidden="true"></span></button>
+                    </form>
+                </td>
+            </tr>
+        @endforeach
+    </x-data-table>
 @endsection
-
-@push('styles')
-    <style>
-        .action-icon {
-            margin-left: 5px;
-        }
-    </style>
-@endpush
-
-@push('scripts')
-    @vite(['resources/assets/js/vendor/datatables.js'])
-    <script type="module">
-        let eventsTable = $('#events-table').DataTable({
-            "order": [[1, "asc"]],
-            "ajax": {
-                'url': eventsApiUrl(),
-                "dataSrc": "agendaItems"
-            },
-            "columns": [
-                {"data": "title"},
-                {"data": "full_startDate", "render": formatDate},
-                {"data": "endDate", "render": formatDate},
-                {
-                    "data": function (data) {
-                        return eventActionLinks(data);
-                    }
-                },
-            ]
-        });
-
-        document.getElementById('startDate').addEventListener('change', () => eventsTable.ajax.url(eventsApiUrl()).load());
-
-        // Shows a "Y-m-d H:i:s" date as "d-m-Y H:i", sorting on the original.
-        function formatDate(date, type) {
-            return type === 'display' ? date.slice(0, 16).replace(/^(\d+)-(\d+)-(\d+)/, '$3-$2-$1') : date;
-        }
-
-        function eventActionLinks(data) {
-            let actions = "";
-            actions += '<a class="mr-1 ml-1" href="' + '{{ route('admin.events.edit', '__id__') }}'.replace('__id__', data.id) + '"><span title="Edit event" class="ion-edit font-size-120 action-icon" aria-hidden="true"></span></a>';
-            actions += '<a class="mr-1 ml-1" href="' + '{{ route('admin.events.show', '__id__') }}'.replace('__id__', data.id) + '"><span title="Show event" class="ion-eye font-size-120 action-icon" aria-hidden="true"></span></a>';
-            if (data.application_form_id != null) {
-                actions += '<a class="mr-1 ml-1" href="' + '{{ route('admin.events.registrations.index', '__id__') }}'.replace('__id__', data.id) + '"><span title="Show registrations" class="ion-android-list font-size-120 action-icon" aria-hidden="true"></span></a>';
-            }
-            actions += '<form class="d-inline" method="POST" action="' + '{{ route('admin.events.copy', '__id__') }}'.replace('__id__', data.id) + '">@csrf<button type="submit" class="btn btn-link p-0 mr-1 ml-1"><span title="Copy event" class="ion-ios-copy font-size-120 action-icon" aria-hidden="true"></span></button></form>';
-            return actions;
-        }
-
-        function eventsApiUrl() {
-            let params = "limit=10000000";
-            let startDate = document.getElementById('startDate').value;
-            if (startDate !== "") {
-                params += "&startDate=" + startDate.split('-').reverse().join('-');
-            }
-
-            return "{{ route('api.events.index') }}?" + params;
-        }
-    </script>
-@endpush

@@ -26,9 +26,16 @@ class EventController extends Controller implements HasMiddleware
         ];
     }
 
-    public function index(): View
+    public function index(Request $request): View
     {
-        return view('admin.events.index');
+        $request->validate(['start_date' => ['nullable', 'date']]);
+
+        $startDate = $request->date('start_date', tz: config('app.display_timezone')) ?? today(config('app.display_timezone'));
+
+        return view('admin.events.index', [
+            'startDate' => $startDate->toDateString(),
+            'events' => Event::query()->where('end_date', '>=', $startDate->copy()->utc())->oldest('start_date')->get(),
+        ]);
     }
 
     public function create(): View

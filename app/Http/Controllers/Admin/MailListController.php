@@ -45,7 +45,10 @@ class MailListController extends Controller implements HasMiddleware
 
     public function show(string $mailList): View
     {
-        return view('admin.mail-lists.show', ['mailList' => $this->mailman->mailList($mailList)]);
+        return view('admin.mail-lists.show', [
+            'mailList' => $this->mailman->mailList($mailList),
+            'members' => User::query()->active()->orderBy('first_name')->get(['id', 'email', 'first_name', 'preposition', 'last_name']),
+        ]);
     }
 
     public function destroy(string $mailList): RedirectResponse

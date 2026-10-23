@@ -20,13 +20,9 @@ class EventResource extends JsonResource
             'title' => $this->title,
             'thumbnail' => $this->image_url,
             'startDate' => $this->start_date->format('d M'),
-            'endDate' => $this->end_date->toDateTimeString(),
-            'full_startDate' => $this->start_date->toDateTimeString(),
-            'category' => $this->category->name,
             'text' => $this->short_description,
             'formId' => $this->registrationForm,
             'canRegister' => $this->isRegistrationOpen(),
-            'application_form_id' => $this->registration_form_id,
             // Counted and checked by the events API's query.
             'amountOfPeopleRegisterd' => $this->registration_form_id ? $this->registrations_count : 0,
             'currentUserSignedUp' => $this->registration_form_id && $this->registrations->isNotEmpty(),
