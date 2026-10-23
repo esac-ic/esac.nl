@@ -8,10 +8,6 @@
 	padding: 0;
 }
 
-.custom-file-input {
-  cursor: pointer;
-}
-
 .card-date {
   right: ($spacer * .7);
   top: ($spacer * .7)
@@ -26,18 +22,6 @@
 	.card {
 		border-bottom: 2px solid $esac-yellow;
 	}
-}
-
-.wrap-break-word {
-	word-wrap: break-word;
-}
-
-[data-toggle="collapse"] .fa:before {
-	content: "\f139";
-}
-
-[data-toggle="collapse"].collapsed .fa:before {
-	content: "\f13a";
 }
 
 @include media-breakpoint-up(lg) { 
@@ -77,14 +61,6 @@
 	}
 }
 
-.c-pointer {
-	cursor: pointer;
-}
-
-.hover-lighten:hover {
-	opacity: 0.9;
-}
-  
 .logo-esac {
 	vertical-align:top;
 	fill:#fff

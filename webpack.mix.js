@@ -1,10 +1,5 @@
 let mix = require('laravel-mix');
 
-// Current use:
-// .js for ES2017, modules etc. (modern js)
-// .combine for concatenating and/or copying simple .js or .css files
-// .sass for SCSS/SASS files
-
 // Vue
 mix.js('resources/assets/js/app.js', 'public/js')
    .vue({ version: 2 })
@@ -39,7 +34,3 @@ mix.browserSync('localhost');
 if (mix.inProduction()) {
    mix.version();
 }
-
-mix.options({
-   processCssUrls: false,
-});
