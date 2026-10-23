@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Casts\SanitizedHtml;
 use App\Enums\PageSlug;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Attributes\Scope;
@@ -16,6 +17,7 @@ use Illuminate\Support\Facades\DB;
     'name',
     'parent_id',
     'slug',
+    'requires_login',
     'show_in_menu',
     'content',
 ])]
@@ -26,6 +28,7 @@ class MenuItem extends Model
     protected function casts(): array
     {
         return [
+            'content' => SanitizedHtml::class,
             'requires_login' => 'boolean',
             'show_in_menu' => 'boolean',
             'deletable' => 'boolean',

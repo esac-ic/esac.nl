@@ -40,6 +40,18 @@ class CreateNewsItemTest extends TestCase
     }
 
     #[Test]
+    public function the_body_is_stored_without_scripts()
+    {
+        $this->post('admin/news-items', [
+            'title' => 'test nieuws',
+            'body' => '<p onclick="alert(1)"><b>test</b> nieuws</p><script>alert(1)</script><img src="https://example.org/x.png">',
+            'author' => 'Gebruiker1',
+        ])->assertRedirect();
+
+        $this->assertSame('<p><b>test</b> nieuws</p><img />', NewsItem::sole()->body);
+    }
+
+    #[Test]
     public function creating_a_news_item_stores_a_resized_header_and_thumbnail()
     {
         Storage::fake('public');

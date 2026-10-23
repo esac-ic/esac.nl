@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Casts\SanitizedHtml;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -19,6 +20,13 @@ use Illuminate\Support\Facades\Storage;
 class NewsItem extends Model
 {
     use HasFactory, SoftDeletes;
+
+    protected function casts(): array
+    {
+        return [
+            'body' => SanitizedHtml::class,
+        ];
+    }
 
     /**
      * The URL of the header image, or of the default header when there is none.
