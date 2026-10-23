@@ -44,9 +44,6 @@
                                 <a class="dropdown-item" href="{{ route('admin.former-members.index') }}">Former members</a>
                                 <a class="dropdown-item" href="{{ route('admin.pending-members.index') }}">Pending members</a>
                             @endcan
-                            @can('manage-roles')
-                                <a class="dropdown-item" href="{{ route('admin.roles.index') }}">Roles</a>
-                            @endcan
                             @can('manage-certificates')
                                 <a class="dropdown-item" href="{{ route('admin.certificates.index') }}">Certificates</a>
                             @endcan

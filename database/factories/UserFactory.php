@@ -54,7 +54,7 @@ class UserFactory extends Factory
 
     public function withRole(AdminRole ...$roles): static
     {
-        return $this->afterCreating(fn (User $user) => $user->roles()->attach(array_map(fn (AdminRole $role) => $role->value, $roles)));
+        return $this->state(['roles' => $roles]);
     }
 
     public function member(): static

@@ -89,7 +89,7 @@
                     @if($loop->first)
                         <td rowspan="{{$loop->count}}">Roles</td>
                     @endif
-                    <td>{{$role->name}}</td>
+                    <td>{{ $role->label() }}</td>
                 </tr>
             @endforeach
         </table>

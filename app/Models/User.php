@@ -15,6 +15,7 @@ use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Attributes\Hidden;
 use Illuminate\Database\Eloquent\Attributes\Scope;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Casts\AsEnumCollection;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
@@ -22,10 +23,14 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 use RuntimeException;
 
+/**
+ * @property Collection<int, AdminRole> $roles
+ */
 #[Fillable([
     'email',
     'password',
@@ -47,6 +52,7 @@ use RuntimeException;
     'emergency_country',
     'birthday',
     'member_type',
+    'roles',
     'iban',
     'bic',
     'direct_debit',
@@ -60,6 +66,13 @@ class User extends Authenticatable
 {
     use HasFactory, Notifiable, SoftDeletes;
 
+    /**
+     * New members have no roles.
+     */
+    protected $attributes = [
+        'roles' => '[]',
+    ];
+
     protected function casts(): array
     {
         return [
@@ -69,6 +82,7 @@ class User extends Authenticatable
             'pending_since' => 'date:Y-m-d',
             'direct_debit' => 'boolean',
             'member_type' => MemberType::class,
+            'roles' => AsEnumCollection::of(AdminRole::class),
         ];
     }
 
@@ -128,14 +142,6 @@ class User extends Authenticatable
     }
 
     /**
-     * @return BelongsToMany<Role, $this>
-     */
-    public function roles(): BelongsToMany
-    {
-        return $this->belongsToMany(Role::class);
-    }
-
-    /**
      * @return BelongsToMany<Certificate, $this>
      */
     public function certificates(): BelongsToMany
@@ -162,13 +168,7 @@ class User extends Authenticatable
 
     public function hasRole(AdminRole ...$roles): bool
     {
-        foreach ($roles as $role) {
-            if ($this->roles->contains($role->value)) {
-                return true;
-            }
-        }
-
-        return false;
+        return collect($roles)->contains(fn (AdminRole $role) => $this->roles->contains($role));
     }
 
     /**
@@ -222,12 +222,11 @@ class User extends Authenticatable
     public function endMembership(): void
     {
         $this->membership_ended_on = today(config('app.display_timezone'));
+        $this->roles = collect();
         // Logs them out everywhere: their sessions and remember-me cookies stop working
         $this->setRememberToken(Str::random(60));
         $this->save();
         DB::table(config('session.table'))->where('user_id', $this->id)->delete();
-
-        $this->roles()->detach();
 
         MembershipEnded::dispatch($this);
     }

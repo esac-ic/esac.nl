@@ -2,11 +2,11 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Enums\AdminRole;
 use App\Enums\MemberType;
 use App\Exports\MembersExport;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\MemberRequest;
-use App\Models\Role;
 use App\Models\User;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
@@ -28,20 +28,18 @@ class MemberController extends Controller implements HasMiddleware
     public function index(): View
     {
         return view('admin.members.index', [
-            'users' => User::query()->active()->with('roles')->get(['id', 'first_name', 'last_name', 'email', 'preposition', 'member_type']),
-            'roles' => Role::all(),
+            'users' => User::query()->active()->get(['id', 'first_name', 'last_name', 'email', 'preposition', 'member_type', 'roles']),
         ]);
     }
 
     public function create(): View
     {
-        return view('admin.members.form', ['user' => new User, 'roles' => Role::all(), 'memberTypes' => MemberType::options()]);
+        return view('admin.members.form', ['user' => new User, 'roles' => AdminRole::cases(), 'memberTypes' => MemberType::options()]);
     }
 
     public function store(MemberRequest $request): RedirectResponse
     {
-        $user = User::query()->create($request->validated());
-        $user->roles()->sync($request->input('roles', []));
+        User::query()->create($request->validated());
 
         return to_route('admin.members.index')->with('message', 'Member added');
     }
@@ -53,13 +51,12 @@ class MemberController extends Controller implements HasMiddleware
 
     public function edit(User $user): View
     {
-        return view('admin.members.form', ['user' => $user, 'roles' => Role::all(), 'memberTypes' => MemberType::options()]);
+        return view('admin.members.form', ['user' => $user, 'roles' => AdminRole::cases(), 'memberTypes' => MemberType::options()]);
     }
 
     public function update(MemberRequest $request, User $user): RedirectResponse
     {
         $user->updateFromForm($request->validated());
-        $user->roles()->sync($request->input('roles', []));
 
         return to_route('admin.members.index')->with('message', 'Member saved');
     }

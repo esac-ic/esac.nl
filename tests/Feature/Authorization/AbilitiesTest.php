@@ -37,7 +37,7 @@ class AbilitiesTest extends TestCase
     {
         $user = $loggedIn ? User::factory()->create() : null;
         if ($role !== null) {
-            $user->roles()->attach($role->value);
+            $user->update(['roles' => [$role]]);
         }
 
         $this->assertSame(

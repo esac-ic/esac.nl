@@ -11,16 +11,18 @@
 
     {{ html()->form($user->exists ? 'PATCH' : 'POST', $user->exists ? route('admin.members.update', $user) : route('admin.members.store'))->open() }}
     <x-member-fields :$user :$memberTypes />
-    <x-card title="Roles" class="mt-4">
-        <div class="form-group">
+    @can('manage-roles')
+        <x-card title="Roles" class="mt-4">
+            <div class="form-group">
                 @foreach($roles as $role)
                     <div class="form-check">
-                        <input class="form-check-input" type="checkbox" name="roles[]" value="{{$role->id}}" id="role-{{ $role->id }}" @checked($user->roles->contains($role->id))>
-                        <label class="form-check-label" for="role-{{ $role->id }}">{{$role->name}}</label>
+                        <input class="form-check-input" type="checkbox" name="roles[]" value="{{ $role->value }}" id="role-{{ $role->value }}" @checked(in_array($role->value, old('roles', $user->roles?->map->value->all() ?? [])))>
+                        <label class="form-check-label" for="role-{{ $role->value }}">{{ $role->label() }}</label>
                     </div>
                 @endforeach
-        </div>
-    </x-card>
+            </div>
+        </x-card>
+    @endcan
     <div class="my-4">
         {{ html()->submit('Save')->class('btn btn-primary') }}
         <a class="btn btn-danger" href="{{ $user->exists ? route('admin.members.show', $user) : route('admin.members.index') }}">Cancel</a>
