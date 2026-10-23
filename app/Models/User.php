@@ -20,13 +20,11 @@ use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
-use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
-use RuntimeException;
 
 /**
  * @property Collection<int, AdminRole> $roles
@@ -64,7 +62,7 @@ use RuntimeException;
 ])]
 class User extends Authenticatable
 {
-    use HasFactory, Notifiable, SoftDeletes;
+    use HasFactory, Notifiable;
 
     /**
      * New members have no roles.
@@ -253,14 +251,11 @@ class User extends Authenticatable
     }
 
     /**
-     * @throws RuntimeException when the user isn't a pending member
+     * Deletes the pending member with all their details; the member log keeps their name.
      */
     public function rejectSignUp(): void
     {
-        if (! $this->isPendingMember()) {
-            throw new RuntimeException('User is not a pending member.');
-        }
-        SignUpRejected::dispatch($this, $this->name);
+        SignUpRejected::dispatch($this->name);
         $this->delete();
     }
 }

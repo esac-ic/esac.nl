@@ -27,7 +27,7 @@ use App\Http\Controllers\SignUpController;
 use App\Http\Controllers\SiteController;
 use Illuminate\Support\Facades\Route;
 
-Route::resourceParameters(['members' => 'user', 'pending-members' => 'user']);
+Route::resourceParameters(['members' => 'user', 'pending-members' => 'pending_member']);
 
 Route::permanentRedirect('/', '/home');
 
@@ -35,13 +35,14 @@ Route::prefix('admin')->name('admin.')->middleware(['auth', 'can:access-admin'])
     Route::get('/', DashboardController::class)->name('dashboard');
 
     Route::get('members/export', [MemberController::class, 'export'])->name('members.export');
-    Route::singleton('members.membership', MembershipController::class)->creatable()->only(['store', 'destroy']);
+    Route::post('members/{former_member}/membership', [MembershipController::class, 'store'])->name('members.membership.store');
+    Route::delete('members/{active_member}/membership', [MembershipController::class, 'destroy'])->name('members.membership.destroy');
     Route::get('former-members/export', [FormerMemberController::class, 'export'])->name('former-members.export');
     Route::resource('former-members', FormerMemberController::class)->only('index');
     Route::resource('penno-export', PennoExportController::class)->only(['create', 'store']);
 
     Route::resource('pending-members', PendingMemberController::class)->only(['index', 'destroy']);
-    Route::patch('pending-members/{user}/approve', [PendingMemberController::class, 'approve'])->name('pending-members.approve');
+    Route::patch('pending-members/{pending_member}/approve', [PendingMemberController::class, 'approve'])->name('pending-members.approve');
 
     Route::resource('members', MemberController::class)->except('destroy');
 

@@ -49,7 +49,7 @@ class WriteMemberLogEntryTest extends TestCase
     {
         $user = User::factory()->create();
 
-        new WriteMemberLogEntry()->handle(new SignUpRejected($user, $user->name));
+        new WriteMemberLogEntry()->handle(new SignUpRejected($user->name));
 
         $logEntry = MemberLogEntry::sole();
         $this->assertNull($logEntry->user);

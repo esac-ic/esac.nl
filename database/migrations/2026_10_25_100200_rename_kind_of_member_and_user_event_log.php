@@ -58,7 +58,8 @@ return new class extends Migration
         });
         Schema::rename('user_event_log_entries', 'member_log_entries');
         Schema::table('member_log_entries', function (Blueprint $table) {
-            $table->foreign('user_id')->references('id')->on('users');
+            // An entry outlives the user it's about, such as a rejected sign-up.
+            $table->foreign('user_id')->references('id')->on('users')->nullOnDelete();
         });
         foreach (self::LOG_TYPES as $from => $to) {
             DB::table('member_log_entries')->where('type', $from)->update(['type' => $to]);

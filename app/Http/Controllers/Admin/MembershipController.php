@@ -24,9 +24,6 @@ class MembershipController extends Controller implements HasMiddleware
 
     public function store(User $user): RedirectResponse
     {
-        // Anonymized former members have no email address, so they can't come back.
-        abort_unless($user->isFormerMember() && $user->email, 404);
-
         $user->restoreMembership();
 
         return to_route('admin.members.show', $user);
