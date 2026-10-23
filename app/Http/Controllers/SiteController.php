@@ -8,9 +8,8 @@ use App\Models\Event;
 use App\Models\MenuItem;
 use App\Models\NewsItem;
 use App\Models\User;
+use Illuminate\Auth\AuthenticationException;
 use Illuminate\Contracts\View\View;
-use Illuminate\Http\RedirectResponse;
-use Illuminate\Support\Facades\Gate;
 
 class SiteController extends Controller
 {
@@ -31,13 +30,11 @@ class SiteController extends Controller
         ]);
     }
 
-    public function zekeringen(): View|RedirectResponse
+    public function zekeringen(): View
     {
         $menuItem = MenuItem::query()->where('slug', PageSlug::Zekeringen)->firstOrFail();
 
-        if (Gate::denies('view', $menuItem)) {
-            return to_route('login');
-        }
+        $this->requireLoginFor($menuItem);
 
         return view('site.zekeringen', [
             'pageTitle' => 'Zekeringen',
@@ -71,13 +68,11 @@ class SiteController extends Controller
         ]);
     }
 
-    public function members(): View|RedirectResponse
+    public function members(): View
     {
         $menuItem = MenuItem::query()->where('slug', PageSlug::Members)->firstOrFail();
 
-        if (Gate::denies('view', $menuItem)) {
-            return to_route('login');
-        }
+        $this->requireLoginFor($menuItem);
 
         return view('site.members', [
             'users' => User::query()->active()->get(['first_name', 'last_name', 'email', 'preposition', 'member_type', 'phone_number']),
@@ -96,11 +91,9 @@ class SiteController extends Controller
         ]);
     }
 
-    public function showPage(MenuItem $menuItem): View|RedirectResponse
+    public function showPage(MenuItem $menuItem): View
     {
-        if (Gate::denies('view', $menuItem)) {
-            return to_route('login');
-        }
+        $this->requireLoginFor($menuItem);
 
         return view('site.page', [
             'content' => $menuItem->content,
@@ -111,5 +104,15 @@ class SiteController extends Controller
     private function pageContent(PageSlug $slug): ?string
     {
         return MenuItem::query()->where('slug', $slug)->value('content');
+    }
+
+    /**
+     * Sends a guest to the login page, and back here afterwards, when the page is for members only.
+     */
+    private function requireLoginFor(MenuItem $page): void
+    {
+        if ($page->requires_login && auth()->guest()) {
+            throw new AuthenticationException;
+        }
     }
 }
