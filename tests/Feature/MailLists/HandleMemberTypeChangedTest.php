@@ -3,12 +3,11 @@
 namespace Tests\Feature\MailLists;
 
 use App\Enums\MemberType;
-use App\Enums\SettingKey;
 use App\Events\MemberTypeChanged;
 use App\Listeners\SyncMemberMailLists;
-use App\Models\Setting;
 use App\Models\User;
 use App\Services\Mailman;
+use App\Settings\SiteSettings;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Mockery\MockInterface;
 use PHPUnit\Framework\Attributes\DataProvider;
@@ -36,10 +35,10 @@ class HandleMemberTypeChangedTest extends TestCase
     #[Test]
     public function a_member_moves_between_member_types_with_several_mail_lists()
     {
-        Setting::where('name', SettingKey::MemberMailLists->value)->first()
-            ->update(['value' => 'first-member;second-member;third-member;fourth-member']);
-        Setting::where('name', SettingKey::ReunistMailLists->value)->first()
-            ->update(['value' => 'first-reunist;second-reunist;third-reunist;fourth-reunist']);
+        SiteSettings::fake(['mail_lists' => [
+            MemberType::Member->value => ['first-member', 'second-member', 'third-member', 'fourth-member'],
+            MemberType::Reunist->value => ['first-reunist', 'second-reunist', 'third-reunist', 'fourth-reunist'],
+        ]]);
 
         // Removing before adding keeps the member on lists that both kinds share.
         $this->mockedMailman->shouldReceive('removeFromMailLists')

@@ -7,6 +7,7 @@ use App\Models\Book;
 use App\Models\Certificate;
 use App\Models\EventCategory;
 use App\Models\User;
+use App\Settings\SiteSettings;
 use Database\Seeders\MenuItemSeeder;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use PHPUnit\Framework\Attributes\Test;
@@ -40,6 +41,27 @@ class CrudResourcesTest extends TestCase
 
         $this->delete("admin/books/{$created->id}")->assertRedirect('admin/books');
         $this->assertSoftDeleted($created);
+    }
+
+    #[Test]
+    public function settings_can_be_managed()
+    {
+        $this->actingAs($this->admin)->get('admin/settings/edit')->assertOk()->assertSee('student.tue.nl')->assertSee('alle-leden.esac.nl');
+
+        $mailLists = array_fill_keys(array_keys(app(SiteSettings::class)->mail_lists), '');
+        $this->put('admin/settings', [
+            'killswitch' => '1',
+            'footer_phone_number' => '',
+            'blocked_email_domains' => "student.tue.nl\r\n\r\nstudent.fontys.nl ",
+            'mail_lists' => ['member' => "alle-leden.esac.nl\nnieuwsbrief.esac.nl"] + $mailLists,
+        ])->assertRedirect('admin/settings/edit');
+
+        $settings = app(SiteSettings::class)->refresh();
+        $this->assertTrue($settings->killswitch);
+        $this->assertNull($settings->footer_phone_number);
+        $this->assertSame(['student.tue.nl', 'student.fontys.nl'], $settings->blocked_email_domains);
+        $this->assertSame(['alle-leden.esac.nl', 'nieuwsbrief.esac.nl'], $settings->mail_lists['member']);
+        $this->assertSame([], $settings->mail_lists['reunist']);
     }
 
     #[Test]
