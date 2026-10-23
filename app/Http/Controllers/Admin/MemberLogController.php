@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Enums\MemberLogType;
 use App\Exports\MemberLogExport;
 use App\Http\Controllers\Controller;
 use App\Models\MemberLogEntry;
@@ -9,6 +10,7 @@ use Illuminate\Contracts\View\View;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controllers\HasMiddleware;
 use Illuminate\Routing\Controllers\Middleware;
+use Illuminate\Validation\Rule;
 use Symfony\Component\HttpFoundation\StreamedResponse;
 
 class MemberLogController extends Controller implements HasMiddleware
@@ -25,7 +27,7 @@ class MemberLogController extends Controller implements HasMiddleware
     {
         return view('admin.member-log.index', [
             'entries' => MemberLogEntry::all(),
-            'types' => MemberLogEntry::query()->distinct('type')->pluck('type')->sort(),
+            'types' => MemberLogType::cases(),
         ]);
     }
 
@@ -33,7 +35,7 @@ class MemberLogController extends Controller implements HasMiddleware
     {
         $request->validate([
             'types' => ['nullable', 'array'],
-            'types.*' => ['string'],
+            'types.*' => [Rule::enum(MemberLogType::class)],
             'start_date' => ['required', 'date'],
             'end_date' => ['required', 'date', 'after_or_equal:start_date'],
         ]);

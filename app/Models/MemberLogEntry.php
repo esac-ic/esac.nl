@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Enums\MemberLogType;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -14,6 +15,13 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 class MemberLogEntry extends Model
 {
     use HasFactory;
+
+    protected function casts(): array
+    {
+        return [
+            'type' => MemberLogType::class,
+        ];
+    }
 
     /**
      * @return BelongsTo<User, $this>

@@ -19,8 +19,8 @@
                             <label>Types</label>
                             @foreach ($types as $type)
                             <div class="form-check">
-                                <input class="form-check-input" type="checkbox" checked name="types[]" value="{{ $type }}" id="type-{{ $type }}">
-                                <label class="form-check-label" for="type-{{ $type }}">{{ $type }}</label>
+                                <input class="form-check-input" type="checkbox" checked name="types[]" value="{{ $type->value }}" id="type-{{ $type->value }}">
+                                <label class="form-check-label" for="type-{{ $type->value }}">{{ $type->label() }}</label>
                             </div>
                             @endforeach
                         </div>

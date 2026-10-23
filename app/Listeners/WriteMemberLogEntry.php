@@ -14,7 +14,7 @@ class WriteMemberLogEntry implements ShouldQueueAfterCommit
     public function handle(LogsToMemberLog $event): void
     {
         $logEntry = new MemberLogEntry([
-            'type' => class_basename($event),
+            'type' => $event->logType(),
             'details' => $event->logDetails(),
         ]);
         $logEntry->user()->associate($event->loggedUser());
