@@ -20,7 +20,7 @@
         <div class="form-group mt-2">
             <input type="file" class="form-control-file" id="thumbnail" name="thumbnail">
         </div>
-        <x-field name="body" id="content" label="Message" type="textarea" :value="$newsItem->body" />
+        <x-field name="body" id="content" label="Message" type="textarea" :data-images-url="route('admin.editor-images.store')" :value="$newsItem->body" />
     </x-card>
 
     <div class="my-4">

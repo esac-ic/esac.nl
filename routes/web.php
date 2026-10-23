@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AccountController;
 use App\Http\Controllers\Admin\BookController;
 use App\Http\Controllers\Admin\CertificateController;
 use App\Http\Controllers\Admin\DashboardController;
@@ -12,7 +13,6 @@ use App\Http\Controllers\Admin\MailListController;
 use App\Http\Controllers\Admin\MailListMemberController;
 use App\Http\Controllers\Admin\MemberCertificateController;
 use App\Http\Controllers\Admin\MemberController;
-use App\Http\Controllers\Admin\MemberExportController;
 use App\Http\Controllers\Admin\MemberLogController;
 use App\Http\Controllers\Admin\MembershipController;
 use App\Http\Controllers\Admin\NewsItemController;
@@ -28,24 +28,26 @@ use App\Http\Controllers\SignUpController;
 use App\Http\Controllers\SiteController;
 use Illuminate\Support\Facades\Route;
 
+Route::resourceParameters(['members' => 'user', 'pending-members' => 'user']);
+
 Route::permanentRedirect('/', '/home');
 
-Route::prefix('admin')->name('admin.')->group(function () {
+Route::prefix('admin')->name('admin.')->middleware(['auth', 'can:access-admin'])->group(function () {
     Route::get('/', DashboardController::class)->name('dashboard');
 
-    Route::get('members/export', MemberExportController::class)->name('members.export');
-    Route::singleton('members.membership', MembershipController::class)->creatable()->only(['store', 'destroy'])->parameters(['members' => 'user']);
+    Route::get('members/export', [MemberController::class, 'export'])->name('members.export');
+    Route::singleton('members.membership', MembershipController::class)->creatable()->only(['store', 'destroy']);
     Route::get('former-members/export', [FormerMemberController::class, 'export'])->name('former-members.export');
     Route::resource('former-members', FormerMemberController::class)->only('index');
     Route::resource('penno-export', PennoExportController::class)->only(['create', 'store']);
 
-    Route::resource('pending-members', PendingMemberController::class)->only(['index', 'destroy'])->parameters(['pending-members' => 'user']);
+    Route::resource('pending-members', PendingMemberController::class)->only(['index', 'destroy']);
     Route::patch('pending-members/{user}/approve', [PendingMemberController::class, 'approve'])->name('pending-members.approve');
 
-    Route::resource('members', MemberController::class)->except('destroy')->parameters(['members' => 'user']);
+    Route::resource('members', MemberController::class)->except('destroy');
 
     Route::resource('certificates', CertificateController::class);
-    Route::scopeBindings()->group(fn () => Route::resource('members.certificates', MemberCertificateController::class)->except(['index', 'show'])->parameters(['members' => 'user']));
+    Route::resource('members.certificates', MemberCertificateController::class)->except(['index', 'show'])->scoped();
 
     Route::resource('roles', RoleController::class);
 
@@ -61,44 +63,55 @@ Route::prefix('admin')->name('admin.')->group(function () {
 
     Route::resource('pages', PageController::class);
     Route::patch('pages/{page}/move', [PageController::class, 'move'])->name('pages.move');
-    Route::controller(EditorImageController::class)->prefix('editor-images')->name('editor-images.')->group(function () {
-        Route::post('/', 'store')->name('store');
-    });
+    Route::post('editor-images', [EditorImageController::class, 'store'])->name('editor-images.store');
 
     Route::get('books/export', [BookController::class, 'export'])->name('books.export');
     Route::resource('books', BookController::class);
 
     Route::post('mail-lists/sync', [MailListController::class, 'sync'])->name('mail-lists.sync');
     Route::resource('mail-lists', MailListController::class)->except(['edit', 'update']);
-    Route::resource('mail-lists.members', MailListMemberController::class)->only(['store', 'destroy']);
+    // A mail list's member is an email address, not a user.
+    Route::resource('mail-lists.members', MailListMemberController::class)->only(['store', 'destroy'])->parameters(['members' => 'member']);
 
-    Route::controller(MemberLogController::class)->prefix('member-log')->name('member-log.')->group(function () {
-        Route::get('/', 'index')->name('index');
-        Route::post('export', 'export')->name('export');
-    });
+    Route::get('member-log', [MemberLogController::class, 'index'])->name('member-log.index');
+    Route::post('member-log/export', [MemberLogController::class, 'export'])->name('member-log.export');
 
     Route::singleton('settings', SettingsController::class)->only(['edit', 'update']);
 });
 
-// A member's registration for an event
-Route::controller(RegistrationController::class)->prefix('forms/{event}')->name('events.registration.')->group(function () {
-    Route::get('/', 'create')->name('create');
-    Route::post('/', 'store')->name('store');
-    Route::delete('/', 'destroy')->name('destroy');
+Route::middleware('auth')->group(function () {
+    Route::singleton('account', AccountController::class);
+
+    // A member's registration for an event
+    Route::controller(RegistrationController::class)->prefix('events/{event}/registration')->name('events.registration.')->group(function () {
+        Route::get('/', 'create')->name('create');
+        Route::post('/', 'store')->name('store');
+        Route::delete('/', 'destroy')->name('destroy');
+    });
 });
 
-Route::get('signup', [SignUpController::class, 'create'])->name('signup.create');
-Route::post('signup', [SignUpController::class, 'store'])->name('signup.store');
-Route::get('ical', EventFeedController::class)->name('events.feed');
+Route::get('sign-up', [SignUpController::class, 'create'])->name('signup.create');
+Route::post('sign-up', [SignUpController::class, 'store'])->name('signup.store')->middleware('throttle:20,1');
+
+Route::get('events.ics', EventFeedController::class)->name('events.feed');
+// Calendar apps keep polling the URL they subscribed to, and not all of them follow redirects.
+Route::get('ical', EventFeedController::class);
+
+// Old URLs that people have shared and bookmarked.
+Route::permanentRedirect('agenda', '/events');
+Route::permanentRedirect('agenda/{event}', '/events/{event}');
+Route::permanentRedirect('memberlist', '/members');
+Route::get('signup', fn () => to_route('signup.create', status: 301));
+Route::get('forms/{event}', fn (string $event) => to_route('events.registration.create', $event, 301));
 
 Route::controller(SiteController::class)->group(function () {
     Route::get('home', 'home')->name('home');
-    Route::get('agenda', 'events')->name('events.index');
-    Route::get('agenda/{event}', 'showEvent')->name('events.show');
+    Route::get('events', 'events')->name('events.index');
+    Route::get('events/{event}', 'showEvent')->name('events.show');
     Route::get('news', 'news')->name('news.index');
     Route::get('news/{newsItem}', 'showNewsItem')->name('news.show');
     Route::get('library', 'library')->name('library');
-    Route::get('memberlist', 'members')->name('members.index');
+    Route::get('members', 'members')->name('members.index');
     Route::get('zekeringen', 'zekeringen')->name('zekeringen');
     Route::get('{menuItem:slug}', 'showPage')->name('pages.show');
 });

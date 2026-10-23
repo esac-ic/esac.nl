@@ -17,7 +17,6 @@ class BookController extends Controller implements HasMiddleware
     public static function middleware(): array
     {
         return [
-            'auth',
             new Middleware('can:manage-library'),
         ];
     }

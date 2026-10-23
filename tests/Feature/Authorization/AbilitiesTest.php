@@ -42,4 +42,10 @@ class AbilitiesTest extends TestCase
             array_combine($abilities, array_map(fn ($ability) => Gate::forUser($user)->allows($ability), $abilities)),
         );
     }
+
+    #[Test]
+    public function a_member_without_an_admin_role_can_not_open_the_admin_pages()
+    {
+        $this->actingAs(User::factory()->create())->get(route('admin.dashboard'))->assertForbidden();
+    }
 }

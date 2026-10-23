@@ -51,7 +51,7 @@ class SignUpFormTest extends TestCase
             'g-recaptcha-response' => 'ikbenvalid',
         ];
 
-        $this->post('/signup', $body)->assertRedirect();
+        $this->post('/sign-up', $body)->assertRedirect();
 
         Event::assertDispatched(MemberSignedUp::class);
         $this->assertDatabaseHas(User::class, [
@@ -66,7 +66,7 @@ class SignUpFormTest extends TestCase
     #[Test]
     public function a_sign_up_needs_the_required_fields()
     {
-        $this->post('/signup')
+        $this->post('/sign-up')
             ->assertRedirect()
             ->assertInvalid([
                 'email' => 'Field email is required',

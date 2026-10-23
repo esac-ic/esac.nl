@@ -4,7 +4,6 @@ namespace App\Providers;
 
 use App\Enums\AdminRole;
 use App\Enums\SettingKey;
-use App\Models\Registration;
 use App\Models\Setting;
 use App\Models\User;
 use App\View\Composers\MenuComposer;
@@ -35,7 +34,7 @@ class AppServiceProvider extends ServiceProvider
         Countries::withUserAssigned(true);
 
         View::composer('components.menu', MenuComposer::class);
-        View::composer(['site.signup', 'admin.members.form', 'admin.members.show'], fn ($view) => $view->with('countries', Countries::getNames()));
+        View::composer(['site.signup', 'components.member-fields', 'components.member-tabs'], fn ($view) => $view->with('countries', Countries::getNames()));
         View::composer('includes.footer', fn ($view) => $view->with(
             'footerPhoneNumber',
             Setting::valueOf(SettingKey::FooterPhoneNumber),
@@ -58,8 +57,7 @@ class AppServiceProvider extends ServiceProvider
 
         Gate::define('manage-events', fn (User $user) => $user->hasRole(AdminRole::ContentAdministrator, AdminRole::EventAdministrator));
         Gate::define('manage-event-categories', fn (User $user) => $user->hasRole(AdminRole::Administrator));
-        Gate::define('delete-registration', fn (User $user, Registration $registration) => $registration->user()->is($user)
-            || $user->hasRole(AdminRole::EventAdministrator));
+        Gate::define('delete-registration', fn (User $user) => $user->hasRole(AdminRole::EventAdministrator));
         Gate::define('manage-zekeringen', fn (User $user) => $user->hasRole(AdminRole::EventAdministrator));
 
         Gate::define('manage-news', fn (User $user) => $user->hasRole(AdminRole::ContentAdministrator, AdminRole::EventAdministrator));

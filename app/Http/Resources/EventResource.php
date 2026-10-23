@@ -18,6 +18,8 @@ class EventResource extends JsonResource
         return [
             'id' => $this->id,
             'title' => $this->title,
+            'url' => route('events.show', $this->resource),
+            'registrationUrl' => route('events.registration.create', $this->resource),
             'thumbnail' => $this->image_url,
             'startDate' => $this->start_date->format('d M'),
             'text' => $this->short_description,
