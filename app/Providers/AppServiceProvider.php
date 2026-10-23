@@ -35,7 +35,7 @@ class AppServiceProvider extends ServiceProvider
         Countries::withUserAssigned(true);
 
         View::composer('components.menu', MenuComposer::class);
-        View::composer(['site.sign-up', 'components.member-fields', 'components.member-tabs'], fn ($view) => $view->with('countries', Countries::getNames()));
+        View::composer(['components.member-fields', 'components.member-tabs'], fn ($view) => $view->with('countries', Countries::getNames()));
         View::composer('includes.footer', fn ($view) => $view->with(
             'footerPhoneNumber',
             app(SiteSettings::class)->footer_phone_number,

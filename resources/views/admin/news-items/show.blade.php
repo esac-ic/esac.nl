@@ -6,8 +6,8 @@ News item
 
 @section('content')
     <x-page-header title="News item">
-        <x-edit-button :href="route('admin.news-items.edit', $newsItem)" />
-        <x-back-button :href="route('admin.news-items.index')" :block="false" />
+        <x-button-link :href="route('admin.news-items.edit', $newsItem)" icon="edit">Edit</x-button-link>
+        <x-button-link :href="route('admin.news-items.index')" icon="android-arrow-back">Back</x-button-link>
         <x-delete-button :action="route('admin.news-items.destroy', $newsItem)" confirm="Are you sure you want to delete this news item?" />
     </x-page-header>
     <x-card title="General information" class="mt-4">

@@ -6,8 +6,8 @@ Books
 
 @section('content')
     <x-page-header title="Books">
-        <x-edit-button :href="route('admin.books.edit', $book)" />
-        <x-back-button :href="route('admin.books.index')" />
+        <x-button-link :href="route('admin.books.edit', $book)" icon="edit">Edit</x-button-link>
+        <x-button-link :href="route('admin.books.index')" icon="android-arrow-back">Back</x-button-link>
         <x-delete-button :action="route('admin.books.destroy', $book)" confirm="Are you sure you want to delete this book?" />
     </x-page-header>
     <x-card title="Book" class="mt-4">

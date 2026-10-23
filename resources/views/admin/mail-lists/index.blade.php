@@ -13,10 +13,7 @@ Mail lists
             @csrf
             <button title="Sync member mail lists" type="submit" class="btn btn-primary"><span class="ion-loop" aria-hidden="true"></span> Sync member mail lists</button>
         </form>    
-        <a href="{{route('admin.mail-lists.create')}}" class="btn btn-primary" title="New mail list">
-            <span class="ion-plus" aria-hidden="true"></span>
-            New mail list
-        </a>
+        <x-button-link :href="route('admin.mail-lists.create')" icon="plus">New mail list</x-button-link>
     </x-page-header>
     <x-data-table datatable :columns="['Name', 'Email', 'Members count', 'Actions']">
         @foreach ($mailLists as $mailList)
@@ -25,7 +22,7 @@ Mail lists
                 <td>{{$mailList->address}}</td>
                 <td>{{$mailList->members_count}}</td>
                 <td>
-                    <a href="{{ route('admin.mail-lists.show', $mailList->address) }}"><span title="Show mail list" class="ion-eye" aria-hidden="true"></span></a>
+                    <x-icon-link :href="route('admin.mail-lists.show', $mailList->address)" icon="eye" title="Show mail list" />
                 </td>
             </tr>
         @endforeach

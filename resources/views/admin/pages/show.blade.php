@@ -12,25 +12,20 @@ Page
             <x-delete-button :action="route('admin.pages.destroy', $page)" confirm="Are you sure you want to delete this page?" />
         @endif
     </x-page-header>
-    <div class="card mt-4">
-        <div class="card-header">
-            <h3>Page {{$page->name}}</h3>
-        </div>
-        <div class="card-body">
-            <table class="table table-striped" style="width:100%">
-                <x-detail-row label="Name">{{$page->name}}</x-detail-row>
-                <x-detail-row label="Sub page of">{{ $page->parent?->name }}</x-detail-row>
-                <x-detail-row label="URL">{{$page->slug}}</x-detail-row>
-                <x-detail-row label="Requires login">{{ $page->requires_login ? 'Yes' : 'No' }}</x-detail-row>
-                @foreach($children as $child)
-                    <tr>
-                        @if($loop->first)
-                            <td rowspan="{{ $loop->count }}">Sub pages</td>
-                        @endif
-                        <td>{{ $child->name }}</td>
-                    </tr>
-                @endforeach
-            </table>
-        </div>
-    </div>
+    <x-card :title="'Page '.$page->name" class="mt-4">
+        <table class="table table-striped" style="width:100%">
+            <x-detail-row label="Name">{{$page->name}}</x-detail-row>
+            <x-detail-row label="Sub page of">{{ $page->parent?->name }}</x-detail-row>
+            <x-detail-row label="URL">{{$page->slug}}</x-detail-row>
+            <x-detail-row label="Requires login">{{ $page->requires_login ? 'Yes' : 'No' }}</x-detail-row>
+            @foreach($children as $child)
+                <tr>
+                    @if($loop->first)
+                        <td rowspan="{{ $loop->count }}">Sub pages</td>
+                    @endif
+                    <td>{{ $child->name }}</td>
+                </tr>
+            @endforeach
+        </table>
+    </x-card>
 @endsection

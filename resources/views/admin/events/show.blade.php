@@ -6,8 +6,8 @@
 
 @section('content')
     <x-page-header title="Event">
-        <x-edit-button :href="route('admin.events.edit', $event)" />
-        <x-back-button :href="route('admin.events.index')" :block="false" />
+        <x-button-link :href="route('admin.events.edit', $event)" icon="edit">Edit</x-button-link>
+        <x-button-link :href="route('admin.events.index')" icon="android-arrow-back">Back</x-button-link>
         <x-delete-button :action="route('admin.events.destroy', $event)" confirm="Are you sure you want to delete this event?" />
     </x-page-header>
     <x-card title="General information" class="mt-4">

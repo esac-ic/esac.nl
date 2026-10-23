@@ -1,7 +1,6 @@
 @extends('layouts.master')
 
 @push('styles')
-    <link rel="stylesheet" type="text/css" href="{{mix("css/vendor/datatables.css")}}">
     <link rel="stylesheet" type="text/css" href="{{mix("css/vendor/summernote.css")}}">
 @endpush
 
@@ -112,11 +111,8 @@
 @endsection
 
 @push('scripts')
-<script src="{{mix("js/vendor/datatables.js")}}"></script>
 <script src="{{mix("js/vendor/summernote.js")}}"></script>
 <script>
-    $('.js-datatable').DataTable();
-
     $(document).ready(function() {
         let $lastClick;
         let $body = $('#body');

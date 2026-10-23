@@ -25,11 +25,7 @@
                             <td>{{ $registration->event->start_date->format('d-m-Y H:i') }}</td>
                             <td>
                                 @if($registration->event->isRegistrationOpen())
-                                <form class="d-inline" method="post" action="{{ route('events.registration.destroy', $registration->event) }}" onsubmit="return confirm('Are you sure you want to remove your registration for this event?');">
-                                    @csrf
-                                    @method('DELETE')
-                                    <button type="submit" class="btn btn-link p-0"><span title="Remove registration" class="ion-trash-a" aria-hidden="true"></span></button>
-                                </form>
+                                    <x-delete-button icon :action="route('events.registration.destroy', $registration->event)" confirm="Are you sure you want to remove your registration for this event?">Remove registration</x-delete-button>
                                 @endif
                             </td>
                         </tr>
