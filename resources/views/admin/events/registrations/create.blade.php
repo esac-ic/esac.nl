@@ -8,7 +8,7 @@
     <div id="app">
         {{ html()->form('POST', route('admin.events.registrations.store', $event))->open() }}
             <x-card :title="$registrationForm->name">
-                <x-field name="user" label="Member who will be registered:" :options="$users" required />
+                <x-field name="user_id" label="Member who will be registered:" :options="$users" required />
                 <registration-form rows="{{ json_encode($fields) }}"></registration-form>
             </x-card>
 

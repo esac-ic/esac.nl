@@ -17,7 +17,7 @@ use Illuminate\Support\Facades\Storage;
 
 #[Fillable([
     'title',
-    'text',
+    'body',
     'short_description',
     'registration_deadline',
     'start_date',
@@ -33,7 +33,7 @@ class Event extends Model
     protected function casts(): array
     {
         return [
-            'text' => SanitizedHtml::class,
+            'body' => SanitizedHtml::class,
             'shows_certificates' => 'boolean',
             'start_date' => DisplayDateTime::class,
             'end_date' => DisplayDateTime::class,

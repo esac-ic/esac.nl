@@ -40,7 +40,7 @@ class NewsItemController extends Controller implements HasMiddleware
     {
         $newsItem = NewsItem::query()->create($request->validated());
 
-        if ($request->hasFile('thumbnail')) {
+        if ($request->hasFile('image')) {
             $this->storeImages($request, $newsItem);
         }
 
@@ -61,7 +61,7 @@ class NewsItemController extends Controller implements HasMiddleware
     {
         $newsItem->update($request->validated());
 
-        if ($request->hasFile('thumbnail')) {
+        if ($request->hasFile('image')) {
             $this->storeImages($request, $newsItem);
         }
 
@@ -80,13 +80,13 @@ class NewsItemController extends Controller implements HasMiddleware
      */
     private function storeImages(Request $request, NewsItem $newsItem): void
     {
-        $headerFileName = $newsItem->id.'-header.'.$request->thumbnail->extension();
-        $thumbnailFileName = $newsItem->id.'-thumbnail.'.$request->thumbnail->extension();
+        $headerFileName = $newsItem->id.'-header.'.$request->image->extension();
+        $thumbnailFileName = $newsItem->id.'-thumbnail.'.$request->image->extension();
 
-        $request->file('thumbnail')->storeAs('newsItems', $headerFileName, 'public');
+        $request->file('image')->storeAs('newsItems', $headerFileName, 'public');
         $newsItem->image_path = 'newsItems/'.$headerFileName;
 
-        $request->file('thumbnail')->storeAs('newsItems', $thumbnailFileName, 'public');
+        $request->file('image')->storeAs('newsItems', $thumbnailFileName, 'public');
         $newsItem->thumbnail_path = 'newsItems/'.$thumbnailFileName;
         $newsItem->save();
 

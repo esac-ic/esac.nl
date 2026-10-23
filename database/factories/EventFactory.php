@@ -16,7 +16,7 @@ class EventFactory extends Factory
     {
         return [
             'title' => fake()->word(),
-            'text' => fake()->text(),
+            'body' => fake()->text(),
             'short_description' => fake()->word(),
             'created_by' => User::factory(),
             'event_category_id' => EventCategory::factory(),

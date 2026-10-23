@@ -12,8 +12,8 @@ class EventRequest extends FormRequest
         return [
             'title' => ['required', 'max:255'],
             'short_description' => ['required', 'max:100'],
-            'text' => ['required'],
-            'thumbnail' => ['nullable', 'image', 'mimes:jpeg,png,jpg', 'max:10240'],
+            'body' => ['required'],
+            'image' => ['nullable', 'image', 'mimes:jpeg,png,jpg', 'max:10240'],
             'event_category_id' => ['required', 'exists:event_categories,id'],
             'registration_form_id' => ['nullable', Rule::exists('registration_forms', 'id')->withoutTrashed()],
             'registration_deadline' => ['exclude_without:registration_form_id', 'required', 'date'],

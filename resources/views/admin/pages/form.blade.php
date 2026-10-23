@@ -36,7 +36,7 @@
         </x-card>
         @if(! $page->exists || $page->editable)
             <x-card title="Content" class="mt-4">
-                <x-field name="content" label="Content" type="textarea" :data-images-url="route('admin.editor-images.store')" :value="$page->content" />
+                <x-field name="body" label="Content" type="textarea" :data-images-url="route('admin.editor-images.store')" :value="$page->body" />
             </x-card>
         @endif
 

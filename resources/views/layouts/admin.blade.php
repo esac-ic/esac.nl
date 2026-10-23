@@ -119,7 +119,7 @@
 
     $(document).ready(function() {
         let $lastClick;
-        let $content = $('#content');
+        let $body = $('#body');
 
         // Keep track of the last clicked element.
         $(document).mousedown(function(e) {
@@ -151,7 +151,7 @@
 
         // Initialise summernote textfields & add event to close the code view when focus is lost. This prevents
         // content from being lost, as it is not saved when code view is active.
-        $content.summernote(summernoteSettings).on('summernote.blur.codeview', handleSNBlur);
+        $body.summernote(summernoteSettings).on('summernote.blur.codeview', handleSNBlur);
     });
 </script>
 @endpush

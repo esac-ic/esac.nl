@@ -23,13 +23,13 @@ class PageSeeder extends Seeder
             [PageSlug::Zekeringen, 'Zekeringen', true, 'Zekeringen content'],
         ];
 
-        foreach ($pages as $index => [$slug, $name, $requiresLogin, $content]) {
+        foreach ($pages as $index => [$slug, $name, $requiresLogin, $body]) {
             Page::query()->forceCreate([
                 'position' => $index + 1,
                 'slug' => $slug->value,
                 'name' => $name,
                 'requires_login' => $requiresLogin,
-                'content' => $content,
+                'body' => $body,
                 'show_in_menu' => true,
                 'deletable' => false,
                 'editable' => true,

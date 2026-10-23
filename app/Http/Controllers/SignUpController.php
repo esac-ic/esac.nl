@@ -18,7 +18,7 @@ class SignUpController extends Controller
     {
         return view('site.sign-up', [
             'pageTitle' => 'Become a member',
-            'content' => Page::contentFor(PageSlug::SignUp),
+            'content' => Page::bodyFor(PageSlug::SignUp),
         ]);
     }
 

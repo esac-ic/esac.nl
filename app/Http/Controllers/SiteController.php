@@ -17,7 +17,7 @@ class SiteController extends Controller
     {
         return view('site.events.index', [
             'pageTitle' => 'Events',
-            'content' => Page::contentFor(PageSlug::Events),
+            'content' => Page::bodyFor(PageSlug::Events),
         ]);
     }
 
@@ -34,7 +34,7 @@ class SiteController extends Controller
     {
         return view('site.zekeringen', [
             'pageTitle' => 'Zekeringen',
-            'content' => Page::contentFor(PageSlug::Zekeringen),
+            'content' => Page::bodyFor(PageSlug::Zekeringen),
         ]);
     }
 
@@ -42,7 +42,7 @@ class SiteController extends Controller
     {
         return view('site.news.index', [
             'pageTitle' => 'News',
-            'content' => Page::contentFor(PageSlug::News),
+            'content' => Page::bodyFor(PageSlug::News),
             'newsItems' => NewsItem::query()->latest('id')->paginate(9),
         ]);
     }
@@ -59,7 +59,7 @@ class SiteController extends Controller
     {
         return view('site.library', [
             'pageTitle' => 'Library',
-            'content' => Page::contentFor(PageSlug::Library),
+            'content' => Page::bodyFor(PageSlug::Library),
             'books' => Book::all(),
         ]);
     }
@@ -69,7 +69,7 @@ class SiteController extends Controller
         return view('site.members', [
             'users' => User::query()->active()->get(['first_name', 'last_name', 'email', 'preposition', 'member_type', 'phone_number']),
             'pageTitle' => 'Members list',
-            'content' => Page::contentFor(PageSlug::Members),
+            'content' => Page::bodyFor(PageSlug::Members),
         ]);
     }
 
@@ -77,7 +77,7 @@ class SiteController extends Controller
     {
         return view('site.home', [
             'newsItems' => NewsItem::query()->latest('id')->take(3)->get(),
-            'content' => Page::contentFor(PageSlug::Home),
+            'content' => Page::bodyFor(PageSlug::Home),
             'pageTitle' => 'Home',
             'events' => Event::query()->upcoming()->withCount('registrations')->take(4)->get(),
         ]);
@@ -91,7 +91,7 @@ class SiteController extends Controller
         }
 
         return view('site.page', [
-            'content' => $page->content,
+            'content' => $page->body,
             'pageTitle' => $page->name,
         ]);
     }

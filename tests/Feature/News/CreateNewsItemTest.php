@@ -60,7 +60,7 @@ class CreateNewsItemTest extends TestCase
             'title' => 'test nieuws',
             'body' => 'test nieuws',
             'author' => 'Gebruiker1',
-            'thumbnail' => UploadedFile::fake()->image('photo.jpg', 1600, 1200),
+            'image' => UploadedFile::fake()->image('photo.jpg', 1600, 1200),
         ])->assertRedirect();
         $newsItem = NewsItem::sole();
 

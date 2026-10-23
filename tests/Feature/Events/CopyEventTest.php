@@ -46,7 +46,7 @@ class CopyEventTest extends TestCase
         $this->assertEquals($event->shows_certificates, $copy->shows_certificates);
 
         $this->assertEquals($event->title, $copy->title);
-        $this->assertEquals($event->text, $copy->text);
+        $this->assertEquals($event->body, $copy->body);
         $this->assertEquals($event->short_description, $copy->short_description);
     }
 
