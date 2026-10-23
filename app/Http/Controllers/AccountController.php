@@ -26,14 +26,14 @@ class AccountController extends Controller
         return view('account.edit', [
             'user' => $request->user(),
             'memberTypes' => MemberType::options(),
-            'pageTitle' => 'Edit account',
+            'pageTitle' => 'Edit your details',
         ]);
     }
 
     public function update(AccountRequest $request): RedirectResponse
     {
-        $request->user()->updateFromForm($request->safe()->except('current_password'));
+        $request->user()->updateFromForm($request->validated());
 
-        return to_route('account.show');
+        return to_route('account.show')->with('message', 'Your details are saved.');
     }
 }

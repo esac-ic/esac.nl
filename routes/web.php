@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AccountController;
+use App\Http\Controllers\AccountLoginController;
 use App\Http\Controllers\Admin\BookController;
 use App\Http\Controllers\Admin\CertificateController;
 use App\Http\Controllers\Admin\DashboardController;
@@ -80,6 +81,10 @@ Route::prefix('admin')->name('admin.')->middleware(['auth', 'can:access-admin'])
 
 Route::middleware('auth')->group(function () {
     Route::singleton('account', AccountController::class);
+    Route::controller(AccountLoginController::class)->prefix('account/login')->name('account.login.')->group(function () {
+        Route::get('edit', 'edit')->name('edit');
+        Route::put('/', 'update')->name('update');
+    });
 
     Route::get('members', [SiteController::class, 'members'])->name('members.index');
     Route::get('zekeringen', [SiteController::class, 'zekeringen'])->name('zekeringen');
