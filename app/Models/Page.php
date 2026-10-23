@@ -21,7 +21,7 @@ use Illuminate\Support\Facades\DB;
     'show_in_menu',
     'content',
 ])]
-class MenuItem extends Model
+class Page extends Model
 {
     use SoftDeletes;
 
@@ -37,23 +37,23 @@ class MenuItem extends Model
     }
 
     /**
-     * @return BelongsTo<MenuItem, $this>
+     * @return BelongsTo<Page, $this>
      */
     public function parent(): BelongsTo
     {
-        return $this->belongsTo(MenuItem::class, 'parent_id');
+        return $this->belongsTo(Page::class, 'parent_id');
     }
 
     /**
-     * @return HasMany<MenuItem, $this>
+     * @return HasMany<Page, $this>
      */
     public function children(): HasMany
     {
-        return $this->hasMany(MenuItem::class, 'parent_id')->chaperone('parent');
+        return $this->hasMany(Page::class, 'parent_id')->chaperone('parent');
     }
 
     /**
-     * Items that are shown in the menu.
+     * Pages that are shown in the menu.
      */
     #[Scope]
     protected function inMenu(Builder $query): void
@@ -61,10 +61,27 @@ class MenuItem extends Model
         $query->where('show_in_menu', true);
     }
 
+    /**
+     * Pages that aren't a sub page.
+     */
+    #[Scope]
+    protected function topLevel(Builder $query): void
+    {
+        $query->whereNull('parent_id');
+    }
+
     #[Scope]
     protected function ordered(Builder $query): void
     {
         $query->orderBy('position')->orderBy('id');
+    }
+
+    /**
+     * The content of a page that one of the site's own routes shows.
+     */
+    public static function contentFor(PageSlug $slug): ?string
+    {
+        return static::query()->where('slug', $slug)->value('content');
     }
 
     /**
@@ -76,18 +93,18 @@ class MenuItem extends Model
     }
 
     /**
-     * Moves the item one place up or down among its siblings and numbers them 1, 2, 3, ...
+     * Moves the page one place up or down among its siblings and numbers them 1, 2, 3, ...
      */
     public function move(string $direction): void
     {
         $siblings = static::query()->where('parent_id', $this->parent_id)->ordered()->get()->values();
-        $from = $siblings->search(fn (MenuItem $sibling) => $sibling->is($this));
+        $from = $siblings->search(fn (Page $sibling) => $sibling->is($this));
         $to = $direction === 'up' ? $from - 1 : $from + 1;
 
         if ($siblings->has($to)) {
             [$siblings[$from], $siblings[$to]] = [$siblings[$to], $siblings[$from]];
 
-            DB::transaction(fn () => $siblings->each(fn (MenuItem $sibling, int $index) => $sibling->forceFill(['position' => $index + 1])->save()));
+            DB::transaction(fn () => $siblings->each(fn (Page $sibling, int $index) => $sibling->forceFill(['position' => $index + 1])->save()));
         }
     }
 }

@@ -3,13 +3,13 @@
 namespace Database\Seeders;
 
 use App\Enums\PageSlug;
-use App\Models\MenuItem;
+use App\Models\Page;
 use Illuminate\Database\Seeder;
 
 /**
  * The pages the site's own routes show content from.
  */
-class MenuItemSeeder extends Seeder
+class PageSeeder extends Seeder
 {
     public function run(): void
     {
@@ -24,7 +24,7 @@ class MenuItemSeeder extends Seeder
         ];
 
         foreach ($pages as $index => [$slug, $name, $requiresLogin, $content]) {
-            MenuItem::query()->forceCreate([
+            Page::query()->forceCreate([
                 'position' => $index + 1,
                 'slug' => $slug->value,
                 'name' => $name,

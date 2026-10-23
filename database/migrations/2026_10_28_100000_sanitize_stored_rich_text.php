@@ -1,10 +1,6 @@
 <?php
 
 use App\Casts\SanitizedHtml;
-use App\Models\Event;
-use App\Models\MenuItem;
-use App\Models\NewsItem;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Support\Facades\DB;
 
@@ -15,17 +11,15 @@ return new class extends Migration
 {
     public function up(): void
     {
-        $this->sanitize(new Event, 'text');
-        $this->sanitize(new NewsItem, 'body');
-        $this->sanitize(new MenuItem, 'content');
+        $this->sanitize('events', 'text');
+        $this->sanitize('news_items', 'body');
+        $this->sanitize('menu_items', 'content');
     }
 
-    private function sanitize(Model $model, string $column): void
+    private function sanitize(string $table, string $column): void
     {
-        $cast = new SanitizedHtml;
-
-        DB::table($model->getTable())->whereNotNull($column)->orderBy('id')->each(fn (object $row) => DB::table($model->getTable())
+        DB::table($table)->whereNotNull($column)->orderBy('id')->each(fn (object $row) => DB::table($table)
             ->where('id', $row->id)
-            ->update([$column => $cast->set($model, $column, $row->{$column}, [])]));
+            ->update([$column => SanitizedHtml::sanitize($row->{$column})]));
     }
 };

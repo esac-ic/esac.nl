@@ -7,7 +7,7 @@
     <form class="form-horizontal" action="{{ $page->exists ? route('admin.pages.update', $page) : route('admin.pages.store') }}" method="POST">
         @csrf
         @method($page->exists ? 'PATCH' : 'POST')
-        <x-card :title="$page->exists ? 'Edit menu page' : 'Add menu item'">
+        <x-card :title="$page->exists ? 'Edit page' : 'Add page'">
             <div class="form-row">
                 <x-field name="name" label="Name" :value="$page->name" col="6" required />
                 @unless($page->hasFixedSlug())
@@ -35,7 +35,7 @@
             @endisset
         </x-card>
         @if(! $page->exists || $page->editable)
-            <x-card :title="$page->exists ? 'Edit page' : 'Add page'" class="mt-4">
+            <x-card title="Content" class="mt-4">
                 <x-field name="content" label="Content" type="textarea" :data-images-url="route('admin.editor-images.store')" :value="$page->content" />
             </x-card>
         @endif
