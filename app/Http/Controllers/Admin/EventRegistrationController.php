@@ -64,6 +64,7 @@ class EventRegistrationController extends Controller implements HasMiddleware
     public function show(Event $event, Registration $registration): View
     {
         return view('admin.events.registrations.show', [
+            'event' => $event,
             'answers' => $registration->answers()->with('field')->get(),
         ]);
     }

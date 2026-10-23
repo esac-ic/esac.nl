@@ -105,8 +105,8 @@ Route::get('ical', EventFeedController::class);
 Route::permanentRedirect('agenda', '/events');
 Route::permanentRedirect('agenda/{event}', '/events/{event}');
 Route::permanentRedirect('memberlist', '/members');
-Route::get('signup', fn () => to_route('sign-up.create', status: 301));
-Route::get('forms/{event}', fn (string $event) => to_route('events.registration.create', $event, 301));
+Route::permanentRedirect('signup', '/sign-up');
+Route::permanentRedirect('forms/{event}', '/events/{event}/registration');
 
 Route::controller(SiteController::class)->group(function () {
     Route::get('home', 'home')->name('home');

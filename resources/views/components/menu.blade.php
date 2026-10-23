@@ -3,7 +3,7 @@
     <div id="{{ $navId }}" class="{{ $navClass }} navbar-dark">
         <div class="container">
             <nav class="navbar navbar-expand-lg">
-                <a class="navbar-brand" href="{{ url('/') }}">
+                <a class="navbar-brand" href="{{ route('home') }}">
                     <x-logo />
                 </a>
                 <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#site-menu"
