@@ -22,10 +22,7 @@
             </div>
             <span>Image</span>
             <div class="form-group mt-2">
-                <div class="custom-file">
-                    <input type="file" class="custom-file-input" id="thumbnail" name="thumbnail">
-                    <label class="custom-file-label" for="thumbnail">Choose file</label>
-                </div>
+                <input type="file" class="form-control-file" id="thumbnail" name="thumbnail">
             </div>
             <x-field name="body" id="content" label="Message" type="textarea" :value="$newsItem->body" />
         </x-card>
@@ -38,17 +35,3 @@
     </div>
 @endsection
 
-@push('scripts')
-    <script type="module">
-        $('.custom-file-input').on('change', function() {
-           let fileName = $(this).val().split('\\').pop();
-           $(this).next('.custom-file-label').addClass("selected").html(fileName);
-        });
-    </script>
-
-    <script type="module">
-        $(document).ready(function() {
-            $('#content').summernote(summernoteSettings);
-        });
-    </script>
-@endpush

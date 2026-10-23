@@ -10,7 +10,7 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 use PHPUnit\Framework\Attributes\Test;
 use Tests\TestCase;
 
-class MemberRegistrationsApiTest extends TestCase
+class MemberRegistrationsTest extends TestCase
 {
     use RefreshDatabase;
 
@@ -25,8 +25,8 @@ class MemberRegistrationsApiTest extends TestCase
         $admin = User::factory()->withRole(AdminRole::CertificateAdministrator)->create();
 
         $this->actingAs($admin)
-            ->getJson(route('api.registrations.index', ['user_id' => $member->id]))
+            ->get(route('admin.members.show', $member))
             ->assertOk()
-            ->assertJsonPath('0.name', 'Ice climbing weekend');
+            ->assertSee('Ice climbing weekend');
     }
 }

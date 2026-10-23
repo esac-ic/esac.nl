@@ -9,11 +9,7 @@
         <x-button-link :href="route('admin.events.create')" icon="plus">New event</x-button-link>
     </x-page-header>
     <div class="row mb-3">
-        <div class="col-md-3">
-            <div class="form-group">
-                <x-date-picker name="startDate" id="startDate" label="Start date" :value="now(config('app.display_timezone'))->format('d-m-Y')" />
-            </div>
-        </div>
+        <x-field type="date" name="startDate" label="Start date" :value="today(config('app.display_timezone'))->toDateString()" col="3" />
     </div>
 
     <x-data-table id="events-table" :columns="['Title', 'Start date', 'End date', 'Actions']" />
@@ -28,45 +24,18 @@
 @endpush
 
 @push('scripts')
-    @vite(['resources/assets/js/vendor/datatables.js', 'resources/assets/js/vendor/moment.js', 'resources/assets/js/vendor/tempusdominus.js'])
+    @vite(['resources/assets/js/vendor/datatables.js'])
     <script type="module">
-        $('#startDateBox').datetimepicker({
-            format: "DD-MM-YYYY",
-            icons: {
-                time: 'ion-clock',
-                date: 'ion-calendar',
-                up: 'ion-android-arrow-up',
-                down: 'ion-android-arrow-down',
-                previous: 'ion-chevron-left',
-                next: 'ion-chevron-right',
-                today: 'ion-calendar',
-                clear: 'ion-trash-a',
-                close: 'ion-close'
-            }
-        });
-
         let eventsTable = $('#events-table').DataTable({
             "order": [[1, "asc"]],
             "ajax": {
                 'url': eventsApiUrl(),
                 "dataSrc": "agendaItems"
             },
-            columnDefs: [
-                {type: 'de_datetime', targets: 1},
-                {type: 'de_datetime', targets: 2},
-            ],
             "columns": [
                 {"data": "title"},
-                {
-                    "data": function (data) {
-                        return formatDate(data.full_startDate);
-                    }
-                },
-                {
-                    "data": function (data) {
-                        return formatDate(data.endDate);
-                    }
-                },
+                {"data": "full_startDate", "render": formatDate},
+                {"data": "endDate", "render": formatDate},
                 {
                     "data": function (data) {
                         return eventActionLinks(data);
@@ -75,13 +44,11 @@
             ]
         });
 
-        $("#startDateBox").on("change.datetimepicker", function (e) {
-            eventsTable.ajax.url(eventsApiUrl()).load();
-        });
+        document.getElementById('startDate').addEventListener('change', () => eventsTable.ajax.url(eventsApiUrl()).load());
 
-        function formatDate(date) {
-            date = moment(date);
-            return date.format("DD-MM-YYYY HH:mm")
+        // Shows a "Y-m-d H:i:s" date as "d-m-Y H:i", sorting on the original.
+        function formatDate(date, type) {
+            return type === 'display' ? date.slice(0, 16).replace(/^(\d+)-(\d+)-(\d+)/, '$3-$2-$1') : date;
         }
 
         function eventActionLinks(data) {
@@ -97,9 +64,9 @@
 
         function eventsApiUrl() {
             let params = "limit=10000000";
-            let datePicker = $('#startDate');
-            if (datePicker.val() != "") {
-                params += "&startDate=" + datePicker.val();
+            let startDate = document.getElementById('startDate').value;
+            if (startDate !== "") {
+                params += "&startDate=" + startDate.split('-').reverse().join('-');
             }
 
             return "{{ route('api.events.index') }}?" + params;

@@ -79,30 +79,18 @@
     </div>
 </div>
 
-@push('scripts')
-    <script type="module">
-        var navId = $('#scrollNav');
-        var timeOut;
-        
-        $(window).on('load resize', function () {
-            var viewPortWidth = $(document).width();
-            if (viewPortWidth < 992) {
-                navId.addClass('bg-dark');
-                $(window).off('scroll')
-                window.cancelAnimationFrame(timeOut);
-            } else {
-                navId.toggleClass('bg-dark', $(window).scrollTop() > 15);
-                
-                $(window).scroll(function () {
-                    if (timeOut) {
-                        window.cancelAnimationFrame(timeOut);
-                    }
-                    
-                    timeOut = window.requestAnimationFrame(function () {
-                        navId.toggleClass('bg-dark', $(window).scrollTop() > 15);
-                    });
-                });
+@if ($navId)
+    @push('scripts')
+        <script type="module">
+            {
+                // On wide screens the menu is transparent over the header until the page scrolls.
+                const nav = document.getElementById(@json($navId));
+                const updateNav = () => nav.classList.toggle('bg-dark', window.innerWidth < 992 || window.scrollY > 15);
+
+                updateNav();
+                window.addEventListener('scroll', updateNav, {passive: true});
+                window.addEventListener('resize', updateNav);
             }
-        });
-    </script>
-@endpush
+        </script>
+    @endpush
+@endif

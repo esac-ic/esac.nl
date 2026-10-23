@@ -3,7 +3,6 @@
 use App\Http\Controllers\Api\EventCategoryController;
 use App\Http\Controllers\Api\EventController;
 use App\Http\Controllers\Api\MemberController;
-use App\Http\Controllers\Api\RegistrationController;
 use App\Http\Controllers\Api\ZekeringController;
 use Illuminate\Support\Facades\Route;
 
@@ -13,7 +12,6 @@ Route::get('agendaCategories', [EventCategoryController::class, 'index'])->name(
 
 Route::get('users', [MemberController::class, 'index'])->name('members.index');
 Route::get('users/autoComplete', [MemberController::class, 'autocomplete'])->name('members.autocomplete');
-Route::get('user/registrations', [RegistrationController::class, 'index'])->name('registrations.index');
 
 Route::controller(ZekeringController::class)->group(function () {
     Route::get('zekeringen', 'index')->name('zekeringen.index');

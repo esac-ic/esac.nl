@@ -27,12 +27,8 @@
                     </div>
                     
                     <div class="form-row">
-                        <div class="form-group col-md-6">
-                            <x-date-picker name="start_date" id="startDate" label="Start date" :value="now(config('app.display_timezone'))->subWeeks(1)->format('d-m-Y H:i')" />
-                        </div>
-                        <div class="form-group col-md-6">
-                            <x-date-picker name="end_date" id="endDate" label="End date" :value="now(config('app.display_timezone'))->format('d-m-Y H:i')" />
-                        </div>
+                        <x-field type="datetime-local" name="start_date" label="Start date" :value="now(config('app.display_timezone'))->subWeeks(1)->toDateTimeLocalString('minute')" col="6" required />
+                        <x-field type="datetime-local" name="end_date" label="End date" :value="now(config('app.display_timezone'))->toDateTimeLocalString('minute')" col="6" required />
                     </div>
                     
                     <div class="form-row">
@@ -45,37 +41,3 @@
         </div>
     </div>
 </div>
-    
-@push('scripts')
-    {{-- Date-time pickers for the period, keeping the end date after the start date --}}
-    @vite(['resources/assets/js/vendor/moment.js', 'resources/assets/js/vendor/tempusdominus.js'])
-
-    <script type="module">
-        $('#startDateBox, #endDateBox').datetimepicker({
-            icons: {
-                time: 'ion-clock',
-                date: 'ion-calendar',
-                up: 'ion-android-arrow-up',
-                down: 'ion-android-arrow-down',
-                previous: 'ion-chevron-left',
-                next: 'ion-chevron-right',
-                today: 'ion-calendar',
-                clear: 'ion-trash-a',
-                close: 'ion-close'
-            }
-        });
-
-        $(function () {
-            $('#startDateBox').datetimepicker();
-            $('#endDateBox').datetimepicker({
-                useCurrent: false
-            });
-            $("#startDateBox").on("change.datetimepicker", function (e) {
-                $('#endDateBox').datetimepicker('minDate', e.date);
-            });
-            $("#endDateBox").on("change.datetimepicker", function (e) {
-                $('#startDateBox').datetimepicker('maxDate', e.date);
-            });
-        });
-    </script>
-@endpush

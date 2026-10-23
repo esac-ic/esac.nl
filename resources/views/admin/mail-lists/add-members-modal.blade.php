@@ -36,7 +36,6 @@
 
         function initializeDataTable() {
             candidatesTable = $('#mail-list-candidates-table').DataTable({
-                buttons: ['pageLength'],
                 ajax: '{{ route('api.members.index') }}',
                 columns: [
                     {
@@ -62,30 +61,12 @@
         }
 
         function addSelectedMembersToMailList() {
-            $.ajax({
-                url: '{{ route('admin.mail-lists.members.store', $mailList->id) }}',
-                data: {
-                    member_ids: selectedMemberIds,
-                    _token: window.Laravel.csrfToken
-                },
-                type: 'POST',
-                success: function() {
-                    window.location.reload();
-                },
-                error: function() {
-                    window.location.reload();
-                }
-            });
+            axios.post('{{ route('admin.mail-lists.members.store', $mailList->id) }}', {member_ids: selectedMemberIds})
+                .finally(() => window.location.reload());
         }
 
-        $(document).ready(function() {
-            initializeDataTable();
-
-            $(document).on('change', '.member-checkbox', function() {
-                toggleSelectedMember($(this).val());
-            });
-
-            $(document).on('click', '#add-members-submit', addSelectedMembersToMailList);
-        });
+        document.addEventListener('DOMContentLoaded', initializeDataTable);
+        document.getElementById('mail-list-candidates-table').addEventListener('change', event => toggleSelectedMember(event.target.value));
+        document.getElementById('add-members-submit').addEventListener('click', addSelectedMembersToMailList);
     </script>
 @endpush

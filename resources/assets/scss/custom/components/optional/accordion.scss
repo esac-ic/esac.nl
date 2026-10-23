@@ -7,7 +7,7 @@
 
 // Markup:
 //
-// .accordion > .accordion-item > [data-toggle="collapse"], .collapse
+// .accordion > details.accordion-item > summary
 
 .accordion{
   // Ensure accordions are spaced away from adjacent siblings
@@ -20,34 +20,34 @@
 }
 
 .accordion-item{
-  > [data-toggle="collapse"]{
+  > summary{
     transition: margin .35s ease, opacity .35s ease;
     cursor: pointer;
     display: flex;
     flex-wrap: wrap;
     justify-content: space-between;
+    color: $link-color;
+    &::-webkit-details-marker{
+      display: none;
+    }
+    // Fade accordion title when not open or hovered
+    opacity: .5;
+    &:hover{
+      opacity: 1;
+    }
     > *{
       margin-bottom: 0;
-    }
-    &:hover{
-      text-decoration: none;
     }
     i{
       transition: transform .35s ease;
     }
-    // Rotate arrow icon when item is open
-    &[aria-expanded="true"]{
-      i{
-        transform: rotate(90deg);
-      }
-      margin-bottom: $spacer/2;
-    }
-    // Fade accordion title when not active or hovered
-    &[aria-expanded="false"]{
-      opacity: .5;
-      &:hover{
-        opacity: 1;
-      }
+  }
+  // Rotate arrow icon when item is open
+  &[open] > summary{
+    opacity: 1;
+    margin-bottom: $spacer/2;
+    i{
+      transform: rotate(90deg);
     }
   }
   // Add border to separate items

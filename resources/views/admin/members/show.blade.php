@@ -4,7 +4,6 @@
 {{ $user->name }}
 @endsection
 
-
 @section('content')
     <x-page-header title="Member">
         @if($user->isPendingMember() && auth()->user()->can('manage-members'))
@@ -179,62 +178,23 @@
                 </table>
             </div>
             <div class="tab-pane fade" id="registrations" role="tabpanel" aria-labelledby="registrations-tab">
-                <table class="table table-striped" style="width:100%" id="registrations-table">
-                    <thead>
-                    <tr>
-                        <td>
-                            <strong>Name</strong>
-                        </td>
-                        <td>
-                            <strong>Start date</strong>
-                        </td>
-                        <td>
-                            <strong>Action</strong>
-                        </td>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    </tbody>
-                </table>
+                <x-data-table datatable :data-order="json_encode([[1, 'asc']])" :columns="['Name', 'Start date', 'Action']">
+                    @foreach ($user->registrations as $registration)
+                        <tr>
+                            <td>{{ $registration->event->title }}</td>
+                            <td data-order="{{ $registration->event->start_date->timestamp }}">{{ $registration->event->start_date->format('d-m-Y H:i') }}</td>
+                            <td>
+                                <a href="{{ route('admin.events.registrations.show', [$registration->event_id, $registration]) }}"><span title="Show entered information" class="ion-eye" aria-hidden="true"></span></a>
+                                <form class="d-inline" method="post" action="{{ route('admin.events.registrations.destroy', [$registration->event_id, $registration]) }}" onsubmit="return confirm('Are you sure you want to remove your registration for this event?');">
+                                    @csrf
+                                    @method('DELETE')
+                                    <button type="submit" class="btn btn-link p-0"><span title="Remove registration" class="ion-trash-a" aria-hidden="true"></span></button>
+                                </form>
+                            </td>
+                        </tr>
+                    @endforeach
+                </x-data-table>
             </div>
         </div>
     </x-card>
 @endsection
-
-@push('scripts')
-    @vite(['resources/assets/js/vendor/datatables.js'])
-    <script type="module">
-        $('#registrations-table').DataTable({
-            "order": [[ 1, "asc" ]],
-            "ajax": {
-                'url' : '{{ route('api.registrations.index', ['user_id' => $user->id]) }}',
-                "dataSrc": ""
-            },
-            "columns": [
-                { "data": "name" },
-                { "data": "startDate"},
-                { "data": "actions"},
-            ]
-        });
-        $(document).on('click', '.js-delete-registration', function(){
-            if(confirm("Are you sure you want do remove your registration for this event?")){
-                var url = $(this).attr('data-destroy-url');
-                $.ajax({
-                    url: url,
-                    beforeSend: function(request) {
-                        request.setRequestHeader("X-CSRF-TOKEN", $('meta[name="csrf-token"]').attr('content'));
-                    },
-                    method: 'DELETE',
-                    contentType: 'application/json',
-                    success: function() {
-                        window.location.reload();
-                    },
-                    error: function() {
-                        window.location.reload();
-                    }
-                });
-            }
-
-        });
-    </script>
-@endpush

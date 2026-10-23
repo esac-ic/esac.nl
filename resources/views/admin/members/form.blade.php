@@ -37,9 +37,7 @@
             <x-field name="phone_number_alt" label="Alternative phone number" :value="$user->phone_number_alt" col="6" />
         </div>
         <div class="form-row">
-            <div class="form-group col-md-6">
-                <x-date-picker name="birthday" id="birthDay" label="Birthdate" :value="($user->birthday ?? now())->format('d-m-Y')" />
-            </div>
+            <x-field type="date" name="birthday" label="Birthdate" :value="$user->birthday?->toDateString()" col="6" required />
             <x-field name="member_type" label="Member type" :options="$memberTypes" :value="$user->member_type" col="6" required :disabled="auth()->user()->cannot('manage-members')" />
         </div>
         <x-field name="remark" label="Remarks" :value="$user->remark" :disabled="auth()->user()->cannot('manage-members')" />
@@ -86,25 +84,3 @@
     {{ html()->form()->close() }}
 @endsection
 
-@push('scripts')
-    @vite(['resources/assets/js/vendor/moment.js', 'resources/assets/js/vendor/tempusdominus.js'])
-    <script type="module">
-        $('#birthDayBox').datetimepicker({
-            format: 'L',
-            icons: {
-                time: 'ion-clock',
-                date: 'ion-calendar',
-                up: 'ion-android-arrow-up',
-                down: 'ion-android-arrow-down',
-                previous: 'ion-chevron-left',
-                next: 'ion-chevron-right',
-                today: 'ion-calendar',
-                clear: 'ion-trash-a',
-                close: 'ion-close'
-            }
-        });
-        $(function(){
-            $('#birthDayBox').datetimepicker();
-        })
-    </script>
-@endpush

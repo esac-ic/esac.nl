@@ -15,7 +15,6 @@ The following libaries and framework are used:
 - [Vite](https://vite.dev) (via [laravel-vite-plugin](https://github.com/laravel/vite-plugin))
 - [Bootstrap](https://getbootstrap.com/)
 - [Vue](https://vuejs.org)
-- [Tempus Dominus](https://tempusdominus.github.io/bootstrap-4/)
 
 
 ## Setting up steps

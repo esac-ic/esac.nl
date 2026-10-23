@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\User;
 use App\Services\Mailman;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Routing\Controllers\HasMiddleware;
@@ -40,10 +41,10 @@ class MailListMemberController extends Controller implements HasMiddleware
         return response()->noContent();
     }
 
-    public function destroy(string $mailList, string $member): Response
+    public function destroy(string $mailList, string $member): RedirectResponse
     {
         $this->mailman->removeMember($mailList, $member);
 
-        return response()->noContent();
+        return back();
     }
 }
