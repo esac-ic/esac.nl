@@ -37,7 +37,7 @@
         <div class="form-row">
             <x-field name="zipcode" label="Postal code" col="4" required />
             <x-field name="city" label="City" col="4" required />
-            <x-field name="country" label="Country" :options="config('countries')" value="NL" col="4" required />
+            <x-field name="country" label="Country" :options="$countries" value="NL" col="4" required />
         </div>
         <div class="form-row">
             <x-field name="phone_number" label="Phone number" col="6" required />
@@ -60,7 +60,7 @@
         <div class="form-row">
             <x-field name="emergency_zipcode" label="Emergency postal code" col="4" required />
             <x-field name="emergency_city" label="Emergency city" col="4" required />
-            <x-field name="emergency_country" label="Emergency country" :options="config('countries')" value="NL" col="4" required />
+            <x-field name="emergency_country" label="Emergency country" :options="$countries" value="NL" col="4" required />
         </div>
         <x-field name="emergency_number" label="Emergency phone number" required />
     </x-card>

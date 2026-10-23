@@ -15,6 +15,7 @@ use Illuminate\Support\Facades\Queue;
 use Illuminate\Support\Facades\View;
 use Illuminate\Support\Once;
 use Illuminate\Support\ServiceProvider;
+use Symfony\Component\Intl\Countries;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -30,7 +31,11 @@ class AppServiceProvider extends ServiceProvider
         // A queue worker runs many jobs in one process, so each job reads the settings afresh.
         Queue::before(fn () => Once::flush());
 
+        // Kosovo has no official ISO code yet, so it's only listed with the user-assigned XK.
+        Countries::withUserAssigned(true);
+
         View::composer('components.menu', MenuComposer::class);
+        View::composer(['site.signup', 'admin.members.form', 'admin.members.show'], fn ($view) => $view->with('countries', Countries::getNames()));
         View::composer('includes.footer', fn ($view) => $view->with(
             'footerPhoneNumber',
             Setting::valueOf(SettingKey::FooterPhoneNumber),
