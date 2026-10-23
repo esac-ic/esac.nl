@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests;
 
+use App\Enums\AdminRole;
 use App\Enums\MemberType;
 use App\Http\Requests\Concerns\ValidatesMemberDetails;
 use Illuminate\Foundation\Http\FormRequest;
@@ -16,11 +17,11 @@ class MemberRequest extends FormRequest
     use ValidatesMemberDetails;
 
     /**
-     * An unchecked checkbox isn't posted.
+     * Unchecked checkboxes aren't posted.
      */
     protected function prepareForValidation(): void
     {
-        $this->merge(['direct_debit' => $this->boolean('direct_debit')]);
+        $this->merge(['direct_debit' => $this->boolean('direct_debit'), 'roles' => $this->input('roles', [])]);
     }
 
     public function rules(): array
@@ -37,6 +38,9 @@ class MemberRequest extends FormRequest
             'direct_debit' => ['boolean'],
             'remark' => ['nullable'],
             'member_type' => ['required', Rule::enum(MemberType::class)],
+            // Only those who manage the roles can hand them out.
+            'roles' => [Rule::excludeIf($this->user()->cannot('manage-roles')), 'array'],
+            'roles.*' => [Rule::enum(AdminRole::class)],
         ];
     }
 }

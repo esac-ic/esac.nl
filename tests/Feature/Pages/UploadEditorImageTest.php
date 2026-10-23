@@ -19,7 +19,7 @@ class UploadEditorImageTest extends TestCase
     {
         Storage::fake('public');
         $admin = User::factory()->create();
-        $admin->roles()->attach(AdminRole::ContentAdministrator->value);
+        $admin->update(['roles' => [AdminRole::ContentAdministrator]]);
         $this->actingAs($admin);
 
         $this->post('admin/editor-images', ['image' => UploadedFile::fake()->createWithContent('shell.php', '<?php echo 1;')])

@@ -20,7 +20,6 @@ use App\Http\Controllers\Admin\PageController;
 use App\Http\Controllers\Admin\PendingMemberController;
 use App\Http\Controllers\Admin\PennoExportController;
 use App\Http\Controllers\Admin\RegistrationFormController;
-use App\Http\Controllers\Admin\RoleController;
 use App\Http\Controllers\Admin\SettingsController;
 use App\Http\Controllers\EventFeedController;
 use App\Http\Controllers\RegistrationController;
@@ -48,8 +47,6 @@ Route::prefix('admin')->name('admin.')->middleware(['auth', 'can:access-admin'])
 
     Route::resource('certificates', CertificateController::class);
     Route::resource('members.certificates', MemberCertificateController::class)->except(['index', 'show'])->scoped();
-
-    Route::resource('roles', RoleController::class);
 
     Route::resource('events', EventController::class);
     Route::post('events/{event}/copy', [EventController::class, 'copy'])->name('events.copy');
