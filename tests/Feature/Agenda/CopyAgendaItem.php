@@ -24,7 +24,7 @@ class CopyAgendaItem extends TestCase
         parent::setUp();
         $this->user = User::factory()->create();
 
-        $this->role = factory(Rol::class)->create([
+        $this->role = Rol::factory()->create([
             'id' => 3
         ]);
 
@@ -43,7 +43,7 @@ class CopyAgendaItem extends TestCase
 
     /** @test */
     public function agenda_item_can_be_copied(){
-        $agendaItem = factory(AgendaItem::class)->create(['image_url' => ""]);
+        $agendaItem = AgendaItem::factory()->create(['image_url' => ""]);
 
         $response = $this->get($this->url . $agendaItem->id . '/copy');
 

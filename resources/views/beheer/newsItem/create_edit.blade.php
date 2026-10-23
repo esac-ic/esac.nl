@@ -20,18 +20,18 @@
             </ul>
         @endif
 
-        {!! Form::open(['method' => $fields['method'], 'url' => $fields['url'],'enctype' => 'multipart/form-data'])  !!}
+        {{ html()->form($fields['method'], url($fields['url']))->acceptsFiles()->open() }}
         <div class="card">
             <div class="card-header">
                 <h3>{{$fields['title']}}</h3>
             </div>
             <div class="card-body">
                 <div class="form-group">
-                    {!! Form::label('title', 'Title') !!}
-                    {!! Form::text('title', ($newsItem != null) ? $newsItem->title : "", ['class' => 'form-control','required' => 'required']) !!}
+                    {{ html()->label('Title', 'title') }}
+                    {{ html()->text('title', ($newsItem != null) ? $newsItem->title : "")->class('form-control')->required() }}
                 </div>
                 <div class="form-group">
-                    {!! Form::label('author', 'Author') !!}
+                    {{ html()->label('Author', 'author') }}
                     <auto-complete-field
                             name="author"
                             url="{{ route('user.autoComplete') }}"
@@ -47,15 +47,15 @@
                     </div>
                 </div>
                 <div class="form-group">
-                    {{Form::label('text',  'News message')}}
-                    {{Form::textarea('text',($newsItem != null) ?  $newsItem->text : "",array('class' => 'form-control', 'id' => 'content'))}}
+                    {{ html()->label('News message', 'text') }}
+                    {{ html()->textarea('text')->text(old('text', ($newsItem != null) ? $newsItem->text : ""))->class('form-control')->id('content')->cols(50)->rows(10) }}
                 </div>
             </div>
         </div>
 
         <div class="my-4">
-            {!! Form::submit('Save', ['class'=> 'btn btn-primary'] ) !!}
-            {!! Form::close() !!}
+            {{ html()->submit('Save')->class('btn btn-primary') }}
+            {{ html()->form()->close() }}
             <a class="btn btn-danger btn-close" href="{{ ($newsItem == null) ? ('/newsItems') : ('/newsItems/' . $newsItem->id)}}">Cancel</a>
         </div>
     </div>

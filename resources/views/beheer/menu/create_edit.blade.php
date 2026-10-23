@@ -9,13 +9,13 @@
 		<div class="alert alert-danger alert-dismissable" role="alert">
 			<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
 			@foreach ($errors->all() as $error)
-				{!! $errors->first() !!}
+				{{ $errors->first() }}
 			@endforeach
 		</div>
 	@endif
 	<form class="form-horizontal" action="{{url($fields['url'])}}" method="POST">
-		{{ csrf_field() }}
-		{{method_field($fields['method'])}}
+		@csrf
+		@method($fields['method'])
 		@include('beheer.menu.create_edit_menu')
 		@if($page === null || $page->editable)
 			@include('beheer.menu.create_edit_page')

@@ -63,7 +63,7 @@
     <body>
         @yield('main')
 
-        <script>var APP_URL = "{{env('APP_URL')}}";</script>
+        <script>var APP_URL = "{{ config('app.url') }}";</script>
         <script src="{{mix("/js/vendor/jquery-bootstrap.js")}}"></script>
         @stack('scripts')
         <script src="{{mix("/js/app.js")}}"></script>
