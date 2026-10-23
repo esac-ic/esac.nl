@@ -79,7 +79,7 @@
                     <h5>Privacy Policy</h5>
                     <i class="h5 ion-chevron-right"></i>
                 </summary>
-                @include('includes.privacy_policy')
+                @include('includes.privacy-policy')
             </details>
             <details class="accordion-item" name="signup-terms">
                 <summary>
