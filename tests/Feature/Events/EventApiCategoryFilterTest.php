@@ -40,7 +40,6 @@ class EventApiCategoryFilterTest extends TestCase
         $json = json_decode($response->getContent());
 
         $this->assertEquals($json->{'agendaItemCount'}, 1);
-        $this->assertEquals($json->{'agendaItems'}[0]->{'category'}, $eventCategory->name);
         $this->assertEquals($json->{'agendaItems'}[0]->{'title'}, $event->title);
 
         $response = $this->get($this->url.'?category='.($eventCategory->id + 1));

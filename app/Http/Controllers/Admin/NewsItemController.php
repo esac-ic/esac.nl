@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\NewsItemRequest;
 use App\Models\NewsItem;
+use App\Models\User;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -33,7 +34,7 @@ class NewsItemController extends Controller implements HasMiddleware
 
     public function create(): View
     {
-        return view('admin.news-items.form', ['newsItem' => new NewsItem]);
+        return $this->form(new NewsItem);
     }
 
     public function store(NewsItemRequest $request): RedirectResponse
@@ -54,7 +55,7 @@ class NewsItemController extends Controller implements HasMiddleware
 
     public function edit(NewsItem $newsItem): View
     {
-        return view('admin.news-items.form', ['newsItem' => $newsItem]);
+        return $this->form($newsItem);
     }
 
     public function update(NewsItemRequest $request, NewsItem $newsItem): RedirectResponse
@@ -98,5 +99,13 @@ class NewsItemController extends Controller implements HasMiddleware
     {
         $imagePath = Storage::disk('public')->path($path);
         ImageManager::usingDriver(Driver::class)->decodePath($imagePath)->cover($width, $height)->save($imagePath);
+    }
+
+    private function form(NewsItem $newsItem): View
+    {
+        return view('admin.news-items.form', [
+            'newsItem' => $newsItem,
+            'memberNames' => User::query()->active()->orderBy('first_name')->get()->pluck('name'),
+        ]);
     }
 }
