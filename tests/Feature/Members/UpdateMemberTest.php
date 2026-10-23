@@ -78,7 +78,7 @@ class UpdateMemberTest extends TestCase
     #[Test]
     public function an_admin_can_update_another_member()
     {
-        $data = self::DETAILS + ['email' => 'Second@esac.nl', 'first_name' => 'New', 'last_name' => 'Second', 'member_type' => 'alumnus'];
+        $data = self::DETAILS + ['email' => 'Second@esac.nl', 'first_name' => 'New', 'last_name' => 'Second', 'member_type' => 'reunist'];
 
         $this->actingAs($this->admin)->patch(route('admin.members.update', $this->member), $data)
             ->assertRedirect(route('admin.members.index'));
