@@ -130,4 +130,19 @@ class MailmanTest extends TestCase
 
         Http::assertSentCount(2);
     }
+
+    #[Test]
+    public function adding_and_removing_a_member_and_finding_their_mail_lists_succeed()
+    {
+        Http::fake([
+            "$this->mailmanUrl/members" => Http::response(status: 201),
+            "$this->mailmanUrl/lists/lid.esac.nl/member/*" => Http::response(status: 204),
+            "$this->mailmanUrl/lists/find" => Http::response($this->collectionPayload([$this->mailListPayload('lid')])),
+        ]);
+
+        $this->mailman()->addMember('lid.esac.nl', 'member@esac.nl', 'Member');
+        $this->mailman()->removeMember('lid.esac.nl', 'member@esac.nl');
+
+        $this->assertSame(['lid.esac.nl'], $this->mailman()->mailListsOf('member@esac.nl')->pluck('id')->all());
+    }
 }
