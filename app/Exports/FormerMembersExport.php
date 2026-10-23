@@ -32,7 +32,7 @@ class FormerMembersExport extends SpreadsheetExport
             'First name',
             'Preposition',
             'Last name',
-            'Member since',
+            'Signed up on',
             'Membership ended on',
         ];
     }

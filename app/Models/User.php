@@ -23,7 +23,6 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Log;
 use RuntimeException;
 
 #[Fillable([
@@ -229,28 +228,13 @@ class User extends Authenticatable
         MembershipEnded::dispatch($this);
     }
 
-    /**
-     * Makes a former member active again; returns false when they're already active or have no email address.
-     */
-    public function restoreMembership(): bool
+    public function restoreMembership(): void
     {
-        if ($this->isActiveMember()) {
-            Log::notice('Member '.$this->name.' was attempted to made active, but is already active');
-        }
-        if (! $this->email) {
-            Log::notice('Member '.$this->name." was attempted to made active, but doesn't have an email address");
-        }
-        if (! $this->email || $this->isActiveMember()) {
-            return false;
-        }
-
         DB::transaction(function () {
             $this->membership_ended_on = null;
             $this->save();
             MembershipRestored::dispatch($this);
         });
-
-        return true;
     }
 
     public function approveSignUp(): void

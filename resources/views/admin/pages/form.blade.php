@@ -11,7 +11,7 @@
             <div class="form-row">
                 <x-field name="name" label="Name" :value="$page->name" col="6" required />
                 @if(! $page->exists || $page->editable)
-                    <x-field name="slug" label="Slug" :value="$page->slug" col="6" required />
+                    <x-field name="slug" label="URL" :value="$page->slug" col="6" required />
                 @endif
             </div>
             <div class="form-row">
