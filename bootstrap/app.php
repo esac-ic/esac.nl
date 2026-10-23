@@ -37,7 +37,9 @@ return Application::configure(basePath: dirname(__DIR__))
                 return response()->json(['message' => $message], 502);
             }
 
-            // A failing page would redirect back to itself, so only actions go back.
-            return $request->isMethod('GET') ? null : back()->withInput($request->except('password', 'password_confirmation'))->with('error', $message);
+            // A failing page would redirect back to itself, so pages show the error and only actions go back.
+            return $request->isMethod('GET')
+                ? response()->view('errors.mailman', ['message' => $message], 502)
+                : back()->withInput($request->except('password', 'password_confirmation'))->with('error', $message);
         });
     })->create();
