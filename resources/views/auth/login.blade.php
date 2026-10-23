@@ -28,7 +28,7 @@
             <div>
                 <div class="custom-control custom-checkbox align-items-center">
                     <input type="checkbox" class="custom-control-input" value="1" name="remember" checked id="remember">
-                    <label class="custom-control-label text-small" for="remember">Remember me</label>
+                    <label class="custom-control-label" for="remember">Remember me</label>
                 </div>
             </div>
             <div class="text-center mt-3">
