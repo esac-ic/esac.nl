@@ -2,6 +2,8 @@
 
 namespace App\Models;
 
+use App\Casts\SanitizedHtml;
+use App\Enums\PageSlug;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Attributes\Scope;
 use Illuminate\Database\Eloquent\Builder;
@@ -15,6 +17,7 @@ use Illuminate\Support\Facades\DB;
     'name',
     'parent_id',
     'slug',
+    'requires_login',
     'show_in_menu',
     'content',
 ])]
@@ -25,6 +28,7 @@ class MenuItem extends Model
     protected function casts(): array
     {
         return [
+            'content' => SanitizedHtml::class,
             'requires_login' => 'boolean',
             'show_in_menu' => 'boolean',
             'deletable' => 'boolean',
@@ -61,6 +65,14 @@ class MenuItem extends Model
     protected function ordered(Builder $query): void
     {
         $query->orderBy('position')->orderBy('id');
+    }
+
+    /**
+     * Whether the slug can only be changed in the database: the page isn't editable, or the site's own routes show its content.
+     */
+    public function hasFixedSlug(): bool
+    {
+        return $this->exists && (! $this->editable || PageSlug::tryFrom($this->slug) !== null);
     }
 
     /**

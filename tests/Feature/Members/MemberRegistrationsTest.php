@@ -15,14 +15,14 @@ class MemberRegistrationsTest extends TestCase
     use RefreshDatabase;
 
     #[Test]
-    public function a_certificate_administrator_sees_a_members_registrations()
+    public function an_administrator_sees_a_members_registrations()
     {
         $member = User::factory()->create();
         Registration::factory()->create([
             'user_id' => $member->id,
             'event_id' => Event::factory()->create(['title' => 'Ice climbing weekend']),
         ]);
-        $admin = User::factory()->withRole(AdminRole::CertificateAdministrator)->create();
+        $admin = User::factory()->withRole(AdminRole::Administrator)->create();
 
         $this->actingAs($admin)
             ->get(route('admin.members.show', $member))

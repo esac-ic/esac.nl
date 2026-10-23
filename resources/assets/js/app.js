@@ -19,8 +19,8 @@ window.summernoteSettings = {
         onImageUpload: function (files) {
             uploadFile(files[0], this);
         },
-        onMediaDelete: function ($target, editor) {
-            deleteFile($target)
+        onMediaDelete: function ($target) {
+            deleteFile($target, this);
         }
     }
 };
@@ -30,13 +30,13 @@ function uploadFile (file, summernote) {
     data.append('image', file);
 
     axios
-        .post('/admin/editor-images', data)
+        .post($(summernote).data('images-url'), data)
         .then(response => {
             $(summernote).summernote('insertImage', response.data);
         });
 }
 
-function deleteFile ($target) {
+function deleteFile ($target, summernote) {
     if ($target.is('img')) {
         let path = $target.attr('src');
 
@@ -46,7 +46,7 @@ function deleteFile ($target) {
         }
 
         axios
-            .delete('/admin/editor-images', {params: {
+            .delete($(summernote).data('images-url'), {params: {
                     path: path,
                 }});
     }

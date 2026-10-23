@@ -15,6 +15,7 @@
         "laravel/tinker": "^3.0",
         "spatie/laravel-html": "^3.13",
         "spatie/simple-excel": "^3.11",
+        "symfony/html-sanitizer": "^8.1",
         "symfony/intl": "^8.1"
     },
     "require-dev": {

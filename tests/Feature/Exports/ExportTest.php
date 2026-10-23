@@ -16,6 +16,7 @@ use Illuminate\Testing\TestResponse;
 use OpenSpout\Reader\XLSX\Reader;
 use PHPUnit\Framework\Attributes\Test;
 use Tests\TestCase;
+use ZipArchive;
 
 class ExportTest extends TestCase
 {
@@ -87,6 +88,24 @@ class ExportTest extends TestCase
         $this->assertSame(['#', 'Title', 'Year', 'Type', 'Country', 'Code'], $rows[0]);
         $this->assertSame('Alpine climbing', $rows[1][1]);
         $this->assertCount(1 + 1, $rows);
+    }
+
+    #[Test]
+    public function text_that_looks_like_a_formula_is_exported_as_text()
+    {
+        Book::create(['title' => '=HYPERLINK("https://example.org")', 'year' => 1990, 'country' => 'CH', 'type' => 'Guide', 'code' => 'A1']);
+        $path = tempnam(sys_get_temp_dir(), 'export');
+        file_put_contents($path, $this->get('admin/books/export')->streamedContent());
+
+        // OpenSpout's reader turns any text that starts with "=" into a formula, so the sheet's XML shows what was written.
+        $zip = new ZipArchive;
+        $zip->open($path);
+        $sheet = $zip->getFromName('xl/worksheets/sheet1.xml');
+        $zip->close();
+        unlink($path);
+
+        $this->assertStringContainsString('<t>=HYPERLINK(&quot;https://example.org&quot;)</t>', $sheet);
+        $this->assertStringNotContainsString('<f>', $sheet);
     }
 
     #[Test]

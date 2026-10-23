@@ -44,7 +44,6 @@
 
 @push('scripts')
     <script>
-        //sanitize the string so it doesn't break the frontend
-        let DESCRIPTION = "{!! str_replace('"', '\"', str_replace(["\n", "\r", "\r\n"], '', nl2br($content))) !!}";
+        let DESCRIPTION = @js($content);
     </script>
 @endpush

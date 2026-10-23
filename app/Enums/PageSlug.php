@@ -8,10 +8,10 @@ namespace App\Enums;
 enum PageSlug: string
 {
     case Home = 'home';
-    case Events = 'agenda';
-    case Members = 'memberlist';
+    case Events = 'events';
+    case Members = 'members';
     case News = 'news';
-    case SignUp = 'signup';
+    case SignUp = 'sign-up';
     case Library = 'library';
     case Zekeringen = 'zekeringen';
 }

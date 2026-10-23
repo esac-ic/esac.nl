@@ -32,13 +32,9 @@ class SiteController extends Controller
 
     public function zekeringen(): View
     {
-        $menuItem = MenuItem::query()->where('slug', PageSlug::Zekeringen)->firstOrFail();
-
-        $this->requireLoginFor($menuItem);
-
         return view('site.zekeringen', [
             'pageTitle' => 'Zekeringen',
-            'content' => $menuItem->content,
+            'content' => $this->pageContent(PageSlug::Zekeringen),
         ]);
     }
 
@@ -70,14 +66,10 @@ class SiteController extends Controller
 
     public function members(): View
     {
-        $menuItem = MenuItem::query()->where('slug', PageSlug::Members)->firstOrFail();
-
-        $this->requireLoginFor($menuItem);
-
         return view('site.members', [
             'users' => User::query()->active()->get(['first_name', 'last_name', 'email', 'preposition', 'member_type', 'phone_number']),
             'pageTitle' => 'Members list',
-            'content' => $menuItem->content,
+            'content' => $this->pageContent(PageSlug::Members),
         ]);
     }
 

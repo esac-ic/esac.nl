@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Casts\DisplayDateTime;
+use App\Casts\SanitizedHtml;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Attributes\Scope;
 use Illuminate\Database\Eloquent\Builder;
@@ -32,6 +33,7 @@ class Event extends Model
     protected function casts(): array
     {
         return [
+            'text' => SanitizedHtml::class,
             'shows_certificates' => 'boolean',
             'start_date' => DisplayDateTime::class,
             'end_date' => DisplayDateTime::class,

@@ -2,40 +2,26 @@
 
 namespace App\Http\Requests;
 
+use App\Enums\AdminRole;
 use App\Enums\MemberType;
 use App\Http\Requests\Concerns\ValidatesMemberDetails;
-use App\Models\User;
 use Illuminate\Foundation\Http\FormRequest;
-use Illuminate\Support\Arr;
 use Illuminate\Validation\Rule;
 use Illuminate\Validation\Rules\Password;
 
 /**
- * Creating a user (administrators) or updating one (administrators, or members updating themselves).
+ * An administrator creating or updating a member.
  */
 class MemberRequest extends FormRequest
 {
     use ValidatesMemberDetails;
 
-    public function authorize(): bool
-    {
-        $user = $this->route('user');
-
-        return $user === null || $this->user()->can('update', $user);
-    }
-
     /**
-     * An unchecked checkbox isn't posted. Members updating themselves can't change their name, remark or member type.
+     * Unchecked checkboxes aren't posted.
      */
     protected function prepareForValidation(): void
     {
-        $this->merge(['direct_debit' => $this->boolean('direct_debit')]);
-
-        $user = $this->route('user');
-
-        if ($user instanceof User && ! $this->canManageMembers()) {
-            $this->merge(Arr::only($user->attributesToArray(), ['first_name', 'preposition', 'last_name', 'remark', 'member_type']));
-        }
+        $this->merge(['direct_debit' => $this->boolean('direct_debit'), 'roles' => $this->input('roles', [])]);
     }
 
     public function rules(): array
@@ -51,12 +37,10 @@ class MemberRequest extends FormRequest
             ],
             'direct_debit' => ['boolean'],
             'remark' => ['nullable'],
-            'member_type' => [Rule::requiredIf($this->canManageMembers()), Rule::enum(MemberType::class)],
+            'member_type' => ['required', Rule::enum(MemberType::class)],
+            // Only those who manage the roles can hand them out.
+            'roles' => [Rule::excludeIf($this->user()->cannot('manage-roles')), 'array'],
+            'roles.*' => [Rule::enum(AdminRole::class)],
         ];
-    }
-
-    private function canManageMembers(): bool
-    {
-        return $this->user()->can('manage-members');
     }
 }

@@ -5,6 +5,9 @@ namespace App\Exports;
 use DateTimeInterface;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Date;
+use OpenSpout\Common\Entity\Cell;
+use OpenSpout\Common\Entity\Cell\StringCell;
+use OpenSpout\Common\Entity\Row;
 use OpenSpout\Writer\XLSX\Writer;
 use Spatie\SimpleExcel\SimpleExcelWriter;
 use Symfony\Component\HttpFoundation\StreamedResponse;
@@ -51,7 +54,10 @@ abstract class SpreadsheetExport
 
             $writer->nameCurrentSheet($this->sheetName());
             $writer->addHeader($this->headings());
-            $writer->addRows($rows);
+            // OpenSpout would write text that starts with "=" as a formula, so text is always written as text.
+            foreach ($rows as $cells) {
+                $writer->addRow(new Row(array_map(fn ($value) => is_string($value) ? new StringCell($value) : Cell::fromValue($value), $cells)));
+            }
             $writer->close();
         }, $fileName, [
             'Content-Type' => 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',

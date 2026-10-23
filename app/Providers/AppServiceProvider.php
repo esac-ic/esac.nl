@@ -4,7 +4,6 @@ namespace App\Providers;
 
 use App\Enums\AdminRole;
 use App\Enums\SettingKey;
-use App\Models\Registration;
 use App\Models\Setting;
 use App\Models\User;
 use App\View\Composers\MenuComposer;
@@ -12,6 +11,7 @@ use Illuminate\Auth\Access\Response;
 use Illuminate\Pagination\Paginator;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Queue;
+use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\View;
 use Illuminate\Support\Once;
 use Illuminate\Support\ServiceProvider;
@@ -26,6 +26,12 @@ class AppServiceProvider extends ServiceProvider
     {
         $this->defineGates();
 
+        // The member routes only find the members in the state that the route is for.
+        Route::bind('pending_member', fn (string $id) => User::query()->pending()->findOrFail($id));
+        Route::bind('active_member', fn (string $id) => User::query()->active()->findOrFail($id));
+        // Anonymized former members have no email address, so they can't come back.
+        Route::bind('former_member', fn (string $id) => User::query()->former()->whereNotNull('email')->findOrFail($id));
+
         Paginator::useBootstrapFour();
 
         // A queue worker runs many jobs in one process, so each job reads the settings afresh.
@@ -35,7 +41,7 @@ class AppServiceProvider extends ServiceProvider
         Countries::withUserAssigned(true);
 
         View::composer('components.menu', MenuComposer::class);
-        View::composer(['site.signup', 'admin.members.form', 'admin.members.show'], fn ($view) => $view->with('countries', Countries::getNames()));
+        View::composer(['site.sign-up', 'components.member-fields', 'components.member-tabs'], fn ($view) => $view->with('countries', Countries::getNames()));
         View::composer('includes.footer', fn ($view) => $view->with(
             'footerPhoneNumber',
             Setting::valueOf(SettingKey::FooterPhoneNumber),
@@ -43,31 +49,36 @@ class AppServiceProvider extends ServiceProvider
     }
 
     /**
-     * The abilities of the management pages and which roles have them.
+     * The abilities of the management pages and the roles that have them.
      */
+    private const array ABILITIES = [
+        'view-members' => [AdminRole::Administrator, AdminRole::CertificateAdministrator],
+        'view-member-details' => [AdminRole::Administrator],
+        'manage-members' => [AdminRole::Administrator],
+        'manage-roles' => [AdminRole::Administrator],
+        'manage-certificates' => [AdminRole::Administrator, AdminRole::CertificateAdministrator],
+        'manage-events' => [AdminRole::Administrator, AdminRole::ContentAdministrator, AdminRole::EventAdministrator],
+        'manage-event-categories' => [AdminRole::Administrator],
+        'manage-registrations' => [AdminRole::Administrator, AdminRole::EventAdministrator],
+        'manage-zekeringen' => [AdminRole::Administrator, AdminRole::EventAdministrator],
+        'manage-news' => [AdminRole::Administrator, AdminRole::ContentAdministrator, AdminRole::EventAdministrator],
+        'manage-pages' => [AdminRole::Administrator, AdminRole::ContentAdministrator],
+        // Whoever manages pages, news or events adds images to their text.
+        'upload-editor-images' => [AdminRole::Administrator, AdminRole::ContentAdministrator, AdminRole::EventAdministrator],
+        'manage-library' => [AdminRole::Administrator],
+        'manage-mail-lists' => [AdminRole::Administrator],
+        'view-member-log' => [AdminRole::Administrator],
+        'manage-settings' => [AdminRole::Administrator],
+    ];
+
     private function defineGates(): void
     {
         Gate::defaultDenialResponse(Response::deny('You do not have sufficient access to view this page'));
 
         Gate::define('access-admin', fn (User $user) => $user->hasAnyRole());
 
-        Gate::define('view-members', fn (User $user) => $user->hasRole(AdminRole::Administrator, AdminRole::CertificateAdministrator));
-        Gate::define('manage-members', fn (User $user) => $user->hasRole(AdminRole::Administrator));
-        Gate::define('manage-roles', fn (User $user) => $user->hasRole(AdminRole::Administrator));
-        Gate::define('manage-certificates', fn (User $user) => $user->hasRole(AdminRole::Administrator, AdminRole::CertificateAdministrator));
-
-        Gate::define('manage-events', fn (User $user) => $user->hasRole(AdminRole::ContentAdministrator, AdminRole::EventAdministrator));
-        Gate::define('manage-event-categories', fn (User $user) => $user->hasRole(AdminRole::Administrator));
-        Gate::define('delete-registration', fn (User $user, Registration $registration) => $registration->user()->is($user)
-            || $user->hasRole(AdminRole::EventAdministrator));
-        Gate::define('manage-zekeringen', fn (User $user) => $user->hasRole(AdminRole::EventAdministrator));
-
-        Gate::define('manage-news', fn (User $user) => $user->hasRole(AdminRole::ContentAdministrator, AdminRole::EventAdministrator));
-        Gate::define('manage-pages', fn (User $user) => $user->hasRole(AdminRole::ContentAdministrator));
-        Gate::define('manage-library', fn (User $user) => $user->hasRole(AdminRole::Administrator));
-
-        Gate::define('manage-mail-lists', fn (User $user) => $user->hasRole(AdminRole::Administrator));
-        Gate::define('view-member-log', fn (User $user) => $user->hasRole(AdminRole::Administrator));
-        Gate::define('manage-settings', fn (User $user) => $user->hasRole(AdminRole::Administrator));
+        foreach (self::ABILITIES as $ability => $roles) {
+            Gate::define($ability, fn (User $user) => $user->hasRole(...$roles));
+        }
     }
 }
