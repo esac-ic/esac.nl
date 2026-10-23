@@ -27,39 +27,38 @@ class CopyEventTest extends TestCase
     }
 
     #[Test]
-    public function an_event_can_be_copied()
+    public function copying_opens_the_new_event_form_filled_in_without_saving()
     {
-        $event = Event::factory()->create(['image_path' => '']);
+        $event = Event::factory()->create(['title' => 'Climbing weekend', 'short_description' => 'Two days in Belgium']);
 
-        $response = $this->post($this->url.$event->id.'/copy');
+        $this->get(route('admin.events.create', ['copy' => $event]))
+            ->assertOk()
+            ->assertSee('Based on Climbing weekend')
+            ->assertSee('value="Climbing weekend"', false)
+            ->assertSee('value="Two days in Belgium"', false)
+            ->assertSee('name="copy_of" value="'.$event->id.'"', false);
 
-        $response->assertStatus(302);
-
-        $events = Event::all();
-        $this->assertCount(2, $events);
-        $copy = $events[1];
-
-        $this->assertEquals($event->registration_deadline, $copy->registration_deadline);
-        $this->assertEquals($event->start_date, $copy->start_date);
-        $this->assertEquals($event->end_date, $copy->end_date);
-        $this->assertEquals($event->event_category_id, $copy->event_category_id);
-        $this->assertEquals($event->shows_certificates, $copy->shows_certificates);
-
-        $this->assertEquals($event->title, $copy->title);
-        $this->assertEquals($event->body, $copy->body);
-        $this->assertEquals($event->short_description, $copy->short_description);
+        $this->assertCount(1, Event::all());
     }
 
     #[Test]
-    public function a_copy_gets_its_own_image_file()
+    public function a_copy_gets_its_own_image_file_when_no_new_image_is_uploaded()
     {
         Storage::fake('public')->put('agendaItem/1-thumbnail.jpg', 'image');
-        // A copy of a copy still has the image name of the original.
         $event = Event::factory()->create(['image_path' => 'agendaItem/1-thumbnail.jpg']);
 
-        $this->post($this->url.$event->id.'/copy');
+        $this->post(route('admin.events.store'), [
+            'title' => $event->title,
+            'body' => $event->body,
+            'short_description' => $event->short_description,
+            'event_category_id' => $event->event_category_id,
+            'start_date' => $event->start_date,
+            'end_date' => $event->end_date,
+            'copy_of' => $event->id,
+        ])->assertSessionHasNoErrors()->assertRedirect();
 
         $copy = Event::query()->latest('id')->first();
+        $this->assertNotSame($event->id, $copy->id);
         $this->assertSame("agendaItem/{$copy->id}-thumbnail.jpg", $copy->image_path);
         Storage::disk('public')->assertExists([$event->image_path, $copy->image_path]);
     }

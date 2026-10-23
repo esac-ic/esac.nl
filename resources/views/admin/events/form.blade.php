@@ -3,8 +3,17 @@
 @section('title', $event->exists ? 'Edit event' : 'New event')
 
 @section('content')
-    <x-page-header :title="$event->exists ? 'Edit event' : 'New event'" />
+    <x-page-header :title="$event->exists ? 'Edit event' : 'New event'">
+        @if ($copyOf)
+            <x-slot:intro>
+                <p class="text-muted mb-0">Based on {{ $copyOf->title }}. Nothing is saved until you press Save.</p>
+            </x-slot:intro>
+        @endif
+    </x-page-header>
     <x-model-form :model="$event" resource="admin.events" files>
+        @if ($copyOf)
+            <input type="hidden" name="copy_of" value="{{ $copyOf->id }}">
+        @endif
         <x-card title="General information">
             <div class="form-row">
                 <x-field type="datetime-local" name="start_date" label="Start date" :value="($event->start_date ?? now(config('app.display_timezone')))->toDateTimeLocalString('minute')" col="6" required />
@@ -12,7 +21,7 @@
             </div>
             <div class="form-row">
                 <x-field name="registration_form_id" label="Registration form" :options="['' => 'No registration form'] + $registrationForms" :value="$event->registration_form_id" col="6" />
-                <x-field type="datetime-local" name="registration_deadline" label="Registration deadline (with a registration form)" :value="($event->exists ? ($event->registration_deadline ?? now(config('app.display_timezone'))) : now(config('app.display_timezone'))->subDays(7))->toDateTimeLocalString('minute')" col="6" />
+                <x-field type="datetime-local" name="registration_deadline" label="Registration deadline (with a registration form)" :value="($event->registration_deadline ?? ($event->exists ? now(config('app.display_timezone')) : now(config('app.display_timezone'))->subDays(7)))->toDateTimeLocalString('minute')" col="6" />
             </div>
             <div class="form-row">
                 <x-field name="event_category_id" label="Category" :options="$eventCategories" :value="$event->event_category_id" col="6" required />
@@ -27,8 +36,8 @@
         <x-card title="Image" class="mt-4">
             <div class="form-group mb-0">
                 <label for="image" class="sr-only">Image</label>
-                <input type="file" @class(['form-control-file', 'is-invalid' => $errors->has('image')]) id="image" name="image" accept="image/*" @required(! $event->exists)>
-                @if ($event->exists)
+                <input type="file" @class(['form-control-file', 'is-invalid' => $errors->has('image')]) id="image" name="image" accept="image/*" @required(! $event->exists && ! $copyOf?->image_path)>
+                @if ($event->exists || $copyOf?->image_path)
                     <small class="form-text text-muted">Leave empty to keep the current image.</small>
                 @endif
                 @error('image')
