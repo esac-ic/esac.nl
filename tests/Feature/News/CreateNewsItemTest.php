@@ -40,15 +40,15 @@ class CreateNewsItemTest extends TestCase
     }
 
     #[Test]
-    public function the_body_is_stored_without_scripts()
+    public function the_body_is_stored_without_scripts_but_with_the_text_of_unknown_tags()
     {
         $this->post('admin/news-items', [
             'title' => 'test nieuws',
-            'body' => '<p onclick="alert(1)"><b>test</b> nieuws</p><script>alert(1)</script><img src="https://example.org/x.png">',
+            'body' => '<p onclick="alert(1)"><b>test</b> <bbb>nieuws</bbb></p><script>alert(1)</script><a href="javascript:alert(1)">link</a>',
             'author' => 'Gebruiker1',
         ])->assertRedirect();
 
-        $this->assertSame('<p><b>test</b> nieuws</p><img />', NewsItem::sole()->body);
+        $this->assertSame('<p><b>test</b> nieuws</p><a>link</a>', NewsItem::sole()->body);
     }
 
     #[Test]
