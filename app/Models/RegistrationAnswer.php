@@ -26,6 +26,9 @@ class RegistrationAnswer extends Model
         return $this->belongsTo(RegistrationFormField::class, 'registration_form_field_id')->withTrashed();
     }
 
+    /**
+     * @return Attribute<string|null, never>
+     */
     protected function formattedValue(): Attribute
     {
         return Attribute::make(get: fn () => match ($this->field->type) {

@@ -23,13 +23,14 @@ class SettingsRequest extends FormRequest
     }
 
     /**
-     * The lists are entered one item per line.
+     * An unchecked checkbox isn't posted, and the lists are entered one item per line.
      */
     protected function prepareForValidation(): void
     {
         $lines = fn (?string $text) => str($text)->explode("\n")->map(fn (string $line) => trim($line))->filter()->values()->all();
 
         $this->merge([
+            'killswitch' => $this->boolean('killswitch'),
             'blocked_email_domains' => $lines($this->input('blocked_email_domains')),
             'mail_lists' => array_map($lines, (array) $this->input('mail_lists')),
         ]);

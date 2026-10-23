@@ -154,7 +154,6 @@ class Event extends Model
     {
         return $this->registrations()
             ->whereBelongsTo($user)
-            ->where('registration_form_id', $this->registration_form_id)
             ->exists();
     }
 

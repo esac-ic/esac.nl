@@ -16,7 +16,7 @@
                 <div class="card w-100">
                     <div class="card-body">
                         <h4 class="card-title">Add zekering</h4>
-                        {{ html()->form('POST', route('api.zekeringen.store'))->open() }}
+                        {{ html()->form('POST', route('zekeringen.store'))->open() }}
                         <x-field name="text" label="Text" type="textarea" required maxlength="150" rows="3" />
                         <div class="form-group">
                             {{ html()->submit('Add')->class('btn btn-primary') }}

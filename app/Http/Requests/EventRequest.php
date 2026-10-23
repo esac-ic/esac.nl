@@ -4,6 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
+use Illuminate\Validation\Rules\File;
 
 class EventRequest extends FormRequest
 {
@@ -13,7 +14,7 @@ class EventRequest extends FormRequest
             'title' => ['required', 'max:255'],
             'short_description' => ['required', 'max:100'],
             'body' => ['required'],
-            'image' => ['nullable', 'image', 'mimes:jpeg,png,jpg', 'max:10240'],
+            'image' => ['nullable', File::image()->max('10mb')],
             'event_category_id' => ['required', 'exists:event_categories,id'],
             'registration_form_id' => ['nullable', Rule::exists('registration_forms', 'id')->withoutTrashed()],
             'registration_deadline' => ['exclude_without:registration_form_id', 'required', 'date'],

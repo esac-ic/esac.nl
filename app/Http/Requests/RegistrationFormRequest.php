@@ -45,9 +45,9 @@ class RegistrationFormRequest extends FormRequest
      */
     protected function prepareForValidation(): void
     {
-        $this->merge(['rows' => collect($this->input('rows', []))->map(fn (array $field) => [
+        $this->merge(['rows' => collect($this->input('rows', []))->map(fn (array $field, $key) => [
             ...$field,
-            'required' => filter_var($field['required'] ?? false, FILTER_VALIDATE_BOOL),
+            'required' => $this->boolean("rows.$key.required"),
             'options' => collect($field['options'] ?? [])->map(fn (array $option) => [
                 ...$option,
                 'value' => filled($option['value'] ?? null) ? $option['value'] : ($option['name'] ?? null),

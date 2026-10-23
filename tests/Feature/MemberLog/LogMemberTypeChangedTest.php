@@ -29,6 +29,6 @@ class LogMemberTypeChangedTest extends TestCase
         $logEntry = MemberLogEntry::sole();
         $this->assertTrue($user->is($logEntry->user));
         $this->assertSame(MemberLogType::MemberTypeChanged, $logEntry->type);
-        $this->assertSame($user->name." changed from {$from->value} to {$to->value}", $logEntry->details);
+        $this->assertSame($user->name." changed from {$from->label()} to {$to->label()}", $logEntry->details);
     }
 }

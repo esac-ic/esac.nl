@@ -37,7 +37,7 @@ class MembersExport extends SpreadsheetExport
             $user->emergency_zipcode,
             $user->emergency_country,
             $user->birthday?->toDateString(),
-            $user->member_type?->value,
+            $user->member_type?->label(),
             $user->iban,
             $user->bic,
             $user->direct_debit,

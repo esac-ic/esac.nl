@@ -4,12 +4,9 @@
 
 @section('content')
     <x-validation-errors />
-    <form action="{{ route('admin.settings.update') }}" method="POST">
-        @csrf
-        @method('PUT')
+    {{ html()->form('PUT', route('admin.settings.update'))->open() }}
         <x-card title="Website">
             <div class="form-group form-check">
-                <input type="hidden" name="killswitch" value="0">
                 <input type="checkbox" class="form-check-input" name="killswitch" id="killswitch" value="1" @checked(old('killswitch', $settings->killswitch))>
                 <label class="form-check-label" for="killswitch">Close the public website</label>
             </div>
@@ -29,7 +26,7 @@
         </x-card>
 
         <div class="my-4">
-            <button type="submit" class="btn btn-primary">Save</button>
+            {{ html()->submit('Save')->class('btn btn-primary') }}
         </div>
-    </form>
+    {{ html()->form()->close() }}
 @endsection

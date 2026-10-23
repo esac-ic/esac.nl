@@ -2,12 +2,23 @@
 
 namespace App\Http\Requests\Concerns;
 
+use App\Actions\Fortify\PasswordValidationRules;
 use App\Settings\SiteSettings;
 use Illuminate\Validation\Rule;
 use Symfony\Component\Intl\Countries;
 
 trait ValidatesMemberDetails
 {
+    use PasswordValidationRules;
+
+    /**
+     * An unchecked checkbox isn't posted.
+     */
+    protected function prepareForValidation(): void
+    {
+        $this->merge(['direct_debit' => $this->boolean('direct_debit')]);
+    }
+
     /**
      * The rules for the personal details every member fills in.
      */
