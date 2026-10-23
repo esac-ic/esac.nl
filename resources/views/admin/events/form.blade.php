@@ -3,6 +3,7 @@
 @section('title', $event->exists ? 'Edit event' : 'New event')
 
 @section('content')
+    <x-page-header :title="$event->exists ? 'Edit event' : 'New event'" />
     <x-model-form :model="$event" resource="admin.events" files>
         <x-card title="General information">
             <div class="form-row">
@@ -24,9 +25,15 @@
             </div>
         </x-card>
         <x-card title="Image" class="mt-4">
-            <span>Image</span>
-            <div class="form-group mt-2">
-                <input type="file" class="form-control-file" id="image" name="image" @required(! $event->exists)>
+            <div class="form-group mb-0">
+                <label for="image" class="sr-only">Image</label>
+                <input type="file" @class(['form-control-file', 'is-invalid' => $errors->has('image')]) id="image" name="image" accept="image/*" @required(! $event->exists)>
+                @if ($event->exists)
+                    <small class="form-text text-muted">Leave empty to keep the current image.</small>
+                @endif
+                @error('image')
+                    <div class="invalid-feedback">{{ $message }}</div>
+                @enderror
             </div>
         </x-card>
         <x-card title="Content" class="mt-4">

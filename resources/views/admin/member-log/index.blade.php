@@ -12,7 +12,7 @@ Member log
         @foreach ($entries as $entry)
             <tr>
                 <td>{{ $entry->type->label() }}</td>
-                <td><x-local-time :value="$entry->created_at" format="Y-m-d H:i:s" /></td>
+                <td data-order="{{ $entry->created_at->timestamp }}"><x-local-time :value="$entry->created_at" /></td>
                 <td>{{$entry->details}}</td>
             </tr>
         @endforeach

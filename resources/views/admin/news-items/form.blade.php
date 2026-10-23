@@ -1,6 +1,6 @@
 @extends('layouts.admin')
 
-@php($title = $newsItem->exists ? 'Edit news item' : 'Add a news item')
+@php($title = $newsItem->exists ? 'Edit news item' : 'New news item')
 
 @section('title', $title)
 
@@ -14,9 +14,15 @@
                     <option value="{{ $memberName }}">
                 @endforeach
             </datalist>
-            <span>Image</span>
-            <div class="form-group mt-2">
-                <input type="file" class="form-control-file" id="image" name="image">
+            <div class="form-group">
+                <label for="image">Image</label>
+                <input type="file" @class(['form-control-file', 'is-invalid' => $errors->has('image')]) id="image" name="image" accept="image/*">
+                @if ($newsItem->image_path)
+                    <small class="form-text text-muted">Leave empty to keep the current image.</small>
+                @endif
+                @error('image')
+                    <div class="invalid-feedback">{{ $message }}</div>
+                @enderror
             </div>
             <x-field name="body" label="Content" type="textarea" :data-images-url="route('admin.editor-images.store')" :value="$newsItem->body" />
         </x-card>

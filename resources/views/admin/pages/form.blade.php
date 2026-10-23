@@ -1,10 +1,10 @@
 @extends('layouts.admin')
 
-@section('title', $page->exists ? 'Edit page' : 'Add page')
+@section('title', $page->exists ? 'Edit page' : 'New page')
 
 @section('content')
     <x-model-form :model="$page" resource="admin.pages">
-        <x-card :title="$page->exists ? 'Edit page' : 'Add page'">
+        <x-card :title="$page->exists ? 'Edit page' : 'New page'">
             <div class="form-row">
                 <x-field name="name" label="Name" :value="$page->name" col="6" required />
                 @unless($page->hasFixedSlug())

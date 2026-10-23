@@ -3,8 +3,9 @@
 @section('title', 'Settings')
 
 @section('content')
+    <x-page-header title="Settings" />
     <x-validation-errors />
-    {{ html()->form('PUT', route('admin.settings.update'))->open() }}
+    {{ html()->form('PUT', route('admin.settings.update'))->attribute('data-warn-unsaved')->open() }}
         <x-card title="Website">
             <div class="form-group form-check">
                 <input type="checkbox" class="form-check-input" name="killswitch" id="killswitch" value="1" @checked(old('killswitch', $settings->killswitch))>
@@ -16,7 +17,8 @@
                 <textarea class="form-control" name="blocked_email_domains" id="blocked_email_domains" rows="3">{{ implode("\n", old('blocked_email_domains', $settings->blocked_email_domains)) }}</textarea>
             </div>
         </x-card>
-        <x-card title="Mail lists per member type, one per line" class="mt-4">
+        <x-card title="Mail lists per member type" class="mt-4">
+            <p class="text-muted">The mail lists members of each type are added to, one per line.</p>
             @foreach ($memberTypes as $type)
                 <div class="form-group">
                     <label for="mail_lists_{{ $type->value }}">{{ $type->label() }}</label>
