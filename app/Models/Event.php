@@ -63,23 +63,17 @@ class Event extends Model
     }
 
     /**
-     * Saves a copy of the event, with a copy of its image, created by the given member.
+     * Gives the event its own copy of the other event's image, so each event has a file to replace or delete.
      */
-    public function copyFor(User $creator): Event
+    public function copyImageFrom(Event $source): void
     {
-        $copy = $this->replicate();
-        $copy->created_by = $creator->id;
-        $copy->save();
-
-        if ($this->image_path !== '') {
-            // Named after the new event, so each event has its own file to replace or delete.
-            $copyImagePath = 'agendaItem/'.$copy->id.'-thumbnail.'.pathinfo($this->image_path, PATHINFO_EXTENSION);
-            Storage::disk('public')->copy($this->image_path, $copyImagePath);
-            $copy->image_path = $copyImagePath;
-            $copy->save();
+        if ($source->image_path === '') {
+            return;
         }
 
-        return $copy;
+        $this->image_path = 'agendaItem/'.$this->id.'-thumbnail.'.pathinfo($source->image_path, PATHINFO_EXTENSION);
+        Storage::disk('public')->copy($source->image_path, $this->image_path);
+        $this->save();
     }
 
     /**

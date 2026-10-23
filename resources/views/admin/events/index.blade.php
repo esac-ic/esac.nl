@@ -29,10 +29,7 @@
                             <x-icon-link :href="route('admin.events.registrations.index', $event)" icon="android-list" title="Show registrations" />
                         @endcan
                     @endif
-                    <form class="d-inline" method="post" action="{{ route('admin.events.copy', $event) }}">
-                        @csrf
-                        <button type="submit" class="btn btn-link p-0 mr-1 ml-1"><span title="Copy event" class="ion-ios-copy font-size-120" aria-hidden="true"></span></button>
-                    </form>
+                    <x-icon-link :href="route('admin.events.create', ['copy' => $event])" icon="ios-copy" title="New event based on this one" />
                 </td>
             </tr>
         @endforeach

@@ -51,7 +51,6 @@ Route::prefix('admin')->name('admin.')->middleware(['auth', 'can:access-admin'])
     Route::resource('members.certificates', MemberCertificateController::class)->except(['index', 'show'])->scoped();
 
     Route::resource('events', EventController::class);
-    Route::post('events/{event}/copy', [EventController::class, 'copy'])->name('events.copy');
     Route::resource('registration-forms', RegistrationFormController::class);
 
     Route::get('events/{event}/registrations/export', [EventRegistrationController::class, 'export'])->name('events.registrations.export');
