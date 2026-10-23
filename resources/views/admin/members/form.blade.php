@@ -5,7 +5,7 @@
 @section('title', $title)
 
 @section('content')
-    <h1>{{ $title }}</h1>
+    <x-page-header :$title />
 
     <x-model-form :model="$user" resource="admin.members">
         <x-member-fields :$user :$memberTypes />

@@ -31,3 +31,17 @@ function uploadFile (file, summernote) {
             $(summernote).summernote('insertImage', response.data);
         });
 }
+
+// Warn before leaving a form with unsaved changes.
+document.querySelectorAll('form[data-warn-unsaved]').forEach(form => {
+    let changed = false;
+    form.addEventListener('input', () => changed = true);
+    form.addEventListener('change', () => changed = true);
+    form.addEventListener('submit', () => changed = false);
+    window.addEventListener('beforeunload', event => {
+        if (changed) {
+            event.preventDefault();
+        }
+    });
+});
+

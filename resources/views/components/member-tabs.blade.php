@@ -24,10 +24,10 @@
     </li>
     @endif
 </ul>
-<div class="tab-content space-sm">
+<div class="tab-content pt-3">
     @if($details)
     <div class="tab-pane fade show active" id="personal" role="tabpanel" aria-labelledby="personal-tab">
-        <table class="table table-striped" style="width:100%">
+        <table class="table table-striped mb-0">
             <x-detail-row label="Name">{{ $user->name}}</x-detail-row>
             <x-detail-row label="Email address">{{$user->email}}</x-detail-row>
             <x-detail-row label="Phone number">{{$user->phone_number}}</x-detail-row>
@@ -51,14 +51,14 @@
         </table>
     </div>
     <div class="tab-pane fade" id="financial" role="tabpanel" aria-labelledby="financial-tab">
-        <table class="table table-striped" style="width:100%">
+        <table class="table table-striped mb-0">
             <x-detail-row label="IBAN">{{$user->iban}}</x-detail-row>
             <x-detail-row label="BIC">{{$user->bic}}</x-detail-row>
             <x-detail-row label="Direct debit">{{($user->direct_debit)? 'Yes' : 'No'}}</x-detail-row>
         </table>
     </div>
     <div class="tab-pane fade" id="emergency" role="tabpanel" aria-labelledby="emergency-tab">
-        <table class="table table-striped" style="width:100%">
+        <table class="table table-striped mb-0">
             <x-detail-row label="Emergency address street">{{$user->emergency_street}}</x-detail-row>
             <x-detail-row label="Emergency address house number">{{$user->emergency_house_number}}</x-detail-row>
             <x-detail-row label="Emergency address postal code">{{$user->emergency_zipcode}}</x-detail-row>
@@ -68,15 +68,17 @@
         </table>
     </div>
     <div class="tab-pane fade" id="roles" role="tabpanel" aria-labelledby="roles-tab">
-        <table class="table table-striped" style="width:100%">
-            @foreach($user->roles as $role)
+        <table class="table table-striped mb-0">
+            @forelse($user->roles as $role)
                 <tr>
                     @if($loop->first)
                         <td rowspan="{{$loop->count}}">Roles</td>
                     @endif
                     <td>{{ $role->label() }}</td>
                 </tr>
-            @endforeach
+            @empty
+                <tr><td class="text-muted">No roles</td></tr>
+            @endforelse
         </table>
     </div>
     @endif

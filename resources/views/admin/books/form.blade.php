@@ -1,6 +1,6 @@
 @extends('layouts.admin')
 
-@php($title = $book->exists ? 'Edit book' : 'Add a book')
+@php($title = $book->exists ? 'Edit book' : 'New book')
 
 @section('title', $title)
 
