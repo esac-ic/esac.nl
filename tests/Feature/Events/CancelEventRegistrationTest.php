@@ -41,7 +41,7 @@ class CancelEventRegistrationTest extends TestCase
 
         $this->delete('events/'.$registration->event_id.'/registration')
             ->assertRedirect()
-            ->assertSessionHas('message', 'The registration deadline has passed, so you can no longer unregister.');
+            ->assertSessionHas('error', 'The registration deadline has passed, so you can no longer unregister.');
 
         $this->assertNotSoftDeleted($registration);
     }
