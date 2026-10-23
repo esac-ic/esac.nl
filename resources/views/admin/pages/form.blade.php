@@ -3,10 +3,7 @@
 @section('title', $page->exists ? 'Edit page' : 'Add page')
 
 @section('content')
-    <x-validation-errors />
-    <form class="form-horizontal" action="{{ $page->exists ? route('admin.pages.update', $page) : route('admin.pages.store') }}" method="POST">
-        @csrf
-        @method($page->exists ? 'PATCH' : 'POST')
+    <x-model-form :model="$page" resource="admin.pages">
         <x-card :title="$page->exists ? 'Edit page' : 'Add page'">
             <div class="form-row">
                 <x-field name="name" label="Name" :value="$page->name" col="6" required />
@@ -39,11 +36,6 @@
                 <x-field name="body" label="Content" type="textarea" :data-images-url="route('admin.editor-images.store')" :value="$page->body" />
             </x-card>
         @endif
-
-        <div class="my-4">
-            <button type="submit" class="btn btn-primary">Save</button>
-            <a class="btn btn-danger" href="{{ $page->exists ? route('admin.pages.show', $page) : route('admin.pages.index') }}">Cancel</a>
-        </div>
-    </form>
+    </x-model-form>
 @endsection
 

@@ -1,66 +1,12 @@
 @extends('layouts.app')
 
-@section('title')
-{{$pageTitle}}
-@endsection
-
 @section('content')
 <x-page-intro :title="$pageTitle" :$content />
 <div class="container">
-    @if ($errors->any())
-        <ul class="alert alert-danger">
-            @foreach ($errors->all() as $error)
-                <li class="ml-2">{{ $error}}</li>
-            @endforeach
-        </ul>
-    @endif
+    <x-validation-errors />
 
     {{ html()->form('POST', route('sign-up.store'))->open() }}
-    <x-card title="Personal" class="mt-4">
-        <div class="form-row">
-            <x-field name="first_name" label="First name" col="5" required />
-            <x-field name="preposition" label="Preposition" col="2" />
-            <x-field name="last_name" label="Last name" col="5" required />
-        </div>
-        <div class="form-row">
-            <x-field name="email" label="Email address" col="6" required />
-        </div>
-        <div class="form-row">
-            <x-field name="password" label="Password" type="password" col="6" required minlength="8" />
-            <x-field name="password_confirmation" label="Confirm password" type="password" col="6" required />
-        </div>
-        <div class="form-row">
-            <x-field name="street" label="Street" col="6" required />
-            <x-field name="house_number" label="House number" col="6" required />
-        </div>
-        <div class="form-row">
-            <x-field name="zipcode" label="Postal code" col="4" required />
-            <x-field name="city" label="City" col="4" required />
-            <x-field name="country" label="Country" :options="$countries" value="NL" col="4" required />
-        </div>
-        <div class="form-row">
-            <x-field name="phone_number" label="Phone number" col="6" required />
-            <x-field type="date" name="birthday" label="Birthdate" col="6" required />
-        </div>
-    </x-card>
-    <x-card title="Financial" class="mt-4">
-        <div class="form-row">
-            <x-field name="bic" label="BIC" col="4" />
-            <x-field name="iban" label="IBAN" col="8" required />
-        </div>
-    </x-card>
-    <x-card title="Emergency info" class="mt-4">
-        <div class="form-row">
-            <x-field name="emergency_street" label="Emergency address street" col="6" required />
-            <x-field name="emergency_house_number" label="Emergency address house number" col="6" required />
-        </div>
-        <div class="form-row">
-            <x-field name="emergency_zipcode" label="Emergency postal code" col="4" required />
-            <x-field name="emergency_city" label="Emergency city" col="4" required />
-            <x-field name="emergency_country" label="Emergency country" :options="$countries" value="NL" col="4" required />
-        </div>
-        <x-field name="emergency_number" label="Emergency phone number" required />
-    </x-card>
+    <x-member-fields :$user sign-up />
 
     <x-card title="Privacy Policy and direct debit" class="mt-4">
         <div class="accordion">

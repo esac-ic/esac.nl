@@ -24,8 +24,10 @@
                 <td>
                     <x-icon-link :href="route('admin.events.edit', $event)" icon="edit" title="Edit event" />
                     <x-icon-link :href="route('admin.events.show', $event)" icon="eye" title="Show event" />
-                    @if ($event->registration_form_id && auth()->user()->can('manage-registrations'))
-                        <x-icon-link :href="route('admin.events.registrations.index', $event)" icon="android-list" title="Show registrations" />
+                    @if ($event->registration_form_id)
+                        @can('manage-registrations')
+                            <x-icon-link :href="route('admin.events.registrations.index', $event)" icon="android-list" title="Show registrations" />
+                        @endcan
                     @endif
                     <form class="d-inline" method="post" action="{{ route('admin.events.copy', $event) }}">
                         @csrf

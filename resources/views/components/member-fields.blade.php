@@ -1,5 +1,5 @@
-@props(['user', 'memberTypes', 'locked' => false])
-{{-- A member's details form; locked, the name, member type and remarks can only be read. --}}
+@props(['user', 'memberTypes' => null, 'locked' => false, 'signUp' => false])
+{{-- A member's details form; locked, the name, member type and remarks can only be read. On the sign-up form, the member type and remarks are left out and the direct debit consent comes with its agreement. --}}
 <x-card title="Personal" class="mt-4">
     <div class="form-row">
         <x-field name="first_name" label="First name" :value="$user->first_name" col="5" required :disabled="$locked" />
@@ -28,19 +28,25 @@
     </div>
     <div class="form-row">
         <x-field type="date" name="birthday" label="Birthdate" :value="$user->birthday?->toDateString()" col="6" required />
-        <x-field name="member_type" label="Member type" :options="$memberTypes" :value="$user->member_type" col="6" required :disabled="$locked" />
+        @unless($signUp)
+            <x-field name="member_type" label="Member type" :options="$memberTypes" :value="$user->member_type" col="6" required :disabled="$locked" />
+        @endunless
     </div>
-    <x-field name="remark" label="Remarks" :value="$user->remark" :disabled="$locked" />
+    @unless($signUp)
+        <x-field name="remark" label="Remarks" :value="$user->remark" :disabled="$locked" />
+    @endunless
 </x-card>
 <x-card title="Financial" class="mt-4">
     <div class="form-row">
         <x-field name="bic" label="BIC" :value="$user->bic" col="4" />
         <x-field name="iban" label="IBAN" :value="$user->iban" col="8" required />
     </div>
-    <div class="form-check">
-        {{ html()->checkbox('direct_debit', ! session()->hasOldInput() && $user->direct_debit)->class('form-check-input')->id('direct_debit') }}
-        {{ html()->label('Accept direct debit', 'direct_debit')->class('form-check-label') }}
-    </div>
+    @unless($signUp)
+        <div class="form-check">
+            {{ html()->checkbox('direct_debit', ! session()->hasOldInput() && $user->direct_debit)->class('form-check-input')->id('direct_debit') }}
+            {{ html()->label('Accept direct debit', 'direct_debit')->class('form-check-label') }}
+        </div>
+    @endunless
 </x-card>
 <x-card title="Emergency info" class="mt-4">
     <div class="form-row">

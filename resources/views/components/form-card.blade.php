@@ -1,23 +1,6 @@
 @props(['title', 'model' => null, 'resource' => null, 'action' => null, 'method' => null, 'cancel' => null])
-@php
-    $action ??= $model->exists ? route("$resource.update", $model) : route("$resource.store");
-    $method ??= $model->exists ? 'PATCH' : 'POST';
-    $cancel ??= $model->exists ? route("$resource.show", $model) : route("$resource.index");
-@endphp
-<x-validation-errors />
-
-<div class="card">
-    <div class="card-header">
-        <h3>{{ $title }}</h3>
-    </div>
-    <div class="card-body">
-        {{ html()->form($method, $action)->open() }}
+<x-model-form :$model :$resource :$action :$method :$cancel>
+    <x-card :$title>
         {{ $slot }}
-    </div>
-</div>
-
-<div class="my-4">
-    {{ html()->submit('Save')->class('btn btn-primary') }}
-    {{ html()->form()->close() }}
-    <a class="btn btn-danger" href="{{ $cancel }}">Cancel</a>
-</div>
+    </x-card>
+</x-model-form>

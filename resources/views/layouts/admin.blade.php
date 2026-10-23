@@ -107,13 +107,11 @@
 @endsection
 
 @prepend('scripts')
-@vite(['resources/assets/js/vendor/datatables.js', 'resources/assets/js/vendor/summernote.js'])
+@vite(['resources/assets/js/vendor/summernote.js'])
 @endprepend
 
 @push('scripts')
 <script type="module">
-    $('.js-datatable').DataTable();
-
     $(document).ready(function() {
         let $lastClick;
         let $body = $('#body');

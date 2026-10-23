@@ -7,18 +7,9 @@ Current members
 @section('content')
     <x-page-header title="Current members">
         @can('manage-members')
-            <a href="{{route('admin.members.create')}}" class="btn btn-primary" title="New member">
-                <span class="ion-person-add" aria-hidden="true"></span>
-                New member
-            </a>
-            <a href="{{route('admin.penno-export.create')}}" class="btn btn-primary" title="Export only the fields needed for the financial administration" >
-                <span class="ion-android-download" aria-hidden="true"></span>
-                Penno export
-            </a>
-            <a href="{{route('admin.members.export')}}" class="btn btn-primary" title="Export all active members">
-                <span class="ion-android-download" aria-hidden="true"></span>
-                Export members
-            </a>
+            <x-button-link :href="route('admin.members.create')" icon="person-add">New member</x-button-link>
+            <x-button-link :href="route('admin.penno-export.create')" icon="android-download" title="Export only the fields needed for the financial administration">Penno export</x-button-link>
+            <x-button-link :href="route('admin.members.export')" icon="android-download" title="Export all active members">Export members</x-button-link>
         @endcan
     </x-page-header>
     <x-data-table datatable :columns="['Name', 'Email address', 'Member type', 'Roles', 'Actions']">

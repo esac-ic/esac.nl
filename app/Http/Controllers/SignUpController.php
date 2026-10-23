@@ -19,12 +19,13 @@ class SignUpController extends Controller
         return view('site.sign-up', [
             'pageTitle' => 'Become a member',
             'content' => Page::bodyFor(PageSlug::SignUp),
+            'user' => new User,
         ]);
     }
 
     public function store(SignUpRequest $request): RedirectResponse
     {
-        User::signUp($request->safe()->except('g-recaptcha-response', 'privacy_policy', 'terms_and_conditions'));
+        User::signUp($request->validated());
 
         return to_route('sign-up.create')
             ->with('message', 'Your membership request is pending, we will get back to you as soon as possible');

@@ -6,19 +6,12 @@
 
 @section('content')
     <x-page-header :title="$registrationForm->name">
-        <x-edit-button :href="route('admin.registration-forms.edit', $registrationForm)" />
-        <x-back-button :href="route('admin.registration-forms.index')" />
+        <x-button-link :href="route('admin.registration-forms.edit', $registrationForm)" icon="edit">Edit</x-button-link>
+        <x-button-link :href="route('admin.registration-forms.index')" icon="android-arrow-back">Back</x-button-link>
         <x-delete-button :action="route('admin.registration-forms.destroy', $registrationForm)" confirm="Are you sure you want to delete this registration form?" />
     </x-page-header>
     <x-card title="Fields" class="mt-4">
-        <table class="table table-striped" style="width:100%">
-            <thead>
-            <th>Name</td>
-            <th>Type</td>
-            <th>Value required</td>
-            <th>Options</td>
-            </thead>
-            <tbody>
+        <x-data-table :columns="['Name', 'Type', 'Value required', 'Options']">
             @foreach($registrationForm->fields as $field)
                 <tr>
                     <td>{{$field->name}}</td>
@@ -35,7 +28,6 @@
                     </td>
                 </tr>
             @endforeach
-            </tbody>
-        </table>
+        </x-data-table>
     </x-card>
 @endsection

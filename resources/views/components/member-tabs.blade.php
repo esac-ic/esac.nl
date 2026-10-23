@@ -34,34 +34,19 @@
             <x-detail-row label="First name">{{ $user->first_name}}</x-detail-row>
             <x-detail-row label="Preposition">{{ $user->preposition}}</x-detail-row>
             <x-detail-row label="Last name">{{ $user->last_name}}</x-detail-row>
-            <x-detail-row label="Address">{{$user->street . " " . $user->house_number}}</x-detail-row>
+            <x-detail-row label="Address">{{ $user->address }}</x-detail-row>
             <x-detail-row label="City">{{$user->city}}</x-detail-row>
             <x-detail-row label="Postal code">{{$user->zipcode}}</x-detail-row>
-            <tr>
-                <td>Country</td>
-                <td>
-                    @isset($user->country)
-                    {{ $countries[$user->country] ?? $user->country }}
-                    @endisset
-                </td>
-            </tr>
+            <x-detail-row label="Country">{{ $countries[$user->country] ?? $user->country }}</x-detail-row>
             <x-detail-row label="Alternative phone number">{{$user->phone_number_alt}}</x-detail-row>
             <x-detail-row label="Birthdate">{{ $user->birthday?->format('d-m-Y') }}</x-detail-row>
-            <tr>
-                <td>Member type</td>
-                <td>
-                    {{ $user->member_type?->label() }}
-                </td>
-            </tr>
+            <x-detail-row label="Member type">{{ $user->member_type?->label() }}</x-detail-row>
             <x-detail-row label="Remarks">{{$user->remark}}</x-detail-row>
             <x-detail-row label="Created at"><x-local-time :value="$user->created_at" format="d-m-Y" /></x-detail-row>
             <x-detail-row label="Updated at"><x-local-time :value="$user->updated_at" format="d-m-Y" /></x-detail-row>
             <x-detail-row label="ID">{{ $user->id}}</x-detail-row>
             @isset($user->membership_ended_on)
-            <tr>
-                <td>Membership ended on</td>
-                <td>{{ $user->membership_ended_on->format('d-m-Y') }}</td>
-            </tr>
+            <x-detail-row label="Membership ended on">{{ $user->membership_ended_on->format('d-m-Y') }}</x-detail-row>
             @endisset
         </table>
     </div>

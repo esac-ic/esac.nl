@@ -59,11 +59,9 @@
                                 <div class="dropdown-menu" aria-labelledby="account-dropdown">
                                     <a class="dropdown-item"
                                        href="{{ route('account.show') }}">Account overview</a>
-                                    <a class="dropdown-item" href="{{ route('logout') }}"
-                                       onclick="event.preventDefault(); document.getElementById('logout-form').submit();">Logout</a>
-                                    <form id="logout-form" action="{{ route('logout') }}" method="POST"
-                                          style="display: none;">
+                                    <form action="{{ route('logout') }}" method="POST">
                                         @csrf
+                                        <button type="submit" class="dropdown-item">Logout</button>
                                     </form>
                                 </div>
                             </li>
