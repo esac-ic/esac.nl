@@ -38,7 +38,7 @@ class PageController extends Controller implements HasMiddleware
 
     public function store(PageRequest $request): RedirectResponse
     {
-        $menuItem = new MenuItem($request->safe()->only(['name', 'slug', 'content']));
+        $menuItem = new MenuItem($request->safe()->only(['name', 'slug', 'content', 'requires_login']));
         $this->fillMenuPosition($request, $menuItem);
         // These can only be changed in the database.
         $menuItem->deletable = true;
@@ -63,8 +63,8 @@ class PageController extends Controller implements HasMiddleware
 
     public function update(PageRequest $request, MenuItem $page): RedirectResponse
     {
-        // The request excludes a fixed slug, and the content of pages that aren't editable.
-        $page->fill($request->safe()->only(['name', 'slug', 'content']));
+        // The request excludes a fixed slug and its login setting, and the content of pages that aren't editable.
+        $page->fill($request->safe()->only(['name', 'slug', 'content', 'requires_login']));
         $this->fillMenuPosition($request, $page);
         $page->save();
 
@@ -97,7 +97,6 @@ class PageController extends Controller implements HasMiddleware
         if (! $menuItem->exists || $menuItem->isDirty('parent_id')) {
             $menuItem->position = MenuItem::query()->where('parent_id', $menuItem->parent_id)->max('position') + 1;
         }
-        $menuItem->requires_login = $request->validated('requires_login');
         $menuItem->show_in_menu = $request->validated('show_in_menu');
     }
 

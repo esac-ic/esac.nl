@@ -34,7 +34,8 @@ class PageRequest extends FormRequest
             'content' => [Rule::excludeIf($page?->editable === false), 'required'],
             // The menu has two levels: a sub page's parent is a top-level page, and a page with sub pages stays top-level.
             'parent_id' => [Rule::prohibitedIf($page?->children()->exists() ?? false), 'nullable', Rule::exists('menu_items', 'id')->whereNull('parent_id')->when($page, fn ($rule) => $rule->whereNot('id', $page->id))],
-            'requires_login' => ['boolean'],
+            // The site's own routes decide who can see the pages with a fixed slug.
+            'requires_login' => [Rule::excludeIf($page?->hasFixedSlug() ?? false), 'boolean'],
             'show_in_menu' => ['boolean'],
         ];
     }
