@@ -2,10 +2,11 @@
 
 namespace Tests\Feature\Pages;
 
-use App\Enums\Role;
+use App\Enums\AdminRole;
 use App\Models\MenuItem;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\Test;
 use Tests\TestCase;
 
@@ -13,271 +14,106 @@ class CreatePageTest extends TestCase
 {
     use RefreshDatabase;
 
-    private $url = 'pages';
-
-    private $user;
-
     private MenuItem $parent;
 
     protected function setUp(): void
     {
         parent::setUp();
-        $this->user = $user = User::factory()->create();
-
-        $user->roles()->attach(Role::ContentAdministrator->value);
-        $this->be($user);
-
+        $this->actingAs(User::factory()->withRole(AdminRole::ContentAdministrator)->create());
         $this->parent = MenuItem::query()->forceCreate([
-            'name' => 'Parent', 'url_name' => 'parent', 'content' => 'Parent', 'login' => false,
-            'menu_item' => true, 'deletable' => true, 'editable' => true,
+            'name' => 'Parent', 'slug' => 'parent', 'content' => 'Parent', 'requires_login' => false,
+            'show_in_menu' => true, 'deletable' => true, 'editable' => true,
+        ]);
+    }
+
+    private function body(array $overrides = []): array
+    {
+        return array_merge([
+            'slug' => 'test',
+            'parent_id' => $this->parent->id,
+            'name' => 'Test title',
+            'content' => 'Very cool test content.',
+        ], $overrides);
+    }
+
+    public static function validPages(): array
+    {
+        return [
+            'sub item' => [[], true],
+            'sub item with emoji' => [['name' => 'Test title 😀', 'content' => 'Hele leuke test inhoud. 😀'], true],
+            'top-level page' => [['parent_id' => null], false],
+        ];
+    }
+
+    #[Test]
+    #[DataProvider('validPages')]
+    public function a_content_administrator_can_create_a_page(array $overrides, bool $isSubItem)
+    {
+        $body = $this->body($overrides);
+
+        $this->post('admin/pages', $body)
+            ->assertSessionHasNoErrors()
+            ->assertRedirect('admin/pages');
+
+        $this->assertDatabaseHas(MenuItem::class, [
+            'parent_id' => $isSubItem ? $this->parent->id : null,
+            'slug' => $body['slug'],
+            'name' => $body['name'],
+            'content' => $body['content'],
         ]);
     }
 
     #[Test]
-    public function admin_can_create_page()
+    public function an_edited_page_is_validated_when_its_slug_is_unchanged()
     {
-        $body = [
-            'url_name' => 'test',
-            'itemType' => 'subItem',
-            'parentItem' => $this->parent->id,
-            'afterItem' => $this->parent->id,
-            'name' => 'Test titel',
-            'content' => 'Hele leuke test inhoud.',
-        ];
+        $body = $this->body(['parent_id' => null]);
+        $this->post('admin/pages', $body)->assertValid();
+        $page = MenuItem::query()->where('slug', 'test')->sole();
 
-        $response = $this->post($this->url, $body);
-
-        // After creation the user should be redirect to /pages.
-        $response->assertStatus(302);
-        $response->assertSessionHasNoErrors();
-        $response->assertRedirect('/pages');
-
-        // Check whether a new page has been added to DB, other test will make sure content is actually correct.
-        $menuItem = MenuItem::all()->last();
-
-        $this->assertEquals($body['content'], $menuItem->content);
-    }
-
-    #[Test]
-    public function admin_can_create_page_with_emoji()
-    {
-        $body = [
-            'url_name' => 'test',
-            'itemType' => 'subItem',
-            'parentItem' => $this->parent->id,
-            'afterItem' => $this->parent->id,
-            'name' => 'Test title 😀',
-            'content' => 'Hele leuke test inhoud. 😀',
-        ];
-
-        $response = $this->post($this->url, $body);
-
-        // After creation the user should be redirect to /pages.
-        $response->assertStatus(302);
-        $response->assertSessionHasNoErrors();
-        $response->assertRedirect('/pages');
-
-        // Check whether a new page has been added to DB, other test will make sure content is actually correct.
-        $menuItem = MenuItem::all()->last();
-
-        $this->assertEquals($body['content'], $menuItem->content);
-    }
-
-    #[Test]
-    public function an_edited_page_is_validated_when_its_url_name_is_unchanged()
-    {
-        $body = ['url_name' => 'test', 'itemType' => 'standAlone', 'afterItem' => -1, 'name' => 'Test title', 'content' => 'Content'];
-        $this->post($this->url, $body)->assertSessionHasNoErrors();
-        $page = MenuItem::query()->where('url_name', 'test')->sole();
-
-        $this->patch(route('pages.update', $page), [...$body, 'name' => ''])->assertSessionHasErrors('name');
-        $this->patch(route('pages.update', $page), [...$body, 'name' => 'New title'])->assertSessionHasNoErrors();
+        $this->patch(route('admin.pages.update', $page), [...$body, 'name' => ''])->assertInvalid('name');
+        $this->patch(route('admin.pages.update', $page), [...$body, 'name' => 'New title'])->assertValid();
         $this->assertSame('New title', $page->fresh()->name);
     }
 
     #[Test]
-    public function no_role_no_create_page()
+    public function other_roles_can_not_create_a_page()
     {
-        $body = [
-            'url_name' => 'test',
-            'itemType' => 'subItem',
-            'parentItem' => $this->parent->id,
-            'afterItem' => $this->parent->id,
-            'name' => 'Test titel',
-            'content' => 'Very cool test content.',
-        ];
+        $this->actingAs(User::factory()->withRole(AdminRole::Administrator, AdminRole::EventAdministrator, AdminRole::CertificateAdministrator)->create());
 
-        // Give the user all roles except for content admin.
-        $this->user->roles()->sync([
-            Role::Administrator->value,
-            Role::ActivityAdministrator->value,
-            Role::CertificateAdministrator->value,
-        ]);
+        $this->post('admin/pages', $this->body())->assertForbidden();
 
-        $response = $this->post($this->url, $body);
-
-        // The user should not be able to create the page.
-        $response->assertStatus(403);
-        $this->assertTrue(MenuItem::count() == 1);
+        $this->assertDatabaseCount(MenuItem::class, 1);
     }
 
     #[Test]
-    public function create_page_subitem_content_correct()
+    public function a_page_can_require_a_login()
     {
-        $body = [
-            'url_name' => 'test',
-            'itemType' => 'subItem',
-            'parentItem' => $this->parent->id,
-            'afterItem' => $this->parent->id,
-            'name' => 'Test title',
-            'content' => 'Very cool test content.',
-        ];
+        $this->post('admin/pages', $this->body())->assertSessionHasNoErrors();
+        $this->post('admin/pages', $this->body(['slug' => 'test2', 'requires_login' => true]))->assertSessionHasNoErrors();
 
-        $response = $this->post($this->url, $body);
-        $response->assertSessionHasNoErrors();
-
-        // Check whether the newly added page has the correct content.
-        $menuItem = MenuItem::all()->last();
-
-        $this->assertEquals($menuItem->parent_id, $body['parentItem']);
-        $this->assertEquals($menuItem->url_name, $body['url_name']);
-        $this->assertEquals($menuItem->after, $body['afterItem']);
-        $this->assertEquals($menuItem->name, $body['name']);
-        $this->assertEquals($menuItem->content, $body['content']);
+        $this->assertDatabaseHas(MenuItem::class, ['slug' => 'test', 'requires_login' => false]);
+        $this->assertDatabaseHas(MenuItem::class, ['slug' => 'test2', 'requires_login' => true]);
     }
 
     #[Test]
-    public function create_page_standalone_content_correct()
+    public function a_new_page_goes_last_in_the_menu_and_can_be_moved_up()
     {
-        $body = [
-            'url_name' => 'test',
-            'itemType' => 'standAlone',
-            'afterItem' => $this->parent->id,
-            'name' => 'Test title',
-            'content' => 'Very cool test content.',
-        ];
+        $this->post('admin/pages', $this->body(['slug' => 'first', 'name' => 'First', 'parent_id' => null, 'show_in_menu' => true]));
+        $this->post('admin/pages', $this->body(['slug' => 'second', 'name' => 'Second', 'parent_id' => null, 'show_in_menu' => true]));
+        $this->get('second')->assertSeeInOrder(['navbar-nav', 'Parent', 'First', 'Second']);
 
-        $response = $this->post($this->url, $body);
-        $response->assertSessionHasNoErrors();
+        $this->patch(route('admin.pages.move', MenuItem::query()->where('slug', 'second')->sole()), ['direction' => 'up']);
 
-        // Check whether the newly added page has the correct content.
-        $menuItem = MenuItem::all()->last();
-
-        $this->assertNull($menuItem->parent_id);
-        $this->assertEquals($menuItem->url_name, $body['url_name']);
-        $this->assertEquals($menuItem->after, $body['afterItem']);
-        $this->assertEquals($menuItem->name, $body['name']);
-        $this->assertEquals($menuItem->content, $body['content']);
+        $this->get('second')->assertSeeInOrder(['navbar-nav', 'Parent', 'Second', 'First']);
     }
 
     #[Test]
-    public function create_page_login_correct()
+    public function a_page_needs_the_required_fields()
     {
-        $body = [
-            'url_name' => 'test',
-            'itemType' => 'subItem',
-            'parentItem' => $this->parent->id,
-            'afterItem' => $this->parent->id,
-            'name' => 'Test title',
-            'content' => 'Very cool test content.',
-        ];
+        $this->post('admin/pages')
+            ->assertRedirect()
+            ->assertInvalid(['slug', 'name', 'content']);
 
-        $response = $this->post($this->url, $body);
-
-        // Check whether the newly added page has the correct content.
-        $menuItem = MenuItem::all()->last();
-
-        $response->assertSessionHasNoErrors();
-        $this->assertFalse((bool) $menuItem->login);
-
-        $body['url_name'] = 'test2';
-        $body['login'] = true;
-        $response = $this->post($this->url, $body);
-
-        // Check whether the newly added page has the correct content.
-        $menuItem = MenuItem::all()->last();
-
-        $response->assertSessionHasNoErrors();
-        $this->assertTrue((bool) $menuItem->login);
-    }
-
-    #[Test]
-    public function create_page_no_after_item_correct()
-    {
-        $body = [
-            'url_name' => 'test',
-            'itemType' => 'subItem',
-            'parentItem' => $this->parent->id,
-            'afterItem' => -1,
-            'name' => 'Test title',
-            'content' => 'Very cool test content.',
-        ];
-
-        $response = $this->post($this->url, $body);
-
-        // Check whether the newly added page has the correct content.
-        $menuItem = MenuItem::all()->last();
-
-        $response->assertSessionHasNoErrors();
-        $this->assertNull($menuItem->after);
-
-        $body['url_name'] = 'test2';
-        $body['login'] = true;
-        $response = $this->post($this->url, $body);
-
-        // Check whether the newly added page has the correct content.
-        $menuItem = MenuItem::all()->last();
-
-        $response->assertSessionHasNoErrors();
-        $this->assertTrue((bool) $menuItem->login);
-    }
-
-    #[Test]
-    public function empty_body_meaningful_error()
-    {
-        $body = [
-        ];
-
-        $response = $this->post($this->url, $body);
-
-        // Must be redirected.
-        $response->assertStatus(302);
-
-        // Session must contain an error for each of the missing fields.
-        $response->assertSessionHasErrors([
-            'url_name',
-            'itemType',
-            'afterItem',
-            'name',
-            'content',
-        ]);
-
-        // No pages should be created.
-        $this->assertTrue(MenuItem::count() == 1);
-    }
-
-    #[Test]
-    public function empty_body_meaningful_error_subitem()
-    {
-        $body = [
-            'url_name' => 'test',
-            'itemType' => 'subItem',
-            'afterItem' => $this->parent->id,
-            'name' => 'Test title',
-            'content' => 'Very cool test content.',
-        ];
-
-        $response = $this->post($this->url, $body);
-
-        // Must be redirected.
-        $response->assertStatus(302);
-
-        // Session must contain an error for each of the missing fields.
-        $response->assertSessionHasErrors([
-            'parentItem',
-        ]);
-
-        // No pages should be created.
-        $this->assertTrue(MenuItem::count() == 1);
+        $this->assertDatabaseCount(MenuItem::class, 1);
     }
 }

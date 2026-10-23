@@ -8,7 +8,7 @@ RUN apt-get update \
     && apt-get install -y --no-install-recommends libcap2-bin default-mysql-client \
     && rm -rf /var/lib/apt/lists/* \
     && printf '[client]\nssl-verify-server-cert = off\n' > /etc/mysql/mariadb.conf.d/90-esac.cnf \
-    && install-php-extensions pdo_mysql gd zip opcache pcntl \
+    && install-php-extensions pdo_mysql gd intl zip opcache pcntl \
     && cp "$PHP_INI_DIR/php.ini-production" "$PHP_INI_DIR/php.ini" \
     && setcap CAP_NET_BIND_SERVICE=+eip /usr/local/bin/frankenphp
 
@@ -26,7 +26,7 @@ WORKDIR /app
 COPY package.json package-lock.json ./
 RUN npm ci --no-audit --no-fund
 COPY . .
-RUN npm run production
+RUN npm run build
 
 FROM base
 

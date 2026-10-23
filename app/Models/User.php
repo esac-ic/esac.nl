@@ -2,15 +2,15 @@
 
 namespace App\Models;
 
-use App\Enums\Role;
-use App\Events\MemberBecameOldMember;
-use App\Events\MemberKindChanged;
-use App\Events\OldMemberBecameMember;
-use App\Events\PendingUserApproved;
-use App\Events\PendingUserCreated;
-use App\Events\PendingUserRemoved;
-use App\Models\ApplicationForm\ApplicationResponse;
-use Carbon\Carbon;
+use App\Enums\AdminRole;
+use App\Enums\MemberType;
+use App\Events\MemberEmailChanged;
+use App\Events\MembershipEnded;
+use App\Events\MembershipRestored;
+use App\Events\MemberSignedUp;
+use App\Events\MemberTypeChanged;
+use App\Events\SignUpApproved;
+use App\Events\SignUpRejected;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Attributes\Hidden;
 use Illuminate\Database\Eloquent\Attributes\Scope;
@@ -22,17 +22,15 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Log;
 use RuntimeException;
 
 #[Fillable([
     'email',
     'password',
-    'firstname',
+    'first_name',
     'preposition',
-    'lastname',
+    'last_name',
     'street',
     'house_number',
     'city',
@@ -47,10 +45,10 @@ use RuntimeException;
     'emergency_zipcode',
     'emergency_country',
     'birthday',
-    'kind_of_member',
+    'member_type',
     'iban',
     'bic',
-    'incasso',
+    'direct_debit',
     'remark',
 ])]
 #[Hidden([
@@ -61,75 +59,51 @@ class User extends Authenticatable
 {
     use HasFactory, Notifiable, SoftDeletes;
 
-    /**
-     * All kinds of member, translated in lang/en/kind_of_member.php.
-     */
-    public const array KINDS_OF_MEMBER = [
-        'member',
-        'extraordinary_member',
-        'reunist',
-        'honorary_member',
-        'member_of_merit',
-        'trainer',
-        'relationship',
-    ];
-
     protected function casts(): array
     {
         return [
             'password' => 'hashed',
             'birthday' => 'date',
-            'lid_af' => 'date:Y-m-d',
-            'pending_user' => 'date:Y-m-d',
-            'incasso' => 'boolean',
+            'membership_ended_on' => 'date:Y-m-d',
+            'pending_since' => 'date:Y-m-d',
+            'direct_debit' => 'boolean',
+            'member_type' => MemberType::class,
         ];
     }
 
     /**
-     * Members who are neither old nor pending.
+     * Members who are neither former nor pending.
      */
     #[Scope]
-    protected function current(Builder $query): void
+    protected function active(Builder $query): void
     {
-        $query->whereNull('lid_af')->whereNull('pending_user');
+        $query->whereNull('membership_ended_on')->whereNull('pending_since');
     }
 
     #[Scope]
-    protected function old(Builder $query): void
+    protected function former(Builder $query): void
     {
-        $query->whereNotNull('lid_af');
+        $query->whereNotNull('membership_ended_on');
     }
 
     #[Scope]
     protected function pending(Builder $query): void
     {
-        $query->whereNotNull('pending_user');
+        $query->whereNotNull('pending_since');
     }
 
-    /**
-     * Makes an unsaved user from the member form's data.
-     */
-    public static function fromForm(array $data): self
+    public static function signUp(array $data): self
     {
         $user = new self($data);
-        $user->birthday = Carbon::parse($data['birthday'])->startOfMinute();
-        $user->incasso = array_key_exists('incasso', $data);
-
-        return $user;
-    }
-
-    public static function createPending(array $data): self
-    {
-        $user = self::fromForm($data);
 
         // A date column, so the date in Amsterdam rather than in UTC.
-        $user->pending_user = today(config('app.display_timezone'));
-        $user->kind_of_member = 'member';
-        $user->lid_af = null;
+        $user->pending_since = today(config('app.display_timezone'));
+        $user->member_type = MemberType::Member;
+        $user->membership_ended_on = null;
 
         $user->save();
 
-        PendingUserCreated::dispatch($user);
+        MemberSignedUp::dispatch($user);
 
         return $user;
     }
@@ -139,43 +113,53 @@ class User extends Authenticatable
      */
     public function updateFromForm(array $data): void
     {
-        $data['birthday'] = Carbon::parse($data['birthday'])->startOfMinute();
-        $data['incasso'] = array_key_exists('incasso', $data);
+        $previousType = $this->member_type;
 
-        $oldKindOfMember = $this->kind_of_member;
-
-        // Update before dispatching the event, so Mailman can't desync when the kind of member and email change together.
         $this->update($data);
 
-        if ($data['kind_of_member'] != $oldKindOfMember) {
-            MemberKindChanged::dispatch($this, $oldKindOfMember, $data['kind_of_member']);
+        // The lists move to the new email address before the member type's lists change.
+        if ($this->wasChanged('email')) {
+            MemberEmailChanged::dispatch($this, $this->getPrevious()['email']);
+        }
+        if ($this->member_type !== $previousType) {
+            MemberTypeChanged::dispatch($this, $previousType, $this->member_type);
         }
     }
 
+    /**
+     * @return BelongsToMany<Role, $this>
+     */
     public function roles(): BelongsToMany
     {
-        return $this->belongsToMany(Rol::class);
+        return $this->belongsToMany(Role::class);
     }
 
+    /**
+     * @return BelongsToMany<Certificate, $this>
+     */
     public function certificates(): BelongsToMany
     {
         return $this->belongsToMany(Certificate::class)
             ->withTimestamps()->withTrashed();
     }
 
-    public function applicationResponses(): HasMany
+    /**
+     * @return HasMany<Zekering, $this>
+     */
+    public function zekeringen(): HasMany
     {
-        return $this->hasMany(ApplicationResponse::class);
+        return $this->hasMany(Zekering::class, 'created_by');
     }
 
-    protected function birthdayFormatted(): Attribute
+    /**
+     * @return HasMany<Registration, $this>
+     */
+    public function registrations(): HasMany
     {
-        return Attribute::make(
-            get: fn () => $this->birthday->format('d-m-Y'),
-        );
+        return $this->hasMany(Registration::class);
     }
 
-    public function hasRole(Role ...$roles): bool
+    public function hasRole(AdminRole ...$roles): bool
     {
         foreach ($roles as $role) {
             if ($this->roles->contains($role->value)) {
@@ -188,107 +172,89 @@ class User extends Authenticatable
 
     /**
      * The certificate abbreviations, as "abbr, abbr, ...".
+     *
+     * @return Attribute<string, never>
      */
-    public function getCertificationsAbbreviations(): string
+    protected function certificateAbbreviations(): Attribute
     {
-        return $this->certificates->pluck('abbreviation')->implode(', ');
+        return Attribute::get(fn (): string => $this->certificates->pluck('abbreviation')->implode(', '));
     }
 
-    public function hasBackendRights(): bool
+    public function hasAnyRole(): bool
     {
         return $this->roles->isNotEmpty();
     }
 
     /**
-     * The name as "firstname preposition lastname".
+     * The full name, as "first name preposition last name".
+     *
+     * @return Attribute<string, never>
      */
-    public function getName(): string
+    protected function name(): Attribute
     {
-        $nameParts = [
-            $this->firstname,
-            $this->preposition,
-            $this->lastname,
-        ];
-
-        return implode(' ', array_filter($nameParts));
+        return Attribute::get(fn (): string => implode(' ', array_filter([$this->first_name, $this->preposition, $this->last_name])));
     }
 
-    public function getAddress(): string
+    /**
+     * The street and house number.
+     */
+    protected function address(): Attribute
     {
-        return "{$this->street} {$this->house_number}";
+        return Attribute::get(fn (): string => "{$this->street} {$this->house_number}");
     }
 
-    public function isOldMember(): bool
+    public function isFormerMember(): bool
     {
-        return $this->lid_af !== null;
+        return $this->membership_ended_on !== null;
     }
 
     public function isPendingMember(): bool
     {
-        return $this->pending_user !== null;
+        return $this->pending_since !== null;
     }
 
     public function isActiveMember(): bool
     {
-        return $this->lid_af === null && $this->pending_user === null;
+        return $this->membership_ended_on === null && $this->pending_since === null;
     }
 
-    public function removeAsActiveMember(): void
+    public function endMembership(): void
     {
-        $this->lid_af = today(config('app.display_timezone'));
+        $this->membership_ended_on = today(config('app.display_timezone'));
         $this->save();
 
         $this->roles()->detach();
 
-        if (Auth::user()->is($this)) {
-            Auth::logout();
-        }
-
-        MemberBecameOldMember::dispatch($this);
+        MembershipEnded::dispatch($this);
     }
 
-    /**
-     * Makes an old member active again; returns false when they're already active or have no email address.
-     */
-    public function makeActiveMember(): bool
+    public function restoreMembership(): void
     {
-        if ($this->isActiveMember()) {
-            Log::notice('User '.$this->getName().' was attempted to made active, but is already active');
-        }
-        if (! $this->email) {
-            Log::notice('User '.$this->getName()." was attempted to made active, but doesn't have an email address");
-        }
-        if (! $this->email || $this->isActiveMember()) {
-            return false;
-        }
-
         DB::transaction(function () {
-            $this->lid_af = null;
+            $this->membership_ended_on = null;
             $this->save();
-            OldMemberBecameMember::dispatch($this);
+            MembershipRestored::dispatch($this);
         });
-
-        return true;
     }
 
-    public function approveAsPendingMember(): void
+    public function approveSignUp(): void
     {
         DB::transaction(function () {
-            $this->pending_user = null;
+            $this->pending_since = null;
             $this->save();
-            PendingUserApproved::dispatch($this);
+            SignUpApproved::dispatch($this);
         });
     }
 
     /**
      * @throws RuntimeException when the user isn't a pending member
      */
-    public function removeAsPendingMember(): void
+    public function rejectSignUp(): void
     {
         if (! $this->isPendingMember()) {
             throw new RuntimeException('User is not a pending member.');
         }
-        PendingUserRemoved::dispatch($this, $this->getName());
+        SignUpRejected::dispatch($this, $this->name);
         $this->delete();
     }
 }

@@ -7,53 +7,45 @@ use Illuminate\Database\Eloquent\Attributes\Scope;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
-use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
 #[Fillable([
     'name',
     'parent_id',
-    'url_name',
-    'after',
-    'menu_item',
+    'slug',
+    'show_in_menu',
     'content',
 ])]
 class MenuItem extends Model
 {
     use SoftDeletes;
 
-    const HOMEURL = 'home';
-
-    const ZEKERINGURL = 'zekeringen';
-
-    const SUBSCRIBEURL = 'signup';
-
-    const NEWSURL = 'news';
-
-    const MEMBERLISTURL = 'memberlist';
-
-    const AGENDAURL = 'agenda';
-
-    const LIBRARYURL = 'library';
-
     protected function casts(): array
     {
         return [
-            'login' => 'boolean',
-            'menu_item' => 'boolean',
+            'requires_login' => 'boolean',
+            'show_in_menu' => 'boolean',
             'deletable' => 'boolean',
             'editable' => 'boolean',
         ];
     }
 
-    public function partner(): BelongsTo
+    /**
+     * @return BelongsTo<MenuItem, $this>
+     */
+    public function parent(): BelongsTo
     {
         return $this->belongsTo(MenuItem::class, 'parent_id');
     }
 
-    public function afterItem(): BelongsTo
+    /**
+     * @return HasMany<MenuItem, $this>
+     */
+    public function children(): HasMany
     {
-        return $this->belongsTo(MenuItem::class, 'after');
+        return $this->hasMany(MenuItem::class, 'parent_id')->chaperone('parent');
     }
 
     /**
@@ -62,47 +54,28 @@ class MenuItem extends Model
     #[Scope]
     protected function inMenu(Builder $query): void
     {
-        $query->where('menu_item', true);
+        $query->where('show_in_menu', true);
+    }
+
+    #[Scope]
+    protected function ordered(Builder $query): void
+    {
+        $query->orderBy('position')->orderBy('id');
     }
 
     /**
-     * Whether the current visitor may see the page.
+     * Moves the item one place up or down among its siblings and numbers them 1, 2, 3, ...
      */
-    public function show(): bool
+    public function move(string $direction): void
     {
-        return ! $this->login || Auth::check();
-    }
+        $siblings = static::query()->where('parent_id', $this->parent_id)->ordered()->get()->values();
+        $from = $siblings->search(fn (MenuItem $sibling) => $sibling->is($this));
+        $to = $direction === 'up' ? $from - 1 : $from + 1;
 
-    public static function sortMenuList($menuList): array
-    {
-        $newList = [];
-        // get a menu item which is not after one
-        $firstItem = $menuList->where('after', '=', null)->first();
-        if ($firstItem == null) {
-            if (count($menuList) == 0) {
-                return $newList;
-            }
-            // there aren't any menu items witch don't have a menu after so we take the first item from te menu item
-            $firstItem = $menuList[0];
+        if ($siblings->has($to)) {
+            [$siblings[$from], $siblings[$to]] = [$siblings[$to], $siblings[$from]];
+
+            DB::transaction(fn () => $siblings->each(fn (MenuItem $sibling, int $index) => $sibling->forceFill(['position' => $index + 1])->save()));
         }
-
-        array_push($newList, $firstItem);
-
-        for ($i = 0; $i < count($newList); $i++) {
-            $newItems = $menuList->where('after', '=', $newList[$i]->id);
-
-            // check if there are new menu item which are after the previos menu item.
-            if (count($newItems) === 0) {
-                $newItems = $menuList->where('after', '=', null);
-            }
-
-            foreach ($newItems as $item) {
-                if (! in_array($item, $newList)) {
-                    array_push($newList, $item);
-                }
-            }
-        }
-
-        return $newList;
     }
 }

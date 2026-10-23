@@ -17,13 +17,8 @@ mix.js('resources/assets/js/app.js', 'public/js')
       "node_modules/datatables.net/js/jquery.dataTables.js",
       "node_modules/datatables.net-bs4/js/dataTables.bootstrap4.js",
       "node_modules/datatables.net-responsive/js/dataTables.responsive.js",
-      "node_modules/datatables.net-responsive-bs4/js/responsive.bootstrap4.js",
-      "resources/assets/js/datatables.js"],
+      "node_modules/datatables.net-responsive-bs4/js/responsive.bootstrap4.js"],
       "public/js/vendor/datatables.js")
-   .combine([
-      "node_modules/moment/moment.js",
-      "node_modules/moment/locale/nl.js"],
-      "public/js/vendor/moment.js")
    .sass("resources/assets/scss/theme.scss", "public/css/app.css")
    .options({
       processCssUrls: false
@@ -35,10 +30,8 @@ mix.js('resources/assets/js/app.js', 'public/js')
    .copyDirectory("resources/assets/img", "public/img");
 
 // Management
-mix.combine("node_modules/tempusdominus-bootstrap-4/build/js/tempusdominus-bootstrap-4.js", "public/js/vendor/tempusdominus.js")
-   .combine("node_modules/summernote/dist/summernote-bs4.js", "public/js/vendor/summernote.js")
+mix.combine("node_modules/summernote/dist/summernote-bs4.js", "public/js/vendor/summernote.js")
    .combine("node_modules/summernote/dist/summernote-bs4.css", "public/css/vendor/summernote.css")
-   .combine("node_modules/tempusdominus-bootstrap-4/build/css/tempusdominus-bootstrap-4.css", "public/css/vendor/tempusdominus.css")
    .copyDirectory("node_modules/summernote/dist/font", "public/css/vendor/font");
 
 mix.browserSync('localhost');

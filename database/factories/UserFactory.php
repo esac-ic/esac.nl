@@ -2,10 +2,15 @@
 
 namespace Database\Factories;
 
+use App\Enums\AdminRole;
+use App\Enums\MemberType;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Facades\Hash;
 
+/**
+ * @extends Factory<User>
+ */
 class UserFactory extends Factory
 {
     protected static ?string $password;
@@ -22,14 +27,14 @@ class UserFactory extends Factory
         return [
             'email' => $email,
             'password' => static::$password ??= Hash::make('password'),
-            'firstname' => $firstName,
-            'lastname' => $lastName,
+            'first_name' => $firstName,
+            'last_name' => $lastName,
             'preposition' => $preposition,
             'street' => fake()->streetName(),
             'house_number' => fake()->randomNumber(),
             'city' => fake()->city(),
             'zipcode' => fake()->postcode(),
-            'country' => fake()->country(),
+            'country' => fake()->countryCode(),
             'phone_number' => fake()->unique()->phoneNumber(),
             'phone_number_alt' => fake()->phoneNumber(),
             'emergency_number' => fake()->phoneNumber(),
@@ -37,61 +42,66 @@ class UserFactory extends Factory
             'emergency_house_number' => fake()->randomNumber(),
             'emergency_city' => fake()->city(),
             'emergency_zipcode' => fake()->postcode(),
-            'emergency_country' => fake()->country(),
+            'emergency_country' => fake()->countryCode(),
             'birthday' => fake()->date(),
-            'kind_of_member' => fake()->randomElement(User::KINDS_OF_MEMBER),
+            'member_type' => fake()->randomElement(MemberType::cases()),
             'iban' => fake()->iban(),
             'bic' => fake()->swiftBicNumber(),
-            'incasso' => fake()->boolean(),
+            'direct_debit' => fake()->boolean(),
             'remark' => fake()->sentence(),
         ];
     }
 
+    public function withRole(AdminRole ...$roles): static
+    {
+        return $this->afterCreating(fn (User $user) => $user->roles()->attach(array_map(fn (AdminRole $role) => $role->value, $roles)));
+    }
+
     public function member(): static
     {
-        return $this->state(['kind_of_member' => 'member']);
+        return $this->state(['member_type' => 'member']);
     }
 
     public function reunist(): static
     {
-        return $this->state(['kind_of_member' => 'reunist']);
+        return $this->state(['member_type' => 'reunist']);
     }
 
-    public function extraordinary_participant(): static
+    public function extraordinaryParticipant(): static
     {
-        return $this->state(['kind_of_member' => 'extraordinary_member']);
+        return $this->state(['member_type' => 'extraordinary_participant']);
     }
 
-    public function honorary_member(): static
+    public function honoraryMember(): static
     {
-        return $this->state(['kind_of_member' => 'honorary_member']);
+        return $this->state(['member_type' => 'honorary_member']);
     }
 
-    public function member_of_merit(): static
+    public function memberOfService(): static
     {
-        return $this->state(['kind_of_member' => 'member_of_merit']);
+        return $this->state(['member_type' => 'member_of_service']);
     }
 
     public function trainer(): static
     {
-        return $this->state(['kind_of_member' => 'trainer']);
+        return $this->state(['member_type' => 'trainer']);
     }
 
     public function relationship(): static
     {
-        return $this->state(['kind_of_member' => 'relationship']);
+        return $this->state(['member_type' => 'relationship']);
     }
 
-    public function lidAf(): static
+    public function former(): static
     {
-        return $this->state(fn () => ['lid_af' => fake()->dateTimeThisDecade()]);
+        return $this->state(fn () => ['membership_ended_on' => fake()->dateTimeThisDecade()]);
     }
 
     public function pending(): static
     {
         return $this->state(fn () => [
-            'pending_user' => fake()->dateTimeThisMonth(),
-            'kind_of_member' => 'member',
+            'pending_since' => fake()->dateTimeThisMonth(),
+            'member_type' => 'member',
         ]);
     }
 }

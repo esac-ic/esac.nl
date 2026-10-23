@@ -1,14 +1,12 @@
 {
   "private": true,
   "scripts": {
-    "start": "npm run development && php artisan serve",
-    "dev": "npm run development",
-    "development": "mix",
+    "start": "npm run dev && php artisan serve",
+    "dev": "mix",
     "watch": "mix watch",
     "watch-poll": "mix watch -- --watch-options-poll=1000",
     "hot": "mix watch --hot",
-    "prod": "npm run production",
-    "production": "mix --production"
+    "build": "mix --production"
   },
   "devDependencies": {
     "axios": "^0.27.2",
@@ -20,13 +18,10 @@
     "datatables.net-responsive-bs4": "^2.3.0",
     "jquery": "^3.6.0",
     "laravel-mix": "^6.0.44",
-    "moment": "^2.29.3",
     "popper.js": "^1.16.1",
     "sass": "^1.52.1",
     "sass-loader": "^13.0.0",
     "summernote": "^0.8.20",
-    "tempusdominus-bootstrap-4": "^5.39.2",
-    "tempusdominus-core": "^5.19.3",
     "vue-loader": "^15.9.7",
     "vue-template-compiler": "^2.6.14"
   },

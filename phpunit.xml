@@ -28,7 +28,7 @@
         <env name="DB_USERNAME" value="root"/>
         <env name="DB_PASSWORD" value="password"/>
         <env name="MAIL_MAILER" value="array"/>
-        <env name="MAIL_MAN_DOMAIN" value="@esac.nl"/>
+        <env name="MAILMAN_LIST_DOMAIN" value="@esac.nl"/>
         <env name="QUEUE_CONNECTION" value="sync"/>
         <env name="SESSION_DRIVER" value="array"/>
     </php>

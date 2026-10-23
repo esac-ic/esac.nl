@@ -3,7 +3,6 @@
 namespace App\Services;
 
 use App\Models\User;
-use Exception;
 use Illuminate\Contracts\Support\Arrayable;
 use Illuminate\Http\Client\PendingRequest;
 use Illuminate\Http\Client\RequestException;
@@ -14,32 +13,15 @@ use Illuminate\Support\Fluent;
 
 /**
  * Client for Mailman's REST API. Mail lists and members are returned as Fluent objects.
+ * Failed requests throw a RequestException.
  */
 class Mailman
 {
     private function http(): PendingRequest
     {
-        return Http::baseUrl((string) config('services.mailman.url'))->withBasicAuth(
-            (string) config('services.mailman.username'), (string) config('services.mailman.password'),
-        );
-    }
-
-    /** @throws RequestException */
-    private function get(string $url): Collection
-    {
-        return $this->http()->get($url)->throw()->collect();
-    }
-
-    /** @throws RequestException */
-    private function post(string $url, array $body): Collection
-    {
-        return $this->http()->post($url, $body)->throw()->collect();
-    }
-
-    /** @throws RequestException */
-    private function delete(string $url, array $body = []): Collection
-    {
-        return $this->http()->delete($url, $body)->throw()->collect();
+        return Http::baseUrl((string) config('services.mailman.url'))
+            ->withBasicAuth((string) config('services.mailman.username'), (string) config('services.mailman.password'))
+            ->timeout(10);
     }
 
     private function toMailList(array $raw): Fluent
@@ -62,180 +44,155 @@ class Mailman
     }
 
     /**
-     * Returns every mail list that exists in mailman, without members
+     * Every mail list, without its members.
      *
      * @return Collection<int, Fluent>
      *
      * @throws RequestException
      */
-    public function getAllMailLists(): Collection
+    public function mailLists(): Collection
     {
-        return collect($this->get('/lists')->get('entries', []))->map($this->toMailList(...));
+        return $this->http()->get('/lists')->throw()->collect('entries')->map($this->toMailList(...));
     }
 
     /**
-     * Returns the ids of all mail lists
+     * The ids of all mail lists, fetched once per instance.
      *
-     * @return string[] mailListIds
+     * @return string[]
      *
      * @throws RequestException
      */
-    public function getAllMailListIds(): array
+    public function mailListIds(): array
     {
-        return $this->getAllMailLists()->pluck('id')->all();
-    }
-
-    public function getMailList($id): ?Fluent
-    {
-        try {
-            $mailList = $this->toMailList($this->get('/lists/'.$id)->all());
-            $mailList->set('members', collect($this->get('/lists/'.$id.'/roster/member')->get('entries', []))
-                ->map($this->toMember(...))
-                ->all());
-
-            return $mailList;
-        } catch (RequestException $e) {
-            Log::error($e->getMessage());
-
-            return null;
-        }
+        return once(fn () => $this->mailLists()->pluck('id')->all());
     }
 
     /** @throws RequestException */
-    public function getMailListsForMember(string $member): Collection
+    public function mailList(string $id): Fluent
     {
-        try {
-            $entries = $this->post('/lists/find', ['subscriber' => $member])->get('entries', []);
+        $mailList = $this->toMailList($this->http()->get("/lists/$id")->throw()->json());
+        $mailList->set('members', $this->http()->get("/lists/$id/roster/member")->throw()
+            ->collect('entries')
+            ->map($this->toMember(...))
+            ->all());
 
-            return collect($entries)->map($this->toMailList(...));
-        } catch (RequestException $e) {
-            // mailman throws a 404 exception when a member is in no mail lists, so we don't want to catch this.
-            if ($e->getCode() === 404) {
-                return collect();
-            } else {
-                throw $e;
-            }
-        }
+        return $mailList;
     }
 
     /**
-     * Stores a mail list in mailman.
-     *
-     * @param  array  $data  the data containing the address of the mail list
-     *
-     * @throws RequestException When the mail list already exists
-     */
-    public function storeMailList(array $data): void
-    {
-        $this->post('/lists', [
-            'fqdn_listname' => $data['address'].config('services.mailman.domain'),
-        ]);
-    }
-
-    /**
-     * @throws RequestException When the mail list couldn't be deleted.
-     */
-    public function deleteMailList($id): void
-    {
-        $this->delete('/lists/'.$id);
-    }
-
-    /**
-     * Deletes/removes a member from a mail list.
-     *
-     * @param  string  $mailListId  id of the mail list
-     * @param  string  $memberEmail  email of the member to be deleted
-     * @param  bool  $suppressErrors  option to suppress errors when they are encountered
-     *
-     * @throws RequestException when the member or list doesn't exist
-     */
-    public function deleteMemberFromMailList(string $mailListId, string $memberEmail, bool $suppressErrors = false): void
-    {
-        try {
-            $this->delete('/lists/'.$mailListId.'/member/'.$memberEmail);
-        } catch (RequestException $e) {
-            if (! $suppressErrors) {
-                throw $e;
-            }
-        }
-    }
-
-    public function addMember($mailListId, $email, $name): void
-    {
-        try {
-            $this->post('/members', [
-                'list_id' => $mailListId,
-                'subscriber' => $email,
-                'display_name' => $name,
-                'pre_verified' => true,
-                'pre_confirmed' => true,
-                'pre_approved' => true,
-            ]);
-        } catch (Exception $e) {
-            Log::error($e->getMessage());
-        }
-    }
-
-    /** @throws RequestException */
-    public function deleteUserForAllMailList(User $user): void
-    {
-        $this->getMailListsForMember($user->email)
-            ->each(fn (Fluent $list) => $this->deleteMemberFromMailList($list->get('id'), $user->email));
-    }
-
-    /** @throws RequestException */
-    public function updateUserEmailForAllMailList($user, $oldEmail, $newEmail): void
-    {
-        $listIds = $this->getMailListsForMember($oldEmail)->pluck('id');
-
-        $listIds->each(fn ($id) => $this->deleteMemberFromMailList($id, $oldEmail));
-        $this->addUserToSpecifiedMailLists($newEmail, $user->getName(), $listIds);
-    }
-
-    /**
-     * Adds a user to an array of mail lists
-     *
-     * @param  string  $email  the email address of the user
-     * @param  string  $name  the name of the user
-     * @param  array|Arrayable  $mailListIds  an array of mail list to add the user to
+     * @return Collection<int, Fluent>
      *
      * @throws RequestException
      */
-    public function addUserToSpecifiedMailLists(string $email, string $name, array|Arrayable $mailListIds): void
+    public function mailListsOf(string $member): Collection
     {
-        $mailListIds = collect($mailListIds)->filter();
-        if ($mailListIds->isEmpty()) {
-            return;
-        }
+        // Mailman answers 404 when the member is on no list.
+        $response = $this->http()->post('/lists/find', ['subscriber' => $member])->throwUnless(fn ($response) => $response->notFound());
 
-        $allListIds = $this->getAllMailListIds();
-        if ($mailListIds->diff($allListIds)->isNotEmpty()) {
-            Log::warning('Warning: tried to add user '.$email.' to nonexistent mail list(s): ',
-                ['list_ids' => $mailListIds->diff($allListIds)->all()]);
-        }
+        return $response->notFound() ? collect() : $response->collect('entries')->map($this->toMailList(...));
+    }
 
-        $mailListIds
-            ->intersect($allListIds)
-            ->each(fn ($listId) => $this->addMember($listId, $email, $name));
+    /**
+     * @throws RequestException when the mail list already exists
+     */
+    public function createMailList(string $address): void
+    {
+        $this->http()->post('/lists', [
+            'fqdn_listname' => $address.config('services.mailman.list_domain'),
+        ])->throw();
     }
 
     /** @throws RequestException */
-    public function removeUserFromSpecifiedMailLists(string $email, array|Arrayable $mailListIds): void
+    public function deleteMailList(string $id): void
+    {
+        $this->http()->delete("/lists/$id")->throw();
+    }
+
+    /**
+     * Removes the member from the mail list; a member who isn't on it (404) is fine.
+     *
+     * @throws RequestException
+     */
+    public function removeMember(string $mailListId, string $memberEmail): void
+    {
+        $this->http()->delete("/lists/$mailListId/member/$memberEmail")->throwUnless(fn ($response) => $response->notFound());
+    }
+
+    /**
+     * Adds the member to the mail list; a member who is already on it (409) is fine.
+     *
+     * @throws RequestException
+     */
+    public function addMember(string $mailListId, string $email, string $name): void
+    {
+        $this->http()->post('/members', [
+            'list_id' => $mailListId,
+            'subscriber' => $email,
+            'display_name' => $name,
+            'pre_verified' => true,
+            'pre_confirmed' => true,
+            'pre_approved' => true,
+        ])->throwUnless(fn ($response) => $response->conflict());
+    }
+
+    /** @throws RequestException */
+    public function removeFromAllMailLists(User $user): void
+    {
+        $this->mailListsOf($user->email)
+            ->each(fn (Fluent $list) => $this->removeMember($list->get('id'), $user->email));
+    }
+
+    /** @throws RequestException */
+    public function changeEmailOnAllMailLists(User $user, string $oldEmail, string $newEmail): void
+    {
+        $listIds = $this->mailListsOf($oldEmail)->pluck('id');
+
+        $listIds->each(fn (string $id) => $this->removeMember($id, $oldEmail));
+        $this->addToMailLists($newEmail, $user->name, $listIds);
+    }
+
+    /**
+     * Adds a member to the given mail lists that exist.
+     *
+     * @param  array<int, string>|Arrayable<int, string>  $mailListIds
+     *
+     * @throws RequestException
+     */
+    public function addToMailLists(string $email, string $name, array|Arrayable $mailListIds): void
+    {
+        $this->existingMailLists($mailListIds, $email)->each(fn (string $listId) => $this->addMember($listId, $email, $name));
+    }
+
+    /**
+     * Removes a member from the given mail lists that exist.
+     *
+     * @param  array<int, string>|Arrayable<int, string>  $mailListIds
+     *
+     * @throws RequestException
+     */
+    public function removeFromMailLists(string $email, array|Arrayable $mailListIds): void
+    {
+        $this->existingMailLists($mailListIds, $email)->each(fn (string $listId) => $this->removeMember($listId, $email));
+    }
+
+    /**
+     * The given mail lists that exist in Mailman; the others are logged.
+     *
+     * @param  array<int, string>|Arrayable<int, string>  $mailListIds
+     * @return Collection<int, string>
+     */
+    private function existingMailLists(array|Arrayable $mailListIds, string $email): Collection
     {
         $mailListIds = collect($mailListIds)->filter();
         if ($mailListIds->isEmpty()) {
-            return;
+            return $mailListIds;
         }
 
-        $allListIds = $this->getAllMailListIds();
-        if ($mailListIds->diff($allListIds)->isNotEmpty()) {
-            Log::warning('Warning: tried to remove user '.$email.' from nonexistent mail list(s): ',
-                ['list_ids' => $mailListIds->diff($allListIds)->all()]);
+        $missing = $mailListIds->diff($this->mailListIds());
+        if ($missing->isNotEmpty()) {
+            Log::warning("Mail lists of $email don't exist in Mailman", ['list_ids' => $missing->all()]);
         }
 
-        $mailListIds
-            ->intersect($allListIds)
-            // suppress errors so we don't break when a member is no longer part of a mail list
-            ->each(fn ($listId) => $this->deleteMemberFromMailList($listId, $email, true));
+        return $mailListIds->intersect($this->mailListIds());
     }
 }

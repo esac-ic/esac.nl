@@ -131,14 +131,14 @@ return [
     | Data Retention
     |--------------------------------------------------------------------------
     |
-    | The number of years after which the remove:oldUsers command erases the
-    | personal data of old members and the remove:oldApplications command
-    | deletes event registrations.
+    | The number of years after which the members:anonymize-former command
+    | erases the personal data of former members and the registrations:prune
+    | command deletes event registrations.
     |
     */
 
-    'old_user_retention_years' => (int) env('OLD_USER_RETENTION_YEARS', 2),
+    'former_member_retention_years' => (int) env('FORMER_MEMBER_RETENTION_YEARS', 2),
 
-    'application_response_retention_years' => (int) env('APPLICATION_RESPONSE_RETENTION_YEARS', 2),
+    'registration_retention_years' => (int) env('REGISTRATION_RETENTION_YEARS', 2),
 
 ];

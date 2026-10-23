@@ -1,14 +1,14 @@
 <template>
     <div>
         <div class="form-group">
-            <label>{{categoriesText}}</label>
+            <label>Categories</label>
             <select class="form-control" v-model="selectedCategorie" v-on:change="categorieChanged">
-                <option value="">{{allCategoriesText}}</option>
+                <option value="">All</option>
                 <option v-for="categorie in categories" :key="categorie.id" :value="categorie.id">{{categorie.name}}</option>
             </select>
         </div>
         <div class="form-group">
-            <label>{{startDateText}}</label>
+            <label>Start date</label>
             <datepicker v-model="startDate" input-class="form-control" :format="dateFormat" v-on:input="startDateChanged"></datepicker>
         </div>
     </div>
@@ -24,9 +24,6 @@ import { mapActions, mapGetters } from 'vuex';
             return {
                 selectedCategorie: "",
                 startDate:  new Date(),
-                allCategoriesText: 'All',
-                categoriesText: 'Categories',
-                startDateText: 'Start date'
             }
         },
         components: {
@@ -55,10 +52,6 @@ import { mapActions, mapGetters } from 'vuex';
         },
         mounted () {
             this.fetchAgendaCategories();
-            
-            this.allCategoriesText = 'All';
-            this.categoriesText = 'Categories';
-            this.startDateText=  'Start date';
         }
     }
 </script>

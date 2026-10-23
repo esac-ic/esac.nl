@@ -3,54 +3,47 @@
 namespace App\Exports;
 
 use App\Models\User;
-use Carbon\Carbon;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection;
 
 class PennoMemberExport extends SpreadsheetExport
 {
-    private Carbon $fromDate;
+    private Carbon $since;
 
     public function __construct(int $daysAgo)
     {
-        $this->fromDate = Carbon::today(config('app.display_timezone'))->subDays($daysAgo);
+        $this->since = today(config('app.display_timezone'))->subDays($daysAgo);
     }
 
     public function collection(): Collection
     {
-        $users = User::current()->where('created_at', '>=', $this->fromDate->copy()->utc())->get($this->columns());
+        return User::query()->active()->where('created_at', '>=', $this->since->copy()->utc())->get();
+    }
 
-        return $users->map(function (User $user) {
-            $export = $user->toArray();
-            $export['iban'] = str_replace(' ', '', $export['iban']);
-            // Remove the time component of the created_at field:
-            $export['created_at'] = $user->created_at->tz(config('app.display_timezone'))->toDateString();
-            $export['incasso'] = $user->incasso ? 'Yes' : 'No';
-
-            return $export;
-        });
+    /**
+     * @param  User  $user
+     */
+    public function map(mixed $user): array
+    {
+        return [
+            $user->id,
+            $user->email,
+            $user->first_name,
+            $user->preposition,
+            $user->last_name,
+            $user->city,
+            $user->country,
+            $user->member_type?->value,
+            str_replace(' ', '', (string) $user->iban),
+            $user->bic,
+            $user->direct_debit ? 'Yes' : 'No',
+            $user->created_at->tz(config('app.display_timezone'))->toDateString(),
+        ];
     }
 
     public function title(): string
     {
-        return 'Non administrated members';
-    }
-
-    private function columns(): array
-    {
-        return [
-            'id',
-            'email',
-            'firstname',
-            'preposition',
-            'lastname',
-            'city',
-            'country',
-            'kind_of_member',
-            'iban',
-            'bic',
-            'incasso',
-            'created_at',
-        ];
+        return 'New members';
     }
 
     public function headings(): array
@@ -63,16 +56,16 @@ class PennoMemberExport extends SpreadsheetExport
             'Last name',
             'City',
             'Country',
-            'Kind of member',
+            'Member type',
             'IBAN',
             'BIC',
-            'Accept Automatic Collection',
-            'User created at',
+            'Direct debit',
+            'Signed up on',
         ];
     }
 
-    public function getFromDate(): Carbon
+    public function since(): Carbon
     {
-        return $this->fromDate;
+        return $this->since;
     }
 }
