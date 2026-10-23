@@ -20,9 +20,10 @@ class EventFactory extends Factory
             'short_description' => fake()->word(),
             'created_by' => User::factory(),
             'event_category_id' => EventCategory::factory(),
-            'start_date' => fake()->date(),
-            'end_date' => fake()->date(),
-            'registration_deadline' => fake()->date(),
+            'start_date' => $start = fake()->dateTimeBetween('-1 month', '+3 months'),
+            // A valid event ends after it starts and closes its registration before.
+            'end_date' => (clone $start)->modify('+'.fake()->numberBetween(2, 48).' hours'),
+            'registration_deadline' => (clone $start)->modify('-1 day'),
             'image_path' => '',
             'shows_certificates' => fake()->boolean(),
         ];
