@@ -96,6 +96,10 @@ class RegisterForEventTest extends TestCase
         ]);
 
         $this->get('/events/'.$event->id.'/registration')
+            ->assertRedirect(route('events.show', $event))
+            ->assertSessionMissing('error');
+
+        $this->post('/events/'.$event->id.'/registration', $this->answers($event))
             ->assertRedirect()
             ->assertSessionHas('error', 'You are already registered for this event.');
     }
@@ -106,7 +110,9 @@ class RegisterForEventTest extends TestCase
         $event = $this->eventWithRegistrationForm();
         $answers = $this->answers($event);
 
-        $this->post('/events/'.$event->id.'/registration', $answers)->assertRedirect();
+        $this->post('/events/'.$event->id.'/registration', $answers)
+            ->assertRedirect(route('events.show', $event))
+            ->assertSessionHas('message', 'You are registered for '.$event->title.'.');
 
         $this->assertRegistered($this->user, $event, $answers);
     }
@@ -116,7 +122,7 @@ class RegisterForEventTest extends TestCase
     {
         $event = $this->eventWithRegistrationForm();
 
-        $this->post(route('admin.events.registrations.store', $event), ['user' => User::factory()->create()->id] + $this->answers($event))
+        $this->post(route('admin.events.registrations.store', $event), ['user_id' => User::factory()->create()->id] + $this->answers($event))
             ->assertForbidden();
     }
 
@@ -128,7 +134,7 @@ class RegisterForEventTest extends TestCase
         $event = $this->eventWithRegistrationForm();
         $answers = $this->answers($event);
 
-        $this->post(route('admin.events.registrations.store', $event), ['user' => $userToRegister->id] + $answers)->assertRedirect();
+        $this->post(route('admin.events.registrations.store', $event), ['user_id' => $userToRegister->id] + $answers)->assertRedirect();
 
         $this->assertRegistered($userToRegister, $event, $answers);
     }

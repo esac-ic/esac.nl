@@ -35,7 +35,7 @@ class EventFeedController extends Controller
                 ))
                 ->setSummary($event->title)
                 ->setDescription(
-                    html_entity_decode(strip_tags($event->text)).
+                    html_entity_decode(strip_tags($event->body)).
                     "\r\n\r\n----------\r\n".
                     'More information: '.route('events.show', $event)
                 );

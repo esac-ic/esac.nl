@@ -1,70 +1,16 @@
 @extends('layouts.app')
 
-@section('title')
-{{$pageTitle}}
-@endsection
-
 @section('content')
 <x-page-intro :title="$pageTitle" :$content />
 <div class="container">
-    @if ($errors->any())
-        <ul class="alert alert-danger">
-            @foreach ($errors->all() as $error)
-                <li class="ml-2">{{ $error}}</li>
-            @endforeach
-        </ul>
-    @endif
+    <x-validation-errors />
 
     {{ html()->form('POST', route('sign-up.store'))->open() }}
-    <x-card title="Personal" class="mt-4">
-        <div class="form-row">
-            <x-field name="first_name" label="First name" col="5" required />
-            <x-field name="preposition" label="Preposition" col="2" />
-            <x-field name="last_name" label="Last name" col="5" required />
-        </div>
-        <div class="form-row">
-            <x-field name="email" label="Email address" col="6" required />
-        </div>
-        <div class="form-row">
-            <x-field name="password" label="Password" type="password" col="6" required minlength="8" />
-            <x-field name="password_confirmation" label="Confirm password" type="password" col="6" required />
-        </div>
-        <div class="form-row">
-            <x-field name="street" label="Street" col="6" required />
-            <x-field name="house_number" label="House number" col="6" required />
-        </div>
-        <div class="form-row">
-            <x-field name="zipcode" label="Postal code" col="4" required />
-            <x-field name="city" label="City" col="4" required />
-            <x-field name="country" label="Country" :options="$countries" value="NL" col="4" required />
-        </div>
-        <div class="form-row">
-            <x-field name="phone_number" label="Phone number" col="6" required />
-            <x-field type="date" name="birthday" label="Birthdate" col="6" required />
-        </div>
-    </x-card>
-    <x-card title="Financial" class="mt-4">
-        <div class="form-row">
-            <x-field name="bic" label="BIC" col="4" />
-            <x-field name="iban" label="IBAN" col="8" required />
-        </div>
-    </x-card>
-    <x-card title="Emergency info" class="mt-4">
-        <div class="form-row">
-            <x-field name="emergency_street" label="Emergency address street" col="6" required />
-            <x-field name="emergency_house_number" label="Emergency address house number" col="6" required />
-        </div>
-        <div class="form-row">
-            <x-field name="emergency_zipcode" label="Emergency postal code" col="4" required />
-            <x-field name="emergency_city" label="Emergency city" col="4" required />
-            <x-field name="emergency_country" label="Emergency country" :options="$countries" value="NL" col="4" required />
-        </div>
-        <x-field name="emergency_number" label="Emergency phone number" required />
-    </x-card>
+    <x-member-fields :$user sign-up />
 
     <x-card title="Privacy Policy and direct debit" class="mt-4">
         <div class="accordion">
-            <details class="accordion-item" name="signup-terms">
+            <details class="accordion-item" name="sign-up-terms">
                 <summary>
                     <h5>Terms and Conditions</h5>
                     <i class="h5 ion-chevron-right"></i>
@@ -74,21 +20,21 @@
                 <p>Being a student and being in the possession of a sports card of the Student Sports Centre Eindhoven are mandatory for all new members of the ESAC.</p>
                 <p>If you participate in mountain sports activities, having an insurance which covers (extreme) mountain sports is mandatory. NKBV membership and insurance are strongly recommended. Other insurances are also possible, but you should thoroughly check the policy. You can’t hold the ESAC liable for any possible damage or injuries.</p>
             </details>
-            <details class="accordion-item" name="signup-terms">
+            <details class="accordion-item" name="sign-up-terms">
                 <summary>
                     <h5>Privacy Policy</h5>
                     <i class="h5 ion-chevron-right"></i>
                 </summary>
                 @include('includes.privacy-policy')
             </details>
-            <details class="accordion-item" name="signup-terms">
+            <details class="accordion-item" name="sign-up-terms">
                 <summary>
                     <h5>Agreement Direct Debit SEPA</h5>
                     <i class="h5 ion-chevron-right"></i>
                 </summary>
                 <p>
                 Collector: Eindhovense Studenten Alpen Club<br>
-                Collector ID: NL75ZZZ402360760000</span>
+                Collector ID: NL75ZZZ402360760000
                 </p>
                 <p>
                     The ESAC has a direct debit agreement with Rabobank. This way, the ESAC and its members can easily handle payments of contribution and other activities, such as climbing weekends. Cash payments or manual transfers won’t be necessary, since the amount can now be automatically cashed with your written or verbal permission. The rules are listed below. These primarily contain the rights of the payee and the obligations for the ESAC.
@@ -106,22 +52,22 @@
 
         <div class="form-group">
             <div class="form-check">
-                {{ html()->checkbox('privacy_policy')->class('form-check-input')->id('privacy_policy') }}
+                {{ html()->checkbox('terms_and_conditions')->class(['form-check-input', 'is-invalid' => $errors->has('terms_and_conditions')])->id('terms_and_conditions') }}
+                {{ html()->label('Accept the Terms and Conditions', 'terms_and_conditions')->class('form-check-label') }}
+            </div>
+            <div class="form-check">
+                {{ html()->checkbox('privacy_policy')->class(['form-check-input', 'is-invalid' => $errors->has('privacy_policy')])->id('privacy_policy') }}
                 {{ html()->label('Accept the Privacy Policy', 'privacy_policy')->class('form-check-label') }}
             </div>
             <div class="form-check">
-                {{ html()->checkbox('direct_debit')->class('form-check-input')->id('direct_debit') }}
+                {{ html()->checkbox('direct_debit')->class(['form-check-input', 'is-invalid' => $errors->has('direct_debit')])->id('direct_debit') }}
                 {{ html()->label('Accept direct debit', 'direct_debit')->class('form-check-label') }}
-            </div>
-            <div class="form-check">
-                {{ html()->checkbox('terms_and_conditions')->class('form-check-input')->id('terms_and_conditions') }}
-                {{ html()->label('Accept the Terms and Conditions', 'terms_and_conditions')->class('form-check-label') }}
             </div>
             <div class="g-recaptcha" data-sitekey="{{config('services.recaptcha.key')}}"></div>
         </div>
     </x-card>
     <div class="my-4">
-        {{ html()->submit('Submit')->class('btn btn-primary') }}
+        {{ html()->submit('Sign up')->class('btn btn-primary btn-lg') }}
     </div>
     {{ html()->form()->close() }}
 </div>

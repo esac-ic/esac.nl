@@ -34,10 +34,7 @@ abstract class SpreadsheetExport
     /**
      * Map a single item of the collection to the cells of its row.
      */
-    public function map(mixed $row): array
-    {
-        return (array) $row;
-    }
+    abstract public function map(mixed $row): array;
 
     public function download(string $fileName): StreamedResponse
     {

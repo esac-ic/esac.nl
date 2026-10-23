@@ -27,27 +27,7 @@
         <div class="row d-flex align-items-stretch align-items-center">
             @foreach($newsItems as $newsItem)
             <div class="col-sm-12 d-flex flex-wrap">
-                <div class="card w-100">
-                  <div class="position-relative">
-                  @if($newsItem->image_path != "")
-                    <img class="card-img-top" src="{{$newsItem->image_url}}" alt="Card image cap">
-                  @endif
-                    <span class="card-date position-absolute bg-light py-1 px-3 rounded"><x-local-time :value="$newsItem->created_at" format="d M" /></span>
-                  </div>
-                  <div class="card-body">
-                    <h4 class="card-title">{{$newsItem->title}}</h4>
-                    <p class="card-text text-body">
-                        {!! $newsItem->body !!}
-                    </p>
-                  </div>
-                  <div class="card-footer bg-white p-3">
-                    <div class="row justify-content-between">
-                      <div class="col-auto text-muted">
-                        <span class="ion-person"></span> {{$newsItem->author}}
-                      </div>
-                    </div>
-                  </div>
-                </div>
+                <x-news-card :$newsItem class="w-100" />
             </div>
             @endforeach
         </div>
@@ -66,7 +46,7 @@
             <div class="col-sm-12 d-flex flex-wrap">
                 <div class="card w-100 position-relative">
                     <a href="{{ route('events.show', $event) }}">
-                        <img class="card-img-top " src="{{$event->image_url}}" alt="Card image cap">
+                        <img class="card-img-top " src="{{$event->image_url}}" alt="">
                     </a>
                     <span class="card-date position-absolute bg-light py-1 px-3 rounded">{{ $event->start_date->format('d M') }}</span>
                     <div class="card-body">
@@ -84,7 +64,7 @@
                             </div>
                             <div class="col-auto">
                                 @guest
-                                    Please log in to register
+                                    <a class="btn btn-outline-primary" href="{{ route('login') }}">Log in to register</a>
                                 @else
                                     @if($event->isRegistrationOpen())
                                         <a class="btn btn-outline-primary" href="{{ route('events.registration.create', $event) }}">Register now</a>

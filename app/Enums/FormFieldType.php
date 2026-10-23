@@ -15,6 +15,19 @@ enum FormFieldType: string
     case Radio = 'radio';
     case Checkboxes = 'checkboxes';
 
+    public function label(): string
+    {
+        return match ($this) {
+            self::Text => 'Text',
+            self::Number => 'Number',
+            self::Textarea => 'Text area',
+            self::Checkbox => 'Checkbox',
+            self::Select => 'Select',
+            self::Radio => 'Radio buttons',
+            self::Checkboxes => 'Checkboxes',
+        };
+    }
+
     /**
      * Whether the field has options to choose from.
      */

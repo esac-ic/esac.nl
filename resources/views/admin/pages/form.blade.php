@@ -1,13 +1,10 @@
 @extends('layouts.admin')
 
-@section('title', $page->exists ? 'Edit page' : 'Add page')
+@section('title', $page->exists ? 'Edit page' : 'New page')
 
 @section('content')
-    <x-validation-errors />
-    <form class="form-horizontal" action="{{ $page->exists ? route('admin.pages.update', $page) : route('admin.pages.store') }}" method="POST">
-        @csrf
-        @method($page->exists ? 'PATCH' : 'POST')
-        <x-card :title="$page->exists ? 'Edit menu page' : 'Add menu item'">
+    <x-model-form :model="$page" resource="admin.pages">
+        <x-card :title="$page->exists ? 'Edit page' : 'New page'">
             <div class="form-row">
                 <x-field name="name" label="Name" :value="$page->name" col="6" required />
                 @unless($page->hasFixedSlug())
@@ -35,15 +32,10 @@
             @endisset
         </x-card>
         @if(! $page->exists || $page->editable)
-            <x-card :title="$page->exists ? 'Edit page' : 'Add page'" class="mt-4">
-                <x-field name="content" label="Content" type="textarea" :data-images-url="route('admin.editor-images.store')" :value="$page->content" />
+            <x-card title="Content" class="mt-4">
+                <x-field name="body" label="Content" type="textarea" :data-images-url="route('admin.editor-images.store')" :value="$page->body" />
             </x-card>
         @endif
-
-        <div class="my-4">
-            <button type="submit" class="btn btn-primary">Save</button>
-            <a class="btn btn-danger" href="{{ $page->exists ? route('admin.pages.show', $page) : route('admin.pages.index') }}">Cancel</a>
-        </div>
-    </form>
+    </x-model-form>
 @endsection
 

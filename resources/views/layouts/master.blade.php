@@ -29,6 +29,7 @@
     </head>
     <body>
         @yield('main')
+        <x-confirm-dialog />
 
         <script>var APP_URL = "{{ config('app.url') }}";</script>
         <script src="{{mix("/js/vendor/jquery-bootstrap.js")}}"></script>

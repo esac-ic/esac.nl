@@ -2,12 +2,23 @@
 
 namespace App\Http\Requests\Concerns;
 
-use App\Rules\NotBlockedEmailDomain;
+use App\Actions\Fortify\PasswordValidationRules;
+use App\Settings\SiteSettings;
 use Illuminate\Validation\Rule;
 use Symfony\Component\Intl\Countries;
 
 trait ValidatesMemberDetails
 {
+    use PasswordValidationRules;
+
+    /**
+     * An unchecked checkbox isn't posted.
+     */
+    protected function prepareForValidation(): void
+    {
+        $this->merge(['direct_debit' => $this->boolean('direct_debit')]);
+    }
+
     /**
      * The rules for the personal details every member fills in.
      */
@@ -19,7 +30,7 @@ trait ValidatesMemberDetails
                 'email',
                 'max:255',
                 Rule::unique('users')->ignore($ignoreUserId),
-                new NotBlockedEmailDomain,
+                'doesnt_end_with:'.collect(app(SiteSettings::class)->blocked_email_domains)->map(fn (string $domain) => "@$domain")->implode(','),
             ],
             'first_name' => ['required', 'max:255'],
             'preposition' => ['nullable', 'max:255'],

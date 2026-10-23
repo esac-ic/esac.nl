@@ -5,13 +5,12 @@ Books
 @endsection
 
 @section('content')
-    <x-page-header title="Books">
-        <x-edit-button :href="route('admin.books.edit', $book)" />
-        <x-back-button :href="route('admin.books.index')" />
-        <x-delete-button :action="route('admin.books.destroy', $book)" confirm="Are you sure you want to delete this book?" />
+    <x-page-header title="Book" :back="route('admin.books.index')" back-label="Books">
+        <x-button-link :href="route('admin.books.edit', $book)" icon="edit">Edit</x-button-link>
+        <x-delete-button :action="route('admin.books.destroy', $book)" title="Remove book" :confirm="'Remove '.$book->title.' from the library?'" />
     </x-page-header>
     <x-card title="Book" class="mt-4">
-        <table class="table table-striped" style="width:100%">
+        <table class="table table-striped mb-0">
             <x-detail-row label="Title">{{ $book->title }}</x-detail-row>
             <x-detail-row label="Year">{{ $book->year }}</x-detail-row>
             <x-detail-row label="Country">{{ $book->country }}</x-detail-row>

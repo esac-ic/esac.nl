@@ -22,7 +22,7 @@ class EventCategoryController extends Controller implements HasMiddleware
     public function index(): View
     {
         return view('admin.event-categories.index', [
-            'eventCategories' => EventCategory::all(['id', 'name']),
+            'eventCategories' => EventCategory::all(),
         ]);
     }
 

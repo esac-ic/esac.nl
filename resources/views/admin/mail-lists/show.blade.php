@@ -5,27 +5,15 @@
 @endsection
 
 @section('content')
-    <x-page-header :title="$mailList->name">
-        <a href="#" class="btn btn-primary" data-toggle="modal" data-target="#add-members-modal">
-            <em class="ion-plus"></em> Add members
-        </a>
-        <a href="{{route('admin.mail-lists.index')}}" class="btn btn-primary">
-            <em class="ion-android-arrow-back"></em>  Back
-        </a>
-        <form method="post"
-              action="{{ route('admin.mail-lists.destroy', $mailList->id) }}"
-              onsubmit="return confirm('Are you sure you want to delete the mail list?');"
-        >
-            @csrf
-            @method('DELETE')
-            <button type="submit" class="btn btn-danger btn-primary"><em class="ion-trash-a"></em> Remove</button>
-        </form>
+    <x-page-header :title="$mailList->name" :back="route('admin.mail-lists.index')" back-label="Mail lists">
+        <x-button-link href="#" icon="plus" data-toggle="modal" data-target="#add-members-modal">Add members</x-button-link>
+        <x-delete-button :action="route('admin.mail-lists.destroy', $mailList->id)" title="Delete mail list" :confirm="'Delete '.$mailList->address.'? Mail to it stops arriving, and this can\'t be undone.'" button="Delete" />
     </x-page-header>
     <x-card title="Mail list" class="mt-4">
         <table class="table table-striped dt-responsive nowrap">
             <x-detail-row label="Name">{{$mailList->name}}</x-detail-row>
             <x-detail-row label="Email">{{$mailList->address}}</x-detail-row>
-            <x-detail-row label="Members count">{{$mailList->members_count}}</x-detail-row>
+            <x-detail-row label="Member count">{{$mailList->members_count}}</x-detail-row>
         </table>
         <h4> Members</h4>
         <x-data-table datatable :columns="['Email', 'Name', 'Actions']">
@@ -34,11 +22,9 @@
                     <td>{{$member->address}}</td>
                     <td>{{$member->name}}</td>
                     <td>
-                        <form method="post" action="{{ route('admin.mail-lists.members.destroy', [$mailList->id, $member->address]) }}" onsubmit="return confirm('Are you sure you want to remove this member from {{$mailList->address}}?');">
-                            @csrf
-                            @method('DELETE')
-                            <button type="submit" class="btn btn-link p-0"><em class="ion-trash-a"></em></button>
-                        </form>
+                        <x-actions-menu :label="$member->address">
+                            <x-actions-menu.delete :action="route('admin.mail-lists.members.destroy', [$mailList->id, $member->address])" title="Remove from mail list" :confirm="'Remove '.$member->address.' from '.$mailList->address.'?'">Remove from list</x-actions-menu.delete>
+                        </x-actions-menu>
                     </td>
                 </tr>
             @endforeach

@@ -12,14 +12,16 @@ Books
     <x-data-table datatable :columns="['Title', 'Year', 'Country', 'Type', 'Code', 'Actions']">
         @foreach ($books as $book)
             <tr>
-                <td>{{$book->title}}</td>
+                <td><a href="{{ route('admin.books.show', $book) }}">{{ $book->title }}</a></td>
                 <td>{{$book->year}}</td>
                 <td>{{$book->country}}</td>
                 <td>{{$book->type}}</td>
                 <td>{{$book->code}}</td>
                 <td>
-                    <x-icon-link :href="route('admin.books.edit', $book)" icon="edit" title="Edit book" />
-                    <x-icon-link :href="route('admin.books.show', $book)" icon="eye" title="Show book" />
+                    <x-actions-menu :label="$book->title">
+                        <x-actions-menu.item :href="route('admin.books.show', $book)" icon="eye">View</x-actions-menu.item>
+                        <x-actions-menu.item :href="route('admin.books.edit', $book)" icon="edit">Edit</x-actions-menu.item>
+                    </x-actions-menu>
                 </td>
             </tr>
         @endforeach

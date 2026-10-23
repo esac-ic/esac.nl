@@ -37,9 +37,14 @@ class EventController extends Controller implements HasMiddleware
         ]);
     }
 
-    public function create(): View
+    /**
+     * With ?copy=, the form starts from that event; nothing is saved until the form is.
+     */
+    public function create(Request $request): View
     {
-        return $this->form(new Event);
+        $source = $request->filled('copy') ? Event::findOrFail($request->integer('copy')) : null;
+
+        return $this->form($source?->replicate(['created_by', 'image_path']) ?? new Event, $source);
     }
 
     public function store(EventRequest $request): RedirectResponse
@@ -48,7 +53,12 @@ class EventController extends Controller implements HasMiddleware
         $event->image_path = '';
         $event->created_by = $request->user()->id;
         $event->save();
-        $this->storeImage($request, $event);
+
+        if ($request->hasFile('image')) {
+            $this->storeImage($request, $event);
+        } elseif ($source = Event::find($request->integer('copy_of'))) {
+            $event->copyImageFrom($source);
+        }
 
         return to_route('admin.events.index')->with('message', 'Event added');
     }
@@ -65,7 +75,7 @@ class EventController extends Controller implements HasMiddleware
 
     public function update(EventRequest $request, Event $event): RedirectResponse
     {
-        $event->fill($request->safe()->only(['title', 'text', 'short_description', 'event_category_id', 'start_date', 'end_date']))
+        $event->fill($request->safe()->only(['title', 'body', 'short_description', 'event_category_id', 'start_date', 'end_date']))
             ->fillRegistrationSettings($request->validated())
             ->save();
         $this->storeImage($request, $event);
@@ -84,17 +94,11 @@ class EventController extends Controller implements HasMiddleware
         return to_route('admin.events.index')->with('message', 'Event removed');
     }
 
-    public function copy(Request $request, Event $event): RedirectResponse
-    {
-        $copy = $event->copyFor($request->user());
-
-        return to_route('admin.events.edit', $copy);
-    }
-
-    private function form(Event $event): View
+    private function form(Event $event, ?Event $copyOf = null): View
     {
         return view('admin.events.form', [
             'event' => $event,
+            'copyOf' => $copyOf,
             'eventCategories' => EventCategory::query()->orderBy('name')->pluck('name', 'id')->all(),
             'registrationForms' => RegistrationForm::query()->orderBy('name')->pluck('name', 'id')->all(),
         ]);
@@ -105,9 +109,9 @@ class EventController extends Controller implements HasMiddleware
      */
     private function storeImage(Request $request, Event $event): void
     {
-        if ($request->hasFile('thumbnail')) {
-            $name = $event->id.'-thumbnail.'.$request->thumbnail->extension();
-            $request->file('thumbnail')->storeAs('agendaItem', $name, 'public');
+        if ($request->hasFile('image')) {
+            $name = $event->id.'-thumbnail.'.$request->image->extension();
+            $request->file('image')->storeAs('agendaItem', $name, 'public');
             $event->image_path = 'agendaItem/'.$name;
             $event->save();
             $imagePath = Storage::disk('public')->path($event->image_path);

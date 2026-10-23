@@ -10,7 +10,7 @@
                 <div class="card w-100 position-relative">
                     @if($newsItem->thumbnail_path != "")
                     <a href="{{ route('news.show', $newsItem) }}">
-                        <img class="card-img-top" src="{{$newsItem->thumbnail_url}}" alt="Card image cap">
+                        <img class="card-img-top" src="{{$newsItem->thumbnail_url}}" alt="">
                     </a>
                     @endif
                     <span class="card-date position-absolute bg-light py-1 px-3 rounded"><x-local-time :value="$newsItem->created_at" format="d M" /></span>

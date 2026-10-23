@@ -17,6 +17,11 @@ class RegistrationController extends Controller
 {
     public function create(Request $request, Event $event): View|RedirectResponse
     {
+        // The back button returns here after registering; the event page already shows the registration.
+        if ($event->hasRegistrationFrom($request->user())) {
+            return to_route('events.show', $event);
+        }
+
         if ($error = $this->registrationError($event, $request->user())) {
             return to_route('events.show', $event)->with('error', $error);
         }
@@ -40,13 +45,13 @@ class RegistrationController extends Controller
 
         $event->register($request->user()->id, $request->validated());
 
-        return to_route('events.show', $event);
+        return to_route('events.show', $event)->with('message', 'You are registered for '.$event->title.'.');
     }
 
     public function destroy(Request $request, Event $event): RedirectResponse
     {
         if (! $event->isRegistrationOpen()) {
-            return back()->with('message', 'The registration deadline has passed, so you can no longer unregister.');
+            return back()->with('error', 'The registration deadline has passed, so you can no longer unregister.');
         }
 
         $event->registrations()->whereBelongsTo($request->user())->delete();

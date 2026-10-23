@@ -8,10 +8,6 @@
 	padding: 0;
 }
 
-.custom-file-input {
-  cursor: pointer;
-}
-
 .card-date {
   right: ($spacer * .7);
   top: ($spacer * .7)
@@ -26,18 +22,6 @@
 	.card {
 		border-bottom: 2px solid $esac-yellow;
 	}
-}
-
-.wrap-break-word {
-	word-wrap: break-word;
-}
-
-[data-toggle="collapse"] .fa:before {
-	content: "\f139";
-}
-
-[data-toggle="collapse"].collapsed .fa:before {
-	content: "\f13a";
 }
 
 @include media-breakpoint-up(lg) { 
@@ -77,14 +61,6 @@
 	}
 }
 
-.c-pointer {
-	cursor: pointer;
-}
-
-.hover-lighten:hover {
-	opacity: 0.9;
-}
-  
 .logo-esac {
 	vertical-align:top;
 	fill:#fff
@@ -100,4 +76,19 @@
 
 .btn-codeview > * {
 	pointer-events: none;
+}
+// Page header actions: spaced buttons, with destructive ones set apart at the end.
+// Right-aligned next to the title on wide screens; on phones they wrap under it, flush left.
+.page-actions {
+	margin-left: -.5rem;
+
+	> * {
+		margin: 0 0 .5rem .5rem;
+	}
+
+	@include media-breakpoint-up(md) {
+		> .page-actions-destructive {
+			margin-left: 1.5rem;
+		}
+	}
 }

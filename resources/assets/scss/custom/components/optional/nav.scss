@@ -15,7 +15,7 @@
       transition: color .35s ease, border-color .35s ease;
       border-bottom: 2px solid rgba(255,255,255,0);
       &:not(.active){
-        color: $gray-500;
+        color: $gray-700;
         &:hover{
           color: $gray-800;
         }

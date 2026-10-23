@@ -14,9 +14,9 @@
                     <br>KvK: 40236076
                 </p>
                 <p class="font-size-180">
-                    <span class="p-1"><a href="https://www.facebook.com/esac040" class="ion-social-facebook"></a></span>
-                    <span class="p-1"><a href="https://www.instagram.com/esac.nl/" class="ion-social-instagram"></a></span>
-                    <span class="p-1"><a href="https://www.youtube.com/channel/UCn6jb9BA10f-rbvinYCYlxA/" class="ion-social-youtube"></a></span>
+                    <span class="p-1"><a href="https://www.facebook.com/esac040" class="ion-social-facebook" aria-label="Facebook"></a></span>
+                    <span class="p-1"><a href="https://www.instagram.com/esac.nl/" class="ion-social-instagram" aria-label="Instagram"></a></span>
+                    <span class="p-1"><a href="https://www.youtube.com/channel/UCn6jb9BA10f-rbvinYCYlxA/" class="ion-social-youtube" aria-label="YouTube"></a></span>
                 </p>
             </div>
             <div class="col-12 col-md-9">
@@ -24,13 +24,13 @@
                 <h6>Supported by</h6>
                 <div class="row">
                     <div class="col-6 col-lg-3">
-                        <a href="https://venusp.tue.nl/sci-cgi/index.opl"><img class="img-fluid" src="{{asset('img/ssc.png')}}"></a>
+                        <a href="https://venusp.tue.nl/sci-cgi/index.opl"><img class="img-fluid" src="{{asset('img/ssc.png')}}" alt="Student Sports Centre Eindhoven"></a>
                     </div>
                     <div class="col-6 col-lg-3">
-                        <a href="https://www.neoliet.nl"><img class="img-fluid" src="{{asset('img/neoliet.png')}}"></a>
+                        <a href="https://www.neoliet.nl"><img class="img-fluid" src="{{asset('img/neoliet.png')}}" alt="Neoliet"></a>
                     </div>
                     <div class="col-6 col-lg-3">
-                        <a href="https://www.klimwinkel.nl"><img class="img-fluid" src="{{asset('img/klimwinkel.png')}}"></a>
+                        <a href="https://www.klimwinkel.nl"><img class="img-fluid" src="{{asset('img/klimwinkel.png')}}" alt="Klimwinkel"></a>
                     </div>
                 </div>
             </div>

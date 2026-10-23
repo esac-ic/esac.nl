@@ -5,41 +5,34 @@
 @endsection
 
 @section('content')
-    <x-page-header title="Member">
-        @if($user->isPendingMember() && auth()->user()->can('manage-members'))
-            {{ html()->form('POST', route('admin.pending-members.approve', $user))->open() }}
-            @method('PATCH')
-            <button type="submit" class="btn btn-success"><em class="ion-checkmark"></em> Approve as member</button>
-            {{ html()->form()->close() }}
-        
-            <form method="post"
-                  action="{{ route("admin.pending-members.destroy", $user) }}"
-                  onsubmit="return confirm('Are you sure you want to remove {{$user->name}} as a pending member?');"
-            >
-                @csrf
-                @method('DELETE')
-                <button type="submit" class="btn btn-danger"><em class="ion-trash-a"></em> Reject sign-up</button>
-            </form>
-        @else
+    @php([$title, $backRoute, $backLabel] = match (true) {
+        $user->isPendingMember() => ['Pending member', 'admin.pending-members.index', 'Pending members'],
+        $user->isFormerMember() => ['Former member', 'admin.former-members.index', 'Former members'],
+        default => ['Member', 'admin.members.index', 'Members'],
+    })
+    <x-page-header :$title :back="route($backRoute)" :back-label="$backLabel">
+        @if($user->isPendingMember())
             @can('manage-members')
-                @if($user->isFormerMember())
-                    {{ html()->form('POST', route('admin.members.membership.store', $user))->open() }}
-                        <button type="submit" class="btn btn-success"><em class="ion-plus"></em> Restore membership</button>
-                    {{ html()->form()->close() }}
-                @endif
+                {{ html()->form('PATCH', route('admin.pending-members.approve', $user))->data('confirm-title', 'Approve sign-up')->data('confirm', 'Approve '.$user->name.' as a member? They are added to the mail lists of their member type.')->data('confirm-button', 'Approve')->data('confirm-danger', 'false')->open() }}
+                <button type="submit" class="btn btn-success text-nowrap"><em class="ion-checkmark"></em> Approve as member</button>
+                {{ html()->form()->close() }}
+                <x-delete-button :action="route('admin.pending-members.destroy', $user)" title="Reject sign-up" :confirm="'Reject the sign-up of '.$user->name.'? Their details are deleted.'" button="Reject sign-up" />
             @endcan
+        @else
             @can('manage-members')
                 <x-button-link :href="route('admin.members.edit', $user)" icon="edit">Edit</x-button-link>
             @endcan
             @can('manage-certificates')
                 <x-button-link :href="route('admin.members.certificates.create', $user)" icon="plus">Add certificate</x-button-link>
             @endcan
-            <x-button-link :href="route('admin.members.index')" icon="android-arrow-back">Back</x-button-link>
             @can('manage-members')
                 @if($user->isActiveMember())
-                    {{ html()->form('POST', route('admin.members.membership.destroy', $user))->open() }}
-                    @method('DELETE')
-                    <button type="submit" class="btn btn-danger"><em class="ion-trash-a"></em> End membership</button>
+                    {{ html()->form('DELETE', route('admin.members.membership.destroy', $user))->class('page-actions-destructive')->data('confirm-title', 'End membership')->data('confirm', 'End the membership of '.$user->name.'? They are logged out everywhere and removed from the mail lists. You can restore it later.')->data('confirm-button', 'End membership')->open() }}
+                    <button type="submit" class="btn btn-outline-danger text-nowrap"><span class="ion-log-out" aria-hidden="true"></span> End membership</button>
+                    {{ html()->form()->close() }}
+                @elseif($user->isFormerMember())
+                    {{ html()->form('POST', route('admin.members.membership.store', $user))->data('confirm-title', 'Restore membership')->data('confirm', 'Restore the membership of '.$user->name.'? They can log in again and are added to the mail lists.')->data('confirm-button', 'Restore')->data('confirm-danger', 'false')->open() }}
+                        <button type="submit" class="btn btn-success text-nowrap"><em class="ion-refresh"></em> Restore membership</button>
                     {{ html()->form()->close() }}
                 @endif
             @endcan
@@ -48,56 +41,34 @@
     <x-card :title="$user->name" class="mt-4">
         <x-member-tabs :$user :details="auth()->user()->can('view-member-details')" :registrations-tab="auth()->user()->can('manage-registrations')">
             <x-slot:certificates>
-                <table class="table table-striped" style="width:100%">
-                    <thead>
-                    <tr>
-                        <td>
-                            <strong>Name</strong>
-                        </td>
-                        <td>
-                            <strong>Abbreviation</strong>
-                        </td>
-                        <td>
-                            <strong>Actions</strong>
-                        </td>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    @foreach($user->certificates as $certificate)
+                <x-data-table :columns="['Name', 'Abbreviation', 'Actions']">
+                    @forelse($user->certificates as $certificate)
                         <tr>
+                            <td>{{ $certificate->name }}</td>
+                            <td>{{ $certificate->abbreviation }}</td>
                             <td>
-                                {{$certificate->name}}
-                            </td>
-                            <td>
-                                {{$certificate->abbreviation}}
-                            </td>
-                            <td>
-                                <a href="{{ route('admin.members.certificates.edit', [$user, $certificate]) }}"><span title="Edit Certificate" class="ion-edit" aria-hidden="true"></span></a>
-                                <a href="{{ route('admin.members.certificates.destroy', [$user, $certificate]) }}" onclick="event.preventDefault(); document.getElementById('remove-certificate-{{$certificate->id}}').submit();">
-                                    <span title="Remove Certificate" class="ion-trash-a" aria-hidden="true"></span>
-                                </a>
-                                {{ html()->form('POST', route('admin.members.certificates.destroy', [$user, $certificate]))->id("remove-certificate-$certificate->id")->open() }}
-                                @method('DELETE')
-                                {{ html()->form()->close() }}
+                                <x-actions-menu :label="$certificate->name">
+                                    <x-actions-menu.item :href="route('admin.members.certificates.edit', [$user, $certificate])" icon="edit">Change certificate</x-actions-menu.item>
+                                    <x-actions-menu.delete :action="route('admin.members.certificates.destroy', [$user, $certificate])" title="Remove certificate" :confirm="'Remove '.$certificate->name.' from '.$user->name.'?'">Remove certificate</x-actions-menu.delete>
+                                </x-actions-menu>
                             </td>
                         </tr>
-                    @endforeach
-                    </tbody>
-                </table>
+                    @empty
+                        <tr><td colspan="3" class="text-muted">No certificates</td></tr>
+                    @endforelse
+                </x-data-table>
             </x-slot:certificates>
             <x-slot:registrations>
-                <x-data-table datatable :data-order="json_encode([[1, 'asc']])" :columns="['Name', 'Start date', 'Action']">
+                <x-data-table datatable :data-order="json_encode([[1, 'asc']])" :columns="['Name', 'Start date', 'Actions']">
                     @foreach ($user->registrations as $registration)
                         <tr>
-                            <td>{{ $registration->event->title }}</td>
+                            <td><a href="{{ route('admin.events.show', $registration->event) }}">{{ $registration->event->title }}</a></td>
                             <td data-order="{{ $registration->event->start_date->timestamp }}">{{ $registration->event->start_date->format('d-m-Y H:i') }}</td>
                             <td>
-                                <a href="{{ route('admin.events.registrations.show', [$registration->event_id, $registration]) }}"><span title="Show entered information" class="ion-eye" aria-hidden="true"></span></a>
-                                <form class="d-inline" method="post" action="{{ route('admin.events.registrations.destroy', [$registration->event_id, $registration]) }}" onsubmit="return confirm('Are you sure you want to remove this registration?');">
-                                    @csrf
-                                    @method('DELETE')
-                                    <button type="submit" class="btn btn-link p-0"><span title="Remove registration" class="ion-trash-a" aria-hidden="true"></span></button>
-                                </form>
+                                <x-actions-menu :label="$registration->event->title">
+                                    <x-actions-menu.item :href="route('admin.events.registrations.show', [$registration->event_id, $registration])" icon="eye">View answers</x-actions-menu.item>
+                                    <x-actions-menu.delete :action="route('admin.events.registrations.destroy', [$registration->event_id, $registration])" title="Remove registration" :confirm="'Remove the registration of '.$user->name.' for '.$registration->event->title.'? Their answers are deleted.'">Remove registration</x-actions-menu.delete>
+                                </x-actions-menu>
                             </td>
                         </tr>
                     @endforeach

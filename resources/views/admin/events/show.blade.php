@@ -5,13 +5,12 @@
 @endsection
 
 @section('content')
-    <x-page-header title="Event">
-        <x-edit-button :href="route('admin.events.edit', $event)" />
-        <x-back-button :href="route('admin.events.index')" :block="false" />
-        <x-delete-button :action="route('admin.events.destroy', $event)" confirm="Are you sure you want to delete this event?" />
+    <x-page-header title="Event" :back="route('admin.events.index')" back-label="Events">
+        <x-button-link :href="route('admin.events.edit', $event)" icon="edit">Edit</x-button-link>
+        <x-delete-button :action="route('admin.events.destroy', $event)" title="Remove event" :confirm="'Remove '.$event->title.'?'.($event->registrations()->exists() ? ' Its '.$event->registrations()->count().' registrations are deleted too.' : '').' This can\'t be undone.'" />
     </x-page-header>
     <x-card title="General information" class="mt-4">
-        <table class="table table-striped" style="width:100%">
+        <table class="table table-striped mb-0">
             <x-detail-row label="Title">{{$event->title}}</x-detail-row>
             <x-detail-row label="Short description">{{$event->short_description}}</x-detail-row>
             <x-detail-row label="Start date">{{ $event->start_date->format('d-m-Y H:i') }}</x-detail-row>
@@ -25,6 +24,6 @@
         </table>
     </x-card>
     <x-card title="Content" class="my-4">
-        {!! $event->text !!}
+        {!! $event->body !!}
     </x-card>
 @endsection

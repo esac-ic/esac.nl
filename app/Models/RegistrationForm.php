@@ -31,15 +31,8 @@ class RegistrationForm extends Model
         $fieldIds = [];
 
         foreach ($fields as $fieldData) {
-            if (array_key_exists('id', $fieldData) === true) {
-                $field = $this->fields()->findOrFail($fieldData['id']);
-            } else {
-                $field = new RegistrationFormField;
-                $field->registration_form_id = $this->id;
-            }
-            $field->fill($fieldData);
-            $field->required = $fieldData['required'] ?? false;
-            $field->save();
+            $field = $this->fields()->findOrNew($fieldData['id'] ?? null);
+            $field->fill($fieldData)->save();
             $field->syncOptions($fieldData['options'] ?? []);
             $fieldIds[] = $field->id;
         }

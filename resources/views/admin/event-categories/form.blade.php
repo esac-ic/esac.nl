@@ -1,6 +1,6 @@
 @extends('layouts.admin')
 
-@php($title = $eventCategory->exists ? 'Edit category' : 'Add an event category')
+@php($title = $eventCategory->exists ? 'Edit event category' : 'New event category')
 
 @section('title', $title)
 

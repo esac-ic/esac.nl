@@ -52,8 +52,8 @@
             'zekering'
         ],
         methods: {
-            deleteZekering(){
-                if (confirm("Are you sure you want to delete this zekering?"))
+            async deleteZekering(){
+                if (await window.confirmDialog({title: 'Remove zekering', message: 'Remove this zekering?', button: 'Remove'}))
                 {
                     zekeringApi.deleteZekering(this.zekering.id, this.zekeringDeleted);
                 }

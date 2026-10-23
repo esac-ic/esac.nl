@@ -8,8 +8,8 @@
         </x-card>
 
         <div class="my-4">
-            {{ html()->submit('Submit')->class('btn btn-primary') }}
-            <a class="btn btn-danger" href="{{ $cancelUrl }}">Cancel</a>
+            {{ html()->submit('Register')->class('btn btn-primary') }}
+            <a class="btn btn-outline-secondary" href="{{ $cancelUrl }}">Cancel</a>
         </div>
     {{ html()->form()->close() }}
 </div>

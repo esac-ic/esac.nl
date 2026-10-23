@@ -11,10 +11,12 @@ Event categories
     <x-data-table datatable :columns="['Name', 'Actions']">
         @foreach ($eventCategories as $category)
             <tr>
-                <td>{{$category->name}}</td>
+                <td><a href="{{ route('admin.event-categories.show', $category) }}">{{ $category->name }}</a></td>
                 <td>
-                    <x-icon-link :href="route('admin.event-categories.edit', $category)" icon="edit" title="Edit category" />
-                    <x-icon-link :href="route('admin.event-categories.show', $category)" icon="eye" title="Show category" />
+                    <x-actions-menu :label="$category->name">
+                        <x-actions-menu.item :href="route('admin.event-categories.show', $category)" icon="eye">View</x-actions-menu.item>
+                        <x-actions-menu.item :href="route('admin.event-categories.edit', $category)" icon="edit">Edit</x-actions-menu.item>
+                    </x-actions-menu>
                 </td>
             </tr>
         @endforeach

@@ -7,7 +7,8 @@ use App\Models\Book;
 use App\Models\Certificate;
 use App\Models\EventCategory;
 use App\Models\User;
-use Database\Seeders\MenuItemSeeder;
+use App\Settings\SiteSettings;
+use Database\Seeders\PageSeeder;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use PHPUnit\Framework\Attributes\Test;
 use Tests\TestCase;
@@ -43,12 +44,33 @@ class CrudResourcesTest extends TestCase
     }
 
     #[Test]
+    public function settings_can_be_managed()
+    {
+        $this->actingAs($this->admin)->get('admin/settings/edit')->assertOk()->assertSee('student.tue.nl')->assertSee('alle-leden.esac.nl');
+
+        $mailLists = array_fill_keys(array_keys(app(SiteSettings::class)->mail_lists), '');
+        $this->put('admin/settings', [
+            'killswitch' => '1',
+            'footer_phone_number' => '',
+            'blocked_email_domains' => "student.tue.nl\r\n\r\nstudent.fontys.nl ",
+            'mail_lists' => ['member' => "alle-leden.esac.nl\nnieuwsbrief.esac.nl"] + $mailLists,
+        ])->assertRedirect('admin/settings/edit');
+
+        $settings = app(SiteSettings::class)->refresh();
+        $this->assertTrue($settings->killswitch);
+        $this->assertNull($settings->footer_phone_number);
+        $this->assertSame(['student.tue.nl', 'student.fontys.nl'], $settings->blocked_email_domains);
+        $this->assertSame(['alle-leden.esac.nl', 'nieuwsbrief.esac.nl'], $settings->mail_lists['member']);
+        $this->assertSame([], $settings->mail_lists['reunist']);
+    }
+
+    #[Test]
     public function certificates_can_be_managed()
     {
         $this->actingAs($this->admin)->post('admin/certificates', ['name' => 'Toprope', 'abbreviation' => 'TR'])->assertRedirect('admin/certificates');
         $created = Certificate::sole();
 
-        $this->get('admin/certificates')->assertOk()->assertSee('Toprope');
+        $this->get('admin/certificates')->assertOk()->assertSee('Toprope')->assertSee('<td>TR</td>', false);
         $this->patch("admin/certificates/{$created->id}", ['name' => 'Lead', 'abbreviation' => 'L'])->assertRedirect('admin/certificates');
         $this->assertSame('Lead', $created->fresh()->name);
 
@@ -84,7 +106,7 @@ class CrudResourcesTest extends TestCase
     #[Test]
     public function the_library_and_front_pages_list_their_content()
     {
-        $this->seed(MenuItemSeeder::class);
+        $this->seed(PageSeeder::class);
         Book::create(['title' => 'Alpine climbing', 'year' => 1990, 'type' => 'Guide', 'country' => 'CH', 'code' => 'A1']);
 
         $this->actingAs($this->admin)->get('library')->assertOk()->assertSee('Alpine climbing');
