@@ -15,12 +15,12 @@ class PageSeeder extends Seeder
     {
         $pages = [
             [PageSlug::Home, 'Home', false, '<h2 class="card-title">Welcome</h2><p class="card-text">Welcome to the ESAC, the student climbing and mountaineering club of Eindhoven.</p>'],
-            [PageSlug::Events, 'Events', false, 'Events content'],
-            [PageSlug::Members, 'Members list', true, 'Members list content'],
-            [PageSlug::News, 'News', false, 'News content'],
-            [PageSlug::SignUp, 'Become a member', false, 'Sign-up content'],
-            [PageSlug::Library, 'Library', false, 'Library content'],
-            [PageSlug::Zekeringen, 'Zekeringen', true, 'Zekeringen content'],
+            [PageSlug::Events, 'Events', false, '<p>Climbing weekends, training evenings and everything in between. Register for an event from its page.</p>'],
+            [PageSlug::Members, 'Members list', true, '<p>All current members, so you can find each other for a climbing trip.</p>'],
+            [PageSlug::News, 'News', false, '<p>The latest news from the association.</p>'],
+            [PageSlug::SignUp, 'Become a member', false, '<p>Fill in the form below to become a member. The board approves your sign-up within a few days.</p>'],
+            [PageSlug::Library, 'Library', false, '<p>Guidebooks and maps you can borrow from the association.</p>'],
+            [PageSlug::Zekeringen, 'Zekeringen', true, '<p>Funny quotes overheard while belaying, added by members.</p>'],
         ];
 
         foreach ($pages as $index => [$slug, $name, $requiresLogin, $body]) {
