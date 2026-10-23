@@ -25,6 +25,6 @@
         </table>
     </x-card>
     <x-card title="Content" class="my-4">
-        {!! $event->text !!}
+        {!! $event->body !!}
     </x-card>
 @endsection

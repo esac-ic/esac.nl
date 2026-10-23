@@ -65,7 +65,7 @@ class EventController extends Controller implements HasMiddleware
 
     public function update(EventRequest $request, Event $event): RedirectResponse
     {
-        $event->fill($request->safe()->only(['title', 'text', 'short_description', 'event_category_id', 'start_date', 'end_date']))
+        $event->fill($request->safe()->only(['title', 'body', 'short_description', 'event_category_id', 'start_date', 'end_date']))
             ->fillRegistrationSettings($request->validated())
             ->save();
         $this->storeImage($request, $event);
@@ -105,9 +105,9 @@ class EventController extends Controller implements HasMiddleware
      */
     private function storeImage(Request $request, Event $event): void
     {
-        if ($request->hasFile('thumbnail')) {
-            $name = $event->id.'-thumbnail.'.$request->thumbnail->extension();
-            $request->file('thumbnail')->storeAs('agendaItem', $name, 'public');
+        if ($request->hasFile('image')) {
+            $name = $event->id.'-thumbnail.'.$request->image->extension();
+            $request->file('image')->storeAs('agendaItem', $name, 'public');
             $event->image_path = 'agendaItem/'.$name;
             $event->save();
             $imagePath = Storage::disk('public')->path($event->image_path);

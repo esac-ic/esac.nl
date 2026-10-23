@@ -12,7 +12,7 @@ class NewsItemRequest extends FormRequest
             'title' => ['required', 'max:255'],
             'body' => ['required'],
             'author' => ['required', 'max:255'],
-            'thumbnail' => ['nullable', 'image', 'max:10240'],
+            'image' => ['nullable', 'image', 'max:10240'],
         ];
     }
 }

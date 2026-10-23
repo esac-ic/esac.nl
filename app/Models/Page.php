@@ -18,7 +18,7 @@ use Illuminate\Support\Facades\DB;
     'slug',
     'requires_login',
     'show_in_menu',
-    'content',
+    'body',
 ])]
 class Page extends Model
 {
@@ -69,11 +69,11 @@ class Page extends Model
     }
 
     /**
-     * The content of a page that one of the site's own routes shows.
+     * The body of a page that one of the site's own routes shows.
      */
-    public static function contentFor(PageSlug $slug): ?string
+    public static function bodyFor(PageSlug $slug): ?string
     {
-        return static::query()->where('slug', $slug)->value('content');
+        return static::query()->where('slug', $slug)->value('body');
     }
 
     /**

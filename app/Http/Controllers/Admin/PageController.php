@@ -38,7 +38,7 @@ class PageController extends Controller implements HasMiddleware
 
     public function store(PageRequest $request): RedirectResponse
     {
-        $page = new Page($request->safe()->only(['name', 'slug', 'content', 'requires_login']));
+        $page = new Page($request->safe()->only(['name', 'slug', 'body', 'requires_login']));
         $this->fillMenuPosition($request, $page);
         // These can only be changed in the database.
         $page->deletable = true;
@@ -64,7 +64,7 @@ class PageController extends Controller implements HasMiddleware
     public function update(PageRequest $request, Page $page): RedirectResponse
     {
         // The request excludes a fixed slug and its login setting, and the content of pages that aren't editable.
-        $page->fill($request->safe()->only(['name', 'slug', 'content', 'requires_login']));
+        $page->fill($request->safe()->only(['name', 'slug', 'body', 'requires_login']));
         $this->fillMenuPosition($request, $page);
         $page->save();
 

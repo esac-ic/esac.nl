@@ -16,7 +16,7 @@ use Illuminate\Support\Facades\Storage;
 
 #[Fillable([
     'title',
-    'text',
+    'body',
     'short_description',
     'registration_deadline',
     'start_date',

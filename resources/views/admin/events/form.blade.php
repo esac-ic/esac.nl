@@ -26,13 +26,13 @@
     <x-card title="Image" class="mt-4">
         <span>Image</span>
         <div class="form-group mt-2">
-            <input type="file" class="form-control-file" id="thumbnail" name="thumbnail" @required(! $event->exists)>
+            <input type="file" class="form-control-file" id="image" name="image" @required(! $event->exists)>
         </div>
     </x-card>
     <x-card title="Content" class="mt-4">
         <x-field name="title" label="Title" :value="$event->title" required />
         <x-field name="short_description" label="Short description (max. 100 characters)" :value="$event->short_description" required maxlength="100" />
-        <x-field name="text" id="content" label="Content" type="textarea" :data-images-url="route('admin.editor-images.store')" :value="$event->text" />
+        <x-field name="body" label="Content" type="textarea" :data-images-url="route('admin.editor-images.store')" :value="$event->body" />
     </x-card>
 
     <div class="my-4">

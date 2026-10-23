@@ -57,7 +57,7 @@ class EventRegistrationController extends Controller implements HasMiddleware
 
     public function store(AdminRegistrationRequest $request, Event $event): RedirectResponse
     {
-        $event->register($request->validated('user'), $request->safe()->except('user'));
+        $event->register($request->validated('user_id'), $request->safe()->except('user_id'));
 
         return to_route('admin.events.registrations.index', $event);
     }

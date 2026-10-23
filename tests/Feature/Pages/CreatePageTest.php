@@ -21,7 +21,7 @@ class CreatePageTest extends TestCase
         parent::setUp();
         $this->actingAs(User::factory()->withRole(AdminRole::ContentAdministrator)->create());
         $this->parent = Page::query()->forceCreate([
-            'name' => 'Parent', 'slug' => 'parent', 'content' => 'Parent', 'requires_login' => false,
+            'name' => 'Parent', 'slug' => 'parent', 'body' => 'Parent', 'requires_login' => false,
             'show_in_menu' => true, 'deletable' => true, 'editable' => true,
         ]);
     }
@@ -32,7 +32,7 @@ class CreatePageTest extends TestCase
             'slug' => 'test',
             'parent_id' => $this->parent->id,
             'name' => 'Test title',
-            'content' => 'Very cool test content.',
+            'body' => 'Very cool test content.',
         ], $overrides);
     }
 
@@ -40,7 +40,7 @@ class CreatePageTest extends TestCase
     {
         return [
             'sub item' => [[], true],
-            'sub item with emoji' => [['name' => 'Test title 😀', 'content' => 'Hele leuke test inhoud. 😀'], true],
+            'sub item with emoji' => [['name' => 'Test title 😀', 'body' => 'Hele leuke test inhoud. 😀'], true],
             'top-level page' => [['parent_id' => null], false],
         ];
     }
@@ -59,7 +59,7 @@ class CreatePageTest extends TestCase
             'parent_id' => $isSubItem ? $this->parent->id : null,
             'slug' => $body['slug'],
             'name' => $body['name'],
-            'content' => $body['content'],
+            'body' => $body['body'],
         ]);
     }
 
@@ -123,7 +123,7 @@ class CreatePageTest extends TestCase
     {
         $this->post('admin/pages')
             ->assertRedirect()
-            ->assertInvalid(['slug', 'name', 'content']);
+            ->assertInvalid(['slug', 'name', 'body']);
 
         $this->assertDatabaseCount(Page::class, 1);
     }

@@ -37,7 +37,7 @@ class UpdateEventTest extends TestCase
 
         $body = [
             'title' => 'test agenda',
-            'text' => 'test agenda',
+            'body' => 'test agenda',
             'short_description' => 'test agenda',
             'event_category_id' => $eventCategory->id,
             'registration_form_id' => RegistrationForm::factory()->create()->id,
@@ -52,7 +52,7 @@ class UpdateEventTest extends TestCase
 
         $event = $event->refresh();
 
-        $this->assertEquals($body['text'], $event->text);
+        $this->assertEquals($body['body'], $event->body);
         $this->assertEquals($body['title'], $event->title);
         $this->assertEquals($body['event_category_id'], $event->category->id);
     }

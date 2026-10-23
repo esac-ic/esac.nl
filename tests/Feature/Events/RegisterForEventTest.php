@@ -116,7 +116,7 @@ class RegisterForEventTest extends TestCase
     {
         $event = $this->eventWithRegistrationForm();
 
-        $this->post(route('admin.events.registrations.store', $event), ['user' => User::factory()->create()->id] + $this->answers($event))
+        $this->post(route('admin.events.registrations.store', $event), ['user_id' => User::factory()->create()->id] + $this->answers($event))
             ->assertForbidden();
     }
 
@@ -128,7 +128,7 @@ class RegisterForEventTest extends TestCase
         $event = $this->eventWithRegistrationForm();
         $answers = $this->answers($event);
 
-        $this->post(route('admin.events.registrations.store', $event), ['user' => $userToRegister->id] + $answers)->assertRedirect();
+        $this->post(route('admin.events.registrations.store', $event), ['user_id' => $userToRegister->id] + $answers)->assertRedirect();
 
         $this->assertRegistered($userToRegister, $event, $answers);
     }

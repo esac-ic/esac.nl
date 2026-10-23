@@ -57,7 +57,7 @@
                 <div class="card w-100">
                     <div class="card-body">
                         <h4 class="card-title">General information</h4>
-                        <p class="card-text">{!! $event->text !!}</p>
+                        <p class="card-text">{!! $event->body !!}</p>
                         @if($event->registration_form_id != null && auth()->check())
                             <h4 class="card-title">Registrations</h4>
                             <ol class="column-count-lg-3">

@@ -30,7 +30,7 @@ class PageRequest extends FormRequest
             ],
             'name' => ['required', 'max:255'],
             // The content of a non-editable page can only be changed in the database.
-            'content' => [Rule::excludeIf($page?->editable === false), 'required'],
+            'body' => [Rule::excludeIf($page?->editable === false), 'required'],
             // The menu has two levels: a sub page's parent is a top-level page, and a page with sub pages stays top-level.
             'parent_id' => [Rule::prohibitedIf($page?->children()->exists() ?? false), 'nullable', Rule::exists('pages', 'id')->whereNull('parent_id')->when($page, fn ($rule) => $rule->whereNot('id', $page->id))],
             // The site's own routes decide who can see the pages with a fixed slug.
