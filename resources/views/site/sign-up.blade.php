@@ -52,15 +52,15 @@
 
         <div class="form-group">
             <div class="form-check">
-                {{ html()->checkbox('privacy_policy')->class('form-check-input')->id('privacy_policy') }}
+                {{ html()->checkbox('privacy_policy')->class(['form-check-input', 'is-invalid' => $errors->has('privacy_policy')])->id('privacy_policy') }}
                 {{ html()->label('Accept the Privacy Policy', 'privacy_policy')->class('form-check-label') }}
             </div>
             <div class="form-check">
-                {{ html()->checkbox('direct_debit')->class('form-check-input')->id('direct_debit') }}
+                {{ html()->checkbox('direct_debit')->class(['form-check-input', 'is-invalid' => $errors->has('direct_debit')])->id('direct_debit') }}
                 {{ html()->label('Accept direct debit', 'direct_debit')->class('form-check-label') }}
             </div>
             <div class="form-check">
-                {{ html()->checkbox('terms_and_conditions')->class('form-check-input')->id('terms_and_conditions') }}
+                {{ html()->checkbox('terms_and_conditions')->class(['form-check-input', 'is-invalid' => $errors->has('terms_and_conditions')])->id('terms_and_conditions') }}
                 {{ html()->label('Accept the Terms and Conditions', 'terms_and_conditions')->class('form-check-label') }}
             </div>
             <div class="g-recaptcha" data-sitekey="{{config('services.recaptcha.key')}}"></div>

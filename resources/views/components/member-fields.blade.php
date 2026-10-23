@@ -43,7 +43,7 @@
     </div>
     @unless($signUp)
         <div class="form-check">
-            {{ html()->checkbox('direct_debit', ! session()->hasOldInput() && $user->direct_debit)->class('form-check-input')->id('direct_debit') }}
+            {{ html()->checkbox('direct_debit', ! session()->hasOldInput() && $user->direct_debit)->class(['form-check-input', 'is-invalid' => $errors->has('direct_debit')])->id('direct_debit') }}
             {{ html()->label('Accept direct debit', 'direct_debit')->class('form-check-label') }}
         </div>
     @endunless
