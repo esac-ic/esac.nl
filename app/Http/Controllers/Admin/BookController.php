@@ -24,7 +24,7 @@ class BookController extends Controller implements HasMiddleware
     public function index(): View
     {
         return view('admin.books.index', [
-            'books' => Book::all(['title', 'id', 'type', 'code', 'year', 'country']),
+            'books' => Book::all(),
         ]);
     }
 

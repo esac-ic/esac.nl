@@ -8,11 +8,10 @@ use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
-use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\Test;
 use Tests\TestCase;
 
-class CreateNewsItemTest extends TestCase
+class ManageNewsItemsTest extends TestCase
 {
     use RefreshDatabase;
 
@@ -22,21 +21,19 @@ class CreateNewsItemTest extends TestCase
         $this->actingAs(User::factory()->withRole(AdminRole::EventAdministrator)->create());
     }
 
-    public static function newsItems(): array
-    {
-        return [
-            'plain' => [['title' => 'test nieuws', 'body' => 'test nieuws', 'author' => 'Gebruiker1']],
-            'emoji' => [['title' => 'test news 😀', 'body' => 'test nieuws 😀', 'author' => 'Gebruiker1']],
-        ];
-    }
-
     #[Test]
-    #[DataProvider('newsItems')]
-    public function a_content_administrator_can_create_a_news_item(array $body)
+    public function an_event_administrator_can_manage_news_items()
     {
-        $this->post('admin/news-items', $body)->assertRedirect();
+        $this->post('admin/news-items', ['title' => 'Test news 😀', 'body' => 'Test news', 'author' => 'Author'])->assertRedirect();
+        $newsItem = NewsItem::sole();
+        $this->assertSame('Test news 😀', $newsItem->title);
 
-        $this->assertDatabaseHas(NewsItem::class, $body);
+        $this->get('admin/news-items')->assertOk()->assertSee('Test news 😀');
+        $this->patch('admin/news-items/'.$newsItem->id, ['title' => 'Updated news', 'body' => 'Updated', 'author' => 'Author'])->assertRedirect();
+        $this->assertSame('Updated news', $newsItem->fresh()->title);
+
+        $this->delete('admin/news-items/'.$newsItem->id)->assertRedirect();
+        $this->assertSoftDeleted($newsItem);
     }
 
     #[Test]

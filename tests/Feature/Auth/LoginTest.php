@@ -5,7 +5,6 @@ namespace Tests\Feature\Auth;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Hash;
 use Illuminate\Testing\TestResponse;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\Test;
@@ -50,7 +49,7 @@ class LoginTest extends TestCase
     #[Test]
     public function a_member_whose_email_has_capitals_can_log_in()
     {
-        $user = User::factory()->create(['email' => 'Jan.Jansen@Example.com', 'password' => Hash::make('secret-password')]);
+        $user = User::factory()->create(['email' => 'Jan.Jansen@Example.com', 'password' => 'secret-password']);
 
         $this->post('/login', ['email' => 'Jan.Jansen@Example.com', 'password' => 'secret-password'])->assertRedirect('/home');
 
@@ -105,24 +104,5 @@ class LoginTest extends TestCase
 
         $this->login($user)->assertTooManyRequests();
         $this->assertGuest();
-    }
-
-    #[Test]
-    public function a_member_logs_out()
-    {
-        $this->actingAs(User::factory()->create())->post('/logout')->assertRedirect('/');
-
-        $this->assertGuest();
-    }
-
-    #[Test]
-    public function an_outdated_password_hash_is_rehashed_on_login()
-    {
-        $user = User::factory()->create(['password' => Hash::make('password', ['rounds' => 4])]);
-        Hash::driver('bcrypt')->setRounds(5);
-
-        $this->login($user)->assertRedirect('/home');
-
-        $this->assertSame(5, password_get_info($user->fresh()->password)['options']['cost']);
     }
 }

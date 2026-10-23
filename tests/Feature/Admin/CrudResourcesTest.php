@@ -70,7 +70,7 @@ class CrudResourcesTest extends TestCase
         $this->actingAs($this->admin)->post('admin/certificates', ['name' => 'Toprope', 'abbreviation' => 'TR'])->assertRedirect('admin/certificates');
         $created = Certificate::sole();
 
-        $this->get('admin/certificates')->assertOk()->assertSee('Toprope');
+        $this->get('admin/certificates')->assertOk()->assertSee('Toprope')->assertSee('<td>TR</td>', false);
         $this->patch("admin/certificates/{$created->id}", ['name' => 'Lead', 'abbreviation' => 'L'])->assertRedirect('admin/certificates');
         $this->assertSame('Lead', $created->fresh()->name);
 

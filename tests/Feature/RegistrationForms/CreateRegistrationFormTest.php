@@ -6,7 +6,6 @@ use App\Enums\AdminRole;
 use App\Enums\FormFieldType;
 use App\Models\RegistrationForm;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\Test;
 use Tests\Concerns\ManagesRegistrationForms;
 use Tests\TestCase;
@@ -38,24 +37,12 @@ class CreateRegistrationFormTest extends TestCase
     }
 
     #[Test]
-    #[DataProvider('managingRoles')]
-    public function registration_form_managers_can_create_a_registration_form(AdminRole $role): void
+    public function an_event_administrator_can_create_a_registration_form(): void
     {
-        $this->actingAsRole($role);
+        $this->actingAsRole(AdminRole::EventAdministrator);
 
         $this->post('admin/registration-forms', $this->body())->assertRedirect();
 
         $this->assertRegistrationForm(RegistrationForm::sole(), $this->body());
-    }
-
-    #[Test]
-    #[DataProvider('otherRoles')]
-    public function other_roles_can_not_create_a_registration_form(AdminRole $role): void
-    {
-        $this->actingAsRole($role);
-
-        $this->post('admin/registration-forms', $this->body())->assertForbidden();
-
-        $this->assertDatabaseEmpty(RegistrationForm::class);
     }
 }

@@ -14,7 +14,7 @@ class AbilitiesTest extends TestCase
 {
     use RefreshDatabase;
 
-    private const array ABILITIES = ['access-admin', 'view-members', 'view-member-details', 'manage-registrations', 'manage-pages'];
+    private const array ABILITIES = ['access-admin', 'view-members', 'view-member-details', 'manage-events', 'manage-registrations', 'manage-pages'];
 
     /**
      * A user, and whether they have each of the abilities above.
@@ -22,12 +22,12 @@ class AbilitiesTest extends TestCase
     public static function membersByRole(): array
     {
         return [
-            'administrator' => [AdminRole::Administrator, true, [true, true, true, true, true]],
-            'certificate administrator' => [AdminRole::CertificateAdministrator, true, [true, true, false, false, false]],
-            'content administrator' => [AdminRole::ContentAdministrator, true, [true, false, false, false, true]],
-            'event administrator' => [AdminRole::EventAdministrator, true, [true, false, false, true, false]],
-            'member' => [null, true, [false, false, false, false, false]],
-            'guest' => [null, false, [false, false, false, false, false]],
+            'administrator' => [AdminRole::Administrator, true, [true, true, true, true, true, true]],
+            'certificate administrator' => [AdminRole::CertificateAdministrator, true, [true, true, false, false, false, false]],
+            'content administrator' => [AdminRole::ContentAdministrator, true, [true, false, false, true, false, true]],
+            'event administrator' => [AdminRole::EventAdministrator, true, [true, false, false, true, true, false]],
+            'member' => [null, true, [false, false, false, false, false, false]],
+            'guest' => [null, false, [false, false, false, false, false, false]],
         ];
     }
 
