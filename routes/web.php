@@ -23,16 +23,12 @@ use App\Http\Controllers\Admin\RegistrationFormController;
 use App\Http\Controllers\Admin\RoleController;
 use App\Http\Controllers\Admin\SettingsController;
 use App\Http\Controllers\EventFeedController;
-use App\Http\Controllers\LegacyAdminRedirectController;
 use App\Http\Controllers\RegistrationController;
 use App\Http\Controllers\SignUpController;
 use App\Http\Controllers\SiteController;
 use Illuminate\Support\Facades\Route;
 
 Route::permanentRedirect('/', '/home');
-
-// The admin pages used to be under /beheer, so old bookmarks and links keep working.
-Route::get('beheer/{path?}', LegacyAdminRedirectController::class)->where('path', '.*');
 
 Route::prefix('admin')->name('admin.')->group(function () {
     Route::get('home', DashboardController::class)->name('dashboard');
