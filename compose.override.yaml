@@ -1,0 +1,70 @@
+services:
+  app:
+    image: esac-app-dev
+    build:
+      context: .
+      target: dev
+    env_file: !override []
+    environment:
+      SERVER_NAME: localhost:80
+      CADDY_EXTRA_CONFIG: ""
+      CADDY_GLOBAL_OPTIONS: "auto_https off"
+      XDEBUG_MODE: ${SAIL_XDEBUG_MODE:-off}
+      XDEBUG_CONFIG: client_host=host.docker.internal
+    extra_hosts:
+      - host.docker.internal:host-gateway
+    ports: !override
+      - "${APP_PORT:-8000}:80"
+    volumes: !override
+      - .:/app
+    depends_on:
+      mailpit:
+        condition: service_started
+      mailman:
+        condition: service_healthy
+
+  mysql:
+    ports:
+      - "${FORWARD_DB_PORT:-3306}:3306"
+
+  mysql-test:
+    image: mysql:8.4
+    environment:
+      MYSQL_DATABASE: ${DB_DATABASE}
+      MYSQL_USER: ${DB_USERNAME}
+      MYSQL_PASSWORD: ${DB_PASSWORD}
+      MYSQL_RANDOM_ROOT_PASSWORD: "yes"
+    command: --innodb-buffer-pool-size=128M --performance-schema=OFF --max-connections=30
+    tmpfs:
+      - /var/lib/mysql
+    healthcheck:
+      test: ["CMD-SHELL", "mysqladmin ping -h 127.0.0.1 --silent"]
+      interval: 5s
+      retries: 20
+    profiles:
+      - test
+
+  mailpit:
+    image: axllent/mailpit:latest
+    ports:
+      - "${FORWARD_MAILPIT_PORT:-1025}:1025"
+      - "${FORWARD_MAILPIT_DASHBOARD_PORT:-8025}:8025"
+
+  mailman:
+    image: maxking/mailman-core:0.5
+    hostname: mailman
+    environment:
+      MM_HOSTNAME: "0.0.0.0"
+      MAILMAN_REST_USER: ${MAIL_MAN_USERNAME:-restadmin}
+      MAILMAN_REST_PASSWORD: ${MAIL_MAN_PASSWORD:-restpass}
+    ports:
+      - "${FORWARD_MAILMAN_PORT:-8001}:8001"
+    volumes:
+      - sail-mailman:/opt/mailman
+    healthcheck:
+      test: ["CMD", "bash", "-c", "cat < /dev/null > /dev/tcp/localhost/8001"]
+      retries: 3
+      timeout: 5s
+
+volumes:
+  sail-mailman:
