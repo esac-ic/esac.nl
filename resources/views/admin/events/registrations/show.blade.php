@@ -6,7 +6,7 @@ Registration
 
 @section('content')
     <x-page-header title="Registration">
-        <x-button-link :href="url()->previous()" icon="android-arrow-back">Back</x-button-link>
+        <x-button-link :href="route('admin.events.registrations.index', $event)" icon="android-arrow-back">Back</x-button-link>
     </x-page-header>
     <x-card title="Answers" class="mt-4">
         <x-data-table :columns="['Field', 'Answer']">

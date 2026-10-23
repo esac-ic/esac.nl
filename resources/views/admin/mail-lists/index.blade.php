@@ -15,14 +15,14 @@ Mail lists
         </form>    
         <x-button-link :href="route('admin.mail-lists.create')" icon="plus">New mail list</x-button-link>
     </x-page-header>
-    <x-data-table datatable :columns="['Name', 'Email', 'Members count', 'Actions']">
+    <x-data-table datatable :columns="['Name', 'Email', 'Member count', 'Actions']">
         @foreach ($mailLists as $mailList)
             <tr>
                 <td>{{$mailList->name}}</td>
                 <td>{{$mailList->address}}</td>
                 <td>{{$mailList->members_count}}</td>
                 <td>
-                    <x-icon-link :href="route('admin.mail-lists.show', $mailList->address)" icon="eye" title="Show mail list" />
+                    <x-icon-link :href="route('admin.mail-lists.show', $mailList->id)" icon="eye" title="Show mail list" />
                 </td>
             </tr>
         @endforeach
