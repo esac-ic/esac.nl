@@ -27,7 +27,7 @@
         <x-field name="phone_number_alt" label="Alternative phone number" :value="$user->phone_number_alt" col="6" />
     </div>
     <div class="form-row">
-        <x-field type="date" name="birthday" label="Birthdate" :value="$user->birthday?->toDateString()" col="6" required />
+        <x-field type="date" name="birthday" label="Date of birth" :value="$user->birthday?->toDateString()" col="6" required />
         @unless($signUp)
             <x-field name="member_type" label="Member type" :options="$memberTypes" :value="$user->member_type" col="6" required :disabled="$locked" />
         @endunless

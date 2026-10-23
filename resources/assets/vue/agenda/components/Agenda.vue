@@ -5,7 +5,7 @@
                 <div class="col-sm-8 d-flex flex-wrap">
                     <div class="card w-100">
                         <div class="card-body">
-                        <button type="button" class="btn btn-outline-primary float-right" data-toggle="modal" data-target="#ExportModal">
+                        <button type="button" class="btn btn-outline-primary float-right" data-toggle="modal" data-target="#export-calendar-modal">
                             <span class="ion-android-download"></span> Export
                         </button>
                         <h2 class="card-title">Events</h2>

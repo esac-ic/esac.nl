@@ -1,5 +1,5 @@
 <template>
-    <nav aria-label="Page navigation example">
+    <nav aria-label="Event pages">
         <ul class="pagination justify-content-center">
             <li class="page-item" :class="{disabled : previousPageDisabled}">
                 <a class="page-link" href="#" aria-label="Previous" v-on:click="previousPage()">

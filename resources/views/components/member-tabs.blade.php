@@ -39,7 +39,7 @@
             <x-detail-row label="Postal code">{{$user->zipcode}}</x-detail-row>
             <x-detail-row label="Country">{{ $countries[$user->country] ?? $user->country }}</x-detail-row>
             <x-detail-row label="Alternative phone number">{{$user->phone_number_alt}}</x-detail-row>
-            <x-detail-row label="Birthdate">{{ $user->birthday?->format('d-m-Y') }}</x-detail-row>
+            <x-detail-row label="Date of birth">{{ $user->birthday?->format('d-m-Y') }}</x-detail-row>
             <x-detail-row label="Member type">{{ $user->member_type?->label() }}</x-detail-row>
             <x-detail-row label="Remarks">{{$user->remark}}</x-detail-row>
             <x-detail-row label="Created at"><x-local-time :value="$user->created_at" format="d-m-Y" /></x-detail-row>

@@ -2,7 +2,7 @@
     <div class="col-lg-4 col-md-6 d-flex flex-wrap">
         <div class="card w-100 position-relative">
             <a :href="agenda.url">
-                <img class="card-img-top" :src="agenda.thumbnail" alt="Card image cap">
+                <img class="card-img-top" :src="agenda.thumbnail" alt="">
             </a>
             <span class="card-date position-absolute bg-light py-1 px-3 rounded">{{agenda.startDate}}</span>
             <div class="card-body">

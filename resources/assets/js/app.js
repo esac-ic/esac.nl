@@ -13,7 +13,6 @@ window.summernoteSettings = {
         ['insert', ['link', 'picture', 'hr']],
         ['view', ['fullscreen', 'codeview']],
         ['help', ['help']],
-        ['myotherbutton', ['emailsDropDown']],
     ],
     callbacks: {
         onImageUpload: function (files) {

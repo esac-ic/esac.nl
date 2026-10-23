@@ -5,7 +5,7 @@
         <div class="row d-flex align-items-stretch">
             <div class="col-lg-4 d-flex flex-wrap">
                 <div class="card w-100">
-                    <img class="card-img-top" src="{{$event->image_url}}">
+                    <img class="card-img-top" src="{{$event->image_url}}" alt="">
                     <div class="card-body">
                         <h3 class="card-title">{{$event->title}}</h3>
                         <p class="card-text">

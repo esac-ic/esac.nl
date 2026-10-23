@@ -9,7 +9,7 @@ Penno export
 
     <x-card title="Penno export">
         {{ html()->form('POST', route('admin.penno-export.store'))->open() }}
-        <x-field name="days_ago" label="Amount of days in the past" type="number" value="7" required />
+        <x-field name="days_ago" label="Number of days back" type="number" value="7" required />
     </x-card>
 
     <div class="my-4">
