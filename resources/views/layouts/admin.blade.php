@@ -58,15 +58,19 @@
                             @endcan
                         </x-nav-dropdown>
                     @endcan
-                    @can('manage-pages')
+                    @canany(['manage-pages', 'manage-news', 'manage-library'])
                         <x-nav-dropdown label="Content">
-                            <a class="dropdown-item" href="{{ route('admin.pages.index') }}">Pages</a>
-                            <a class="dropdown-item" href="{{ route('admin.news-items.index') }}">News items</a>
+                            @can('manage-pages')
+                                <a class="dropdown-item" href="{{ route('admin.pages.index') }}">Pages</a>
+                            @endcan
+                            @can('manage-news')
+                                <a class="dropdown-item" href="{{ route('admin.news-items.index') }}">News items</a>
+                            @endcan
                             @can('manage-library')
                                 <a class="dropdown-item" href="{{ route('admin.books.index') }}">Books</a>
                             @endcan
                         </x-nav-dropdown>
-                    @endcan
+                    @endcanany
                     @can('manage-mail-lists')
                         <li class="nav-item">
                             <a href="{{ route('admin.mail-lists.index') }}" class="nav-link">

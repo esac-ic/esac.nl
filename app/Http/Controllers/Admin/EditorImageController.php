@@ -16,7 +16,7 @@ class EditorImageController extends Controller implements HasMiddleware
     public static function middleware(): array
     {
         return [
-            new Middleware('can:manage-pages'),
+            new Middleware('can:upload-editor-images'),
         ];
     }
 

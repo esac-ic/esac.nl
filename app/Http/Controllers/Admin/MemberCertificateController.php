@@ -31,7 +31,7 @@ class MemberCertificateController extends Controller implements HasMiddleware
 
     public function store(MemberCertificateRequest $request, User $user): RedirectResponse
     {
-        $user->certificates()->attach($request->input('certificate_id'));
+        $user->certificates()->attach($request->validated('certificate_id'));
 
         return to_route('admin.members.show', $user);
     }
@@ -48,7 +48,7 @@ class MemberCertificateController extends Controller implements HasMiddleware
     public function update(MemberCertificateRequest $request, User $user, Certificate $certificate): RedirectResponse
     {
         $user->certificates()->detach($certificate->id);
-        $user->certificates()->attach($request->input('certificate_id'));
+        $user->certificates()->attach($request->validated('certificate_id'));
 
         return to_route('admin.members.show', $user);
     }

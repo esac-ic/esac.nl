@@ -10,7 +10,7 @@ class ZekeringRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'text' => ['required'],
+            'text' => ['required', 'max:150'],
             'parent_id' => ['nullable', Rule::exists('zekerings', 'id')],
         ];
     }

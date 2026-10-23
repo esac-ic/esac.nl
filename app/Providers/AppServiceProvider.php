@@ -56,6 +56,8 @@ class AppServiceProvider extends ServiceProvider
         'manage-zekeringen' => [AdminRole::Administrator, AdminRole::EventAdministrator],
         'manage-news' => [AdminRole::Administrator, AdminRole::ContentAdministrator, AdminRole::EventAdministrator],
         'manage-pages' => [AdminRole::Administrator, AdminRole::ContentAdministrator],
+        // Whoever manages pages, news or events adds images to their text.
+        'upload-editor-images' => [AdminRole::Administrator, AdminRole::ContentAdministrator, AdminRole::EventAdministrator],
         'manage-library' => [AdminRole::Administrator],
         'manage-mail-lists' => [AdminRole::Administrator],
         'view-member-log' => [AdminRole::Administrator],
