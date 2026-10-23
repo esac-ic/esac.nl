@@ -7,6 +7,10 @@ use Illuminate\Database\Seeder;
 
 class ZekeringenSeeder extends Seeder
 {
+    private const AMOUNT = 150;
+
+    private const MAX_CHILDREN = 4;
+
     /**
      * Run the database seeds.
      *
@@ -14,35 +18,26 @@ class ZekeringenSeeder extends Seeder
      */
     public function run()
     {
-        //inserting test data
+        for ($i = 0; $i < self::AMOUNT; $i++) {
+            $zekering = $this->createZekering(fake()->sentence(rand(6, 20)));
+
+            $childCount = rand(0, self::MAX_CHILDREN);
+            for ($j = 0; $j < $childCount; $j++) {
+                $this->createZekering(fake()->sentence(rand(4, 12)), $zekering->id);
+            }
+        }
+    }
+
+    private function createZekering(string $text, ?int $parentId = null): Zekering
+    {
         $zekering = new Zekering();
-        $zekering->text = "dit is een dummy tekst voor een zekering";
+        $zekering->text = $text;
         $zekering->createdBy = 1;
         $zekering->score = 1;
-        $zekering->parent_id = 1;
-        $zekering->has_parent = 0;
-
-        //add zekering(en)
+        $zekering->parent_id = $parentId;
+        $zekering->has_parent = $parentId !== null;
         $zekering->save();
 
-        $zekering = new Zekering();
-        $zekering->text = "dit is een dummy tekst 2 voor een zekering";
-        $zekering->createdBy = 1;
-        $zekering->score = 1;
-        $zekering->parent_id = 2;
-        $zekering->has_parent = 0;
-
-        //add zekering(en)
-        $zekering->save();
-
-        $zekering = new Zekering();
-        $zekering->text = "dit is een dummy tekst 2 voor een zekering met een parent";
-        $zekering->createdBy = 1;
-        $zekering->score = 1;
-        $zekering->parent_id = 2;
-        $zekering->has_parent = 1;
-
-        //add zekering(en)
-        $zekering->save();
+        return $zekering;
     }
 }
