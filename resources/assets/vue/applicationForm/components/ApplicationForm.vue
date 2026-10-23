@@ -84,10 +84,14 @@ import ApplicationFormRowOptions from "./ApplicationFormRowOptions";
                     'id' : undefined
                 });
             },
-            deleteRow(index){
+            async deleteRow(index){
                 const row = this.applicationRows[index];
                 // A saved question takes its answers with it when the form is saved.
-                if (row.id !== undefined && !confirm(`Remove the question "${row.name}"? Its answers are deleted when you save the form.`)) {
+                if (row.id !== undefined && !await window.confirmDialog({
+                    title: 'Remove question',
+                    message: `Remove the question "${row.name}"? Its answers are deleted when you save the form.`,
+                    button: 'Remove',
+                })) {
                     return;
                 }
                 this.applicationRows.splice(this.applicationRows.indexOf(row), 1);

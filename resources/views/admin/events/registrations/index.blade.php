@@ -5,21 +5,22 @@ Registrations: {{ $event->title }}
 @endsection
 
 @section('content')
-    <x-page-header :title="'Registrations: '.$event->title">
+    <x-page-header :title="'Registrations: '.$event->title" :back="route('admin.events.index')" back-label="Events">
         <x-button-link :href="route('admin.events.registrations.create', $event)" icon="person-add">New registration</x-button-link>
         <x-button-link :href="route('admin.events.registrations.export', $event)" icon="android-download">Export</x-button-link>
-        <x-button-link :href="route('admin.events.index')" icon="android-arrow-back">Back</x-button-link>
     </x-page-header>
     <x-data-table datatable :columns="['Name', 'Email address', 'Address', 'Actions']">
         @foreach ($registrations as $registration)
             <tr>
-                <td>{{ $registration->user->name }}</td>
+                <td><a href="{{ route('admin.events.registrations.show', [$event, $registration]) }}">{{ $registration->user->name }}</a></td>
                 <td>{{ $registration->user->email }}</td>
                 <td>{{ $registration->user->address }}</td>
 
                 <td>
-                    <a href="{{ route('admin.events.registrations.show', [$event, $registration]) }}"><span title="Show entered information" class="ion-eye" aria-hidden="true"></span></a>
-                    <x-delete-button icon :action="route('admin.events.registrations.destroy', [$event, $registration])" confirm="Are you sure you want to remove this registration?">Remove registration</x-delete-button>
+                    <x-actions-menu :label="$registration->user->name">
+                        <x-actions-menu.item :href="route('admin.events.registrations.show', [$event, $registration])" icon="eye">View answers</x-actions-menu.item>
+                        <x-actions-menu.delete :action="route('admin.events.registrations.destroy', [$event, $registration])" title="Remove registration" :confirm="'Remove the registration of '.$registration->user->name.' for '.$event->title.'? Their answers are deleted.'">Remove registration</x-actions-menu.delete>
+                    </x-actions-menu>
                 </td>
             </tr>
         @endforeach

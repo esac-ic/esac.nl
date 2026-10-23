@@ -35,7 +35,7 @@
                                     @else
                                         @if($event->isRegistrationOpen())
                                             @if($registrations->contains('user_id', auth()->id()))
-                                                <form method="POST" action="{{ route('events.registration.destroy', $event) }}">
+                                                <form method="POST" action="{{ route('events.registration.destroy', $event) }}" data-confirm-title="Unregister" data-confirm="Unregister from {{ $event->title }}?" data-confirm-button="Unregister">
                                                     @csrf
                                                     @method('DELETE')
                                                     <button type="submit" class="btn btn-outline-danger">Unregister</button>

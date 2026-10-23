@@ -4,7 +4,8 @@
     <thead>
     <tr>
         @foreach ($columns as $column)
-            <th>{{ $column }}</th>
+            {{-- DataTables keeps the "all" columns visible on narrow screens; the rest fold into the row details. --}}
+            <th @class(['all' => $loop->first || $column === 'Actions']) @if ($column === 'Actions') data-orderable="false" @endif>{{ $column }}</th>
         @endforeach
     </tr>
     </thead>

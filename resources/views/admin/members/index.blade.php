@@ -15,15 +15,20 @@ Current members
     <x-data-table datatable :columns="['Name', 'Email address', 'Member type', 'Roles', 'Actions']">
         @foreach ($users as $user)
             <tr>
-                <td>{{$user->name}}</td>
+                <td><a href="{{ route('admin.members.show', $user) }}">{{ $user->name }}</a></td>
                 <td>{{$user->email}}</td>
                 <td>{{ $user->member_type?->label() }}</td>
                 <td>{{ $user->roles->map->label()->implode(', ') }}</td>
                 <td>
-                    @can('manage-members')
-                        <x-icon-link :href="route('admin.members.edit', $user)" icon="edit" title="Edit member" />
-                    @endcan
-                    <x-icon-link :href="route('admin.members.show', $user)" icon="eye" title="Show member" />
+                    <x-actions-menu :label="$user->name">
+                        <x-actions-menu.item :href="route('admin.members.show', $user)" icon="eye">View</x-actions-menu.item>
+                        @can('manage-members')
+                            <x-actions-menu.item :href="route('admin.members.edit', $user)" icon="edit">Edit</x-actions-menu.item>
+                        @endcan
+                        @can('manage-certificates')
+                            <x-actions-menu.item :href="route('admin.members.certificates.create', $user)" icon="plus">Add certificate</x-actions-menu.item>
+                        @endcan
+                    </x-actions-menu>
                 </td>
             </tr>
         @endforeach

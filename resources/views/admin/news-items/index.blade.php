@@ -11,12 +11,14 @@ News items
     <x-data-table datatable :columns="['Title', 'Author', 'Created at', 'Actions']">
         @foreach ($newsItems as $newsItem)
             <tr>
-                <td>{{$newsItem->title}}</td>
+                <td><a href="{{ route('admin.news-items.show', $newsItem) }}">{{ $newsItem->title }}</a></td>
                 <td>{{$newsItem->author}}</td>
                 <td data-order="{{ $newsItem->created_at->timestamp }}"><x-local-time :value="$newsItem->created_at" /></td>
                 <td>
-                    <x-icon-link :href="route('admin.news-items.edit', $newsItem)" icon="edit" title="Edit news item" />
-                    <x-icon-link :href="route('admin.news-items.show', $newsItem)" icon="eye" title="Show news item" />
+                    <x-actions-menu :label="$newsItem->title">
+                        <x-actions-menu.item :href="route('admin.news-items.show', $newsItem)" icon="eye">View</x-actions-menu.item>
+                        <x-actions-menu.item :href="route('admin.news-items.edit', $newsItem)" icon="edit">Edit</x-actions-menu.item>
+                    </x-actions-menu>
                 </td>
             </tr>
         @endforeach
