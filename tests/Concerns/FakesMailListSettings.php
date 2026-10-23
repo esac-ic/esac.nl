@@ -22,11 +22,6 @@ trait FakesMailListSettings
         return "$type->value.esac.nl";
     }
 
-    public static function memberTypes(): array
-    {
-        return collect(MemberType::cases())->mapWithKeys(fn (MemberType $type) => [$type->value => [$type]])->all();
-    }
-
     public static function memberTypeChanges(): array
     {
         return collect(MemberType::cases())

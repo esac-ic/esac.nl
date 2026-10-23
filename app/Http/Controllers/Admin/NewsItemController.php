@@ -27,7 +27,7 @@ class NewsItemController extends Controller implements HasMiddleware
     public function index(): View
     {
         return view('admin.news-items.index', [
-            'newsItems' => NewsItem::all(['id', 'title', 'created_at', 'author']),
+            'newsItems' => NewsItem::all(),
         ]);
     }
 

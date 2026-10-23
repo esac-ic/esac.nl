@@ -59,37 +59,7 @@ class UserFactory extends Factory
 
     public function member(): static
     {
-        return $this->state(['member_type' => 'member']);
-    }
-
-    public function reunist(): static
-    {
-        return $this->state(['member_type' => 'reunist']);
-    }
-
-    public function extraordinaryParticipant(): static
-    {
-        return $this->state(['member_type' => 'extraordinary_participant']);
-    }
-
-    public function honoraryMember(): static
-    {
-        return $this->state(['member_type' => 'honorary_member']);
-    }
-
-    public function memberOfService(): static
-    {
-        return $this->state(['member_type' => 'member_of_service']);
-    }
-
-    public function trainer(): static
-    {
-        return $this->state(['member_type' => 'trainer']);
-    }
-
-    public function relationship(): static
-    {
-        return $this->state(['member_type' => 'relationship']);
+        return $this->state(['member_type' => MemberType::Member]);
     }
 
     public function former(): static
@@ -101,7 +71,7 @@ class UserFactory extends Factory
     {
         return $this->state(fn () => [
             'pending_since' => fake()->dateTimeThisMonth(),
-            'member_type' => 'member',
+            'member_type' => MemberType::Member,
         ]);
     }
 }

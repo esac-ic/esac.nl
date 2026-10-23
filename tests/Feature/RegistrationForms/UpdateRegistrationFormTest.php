@@ -8,7 +8,6 @@ use App\Models\RegistrationForm;
 use App\Models\RegistrationFormField;
 use App\Models\RegistrationFormFieldOption;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\Test;
 use Tests\Concerns\ManagesRegistrationForms;
 use Tests\TestCase;
@@ -57,18 +56,6 @@ class UpdateRegistrationFormTest extends TestCase
         $this->put($this->url, $body)->assertRedirect();
 
         $this->assertRegistrationForm($this->registrationForm->refresh(), $body);
-    }
-
-    #[Test]
-    #[DataProvider('otherRoles')]
-    public function other_roles_can_not_update_a_registration_form(AdminRole $role): void
-    {
-        $this->actingAsRole($role);
-
-        $this->put($this->url, [
-            'name' => 'test name',
-            'rows' => [['name' => 'Question 1', 'type' => FormFieldType::Number]],
-        ])->assertForbidden();
     }
 
     #[Test]

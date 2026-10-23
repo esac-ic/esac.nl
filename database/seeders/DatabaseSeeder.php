@@ -32,8 +32,8 @@ class DatabaseSeeder extends Seeder
             ->create(['email' => 'test@esac.nl', 'password' => 'test', 'first_name' => 'Piet', 'preposition' => 'van', 'last_name' => 'Jansen']);
         User::factory()->member()->create(['email' => 'member@esac.nl', 'password' => 'test']);
         $members = User::factory()->count(20)->create();
-        User::factory()->count(3)->create(['membership_ended_on' => now()->subYear()]);
-        User::factory()->count(2)->create(['pending_since' => today()]);
+        User::factory()->count(3)->former()->create();
+        User::factory()->count(2)->pending()->create();
 
         $certificates = Certificate::factory()->count(3)->create();
         $members->random(8)->each(fn (User $member) => $member->certificates()->attach($certificates->random()));
