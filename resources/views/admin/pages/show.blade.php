@@ -20,7 +20,7 @@ Page
             <table class="table table-striped" style="width:100%">
                 <x-detail-row label="Name">{{$page->name}}</x-detail-row>
                 <x-detail-row label="Sub page of">{{ $page->parent?->name }}</x-detail-row>
-                <x-detail-row label="Slug">{{$page->slug}}</x-detail-row>
+                <x-detail-row label="URL">{{$page->slug}}</x-detail-row>
                 <x-detail-row label="Requires login">{{ $page->requires_login ? 'Yes' : 'No' }}</x-detail-row>
                 @foreach($children as $child)
                     <tr>

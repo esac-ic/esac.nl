@@ -25,7 +25,7 @@ class EventFeedController extends Controller
         $events = Event::query()->where('end_date', '>=', now()->subYear()->startOfDay())->get();
 
         foreach ($events as $event) {
-            // The UID keeps its old prefix, so subscribed calendars don't duplicate the events.
+            // A stable UID, so calendar apps update an event instead of adding it again.
             $calendarEvent = new CalendarEvent(new UniqueIdentifier('agenda-item-'.$event->id.'@'.$host));
             $calendarEvent
                 ->setOccurrence(new TimeSpan(

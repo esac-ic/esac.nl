@@ -55,7 +55,7 @@ class ExportTest extends TestCase
         [$sheet, $rows] = $this->readSpreadsheet($this->get('admin/former-members/export'), 'Former members.xlsx');
 
         $this->assertSame('Former members', $sheet);
-        $this->assertSame(['#', 'First name', 'Preposition', 'Last name', 'Member since', 'Membership ended on'], $rows[0]);
+        $this->assertSame(['#', 'First name', 'Preposition', 'Last name', 'Signed up on', 'Membership ended on'], $rows[0]);
         $this->assertCount(1 + 2, $rows);
     }
 

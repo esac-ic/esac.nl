@@ -14,8 +14,8 @@ Registration
         <table class="table table-striped" style="width:100%">
             <thead>
             <tr>
-                <th>Field</td>
-                <th>Answer</td>
+                <th>Field</th>
+                <th>Answer</th>
             </tr>
             </thead>
             <tbody>

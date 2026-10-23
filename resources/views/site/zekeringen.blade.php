@@ -7,7 +7,7 @@
             <div class="col-sm-8 d-flex flex-wrap">
                 <div class="card w-100">
                     <div class="card-body">
-                        <h2 class="card-title">Rumour has it that...</h2>
+                        <h2 class="card-title">Er wordt gezekerd dat...</h2>
                         {!! $content !!}
                     </div>
                 </div>     

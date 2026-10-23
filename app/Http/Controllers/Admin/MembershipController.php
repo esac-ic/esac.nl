@@ -25,12 +25,12 @@ class MembershipController extends Controller implements HasMiddleware
 
     public function store(User $user): RedirectResponse
     {
-        // This only fails when the member is already active or has no email address.
-        if ($user->restoreMembership()) {
-            return to_route('admin.members.show', $user);
-        }
+        // Anonymized former members have no email address, so they can't come back.
+        abort_unless($user->isFormerMember() && $user->email, 404);
 
-        return to_route('admin.former-members.index')->with('error', 'Failed to make member active');
+        $user->restoreMembership();
+
+        return to_route('admin.members.show', $user);
     }
 
     public function destroy(Request $request, User $user): RedirectResponse

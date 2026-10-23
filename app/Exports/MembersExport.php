@@ -79,7 +79,7 @@ class MembersExport extends SpreadsheetExport
             'BIC',
             'Direct debit',
             'Remarks',
-            'Member since',
+            'Signed up on',
             'Certificates',
         ];
     }

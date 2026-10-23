@@ -60,7 +60,7 @@ class PennoMemberExport extends SpreadsheetExport
             'IBAN',
             'BIC',
             'Direct debit',
-            'Member since',
+            'Signed up on',
         ];
     }
 
