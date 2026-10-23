@@ -39,7 +39,7 @@ class SignUpTest extends TestCase
             'iban' => '123456789',
         ];
 
-        $this->post(route('signup.store'), [
+        $this->post(route('sign-up.store'), [
             ...$details,
             'password' => 'a-password',
             'password_confirmation' => 'a-password',
@@ -47,7 +47,7 @@ class SignUpTest extends TestCase
             'direct_debit' => 'True',
             'privacy_policy' => 'True',
             'terms_and_conditions' => 'True',
-        ])->assertRedirectToRoute('signup.create');
+        ])->assertRedirectToRoute('sign-up.create');
 
         Event::assertDispatched(MemberSignedUp::class);
         $this->assertDatabaseCount(User::class, 1);
@@ -60,7 +60,7 @@ class SignUpTest extends TestCase
         Http::fake(['www.google.com/recaptcha/*' => Http::response(['success' => false])]);
         Event::fake();
 
-        $this->post(route('signup.store'), ['g-recaptcha-response' => 'invalid'])
+        $this->post(route('sign-up.store'), ['g-recaptcha-response' => 'invalid'])
             ->assertInvalid(['g-recaptcha-response' => "'I'm not a robot' validation failed, please try again"]);
 
         Event::assertNotDispatched(MemberSignedUp::class);

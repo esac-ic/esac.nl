@@ -16,7 +16,7 @@ class SignUpController extends Controller
 {
     public function create(): View
     {
-        return view('site.signup', [
+        return view('site.sign-up', [
             'pageTitle' => 'Become a member',
             'content' => MenuItem::query()->where('slug', PageSlug::SignUp)->value('content'),
         ]);
@@ -26,7 +26,7 @@ class SignUpController extends Controller
     {
         User::signUp($request->safe()->except('g-recaptcha-response', 'privacy_policy', 'terms_and_conditions'));
 
-        return to_route('signup.create')
+        return to_route('sign-up.create')
             ->with('message', 'Your membership request is pending, we will get back to you as soon as possible');
     }
 }

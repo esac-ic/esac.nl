@@ -6,12 +6,12 @@
                 <a class="navbar-brand" href="{{ url('/') }}">
                     <x-logo />
                 </a>
-                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
-                        aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#site-menu"
+                        aria-controls="site-menu" aria-expanded="false" aria-label="Toggle navigation">
                     <span class="ion-navicon h3 text-white"></span>
                 </button>
                 
-                <div class="collapse navbar-collapse justify-content-between" id="navbarNav">
+                <div class="collapse navbar-collapse justify-content-between" id="site-menu">
                     <ul class="navbar-nav">
                         @foreach($menuItems as $menuItem)
                             @if($menuItem->children->isNotEmpty())
@@ -69,7 +69,7 @@
                             </li>
                         @endguest @guest
                             <li class="nav-item d-flex align-items-center">
-                                <a class="btn btn-info text-dark" href="{{ route('signup.create') }}">Become a member</a>
+                                <a class="btn btn-info text-dark" href="{{ route('sign-up.create') }}">Become a member</a>
                             </li>
                         @endguest
                     </ul>
