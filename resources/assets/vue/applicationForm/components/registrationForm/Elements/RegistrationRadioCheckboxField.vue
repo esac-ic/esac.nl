@@ -1,13 +1,13 @@
 <template>
     <div>
-        <div v-for="(option, index) in row.applicationFormRowOptions" style="margin-bottom: 5px">
-            <input  :required="row.required"
+        <div v-for="(option, index) in row.applicationFormRowOptions" class="form-check" :key="index">
+            <input  class="form-check-input"
+                    :id="row.id + '-' + index"
+                    :required="row.required"
                     :type="getType()"
                     :name="row.id + '[]'"
-                    :value="option.value"
-                    :key="index"
-                    style="margin-right: 5px;">
-            {{getName(option)}}
+                    :value="option.value">
+            <label class="form-check-label" :for="row.id + '-' + index">{{getName(option)}}</label>
         </div>
     </div>
 </template>

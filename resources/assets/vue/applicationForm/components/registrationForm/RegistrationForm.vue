@@ -4,7 +4,7 @@
             <label>{{getLabel(row)}}<span v-if="isRequired(row)">*</span></label>
             <component :is="getComponentName(row)" :row="row"></component>
         </div>
-        <span v-if="hasMandatoryQuestions" class="text-small text-muted">*Mandatory question</span>
+        <span v-if="hasMandatoryQuestions" class="text-small text-muted">* Required question</span>
     </div>
 </template>
 

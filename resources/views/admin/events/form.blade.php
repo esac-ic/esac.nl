@@ -15,9 +15,11 @@
             </div>
             <div class="form-row">
                 <x-field name="event_category_id" label="Category" :options="$eventCategories" :value="$event->event_category_id" col="6" required />
-                <div class="form-group col-md-6">
-                    {{ html()->label('Show the members\' certificates', 'shows_certificates') }}
-                    {{ html()->checkbox('shows_certificates', ! session()->hasOldInput() && ($event->shows_certificates ?? true), 1)->class('form-control') }}
+                <div class="form-group col-md-6 d-flex align-items-end">
+                    <div class="form-check mb-2">
+                        {{ html()->checkbox('shows_certificates', ! session()->hasOldInput() && ($event->shows_certificates ?? true), 1)->class('form-check-input') }}
+                        {{ html()->label('Show the members\' certificates', 'shows_certificates')->class('form-check-label') }}
+                    </div>
                 </div>
             </div>
         </x-card>
