@@ -1,5 +1,5 @@
-@props(['user', 'details' => true, 'certificates', 'registrations'])
-{{-- A member's details in tabs; without details, only the certificates and registrations. --}}
+@props(['user', 'details' => true, 'registrationsTab' => true, 'certificates', 'registrations'])
+{{-- A member's details in tabs; without details, only the certificates and (with the registrations tab) the registrations. --}}
 <ul class="nav nav-tabs" id="member-tabs" role="tablist">
     @if($details)
     <li class="nav-item">
@@ -18,9 +18,11 @@
     <li class="nav-item">
         <a @class(['nav-link', 'active' => ! $details]) id="certificates-tab" data-toggle="tab" href="#certificates" role="tab" aria-controls="certificates" aria-selected="false">Certificates</a>
     </li>
+    @if($registrationsTab)
     <li class="nav-item">
         <a class="nav-link" id="registrations-tab" data-toggle="tab" href="#registrations" role="tab" aria-controls="registrations" aria-selected="false">Registrations</a>
     </li>
+    @endif
 </ul>
 <div class="tab-content space-sm">
     @if($details)
@@ -96,7 +98,9 @@
     <div @class(['tab-pane fade', 'show active' => ! $details]) id="certificates" role="tabpanel" aria-labelledby="certificates-tab">
         {{ $certificates }}
     </div>
+    @if($registrationsTab)
     <div class="tab-pane fade" id="registrations" role="tabpanel" aria-labelledby="registrations-tab">
         {{ $registrations }}
     </div>
+    @endif
 </div>

@@ -46,7 +46,7 @@
         @endif
     </x-page-header>
     <x-card :title="$user->name" class="mt-4">
-        <x-member-tabs :$user :details="auth()->user()->can('manage-members')">
+        <x-member-tabs :$user :details="auth()->user()->can('view-member-details')" :registrations-tab="auth()->user()->can('manage-registrations')">
             <x-slot:certificates>
                 <table class="table table-striped" style="width:100%">
                     <thead>
@@ -92,16 +92,12 @@
                             <td>{{ $registration->event->title }}</td>
                             <td data-order="{{ $registration->event->start_date->timestamp }}">{{ $registration->event->start_date->format('d-m-Y H:i') }}</td>
                             <td>
-                                @can('manage-events')
                                 <a href="{{ route('admin.events.registrations.show', [$registration->event_id, $registration]) }}"><span title="Show entered information" class="ion-eye" aria-hidden="true"></span></a>
-                                @endcan
-                                @can('delete-registration')
                                 <form class="d-inline" method="post" action="{{ route('admin.events.registrations.destroy', [$registration->event_id, $registration]) }}" onsubmit="return confirm('Are you sure you want to remove this registration?');">
                                     @csrf
                                     @method('DELETE')
                                     <button type="submit" class="btn btn-link p-0"><span title="Remove registration" class="ion-trash-a" aria-hidden="true"></span></button>
                                 </form>
-                                @endcan
                             </td>
                         </tr>
                     @endforeach

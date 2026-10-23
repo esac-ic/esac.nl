@@ -121,9 +121,9 @@ class RegisterForEventTest extends TestCase
     }
 
     #[Test]
-    public function an_administrator_can_register_a_member(): void
+    public function an_event_administrator_can_register_a_member(): void
     {
-        $this->actingAs(User::factory()->withRole(AdminRole::ContentAdministrator)->create());
+        $this->actingAs(User::factory()->withRole(AdminRole::EventAdministrator)->create());
         $userToRegister = User::factory()->create();
         $event = $this->eventWithRegistrationForm();
         $answers = $this->answers($event);

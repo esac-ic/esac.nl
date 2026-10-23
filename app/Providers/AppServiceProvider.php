@@ -42,30 +42,34 @@ class AppServiceProvider extends ServiceProvider
     }
 
     /**
-     * The abilities of the management pages and which roles have them.
+     * The abilities of the management pages and the roles that have them.
      */
+    private const array ABILITIES = [
+        'view-members' => [AdminRole::Administrator, AdminRole::CertificateAdministrator],
+        'view-member-details' => [AdminRole::Administrator],
+        'manage-members' => [AdminRole::Administrator],
+        'manage-roles' => [AdminRole::Administrator],
+        'manage-certificates' => [AdminRole::Administrator, AdminRole::CertificateAdministrator],
+        'manage-events' => [AdminRole::Administrator, AdminRole::ContentAdministrator, AdminRole::EventAdministrator],
+        'manage-event-categories' => [AdminRole::Administrator],
+        'manage-registrations' => [AdminRole::Administrator, AdminRole::EventAdministrator],
+        'manage-zekeringen' => [AdminRole::Administrator, AdminRole::EventAdministrator],
+        'manage-news' => [AdminRole::Administrator, AdminRole::ContentAdministrator, AdminRole::EventAdministrator],
+        'manage-pages' => [AdminRole::Administrator, AdminRole::ContentAdministrator],
+        'manage-library' => [AdminRole::Administrator],
+        'manage-mail-lists' => [AdminRole::Administrator],
+        'view-member-log' => [AdminRole::Administrator],
+        'manage-settings' => [AdminRole::Administrator],
+    ];
+
     private function defineGates(): void
     {
         Gate::defaultDenialResponse(Response::deny('You do not have sufficient access to view this page'));
 
         Gate::define('access-admin', fn (User $user) => $user->hasAnyRole());
 
-        Gate::define('view-members', fn (User $user) => $user->hasRole(AdminRole::Administrator, AdminRole::CertificateAdministrator));
-        Gate::define('manage-members', fn (User $user) => $user->hasRole(AdminRole::Administrator));
-        Gate::define('manage-roles', fn (User $user) => $user->hasRole(AdminRole::Administrator));
-        Gate::define('manage-certificates', fn (User $user) => $user->hasRole(AdminRole::Administrator, AdminRole::CertificateAdministrator));
-
-        Gate::define('manage-events', fn (User $user) => $user->hasRole(AdminRole::ContentAdministrator, AdminRole::EventAdministrator));
-        Gate::define('manage-event-categories', fn (User $user) => $user->hasRole(AdminRole::Administrator));
-        Gate::define('delete-registration', fn (User $user) => $user->hasRole(AdminRole::EventAdministrator));
-        Gate::define('manage-zekeringen', fn (User $user) => $user->hasRole(AdminRole::EventAdministrator));
-
-        Gate::define('manage-news', fn (User $user) => $user->hasRole(AdminRole::ContentAdministrator, AdminRole::EventAdministrator));
-        Gate::define('manage-pages', fn (User $user) => $user->hasRole(AdminRole::ContentAdministrator));
-        Gate::define('manage-library', fn (User $user) => $user->hasRole(AdminRole::Administrator));
-
-        Gate::define('manage-mail-lists', fn (User $user) => $user->hasRole(AdminRole::Administrator));
-        Gate::define('view-member-log', fn (User $user) => $user->hasRole(AdminRole::Administrator));
-        Gate::define('manage-settings', fn (User $user) => $user->hasRole(AdminRole::Administrator));
+        foreach (self::ABILITIES as $ability => $roles) {
+            Gate::define($ability, fn (User $user) => $user->hasRole(...$roles));
+        }
     }
 }
