@@ -1,6 +1,5 @@
 <?php
 
-use App\Enums\MemberType;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
@@ -11,6 +10,11 @@ use Spatie\LaravelSettings\Migrations\SettingsMigration;
  */
 return new class extends SettingsMigration
 {
+    /**
+     * The member types at the time of this migration.
+     */
+    private const array MEMBER_TYPES = ['member', 'extraordinary_participant', 'reunist', 'honorary_member', 'member_of_service', 'trainer', 'relationship'];
+
     public function up(): void
     {
         $values = DB::table('legacy_settings')->pluck('value', 'name');
@@ -19,8 +23,8 @@ return new class extends SettingsMigration
         $this->migrator->add('site.killswitch', (bool) $values['killswitch']);
         $this->migrator->add('site.footer_phone_number', $values['footer_phone_number'] ?: null);
         $this->migrator->add('site.blocked_email_domains', $list('blocked_email_domains'));
-        $this->migrator->add('site.mail_lists', collect(MemberType::cases())
-            ->mapWithKeys(fn (MemberType $type) => [$type->value => $list("{$type->value}_mail_lists")])
+        $this->migrator->add('site.mail_lists', collect(self::MEMBER_TYPES)
+            ->mapWithKeys(fn (string $type) => [$type => $list("{$type}_mail_lists")])
             ->all());
 
         Schema::drop('legacy_settings');
