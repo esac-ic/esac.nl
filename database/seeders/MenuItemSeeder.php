@@ -25,7 +25,7 @@ class MenuItemSeeder extends Seeder
 
         foreach ($pages as $index => [$slug, $name, $requiresLogin, $content]) {
             MenuItem::query()->forceCreate([
-                'position' => ($index + 1) * 10,
+                'position' => $index + 1,
                 'slug' => $slug->value,
                 'name' => $name,
                 'requires_login' => $requiresLogin,

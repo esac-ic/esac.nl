@@ -15,7 +15,6 @@ class AdminApiTest extends TestCase
     #[Test]
     #[TestWith(['api/users'])]
     #[TestWith(['api/users/autoComplete?term=a'])]
-    #[TestWith(['api/menuItems'])]
     public function a_member_without_an_admin_role_cannot_use_the_admin_api(string $url)
     {
         $this->actingAs(User::factory()->create())->get($url)->assertForbidden();

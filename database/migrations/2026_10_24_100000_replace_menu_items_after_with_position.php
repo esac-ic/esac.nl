@@ -27,7 +27,7 @@ return new class extends Migration
                 ->values();
 
             foreach ($ordered as $index => $item) {
-                DB::table('menu_items')->where('id', $item->id)->update(['position' => ($index + 1) * 10]);
+                DB::table('menu_items')->where('id', $item->id)->update(['position' => $index + 1]);
             }
         }
 

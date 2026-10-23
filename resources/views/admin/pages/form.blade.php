@@ -26,26 +26,11 @@
                     </div>
                 </div>
             </div>
-            <div class="form-row mt-2" id="menu-parent-settings">
-                <div class="form-group col-md-6">
-                    <label for="menu_level"> Item type:  </label>
-                    <select class="form-control" name="menu_level" id="menu_level">
-                        <option value="top" @selected($page->parent_id == null)>Standalone menu item</option>
-                        <option value="child" @selected($page->parent_id != null)>Sub menu item</option>
-                    </select>
+            @isset($parents)
+                <div class="form-row mt-2">
+                    <x-field name="parent_id" label="Sub page of" :options="['' => 'None, a top-level page'] + $parents->pluck('name', 'id')->all()" :value="$page->parent_id" col="6" />
                 </div>
-                <div id="parent-page-group" class="col-md-6">
-                    <label for="parent_id"> If page is a sub page, who is the parent? </label>
-                    <select class="form-control" name="parent_id" id="parent_id">
-                        @foreach($pages as $item)
-                            <option value="{{$item->id}}" @selected($item->id === $page->parent_id)>{{$item->name}}</option>
-                        @endforeach
-                    </select>
-                </div>
-            </div>
-            <div class="form-row" id="menu-position-settings">
-                <x-field name="position" label="Position in the menu (lower comes first)" type="number" :value="$page->position" col="6" required />
-            </div>
+            @endisset
         </x-card>
         @if(! $page->exists || $page->editable)
             <x-card :title="$page->exists ? 'Edit page' : 'Add page'" class="mt-4">
@@ -60,19 +45,3 @@
     </form>
 @endsection
 
-@push('scripts')
-    <script>
-        $(document).ready(function() {
-            $('#menu_level').change(function() {
-                $('#parent-page-group').toggle($('#menu_level').val() === 'child');
-            });
-
-            $('#show_in_menu').change(function () {
-                $('#menu-parent-settings, #menu-position-settings').toggle($('#show_in_menu').is(':checked'));
-            });
-
-            $('#menu_level').change();
-            $('#show_in_menu').change();
-        });
-    </script>
-@endpush
