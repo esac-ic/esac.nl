@@ -18,26 +18,13 @@ class ZekeringenSeeder extends Seeder
      */
     public function run()
     {
-        for ($i = 0; $i < self::AMOUNT; $i++) {
-            $zekering = $this->createZekering(fake()->sentence(rand(6, 20)));
+        $zekeringen = Zekering::factory()->count(self::AMOUNT)->create(['createdBy' => 1]);
 
-            $childCount = rand(0, self::MAX_CHILDREN);
-            for ($j = 0; $j < $childCount; $j++) {
-                $this->createZekering(fake()->sentence(rand(4, 12)), $zekering->id);
-            }
+        foreach ($zekeringen as $zekering) {
+            Zekering::factory()
+                ->count(rand(0, self::MAX_CHILDREN))
+                ->childOf($zekering)
+                ->create(['createdBy' => 1]);
         }
-    }
-
-    private function createZekering(string $text, ?int $parentId = null): Zekering
-    {
-        $zekering = new Zekering();
-        $zekering->text = $text;
-        $zekering->createdBy = 1;
-        $zekering->score = 1;
-        $zekering->parent_id = $parentId;
-        $zekering->has_parent = $parentId !== null;
-        $zekering->save();
-
-        return $zekering;
     }
 }
