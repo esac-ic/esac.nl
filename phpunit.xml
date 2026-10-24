@@ -13,8 +13,6 @@
     <env name="QUEUE_DRIVER" value="sync"/>
     <env name="DB_CONNECTION" value="mysql"/>
     <env name="DB_DATABASE" value="esac"/>
-    <env name="DB_USERNAME" value="root"/>
-    <env name="DB_PASSWORD" value="password"/>
     <env name="QUEUE_DRIVER" value="sync"/>
     <env name="MAIL_MAN_DOMAIN" value="@esac.nl" />
   </php>
