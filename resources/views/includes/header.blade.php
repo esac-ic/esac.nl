@@ -34,7 +34,7 @@ var headerHome = [{
 }, {
     background: 'header-img3.jpeg',
     heading: '{{'Climbing weekends in Belgium'}}',
-    message: '{{'The ESAC annually organizes about 12 climbing weekends to Belgium, Germany or beyond.'}}',
+    message: '{{'The ESAC annually organizes over 20 climbing weekends to Belgium, Germany or beyond.'}}',
     buttonUrl: '{{url('buitenklimmen')}}',
     buttonText: '{{'More Information'}}'
 }, {
