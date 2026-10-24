@@ -3,6 +3,7 @@
 namespace Tests\Feature\User;
 
 use App\CustomClasses\MailList\MailListFacade;
+use App\Events\MemberInfoUpdated;
 use App\Events\MemberKindChanged;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -38,7 +39,7 @@ class UpdateUserTest extends \TestCase
             'emergencyzipcode' =>  '1111AA',
             'emergencycountry' => 'Initial',
             'birthday' => '1990-01-01',
-            'IBAN' =>  '123456789',
+            'IBAN' =>  'NL02ABNA0123456789',
             'kind_of_member' => 'Initial'
         
         ]);
@@ -69,7 +70,7 @@ class UpdateUserTest extends \TestCase
             'emergencyzipcode' =>  '2222AA',
             'emergencycountry' => 'Second',
             'birthDay' => '1990-02-02',
-            'IBAN' =>  '234567891',
+            'IBAN' =>  'BE71096123456769',
             'kind_of_member' => $this->admin->kind_of_member,
         ];
         $oldEmail = $this->admin->email;
@@ -85,6 +86,7 @@ class UpdateUserTest extends \TestCase
         $response->assertRedirect('/users/' . $this->admin->id . '?back=false');
         
         Event::assertNotDispatched(MemberKindChanged::class);
+        Event::assertDispatched(MemberInfoUpdated::class);
         
         $newAdmin = User::find($this->admin->id);
         
@@ -130,7 +132,7 @@ class UpdateUserTest extends \TestCase
             'emergencyzipcode' =>  '2222AA',
             'emergencycountry' => 'Second',
             'birthDay' => '1990-02-02',
-            'IBAN' =>  '234567891',
+            'IBAN' =>  'BE71096123456769',
             'kind_of_member' => $this->admin->kind_of_member,
         ];
         
@@ -145,6 +147,7 @@ class UpdateUserTest extends \TestCase
         $response->assertRedirect('/users/' . $this->admin->id . '?back=false');
         
         Event::assertNotDispatched(MemberKindChanged::class);
+        Event::assertDispatched(MemberInfoUpdated::class);
         
         $newAdmin = User::find($this->admin->id);
         
@@ -187,7 +190,7 @@ class UpdateUserTest extends \TestCase
             'emergencyzipcode' =>  '2222AA',
             'emergencycountry' => 'Second',
             'birthDay' => '1990-02-02',
-            'IBAN' =>  '234567891',
+            'IBAN' =>  'BE71096123456769',
             'kind_of_member' => 'reunist',
         ];
         
@@ -203,6 +206,7 @@ class UpdateUserTest extends \TestCase
         $response->assertRedirect('/users');
         
         Event::assertDispatched(MemberKindChanged::class);
+        Event::assertDispatched(MemberInfoUpdated::class);
         
         $newMember = User::find($this->member->id);
         
@@ -246,7 +250,7 @@ class UpdateUserTest extends \TestCase
             'emergencyzipcode' =>  '2222AA',
             'emergencycountry' => 'Second',
             'birthDay' => '1990-02-02',
-            'IBAN' =>  '234567891',
+            'IBAN' =>  'BE71096123456769',
             'kind_of_member' => $this->member->kind_of_member,
             'remark' => $this->member->remark,
         ];
@@ -262,6 +266,7 @@ class UpdateUserTest extends \TestCase
         $response->assertRedirect('/users/' . $this->member->id . '?back=false');
         
         Event::assertNotDispatched(MemberKindChanged::class);
+        Event::assertDispatched(MemberInfoUpdated::class);
         
         $newMember = User::find($this->member->id);
         
@@ -308,7 +313,7 @@ class UpdateUserTest extends \TestCase
             'emergencyzipcode' =>  '2222AA',
             'emergencycountry' => 'Second',
             'birthDay' => '1990-02-02',
-            'IBAN' =>  '234567891',
+            'IBAN' =>  'BE71096123456769',
             'kind_of_member' => 'Second',
             'remark' => 'Second',
         ];
@@ -330,6 +335,7 @@ class UpdateUserTest extends \TestCase
         $response->assertRedirect('/users/' . $this->member->id . '?back=false');
         
         Event::assertNotDispatched(MemberKindChanged::class);
+        Event::assertDispatched(MemberInfoUpdated::class);
         
         $newMember = User::find($this->member->id);
         
@@ -377,7 +383,7 @@ class UpdateUserTest extends \TestCase
             'emergencyzipcode' =>  '2222AA',
             'emergencycountry' => 'Second',
             'birthDay' => '1990-02-02',
-            'IBAN' =>  '234567891',
+            'IBAN' =>  'BE71096123456769',
             'kind_of_member' => $this->member->kind_of_member,
             'remark' => $this->member->remarks,
         ];

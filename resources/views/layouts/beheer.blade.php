@@ -64,6 +64,7 @@
                                     @if(\Illuminate\Support\Facades\Auth::user()->hasRole(Config::get('constants.Administrator')))
                                         <a class="dropdown-item" href="{{ url('users/old_members') }}">{{'Old members'}}</a>
                                         <a class="dropdown-item" href="{{ url('users/pending_members') }}">{{'Pending users'}}</a>
+                                        <a class="dropdown-item" href="{{ route('users.indexTreasurerPending') }}">{{'Treasurer pending'}}</a>
                                         <a class="dropdown-item" href="{{ url('rols') }}">{{'Roles'}}</a>
                                     @endif
                                     <a class="dropdown-item" href="{{ url('certificates') }}">{{'Certificates'}}</a>

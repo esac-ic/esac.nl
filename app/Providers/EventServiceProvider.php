@@ -29,7 +29,10 @@ class EventServiceProvider extends ServiceProvider
         ],
         \App\Events\PendingUserCreated::class => [
             \App\Listeners\LogPendingUserCreated::class,
-        ],  
+        ],
+        \App\Events\MemberInfoUpdated::class => [
+            \App\Listeners\MarkMemberForPenno::class,
+        ],
     ];
     
     protected $subscribe = [

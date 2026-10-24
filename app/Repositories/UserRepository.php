@@ -8,6 +8,7 @@
 
 namespace App\Repositories;
 
+use App\Events\MemberInfoUpdated;
 use App\Events\MemberKindChanged;
 use App\Events\PendingUserCreated;
 use App\Models\User;
@@ -45,7 +46,9 @@ class UserRepository implements IRepository
             $data['password'] = ($data['password'] != "") ? bcrypt($data['password']) : $user->password;
             
             $oldKindOfMember = $user->kind_of_member;
-            
+
+            MemberInfoUpdated::dispatch($user, $data);
+
             $user->update($data); //update before firing the events so mailman can't desync if kind_of_member and email are updated in the same request
             
             //fire a MemberKindChanged event when the kind_of_member field is updated
@@ -103,6 +106,10 @@ class UserRepository implements IRepository
     {
         return User::where('pending_user', '!=', null)->get($columns);
     }
+    public function getTreasurerPendingUsers($columns = array('*'))
+    {
+        return User::where('treasurer_pending', '!=', null)->get($columns);
+    }
 
     public function addRols($id, array $rols = array()): void
     {
@@ -123,7 +130,7 @@ class UserRepository implements IRepository
         $user = $this->find($userid);
         return $user->certificates;
     }
-    
+
     /**
      * Creates a new pending user.
      * Dispatches a PendingUserCreated event
