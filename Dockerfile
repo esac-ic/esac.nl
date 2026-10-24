@@ -12,7 +12,7 @@ WORKDIR /app
 COPY package.json package-lock.json ./
 RUN npm ci --no-audit --no-fund
 COPY . .
-RUN npm run production
+RUN npm run build
 
 FROM dunglas/frankenphp:1.13.2-php8.3.36-trixie AS base
 

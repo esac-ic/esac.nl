@@ -1,11 +1,10 @@
 <template>
     <div>
-        <div v-for="(option, index) in row.applicationFormRowOptions" style="margin-bottom: 5px">
+        <div v-for="(option, index) in row.applicationFormRowOptions" :key="index" style="margin-bottom: 5px">
             <input  :required="row.required"
                     :type="getType()"
                     :name="row.id + '[]'"
                     :value="option.value"
-                    :key="index"
                     style="margin-right: 5px;">
             {{getName(option)}}
         </div>

@@ -21,7 +21,8 @@
 </template>
 
 <script>
-    import { mapGetters, mapActions } from 'vuex';
+    import { mapState, mapActions } from 'pinia';
+    import { useAgendaStore } from '../../store';
     import {AGENDA_ITEMS_ON_PAGE} from '../constants';
 
     export default {
@@ -33,13 +34,10 @@
             }
         },
         computed: {
-            ...mapGetters({
-                agendaTotalItemCount : "agendaTotalItemCount",
-                selectedPage : "selectedPage"
-            })
+            ...mapState(useAgendaStore, ['agendaTotalItemCount', 'selectedPage'])
         },
         methods: {
-            ...mapActions([
+            ...mapActions(useAgendaStore, [
                 'setSelectedAgendaPage',
             ]),
             getAmountOfPages: function(){

@@ -58,7 +58,7 @@
 @endsection
 
 @push('scripts')
-    <script>
+    <script type="module">
         $(document).on('click','#delete_button',function(){
             var url = $(this).attr('data-url');
             $.ajax({

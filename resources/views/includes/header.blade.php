@@ -18,7 +18,7 @@
 @endif
 
 @push('scripts')
-<script>
+<script type="module">
 var headerHome = [{
     background: 'header-img1.jpeg',
     heading: '{{'Stunts and more'}}',
