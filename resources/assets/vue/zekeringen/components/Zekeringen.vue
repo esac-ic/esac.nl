@@ -4,7 +4,7 @@
             <Zekering v-for="zekering in paginatedZekeringen" :key="zekering.id" :zekering="zekering"/>
 
             <nav aria-label="Zekeringen pagination" v-if="totalPages > 1">
-                <ul class="pagination justify-content-center flex-wrap" :class="{'pagination-sm': isMobile}">
+                <ul class="pagination justify-content-center flex-wrap">
                     <li class="page-item" :class="{disabled: currentPage === 1}">
                         <a class="page-link" href="#" aria-label="Previous" v-on:click.prevent="previousPage">
                             <span aria-hidden="true">&laquo;</span>
@@ -34,10 +34,7 @@
 
     const PER_PAGE = 10;
     // Amount of pages shown on each side of the current page
-    const PAGE_LIMIT = 2;
-    const PAGE_LIMIT_MOBILE = 1;
-    // Bootstrap's sm breakpoint
-    const mobileQuery = window.matchMedia('(max-width: 575.98px)');
+    const PAGE_LIMIT = 1;
     const ELLIPSIS = '...';
 
     export default {
@@ -47,7 +44,6 @@
             return {
                 zekeringen: [],
                 currentPage: 1,
-                isMobile: mobileQuery.matches,
                 ELLIPSIS,
             }
         },
@@ -60,9 +56,8 @@
                 return this.zekeringen.slice(start, start + PER_PAGE);
             },
             visiblePages() {
-                const limit = this.isMobile ? PAGE_LIMIT_MOBILE : PAGE_LIMIT;
-                const first = Math.max(1, this.currentPage - limit);
-                const last = Math.min(this.totalPages, this.currentPage + limit);
+                const first = Math.max(1, this.currentPage - PAGE_LIMIT);
+                const last = Math.min(this.totalPages, this.currentPage + PAGE_LIMIT);
                 const pages = [];
 
                 if (first > 1) {
@@ -102,18 +97,11 @@
                 if (this.currentPage > 1) {
                     this.currentPage--;
                 }
-            },
-            updateIsMobile: function(event) {
-                this.isMobile = event.matches;
             }
         },
         mounted(){
             this.loadZekeringen();
             EventBus.on(constants.EVENT_RELOAD_ZEKERINGEN, this.loadZekeringen);
-            mobileQuery.addEventListener('change', this.updateIsMobile);
-        },
-        beforeUnmount(){
-            mobileQuery.removeEventListener('change', this.updateIsMobile);
         }
     }
 </script>
