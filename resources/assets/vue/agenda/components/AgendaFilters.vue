@@ -53,12 +53,12 @@
                 this.setSelectedCategory(this.selectedCategorie);
             },
             startDateChanged(){
-                this.setStartDate(isoDateToDMY(this.startDate));
+                this.setStartDate(this.startDate ? isoDateToDMY(this.startDate) : "");
             }
         },
         mounted () {
             this.fetchAgendaCategories();
-            
+
             this.allCategoriesText = 'All';
             this.categoriesText = 'Categories';
             this.startDateText=  'Start date';
