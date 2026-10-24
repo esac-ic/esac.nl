@@ -124,8 +124,11 @@
 </div>
 @endsection
 
-@push('scripts')
+@prepend('scripts')
 @vite(['resources/assets/js/vendor/datatables.js', 'resources/assets/js/vendor/summernote.js'])
+@endprepend
+
+@push('scripts')
 <script type="module">
     $('#users').DataTable();
 
