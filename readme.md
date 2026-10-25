@@ -12,7 +12,7 @@ The following libaries and framework are used:
 - [DataTables](https://datatables.net/)
 - [Laravel HTML Form](https://github.com/LaravelCollective/html)
 - [Summernote](http://summernote.org/)
-- [Laravel-Mix (Webpack)](https://github.com/JeffreyWay/laravel-mix)
+- [Vite](https://vite.dev) (via [laravel-vite-plugin](https://github.com/laravel/vite-plugin))
 - [Bootstrap](https://getbootstrap.com/)
 - [Vue](https://vuejs.org)
 - [Tempus Dominus](https://tempusdominus.github.io/bootstrap-4/)
@@ -61,8 +61,9 @@ On WSL you have 2 places where you can store/edit files:
 5. Install and build the frontend assets
 	```
 	docker compose exec app npm install
-	docker compose exec app npm run dev
+	docker compose exec app npm run build
 	```
+	Run `npm run build` again after changing CSS or JS files.
 6. Configure `mailman` once, otherwise mail list sync will error:
 	```
 	curl -u restadmin:restpass -X POST http://localhost:8001/3.1/domains -d mail_host=esac.nl
@@ -155,14 +156,12 @@ Tests run against their own disposable stack (the mysql test profile)
 	npm install
 	npm run dev
 	```
-	When you make changes to CSS or JS file you need to build again which can be done with
+	`npm run dev` starts the Vite development server, which automatically reloads the page when you change CSS or JS files. Keep it running while you develop.
+	Alternatively you can build the files once with
 	```
-	npm run dev
+	npm run build
 	```
-	It is also possible to recompile your files when you make a change by running the following command
-	```
-	npm run watch
-	```
+	If the site tries to load its assets from `localhost:5173` while the development server isn't running, delete the leftover `public/hot` file.
 	If you get issues with npm, you can install [nvm](https://github.com/nvm-sh/nvm) and run `nvm install --lts` to install a version of node that should work.
 13. Open another Ubuntu (from Windows Start) and run, from the repository root
 	```
@@ -179,7 +178,7 @@ Tests run against their own disposable stack (the mysql test profile)
 ### Starting up the development environment again later
 1. Open ubuntu
 2. Navigate to the repository root using `cd esac.nl`
-4. Run either `npm run dev` or `npm run watch` to start the javascript development server
+4. Run `npm run dev` to start the Vite development server
 6. Open a new terminal instance and run `code .` from the repository root to open VScode
 7. Then run `php artisan serve` to start up the laravel development server.
 8. Go to localhost:8000 in your favorite browser to view your own version of the ESAC website
@@ -374,18 +373,16 @@ DB\_HOST, DB\_PORT, DB\_DATABASE, DB\_USERNAME and DB\_PASSWORD
 	npm install
 	npm run dev
 	```
-	When you make changes to CSS or JS file you need to build again which can be done with
+	`npm run dev` starts the Vite development server, which automatically reloads the page when you change CSS or JS files. Keep it running while you develop.
+	Alternatively you can build the files once with
 	```
-	npm run dev
+	npm run build
 	```
-	It is also possible to recompile your files when you make a change by running the following command
-	```
-	npm run watch
-	```
+	If the site tries to load its assets from `localhost:5173` while the development server isn't running, delete the leftover `public/hot` file.
 
 ### Production environment
 When you update the server make sure you run the following commands
 ```
 php artisan migrate
-npm run production
+npm run build
 ```

@@ -58,7 +58,7 @@
 
 <script>
     import { FORM_TYPES, ROW_OPTION_FORM_TYPE } from '../constants';
-import ApplicationFormRowOptions from "./ApplicationFormRowOptions";
+    import ApplicationFormRowOptions from "./ApplicationFormRowOptions.vue";
 
     export default {
         name: "ApplicationForm",
