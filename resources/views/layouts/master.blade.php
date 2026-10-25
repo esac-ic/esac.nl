@@ -26,7 +26,7 @@
         <link href="https://fonts.googleapis.com/css?family=Rubik:300,400,400i,500" rel="stylesheet">
         <link rel="stylesheet" type="text/css" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
         @stack('styles')
-        <link rel="stylesheet" type="text/css" href="{{mix("css/app.css")}}">
+        @vite(['resources/assets/scss/theme.scss'])
 
         @php
             // This code allows for css changes based on the current timestamp.
@@ -64,9 +64,9 @@
         @yield('main')
 
         <script>var APP_URL = "{{env('APP_URL')}}";</script>
-        <script src="{{mix("/js/vendor/jquery-bootstrap.js")}}"></script>
+        @vite(['resources/assets/js/vendor/jquery-bootstrap.js'])
+        @vite(['resources/assets/js/app.js'])
         @stack('scripts')
-        <script src="{{mix("/js/app.js")}}"></script>
     </body>
 </html>
 

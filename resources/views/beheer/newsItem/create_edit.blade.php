@@ -62,14 +62,14 @@
 @endsection
 
 @push('scripts')
-    <script>
+    <script type="module">
         $('.custom-file-input').on('change', function() {
            let fileName = $(this).val().split('\\').pop();
            $(this).next('.custom-file-label').addClass("selected").html(fileName);
         });
     </script>
 
-    <script>
+    <script type="module">
         $(document).ready(function() {
             $('#content').summernote(summernoteSettings);
         });

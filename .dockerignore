@@ -8,9 +8,8 @@ tests
 compose.yaml
 infra/cloud-init.yaml
 infra/backup.sh
-public/css
-public/js
-public/mix-manifest.json
+public/build
+public/hot
 public/storage
 storage/app/public/*
 storage/framework/cache/**
