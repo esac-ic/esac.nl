@@ -35,7 +35,7 @@
                         <a href="https://venusp.tue.nl/sci-cgi/index.opl"><img class="img-fluid" src="{{asset('img/ssc.png')}}"></a>
                     </div>
                     <div class="col-6 col-lg-3 text-center">
-                        <a href="https://www.neoliet.nl"><img class="img-fluid" src="{{asset('img/neoliet.png')}}"></a>
+                        <a href="https://www.neoliet.nl"><img class="img-fluid" src="{{asset('img/neoliet.webp')}}"></a>
                     </div>
                     <div class="col-6 col-lg-3 text-center">
                         <a href="https://boulderneoliet.nl/"><img class="img-fluid" src="{{asset('img/boulder.png')}}"></a>
