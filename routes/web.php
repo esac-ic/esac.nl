@@ -83,8 +83,6 @@ Route::get("forms/users/{user}/detail/{agendaItem}", "ApplicationForm\AgendaAppl
 Route::get('forms/users/{inschrijfId}/export', array('uses' => 'ApplicationForm\AgendaApplicationFormController@exportData'));
 Route::delete('forms/{agenda_id}/remove/{applicationResponseId}', 'ApplicationForm\AgendaApplicationFormController@destroy');
 
-Route::resource('forms', 'InschrijfController');
-
 //maillist routes
 Route::delete('/mailList/{mailistid}/member/{memberid}', 'MailListController@deleteMemberFromMailList');
 Route::post('/mailList/{mailistid}/member', 'MailListController@addMember');
