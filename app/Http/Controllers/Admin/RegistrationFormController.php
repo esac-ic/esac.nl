@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\RegistrationFormRequest;
 use App\Http\Resources\RegistrationFormFieldResource;
+use App\Models\Event;
 use App\Models\RegistrationForm;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
@@ -62,6 +63,8 @@ class RegistrationFormController extends Controller implements HasMiddleware
 
     public function destroy(RegistrationForm $registrationForm): RedirectResponse
     {
+        // Past events keep showing their registrations' answers, upcoming events can no longer be registered for.
+        Event::query()->upcoming()->whereBelongsTo($registrationForm)->update(['registration_form_id' => null]);
         $registrationForm->fields->each->delete();
         $registrationForm->delete();
 

@@ -7,7 +7,6 @@ use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Database\Eloquent\SoftDeletes;
 
 #[Fillable([
     'registration_id',
@@ -16,8 +15,6 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 ])]
 class RegistrationAnswer extends Model
 {
-    use SoftDeletes;
-
     /**
      * @return BelongsTo<RegistrationFormField, $this>
      */

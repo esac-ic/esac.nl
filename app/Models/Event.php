@@ -102,7 +102,7 @@ class Event extends Model
      */
     public function registrationForm(): BelongsTo
     {
-        return $this->belongsTo(RegistrationForm::class, 'registration_form_id');
+        return $this->belongsTo(RegistrationForm::class, 'registration_form_id')->withTrashed();
     }
 
     /**

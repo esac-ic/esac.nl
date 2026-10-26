@@ -15,13 +15,11 @@ class PruneRegistrations extends Command
 {
     public function handle(): void
     {
-        $old = Registration::withTrashed()
+        $old = Registration::query()
             ->whereRelation('event', 'end_date', '<', now()->subYears(config('custom.application_response_save_period')));
 
         DB::transaction(function () use ($old) {
-            RegistrationAnswer::withTrashed()->whereIn('registration_id', $old->clone()->select('id'))->forceDelete();
-            // A cancelled registration never was a participation
-            $old->clone()->onlyTrashed()->forceDelete();
+            RegistrationAnswer::query()->whereIn('registration_id', $old->clone()->select('id'))->delete();
             $old->clone()->whereNotNull('user_id')->update(['user_id' => null]);
         });
     }

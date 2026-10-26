@@ -7,7 +7,6 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
-use Illuminate\Database\Eloquent\SoftDeletes;
 
 #[Fillable([
     'event_id',
@@ -16,14 +15,14 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 ])]
 class Registration extends Model
 {
-    use HasFactory, SoftDeletes;
+    use HasFactory;
 
     /**
      * @return HasMany<RegistrationAnswer, $this>
      */
     public function answers(): HasMany
     {
-        return $this->hasMany(RegistrationAnswer::class, 'registration_id')->withTrashed();
+        return $this->hasMany(RegistrationAnswer::class, 'registration_id');
     }
 
     /**

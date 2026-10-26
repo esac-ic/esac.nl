@@ -37,7 +37,7 @@ class PruneRegistrationsCommandTest extends TestCase
 
         $registration->refresh();
         $this->assertNull($registration->user_id);
-        $this->assertSame(0, RegistrationAnswer::withTrashed()->count());
+        $this->assertSame(0, RegistrationAnswer::query()->count());
         $this->assertSame(1, $registration->event->registrations()->count());
 
         // Counted on the event page, but no longer listed there, on the admin page or in the export
@@ -73,7 +73,7 @@ class PruneRegistrationsCommandTest extends TestCase
 
         $this->artisan('registrations:prune');
 
-        $this->assertSame(0, Registration::withTrashed()->count());
-        $this->assertSame(0, RegistrationAnswer::withTrashed()->count());
+        $this->assertSame(0, Registration::query()->count());
+        $this->assertSame(0, RegistrationAnswer::query()->count());
     }
 }
