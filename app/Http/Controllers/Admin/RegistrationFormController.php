@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Enums\FormFieldType;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\RegistrationFormRequest;
 use App\Http\Resources\RegistrationFormFieldResource;
@@ -78,6 +79,11 @@ class RegistrationFormController extends Controller implements HasMiddleware
         return view('admin.registration-forms.form', [
             'registrationForm' => $registrationForm->load('fields.options'),
             'fields' => RegistrationFormFieldResource::collection($registrationForm->fields),
+            'types' => array_map(fn (FormFieldType $type) => [
+                'value' => $type->value,
+                'label' => $type->label(),
+                'hasOptions' => $type->hasOptions(),
+            ], FormFieldType::cases()),
         ]);
     }
 }

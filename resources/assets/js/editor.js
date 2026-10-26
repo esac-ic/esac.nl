@@ -1,5 +1,5 @@
 import $ from 'jquery';
-import http from './http';
+import { request } from './http';
 import 'summernote/dist/summernote-bs4';
 import 'summernote/dist/summernote-bs4.css';
 
@@ -27,8 +27,8 @@ function uploadImage(file, editor) {
     const data = new FormData();
     data.append('image', file);
 
-    http.post($(editor).data('images-url'), data)
-        .then(response => $(editor).summernote('insertImage', response.data));
+    request('POST', $(editor).data('images-url'), data)
+        .then(url => $(editor).summernote('insertImage', url));
 }
 
 $editors.summernote({

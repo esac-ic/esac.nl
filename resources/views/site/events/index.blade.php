@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
 @section('content')
-<div data-vue="agenda" data-props="{{ json_encode(['description' => $content]) }}"></div>
+<div data-vue="agenda" data-props="{{ json_encode(['description' => $content, 'categories' => $categories]) }}"></div>
 
 <div id="export-calendar-modal" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
     <div class="modal-dialog" role="document">

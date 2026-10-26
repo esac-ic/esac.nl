@@ -1,5 +1,4 @@
 import { createApp } from 'vue';
-import { createPinia } from 'pinia';
 
 import Agenda from '../vue/agenda/components/Agenda.vue';
 import ApplicationForm from '../vue/applicationForm/components/ApplicationForm.vue';
@@ -15,7 +14,5 @@ const components = {
 };
 
 document.querySelectorAll('[data-vue]').forEach(element => {
-    createApp(components[element.dataset.vue], JSON.parse(element.dataset.props ?? '{}'))
-        .use(createPinia())
-        .mount(element);
+    createApp(components[element.dataset.vue], JSON.parse(element.dataset.props ?? '{}')).mount(element);
 });

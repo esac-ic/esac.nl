@@ -1,13 +1,10 @@
 <?php
 
-use App\Http\Controllers\Api\EventCategoryController;
 use App\Http\Controllers\Api\EventController;
 use App\Http\Controllers\Api\ZekeringController;
 use Illuminate\Support\Facades\Route;
 
-// The URLs are used by the site's JavaScript, so they keep their names.
-Route::get('agenda', [EventController::class, 'index'])->name('events.index');
-Route::get('agendaCategories', [EventCategoryController::class, 'index'])->name('event-categories.index');
+Route::get('events', [EventController::class, 'index'])->name('events.index');
 
 Route::middleware('auth')->controller(ZekeringController::class)->group(function () {
     Route::get('zekeringen', 'index')->name('zekeringen.index');

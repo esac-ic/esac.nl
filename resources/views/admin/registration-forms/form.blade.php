@@ -9,6 +9,6 @@
                 <x-field name="name" label="Name" :value="$registrationForm->name" col="6" required />
             </div>
         </x-card>
-        <div data-vue="application-form" data-props="{{ json_encode(['rows' => $fields]) }}"></div>
+        <div data-vue="application-form" data-props="{{ json_encode(['rows' => $fields, 'types' => $types]) }}"></div>
     </x-model-form>
 @endsection

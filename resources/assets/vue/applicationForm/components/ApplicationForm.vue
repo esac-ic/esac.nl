@@ -9,7 +9,7 @@
             </h3>
         </div>
         <div class="card-body">
-            <div v-for="(row, index) in applicationRows" :key="row.key" class="application-form-row">
+            <div v-for="(row, index) in applicationRows" :key="row.key" class="py-2 border-bottom">
                 <div class="row">
                     <div class="col-md-5">
                         <div class="form-group">
@@ -26,7 +26,7 @@
                         <div class="form-group">
                             <label :for="'row-type-' + row.key">Type</label>
                             <select :id="'row-type-' + row.key" class="form-control" :name="'rows[' + index + '][type]'" v-model="row.type" required>
-                                <option v-for="(name, value) in FORM_TYPES" :value="value" :key="value">{{ name }}</option>
+                                <option v-for="type in types" :key="type.value" :value="type.value">{{ type.label }}</option>
                             </select>
                         </div>
                     </div>
@@ -48,7 +48,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="row" v-if="showRowOptions(row)">
+                <div class="row" v-if="hasOptions(row)">
                     <application-form-row-options :rows="row.applicationFormRowOptions" :application-form-index="index"></application-form-row-options>
                 </div>
                 <input type="hidden" v-if="row.id !== undefined" v-model="row.id" :name="'rows[' + index + '][id]'">
@@ -60,37 +60,35 @@
 <script>
     import { PlusIcon, TrashIcon } from '@heroicons/vue/24/outline';
     import { confirmDialog } from '../../../js/confirm-dialog';
-    import { FORM_TYPE_TEXT, FORM_TYPES, ROW_OPTION_FORM_TYPE } from '../constants';
-    import ApplicationFormRowOptions from "./ApplicationFormRowOptions.vue";
+    import ApplicationFormRowOptions from './ApplicationFormRowOptions.vue';
 
     let nextKey = 0;
 
     export default {
-        name: "ApplicationForm",
-        components: {ApplicationFormRowOptions, PlusIcon, TrashIcon},
-        data(){
-            return {
-                applicationRows: [],
-                FORM_TYPES,
-                ROW_OPTION_FORM_TYPE
-            }
-        },
+        name: 'ApplicationForm',
+        components: { ApplicationFormRowOptions, PlusIcon, TrashIcon },
         props: {
             rows: Array,
+            // Every field type: { value, label, hasOptions }
+            types: Array,
         },
-        methods:{
-            addRow(){
-                this.applicationRows.push({
-                    'key' : nextKey++,
-                    'name' : "",
-                    'type' : FORM_TYPE_TEXT,
-                    'required' : false,
-                    'id' : undefined
-                });
+        data() {
+            // A stable key per row, so removing a row doesn't hand its options to the next row
+            const rows = (this.rows ?? []).map(row => ({ ...structuredClone(row), key: nextKey++ }));
+            return { applicationRows: rows };
+        },
+        mounted() {
+            if (this.applicationRows.length === 0) {
+                this.addRow();
+            }
+        },
+        methods: {
+            addRow() {
+                this.applicationRows.push({ key: nextKey++, name: '', type: this.types[0].value, required: false, id: undefined });
             },
-            async deleteRow(index){
+            async deleteRow(index) {
                 const row = this.applicationRows[index];
-                // A saved question takes its answers with it when the form is saved.
+                // A saved question takes its answers with it when the form is saved
                 if (row.id !== undefined && !await confirmDialog({
                     title: 'Remove question',
                     message: `Remove the question "${row.name}"? Its answers are deleted when you save the form.`,
@@ -98,30 +96,11 @@
                 })) {
                     return;
                 }
-                this.applicationRows.splice(this.applicationRows.indexOf(row), 1);
+                this.applicationRows.splice(index, 1);
             },
-            showRowOptions(row) {
-                return ROW_OPTION_FORM_TYPE.includes(row.type);
-            }
+            hasOptions(row) {
+                return this.types.find(type => type.value === row.type)?.hasOptions;
+            },
         },
-        mounted(){
-            if(undefined === this.rows || this.rows.length === 0){
-                this.addRow();
-            } else {
-                // A stable key per row, so removing a row doesn't hand its options to the next row.
-                this.applicationRows = JSON.parse(JSON.stringify(this.rows)).map(row => ({...row, key: nextKey++}));
-            }
-        }
-    }
+    };
 </script>
-
-<style scoped>
-    .application-form-row {
-        margin-bottom: 10px;
-        padding: 5px;
-        border-bottom: 1px solid #dee2e6;
-    }
-    .application-form-row:last-child {
-        border-bottom: 0;
-    }
-</style>
