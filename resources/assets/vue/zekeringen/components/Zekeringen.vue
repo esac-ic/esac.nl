@@ -1,7 +1,7 @@
 <template>
     <section class="py-3">
         <div class="container">
-            <Zekering v-for="zekering in paginatedZekeringen" :key="zekering.id" :zekering="zekering" @changed="loadZekeringen"/>
+            <Zekering v-for="zekering in paginatedZekeringen" :key="zekering.id" :zekering="zekering" :can-manage="canManage" @changed="loadZekeringen"/>
 
             <nav aria-label="Zekeringen pagination" v-if="totalPages > 1">
                 <ul class="pagination justify-content-center flex-wrap">
@@ -38,6 +38,9 @@
     export default {
         name: "Zekeringen",
         components: {Zekering},
+        props: {
+            canManage: Boolean,
+        },
         data() {
             return {
                 zekeringen: [],

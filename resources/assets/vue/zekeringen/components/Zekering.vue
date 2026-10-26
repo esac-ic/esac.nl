@@ -6,11 +6,11 @@
                     <h5 class="card-title text-muted">#{{zekering.id}}</h5>
                 </div>
                 <div class="col-auto">
-                    <button v-on:click="togleForm" class="btn btn-outline-primary" v-if="canAddSubzekering">
+                    <button v-on:click="togleForm" class="btn btn-outline-primary" v-if="zekering.children.length < 4">
                         <span class="ion-plus" aria-hidden="true"></span>
                         Sub-zekering
                     </button>
-                    <button v-on:click="deleteZekering" class="btn btn-danger" v-if="canDelete">
+                    <button v-on:click="deleteZekering" class="btn btn-danger" v-if="canManage">
                         <span class="ion-trash-a" aria-hidden="true"></span>
                     </button>
                 </div>
@@ -43,13 +43,12 @@
             return {
                 showForm: false,
                 subZekering: "",
-                canDelete: false,
-                canAddSubzekering: false
             }
         },
-        props: [
-            'zekering'
-        ],
+        props: {
+            zekering: Object,
+            canManage: Boolean,
+        },
         methods: {
             async deleteZekering(){
                 if (await window.confirmDialog({title: 'Remove zekering', message: 'Remove this zekering?', button: 'Remove'}))
@@ -71,10 +70,6 @@
                 this.showForm = false;
                 this.$emit('changed');
             }
-        },
-        mounted(){
-            this.canAddSubzekering = this.zekering.children.length < 4;
-            this.canDelete = ADMIN === "1";
         }
     }
 </script>

@@ -1,11 +1,11 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="container intro-container" id="app">
+<div class="container intro-container">
     <x-validation-errors />
     {{ html()->form('POST', $action)->open() }}
         <x-card :title="$registrationForm->name">
-            <registration-form rows="{{ json_encode($fields) }}"></registration-form>
+            <div id="app"><registration-form rows="{{ json_encode($fields) }}"></registration-form></div>
         </x-card>
 
         <div class="my-4">

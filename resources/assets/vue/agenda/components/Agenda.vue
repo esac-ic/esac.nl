@@ -49,6 +49,10 @@ import AgendaPagination from './AgendaPagination.vue';
             AgendaItem,
             AgendaPagination,
         },
+        props: {
+            // The events page's intro text, as HTML
+            description: String,
+        },
         computed: {
             ...mapState(useAgendaStore, ['agendaItems'])
         },
@@ -66,7 +70,6 @@ import AgendaPagination from './AgendaPagination.vue';
         },
         data() {
             return {
-                description: window.DESCRIPTION,
                 loaded: false,
             }
         }
