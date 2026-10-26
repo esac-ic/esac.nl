@@ -4,6 +4,8 @@ namespace App\Http\Requests\Concerns;
 
 use App\Actions\Fortify\PasswordValidationRules;
 use App\Settings\SiteSettings;
+use Closure;
+use Illuminate\Support\Str;
 use Illuminate\Validation\Rule;
 use Symfony\Component\Intl\Countries;
 
@@ -19,7 +21,12 @@ trait ValidatesMemberDetails
                 'email',
                 'max:255',
                 Rule::unique('users')->ignore($ignoreUserId),
-                'doesnt_end_with:'.collect(app(SiteSettings::class)->blocked_email_domains)->map(fn (string $domain) => "@$domain")->implode(','),
+                function (string $attribute, string $value, Closure $fail) {
+                    $domain = Str::lower(Str::afterLast($value, '@'));
+                    if (collect(app(SiteSettings::class)->blocked_email_domains)->contains(fn (string $blocked) => Str::lower($blocked) === $domain)) {
+                        $fail('validation.custom.email.doesnt_end_with')->translate(['values' => "@$domain"]);
+                    }
+                },
             ],
             'first_name' => ['required', 'max:255'],
             'preposition' => ['nullable', 'max:255'],

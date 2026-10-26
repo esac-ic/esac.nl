@@ -7,6 +7,7 @@ use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\Http;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\Test;
 use Tests\TestCase;
 
@@ -67,12 +68,18 @@ class SignUpTest extends TestCase
         Http::assertSent(fn ($request) => $request['response'] === 'invalid');
     }
 
+    public static function blockedEmails(): array
+    {
+        return ['lowercase' => ['student@student.tue.nl'], 'uppercase' => ['student@STUDENT.TUE.NL']];
+    }
+
     #[Test]
-    public function a_sign_up_on_a_blocked_email_domain_is_rejected()
+    #[DataProvider('blockedEmails')]
+    public function a_sign_up_on_a_blocked_email_domain_is_rejected(string $email)
     {
         Http::fake(['www.google.com/recaptcha/*' => Http::response(['success' => true])]);
 
-        $this->post(route('sign-up.store'), ['email' => 'student@student.tue.nl'])
+        $this->post(route('sign-up.store'), ['email' => $email])
             ->assertInvalid(['email' => 'Email addresses ending in @student.tue.nl']);
     }
 }
