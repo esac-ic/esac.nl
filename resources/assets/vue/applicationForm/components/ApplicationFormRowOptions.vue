@@ -8,7 +8,7 @@
                 </span>
             </h3>
         </div>
-        <div v-for="(row, index) in optionRows" :key="index" class="row" style="margin-bottom: 5px">
+        <div v-for="(row, index) in optionRows" :key="row.key" class="row" style="margin-bottom: 5px">
             <div class="col-md-4">
                 <label>Name</label>
                 <input
@@ -40,6 +40,8 @@
 </template>
 
 <script>
+    let nextKey = 0;
+
     export default {
         name: "ApplicationFormRowOptions",
         props: ['applicationFormIndex', 'rows'],
@@ -51,6 +53,7 @@
         methods: {
             addRow(){
                 this.optionRows.push({
+                    'key' : nextKey++,
                     'name' : "",
                     'value': "",
                 })
@@ -63,7 +66,7 @@
             if(undefined === this.rows || this.rows.length === 0){
                 this.addRow();
             } else {
-                this.optionRows = JSON.parse(JSON.stringify(this.rows));
+                this.optionRows = JSON.parse(JSON.stringify(this.rows)).map(row => ({...row, key: nextKey++}));
             }
         }
     }

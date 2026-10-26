@@ -10,6 +10,7 @@ use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Routing\Controllers\HasMiddleware;
 use Illuminate\Routing\Controllers\Middleware;
+use Illuminate\Support\Facades\DB;
 
 class ApplicationFormController extends Controller implements HasMiddleware
 {
@@ -43,7 +44,7 @@ class ApplicationFormController extends Controller implements HasMiddleware
 
     public function store(ApplicationFormStoreRequest $request): RedirectResponse
     {
-        ApplicationForm::create($request->all())->syncRows($request->input('rows', []));
+        DB::transaction(fn () => ApplicationForm::create($request->all())->syncRows($request->input('rows', [])));
 
         return to_route('beheer.applicationForms.index')->with('message', 'Application form added');
     }
@@ -68,8 +69,10 @@ class ApplicationFormController extends Controller implements HasMiddleware
 
     public function update(ApplicationFormStoreRequest $request, ApplicationForm $applicationForm): RedirectResponse
     {
-        $applicationForm->update($request->all());
-        $applicationForm->syncRows($request->input('rows', []));
+        DB::transaction(function () use ($request, $applicationForm) {
+            $applicationForm->update($request->all());
+            $applicationForm->syncRows($request->input('rows', []));
+        });
 
         return to_route('beheer.applicationForms.index')->with('message', 'Application form edited');
     }
