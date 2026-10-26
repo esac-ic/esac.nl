@@ -16,13 +16,13 @@
                     <div class="col-auto text-muted">
                         <UserGroupIcon class="icon" aria-hidden="true" /> {{ event.registrationCount }}
                     </div>
-                    <div v-if="event.canRegister" class="col-auto">
-                        <form v-if="event.currentUserSignedUp" method="POST" :action="event.registrationUrl" data-confirm-title="Unregister" :data-confirm="'Unregister from ' + event.title + '?'" data-confirm-button="Unregister">
+                    <div class="col-auto">
+                        <form v-if="event.currentUserSignedUp && event.registrationOpen" method="POST" :action="event.registrationUrl" data-confirm-title="Unregister" :data-confirm="'Unregister from ' + event.title + '?'" data-confirm-button="Unregister">
                             <input type="hidden" name="_method" value="DELETE">
                             <input type="hidden" name="_token" :value="csrfToken">
                             <button type="submit" class="btn btn-outline-danger">Unregister</button>
                         </form>
-                        <a v-else class="btn btn-outline-primary" :href="event.registrationUrl">Register now</a>
+                        <a v-else-if="!event.currentUserSignedUp && event.canRegister" class="btn btn-outline-primary" :href="event.registrationUrl">Register now</a>
                     </div>
                 </div>
             </div>

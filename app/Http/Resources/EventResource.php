@@ -22,7 +22,8 @@ class EventResource extends JsonResource
             'startDate' => $this->start_date->format('d M'),
             'text' => $this->short_description,
             'hasRegistration' => $this->registration_form_id !== null,
-            'canRegister' => $this->isRegistrationOpen(),
+            'registrationOpen' => $this->isRegistrationOpen(),
+            'canRegister' => $this->acceptsRegistrations(),
             // Counted and checked by the events API's query.
             'registrationCount' => $this->registration_form_id ? $this->registrations_count : 0,
             'currentUserSignedUp' => $this->registration_form_id && $this->registrations->isNotEmpty(),

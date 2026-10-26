@@ -42,7 +42,7 @@
                                                     @method('DELETE')
                                                     <button type="submit" class="btn btn-outline-danger">Unregister</button>
                                                 </form>
-                                            @else
+                                            @elseif($event->acceptsRegistrations())
                                                 <a class="btn btn-outline-primary" href="{{ route('events.registration.create', $event) }}">Register now</a>
                                             @endif
                                         @else

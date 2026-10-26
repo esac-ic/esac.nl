@@ -67,7 +67,7 @@
                                         <a class="btn btn-outline-primary" href="{{ route('events.registration.create', $event) }}">Log in to register</a>
                                     @endif
                                 @else
-                                    @if($event->isRegistrationOpen())
+                                    @if($event->acceptsRegistrations())
                                         <a class="btn btn-outline-primary" href="{{ route('events.registration.create', $event) }}">Register now</a>
                                     @else
                                         Registration not possible

@@ -82,7 +82,7 @@ class SiteController extends Controller
             'newsItems' => NewsItem::query()->latest('id')->take(3)->get(),
             'content' => Page::bodyFor(PageSlug::Home),
             'pageTitle' => 'Home',
-            'events' => Event::query()->upcoming()->withCount('registrations')->take(4)->get(),
+            'events' => Event::query()->upcoming()->with('registrationForm')->withCount('registrations')->take(4)->get(),
         ]);
     }
 
