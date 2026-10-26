@@ -47,6 +47,12 @@ class AccountTest extends TestCase
     }
 
     #[Test]
+    public function a_member_sees_their_account()
+    {
+        $this->actingAs($this->member)->get('account')->assertOk()->assertSee('initial@esac.nl');
+    }
+
+    #[Test]
     public function a_member_can_update_their_own_details()
     {
         $this->actingAs($this->member)->patch(route('account.update'), self::DETAILS)
