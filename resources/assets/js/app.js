@@ -23,7 +23,7 @@ window.summernoteSettings = {
 };
 
 function uploadFile (file, summernote) {
-    data = new FormData();
+    const data = new FormData();
     data.append('image', file);
 
     axios
