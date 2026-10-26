@@ -34,12 +34,11 @@
 <script>
     import zekeringApi from '../api/zekering';
     import subZekering from './SubZekering.vue';
-    import EventBus from '../event-bus';
-    import * as constants from "../constants";
 
     export default {
         name: "Zekering",
         components: {subZekering},
+        emits: ['changed'],
         data(){
             return {
                 showForm: false,
@@ -58,8 +57,8 @@
                     zekeringApi.deleteZekering(this.zekering.id, this.zekeringDeleted);
                 }
             },
-            zekeringDeleted(response) {
-                EventBus.emit(constants.EVENT_RELOAD_ZEKERINGEN);
+            zekeringDeleted() {
+                this.$emit('changed');
             },
             togleForm(){
                 this.showForm = !this.showForm;
@@ -70,7 +69,7 @@
             subZekeringAdded() {
                 this.subZekering = "";
                 this.showForm = false;
-                EventBus.emit(constants.EVENT_RELOAD_ZEKERINGEN);
+                this.$emit('changed');
             }
         },
         mounted(){

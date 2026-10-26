@@ -1,7 +1,7 @@
 <template>
     <section class="py-3">
         <div class="container">
-            <Zekering v-for="zekering in paginatedZekeringen" :key="zekering.id" :zekering="zekering"/>
+            <Zekering v-for="zekering in paginatedZekeringen" :key="zekering.id" :zekering="zekering" @changed="loadZekeringen"/>
 
             <nav aria-label="Zekeringen pagination" v-if="totalPages > 1">
                 <ul class="pagination justify-content-center flex-wrap">
@@ -29,8 +29,6 @@
 <script>
     import zekeringApi from '../api/zekering';
     import Zekering from './Zekering.vue';
-    import EventBus from '../event-bus';
-    import * as constants from "../constants";
 
     const PER_PAGE = 10;
     // Amount of pages shown on each side of the current page
@@ -101,7 +99,6 @@
         },
         mounted(){
             this.loadZekeringen();
-            EventBus.on(constants.EVENT_RELOAD_ZEKERINGEN, this.loadZekeringen);
         }
     }
 </script>
