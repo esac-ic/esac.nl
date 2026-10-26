@@ -37,7 +37,7 @@ services:
       mailman-setup:
         condition: service_completed_successfully
 
-  # Rebuilds the CSS and JS on every change
+  # Vite dev server: CSS changes apply live, Blade/JS changes reload the page
   assets:
     image: esac-app-dev
     build:
@@ -48,11 +48,16 @@ services:
       - .:/app
       # Its own Linux packages, so they don't clash with a node_modules installed on the host
       - node-modules:/app/node_modules
+    ports:
+      - "${VITE_PORT:-5173}:5173"
+    environment:
+      VITE_PORT: ${VITE_PORT:-5173}
+      VITE_HOST: ${VITE_HOST:-localhost}
     entrypoint: ["sh", "-c"]
     command:
       - |
         [ package-lock.json -ot node_modules/.package-lock.json ] || npm ci --no-audit --no-fund
-        exec npm run watch
+        exec node_modules/.bin/vite
     # The image's healthcheck probes FrankenPHP, which doesn't run here
     healthcheck:
       disable: true

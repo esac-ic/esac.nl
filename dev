@@ -3,6 +3,8 @@
 # container, so `./dev composer require foo/bar`, `./dev npm install foo` and `./dev bash` work too.
 set -e
 cd "$(dirname "$0")"
+# doesn't recreate everything all the time
+export BUILDX_NO_DEFAULT_ATTESTATIONS=1
 
 case "$1" in
     up)    docker compose up --wait --build ;;

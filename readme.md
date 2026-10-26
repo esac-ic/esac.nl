@@ -41,11 +41,13 @@ WSL can store files in two places:
 
 Stop it with `./dev down` and start it again with `./dev up`. Outgoing mail goes to mailpit (http://localhost:8025).
 
-PHP and Blade changes show up on the next page load, and the `assets` container rebuilds the CSS and JS on every change (`./dev logs assets`).
+PHP changes show up on the next page load. The `assets` container runs the Vite dev server: CSS changes apply without a reload, and Blade and JS changes reload the page (`./dev logs assets`).
 
 `./dev` is a shortcut for the common commands: `./dev art migrate`, `./dev composer require foo/bar`, `./dev npm install foo`, `./dev mysql`, `./dev logs` and `./dev bash`. Run `./dev` to see them all.
 
 For step debugging with Xdebug, set `XDEBUG_MODE=debug` in `.env` and run `./dev up`. In your IDE, listen on port 9003 and map `/app` to the project folder.
+
+To view on other devices, set `VITE_HOST` in `.env` to your computer's LAN IP (e.g. `192.168.1.10`), run `docker compose up -d assets` and browse to `http://<that IP>:8000`. Without it, the page loads its CSS and JS from `localhost`, which only works on your own computer.
 
 ### Running tests
 Tests run against their own `esac_testing` database
