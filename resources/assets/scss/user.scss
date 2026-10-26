@@ -62,6 +62,12 @@
 	fill:#fff
 }
 
+// Card photos share one shape, so a tall photo doesn't stretch its card
+.card-img-top {
+	aspect-ratio: 3 / 2;
+	object-fit: cover;
+}
+
 // Heroicons, sized to the text around them
 .icon {
 	width: 1.25em;
