@@ -4,7 +4,7 @@
             <div class="d-flex justify-content-between align-items-center mb-3">
                 <h5 class="card-title text-muted mb-0">#{{ zekering.id }}</h5>
                 <div>
-                    <button v-if="zekering.children.length < 4" type="button" class="btn btn-outline-primary" @click="replying = !replying">
+                    <button v-if="zekering.can_reply" type="button" class="btn btn-outline-primary" @click="replying = !replying">
                         <PlusIcon class="icon" aria-hidden="true" /> Sub-zekering
                     </button>
                     <button v-if="canManage" type="button" class="btn btn-danger ml-2" aria-label="Remove zekering" @click="remove">
@@ -44,7 +44,7 @@
         },
         methods: {
             async reply() {
-                await request('POST', '/api/subzekering', { text: this.text, parent_id: this.zekering.id });
+                await request('POST', '/api/zekeringen', { text: this.text, parent_id: this.zekering.id });
                 this.text = '';
                 this.replying = false;
                 this.$emit('changed');

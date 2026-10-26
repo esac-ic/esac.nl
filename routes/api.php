@@ -8,6 +8,6 @@ Route::get('events', [EventController::class, 'index'])->name('events.index');
 
 Route::middleware('auth')->controller(ZekeringController::class)->group(function () {
     Route::get('zekeringen', 'index')->name('zekeringen.index');
-    Route::post('subzekering', 'storeChild')->name('zekeringen.children.store');
+    Route::post('zekeringen', 'store')->name('zekeringen.store');
     Route::delete('zekeringen/{zekering}', 'destroy')->name('zekeringen.destroy')->can('manage-zekeringen');
 });

@@ -16,6 +16,8 @@ class Zekering extends Model
 {
     use HasFactory, SoftDeletes;
 
+    public const int MAX_CHILDREN = 4;
+
     /**
      * @return HasMany<Zekering, $this>
      */

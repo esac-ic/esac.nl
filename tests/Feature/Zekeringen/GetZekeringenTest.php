@@ -20,10 +20,12 @@ class GetZekeringenTest extends TestCase
 
         $this->actingAs(User::factory()->create())->get(route('api.zekeringen.index'))
             ->assertOk()
-            ->assertJsonCount(2, 'zekeringen')
-            ->assertJsonPath('zekeringen.0.id', $other->id)
-            ->assertJsonPath('zekeringen.0.children', [])
-            ->assertJsonPath('zekeringen.1.id', $zekering->id)
-            ->assertJsonPath('zekeringen.1.children.0.id', $zekering->children->sole()->id);
+            ->assertJsonCount(2, 'data')
+            ->assertJsonPath('data.0.id', $other->id)
+            ->assertJsonPath('data.0.children', [])
+            ->assertJsonPath('data.0.can_reply', true)
+            ->assertJsonPath('data.1.id', $zekering->id)
+            ->assertJsonPath('data.1.children.0.id', $zekering->children->sole()->id)
+            ->assertJsonPath('meta.last_page', 1);
     }
 }

@@ -1,12 +1,12 @@
 <template>
     <section class="py-3">
         <div class="container">
-            <Zekering v-for="zekering in shown" :key="zekering.id" :zekering="zekering" :can-manage="canManage" @changed="load" />
+            <Zekering v-for="zekering in zekeringen" :key="zekering.id" :zekering="zekering" :can-manage="canManage" @changed="load(page)" />
 
             <nav v-if="pages > 1" class="d-flex justify-content-center align-items-center" aria-label="Zekeringen pages">
-                <button type="button" class="btn btn-outline-primary" :disabled="page === 1" @click="page--">Newer</button>
+                <button type="button" class="btn btn-outline-primary" :disabled="page === 1" @click="load(page - 1)">Newer</button>
                 <span class="mx-3 text-muted">Page {{ page }} of {{ pages }}</span>
-                <button type="button" class="btn btn-outline-primary" :disabled="page === pages" @click="page++">Older</button>
+                <button type="button" class="btn btn-outline-primary" :disabled="page === pages" @click="load(page + 1)">Older</button>
             </nav>
         </div>
     </section>
@@ -16,8 +16,6 @@
     import { request } from '../../../js/http';
     import Zekering from './Zekering.vue';
 
-    const PER_PAGE = 10;
-
     export default {
         name: 'Zekeringen',
         components: { Zekering },
@@ -25,24 +23,21 @@
             canManage: Boolean,
         },
         data() {
-            return { zekeringen: [], page: 1 };
-        },
-        computed: {
-            pages() {
-                return Math.ceil(this.zekeringen.length / PER_PAGE);
-            },
-            shown() {
-                return this.zekeringen.slice((this.page - 1) * PER_PAGE, this.page * PER_PAGE);
-            },
+            return { zekeringen: [], page: 1, pages: 0 };
         },
         mounted() {
-            this.load();
+            this.load(1);
         },
         methods: {
-            async load() {
-                this.zekeringen = (await request('GET', '/api/zekeringen')).zekeringen;
-                // Stay on this page after a change, unless it no longer exists
-                this.page = Math.max(1, Math.min(this.page, this.pages));
+            async load(page) {
+                const result = await request('GET', '/api/zekeringen?' + new URLSearchParams({ page }));
+                // A removal can empty the last page
+                if (result.data.length === 0 && page > 1) {
+                    return this.load(result.meta.last_page);
+                }
+                this.zekeringen = result.data;
+                this.page = result.meta.current_page;
+                this.pages = result.meta.last_page;
             },
         },
     };

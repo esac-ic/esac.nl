@@ -6,18 +6,17 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\ZekeringRequest;
 use App\Http\Resources\ZekeringResource;
 use App\Models\Zekering;
+use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 use Illuminate\Http\Response;
 
 class ZekeringController extends Controller
 {
-    public function index(): array
+    public function index(): AnonymousResourceCollection
     {
-        $zekeringen = Zekering::query()->whereNull('parent_id')->latest('id')->with('children')->get();
-
-        return ['zekeringen' => ZekeringResource::collection($zekeringen)];
+        return ZekeringResource::collection(Zekering::query()->whereNull('parent_id')->latest('id')->with('children')->paginate(10));
     }
 
-    public function storeChild(ZekeringRequest $request): ZekeringResource
+    public function store(ZekeringRequest $request): ZekeringResource
     {
         return new ZekeringResource($request->user()->zekeringen()->create($request->validated()));
     }
