@@ -48,6 +48,6 @@ return Application::configure(basePath: dirname(__DIR__))
             }
 
             // A failing page would redirect back to itself, so only actions go back.
-            return $request->isMethod('GET') ? null : back()->withInput()->with('error', $message);
+            return $request->isMethod('GET') ? null : back()->withInput($request->except('password', 'password_confirmation'))->with('error', $message);
         });
     })->create();
