@@ -8,9 +8,6 @@ use App\Http\Requests\Concerns\ValidatesMemberDetails;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 
-/**
- * An administrator creating or updating a member.
- */
 class MemberRequest extends FormRequest
 {
     use ValidatesMemberDetails;

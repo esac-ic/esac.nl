@@ -10,9 +10,6 @@ use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 
-/**
- * A member registering for an event, or cancelling their registration.
- */
 class RegistrationController extends Controller
 {
     public function create(Request $request, Event $event): View|RedirectResponse

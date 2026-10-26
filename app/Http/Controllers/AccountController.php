@@ -8,9 +8,6 @@ use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 
-/**
- * The logged-in member's own account.
- */
 class AccountController extends Controller
 {
     public function show(Request $request): View

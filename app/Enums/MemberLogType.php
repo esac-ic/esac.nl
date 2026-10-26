@@ -2,9 +2,6 @@
 
 namespace App\Enums;
 
-/**
- * The kinds of member log entry.
- */
 enum MemberLogType: string
 {
     case MemberSignedUp = 'member_signed_up';

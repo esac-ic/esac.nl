@@ -39,8 +39,6 @@ enum MemberType: string
     }
 
     /**
-     * The labels by value, for a select.
-     *
      * @return array<string, string>
      */
     public static function options(): array

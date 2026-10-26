@@ -121,9 +121,6 @@ class User extends Authenticatable
         return $user;
     }
 
-    /**
-     * Updates the user from the member form's data.
-     */
     public function updateFromForm(array $data): void
     {
         $previousType = $this->member_type;
@@ -194,9 +191,6 @@ class User extends Authenticatable
         return Attribute::get(fn (): string => implode(' ', array_filter([$this->first_name, $this->preposition, $this->last_name])));
     }
 
-    /**
-     * The street and house number.
-     */
     protected function address(): Attribute
     {
         return Attribute::get(fn (): string => "{$this->street} {$this->house_number}");

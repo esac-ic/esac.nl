@@ -16,9 +16,6 @@ use Illuminate\Routing\Controllers\Middleware;
 use Illuminate\Support\Str;
 use Symfony\Component\HttpFoundation\StreamedResponse;
 
-/**
- * The registrations of an event, managed by the event administrators.
- */
 class EventRegistrationController extends Controller implements HasMiddleware
 {
     public static function middleware(): array

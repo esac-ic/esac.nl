@@ -11,9 +11,6 @@ use Eluceo\iCal\Domain\ValueObject\UniqueIdentifier;
 use Eluceo\iCal\Presentation\Factory\CalendarFactory;
 use Illuminate\Http\Response;
 
-/**
- * The events as an iCal feed that calendar apps subscribe to.
- */
 class EventFeedController extends Controller
 {
     public function __invoke(): Response

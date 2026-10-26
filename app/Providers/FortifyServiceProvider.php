@@ -12,9 +12,6 @@ use Laravel\Fortify\Fortify;
 
 class FortifyServiceProvider extends ServiceProvider
 {
-    /**
-     * Bootstrap any application services.
-     */
     public function boot(): void
     {
         Fortify::resetUserPasswordsUsing(ResetUserPassword::class);

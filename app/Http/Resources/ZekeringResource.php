@@ -7,8 +7,6 @@ use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 /**
- * A zekering as the zekeringen page's JavaScript reads it.
- *
  * @mixin Zekering
  */
 class ZekeringResource extends JsonResource

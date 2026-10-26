@@ -2,9 +2,6 @@
 
 namespace App\Enums;
 
-/**
- * The types of field on a registration form.
- */
 enum FormFieldType: string
 {
     case Text = 'text';
