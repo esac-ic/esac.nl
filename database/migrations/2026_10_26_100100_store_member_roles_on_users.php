@@ -25,7 +25,10 @@ return new class extends Migration
             $table->json('roles')->default(new Expression('(JSON_ARRAY())'))->after('member_type');
         });
 
-        DB::table('role_user')->whereIn('role_id', array_keys(self::ROLES))->orderBy('role_id')->get()->groupBy('user_id')
+        // A deleted role grants nothing, even when its assignments were left behind.
+        $activeRoleIds = DB::table('roles')->whereNull('deleted_at')->whereIn('id', array_keys(self::ROLES))->pluck('id');
+
+        DB::table('role_user')->whereIn('role_id', $activeRoleIds)->orderBy('role_id')->get()->groupBy('user_id')
             ->each(fn ($rows, $userId) => DB::table('users')->where('id', $userId)->update([
                 'roles' => json_encode($rows->map(fn (object $row) => self::ROLES[$row->role_id])->values()),
             ]));
