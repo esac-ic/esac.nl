@@ -14,7 +14,7 @@
             <div v-if="agenda.formId" class="card-footer bg-white p-3">
                 <div class="row justify-content-between align-items-center">
                     <div class="col-auto text-muted">
-                        <span class="ion-person-stalker"></span> {{agenda.amountOfPeopleRegisterd}}
+                        <UserGroupIcon class="icon" aria-hidden="true" /> {{agenda.amountOfPeopleRegisterd}}
                     </div>
                     <div v-show="agenda.canRegister" class="col-auto">
                         <form v-if="checkIfCurrentUserSignedUp()" method="POST" :action="agenda.registrationUrl" data-confirm-title="Unregister" :data-confirm="'Unregister from ' + agenda.title + '?'" data-confirm-button="Unregister">
@@ -32,8 +32,11 @@
 
 <script>
     
+    import { UserGroupIcon } from '@heroicons/vue/24/outline';
+    
     export default {
         name: "AgendaItem",
+        components: {UserGroupIcon},
         props: [
             'agenda',
         ],

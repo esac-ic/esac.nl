@@ -14,9 +14,9 @@
                     <br>KvK: 40236076
                 </p>
                 <p class="font-size-180">
-                    <span class="p-1"><a href="https://www.facebook.com/esac040" class="ion-social-facebook" aria-label="Facebook"></a></span>
-                    <span class="p-1"><a href="https://www.instagram.com/esac.nl/" class="ion-social-instagram" aria-label="Instagram"></a></span>
-                    <span class="p-1"><a href="https://www.youtube.com/channel/UCn6jb9BA10f-rbvinYCYlxA/" class="ion-social-youtube" aria-label="YouTube"></a></span>
+                    <span class="p-1"><a href="https://www.facebook.com/esac040" aria-label="Facebook"><x-brand-icon name="facebook" /></a></span>
+                    <span class="p-1"><a href="https://www.instagram.com/esac.nl/" aria-label="Instagram"><x-brand-icon name="instagram" /></a></span>
+                    <span class="p-1"><a href="https://www.youtube.com/channel/UCn6jb9BA10f-rbvinYCYlxA/" aria-label="YouTube"><x-brand-icon name="youtube" /></a></span>
                 </p>
             </div>
             <div class="col-12 col-md-9">

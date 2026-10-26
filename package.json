@@ -23,6 +23,7 @@
   },
   "dependencies": {
     "@fontsource/rubik": "^5.3.0",
+    "@heroicons/vue": "^2.2.0",
     "pinia": "^4.1.0",
     "vue": "^3.5.44"
   }

@@ -8,7 +8,7 @@
                 </a>
                 <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#site-menu"
                         aria-controls="site-menu" aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="ion-navicon h3 text-white"></span>
+                    <x-heroicon-o-bars-3 class="h3 text-white" />
                 </button>
                 
                 <div class="collapse navbar-collapse justify-content-between" id="site-menu">

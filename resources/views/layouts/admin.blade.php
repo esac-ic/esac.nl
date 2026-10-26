@@ -10,7 +10,7 @@
             <nav class="navbar navbar-expand-lg navbar-light bg-white border-right h-lg-100">
                 <span class="navbar-brand d-lg-none">@yield('title', 'Admin')</span>
                 <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#admin-menu" aria-controls="admin-menu" aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="ion-ios-arrow-down h4"></span>
+                    <x-heroicon-o-chevron-down class="h4" />
                 </button>
 
               <div class="collapse navbar-collapse align-self-start" id="admin-menu">

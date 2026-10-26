@@ -6,7 +6,7 @@
 
 @section('content')
     <x-page-header :title="$registrationForm->name" :back="route('admin.registration-forms.index')" back-label="Registration forms">
-        <x-button-link :href="route('admin.registration-forms.edit', $registrationForm)" icon="edit">Edit</x-button-link>
+        <x-button-link :href="route('admin.registration-forms.edit', $registrationForm)" icon="pencil-square">Edit</x-button-link>
         <x-delete-button :action="route('admin.registration-forms.destroy', $registrationForm)" title="Remove registration form" :confirm="'Remove the registration form '.$registrationForm->name.'?'" />
     </x-page-header>
     <x-card title="Fields" class="mt-4">

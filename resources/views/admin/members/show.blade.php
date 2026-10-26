@@ -14,13 +14,13 @@
         @if($user->isPendingMember())
             @can('manage-members')
                 {{ html()->form('PATCH', route('admin.pending-members.approve', $user))->data('confirm-title', 'Approve sign-up')->data('confirm', 'Approve '.$user->name.' as a member? They are added to the mail lists of their member type.')->data('confirm-button', 'Approve')->data('confirm-danger', 'false')->open() }}
-                <button type="submit" class="btn btn-success text-nowrap"><em class="ion-checkmark"></em> Approve as member</button>
+                <button type="submit" class="btn btn-success text-nowrap"><x-heroicon-o-check /> Approve as member</button>
                 {{ html()->form()->close() }}
                 <x-delete-button :action="route('admin.pending-members.destroy', $user)" title="Reject sign-up" :confirm="'Reject the sign-up of '.$user->name.'? Their details are deleted.'" button="Reject sign-up" />
             @endcan
         @else
             @can('manage-members')
-                <x-button-link :href="route('admin.members.edit', $user)" icon="edit">Edit</x-button-link>
+                <x-button-link :href="route('admin.members.edit', $user)" icon="pencil-square">Edit</x-button-link>
             @endcan
             @can('manage-certificates')
                 <x-button-link :href="route('admin.members.certificates.create', $user)" icon="plus">Add certificate</x-button-link>
@@ -28,11 +28,11 @@
             @can('manage-members')
                 @if($user->isActiveMember())
                     {{ html()->form('DELETE', route('admin.members.membership.destroy', $user))->class('page-actions-destructive')->data('confirm-title', 'End membership')->data('confirm', 'End the membership of '.$user->name.'? They are logged out everywhere and removed from the mail lists. You can restore it later.')->data('confirm-button', 'End membership')->open() }}
-                    <button type="submit" class="btn btn-outline-danger text-nowrap"><span class="ion-log-out" aria-hidden="true"></span> End membership</button>
+                    <button type="submit" class="btn btn-outline-danger text-nowrap"><x-heroicon-o-arrow-right-start-on-rectangle /> End membership</button>
                     {{ html()->form()->close() }}
                 @elseif($user->isFormerMember())
                     {{ html()->form('POST', route('admin.members.membership.store', $user))->data('confirm-title', 'Restore membership')->data('confirm', 'Restore the membership of '.$user->name.'? They can log in again and are added to the mail lists.')->data('confirm-button', 'Restore')->data('confirm-danger', 'false')->open() }}
-                        <button type="submit" class="btn btn-success text-nowrap"><em class="ion-refresh"></em> Restore membership</button>
+                        <button type="submit" class="btn btn-success text-nowrap"><x-heroicon-o-arrow-uturn-left /> Restore membership</button>
                     {{ html()->form()->close() }}
                 @endif
             @endcan
@@ -48,7 +48,7 @@
                             <td>{{ $certificate->abbreviation }}</td>
                             <td>
                                 <x-actions-menu :label="$certificate->name">
-                                    <x-actions-menu.item :href="route('admin.members.certificates.edit', [$user, $certificate])" icon="edit">Change certificate</x-actions-menu.item>
+                                    <x-actions-menu.item :href="route('admin.members.certificates.edit', [$user, $certificate])" icon="pencil-square">Change certificate</x-actions-menu.item>
                                     <x-actions-menu.delete :action="route('admin.members.certificates.destroy', [$user, $certificate])" title="Remove certificate" :confirm="'Remove '.$certificate->name.' from '.$user->name.'?'">Remove certificate</x-actions-menu.delete>
                                 </x-actions-menu>
                             </td>

@@ -15,7 +15,7 @@
     <div class="card-footer bg-white p-3">
         <div class="row justify-content-between">
             <div class="col-auto text-muted">
-                <span class="ion-person"></span> {{ $newsItem->author }}
+                <x-heroicon-o-user /> {{ $newsItem->author }}
             </div>
         </div>
     </div>

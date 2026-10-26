@@ -6,7 +6,7 @@
 
 @section('content')
     <x-page-header title="Event" :back="route('admin.events.index')" back-label="Events">
-        <x-button-link :href="route('admin.events.edit', $event)" icon="edit">Edit</x-button-link>
+        <x-button-link :href="route('admin.events.edit', $event)" icon="pencil-square">Edit</x-button-link>
         <x-delete-button :action="route('admin.events.destroy', $event)" title="Remove event" :confirm="'Remove '.$event->title.'?'.($event->registrations()->exists() ? ' Its '.$event->registrations()->count().' registrations are deleted too.' : '').' This can\'t be undone.'" />
     </x-page-header>
     <x-card title="General information" class="mt-4">

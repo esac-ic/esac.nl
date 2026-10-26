@@ -11,7 +11,7 @@ Mail lists
               data-confirm="Add every member to the mail lists of their member type? This also adds people back who unsubscribed from a list."
               data-confirm-button="Sync" data-confirm-danger="false">
             @csrf
-            <button title="Sync member mail lists" type="submit" class="btn btn-primary"><span class="ion-loop" aria-hidden="true"></span> Sync member mail lists</button>
+            <button title="Sync member mail lists" type="submit" class="btn btn-primary"><x-heroicon-o-arrow-path /> Sync member mail lists</button>
         </form>    
         <x-button-link :href="route('admin.mail-lists.create')" icon="plus">New mail list</x-button-link>
     </x-page-header>

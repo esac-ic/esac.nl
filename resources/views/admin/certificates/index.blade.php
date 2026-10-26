@@ -16,7 +16,7 @@ Certificates
                 <td>
                     <x-actions-menu :label="$certificate->name">
                         <x-actions-menu.item :href="route('admin.certificates.show', $certificate)" icon="eye">View</x-actions-menu.item>
-                        <x-actions-menu.item :href="route('admin.certificates.edit', $certificate)" icon="edit">Edit</x-actions-menu.item>
+                        <x-actions-menu.item :href="route('admin.certificates.edit', $certificate)" icon="pencil-square">Edit</x-actions-menu.item>
                     </x-actions-menu>
                 </td>
             </tr>

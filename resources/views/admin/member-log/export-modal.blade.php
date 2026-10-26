@@ -33,7 +33,7 @@
                     
                     <div class="form-row">
                         <div class="my-4 mx-auto">
-                            <button type="submit" class="btn btn-primary px-4"><i class="ion-android-download"></i> Export to excel</button>
+                            <button type="submit" class="btn btn-primary px-4"><x-heroicon-o-arrow-down-tray /> Export to excel</button>
                         </div>
                     </div>
                 </form>

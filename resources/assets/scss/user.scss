@@ -35,10 +35,6 @@
 	left: 0;
 }
 
-.font-size-100 {
-	font-size: 100%;
-}
-
 .column-count-lg-3 {
 	column-count: 1;
 	column-gap: $spacer * 3;
@@ -66,8 +62,11 @@
 	fill:#fff
 }
 
-.font-size-120 {
-	font-size: 120%;
+// Heroicons, sized to the text around them
+.icon {
+	width: 1.25em;
+	height: 1.25em;
+	vertical-align: -.25em;
 }
 
 .font-size-180 {

@@ -4,7 +4,7 @@
             <h5 class="d-flex justify-content-between align-items-center">
                 Options
                 <button type="button" class="btn btn-sm btn-outline-primary mb-2" v-on:click="addRow()">
-                    <i class="ion-plus" aria-hidden="true"></i> Add option
+                    <PlusIcon class="icon" aria-hidden="true" /> Add option
                 </button>
             </h5>
         </div>
@@ -29,7 +29,7 @@
             <div class="col-md-2 d-flex align-items-end">
                 <div class="form-group mb-0">
                     <button type="button" class="btn btn-outline-danger text-nowrap" v-on:click="deleteRow(index)">
-                        <i class="ion-trash-a" aria-hidden="true"></i> Remove
+                        <TrashIcon class="icon" aria-hidden="true" /> Remove
                     </button>
                 </div>
             </div>
@@ -39,10 +39,12 @@
 </template>
 
 <script>
+    import { PlusIcon, TrashIcon } from '@heroicons/vue/24/outline';
     let nextKey = 0;
 
     export default {
         name: "ApplicationFormRowOptions",
+        components: {PlusIcon, TrashIcon},
         props: ['applicationFormIndex', 'rows'],
         data() {
             return {

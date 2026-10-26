@@ -23,7 +23,7 @@
                     <div class="card-footer bg-white p-3">
                         <div class="row justify-content-between align-items-center">
                             <div class="col-auto text-muted">
-                                <span class="ion-person"></span> {{$newsItem->author}}
+                                <x-heroicon-o-user /> {{$newsItem->author}}
                             </div>
                             <div class="col-auto">
                                 <a class="btn btn-outline-primary" href="{{ route('news.show', $newsItem) }}">Read more</a>

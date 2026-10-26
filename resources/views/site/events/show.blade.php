@@ -10,7 +10,7 @@
                         <h3 class="card-title">{{$event->title}}</h3>
                         @php($sameDay = $event->start_date->isSameDay($event->end_date))
                         <p class="card-text mb-2">
-                            <span class="ion-calendar text-muted mr-1" aria-hidden="true"></span>
+                            <x-heroicon-o-calendar class="text-muted mr-1" />
                             {{ $event->start_date->format('D j M Y, H:i') }} –
                             {{ $event->end_date->format($sameDay ? 'H:i' : 'D j M Y, H:i') }}
                         </p>
@@ -24,7 +24,7 @@
                         <div class="row justify-content-between align-items-center">
                             <div class="col-auto text-muted">
                                 @if($event->registration_form_id != null)
-                                    <span class="ion-person-stalker"></span> {{ $event->registrations_count }}
+                                    <x-heroicon-o-user-group /> {{ $event->registrations_count }}
                                 @endif
                             </div>
                             <div class="col-auto">
@@ -76,7 +76,7 @@
                         @endif
                     </div>
                     <div class="card-footer bg-white p-3">
-                        <a class="btn btn-outline-primary" href="{{ route('events.index') }}"><span class="ion-android-arrow-back" aria-hidden="true"></span> Back to events</a>
+                        <a class="btn btn-outline-primary" href="{{ route('events.index') }}"><x-heroicon-o-arrow-left /> Back to events</a>
                     </div>
                 </div>
             </div>

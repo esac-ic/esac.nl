@@ -60,7 +60,7 @@
                     <div class="card-footer bg-white p-3">
                         <div class="row justify-content-between align-items-center">
                             <div class="col-auto text-muted">
-                                <span class="ion-person-stalker"></span> {{ $event->registrations_count }}
+                                <x-heroicon-o-user-group /> {{ $event->registrations_count }}
                             </div>
                             <div class="col-auto">
                                 @guest

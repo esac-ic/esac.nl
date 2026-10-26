@@ -17,7 +17,6 @@
         <meta name="msapplication-TileColor" content="#ffffff">
         <meta name="theme-color" content="#ffffff">
 
-        <link rel="stylesheet" type="text/css" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
         @stack('styles')
         @vite(['resources/assets/scss/theme.scss'])
 

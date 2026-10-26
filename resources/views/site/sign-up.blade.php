@@ -13,7 +13,7 @@
             <details class="accordion-item" name="sign-up-terms">
                 <summary>
                     <h5>Terms and Conditions</h5>
-                    <i class="h5 ion-chevron-right"></i>
+                    <x-heroicon-o-chevron-right class="h5" />
                 </summary>
                 <p>By signing this form, you subscribe to the ESAC up until termination of your membership. Without notice, your membership of the ESAC is continued annually. Termination of membership should happen before the 1st of January by sending a letter to the address mentioned above or by sending an email to secretaris@esac.nl.</p>
                 <p>The annual contribution will be taken from your bank account via direct debit. The amount of the contribution is determined by the general members’ assembly (GMA / ALV). If you subscribe on or after the 1st of August, you have to pay a reduced contribution (of which the amount is also determined by the GMA) for the rest of that calendar year.</p>
@@ -23,14 +23,14 @@
             <details class="accordion-item" name="sign-up-terms">
                 <summary>
                     <h5>Privacy Policy</h5>
-                    <i class="h5 ion-chevron-right"></i>
+                    <x-heroicon-o-chevron-right class="h5" />
                 </summary>
                 @include('includes.privacy-policy')
             </details>
             <details class="accordion-item" name="sign-up-terms">
                 <summary>
                     <h5>Agreement Direct Debit SEPA</h5>
-                    <i class="h5 ion-chevron-right"></i>
+                    <x-heroicon-o-chevron-right class="h5" />
                 </summary>
                 <p>
                 Collector: Eindhovense Studenten Alpen Club<br>

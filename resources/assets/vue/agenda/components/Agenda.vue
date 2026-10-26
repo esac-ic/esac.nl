@@ -6,7 +6,7 @@
                     <div class="card w-100">
                         <div class="card-body">
                         <button type="button" class="btn btn-outline-primary float-right" data-toggle="modal" data-target="#export-calendar-modal">
-                            <span class="ion-android-download" aria-hidden="true"></span> Export
+                            <ArrowDownTrayIcon class="icon" aria-hidden="true" /> Export
                         </button>
                         <h2 class="card-title">Events</h2>
                          <p class="card-text" v-html="description"></p>
@@ -36,6 +36,7 @@
 </template>
 
 <script>
+import { ArrowDownTrayIcon } from '@heroicons/vue/24/outline';
 import { mapActions, mapState } from 'pinia';
 import { useAgendaStore } from '../../store';
 import AgendaFilters from './AgendaFilters.vue';
@@ -48,6 +49,7 @@ import AgendaPagination from './AgendaPagination.vue';
             AgendaFilters,
             AgendaItem,
             AgendaPagination,
+            ArrowDownTrayIcon,
         },
         props: {
             // The events page's intro text, as HTML

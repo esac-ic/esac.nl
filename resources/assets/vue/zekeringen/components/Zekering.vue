@@ -7,11 +7,11 @@
                 </div>
                 <div class="col-auto">
                     <button v-on:click="togleForm" class="btn btn-outline-primary" v-if="zekering.children.length < 4">
-                        <span class="ion-plus" aria-hidden="true"></span>
+                        <PlusIcon class="icon" aria-hidden="true" />
                         Sub-zekering
                     </button>
-                    <button v-on:click="deleteZekering" class="btn btn-danger" v-if="canManage">
-                        <span class="ion-trash-a" aria-hidden="true"></span>
+                    <button v-on:click="deleteZekering" class="btn btn-danger ml-2" v-if="canManage" aria-label="Remove zekering">
+                        <TrashIcon class="icon" aria-hidden="true" />
                     </button>
                 </div>
             </div>
@@ -32,12 +32,13 @@
 </template>
 
 <script>
+    import { PlusIcon, TrashIcon } from '@heroicons/vue/24/outline';
     import zekeringApi from '../api/zekering';
     import subZekering from './SubZekering.vue';
 
     export default {
         name: "Zekering",
-        components: {subZekering},
+        components: {subZekering, PlusIcon, TrashIcon},
         emits: ['changed'],
         data(){
             return {
