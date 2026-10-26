@@ -118,7 +118,7 @@ class AgendaItemController extends Controller implements HasMiddleware
             $agendaItem->image_url = 'agendaItem/'.$name;
             $agendaItem->save();
             $img_path = Storage::disk('public')->path($agendaItem->image_url);
-            ImageManager::usingDriver(Driver::class)->decodePath($img_path)->cover(400, 300)->save($img_path);
+            ImageManager::usingDriver(Driver::class, decodeAnimation: false)->decodePath($img_path)->cover(400, 300)->save($img_path);
         }
     }
 }
