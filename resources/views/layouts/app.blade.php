@@ -5,7 +5,7 @@
 @endsection
 
 @section('main')
-<x-menu nav-class="position-fixed bg-dark" nav-id="scroll-nav" />
+<x-menu nav-class="position-fixed bg-dark" transparent-at-top />
 @include('includes.header')
 
 {{-- Floats under the menu, so it shows on every page layout --}}

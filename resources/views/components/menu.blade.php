@@ -1,6 +1,6 @@
-@props(['navClass', 'navId' => ''])
+@props(['navClass', 'transparentAtTop' => false])
 <div class="navbar-container">
-    <div id="{{ $navId }}" class="{{ $navClass }} navbar-dark">
+    <div class="{{ $navClass }} navbar-dark" @if ($transparentAtTop) data-transparent-at-top @endif>
         <div class="container">
             <nav class="navbar navbar-expand-lg">
                 <a class="navbar-brand" href="{{ route('home') }}">
@@ -76,19 +76,3 @@
         </div>
     </div>
 </div>
-
-@if ($navId)
-    @push('scripts')
-        <script type="module">
-            {
-                // On wide screens the menu is transparent over the header until the page scrolls.
-                const nav = document.getElementById(@json($navId));
-                const updateNav = () => nav.classList.toggle('bg-dark', window.innerWidth < 992 || window.scrollY > 15);
-
-                updateNav();
-                window.addEventListener('scroll', updateNav, {passive: true});
-                window.addEventListener('resize', updateNav);
-            }
-        </script>
-    @endpush
-@endif

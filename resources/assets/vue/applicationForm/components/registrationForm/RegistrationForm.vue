@@ -1,6 +1,6 @@
 <template>
     <div>
-        <div v-for="(row, index) in applicationFormRows" class="form-group" :key="index">
+        <div v-for="(row, index) in rows" class="form-group" :key="index">
             <label>{{getLabel(row)}}<span v-if="isRequired(row)">*</span></label>
             <component :is="getComponentName(row)" :row="row"></component>
         </div>
@@ -9,17 +9,16 @@
 </template>
 
 <script>
+    import RegistrationInputField from "./Elements/RegistrationInputField.vue";
+    import RegistrationRadioCheckboxField from "./Elements/RegistrationRadioCheckboxField.vue";
+    import RegistrationSelectField from "./Elements/RegistrationSelectField.vue";
+    import RegistrationTextAreaField from "./Elements/RegistrationTextAreaField.vue";
     import { FORM_TYPE_CHECK_BOX, FORM_TYPE_CHECK_BOXES, FORM_TYPE_NUMBER, FORM_TYPE_RADIO, FORM_TYPE_SELECT, FORM_TYPE_TEXT, FORM_TYPE_TEXT_BOX } from "../../constants";
 
     export default {
         name: "RegistrationForm",
-        props: [
-            'rows',
-        ],
-        data(){
-            return {
-                applicationFormRows: [],
-            }
+        props: {
+            rows: Array,
         },
         methods:{
             getComponentName(row) {
@@ -27,14 +26,14 @@
                     case FORM_TYPE_TEXT:
                     case FORM_TYPE_NUMBER:
                     case FORM_TYPE_CHECK_BOX:
-                        return "registration-input-field";
+                        return RegistrationInputField;
                     case FORM_TYPE_TEXT_BOX:
-                        return "registration-text-area-field";
+                        return RegistrationTextAreaField;
                     case FORM_TYPE_SELECT:
-                        return "registration-select-field";
+                        return RegistrationSelectField;
                     case FORM_TYPE_RADIO:
                     case FORM_TYPE_CHECK_BOXES:
-                        return "registration-radio-checkbox-field";
+                        return RegistrationRadioCheckboxField;
                 }
 
                 console.error(row.type + ' is not supported');
@@ -49,12 +48,9 @@
         computed: {
             hasMandatoryQuestions()
             {
-                return this.applicationFormRows.some(this.isRequired);
+                return this.rows.some(this.isRequired);
             },
         },
-        mounted(){
-            this.applicationFormRows = JSON.parse(this.rows);
-        }
     }
 </script>
 

@@ -13,10 +13,3 @@
     {{ $slot }}
     </tbody>
 </table>
-@if ($datatable)
-    @once
-        @push('scripts')
-            @vite(['resources/assets/js/vendor/datatables.js'])
-        @endpush
-    @endonce
-@endif

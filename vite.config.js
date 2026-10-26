@@ -12,19 +12,11 @@ export default defineConfig({
             input: [
                 'resources/assets/scss/theme.scss',
                 'resources/assets/js/app.js',
-                'resources/assets/js/vendor/jquery-bootstrap.js',
-                'resources/assets/js/vendor/datatables.js',
-                'resources/assets/js/vendor/summernote.js',
             ],
             refresh: true,
         }),
         vue(),
     ],
-    resolve: {
-        alias: [
-            { find: /^vue$/, replacement: 'vue/dist/vue.esm-bundler.js' },
-        ],
-    },
     server: {
         host: true,
         port: 5173,

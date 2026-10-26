@@ -1,8 +1,7 @@
 @extends('layouts.app')
 
 @section('content')
-{{-- Vue mounts the events list here --}}
-<div id="app"><agenda description="{{ $content }}"></agenda></div>
+<div data-vue="agenda" data-props="{{ json_encode(['description' => $content]) }}"></div>
 
 <div id="export-calendar-modal" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
     <div class="modal-dialog" role="document">

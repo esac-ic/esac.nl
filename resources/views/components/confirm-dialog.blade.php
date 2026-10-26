@@ -1,4 +1,4 @@
-{{-- The one confirmation dialog: forms with data-confirm open it, and scripts call window.confirmDialog(). --}}
+{{-- The one confirmation dialog: forms with data-confirm open it, and scripts call confirmDialog() from confirm-dialog.js. --}}
 <div class="modal fade" id="confirm-dialog" tabindex="-1" role="dialog" aria-labelledby="confirm-dialog-title" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered" role="document">
         <div class="modal-content">

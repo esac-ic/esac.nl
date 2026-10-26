@@ -1,9 +1,9 @@
-import axios from "axios";
+import http from "../../../js/http";
 import * as constants from "../constants";
 
 export default {
     getZekeringen(cb){
-        axios.get(constants.BASE_URL + "/zekeringen")
+        http.get(constants.BASE_URL + "/zekeringen")
             .then(response => {
                 // JSON responses are automatically parsed.
                 cb(response.data);
@@ -14,13 +14,13 @@ export default {
             });
     },
     deleteZekering(id, cb){
-        axios.delete(constants.BASE_URL + "/zekeringen/" + id)
+        http.delete(constants.BASE_URL + "/zekeringen/" + id)
             .then(response => {
                 cb(response);
             });
     },
     addSubZekering(zekering,parent_id,cb) {
-        axios.post(constants.BASE_URL + "/subzekering",{
+        http.post(constants.BASE_URL + "/subzekering",{
                 text : zekering,
                 parent_id : parent_id
             })

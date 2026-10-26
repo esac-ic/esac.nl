@@ -33,6 +33,7 @@
 
 <script>
     import { PlusIcon, TrashIcon } from '@heroicons/vue/24/outline';
+    import { confirmDialog } from '../../../js/confirm-dialog';
     import zekeringApi from '../api/zekering';
     import subZekering from './SubZekering.vue';
 
@@ -52,7 +53,7 @@
         },
         methods: {
             async deleteZekering(){
-                if (await window.confirmDialog({title: 'Remove zekering', message: 'Remove this zekering?', button: 'Remove'}))
+                if (await confirmDialog({title: 'Remove zekering', message: 'Remove this zekering?', button: 'Remove'}))
                 {
                     zekeringApi.deleteZekering(this.zekering.id, this.zekeringDeleted);
                 }

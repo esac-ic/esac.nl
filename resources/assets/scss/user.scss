@@ -13,7 +13,7 @@
   top: ($spacer * .7)
 }
 
-#scroll-nav {
+[data-transparent-at-top] {
 	transition: background 0.2s;
 }
 

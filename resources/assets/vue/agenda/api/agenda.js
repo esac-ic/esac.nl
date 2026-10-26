@@ -1,9 +1,9 @@
-import axios from "axios";
+import http from "../../../js/http";
 import * as constants from "../constants";
 
 export default {
     getCategories(cb){
-        axios.get(constants.BASE_URL + "/agendaCategories")
+        http.get(constants.BASE_URL + "/agendaCategories")
             .then(response => {
                 // JSON responses are automatically parsed.
                 cb(response.data);
@@ -23,7 +23,7 @@ export default {
         if(category !== ""){
             url += "&category=" + category;
         }
-        axios.get(url)
+        http.get(url)
             .then(response => {
                 // JSON responses are automatically parsed.
                 cb(response.data);

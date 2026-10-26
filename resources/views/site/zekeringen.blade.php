@@ -26,5 +26,5 @@
         </div>
     </div>
 </div>
-<div id="app"><zekeringen :can-manage="@js(auth()->user()->can('manage-zekeringen'))"></zekeringen></div>
+<div data-vue="zekeringen" data-props="{{ json_encode(['canManage' => auth()->user()->can('manage-zekeringen')]) }}"></div>
 @endsection

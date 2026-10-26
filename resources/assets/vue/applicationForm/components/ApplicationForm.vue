@@ -59,6 +59,7 @@
 
 <script>
     import { PlusIcon, TrashIcon } from '@heroicons/vue/24/outline';
+    import { confirmDialog } from '../../../js/confirm-dialog';
     import { FORM_TYPE_TEXT, FORM_TYPES, ROW_OPTION_FORM_TYPE } from '../constants';
     import ApplicationFormRowOptions from "./ApplicationFormRowOptions.vue";
 
@@ -74,7 +75,9 @@
                 ROW_OPTION_FORM_TYPE
             }
         },
-        props:['rows'],
+        props: {
+            rows: Array,
+        },
         methods:{
             addRow(){
                 this.applicationRows.push({
@@ -88,7 +91,7 @@
             async deleteRow(index){
                 const row = this.applicationRows[index];
                 // A saved question takes its answers with it when the form is saved.
-                if (row.id !== undefined && !await window.confirmDialog({
+                if (row.id !== undefined && !await confirmDialog({
                     title: 'Remove question',
                     message: `Remove the question "${row.name}"? Its answers are deleted when you save the form.`,
                     button: 'Remove',
