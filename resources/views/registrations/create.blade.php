@@ -5,7 +5,7 @@
     <x-validation-errors />
     {{ html()->form('POST', $action)->open() }}
         <x-card :title="$registrationForm->name">
-            <div data-vue="registration-form" data-props="{{ json_encode(['rows' => $fields]) }}"></div>
+            <div data-vue="registration-form" data-props="{{ json_encode(['rows' => $fields, 'old' => (object) session()->getOldInput()]) }}"></div>
         </x-card>
 
         <div class="my-4">

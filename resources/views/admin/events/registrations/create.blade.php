@@ -10,7 +10,7 @@
     {{ html()->form('POST', route('admin.events.registrations.store', $event))->open() }}
         <x-card :title="$registrationForm->name">
             <x-field name="user_id" label="Member" :options="$users" required />
-            <div data-vue="registration-form" data-props="{{ json_encode(['rows' => $fields]) }}"></div>
+            <div data-vue="registration-form" data-props="{{ json_encode(['rows' => $fields, 'old' => (object) session()->getOldInput()]) }}"></div>
         </x-card>
 
         <div class="my-4">

@@ -40,6 +40,7 @@
 
 <script>
     import { PlusIcon, TrashIcon } from '@heroicons/vue/24/outline';
+    import { toRaw } from 'vue';
 
     let nextKey = 0;
 
@@ -51,7 +52,7 @@
             rows: Array,
         },
         data() {
-            const options = (this.rows ?? []).map(option => ({ ...structuredClone(option), key: nextKey++ }));
+            const options = (this.rows ?? []).map(option => ({ ...structuredClone(toRaw(option)), key: nextKey++ }));
             return { optionRows: options };
         },
         mounted() {

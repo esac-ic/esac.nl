@@ -59,6 +59,7 @@
 
 <script>
     import { PlusIcon, TrashIcon } from '@heroicons/vue/24/outline';
+    import { toRaw } from 'vue';
     import { confirmDialog } from '../../../js/confirm-dialog';
     import ApplicationFormRowOptions from './ApplicationFormRowOptions.vue';
 
@@ -74,7 +75,7 @@
         },
         data() {
             // A stable key per row, so removing a row doesn't hand its options to the next row
-            const rows = (this.rows ?? []).map(row => ({ ...structuredClone(row), key: nextKey++ }));
+            const rows = (this.rows ?? []).map(row => ({ ...structuredClone(toRaw(row)), key: nextKey++ }));
             return { applicationRows: rows };
         },
         mounted() {
