@@ -22,7 +22,9 @@ class UploadEditorImageTest extends TestCase
 
         $this->post('images/upload', ['image' => UploadedFile::fake()->createWithContent('shell.php', '<?php echo 1;')])
             ->assertInvalid('image');
-        $this->post('images/upload', ['image' => UploadedFile::fake()->image('photo.jpg')])->assertOk();
+        $url = $this->post('images/upload', ['image' => UploadedFile::fake()->image('photo.jpg')])->assertOk()->getContent();
+
+        $this->assertStringStartsWith('/storage/image_uploads/', $url);
 
         $this->assertCount(1, Storage::disk('public')->files('image_uploads'));
     }
