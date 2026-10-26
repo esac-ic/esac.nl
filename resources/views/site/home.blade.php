@@ -64,7 +64,10 @@
                             </div>
                             <div class="col-auto">
                                 @guest
-                                    <a class="btn btn-outline-primary" href="{{ route('login') }}">Log in to register</a>
+                                    @if($event->isRegistrationOpen())
+                                        {{-- After logging in, the member lands on the registration page --}}
+                                        <a class="btn btn-outline-primary" href="{{ route('events.registration.create', $event) }}">Log in to register</a>
+                                    @endif
                                 @else
                                     @if($event->isRegistrationOpen())
                                         <a class="btn btn-outline-primary" href="{{ route('events.registration.create', $event) }}">Register now</a>
