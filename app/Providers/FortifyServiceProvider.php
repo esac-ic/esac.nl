@@ -17,6 +17,7 @@ class FortifyServiceProvider extends ServiceProvider
         Fortify::resetUserPasswordsUsing(ResetUserPassword::class);
 
         Fortify::loginView(fn () => view('auth.login'));
+        // Fortify always registers the password confirmation page, which nothing here uses
         Fortify::confirmPasswordView(fn () => abort(404));
         Fortify::requestPasswordResetLinkView(fn () => view('auth.passwords.email'));
         Fortify::resetPasswordView(fn (Request $request) => view('auth.passwords.reset', [

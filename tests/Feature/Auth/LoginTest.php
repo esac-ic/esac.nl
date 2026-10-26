@@ -105,4 +105,10 @@ class LoginTest extends TestCase
         $this->login($user)->assertTooManyRequests();
         $this->assertGuest();
     }
+
+    #[Test]
+    public function the_unused_password_confirmation_page_is_not_found()
+    {
+        $this->actingAs(User::factory()->create())->get('/user/confirm-password')->assertNotFound();
+    }
 }
