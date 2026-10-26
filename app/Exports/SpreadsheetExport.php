@@ -53,8 +53,8 @@ abstract class SpreadsheetExport
             );
 
             $writer->nameCurrentSheet($this->sheetName());
-            $writer->addHeader($this->headings());
             // OpenSpout would write text that starts with "=" as a formula, so text is always written as text.
+            $writer->addRow(new Row(array_map(fn (string $heading) => new StringCell($heading), $this->headings())));
             foreach ($rows as $cells) {
                 $writer->addRow(new Row(array_map(fn ($value) => is_string($value) ? new StringCell($value) : Cell::fromValue($value), $cells)));
             }
