@@ -35,10 +35,10 @@
                         <a class="sponsor-logo" href="https://venusp.tue.nl/sci-cgi/index.opl"><img src="{{asset('img/ssc.png')}}" alt="Student Sports Centre Eindhoven"></a>
                     </div>
                     <div class="col-6 col-lg-3">
-                        <a class="sponsor-logo" href="https://www.neoliet.nl"><img src="{{asset('img/neoliet.webp')}}" alt="Neoliet"></a>
+                        <a class="sponsor-logo" href="https://boulderneoliet.nl/"><img src="{{asset('img/boulder.png')}}" alt="Boulder Neoliet"></a>
                     </div>
                     <div class="col-6 col-lg-3">
-                        <a class="sponsor-logo" href="https://boulderneoliet.nl/"><img src="{{asset('img/boulder.png')}}" alt="Boulder Neoliet"></a>
+                        <a class="sponsor-logo" href="https://www.neoliet.nl"><img src="{{asset('img/neoliet.webp')}}" alt="Neoliet"></a>
                     </div>
                     <div class="col-6 col-lg-3">
                         <a class="sponsor-logo" href="https://www.klimwinkel.nl"><img src="{{asset('img/klimwinkel.png')}}" alt="Klimwinkel"></a>
