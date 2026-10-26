@@ -2,8 +2,7 @@
 <html lang="en">
     <head>
         <meta charset="utf-8">
-        <meta http-equiv="x-ua-compatible" content="ie=edge">
-        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
         <meta name="verification" content="6364deb46fa2fe44c96bc77a821e8ab4" />
         <title>@yield('title') - Eindhovense Studenten Alpen Club</title>
 

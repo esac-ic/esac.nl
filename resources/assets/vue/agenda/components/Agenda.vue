@@ -77,7 +77,3 @@ import AgendaPagination from './AgendaPagination.vue';
         }
     }
 </script>
-
-<style scoped>
-
-</style>

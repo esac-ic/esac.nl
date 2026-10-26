@@ -2,9 +2,9 @@
     <div>
         <div class="form-group">
             <label>Categories</label>
-            <select class="form-control" v-model="selectedCategorie" v-on:change="categorieChanged">
+            <select class="form-control" v-model="selectedCategory" v-on:change="categoryChanged">
                 <option value="">All</option>
-                <option v-for="categorie in categories" :key="categorie.id" :value="categorie.id">{{categorie.name}}</option>
+                <option v-for="category in categories" :key="category.id" :value="category.id">{{category.name}}</option>
             </select>
         </div>
         <div class="form-group">
@@ -33,7 +33,7 @@
         name: "AgendaFilters",
         data(){
             return {
-                selectedCategorie: "",
+                selectedCategory: "",
                 startDate: toIsoDate(new Date()),
             }
         },
@@ -46,8 +46,8 @@
                 'setSelectedCategory',
                 'setStartDate',
             ]),
-            categorieChanged(){
-                this.setSelectedCategory(this.selectedCategorie);
+            categoryChanged(){
+                this.setSelectedCategory(this.selectedCategory);
             },
             startDateChanged(){
                 this.setStartDate(this.startDate ? isoDateToDMY(this.startDate) : "");
@@ -58,7 +58,3 @@
         }
     }
 </script>
-
-<style scoped>
-
-</style>

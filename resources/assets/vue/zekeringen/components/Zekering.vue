@@ -6,7 +6,7 @@
                     <h5 class="card-title text-muted">#{{zekering.id}}</h5>
                 </div>
                 <div class="col-auto">
-                    <button v-on:click="togleForm" class="btn btn-outline-primary" v-if="zekering.children.length < 4">
+                    <button v-on:click="toggleForm" class="btn btn-outline-primary" v-if="zekering.children.length < 4">
                         <PlusIcon class="icon" aria-hidden="true" />
                         Sub-zekering
                     </button>
@@ -61,7 +61,7 @@
             zekeringDeleted() {
                 this.$emit('changed');
             },
-            togleForm(){
+            toggleForm(){
                 this.showForm = !this.showForm;
             },
             addSubZekering() {
@@ -75,7 +75,3 @@
         }
     }
 </script>
-
-<style scoped>
-
-</style>

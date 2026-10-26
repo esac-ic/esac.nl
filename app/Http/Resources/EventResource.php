@@ -24,7 +24,7 @@ class EventResource extends JsonResource
             'formId' => $this->registrationForm,
             'canRegister' => $this->isRegistrationOpen(),
             // Counted and checked by the events API's query.
-            'amountOfPeopleRegisterd' => $this->registration_form_id ? $this->registrations_count : 0,
+            'registrationCount' => $this->registration_form_id ? $this->registrations_count : 0,
             'currentUserSignedUp' => $this->registration_form_id && $this->registrations->isNotEmpty(),
         ];
     }
