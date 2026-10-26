@@ -3,13 +3,13 @@
 @if ($back)
     <a href="{{ $back }}" class="d-inline-block mb-2 text-muted"><x-heroicon-o-arrow-left /> {{ $backLabel }}</a>
 @endif
-<div class="d-flex flex-wrap justify-content-between align-items-center mb-3">
-    <div class="mr-3">
+<div class="page-header mb-3">
+    <div>
         <h1>{{ $title }}</h1>
         {{ $intro ?? '' }}
     </div>
     @if ($slot->isNotEmpty())
-        <div class="page-actions d-flex flex-wrap align-items-center" role="group" aria-label="Actions">
+        <div class="page-actions" role="group" aria-label="Actions">
             {{ $slot }}
         </div>
     @endif
