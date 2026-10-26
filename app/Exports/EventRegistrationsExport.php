@@ -4,6 +4,7 @@ namespace App\Exports;
 
 use App\Models\Event;
 use App\Models\Registration;
+use App\Models\RegistrationAnswer;
 use App\Models\RegistrationFormField;
 use Illuminate\Support\Collection;
 
@@ -17,7 +18,7 @@ class EventRegistrationsExport extends SpreadsheetExport
     public function collection(): Collection
     {
         // Anonymised registrations have no one to export
-        return $this->event->registrations()->whereNotNull('user_id')->with(['user', 'answers.field'])->get();
+        return $this->event->registrations()->whereNotNull('user_id')->with(['user', 'answers'])->get();
     }
 
     /**
@@ -38,7 +39,8 @@ class EventRegistrationsExport extends SpreadsheetExport
             $user->email,
             $user->phone_number,
             $user->birthday?->format('d-m-Y'),
-            ...$this->fields()->map(fn (RegistrationFormField $field) => $registration->answers->firstWhere('registration_form_field_id', $field->id)?->formatted_value),
+            ...$this->questions()->map(fn (array $column) => $registration->answers
+                ->first(fn (RegistrationAnswer $answer) => [$answer->registration_form_field_id, $answer->question] === $column)?->value),
         ];
     }
 
@@ -60,15 +62,27 @@ class EventRegistrationsExport extends SpreadsheetExport
             'Email address',
             'Phone number',
             'Date of birth',
-            ...$this->fields()->pluck('name'),
+            ...$this->questions()->pluck(1),
         ];
     }
 
     /**
-     * @return Collection<int, RegistrationFormField>
+     * One column per question as it was asked, so a renamed question keeps its answers under their own wording and
+     * questions with the same wording stay apart: the answered questions, then the form's questions nobody answered yet.
+     *
+     * @return Collection<int, array{int, ?string}>
      */
-    private function fields(): Collection
+    private function questions(): Collection
     {
-        return $this->event->registrationForm->fields;
+        return once(fn () => RegistrationAnswer::query()
+            ->whereIn('registration_id', $this->event->registrations()->select('id'))
+            ->distinct()
+            ->get(['registration_form_field_id', 'question'])
+            ->toBase()
+            ->map(fn (RegistrationAnswer $answer) => [$answer->registration_form_field_id, $answer->question])
+            ->merge(collect($this->event->registrationForm?->fields)->map(fn (RegistrationFormField $field) => [$field->id, $field->name]))
+            ->unique(fn (array $column) => json_encode($column))
+            ->sortBy(fn (array $column) => $column[0])
+            ->values());
     }
 }

@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Casts\DisplayDateTime;
+use App\Enums\FormFieldType;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Attributes\Scope;
 use Illuminate\Database\Eloquent\Builder;
@@ -84,13 +85,19 @@ class Event extends Model
                 'registration_form_id' => $this->registration_form_id,
                 'user_id' => $userId,
             ]);
+            $fields = $this->registrationForm->fields->keyBy('id');
 
             // Unanswered optional fields are saved as blank answers.
             $registration->answers()->createMany(
                 collect($answers)
                     ->map(fn ($value, $fieldId) => [
                         'registration_form_field_id' => $fieldId,
-                        'value' => is_array($value) ? implode(',', $value) : $value ?? '',
+                        'question' => $fields[$fieldId]->name,
+                        'value' => match (true) {
+                            $fields[$fieldId]->type === FormFieldType::Checkbox => $value === 'on' ? 'Yes' : 'No',
+                            is_array($value) => implode(', ', $value),
+                            default => $value ?? '',
+                        },
                     ])
                     ->values(),
             );
@@ -151,5 +158,13 @@ class Event extends Model
     public function isRegistrationOpen(): bool
     {
         return $this->registration_deadline?->isFuture() ?? false;
+    }
+
+    /**
+     * New registrations need an open deadline and a form that hasn't been deleted; existing ones can still be cancelled.
+     */
+    public function acceptsRegistrations(): bool
+    {
+        return $this->isRegistrationOpen() && $this->registrationForm?->trashed() === false;
     }
 }

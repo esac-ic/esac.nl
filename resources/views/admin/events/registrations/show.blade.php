@@ -11,8 +11,8 @@ Registration
         <x-data-table :columns="['Field', 'Answer']">
             @foreach($answers as $answer)
                 <tr>
-                    <td>{{ $answer->field->name }}</td>
-                    <td>{{ $answer->formatted_value }}</td>
+                    <td>{{ $answer->question }}</td>
+                    <td>{{ $answer->value }}</td>
                 </tr>
             @endforeach
         </x-data-table>

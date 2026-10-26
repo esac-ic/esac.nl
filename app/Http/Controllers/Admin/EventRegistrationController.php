@@ -36,6 +36,7 @@ class EventRegistrationController extends Controller implements HasMiddleware
 
     public function create(Event $event): View
     {
+        abort_if($event->registrationForm?->trashed() !== false, 404);
         $registrationForm = $event->registrationForm->load('fields.options');
 
         $users = User::query()->active()
@@ -54,6 +55,7 @@ class EventRegistrationController extends Controller implements HasMiddleware
 
     public function store(AdminRegistrationRequest $request, Event $event): RedirectResponse
     {
+        abort_if($event->registrationForm?->trashed() !== false, 404);
         $event->register($request->validated('user_id'), $request->safe()->except('user_id'));
 
         return to_route('admin.events.registrations.index', $event);
@@ -63,7 +65,7 @@ class EventRegistrationController extends Controller implements HasMiddleware
     {
         return view('admin.events.registrations.show', [
             'event' => $event,
-            'answers' => $registration->answers()->with('field')->get(),
+            'answers' => $registration->answers,
         ]);
     }
 

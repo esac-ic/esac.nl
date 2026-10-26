@@ -16,6 +16,14 @@ class RegistrationForm extends Model
     use HasFactory, SoftDeletes;
 
     /**
+     * @return HasMany<Event, $this>
+     */
+    public function events(): HasMany
+    {
+        return $this->hasMany(Event::class, 'registration_form_id');
+    }
+
+    /**
      * @return HasMany<RegistrationFormField, $this>
      */
     public function fields(): HasMany

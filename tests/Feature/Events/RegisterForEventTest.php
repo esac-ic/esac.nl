@@ -155,4 +155,14 @@ class RegisterForEventTest extends TestCase
 
         $this->assertNotContains($otherFormsRow->id, Registration::sole()->answers->pluck('registration_form_field_id'));
     }
+
+    #[Test]
+    public function an_event_whose_form_was_deleted_takes_no_new_registrations(): void
+    {
+        $event = Event::factory()->for(RegistrationForm::factory())->create(['registration_deadline' => now()->addDay()]);
+        $event->registrationForm->delete();
+
+        $this->actingAs(User::factory()->create())->get(route('events.registration.create', $event))->assertSessionHas('error', 'This event has no registration form.');
+        $this->actingAs(User::factory()->withRole(AdminRole::EventAdministrator)->create())->get(route('admin.events.registrations.create', $event))->assertNotFound();
+    }
 }

@@ -63,7 +63,7 @@ class RegistrationController extends Controller
     {
         return match (true) {
             ! $event->isRegistrationOpen() => 'The registration deadline has passed, so you can no longer register.',
-            $event->registration_form_id === null => 'This event has no registration form.',
+            ! $event->acceptsRegistrations() => 'This event has no registration form.',
             $event->hasRegistrationFrom($user) => 'You are already registered for this event.',
             default => null,
         };
