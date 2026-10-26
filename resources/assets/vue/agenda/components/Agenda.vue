@@ -35,10 +35,11 @@
 </template>
 
 <script>
-    import { mapActions, mapGetters } from 'vuex';
-import AgendaFilters from './AgendaFilters';
-import AgendaItem from './AgendaItem';
-import AgendaPagination from './AgendaPagination';
+import { mapActions, mapState } from 'pinia';
+import { useAgendaStore } from '../../store';
+import AgendaFilters from './AgendaFilters.vue';
+import AgendaItem from './AgendaItem.vue';
+import AgendaPagination from './AgendaPagination.vue';
     
     export default {
         name: "Agenda",
@@ -48,14 +49,10 @@ import AgendaPagination from './AgendaPagination';
             AgendaPagination,
         },
         computed: {
-            ...mapGetters({
-                agendaItems : "agendaItems"
-            })
+            ...mapState(useAgendaStore, ['agendaItems'])
         },
         methods: {
-            ...mapActions([
-                'fetchAgendaItems',
-            ])
+            ...mapActions(useAgendaStore, ['fetchAgendaItems']),
         },
         mounted () {
             this.fetchAgendaItems();
@@ -66,7 +63,7 @@ import AgendaPagination from './AgendaPagination';
         },
         data() {
             return {
-                description: DESCRIPTION,
+                description: window.DESCRIPTION,
                 titleText: 'Activiteiten',
                 exportText: 'Exporteren',
                 filterText: "Filters",

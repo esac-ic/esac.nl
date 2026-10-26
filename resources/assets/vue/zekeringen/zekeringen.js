@@ -1,3 +1,9 @@
-Vue.component('zekeringen', require('./components/Zekeringen').default);
-Vue.component('zekering', require('./components/Zekering').default);
-Vue.component('sub-zekering', require('./components/SubZekering').default);
+import Zekeringen from './components/Zekeringen.vue';
+import Zekering from './components/Zekering.vue';
+import SubZekering from './components/SubZekering.vue';
+
+export default {
+    'zekeringen': Zekeringen,
+    'zekering': Zekering,
+    'sub-zekering': SubZekering,
+};

@@ -1,23 +1,29 @@
-import Vue from 'vue';
-import store from '../vue/store';
-import VuePaginate from 'vue-paginate';
+import { createApp } from 'vue';
+import { createPinia } from 'pinia';
 
-window.Vue = Vue;
-Vue.use(VuePaginate);
-
-//load components
-require('../vue/agenda/agenda');
-require('../vue/zekeringen/zekeringen');
-require('../vue/applicationForm/applicationForm');
-
-Vue.component('auto-complete-field', require('../vue/components/AutoCompleteField').default);
+import agendaComponents from '../vue/agenda/agenda';
+import zekeringenComponents from '../vue/zekeringen/zekeringen';
+import applicationFormComponents from '../vue/applicationForm/applicationForm';
+import AutoCompleteField from '../vue/components/AutoCompleteField.vue';
 
 if (document.getElementById('app') !== null) {
     /**
-     * Create vue for the core package
+     * Create vue app
      */
-    const core = new Vue({
-        el: '#app',
-        store
-    });
+    const app = createApp({});
+
+    app.use(createPinia());
+
+    const components = {
+        ...agendaComponents,
+        ...zekeringenComponents,
+        ...applicationFormComponents,
+        'auto-complete-field': AutoCompleteField,
+    };
+
+    for (const [name, component] of Object.entries(components)) {
+        app.component(name, component);
+    }
+
+    app.mount('#app');
 }

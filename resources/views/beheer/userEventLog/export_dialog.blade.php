@@ -62,10 +62,9 @@
     
 @section('modal_javascript')
     <!-- not entirely sure what these scripts do -->
-    <script src="{{mix("js/vendor/moment.js")}}"></script>
-    <script src="{{mix("js/vendor/tempusdominus.js")}}"></script>
+    @vite(['resources/assets/js/vendor/moment.js', 'resources/assets/js/vendor/tempusdominus.js'])
 
-    <script>
+    <script type="module">
         $('#startDateBox, #endDateBox').datetimepicker({
             locale: 'nl',
             icons: {

@@ -4,9 +4,6 @@
 {{$fields['title_content']}}
 @endsection
 
-@push('styles')
-<link rel="stylesheet" type="text/css" href="{{mix("css/vendor/tempusdominus.css")}}">
-@endpush
 
 @section('content')
     @if(Session::has('message'))
@@ -36,9 +33,8 @@
 @endsection
 
 @push('scripts')
-<script src="{{mix("js/vendor/moment.js")}}"></script>
-<script src="{{mix("js/vendor/tempusdominus.js")}}"></script>
-<script>
+@vite(['resources/assets/js/vendor/moment.js', 'resources/assets/js/vendor/tempusdominus.js'])
+<script type="module">
     $('#startDateBox, #endDateBox, #subscription_endDateBox').datetimepicker({
         locale: 'nl',
         icons: {

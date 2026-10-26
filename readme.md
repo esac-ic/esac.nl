@@ -1,6 +1,5 @@
 <p align="center"><img width="20%" src="https://i.imgur.com/M2nZitU.png"></p>
 <p align="center">
-<a href="https://travis-ci.org/esac-ic/esac.nl"><img src="https://travis-ci.org/esac-ic/esac.nl.svg?branch=master" alt="Build Status"></a>
 <a href="https://codecov.io/gh/esac-ic/esac.nl">
   <img src="https://codecov.io/gh/esac-ic/esac.nl/branch/master/graph/badge.svg" />
 </a>
@@ -13,7 +12,7 @@ The following libaries and framework are used:
 - [DataTables](https://datatables.net/)
 - [Laravel HTML Form](https://github.com/LaravelCollective/html)
 - [Summernote](http://summernote.org/)
-- [Laravel-Mix (Webpack)](https://github.com/JeffreyWay/laravel-mix)
+- [Vite](https://vite.dev) (via [laravel-vite-plugin](https://github.com/laravel/vite-plugin))
 - [Bootstrap](https://getbootstrap.com/)
 - [Vue](https://vuejs.org)
 - [Tempus Dominus](https://tempusdominus.github.io/bootstrap-4/)
@@ -23,6 +22,82 @@ The following libaries and framework are used:
 Create an .env file from .env.example, with your local values for 
 DB\_HOST, DB\_PORT, DB\_DATABASE, DB\_USERNAME and DB\_PASSWORD
 **Note**: When running your local environment on a certain port, let's say 3000, modify your `APP_URL` in the file to reflect that port, else the api's won't work
+
+### Development environment (Docker, easiest and works on any OS)
+The easiest method is using Docker, on windows this is the easiest with [Docker Desktop](https://www.docker.com/products/docker-desktop/). No local PHP, Composer, Node or MySQL required, and no problems pinning PHP/Node versions.
+
+On windows: use WSL and make sure to clone to a WSL native path for performance reasons (ie `~/`(easiest) or `/home/yourusername`)
+<details>
+    <summary>What is a WSL native path?</summary>
+
+On WSL you have 2 places where you can store/edit files:
+ - **WSL native**: Files in the linux file system, an actual xtf4 file system, like your `/home/<username>`, `~/` or `/root`. On ubuntu run `cd ~/` and continue with the next steps, then you will use a WSL Native path.
+ - **Windows Mounted**: Files in /mnt/c are files on you windows computer, reading these is slow because it accesses them using a local network. Try to not use this when not necessary. 
+</details>
+
+`compose.override.yaml` works on top of `compose.yaml`, it only uses the override when run locally and not in github actions. 
+
+1. Clone the project repository and cd into it
+	```
+	git clone https://github.com/esac-ic/esac.nl.git
+	cd esac.nl
+	```
+2. Copy `.env.example` to `.env`.
+	```
+	cp .env.example .env
+	```
+3. Build and start the containers (first run takes a few minutes)
+	```
+	docker compose up -d --build
+	```
+4. Set up the local dev instance
+	```
+	docker compose exec app composer install
+	docker compose exec app php artisan key:generate
+	docker compose exec app php artisan migrate --force
+	docker compose exec app php artisan db:seed --force
+	docker compose exec app php artisan storage:link
+	```
+5. Install and build the frontend assets
+	```
+	docker compose exec app npm install
+	docker compose exec app npm run build
+	```
+	Run `npm run build` again after changing CSS or JS files.
+6. Configure `mailman` once, otherwise mail list sync will error:
+	```
+	curl -u restadmin:restpass -X POST http://localhost:8001/3.1/domains -d mail_host=esac.nl
+	curl -u restadmin:restpass -X POST http://localhost:8001/3.1/lists -d "fqdn_listname=alle-leden@esac.nl"
+	curl -u restadmin:restpass -X POST http://localhost:8001/3.1/lists -d "fqdn_listname=nieuwsbrief@esac.nl"
+	curl -u restadmin:restpass -X POST http://localhost:8001/3.1/lists -d "fqdn_listname=reunist@esac.nl"
+	```
+	(`restadmin`/`restpass` are the `MAIL_MAN_USERNAME`/`MAIL_MAN_PASSWORD` defaults from `.env.example`, change these if you changed them in the .env)
+7. Visit http://localhost:8000
+
+When you are done, you can stop the server with `docker compose down`
+
+To start it back up later, just run `docker compose up -d` from the repository root. 
+Outgoing mails will go to mailpit (http://localhost:8025).
+
+To avoid typing `docker compose exec app php artisan blablabla` every time. You can add an alias, e.g. put `alias art='docker compose exec app php artisan'` in your `~/.bashrc`/`~/.zshrc` (or a PowerShell profile function on Windows), then you can just run `art migrate` instead.
+
+PHP code changes are hot reloaded, no rebuild needed. If you want to step-debug with Xdebug, set `SAIL_XDEBUG_MODE=debug` in `.env` and recreate the container with `docker compose up -d app`. In you ide use port 9003 with `host.docker.internal` as the client host.
+
+#### Running tests
+Tests run against their own disposable stack (the mysql test profile)
+
+1. Start the test database (it's behind the `test` profile, so it won't start with a plain `docker compose up`)
+	```
+	docker compose --profile test up -d mysql-test
+	```
+2. Migrate 
+	```
+	docker compose exec -e DB_HOST=mysql-test app php artisan migrate --force
+	```
+3. Run the test
+	```
+	docker compose exec -e APP_ENV=testing -e DB_HOST=mysql-test app vendor/bin/phpunit
+	```
 
 ### Development environment (Ubuntu on Windows + Visual Studio Code, prevents having to install a lot on Windows)
 1. Install the following:
@@ -81,14 +156,12 @@ DB\_HOST, DB\_PORT, DB\_DATABASE, DB\_USERNAME and DB\_PASSWORD
 	npm install
 	npm run dev
 	```
-	When you make changes to CSS or JS file you need to build again which can be done with
+	`npm run dev` starts the Vite development server, which automatically reloads the page when you change CSS or JS files. Keep it running while you develop.
+	Alternatively you can build the files once with
 	```
-	npm run dev
+	npm run build
 	```
-	It is also possible to recompile your files when you make a change by running the following command
-	```
-	npm run watch
-	```
+	If the site tries to load its assets from `localhost:5173` while the development server isn't running, delete the leftover `public/hot` file.
 	If you get issues with npm, you can install [nvm](https://github.com/nvm-sh/nvm) and run `nvm install --lts` to install a version of node that should work.
 13. Open another Ubuntu (from Windows Start) and run, from the repository root
 	```
@@ -105,7 +178,7 @@ DB\_HOST, DB\_PORT, DB\_DATABASE, DB\_USERNAME and DB\_PASSWORD
 ### Starting up the development environment again later
 1. Open ubuntu
 2. Navigate to the repository root using `cd esac.nl`
-4. Run either `npm run dev` or `npm run watch` to start the javascript development server
+4. Run `npm run dev` to start the Vite development server
 6. Open a new terminal instance and run `code .` from the repository root to open VScode
 7. Then run `php artisan serve` to start up the laravel development server.
 8. Go to localhost:8000 in your favorite browser to view your own version of the ESAC website
@@ -300,18 +373,16 @@ DB\_HOST, DB\_PORT, DB\_DATABASE, DB\_USERNAME and DB\_PASSWORD
 	npm install
 	npm run dev
 	```
-	When you make changes to CSS or JS file you need to build again which can be done with
+	`npm run dev` starts the Vite development server, which automatically reloads the page when you change CSS or JS files. Keep it running while you develop.
+	Alternatively you can build the files once with
 	```
-	npm run dev
+	npm run build
 	```
-	It is also possible to recompile your files when you make a change by running the following command
-	```
-	npm run watch
-	```
+	If the site tries to load its assets from `localhost:5173` while the development server isn't running, delete the leftover `public/hot` file.
 
 ### Production environment
 When you update the server make sure you run the following commands
 ```
 php artisan migrate
-npm run production
+npm run build
 ```
