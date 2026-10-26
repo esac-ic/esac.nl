@@ -5,14 +5,15 @@ $blue: #4582ec;
 $red: #d9534f;
 $yellow: #f0ad4e;
 $green: #02b875;
-$esac-yellow: #f1c40f;
 
 $primary: $blue;
 $success: $green;
 $warning: $yellow;
 $danger: $red;
-$info: $esac-yellow;
 $dark: #212529;
+
+// ESAC's yellow, for the calls to action and accents: btn-accent, text-accent, border-accent
+$theme-colors: ("accent": #f1c40f);
 
 $body-bg: #f8f9fa;
 $body-color: #495057;

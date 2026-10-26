@@ -67,7 +67,7 @@
                             </li>
                         @endguest @guest
                             <li class="nav-item d-flex align-items-center">
-                                <a class="btn btn-info text-dark" href="{{ route('sign-up.create') }}">Become a member</a>
+                                <a class="btn btn-accent" href="{{ route('sign-up.create') }}">Become a member</a>
                             </li>
                         @endguest
                     </ul>

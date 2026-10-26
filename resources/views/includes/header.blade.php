@@ -17,7 +17,7 @@
             <div class="col-12 col-md-9 col-lg-5">
                 <h1 class="display-3">{{ $header['heading'] }}</h1>
                 <p class="lead">{{ $header['message'] }}</p>
-                <a href="{{ $header['url'] }}" class="btn btn-info btn-lg">More information</a>
+                <a href="{{ $header['url'] }}" class="btn btn-accent btn-lg">More information</a>
             </div>
         </div>
     </div>
