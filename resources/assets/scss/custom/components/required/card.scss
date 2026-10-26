@@ -9,6 +9,9 @@
 //
 // General overrides for default card styles
 
+@use "sass:color";
+@use "sass:math";
+
 .card{
   margin-bottom: $spacer;
 }
@@ -60,7 +63,7 @@ a.card{
 
 @include media-breakpoint-down(xs) {
   .card{
-    margin-bottom: $spacer/2;
+    margin-bottom: $spacer*0.5;
   }
 }
 
@@ -83,7 +86,7 @@ a.card{
           border-top: $card-border-width solid $card-border-color;
         }
       > .media:only-child{
-        padding: $spacer/4 0;
+        padding: $spacer*0.25 0;
       }
     }
     > a.list-group-item{
@@ -137,13 +140,13 @@ h5.card-title{
 
 .card-sm{
   .card-header, .card-footer{
-    padding: $spacer/2 $spacer;
+    padding: $spacer*0.5 $spacer;
   }
   .card-body{
-    padding: $spacer/2 $spacer;
+    padding: $spacer*0.5 $spacer;
   }
   .card-img-overlay{
-    padding: $spacer/1.5;
+    padding: math.div($spacer, 1.5);
   }
 }
 
@@ -218,7 +221,7 @@ a.card{
     background-color: transparent;
     border-color: transparent; 
     &:hover{
-      background-color: darken($gray-100,2%);
+      background-color: color.adjust($gray-100, $lightness: -2%, $space: hsl);
     }
   }
 }

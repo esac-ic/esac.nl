@@ -9,6 +9,8 @@
 //
 // General overrides for default list styles
 
+@use "sass:math";
+
 ul:last-child,dl:last-child,ol:last-child{
   margin-bottom: 0;
 }
@@ -16,7 +18,7 @@ ul:last-child,dl:last-child,ol:last-child{
 .list-inline{
   > .list-inline-item{
     &:not(:last-child){
-      margin-right: $spacer/2;
+      margin-right: $spacer*0.5;
     }
   }
   &.list-inline-large{
@@ -46,7 +48,7 @@ ul:last-child,dl:last-child,ol:last-child{
 
 .list-spacing-sm{
   > li:not(:last-child){
-    margin-bottom: $spacer/2;
+    margin-bottom: $spacer*0.5;
   }
 }
 
@@ -54,7 +56,7 @@ ul:last-child,dl:last-child,ol:last-child{
   &.list-spacing-sm{
     > .list-inline-item{
       margin-bottom: 0;
-      margin-right: $spacer/6;
+      margin-right: math.div($spacer, 6);
     }
   }
 }

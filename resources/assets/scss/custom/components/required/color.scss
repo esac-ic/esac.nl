@@ -4,6 +4,7 @@
 //
 //
 
+@use "sass:list";
 
 // Text on different colored backgrounds
 //
@@ -103,7 +104,7 @@ a.text-white{
 // Create text utility classes for all items in the Bootstrap $colors list
 
 @each $current-color in $colors{
-  $key: nth($current-color,1);
-  $value: nth($current-color,2);
+  $key: list.nth($current-color,1);
+  $value: list.nth($current-color,2);
   .text-#{$key}{ color: $value !important; }
 }

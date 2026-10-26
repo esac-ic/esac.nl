@@ -14,7 +14,7 @@
 }
 
 @for $i from 1 through 9 {
-    $opacity: ($i / 10);
+    $opacity: ($i * 0.1);
     .opacity-#{($i*10)}{
       opacity: $opacity;
     }

@@ -11,7 +11,7 @@
 .nav-tabs{
   .nav-item{
     .nav-link{
-      padding: $spacer/2;
+      padding: $spacer*0.5;
       transition: color .35s ease, border-color .35s ease;
       border-bottom: 2px solid rgba(255,255,255,0);
       &:not(.active){
@@ -58,7 +58,7 @@ nav.flex-md-column{
 @include media-breakpoint-down(md) {
   nav.flex-md-column{
     .nav-link{
-      padding-right: $spacer/2;
+      padding-right: $spacer*0.5;
     }
   }
 }

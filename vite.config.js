@@ -37,6 +37,15 @@ export default defineConfig({
             ],
         },
     },
+    css: {
+        preprocessorOptions: {
+            scss: {
+                // Bootstrap 4's SCSS warns about its own code, and it only loads through @import
+                quietDeps: true,
+                silenceDeprecations: ['import'],
+            },
+        },
+    },
     optimizeDeps: {
         exclude: ['axios'],
     },

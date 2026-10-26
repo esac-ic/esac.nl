@@ -67,7 +67,7 @@
 @include media-breakpoint-down(sm) {
   .navbar .form-inline{
     &:not(:last-child){
-      margin-bottom: $spacer/2;
+      margin-bottom: $spacer*0.5;
     }
   }
 }
