@@ -69,7 +69,6 @@ Route::resource('mailList', MailListController::class)->except(['edit', 'update'
 Route::post('/signup', [PendingUserController::class, 'storePendingUser'])->name('user.signup');
 Route::resource('books', LibraryController::class);
 Route::post('images/upload', [StorageController::class, 'uploadImage'])->name('images.store');
-Route::delete('images/delete', [StorageController::class, 'deleteImage'])->name('images.destroy');
 Route::post('agendaItems/{agendaItem}/copy', [AgendaItemController::class, 'copy'])->name('copyAgendaItem');
 
 Route::get('userEventLog', [UserEventLogEntryController::class, 'index'])->name('user-event-log-entry.index');

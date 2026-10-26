@@ -19,9 +19,6 @@ window.summernoteSettings = {
         onImageUpload: function (files) {
             uploadFile(files[0], this);
         },
-        onMediaDelete: function ($target, editor) {
-            deleteFile($target)
-        }
     }
 };
 
@@ -34,22 +31,6 @@ function uploadFile (file, summernote) {
         .then(response => {
             $(summernote).summernote('insertImage', response.data);
         });
-}
-
-function deleteFile ($target) {
-    if ($target.is('img')) {
-        let path = $target.attr('src');
-
-        if (path.startsWith('data:image')) {
-            // This is a base64 image, so no need to remove it from storage.
-            return;
-        }
-
-        axios
-            .delete('/images/delete', {params: {
-                    path: path,
-                }});
-    }
 }
 
 // Cookie utils
