@@ -19,6 +19,8 @@ services:
       CADDY_GLOBAL_OPTIONS: "auto_https off"
       XDEBUG_MODE: ${XDEBUG_MODE:-off}
       XDEBUG_CONFIG: client_host=host.docker.internal
+      # Plain http, so browsers keep the session cookie on a LAN IP too (localhost is exempt)
+      SESSION_SECURE_COOKIE: "false"
     extra_hosts:
       - host.docker.internal:host-gateway
     ports: !override

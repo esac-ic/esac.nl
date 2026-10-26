@@ -36,7 +36,7 @@ export default defineConfig({
         origin: `http://${host}:${port}`,
         cors: {
             origin: [
-                /^https?:\/\/(localhost|127\.0\.0\.1|192\.168\.\d+\.\d+)(:\d+)?$/,
+                /^https?:\/\/(localhost|127\.0\.0\.1)(:\d+)?$/,
                 new RegExp(`^https?://${host.replaceAll('.', '\\.')}(:\\d+)?$`),
             ],
         },
