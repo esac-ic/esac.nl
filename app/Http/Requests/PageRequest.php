@@ -24,9 +24,8 @@ class PageRequest extends FormRequest
                 Rule::excludeIf($page?->hasFixedSlug() ?? false),
                 'required',
                 'max:255',
-                'lowercase',
-                'alpha_dash:ascii',
-                Rule::notIn(self::RESERVED_SLUGS),
+                // Older pages keep their slug until it's changed
+                Rule::when($this->input('slug') !== $page?->slug, ['lowercase', 'alpha_dash:ascii', Rule::notIn(self::RESERVED_SLUGS)]),
                 Rule::unique('menu_items', 'slug')->ignore($page),
             ],
             'name' => ['required', 'max:255'],

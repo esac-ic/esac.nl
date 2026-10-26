@@ -76,6 +76,17 @@ class CreatePageTest extends TestCase
     }
 
     #[Test]
+    public function a_page_with_an_older_slug_can_be_saved_without_renaming_it()
+    {
+        $this->post('admin/pages', $this->body(['parent_id' => null]))->assertValid();
+        $page = MenuItem::query()->where('slug', 'test')->sole();
+        $page->forceFill(['slug' => 'Huisregels'])->save();
+
+        $this->patch(route('admin.pages.update', $page), $this->body(['slug' => 'Huisregels', 'parent_id' => null]))->assertValid();
+        $this->patch(route('admin.pages.update', $page), $this->body(['slug' => 'Huis.regels', 'parent_id' => null]))->assertInvalid('slug');
+    }
+
+    #[Test]
     public function other_roles_can_not_create_a_page()
     {
         $this->actingAs(User::factory()->withRole(AdminRole::EventAdministrator, AdminRole::CertificateAdministrator)->create());
