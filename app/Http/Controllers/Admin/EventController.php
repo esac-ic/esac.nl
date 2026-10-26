@@ -49,7 +49,8 @@ class EventController extends Controller implements HasMiddleware
 
     public function store(EventRequest $request): RedirectResponse
     {
-        $event = new Event($request->validated())->fillRegistrationSettings($request->validated());
+        $event = new Event($request->safe()->only(['title', 'body', 'short_description', 'event_category_id', 'start_date', 'end_date']))
+            ->fillRegistrationSettings($request->validated());
         $event->image_path = '';
         $event->created_by = $request->user()->id;
         $event->save();

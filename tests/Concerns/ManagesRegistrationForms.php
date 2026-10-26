@@ -15,6 +15,7 @@ trait ManagesRegistrationForms
 
     private function assertRegistrationForm(RegistrationForm $registrationForm, array $data): void
     {
+        $registrationForm->load('fields.options');
         $this->assertEquals($data['name'], $registrationForm->name);
         $this->assertCount(count($data['rows']), $registrationForm->fields);
 

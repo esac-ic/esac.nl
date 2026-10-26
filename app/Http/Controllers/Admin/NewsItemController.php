@@ -38,7 +38,7 @@ class NewsItemController extends Controller implements HasMiddleware
 
     public function store(NewsItemRequest $request): RedirectResponse
     {
-        $newsItem = NewsItem::query()->create($request->validated());
+        $newsItem = NewsItem::query()->create($request->safe()->except('image'));
 
         if ($request->hasFile('image')) {
             $this->storeImages($request, $newsItem);
@@ -59,7 +59,7 @@ class NewsItemController extends Controller implements HasMiddleware
 
     public function update(NewsItemRequest $request, NewsItem $newsItem): RedirectResponse
     {
-        $newsItem->update($request->validated());
+        $newsItem->update($request->safe()->except('image'));
 
         if ($request->hasFile('image')) {
             $this->storeImages($request, $newsItem);

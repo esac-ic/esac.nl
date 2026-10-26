@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Arr;
 
 #[Fillable([
     'name',
@@ -40,7 +41,7 @@ class RegistrationForm extends Model
 
         foreach ($fields as $fieldData) {
             $field = $this->fields()->findOrNew($fieldData['id'] ?? null);
-            $field->fill($fieldData)->save();
+            $field->fill(Arr::only($fieldData, ['name', 'type', 'required']))->save();
             $field->syncOptions($fieldData['options'] ?? []);
             $fieldIds[] = $field->id;
         }

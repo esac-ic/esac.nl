@@ -7,7 +7,9 @@ use App\Models\User;
 use App\Settings\SiteSettings;
 use App\View\Composers\MenuComposer;
 use Illuminate\Auth\Access\Response;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Pagination\Paginator;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\View;
@@ -21,6 +23,10 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
+        // Lazy loading, unknown attributes and dropped mass assignments fail in development and tests; production stays lenient.
+        Model::shouldBeStrict(! $this->app->isProduction());
+        DB::prohibitDestructiveCommands($this->app->isProduction());
+
         $this->defineGates();
 
         // The member routes only find the members in the state that the route is for.
