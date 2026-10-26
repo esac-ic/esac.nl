@@ -44,6 +44,15 @@ class CrudResourcesTest extends TestCase
     }
 
     #[Test]
+    public function the_settings_page_shows_the_entered_text_after_a_validation_error()
+    {
+        $this->actingAs($this->admin)->from('admin/settings/edit')->followingRedirects()
+            ->put('admin/settings', ['killswitch' => '0', 'blocked_email_domains' => str_repeat('a', 256), 'mail_lists' => []])
+            ->assertOk()
+            ->assertSee(str_repeat('a', 256));
+    }
+
+    #[Test]
     public function settings_can_be_managed()
     {
         $this->actingAs($this->admin)->get('admin/settings/edit')->assertOk()->assertSee('student.tue.nl')->assertSee('alle-leden.esac.nl');
