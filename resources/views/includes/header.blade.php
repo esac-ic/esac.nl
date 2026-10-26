@@ -10,12 +10,12 @@
     ['background' => 'header-img10.jpeg', 'heading' => 'Bouldering', 'message' => 'Besides sport climbing, we also do a lot of bouldering, including in Fontainebleau.', 'url' => route('events.index')],
 ])->random())
 @if (request()->routeIs('home'))
-<section class="bg-dark text-white height-70 border-bottom">
-    <img alt="Header image" src="{{ asset('img/'.$header['background']) }}" class="bg-image opacity-70">
+<section class="site-header site-header-home bg-dark text-white border-bottom">
+    <img alt="" src="{{ asset('img/'.$header['background']) }}" class="site-header-image">
     <div class="container">
         <div class="row">
             <div class="col-12 col-md-9 col-lg-5">
-                <h1 class="display-3 word-wrap-break-word">{{ $header['heading'] }}</h1>
+                <h1 class="display-3">{{ $header['heading'] }}</h1>
                 <p class="lead">{{ $header['message'] }}</p>
                 <a href="{{ $header['url'] }}" class="btn btn-info btn-lg">More information</a>
             </div>
@@ -23,7 +23,7 @@
     </div>
 </section>
 @else
-<section class="bg-dark text-white height-30">
-    <img alt="Header image" src="{{ asset('img/'.$header['background']) }}" class="bg-image opacity-70">
+<section class="site-header bg-dark text-white">
+    <img alt="" src="{{ asset('img/'.$header['background']) }}" class="site-header-image">
 </section>
 @endif

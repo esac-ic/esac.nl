@@ -1,0 +1,197 @@
+// Adjustments to Bootstrap's components
+
+// Buttons
+.btn-link {
+    font-weight: $font-weight-bold;
+}
+
+.btn-outline-primary, .btn-outline-secondary {
+    &:not(:hover):not(:active):not(.active) {
+        border-color: $gray-400;
+    }
+}
+
+.btn-sm {
+    font-size: .75rem;
+}
+
+.btn-lg {
+    font-size: 1rem;
+}
+
+.btn.disabled, .btn:disabled {
+    opacity: .35;
+}
+
+// Forms
+.form-group label {
+    color: $gray-800;
+    font-size: .875em;
+}
+
+.form-check {
+    margin-bottom: 1rem;
+}
+
+.form-check-label {
+    font-size: .875rem;
+}
+
+.form-control-lg {
+    font-size: 1rem;
+}
+
+// Cards
+.card {
+    margin-bottom: $spacer * .5;
+
+    @include media-breakpoint-up(sm) {
+        margin-bottom: $spacer;
+    }
+}
+
+.card-header {
+    padding: $spacer * .75 $spacer;
+}
+
+.card-header, .card-footer {
+    background: none;
+}
+
+h5.card-title {
+    line-height: 1.5rem;
+}
+
+// Card photos share one shape, so a tall photo doesn't stretch its card
+.card-img-top {
+    aspect-ratio: 3 / 2;
+    object-fit: cover;
+}
+
+// A date label over the top right corner of a card's photo
+.card-date {
+    top: $spacer * .7;
+    right: $spacer * .7;
+}
+
+// Roomier padding for the cards that hold a whole form, such as login
+@include media-breakpoint-up(lg) {
+    .card-lg .card-body {
+        padding: $spacer * 1.5;
+    }
+}
+
+// Tables
+.table thead th {
+    border-bottom-width: 1px;
+    font-weight: $font-weight-normal;
+    color: $headings-color;
+}
+
+// Tabs are underlined instead of boxed
+.nav-tabs .nav-link {
+    padding: $spacer * .5;
+    border-bottom: 2px solid transparent;
+    transition: color .35s ease, border-color .35s ease;
+
+    &:not(.active) {
+        color: $gray-700;
+
+        &:hover {
+            color: $gray-800;
+        }
+    }
+
+    &.active {
+        border-color: $primary;
+    }
+}
+
+// Dropdowns
+.dropdown-menu.show {
+    box-shadow: 0 5px 10px rgba($black, .1);
+}
+
+.dropdown-item {
+    transition: background-color .2s ease, color .2s ease;
+
+    &.active, &:active {
+        > * {
+            color: $white !important;
+        }
+    }
+}
+
+// Modals fade in place instead of sliding down
+.modal.fade .modal-dialog {
+    transform: none;
+    opacity: 0;
+    transition: opacity .2s ease-out;
+}
+
+.modal.show .modal-dialog {
+    opacity: 1;
+}
+
+.badge {
+    vertical-align: middle;
+}
+
+// Accordion of <details> elements: .accordion > details.accordion-item > summary
+.accordion {
+    &:not(:first-child) {
+        margin-top: $spacer * 2;
+    }
+
+    &:not(:last-child) {
+        margin-bottom: $spacer;
+    }
+}
+
+.accordion-item {
+    padding: $spacer * .5 0;
+
+    &:not(:first-child) {
+        border-top: $hr-border-width solid $hr-border-color;
+    }
+
+    > summary {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: space-between;
+        cursor: pointer;
+        color: $link-color;
+        opacity: .8;
+        transition: margin .35s ease, opacity .35s ease;
+
+        &::-webkit-details-marker {
+            display: none;
+        }
+
+        &:hover {
+            opacity: 1;
+        }
+
+        > * {
+            margin-bottom: 0;
+        }
+
+        .icon {
+            transition: transform .35s ease;
+        }
+    }
+
+    &[open] > summary {
+        opacity: 1;
+        margin-bottom: $spacer * .5;
+
+        .icon {
+            transform: rotate(90deg);
+        }
+    }
+}
+
+// The editor's code view button keeps its click when the icon inside it is clicked
+.btn-codeview > * {
+    pointer-events: none;
+}
