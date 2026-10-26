@@ -2,9 +2,12 @@
 
 namespace App\Services;
 
+use App\Exceptions\MailmanException;
+use Closure;
 use Illuminate\Contracts\Support\Arrayable;
-use Illuminate\Http\Client\PendingRequest;
+use Illuminate\Http\Client\ConnectionException;
 use Illuminate\Http\Client\RequestException;
+use Illuminate\Http\Client\Response;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
@@ -12,15 +15,25 @@ use Illuminate\Support\Fluent;
 
 /**
  * Client for Mailman's REST API. Mail lists and members are returned as Fluent objects.
- * Failed requests throw a RequestException.
+ * Failed requests throw a MailmanException.
  */
 class Mailman
 {
-    private function http(): PendingRequest
+    /**
+     * @param  'get'|'post'|'delete'  $method
+     * @param  (Closure(Response): bool)|null  $isFine  which failed responses are fine
+     */
+    private function request(string $method, string $url, array $data = [], ?Closure $isFine = null): Response
     {
-        return Http::baseUrl((string) config('services.mailman.url'))
-            ->withBasicAuth(config('services.mailman.username'), config('services.mailman.password'))
-            ->timeout(10);
+        try {
+            return Http::baseUrl((string) config('services.mailman.url'))
+                ->withBasicAuth(config('services.mailman.username'), config('services.mailman.password'))
+                ->timeout(10)
+                ->{$method}($url, $data)
+                ->throwUnless($isFine ?? false);
+        } catch (RequestException|ConnectionException $e) {
+            throw new MailmanException('Mailman failed: '.$e->getMessage(), $e->getCode(), $e);
+        }
     }
 
     private function toMailList(array $raw): Fluent
@@ -47,11 +60,11 @@ class Mailman
      *
      * @return Collection<int, Fluent>
      *
-     * @throws RequestException
+     * @throws MailmanException
      */
     public function mailLists(): Collection
     {
-        return $this->http()->get('/lists')->throw()->collect('entries')->map($this->toMailList(...));
+        return $this->request('get', '/lists')->collect('entries')->map($this->toMailList(...));
     }
 
     /**
@@ -59,18 +72,18 @@ class Mailman
      *
      * @return string[]
      *
-     * @throws RequestException
+     * @throws MailmanException
      */
     public function mailListIds(): array
     {
         return once(fn () => $this->mailLists()->pluck('id')->all());
     }
 
-    /** @throws RequestException */
+    /** @throws MailmanException */
     public function mailList(string $id): Fluent
     {
-        $mailList = $this->toMailList($this->http()->get("/lists/$id")->throw()->json());
-        $mailList->set('members', $this->http()->get("/lists/$id/roster/member")->throw()
+        $mailList = $this->toMailList($this->request('get', "/lists/$id")->json());
+        $mailList->set('members', $this->request('get', "/lists/$id/roster/member")
             ->collect('entries')
             ->map($this->toMember(...))
             ->all());
@@ -81,60 +94,60 @@ class Mailman
     /**
      * @return Collection<int, Fluent>
      *
-     * @throws RequestException
+     * @throws MailmanException
      */
     public function mailListsOf(string $member): Collection
     {
         // Mailman answers 404 when the member is on no list.
-        $response = $this->http()->post('/lists/find', ['subscriber' => $member])->throwUnless(fn ($response) => $response->notFound());
+        $response = $this->request('post', '/lists/find', ['subscriber' => $member], fn (Response $response) => $response->notFound());
 
         return $response->notFound() ? collect() : $response->collect('entries')->map($this->toMailList(...));
     }
 
     /**
-     * @throws RequestException when the mail list already exists
+     * @throws MailmanException when the mail list already exists
      */
     public function createMailList(string $address): void
     {
-        $this->http()->post('/lists', [
+        $this->request('post', '/lists', [
             'fqdn_listname' => $address.config('services.mailman.list_domain'),
-        ])->throw();
+        ]);
     }
 
-    /** @throws RequestException */
+    /** @throws MailmanException */
     public function deleteMailList(string $id): void
     {
-        $this->http()->delete("/lists/$id")->throw();
+        $this->request('delete', "/lists/$id");
     }
 
     /**
      * Removes the member from the mail list; a member who isn't on it (404) is fine.
      *
-     * @throws RequestException
+     * @throws MailmanException
      */
     public function removeMember(string $mailListId, string $memberEmail): void
     {
-        $this->http()->delete("/lists/$mailListId/member/$memberEmail")->throwUnless(fn ($response) => $response->notFound());
+        $this->request('delete', "/lists/$mailListId/member/$memberEmail", isFine: fn (Response $response) => $response->notFound());
     }
 
     /**
      * Adds the member to the mail list; a member who is already on it (409) is fine.
      *
-     * @throws RequestException
+     * @throws MailmanException
      */
     public function addMember(string $mailListId, string $email, string $name): void
     {
-        $this->http()->post('/members', [
+        $this->request('post', '/members', [
             'list_id' => $mailListId,
             'subscriber' => $email,
             'display_name' => $name,
             'pre_verified' => true,
             'pre_confirmed' => true,
             'pre_approved' => true,
-        ])->throwUnless(fn ($response) => $response->conflict());
+        ], fn (Response $response) => $response->conflict());
     }
 
-    /** @throws RequestException */
+    /** @throws MailmanException */
     public function removeFromAllMailLists(string $email): void
     {
         $this->mailListsOf($email)
@@ -144,7 +157,7 @@ class Mailman
     /**
      * Moves the subscriptions list by list, adding the new address before removing the old one, so a retry after a failure loses none.
      *
-     * @throws RequestException
+     * @throws MailmanException
      */
     public function changeEmailOnAllMailLists(string $name, string $oldEmail, string $newEmail): void
     {
@@ -159,7 +172,7 @@ class Mailman
      *
      * @param  array<int, string>|Arrayable<int, string>  $mailListIds
      *
-     * @throws RequestException
+     * @throws MailmanException
      */
     public function addToMailLists(string $email, string $name, array|Arrayable $mailListIds): void
     {
@@ -171,7 +184,7 @@ class Mailman
      *
      * @param  array<int, string>|Arrayable<int, string>  $mailListIds
      *
-     * @throws RequestException
+     * @throws MailmanException
      */
     public function removeFromMailLists(string $email, array|Arrayable $mailListIds): void
     {

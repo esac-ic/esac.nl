@@ -2,9 +2,9 @@
 
 namespace Tests\Unit;
 
+use App\Exceptions\MailmanException;
 use App\Services\Mailman;
 use Illuminate\Http\Client\Request;
-use Illuminate\Http\Client\RequestException;
 use Illuminate\Support\Facades\Http;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\Test;
@@ -111,7 +111,7 @@ class MailmanTest extends TestCase
     {
         Http::fake(["$this->mailmanUrl/lists" => Http::response('{"title": "400 Bad Request", "description": "Mailing list exists"}', 400)]);
 
-        $this->expectException(RequestException::class);
+        $this->expectException(MailmanException::class);
         $this->expectExceptionCode(400);
 
         $this->mailman()->createMailList('duplicate');
