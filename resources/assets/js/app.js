@@ -13,8 +13,10 @@ if (document.querySelector('textarea[data-images-url]')) {
 }
 
 // On wide screens the menu with data-transparent-at-top shows the header through it until the page scrolls.
+// Bootstrap puts its breakpoints in CSS variables; the menu expands at lg.
+const wide = window.matchMedia(`(min-width: ${getComputedStyle(document.documentElement).getPropertyValue('--breakpoint-lg')})`);
 document.querySelectorAll('[data-transparent-at-top]').forEach(nav => {
-    const update = () => nav.classList.toggle('bg-dark', window.innerWidth < 992 || window.scrollY > 15);
+    const update = () => nav.classList.toggle('bg-dark', !wide.matches || window.scrollY > 15);
 
     update();
     window.addEventListener('scroll', update, { passive: true });

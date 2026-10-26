@@ -4,7 +4,7 @@
         <div class="row">
             <div class="col-12 col-md-3">
                 <x-logo />
-                <p class="text-muted mt-4">
+                <p class="mt-4">
                     © {{ now()->year }} ESAC
                     <br>Eindhovense Studenten
                     <br>Alpen Club

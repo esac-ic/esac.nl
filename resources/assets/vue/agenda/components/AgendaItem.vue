@@ -1,5 +1,5 @@
 <template>
-    <div class="col-lg-4 col-md-6 d-flex flex-wrap">
+    <div class="col-lg-4 col-md-6 d-flex">
         <div class="card w-100 position-relative">
             <a :href="event.url">
                 <img class="card-img-top" :src="event.thumbnail" alt="">
@@ -11,7 +11,7 @@
                     <p class="card-text text-body">{{ event.text }}</p>
                 </a>
             </div>
-            <div v-if="event.hasRegistration" class="card-footer bg-white p-3">
+            <div v-if="event.hasRegistration" class="card-footer">
                 <div class="row justify-content-between align-items-center">
                     <div class="col-auto text-muted">
                         <UserGroupIcon class="icon" aria-hidden="true" /> {{ event.registrationCount }}

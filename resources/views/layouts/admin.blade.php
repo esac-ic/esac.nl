@@ -2,7 +2,7 @@
 
 @section('main')
 
-<x-menu nav-class="bg-dark position-fixed" />
+<x-menu />
 
 <div class="container-fluid mt-5 mt-lg-0">
     <div class="row">

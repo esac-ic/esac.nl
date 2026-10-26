@@ -6,23 +6,6 @@ import 'summernote/dist/summernote-bs4.css';
 // Rich text fields are textareas with data-images-url, where the editor uploads its images.
 const $editors = $('textarea[data-images-url]');
 
-// The code view doesn't save its changes, so leaving it closes it first, then repeats the click that left it.
-let $lastClick = null;
-$(document).on('mousedown', event => $lastClick = $(event.target));
-$(document).on('mouseup', () => $lastClick = null);
-
-function closeCodeView(event) {
-    const $editor = $(event.target);
-
-    if ($editor.summernote('codeview.isActivated')) {
-        $editor.summernote('codeview.deactivate');
-
-        if ($lastClick !== null && !$lastClick.hasClass('btn-codeview')) {
-            $lastClick.trigger('click');
-        }
-    }
-}
-
 function uploadImage(file, editor) {
     const data = new FormData();
     data.append('image', file);
@@ -49,4 +32,5 @@ $editors.summernote({
             uploadImage(files[0], this);
         },
     },
-}).on('summernote.blur.codeview', closeCodeView);
+// Summernote only copies its content to the textarea on changes outside the code view
+}).on('summernote.change.codeview', (event, html) => $(event.target).val(html));

@@ -32,13 +32,10 @@ export default defineConfig({
     css: {
         preprocessorOptions: {
             scss: {
-                // Bootstrap 4's SCSS warns about its own code, and it only loads through @import
+                // Bootstrap 4 only loads through @import and warns about its own code; this is the setup its docs give
                 quietDeps: true,
                 silenceDeprecations: ['import'],
             },
         },
-    },
-    optimizeDeps: {
-        exclude: ['axios'],
     },
 });

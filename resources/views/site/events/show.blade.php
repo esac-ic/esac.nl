@@ -2,8 +2,8 @@
 
 @section('content')
     <div class="container intro-container pb-3">
-        <div class="row d-flex align-items-stretch">
-            <div class="col-lg-4 d-flex flex-wrap">
+        <div class="row">
+            <div class="col-lg-4 d-flex">
                 <div class="card w-100">
                     <img class="card-img-top" src="{{$event->image_url}}" alt="">
                     <div class="card-body">
@@ -20,7 +20,7 @@
                             </p>
                         @endif
                     </div>
-                    <div class="card-footer bg-white p-3">
+                    <div class="card-footer">
                         <div class="row justify-content-between align-items-center">
                             <div class="col-auto text-muted">
                                 @if($event->registration_form_id != null)
@@ -55,7 +55,7 @@
                     </div>
                 </div>
             </div>
-            <div class="col-lg-8 d-flex flex-wrap">
+            <div class="col-lg-8 d-flex">
                 <div class="card w-100">
                     <div class="card-body">
                         <h4 class="card-title">General information</h4>
@@ -75,7 +75,7 @@
                             </ol>
                         @endif
                     </div>
-                    <div class="card-footer bg-white p-3">
+                    <div class="card-footer">
                         <a class="btn btn-outline-primary" href="{{ route('events.index') }}"><x-heroicon-o-arrow-left /> Back to events</a>
                     </div>
                 </div>

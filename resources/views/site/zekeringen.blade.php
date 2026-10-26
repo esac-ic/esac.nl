@@ -2,8 +2,8 @@
 
 @section('content')
 <div class="container intro-container">
-    <div class="row d-flex align-items-stretch">
-        <div class="col-sm-8 d-flex flex-wrap">
+    <div class="row">
+        <div class="col-sm-8 d-flex">
             <div class="card w-100">
                 <div class="card-body">
                     <h2 class="card-title">Er wordt gezekerd dat...</h2>
@@ -11,7 +11,7 @@
                 </div>
             </div>     
         </div>
-        <div class="col-sm-4 d-flex flex-wrap">
+        <div class="col-sm-4 d-flex">
             <div class="card w-100">
                 <div class="card-body">
                     <h4 class="card-title">Add zekering</h4>

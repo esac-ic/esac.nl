@@ -12,7 +12,7 @@
             {!! $newsItem->body !!}
         </p>
     </div>
-    <div class="card-footer bg-white p-3">
+    <div class="card-footer">
         <div class="row justify-content-between">
             <div class="col-auto text-muted">
                 <x-heroicon-o-user /> {{ $newsItem->author }}

@@ -1,8 +1,8 @@
 <template>
     <div>
         <div class="container intro-container">
-            <div class="row d-flex align-items-stretch">
-                <div class="col-sm-8 d-flex flex-wrap">
+            <div class="row">
+                <div class="col-sm-8 d-flex">
                     <div class="card w-100">
                         <div class="card-body">
                             <button type="button" class="btn btn-outline-primary float-right" data-toggle="modal" data-target="#export-calendar-modal">
@@ -13,7 +13,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-sm-4 d-flex flex-wrap">
+                <div class="col-sm-4 d-flex">
                     <div class="card w-100">
                         <div class="card-body">
                             <h4 class="card-title">Filters</h4>

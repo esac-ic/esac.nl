@@ -5,13 +5,12 @@
 @endsection
 
 @section('main')
-<x-menu nav-class="position-fixed bg-dark" transparent-at-top />
+<x-menu transparent-at-top>
+    <div class="flash-messages">
+        @include('includes.flash')
+    </div>
+</x-menu>
 @include('includes.header')
-
-{{-- Floats under the menu, so it shows on every page layout --}}
-<div class="position-fixed" style="top: 80px; right: 1rem; z-index: 1050;">
-    @include('includes.flash')
-</div>
 
 @yield('content')
 
