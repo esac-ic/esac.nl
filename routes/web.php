@@ -103,15 +103,18 @@ Route::get('events.ics', EventFeedController::class)->name('events.feed');
 Route::get('ical', EventFeedController::class);
 
 // Old URLs that people have shared and bookmarked.
-Route::permanentRedirect('home', '/');
 Route::permanentRedirect('agenda', '/events');
 Route::permanentRedirect('agenda/{event}', '/events/{event}');
 Route::permanentRedirect('memberlist', '/members');
 Route::permanentRedirect('signup', '/sign-up');
 Route::permanentRedirect('forms/{event}', '/events/{event}/registration');
+Route::permanentRedirect('password/reset', '/forgot-password');
+Route::permanentRedirect('password/reset/{token}', '/reset-password/{token}');
 
 Route::controller(SiteController::class)->group(function () {
     Route::get('/', 'home')->name('home');
+    // Browsers keep the old 301 from / to /home, so /home redirecting back would loop
+    Route::get('home', 'home');
     Route::get('events', 'events')->name('events.index');
     Route::get('events/{event}', 'showEvent')->name('events.show');
     Route::get('news', 'news')->name('news.index');
