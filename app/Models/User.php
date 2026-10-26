@@ -256,6 +256,8 @@ class User extends Authenticatable
     public function rejectSignUp(): void
     {
         SignUpRejected::dispatch($this->name);
+        // certificate_user has no foreign key to clean up after it
+        $this->certificates()->detach();
         $this->delete();
     }
 }
