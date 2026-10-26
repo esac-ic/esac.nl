@@ -16,6 +16,8 @@ class ZekeringRequest extends FormRequest
             // A reply is to a top-level zekering, which has room for it.
             'parent_id' => [
                 'nullable',
+                'bail',
+                'integer',
                 Rule::exists('zekerings', 'id')->whereNull('parent_id')->withoutTrashed(),
                 function (string $attribute, int $parentId, Closure $fail) {
                     if (Zekering::query()->where('parent_id', $parentId)->count() >= Zekering::MAX_CHILDREN) {

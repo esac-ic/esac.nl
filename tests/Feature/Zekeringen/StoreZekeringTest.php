@@ -40,4 +40,12 @@ class StoreZekeringTest extends TestCase
         $this->postJson(route('api.zekeringen.store'), ['text' => 'Reply', 'parent_id' => $full->id])->assertInvalid('parent_id');
         $this->postJson(route('api.zekeringen.store'), ['text' => 'Reply', 'parent_id' => $full->children->first()->id])->assertInvalid('parent_id');
     }
+
+    #[Test]
+    public function a_reply_to_something_that_is_not_a_zekering_id_is_refused()
+    {
+        $this->actingAs(User::factory()->create())->postJson(route('api.zekeringen.store'), ['text' => 'Reply', 'parent_id' => 'abc'])
+            ->assertUnprocessable()
+            ->assertInvalid('parent_id');
+    }
 }
