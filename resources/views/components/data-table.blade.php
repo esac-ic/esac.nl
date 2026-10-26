@@ -17,9 +17,6 @@
     @once
         @push('scripts')
             @vite(['resources/assets/js/vendor/datatables.js'])
-            <script type="module">
-                $('.js-datatable').DataTable();
-            </script>
         @endpush
     @endonce
 @endif
