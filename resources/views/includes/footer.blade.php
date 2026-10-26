@@ -31,17 +31,17 @@
                 <span class="h5">The student climbing and mountaineering association of Eindhoven.</span>
                 <h6>Supported by</h6>
                 <div class="row">
-                    <div class="col-6 col-lg-3 text-center">
-                        <a href="https://venusp.tue.nl/sci-cgi/index.opl"><img class="img-fluid" src="{{asset('img/ssc.png')}}"></a>
+                    <div class="col-6 col-lg-3">
+                        <a class="sponsor-logo" href="https://venusp.tue.nl/sci-cgi/index.opl"><img src="{{asset('img/ssc.png')}}" alt="Student Sports Centre Eindhoven"></a>
                     </div>
-                    <div class="col-6 col-lg-3 text-center">
-                        <a href="https://www.neoliet.nl"><img class="img-fluid" src="{{asset('img/neoliet.webp')}}"></a>
+                    <div class="col-6 col-lg-3">
+                        <a class="sponsor-logo" href="https://www.neoliet.nl"><img src="{{asset('img/neoliet.webp')}}" alt="Neoliet"></a>
                     </div>
-                    <div class="col-6 col-lg-3 text-center">
-                        <a href="https://boulderneoliet.nl/"><img class="img-fluid" src="{{asset('img/boulder.png')}}"></a>
+                    <div class="col-6 col-lg-3">
+                        <a class="sponsor-logo" href="https://boulderneoliet.nl/"><img src="{{asset('img/boulder.png')}}" alt="Boulder Neoliet"></a>
                     </div>
-                    <div class="col-6 col-lg-3 text-center">
-                        <a href="https://www.klimwinkel.nl"><img class="img-fluid" src="{{asset('img/klimwinkel.png')}}"></a>
+                    <div class="col-6 col-lg-3">
+                        <a class="sponsor-logo" href="https://www.klimwinkel.nl"><img src="{{asset('img/klimwinkel.png')}}" alt="Klimwinkel"></a>
                     </div>
                 </div>
             </div>
