@@ -24,7 +24,6 @@ class EventFactory extends Factory
             // A valid event ends after it starts and closes its registration before.
             'end_date' => (clone $start)->modify('+'.fake()->numberBetween(2, 48).' hours'),
             'registration_deadline' => (clone $start)->modify('-1 day'),
-            'image_path' => '',
             'shows_certificates' => fake()->boolean(),
         ];
     }

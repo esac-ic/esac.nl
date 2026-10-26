@@ -36,8 +36,8 @@
         <x-card title="Image" class="mt-4">
             <div class="form-group mb-0">
                 <label for="image" class="sr-only">Image</label>
-                <input type="file" @class(['form-control-file', 'is-invalid' => $errors->has('image')]) id="image" name="image" accept="image/*" @required(! $event->exists && ! $copyOf?->image_path)>
-                @if ($event->exists || $copyOf?->image_path)
+                <input type="file" @class(['form-control-file', 'is-invalid' => $errors->has('image')]) id="image" name="image" accept="image/*" @required(! $event->exists && ! $copyOf?->hasMedia('image'))>
+                @if ($event->hasMedia('image') || $copyOf?->hasMedia('image'))
                     <small class="form-text text-muted">Leave empty to keep the current image.</small>
                 @endif
                 @error('image')

@@ -6,6 +6,7 @@ use App\Enums\AdminRole;
 use App\Models\Event;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
 use PHPUnit\Framework\Attributes\Test;
 use Tests\TestCase;
@@ -44,8 +45,9 @@ class CopyEventTest extends TestCase
     #[Test]
     public function a_copy_gets_its_own_image_file_when_no_new_image_is_uploaded()
     {
-        Storage::fake('public')->put('agendaItem/1-thumbnail.jpg', 'image');
-        $event = Event::factory()->create(['image_path' => 'agendaItem/1-thumbnail.jpg']);
+        Storage::fake('public');
+        $event = Event::factory()->create();
+        $event->addMedia(UploadedFile::fake()->image('photo.jpg', 800, 600))->toMediaCollection('image');
 
         $this->post(route('admin.events.store'), [
             'title' => $event->title,
@@ -59,7 +61,8 @@ class CopyEventTest extends TestCase
 
         $copy = Event::query()->latest('id')->first();
         $this->assertNotSame($event->id, $copy->id);
-        $this->assertSame("agendaItem/{$copy->id}-thumbnail.jpg", $copy->image_path);
-        Storage::disk('public')->assertExists([$event->image_path, $copy->image_path]);
+        $this->assertNotSame($event->getFirstMediaPath('image'), $copy->getFirstMediaPath('image'));
+        $this->assertFileExists($event->getFirstMediaPath('image', 'card'));
+        $this->assertFileExists($copy->getFirstMediaPath('image', 'card'));
     }
 }

@@ -14,7 +14,7 @@ News item
             <x-detail-row label="Title">{{ $newsItem->title }}</x-detail-row>
             <x-detail-row label="Created at"><x-local-time :value="$newsItem->created_at" /></x-detail-row>
             <x-detail-row label="Author">{{ $newsItem->author }}</x-detail-row>
-            @if($newsItem->image_path != "")
+            @if($newsItem->hasMedia('image'))
                 <x-detail-row label="Image"><img src="{{$newsItem->image_url}}" style="max-width: 240px" class="img-fluid"></x-detail-row>
             @endif
         </table>

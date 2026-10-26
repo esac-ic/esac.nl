@@ -8,7 +8,7 @@
             @foreach($newsItems as $newsItem)
             <div class="col-lg-4 col-md-6 d-flex">
                 <div class="card w-100 position-relative">
-                    @if($newsItem->thumbnail_path != "")
+                    @if($newsItem->hasMedia('image'))
                     <a href="{{ route('news.show', $newsItem) }}">
                         <img class="card-img-top" src="{{$newsItem->thumbnail_url}}" alt="">
                     </a>
