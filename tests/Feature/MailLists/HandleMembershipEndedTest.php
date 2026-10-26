@@ -8,7 +8,6 @@ use App\Models\User;
 use App\Services\Mailman;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Event;
-use Mockery;
 use PHPUnit\Framework\Attributes\Test;
 use Tests\TestCase;
 
@@ -21,9 +20,7 @@ class HandleMembershipEndedTest extends TestCase
     {
         $user = User::factory()->create();
         $mailman = $this->mock(Mailman::class);
-        $mailman->shouldReceive('removeFromAllMailLists')
-            ->with(Mockery::on(fn ($argument) => $user->is($argument)))
-            ->once();
+        $mailman->shouldReceive('removeFromAllMailLists')->with($user->email)->once();
 
         new SyncMemberMailLists($mailman)->handleMembershipEnded(new MembershipEnded($user));
     }

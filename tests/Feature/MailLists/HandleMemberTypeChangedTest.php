@@ -73,4 +73,17 @@ class HandleMemberTypeChangedTest extends TestCase
         new SyncMemberMailLists($this->mockedMailman)
             ->handleMemberTypeChanged(new MemberTypeChanged($this->user, $from, $to));
     }
+
+    #[Test]
+    public function a_queued_change_uses_the_address_the_member_had_at_the_time()
+    {
+        $oldEmail = $this->user->email;
+        $event = new MemberTypeChanged($this->user, MemberType::Member, MemberType::Reunist);
+        $this->user->update(['email' => 'new@example.com']);
+
+        $this->mockedMailman->shouldReceive('removeFromMailLists')->with($oldEmail, [$this->mailListOf(MemberType::Member)])->once();
+        $this->mockedMailman->shouldReceive('addToMailLists')->with($oldEmail, $this->user->name, [$this->mailListOf(MemberType::Reunist)])->once();
+
+        new SyncMemberMailLists($this->mockedMailman)->handleMemberTypeChanged(unserialize(serialize($event)));
+    }
 }

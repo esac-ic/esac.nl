@@ -145,4 +145,32 @@ class MailmanTest extends TestCase
 
         $this->assertSame(['lid.esac.nl'], $this->mailman()->mailListsOf('member@esac.nl')->pluck('id')->all());
     }
+
+    #[Test]
+    public function an_email_change_adds_the_new_address_to_each_list_before_removing_the_old_one()
+    {
+        Http::fake([
+            "$this->mailmanUrl/lists/find" => Http::response($this->collectionPayload([$this->mailListPayload('lid'), $this->mailListPayload('nieuwsbrief')])),
+            "$this->mailmanUrl/members" => Http::response(status: 201),
+            "$this->mailmanUrl/lists/*" => Http::response(status: 204),
+        ]);
+
+        $this->mailman()->changeEmailOnAllMailLists('Name', 'old@example.com', 'new@example.com');
+
+        $this->assertSame(
+            [
+                'POST members new@example.com lid.esac.nl',
+                'DELETE lists/lid.esac.nl/member/old@example.com',
+                'POST members new@example.com nieuwsbrief.esac.nl',
+                'DELETE lists/nieuwsbrief.esac.nl/member/old@example.com',
+            ],
+            Http::recorded()
+                ->map(fn (array $pair) => $pair[0])
+                ->reject(fn (Request $request) => str_ends_with($request->url(), '/lists/find'))
+                ->map(fn (Request $request) => $request->method().' '.str_replace("$this->mailmanUrl/", '', $request->url())
+                    .($request->method() === 'POST' ? ' '.$request['subscriber'].' '.$request['list_id'] : ''))
+                ->values()
+                ->all(),
+        );
+    }
 }

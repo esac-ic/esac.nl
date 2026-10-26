@@ -11,7 +11,12 @@ class MembershipEnded implements LogsToMemberLog
 {
     use Dispatchable, SerializesModels;
 
-    public function __construct(public User $user) {}
+    public string $email;
+
+    public function __construct(public User $user)
+    {
+        $this->email = $user->email;
+    }
 
     public function logType(): MemberLogType
     {

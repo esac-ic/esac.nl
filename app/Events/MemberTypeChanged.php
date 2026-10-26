@@ -12,7 +12,12 @@ class MemberTypeChanged implements LogsToMemberLog
 {
     use Dispatchable, SerializesModels;
 
-    public function __construct(public User $user, public MemberType $previousMemberType, public MemberType $newMemberType) {}
+    public string $email;
+
+    public function __construct(public User $user, public MemberType $previousMemberType, public MemberType $newMemberType)
+    {
+        $this->email = $user->email;
+    }
 
     public function logType(): MemberLogType
     {

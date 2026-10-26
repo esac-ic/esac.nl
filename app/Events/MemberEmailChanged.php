@@ -10,5 +10,10 @@ class MemberEmailChanged
 {
     use Dispatchable, SerializesModels;
 
-    public function __construct(public User $user, public string $previousEmail) {}
+    public string $email;
+
+    public function __construct(public User $user, public string $previousEmail)
+    {
+        $this->email = $user->email;
+    }
 }

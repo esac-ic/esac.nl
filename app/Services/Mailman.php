@@ -2,7 +2,6 @@
 
 namespace App\Services;
 
-use App\Models\User;
 use Illuminate\Contracts\Support\Arrayable;
 use Illuminate\Http\Client\PendingRequest;
 use Illuminate\Http\Client\RequestException;
@@ -136,19 +135,23 @@ class Mailman
     }
 
     /** @throws RequestException */
-    public function removeFromAllMailLists(User $user): void
+    public function removeFromAllMailLists(string $email): void
     {
-        $this->mailListsOf($user->email)
-            ->each(fn (Fluent $list) => $this->removeMember($list->get('id'), $user->email));
+        $this->mailListsOf($email)
+            ->each(fn (Fluent $list) => $this->removeMember($list->get('id'), $email));
     }
 
-    /** @throws RequestException */
-    public function changeEmailOnAllMailLists(User $user, string $oldEmail, string $newEmail): void
+    /**
+     * Moves the subscriptions list by list, adding the new address before removing the old one, so a retry after a failure loses none.
+     *
+     * @throws RequestException
+     */
+    public function changeEmailOnAllMailLists(string $name, string $oldEmail, string $newEmail): void
     {
-        $listIds = $this->mailListsOf($oldEmail)->pluck('id');
-
-        $listIds->each(fn (string $id) => $this->removeMember($id, $oldEmail));
-        $this->addToMailLists($newEmail, $user->name, $listIds);
+        $this->mailListsOf($oldEmail)->each(function (Fluent $list) use ($name, $oldEmail, $newEmail) {
+            $this->addMember($list->get('id'), $newEmail, $name);
+            $this->removeMember($list->get('id'), $oldEmail);
+        });
     }
 
     /**
