@@ -12,6 +12,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\UniqueConstraintViolationException;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 
@@ -79,6 +80,15 @@ class Event extends Model
      * Registers the member for the event with their validated answers, keyed by the field id.
      */
     public function register(int $userId, array $answers): void
+    {
+        try {
+            $this->createRegistration($userId, $answers);
+        } catch (UniqueConstraintViolationException) {
+            // A request at the same moment registered the member first.
+        }
+    }
+
+    private function createRegistration(int $userId, array $answers): void
     {
         DB::transaction(function () use ($userId, $answers) {
             $registration = $this->registrations()->create([

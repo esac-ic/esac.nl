@@ -165,4 +165,16 @@ class RegisterForEventTest extends TestCase
         $this->actingAs(User::factory()->create())->get(route('events.registration.create', $event))->assertSessionHas('error', 'This event has no registration form.');
         $this->actingAs(User::factory()->withRole(AdminRole::EventAdministrator)->create())->get(route('admin.events.registrations.create', $event))->assertNotFound();
     }
+
+    #[Test]
+    public function a_member_registers_only_once_even_when_two_requests_arrive_together(): void
+    {
+        $event = Event::factory()->for(RegistrationForm::factory())->create();
+        $user = User::factory()->create();
+
+        $event->register($user->id, []);
+        $event->register($user->id, []);
+
+        $this->assertSame(1, $event->registrations()->count());
+    }
 }
