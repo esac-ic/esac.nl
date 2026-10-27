@@ -94,7 +94,11 @@ Tests run against their own disposable stack (the mysql test profile)
 	```
 	docker compose exec -e DB_HOST=mysql-test app php artisan migrate --force
 	```
-3. Run the test
+3. Build 
+	```
+	docker compose exec app npm run build
+	```
+4. Run the test
 	```
 	docker compose exec -e APP_ENV=testing -e DB_HOST=mysql-test app vendor/bin/phpunit
 	```
