@@ -53,7 +53,7 @@ On WSL you have 2 places where you can store/edit files:
 4. Visit http://localhost:8000 and log in with `test@esac.nl` / `test`
 
 > [!NOTE]
-> Used the Docker setup before? Run `docker compose down -v` once, so the test database gets created. This deletes your local database; `./dev up` seeds a fresh one. If you get permission errors, also run `sudo chown -R "$(id -u):$(id -g)" .` once.
+> Used the Docker setup before? Run `docker compose down -v` once, so the test database gets created. This deletes your local database; `./dev up` seeds a fresh one. If you get permission errors, also run `sudo chown -R "$(id -u):$(id -g)" .` once. In `.env`, rename `SAIL_XDEBUG_MODE` to `XDEBUG_MODE`.
 
 Stop it with `./dev down` and start it again with `./dev up`. Outgoing mails go to mailpit (http://localhost:8025).
 
@@ -63,7 +63,7 @@ PHP changes show up on the next page load. The `assets` container runs the Vite 
 
 PHP code changes are hot reloaded, no rebuild needed. If you want to step-debug with Xdebug, set `XDEBUG_MODE=debug` in `.env` and run `./dev up`. In you ide use port 9003 with `host.docker.internal` as the client host.
 
-To view on other devices, set `VITE_HOST` in `.env` to your computer's LAN IP (e.g. `192.168.1.10`), run `docker compose up -d assets` and browse to `http://<that IP>:8000`. Without it, the page loads its CSS and JS from `localhost`, which only works on your own computer.
+To view on other devices, set `FORWARD_HOST=0.0.0.0` and `VITE_HOST` to your computer's LAN IP (e.g. `192.168.1.10`) in `.env`, run `./dev up` and browse to `http://<that IP>:8000`. Without them, the ports only listen on your own computer.
 
 #### Running tests
 Tests run against their own `esac_testing` database

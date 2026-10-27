@@ -24,7 +24,7 @@ services:
     extra_hosts:
       - host.docker.internal:host-gateway
     ports: !override
-      - "${APP_PORT:-8000}:80"
+      - "${FORWARD_HOST:-127.0.0.1}:${APP_PORT:-8000}:80"
     volumes: !override
       - .:/app
     restart: !reset
@@ -51,7 +51,7 @@ services:
       # Its own Linux packages, so they don't clash with a node_modules installed on the host
       - node-modules:/app/node_modules
     ports:
-      - "${VITE_PORT:-5173}:5173"
+      - "${FORWARD_HOST:-127.0.0.1}:${VITE_PORT:-5173}:5173"
     environment:
       VITE_PORT: ${VITE_PORT:-5173}
       VITE_HOST: ${VITE_HOST:-localhost}
@@ -66,7 +66,7 @@ services:
 
   mysql:
     ports:
-      - "${FORWARD_DB_PORT:-3306}:3306"
+      - "127.0.0.1:${FORWARD_DB_PORT:-3306}:3306"
     # Creates the test database along with a new volume
     configs:
       - source: test-db
@@ -76,8 +76,8 @@ services:
   mailpit:
     image: axllent/mailpit:v1.32.0
     ports:
-      - "${FORWARD_MAILPIT_PORT:-1025}:1025"
-      - "${FORWARD_MAILPIT_DASHBOARD_PORT:-8025}:8025"
+      - "127.0.0.1:${FORWARD_MAILPIT_PORT:-1025}:1025"
+      - "127.0.0.1:${FORWARD_MAILPIT_DASHBOARD_PORT:-8025}:8025"
 
   mailman:
     image: maxking/mailman-core:0.5
@@ -87,7 +87,7 @@ services:
       MAILMAN_REST_USER: ${MAIL_MAN_USERNAME}
       MAILMAN_REST_PASSWORD: ${MAIL_MAN_PASSWORD}
     ports:
-      - "${FORWARD_MAILMAN_PORT:-8001}:8001"
+      - "127.0.0.1:${FORWARD_MAILMAN_PORT:-8001}:8001"
     volumes:
       - mailman-data:/opt/mailman
     healthcheck:
