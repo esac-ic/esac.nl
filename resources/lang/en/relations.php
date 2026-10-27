@@ -1,7 +1,7 @@
 <?php
 
 return [
-    "empty" => "",
+    "placeholder" => "Choose...",
     "parent" => "Parent",
     "sibling" => "Sibling",
     "partner" => "Partner",

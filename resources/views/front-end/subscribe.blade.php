@@ -157,8 +157,8 @@
                     {!! Form::text('emergencyfirstname', '', ['class' => 'form-control','required' => 'required']) !!}
                 </div>
                 <div class="form-group col-md-4">
-                    {!! Form::label('emergencyfirstname', 'Emergency contact first name') !!}
-                    {!! Form::text('emergencyfirstname', '', ['class' => 'form-control','required' => 'required']) !!}
+                    {!! Form::label('emergencylastname', 'Emergency contact last name') !!}
+                    {!! Form::text('emergencylastname', '', ['class' => 'form-control','required' => 'required']) !!}
                 </div>
                 <div class="form-group col-md-4">
                     {!! Form::label('emergencyrelation', 'Relation to emergency contact') !!}
