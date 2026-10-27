@@ -11,9 +11,14 @@ class CommitteeController extends Controller
 {
     public function index()
     {
-        return Committee::all();
+        $committees = Committee::all();
+        return view('beheer.committee.index', compact('committees'));
     }
     
+    public function create()
+    {
+        return view('beheer.committee.create');
+    }
     public function store(Request $request)
     {
         $data = $request->validate([
@@ -28,6 +33,11 @@ class CommitteeController extends Controller
     public function show(Committee $committee)
     {
         return view('beheer.committee.show', compact('committee'));
+    }
+    
+    public function edit(Committee $committee)
+    {
+        return view('beheer.committee.edit', compact('committee'));
     }
     
     public function update(Request $request, Committee $committee)
@@ -94,5 +104,10 @@ class CommitteeController extends Controller
         }
         
         return redirect()->route('beheer.committees.show', $committee);
+    }
+    
+    public function exportMemberChanges()
+    {
+        //TODO
     }
 }
