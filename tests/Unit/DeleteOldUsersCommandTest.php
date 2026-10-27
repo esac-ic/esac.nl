@@ -4,30 +4,26 @@ namespace Tests\Unit;
 
 use App\Models\User;
 use Carbon\Carbon;
-use Illuminate\Foundation\Testing\DatabaseMigrations;
+use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Artisan;
 use Tests\TestCase;
 
 class DeleteOldUsersCommandTest extends TestCase
 {
-    use DatabaseMigrations;
+    use RefreshDatabase;
+
+    private int $id;
 
     protected function setUp(): void
     {
         parent::setUp();
-        Artisan::call('db:seed');
-
-    }
-
-    protected function tearDown(): void
-    {
-        Artisan::call('migrate:reset');
-        parent::tearDown();
+        // Transactions dont reset the incremental id
+        $this->id = User::factory()->create(['phonenumber_alt' => '0612345678', 'incasso' => true])->id;
     }
 
     public function testDeleteOldUserWichIsLidAfFor3Years()
     {
-        $id = 1;
+        $id = $this->id;
         $user = User::find($id);
         $user->lid_af = Carbon::now()->subYears(3);
         $user->save();
@@ -61,7 +57,7 @@ class DeleteOldUsersCommandTest extends TestCase
 
     public function testDeleteOldUserWichIsLidAfFor1Years()
     {
-        $id = 1;
+        $id = $this->id;
         $user = User::find($id);
         $user->lid_af = Carbon::now()->subYears(1);
         $user->save();

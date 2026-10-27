@@ -56,7 +56,7 @@ class HandlePendingUserApprovedTest extends TestCase
         $this->mockedMailListFacade = Mockery::mock(MailListFacade::class);
         $this->user = User::factory()->member()->create();
 
-        Setting::truncate();
+        Setting::query()->delete();
         Setting::insert(collect($this->mailLists)->map(fn ($set) => new Setting([
             'name' => $set['key'],
             'type' => Setting::TYPE_STRING,
