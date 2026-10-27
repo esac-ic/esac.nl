@@ -20,6 +20,8 @@
         "spatie/laravel-html": "^3"
     },
     "require-dev": {
+        "ext-dom": "*",
+        "ext-libxml": "*",
         "barryvdh/laravel-debugbar": "^3.6",
         "fakerphp/faker": "^1.23",
         "mockery/mockery": "^1.6",
