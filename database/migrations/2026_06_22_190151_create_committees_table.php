@@ -12,7 +12,7 @@ return new class extends Migration {
             $table->string('name');
             $table->string('abbreviation');
             $table->string('email');
-            $table->string('description');
+            $table->string('description')->default('');
             $table->timestamps();
             $table->softDeletes();
         });

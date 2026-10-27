@@ -23,11 +23,12 @@ class CommitteeController extends Controller
     {
         $data = $request->validate([
             'name' => ['required'],
+            'email' => ['required', 'email'],
             'abbreviation' => ['required'],
-            'description' => ['required'],
         ]);
         
-        return Committee::create($data);
+        $committee = Committee::create($data);
+        return to_route('beheer.committees.show', $committee);
     }
     
     public function show(Committee $committee)
@@ -44,13 +45,15 @@ class CommitteeController extends Controller
     {
         $data = $request->validate([
             'name' => ['required'],
+            'email' => ['required', 'email'],
             'abbreviation' => ['required'],
-            'description' => ['required'],
         ]);
         
         $committee->update($data);
         
-        return $committee;
+        //TODO the behaviour in the other controllers is to redirect to the show view, but this seems somewhat unintuitive to me, what do you think is better?
+        return to_route('beheer.committees.index');
+//        return to_route('beheer.committees.show', $committee);
     }
     
     public function destroy(Committee $committee)
