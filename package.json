@@ -4,8 +4,7 @@
   "name": "esac.nl",
   "scripts": {
     "dev": "vite",
-    "build": "vite build",
-    "watch": "vite build --watch"
+    "build": "vite build"
   },
   "devDependencies": {
     "@vitejs/plugin-vue": "^6.0.10",
