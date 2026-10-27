@@ -5,8 +5,7 @@ namespace Tests\Feature\User;
 use App\Events\PendingUserCreated;
 use App\Models\User;
 use Carbon\Carbon;
-use Illuminate\Foundation\Testing\DatabaseMigrations;
-use Illuminate\Support\Facades\Artisan;
+use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\Http;
 use PHPUnit\Framework\Attributes\Test;
@@ -14,7 +13,7 @@ use Tests\TestCase;
 
 class RegisterNewMemberTest extends TestCase
 {
-    use DatabaseMigrations;
+    use RefreshDatabase;
 
     /**
      * @var string
@@ -32,12 +31,6 @@ class RegisterNewMemberTest extends TestCase
         Event::fake();
         Http::fake(['www.google.com/recaptcha/*' => Http::response(['success' => true])]);
         session()->start();
-    }
-
-    protected function tearDown(): void
-    {
-        Artisan::call('migrate:reset');
-        parent::tearDown();
     }
 
     #[Test]

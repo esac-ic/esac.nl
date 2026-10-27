@@ -4,9 +4,8 @@ namespace Tests\Feature\News;
 
 use App\Models\NewsItem;
 use App\Models\User;
-use Illuminate\Foundation\Testing\DatabaseMigrations;
+use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Http\UploadedFile;
-use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Storage;
 use PHPUnit\Framework\Attributes\Test;
@@ -14,7 +13,7 @@ use Tests\TestCase;
 
 class CreateNewsItemTest extends TestCase
 {
-    use DatabaseMigrations;
+    use RefreshDatabase;
 
     private $url = 'newsItems';
     private $newsItem;
@@ -31,11 +30,6 @@ class CreateNewsItemTest extends TestCase
         session()->start();
     }
 
-    protected function tearDown(): void
-    {
-        Artisan::call('migrate:reset');
-        parent::tearDown();
-    }
     #[Test]
     public function CreateNewsItem(){
         $body = [

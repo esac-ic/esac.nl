@@ -4,8 +4,7 @@ namespace Tests\Feature\ApplicationForm;
 
 use App\Models\ApplicationForm\ApplicationForm;
 use App\Models\User;
-use Illuminate\Foundation\Testing\DatabaseMigrations;
-use Illuminate\Support\Facades\Artisan;
+use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Config;
 use PHPUnit\Framework\Attributes\Test;
 use Tests\TestCase;
@@ -16,7 +15,7 @@ use Tests\TestCase;
  */
 class ApplicationFormIndexTest extends TestCase
 {
-    use DatabaseMigrations;
+    use RefreshDatabase;
 
     /**
      * @var ApplicationForm
@@ -47,15 +46,6 @@ class ApplicationFormIndexTest extends TestCase
         $this->applicationForm = ApplicationForm::factory()->create();
 
         session()->start();
-    }
-
-    /**
-     * @return void
-     */
-    protected function tearDown(): void
-    {
-        Artisan::call('migrate:fresh');
-        parent::tearDown();
     }
 
     #[Test]

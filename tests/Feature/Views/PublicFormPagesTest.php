@@ -7,8 +7,7 @@ use App\Models\ApplicationForm\ApplicationForm;
 use App\Models\MenuItem;
 use App\Models\NewsItem;
 use App\Models\User;
-use Illuminate\Foundation\Testing\DatabaseMigrations;
-use Illuminate\Support\Facades\Artisan;
+use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Str;
 use PHPUnit\Framework\Attributes\Test;
 use Tests\TestCase;
@@ -18,18 +17,12 @@ use Tests\TestCase;
  */
 class PublicFormPagesTest extends TestCase
 {
-    use DatabaseMigrations, InspectsForms;
+    use RefreshDatabase, InspectsForms;
 
     protected function setUp(): void
     {
         parent::setUp();
         session()->start();
-    }
-
-    protected function tearDown(): void
-    {
-        Artisan::call('migrate:reset');
-        parent::tearDown();
     }
 
     private function createPage(string $urlName, bool $login = false): void

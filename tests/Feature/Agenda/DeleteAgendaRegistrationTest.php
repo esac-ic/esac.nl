@@ -5,14 +5,13 @@ namespace Tests\Feature\Agenda;
 use App\Models\ApplicationForm\ApplicationResponse;
 use App\Models\User;
 use Carbon\Carbon;
-use Illuminate\Foundation\Testing\DatabaseMigrations;
-use Illuminate\Support\Facades\Artisan;
+use Illuminate\Foundation\Testing\RefreshDatabase;
 use PHPUnit\Framework\Attributes\Test;
 use Tests\TestCase;
 
 class DeleteAgendaRegistrationTest extends TestCase
 {
-    use DatabaseMigrations;
+    use RefreshDatabase;
 
     /**
      * @var string
@@ -32,12 +31,6 @@ class DeleteAgendaRegistrationTest extends TestCase
         $this->be($user);
 
         session()->start();
-    }
-
-    protected function tearDown(): void
-    {
-        Artisan::call('migrate:reset');
-        parent::tearDown();
     }
 
     #[Test]

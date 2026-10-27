@@ -11,8 +11,7 @@ use App\Models\MenuItem;
 use App\Models\NewsItem;
 use App\Models\Rol;
 use App\Models\User;
-use Illuminate\Foundation\Testing\DatabaseMigrations;
-use Illuminate\Support\Facades\Artisan;
+use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Config;
 use PHPUnit\Framework\Attributes\Test;
 use Tests\TestCase;
@@ -22,7 +21,7 @@ use Tests\TestCase;
  */
 class AdminFormPagesTest extends TestCase
 {
-    use DatabaseMigrations, InspectsForms;
+    use RefreshDatabase, InspectsForms;
 
     /**
      * @var User
@@ -36,12 +35,6 @@ class AdminFormPagesTest extends TestCase
 
         $user->roles()->attach([Config::get('constants.Administrator'), Config::get('constants.Content_administrator')]);
         $this->be($user);
-    }
-
-    protected function tearDown(): void
-    {
-        Artisan::call('migrate:reset');
-        parent::tearDown();
     }
 
     #[Test]
