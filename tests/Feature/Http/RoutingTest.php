@@ -1,0 +1,80 @@
+<?php
+
+namespace Tests\Feature\Http;
+
+use App\Models\User;
+use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Support\Facades\Config;
+use PHPUnit\Framework\Attributes\Test;
+use Tests\TestCase;
+
+class RoutingTest extends TestCase
+{
+    use RefreshDatabase;
+
+    #[Test]
+    public function the_root_redirects_to_home()
+    {
+        $this->get('/')->assertStatus(301)->assertRedirect('/home');
+    }
+
+    #[Test]
+    public function the_health_check_responds()
+    {
+        $this->get('/up')->assertOk();
+    }
+
+    #[Test]
+    public function an_unknown_page_shows_the_not_found_page()
+    {
+        $this->get('/does-not-exist')->assertNotFound()->assertSee('Page not found')->assertSee('<nav', false);
+    }
+
+    #[Test]
+    public function a_forbidden_page_shows_the_no_access_page()
+    {
+        $this->actingAs(User::factory()->create())
+            ->get('/users/create')
+            ->assertForbidden()
+            ->assertSee('You do not have sufficient access to view this page')
+            ->assertSee('<nav', false);
+    }
+
+    #[Test]
+    public function a_member_who_is_logged_in_is_sent_home_from_the_login_page()
+    {
+        $this->actingAs(User::factory()->create())->get('/login')->assertRedirect('/home');
+    }
+
+    #[Test]
+    public function api_errors_are_json()
+    {
+        $this->get('api/does-not-exist')->assertNotFound()->assertHeader('Content-Type', 'application/json');
+        $this->get('api/user/registrations')->assertUnauthorized()->assertJson(['message' => 'Unauthenticated.']);
+    }
+
+    #[Test]
+    public function the_api_uses_the_session_of_the_site()
+    {
+        $user = User::factory()->create();
+
+        $this->actingAs($user)
+            ->getJson('api/user/registrations?user_id='.$user->id)
+            ->assertOk();
+    }
+
+    #[Test]
+    public function api_writes_need_the_csrf_token_of_the_page()
+    {
+        $user = User::factory()->create();
+        $user->roles()->attach(Config::get('constants.Activity_administrator'));
+        // Laravel skips the CSRF check in tests
+        $this->app['env'] = 'local';
+
+        $this->actingAs($user)->postJson('api/subzekering', ['text' => 'no token'])->assertStatus(419);
+
+        $this->withSession(['_token' => 'page-token'])
+            ->postJson('api/subzekering', ['text' => 'with token'], ['X-CSRF-TOKEN' => 'page-token'])
+            ->assertOk();
+    }
+}

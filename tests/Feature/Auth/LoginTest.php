@@ -37,6 +37,16 @@ class LoginTest extends TestCase
     }
 
     #[Test]
+    public function a_member_whose_email_has_capitals_can_log_in()
+    {
+        $user = User::factory()->create(['email' => 'Jan.Jansen@Example.com', 'password' => Hash::make('secret-password')]);
+
+        $this->post('/login', ['email' => 'Jan.Jansen@Example.com', 'password' => 'secret-password'])->assertRedirect('/home');
+
+        $this->assertAuthenticatedAs($user);
+    }
+
+    #[Test]
     public function a_member_is_not_remembered_without_the_checkbox()
     {
         $user = User::factory()->create(['password' => Hash::make('secret-password')]);
