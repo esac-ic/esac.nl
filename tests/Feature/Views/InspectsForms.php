@@ -37,7 +37,8 @@ trait InspectsForms
     private function assertForm(TestResponse $response, string $method, string $action): void
     {
         $xpath = $this->xpath($response);
-        $forms = $xpath->query(sprintf('//form[@action="%s"]', url($action)));
+        // Some views use a relative action
+        $forms = $xpath->query(sprintf('//form[@action="%s" or @action="%s"]', url($action), '/' . ltrim($action, '/')));
         $this->assertSame(1, $forms->length, "No form with action $action");
         $form = $forms->item(0);
         $this->assertInstanceOf(DOMElement::class, $form);
