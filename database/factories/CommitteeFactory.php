@@ -12,7 +12,7 @@ class CommitteeFactory extends Factory
     
     public function definition(): array
     {
-        $name = $this->faker->word();
+        $name = ucfirst($this->faker->word()) . " Committee";
         $abbr = strtoupper($name[0]) . "C";
         return [
             'name' => $name,
