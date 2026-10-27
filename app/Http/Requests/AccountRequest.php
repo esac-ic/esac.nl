@@ -8,7 +8,7 @@ use Illuminate\Support\Arr;
 
 /**
  * A member updating their own details; their name, remark and member type are left to the administrators,
- * and their email address and password are changed with AccountLoginRequest.
+ * and their email address and password are changed through Fortify.
  */
 class AccountRequest extends FormRequest
 {

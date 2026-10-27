@@ -1,9 +1,9 @@
-@props(['name', 'label', 'type' => 'text', 'value' => null, 'options' => null, 'col' => null])
+@props(['name', 'label', 'type' => 'text', 'value' => null, 'options' => null, 'col' => null, 'bag' => 'default'])
 @php($id = $attributes->get('id', $name))
 @php($key = str_replace(['[', ']'], ['.', ''], $name))
 @php($value = old($key, $value))
 @php($value = $value instanceof BackedEnum ? $value->value : $value)
-@php($attributes = $attributes->class(['form-control', 'is-invalid' => $errors->has($key)]))
+@php($attributes = $attributes->class(['form-control', 'is-invalid' => $errors->getBag($bag)->has($key)]))
 <div @class(['form-group', 'col-md-'.$col => $col])>
     <label for="{{ $id }}">{{ $label }}</label>
     @if ($options !== null)
@@ -15,7 +15,7 @@
     @else
         <input {{ $attributes->merge(['type' => $type, 'name' => $name, 'id' => $id, 'value' => $value]) }}>
     @endif
-    @error($key)
+    @error($key, $bag)
         <div class="invalid-feedback">{{ $message }}</div>
     @enderror
 </div>
