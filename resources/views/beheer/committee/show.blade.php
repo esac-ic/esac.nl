@@ -27,6 +27,9 @@
                 <a href="javascript:void(0);" id="setChairPersons" class="btn btn-primary" data-toggle="modal" data-target="#setChairPersonsModal">
                     <em class="ion-person"></em> {{'Set chairperson(s)'}}
                 </a>
+                <a href="{{route("beheer.committees.index")}}" class="btn btn-primary">
+                    <em class="ion-android-arrow-back"></em> {{'Back'}}
+                </a>
                 {{--                <a href="{{url('/mailList/')}}" class="btn btn-primary">--}}
                 {{--                    <em class="ion-android-arrow-back"></em>  {{'Back'}}--}}
                 {{--                </a>--}}
@@ -98,9 +101,9 @@
             <h4> {{'Members'}}</h4>
             <table id="committeeMembers" class="table table-striped dt-responsive nowrap" style="width: 100%">
                 <thead>
-                <td><strong>{{'Name'}}</strong></td>
-                <td><strong>{{'Email'}}</strong></td>
-                <td><strong>{{'Management'}}</strong></td>
+                    <td><strong>{{'Name'}}</strong></td>
+                    <td><strong>{{'Email'}}</strong></td>
+                    <td><strong>{{'Management'}}</strong></td>
                 </thead>
                 <tbody>
                 @foreach($committee->members as $member)
@@ -193,6 +196,5 @@
                 ]
             });
         });
-        console.log({{$committee->chairPersons()}})
     </script>
 @endpush
