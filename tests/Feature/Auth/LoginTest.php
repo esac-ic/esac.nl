@@ -39,7 +39,7 @@ class LoginTest extends TestCase
         $user = User::factory()->create();
 
         $this->login($user, extra: ['remember' => '1'])
-            ->assertRedirect('/home')
+            ->assertRedirect('/')
             ->assertCookie(Auth::guard()->getRecallerName());
 
         $this->assertAuthenticatedAs($user);
@@ -60,7 +60,7 @@ class LoginTest extends TestCase
     public function a_member_is_not_remembered_without_the_checkbox()
     {
         $this->login(User::factory()->create())
-            ->assertRedirect('/home')
+            ->assertRedirect('/')
             ->assertCookieMissing(Auth::guard()->getRecallerName());
     }
 

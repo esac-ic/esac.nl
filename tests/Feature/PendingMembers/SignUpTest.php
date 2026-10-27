@@ -44,7 +44,7 @@ class SignUpTest extends TestCase
             'password' => 'a-password',
             'password_confirmation' => 'a-password',
             'g-recaptcha-response' => 'True',
-            'direct_debit' => 'True',
+            'direct_debit' => '1',
             'privacy_policy' => '1',
             'terms_and_conditions' => '1',
         ])->assertRedirectToRoute('sign-up.create');

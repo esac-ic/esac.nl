@@ -31,8 +31,6 @@ use Illuminate\Support\Facades\Route;
 
 Route::resourceParameters(['members' => 'user', 'pending-members' => 'pending_member']);
 
-Route::permanentRedirect('/', '/home');
-
 Route::prefix('admin')->name('admin.')->middleware(['auth', 'can:access-admin'])->group(function () {
     Route::get('/', DashboardController::class)->name('dashboard');
 
@@ -105,6 +103,7 @@ Route::get('events.ics', EventFeedController::class)->name('events.feed');
 Route::get('ical', EventFeedController::class);
 
 // Old URLs that people have shared and bookmarked.
+Route::permanentRedirect('home', '/');
 Route::permanentRedirect('agenda', '/events');
 Route::permanentRedirect('agenda/{event}', '/events/{event}');
 Route::permanentRedirect('memberlist', '/members');
@@ -112,7 +111,7 @@ Route::permanentRedirect('signup', '/sign-up');
 Route::permanentRedirect('forms/{event}', '/events/{event}/registration');
 
 Route::controller(SiteController::class)->group(function () {
-    Route::get('home', 'home')->name('home');
+    Route::get('/', 'home')->name('home');
     Route::get('events', 'events')->name('events.index');
     Route::get('events/{event}', 'showEvent')->name('events.show');
     Route::get('news', 'news')->name('news.index');

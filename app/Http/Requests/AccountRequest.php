@@ -14,6 +14,14 @@ class AccountRequest extends FormRequest
 {
     use ValidatesMemberDetails;
 
+    /**
+     * An unchecked checkbox isn't posted.
+     */
+    protected function prepareForValidation(): void
+    {
+        $this->merge(['direct_debit' => $this->boolean('direct_debit')]);
+    }
+
     public function rules(): array
     {
         return [

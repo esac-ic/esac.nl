@@ -3,17 +3,27 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Routing\Route as RouteDefinition;
+use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Str;
 use Illuminate\Validation\Rule;
 
 class PageRequest extends FormRequest
 {
     /**
-     * The first URL segments of the site's own routes, the old ones that redirect included, which a page's slug can't take.
+     * A page's URL can't take the first segment of the site's own routes or of a public folder, e.g. /admin or /build.
      */
-    private const array RESERVED_SLUGS = [
-        'account', 'admin', 'agenda', 'api', 'events', 'forms', 'home', 'ical', 'library', 'login', 'logout',
-        'memberlist', 'members', 'news', 'password', 'sign-up', 'signup', 'storage', 'up', 'user', 'zekeringen',
-    ];
+    private function reservedSlugs(): array
+    {
+        return collect(Route::getRoutes()->getRoutes())
+            ->map(fn (RouteDefinition $route) => Str::before($route->uri(), '/'))
+            ->merge(array_map(basename(...), File::directories(public_path())))
+            ->reject(fn (string $segment) => Str::startsWith($segment, '{'))
+            ->unique()
+            ->values()
+            ->all();
+    }
 
     public function rules(): array
     {
@@ -25,7 +35,7 @@ class PageRequest extends FormRequest
                 'required',
                 'max:255',
                 // Older pages keep their slug until it's changed
-                Rule::when($this->input('slug') !== $page?->slug, ['lowercase', 'alpha_dash:ascii', Rule::notIn(self::RESERVED_SLUGS)]),
+                Rule::when($this->input('slug') !== $page?->slug, ['lowercase', 'alpha_dash:ascii', Rule::notIn($this->reservedSlugs())]),
                 Rule::unique('pages', 'slug')->ignore($page),
             ],
             'name' => ['required', 'max:255'],

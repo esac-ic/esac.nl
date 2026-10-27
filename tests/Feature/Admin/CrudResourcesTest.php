@@ -110,7 +110,7 @@ class CrudResourcesTest extends TestCase
         Book::create(['title' => 'Alpine climbing', 'year' => 1990, 'type' => 'Guide', 'country' => 'CH', 'code' => 'A1']);
 
         $this->actingAs($this->admin)->get('library')->assertOk()->assertSee('Alpine climbing');
-        $this->get('home')->assertOk();
+        $this->get('/')->assertOk();
         $this->get('events')->assertOk();
     }
 }

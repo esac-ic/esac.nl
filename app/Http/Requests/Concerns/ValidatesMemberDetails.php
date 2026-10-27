@@ -11,17 +11,6 @@ trait ValidatesMemberDetails
 {
     use PasswordValidationRules;
 
-    /**
-     * An unchecked checkbox isn't posted.
-     */
-    protected function prepareForValidation(): void
-    {
-        $this->merge(['direct_debit' => $this->boolean('direct_debit')]);
-    }
-
-    /**
-     * The rules for the personal details every member fills in.
-     */
     protected function memberDetailRules(?int $ignoreUserId = null): array
     {
         return [

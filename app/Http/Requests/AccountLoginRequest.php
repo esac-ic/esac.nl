@@ -11,11 +11,6 @@ class AccountLoginRequest extends FormRequest
 {
     use ValidatesMemberDetails;
 
-    /**
-     * Only the details that can take over the account; there's no checkbox to read.
-     */
-    protected function prepareForValidation(): void {}
-
     public function rules(): array
     {
         return [
