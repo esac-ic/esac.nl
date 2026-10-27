@@ -10,12 +10,6 @@ fi
 grep -q '^APP_KEY=.' .env || php artisan key:generate
 [ -L public/storage ] || php artisan storage:link
 
-# No migrations table means a new database, which also gets the seed data
-# (if seeding fails, the next start won't retry it: run `php artisan db:seed`)
-if php artisan migrate:status > /dev/null 2>&1; then
-    php artisan migrate --force
-else
-    php artisan migrate --force --seed
-fi
+php artisan migrate --force --seed
 
 exec docker-php-entrypoint "$@"
