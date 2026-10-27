@@ -33,7 +33,7 @@ class HandleMemberMassMailListSyncTest extends TestCase
             ->with($user->email, $user->getName(), ['member.esac.nl'])
             ->once();
 
-        User::all()->each(fn (User $user) => new MemberMassMailListSyncJob($user)->handle($mailman));
+        new MemberMassMailListSyncJob($user)->handle($mailman);
     }
 
     #[Test]
