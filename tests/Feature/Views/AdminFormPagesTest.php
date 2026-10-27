@@ -214,6 +214,26 @@ class AdminFormPagesTest extends TestCase
     }
 
     /** @test */
+    public function a_pending_member_page_has_the_approve_form()
+    {
+        $member = User::factory()->create(['pending_user' => now()]);
+
+        $response = $this->get("users/$member->id")->assertOk();
+
+        $this->assertForm($response, 'POST', "users/$member->id/approveAsPendingMember");
+    }
+
+    /** @test */
+    public function an_old_member_page_has_the_make_active_form()
+    {
+        $member = User::factory()->create(['lid_af' => now()]);
+
+        $response = $this->get("users/$member->id")->assertOk();
+
+        $this->assertForm($response, 'POST', "users/$member->id/makeActiveMember");
+    }
+
+    /** @test */
     public function the_settings_form_renders()
     {
         $this->assertForm($this->get('beheer/settings/edit')->assertOk(), 'PUT', 'beheer/settings');
