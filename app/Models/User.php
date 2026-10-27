@@ -267,7 +267,7 @@ class User extends Authenticatable
     {
         if($this->treasurer_pending == null) $this->treasurer_pending = '[]';
         $merged = array_merge(json_decode($this->treasurer_pending), $reasons);
-        $this->treasurer_pending = json_encode(array_unique($merged));
+        $this->treasurer_pending = json_encode(array_values(array_unique($merged)));
         $this->save();
     }
 
