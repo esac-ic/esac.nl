@@ -19,9 +19,8 @@ The following libaries and framework are used:
 
 
 ## Setting up steps
-Create an .env file from .env.example, with your local values for 
+Create an .env file from .env.example. The Docker setup works with the defaults; for the other setups, fill in your local values for
 DB\_HOST, DB\_PORT, DB\_DATABASE, DB\_USERNAME and DB\_PASSWORD
-**Note**: When running your local environment on a certain port, let's say 3000, modify your `APP_URL` in the file to reflect that port, else the api's won't work
 
 ### Development environment (Docker, easiest and works on any OS)
 The easiest method is using Docker, on windows this is the easiest with [Docker Desktop](https://www.docker.com/products/docker-desktop/). No local PHP, Composer, Node or MySQL required, and no problems pinning PHP/Node versions.
@@ -52,8 +51,14 @@ On WSL you have 2 places where you can store/edit files:
 	```
 4. Visit http://localhost:8000 and log in with `test@esac.nl` / `test`
 
-> [!NOTE]
-> Used the Docker setup before? Run `docker compose down -v` once, so the test database gets created. This deletes your local database; `./dev up` seeds a fresh one. If you get permission errors, also run `sudo chown -R "$(id -u):$(id -g)" .` once. In `.env`, rename `SAIL_XDEBUG_MODE` to `XDEBUG_MODE`.
+> [!WARNING]
+> Used the Docker setup before? Run this once, otherwise `./dev up` keeps waiting on files the old setup created as root, and `./dev test` can't reach its database. It deletes your local database; `./dev up` seeds a fresh one.
+> ```
+> docker compose down -v --remove-orphans
+> docker volume rm esac_sail-mailman
+> sudo chown -R "$(id -u):$(id -g)" .
+> ```
+> Also rename `SAIL_XDEBUG_MODE` to `XDEBUG_MODE` in `.env`.
 
 Stop it with `./dev down` and start it again with `./dev up`. Outgoing mails go to mailpit (http://localhost:8025).
 
@@ -166,7 +171,9 @@ If you want to reseed the database because, for example, you want to regenerate 
 php artisan migrate:fresh
 php artisan db:seed
 ```
-The first command will drop all your tables and rerun all migrations and the second command will seed the database with data again. 
+The first command will drop all your tables and rerun all migrations and the second command will seed the database with data again. In the Docker setup, run `./dev art migrate:fresh --seed` instead.
+
+`db:seed` only seeds an empty database, so it does nothing on a database that already has users.
 
 ### Installing mailman locally
 
@@ -327,7 +334,6 @@ mailman create pending@esac.nl
 	```
 3. Create an .env file from .env.example, with your local values for 
 DB\_HOST, DB\_PORT, DB\_DATABASE, DB\_USERNAME and DB\_PASSWORD
-**Note**: When running your local environment on a certain port, let's say 3000, modify your `APP_URL` in the file to reflect that port, else the api's won't work
 
 4. Make sure you've enabled the following extensions in your php.ini file, this can be found next to the php.exe location
 	```
