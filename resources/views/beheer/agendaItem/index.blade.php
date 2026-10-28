@@ -58,7 +58,6 @@
 @endsection
 
 @push('styles')
-    <link rel="stylesheet" type="text/css" href="{{mix("css/vendor/datatables.css")}}">
     <style>
         .icon {
             margin-left: 5px;
@@ -67,10 +66,8 @@
 @endpush
 
 @push('scripts')
-    <script src="{{mix("js/vendor/datatables.js")}}"></script>
-    <script src="{{mix("js/vendor/moment.js")}}"></script>
-    <script src="{{mix("js/vendor/tempusdominus.js")}}"></script>
-    <script>
+    @vite(['resources/assets/js/vendor/datatables.js', 'resources/assets/js/vendor/moment.js', 'resources/assets/js/vendor/tempusdominus.js'])
+    <script type="module">
         $('#startDateBox').datetimepicker({
             locale: 'nl',
             format: "DD-MM-YYYY",

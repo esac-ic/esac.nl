@@ -1,8 +1,5 @@
 @extends('layouts.app')
 
-@push('styles')
-    <link rel="stylesheet" type="text/css" href="{{mix("css/vendor/tempusdominus.css")}}">
-@endpush
 
 @section('title')
 {{$curPageName}}
@@ -234,9 +231,8 @@
 @endsection
 
 @push('scripts')
-    <script src="{{mix("js/vendor/moment.js")}}"></script>
-    <script src="{{mix("js/vendor/tempusdominus.js")}}"></script>
-    <script>
+    @vite(['resources/assets/js/vendor/moment.js', 'resources/assets/js/vendor/tempusdominus.js'])
+    <script type="module">
         $('#birthDayBox').datetimepicker({
             locale: 'nl',
             format: 'L',

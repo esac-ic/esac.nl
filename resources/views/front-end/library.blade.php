@@ -1,8 +1,5 @@
 @extends('layouts.app')
 
-@push('styles')
-    <link rel="stylesheet" type="text/css" href="{{mix("css/vendor/datatables.css")}}">
-@endpush
 
 @section('content')
     <div class="container intro-container">
@@ -47,8 +44,8 @@
 @endsection
 
 @push('scripts')
-<script src="{{mix("js/vendor/datatables.js")}}"></script>
-<script>
+@vite(['resources/assets/js/vendor/datatables.js'])
+<script type="module">
     $('#dataTable').DataTable();
 </script>
 @endpush
