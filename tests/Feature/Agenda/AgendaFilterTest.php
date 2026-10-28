@@ -45,12 +45,12 @@ class AgendaFilterTest extends TestCase
     public function api_returns_filtered_agenda_items()
     {
         $agendaItemCategory = factory(AgendaItemCategory::class)->create();
-        $agendaItem = factory(AgendaItem::class)->create();
+        $agendaItem = AgendaItem::factory()->not_hidden()->create();
         $agendaItem->category = $agendaItemCategory->id;
         $agendaItem->save();
 
-        factory(AgendaItem::class)->create();
-        factory(AgendaItem::class)->create();
+        AgendaItem::factory()->not_hidden()->create();
+        AgendaItem::factory()->not_hidden()->create();
 
         $response = $this->get($this->url . "?category=" . $agendaItemCategory->id);
         $json = json_decode($response->getContent());
