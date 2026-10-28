@@ -91,11 +91,11 @@
             <div class="form-row">
                 <div class="form-group col-md-6">
                     {!! Form::label('phonenumber', 'Phone number') !!}
-                    {!! Form::text('phonenumber', ($user != null) ? $user->phonenumber : "", ['class' => 'form-control','required' => 'required']) !!}
+                    {!! Form::text('phonenumber', ($user != null) ? $user->phonenumber : "", ['class' => 'form-control','required' => 'required', 'spellcheck' => 'false']) !!}
                 </div>
                 <div class="form-group col-md-6">
                     {!! Form::label('phonenumber_alt', 'Alternative phone number') !!}
-                    {!! Form::text('phonenumber_alt', ($user != null) ? $user->phonenumber_alt : "", ['class' => 'form-control']) !!}
+                    {!! Form::text('phonenumber_alt', ($user != null) ? $user->phonenumber_alt : "", ['class' => 'form-control', 'spellcheck' => 'false']) !!}
                 </div>
             </div>
             <div class="form-row">
@@ -135,7 +135,7 @@
             <div class="form-row">
                 <div class="form-group col-md-4">
                     {!! Form::label('IBAN', 'IBAN') !!}
-                    {!! Form::text('IBAN', ($user != null) ? $user->IBAN : "", ['class' => 'form-control','required' => 'required']) !!}
+                    {!! Form::text('IBAN', ($user != null) ? $user->IBAN : "", ['class' => 'form-control','required' => 'required', 'autocapitalize' => 'characters', 'spellcheck' => 'false']) !!}
                 </div>
             </div>
             <div class="form-check">
