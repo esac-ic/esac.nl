@@ -4,9 +4,8 @@ namespace App\Listeners;
 
 use App\Events\MemberInfoUpdated;
 use App\Repositories\UserRepository;
-use Illuminate\Contracts\Queue\ShouldQueue;
 
-class MarkMemberForPenno implements ShouldQueue
+class MarkMemberForPenno
 {
     private UserRepository $userRepository;
     
