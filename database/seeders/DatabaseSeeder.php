@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Models\User;
 use Illuminate\Database\Seeder;
 
 class DatabaseSeeder extends Seeder
@@ -13,6 +14,12 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
+        // The dev setup seeds on every start; only an empty database gets the dev data
+        if (User::query()->exists()) {
+            $this->command?->info('The database already has users, skipping the seed data (migrate:fresh --seed reseeds it)');
+            return;
+        }
+
         $this->call(ClearSeeder::class);
         $this->call(RolTableSeeder::class);
         $this->call(UsersTableSeeder::class);

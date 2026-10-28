@@ -19,9 +19,8 @@ The following libaries and framework are used:
 
 
 ## Setting up steps
-Create an .env file from .env.example, with your local values for 
+Create an .env file from .env.example. The Docker setup works with the defaults; for the other setups, fill in your local values for
 DB\_HOST, DB\_PORT, DB\_DATABASE, DB\_USERNAME and DB\_PASSWORD
-**Note**: When running your local environment on a certain port, let's say 3000, modify your `APP_URL` in the file to reflect that port, else the api's won't work
 
 ### Development environment (Docker, easiest and works on any OS)
 The easiest method is using Docker, on windows this is the easiest with [Docker Desktop](https://www.docker.com/products/docker-desktop/). No local PHP, Composer, Node or MySQL required, and no problems pinning PHP/Node versions.
@@ -46,58 +45,36 @@ On WSL you have 2 places where you can store/edit files:
 	```
 	cp .env.example .env
 	```
-3. Build and start the containers (first run takes a few minutes)
+3. Build and start the containers. The first run takes a few minutes: it installs the dependencies, migrates and seeds the database and creates the mailman lists.
 	```
-	docker compose up -d --build
+	./dev up
 	```
-4. Set up the local dev instance
-	```
-	docker compose exec app composer install
-	docker compose exec app php artisan key:generate
-	docker compose exec app php artisan migrate --force
-	docker compose exec app php artisan db:seed --force
-	docker compose exec app php artisan storage:link
-	```
-5. Install and build the frontend assets
-	```
-	docker compose exec app npm install
-	docker compose exec app npm run build
-	```
-	Run `npm run build` again after changing CSS or JS files.
-6. Configure `mailman` once, otherwise mail list sync will error:
-	```
-	curl -u restadmin:restpass -X POST http://localhost:8001/3.1/domains -d mail_host=esac.nl
-	curl -u restadmin:restpass -X POST http://localhost:8001/3.1/lists -d "fqdn_listname=alle-leden@esac.nl"
-	curl -u restadmin:restpass -X POST http://localhost:8001/3.1/lists -d "fqdn_listname=nieuwsbrief@esac.nl"
-	curl -u restadmin:restpass -X POST http://localhost:8001/3.1/lists -d "fqdn_listname=reunist@esac.nl"
-	```
-	(`restadmin`/`restpass` are the `MAIL_MAN_USERNAME`/`MAIL_MAN_PASSWORD` defaults from `.env.example`, change these if you changed them in the .env)
-7. Visit http://localhost:8000
+4. Visit http://localhost:8000 and log in with `test@esac.nl` / `test`
 
-When you are done, you can stop the server with `docker compose down`
+> [!WARNING]
+> Used the Docker setup before? Run this once, otherwise `./dev up` keeps waiting on files the old setup created as root, and `./dev test` can't reach its database. It deletes your local database; `./dev up` seeds a fresh one.
+> ```
+> docker compose down -v --remove-orphans
+> docker volume rm esac_sail-mailman
+> sudo chown -R "$(id -u):$(id -g)" .
+> ```
+> Also rename `SAIL_XDEBUG_MODE` to `XDEBUG_MODE` in `.env`.
 
-To start it back up later, just run `docker compose up -d` from the repository root. 
-Outgoing mails will go to mailpit (http://localhost:8025).
+Stop it with `./dev down` and start it again with `./dev up`. Outgoing mails go to mailpit (http://localhost:8025).
 
-To avoid typing `docker compose exec app php artisan blablabla` every time. You can add an alias, e.g. put `alias art='docker compose exec app php artisan'` in your `~/.bashrc`/`~/.zshrc` (or a PowerShell profile function on Windows), then you can just run `art migrate` instead.
+PHP changes show up on the next page load. The `assets` container runs the Vite dev server: CSS changes apply without a reload, and Blade and JS changes reload the page (`./dev logs assets`).
 
-PHP code changes are hot reloaded, no rebuild needed. If you want to step-debug with Xdebug, set `SAIL_XDEBUG_MODE=debug` in `.env` and recreate the container with `docker compose up -d app`. In you ide use port 9003 with `host.docker.internal` as the client host.
+`./dev` has shortcuts for the common commands, e.g. `./dev art migrate`, `./dev composer require foo/bar`, `./dev npm install foo` and `./dev mysql`. Run `./dev` to see them all.
+
+PHP code changes are hot reloaded, no rebuild needed. If you want to step-debug with Xdebug, set `XDEBUG_MODE=debug` in `.env` and run `./dev up`. In you ide use port 9003 with `host.docker.internal` as the client host.
+
+To view on other devices, set `FORWARD_HOST=0.0.0.0` and `VITE_HOST` to your computer's LAN IP (e.g. `192.168.1.10`) in `.env`, run `./dev up` and browse to `http://<that IP>:8000`. Without them, the ports only listen on your own computer.
 
 #### Running tests
-Tests run against their own disposable stack (the mysql test profile)
-
-1. Start the test database (it's behind the `test` profile, so it won't start with a plain `docker compose up`)
-	```
-	docker compose --profile test up -d mysql-test
-	```
-2. Migrate 
-	```
-	docker compose exec -e DB_HOST=mysql-test app php artisan migrate --force
-	```
-3. Run the test
-	```
-	docker compose exec -e APP_ENV=testing -e DB_HOST=mysql-test app vendor/bin/phpunit
-	```
+Tests run against their own `esac_testing` database
+```
+./dev test
+```
 
 ### Development environment (Ubuntu on Windows + Visual Studio Code, prevents having to install a lot on Windows)
 1. Install the following:
@@ -194,7 +171,9 @@ If you want to reseed the database because, for example, you want to regenerate 
 php artisan migrate:fresh
 php artisan db:seed
 ```
-The first command will drop all your tables and rerun all migrations and the second command will seed the database with data again. 
+The first command will drop all your tables and rerun all migrations and the second command will seed the database with data again. In the Docker setup, run `./dev art migrate:fresh --seed` instead.
+
+`db:seed` only seeds an empty database, so it does nothing on a database that already has users.
 
 ### Installing mailman locally
 
@@ -355,7 +334,6 @@ mailman create pending@esac.nl
 	```
 3. Create an .env file from .env.example, with your local values for 
 DB\_HOST, DB\_PORT, DB\_DATABASE, DB\_USERNAME and DB\_PASSWORD
-**Note**: When running your local environment on a certain port, let's say 3000, modify your `APP_URL` in the file to reflect that port, else the api's won't work
 
 4. Make sure you've enabled the following extensions in your php.ini file, this can be found next to the php.exe location
 	```

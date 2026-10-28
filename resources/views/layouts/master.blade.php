@@ -63,7 +63,6 @@
     <body>
         @yield('main')
 
-        <script>var APP_URL = "{{env('APP_URL')}}";</script>
         @vite(['resources/assets/js/vendor/jquery-bootstrap.js'])
         @vite(['resources/assets/js/app.js'])
         @stack('scripts')

@@ -1,70 +1,125 @@
+# Local dev only: Compose loads this automatically, so never copy it to the production server
+
+# Your user id, so created files are yours (on Linux, set UID/GID in .env if `id -u` isn't 1000)
+x-user: &user "${UID:-1000}:${GID:-1000}"
+
 services:
   app:
     image: esac-app-dev
     build:
       context: .
       target: dev
-    env_file: !override []
+    user: *user
+    # Laravel reads the mounted .env itself, so edits apply without recreating the container
+    env_file: !reset []
     environment:
-      SERVER_NAME: localhost:80
+      # Any host, so 127.0.0.1 and your LAN IP work too
+      SERVER_NAME: :80
       CADDY_EXTRA_CONFIG: ""
       CADDY_GLOBAL_OPTIONS: "auto_https off"
-      XDEBUG_MODE: ${SAIL_XDEBUG_MODE:-off}
+      XDEBUG_MODE: ${XDEBUG_MODE:-off}
       XDEBUG_CONFIG: client_host=host.docker.internal
+      # Plain http, so browsers keep the session cookie on a LAN IP too (localhost is exempt)
+      SESSION_SECURE_COOKIE: "false"
     extra_hosts:
       - host.docker.internal:host-gateway
     ports: !override
-      - "${APP_PORT:-8000}:80"
+      - "${FORWARD_HOST:-127.0.0.1}:${APP_PORT:-8000}:80"
     volumes: !override
       - .:/app
+    restart: !reset
+    # Lets `up --wait` return once the site loads; the first start takes a few minutes
+    healthcheck:
+      test: ["CMD", "curl", "-fso", "/dev/null", "http://localhost/login"]
+      start_period: 10m
+      start_interval: 2s
     depends_on:
       mailpit:
         condition: service_started
-      mailman:
-        condition: service_healthy
+      mailman-setup:
+        condition: service_completed_successfully
+
+  # Vite dev server: CSS changes apply live, Blade/JS changes reload the page
+  assets:
+    image: esac-app-dev
+    build:
+      context: .
+      target: dev
+    user: *user
+    volumes:
+      - .:/app
+      # Its own Linux packages, so they don't clash with a node_modules installed on the host
+      - node-modules:/app/node_modules
+    ports:
+      - "${FORWARD_HOST:-127.0.0.1}:${VITE_PORT:-5173}:5173"
+    environment:
+      VITE_PORT: ${VITE_PORT:-5173}
+      VITE_HOST: ${VITE_HOST:-localhost}
+    entrypoint: ["sh", "-c"]
+    command:
+      - |
+        [ package-lock.json -ot node_modules/.package-lock.json ] || npm ci --no-audit --no-fund
+        exec node_modules/.bin/vite
+    # The image's healthcheck probes FrankenPHP, which doesn't run here
+    healthcheck:
+      disable: true
 
   mysql:
     ports:
-      - "${FORWARD_DB_PORT:-3306}:3306"
-
-  mysql-test:
-    image: mysql:8.4
-    environment:
-      MYSQL_DATABASE: ${DB_DATABASE}
-      MYSQL_USER: ${DB_USERNAME}
-      MYSQL_PASSWORD: ${DB_PASSWORD}
-      MYSQL_RANDOM_ROOT_PASSWORD: "yes"
-    command: --innodb-buffer-pool-size=128M --performance-schema=OFF --max-connections=30
-    tmpfs:
-      - /var/lib/mysql
-    healthcheck:
-      test: ["CMD-SHELL", "mysqladmin ping -h 127.0.0.1 --silent"]
-      interval: 5s
-      retries: 20
-    profiles:
-      - test
+      - "127.0.0.1:${FORWARD_DB_PORT:-3306}:3306"
+    # Creates the test database along with a new volume
+    configs:
+      - source: test-db
+        target: /docker-entrypoint-initdb.d/test-db.sql
+    restart: !reset
 
   mailpit:
-    image: axllent/mailpit:latest
+    image: axllent/mailpit:v1.32.0
     ports:
-      - "${FORWARD_MAILPIT_PORT:-1025}:1025"
-      - "${FORWARD_MAILPIT_DASHBOARD_PORT:-8025}:8025"
+      - "127.0.0.1:${FORWARD_MAILPIT_PORT:-1025}:1025"
+      - "127.0.0.1:${FORWARD_MAILPIT_DASHBOARD_PORT:-8025}:8025"
 
   mailman:
     image: maxking/mailman-core:0.5
     hostname: mailman
     environment:
       MM_HOSTNAME: "0.0.0.0"
-      MAILMAN_REST_USER: ${MAIL_MAN_USERNAME:-restadmin}
-      MAILMAN_REST_PASSWORD: ${MAIL_MAN_PASSWORD:-restpass}
+      MAILMAN_REST_USER: ${MAIL_MAN_USERNAME}
+      MAILMAN_REST_PASSWORD: ${MAIL_MAN_PASSWORD}
     ports:
-      - "${FORWARD_MAILMAN_PORT:-8001}:8001"
+      - "127.0.0.1:${FORWARD_MAILMAN_PORT:-8001}:8001"
     volumes:
-      - sail-mailman:/opt/mailman
+      - mailman-data:/opt/mailman
     healthcheck:
       test: ["CMD", "bash", "-c", "cat < /dev/null > /dev/tcp/localhost/8001"]
-      retries: 3
-      timeout: 5s
+      start_period: 2m
+      start_interval: 2s
+
+  # Creates the mailing lists the member sync expects, if missing
+  mailman-setup:
+    image: curlimages/curl:8.11.1
+    environment:
+      AUTH: ${MAIL_MAN_USERNAME}:${MAIL_MAN_PASSWORD}
+      API: ${MAIL_MAN_URL}
+    entrypoint: ["sh", "-ec"]
+    command:
+      - |
+        curl -sfu "$$AUTH" "$$API/domains/esac.nl" -o /dev/null \
+          || curl -sfu "$$AUTH" "$$API/domains" -d mail_host=esac.nl -o /dev/null
+        for list in alle-leden nieuwsbrief reunist; do
+          curl -sfu "$$AUTH" "$$API/lists/$$list@esac.nl" -o /dev/null \
+            || curl -sfu "$$AUTH" "$$API/lists" -d "fqdn_listname=$$list@esac.nl" -o /dev/null
+        done
+    depends_on:
+      mailman:
+        condition: service_healthy
+
+configs:
+  test-db:
+    content: |
+      CREATE DATABASE IF NOT EXISTS esac_testing;
+      GRANT ALL ON esac_testing.* TO '${DB_USERNAME}'@'%';
 
 volumes:
-  sail-mailman:
+  mailman-data:
+  node-modules:

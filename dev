@@ -1,0 +1,19 @@
+#!/bin/sh
+# Shortcuts for the Docker dev setup, e.g. `./dev art migrate`. Anything else runs in the app
+# container, so `./dev composer require foo/bar`, `./dev npm install foo` and `./dev bash` work too.
+set -e
+cd "$(dirname "$0")"
+# doesn't recreate everything all the time
+export BUILDX_NO_DEFAULT_ATTESTATIONS=1
+
+case "$1" in
+    up)    docker compose up --wait --build ;;
+    down)  shift; docker compose down "$@" ;;
+    logs)  shift; docker compose logs -f "$@" ;;
+    art)   shift; docker compose exec app php artisan "$@" ;;
+    test)  shift; docker compose exec app composer test -- "$@" ;;
+    npm)   shift; docker compose exec assets npm "$@" ;;
+    mysql) docker compose exec mysql sh -c 'mysql -u"$MYSQL_USER" -p"$MYSQL_PASSWORD" "$MYSQL_DATABASE"' ;;
+    "")    echo "Usage: ./dev up | down | logs | art <command> | test | npm <command> | mysql | <command in the app container>" ;;
+    *)     docker compose exec app "$@" ;;
+esac
