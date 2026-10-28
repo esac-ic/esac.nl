@@ -9,7 +9,8 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Queue\Queueable;
 
 /**
- * Adds one member to the mail lists of their kind of member.
+ * Adds one member to the mail lists of their kind of member. The mass sync queues one per member, so each is retried
+ * on its own.
  */
 class MemberMassMailListSyncJob implements ShouldQueue
 {
@@ -21,7 +22,7 @@ class MemberMassMailListSyncJob implements ShouldQueue
     {
         $mailLists = UpdateMemberTypeMaillists::getMemberTypeMailLists((string) $this->user->kind_of_member);
 
-        if ($mailLists) {
+        if ($mailLists !== []) {
             $mailman->addUserToSpecifiedMailLists($this->user->email, $this->user->getName(), $mailLists);
         }
     }

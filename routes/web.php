@@ -24,18 +24,18 @@ use Illuminate\Support\Facades\Route;
 
 Route::permanentRedirect('/', '/home');
 
-// Admin routes
+// Management
 Route::group(['as' => 'beheer.', 'prefix' => 'beheer/'], function () {
     Route::get('home', [ManageController::class, 'index'])->name('home');
     Route::resource('applicationForms', ApplicationFormController::class);
 
-    // setting routes
+    // Settings
     Route::get('/settings', [SettingsController::class, 'index'])->name('settings.index');
     Route::put('/settings', [SettingsController::class, 'update'])->name('settings.update');
     Route::get('/settings/edit', [SettingsController::class, 'edit'])->name('settings.edit');
 });
 
-// extra user routes
+// Members
 Route::get('users/old_members', [UserController::class, 'indexOldMembers'])->name('users.index-old-members');
 Route::get('users/pending_members', [PendingUserController::class, 'indexPendingMembers'])->name('users.indexPendingMembers');
 Route::get('users/exportUsers', [UserController::class, 'exportUsers'])->name('users.exportUsers');
@@ -47,17 +47,17 @@ Route::patch('users/{user}/makeActiveMember', [UserController::class, 'makeActiv
 Route::patch('users/{user}/removeAsPendingMember', [PendingUserController::class, 'removeAsPendingMember'])->name('users.removeAsPendingMember');
 Route::patch('users/{user}/approveAsPendingMember', [PendingUserController::class, 'approveAsPendingMember'])->name('users.approveAsPendingMember');
 
-// user certification routes
+// Member certificates
 Route::get('users/{user}/addCertificate', [UserCertificateController::class, 'addCertificate'])->name('users.certificates.create');
 Route::get('users/{user}/addCertificate/{certificate}', [UserCertificateController::class, 'editUserCertificate'])->name('users.certificates.edit');
 Route::post('users/{user}/addCertificate', [UserCertificateController::class, 'saveCertificate'])->name('users.certificates.store');
 Route::patch('users/{user}/addCertificate/{certificate}', [UserCertificateController::class, 'updateUserCertificate'])->name('users.certificates.update');
 Route::delete('users/{user}/addCertificate/{certificate}', [UserCertificateController::class, 'deleteUserCertificate'])->name('users.certificates.destroy');
 
-// library routes
+// Library
 Route::get('books/exportLibrary', [LibraryController::class, 'exportLibrary'])->name('books.export');
 
-// crud routes
+// Resources
 Route::resource('users', UserController::class);
 Route::resource('rols', RolController::class);
 Route::resource('pages', PaginaBeheerController::class);
@@ -74,7 +74,7 @@ Route::post('agendaItems/{agendaItem}/copy', [AgendaItemController::class, 'copy
 Route::get('userEventLog', [UserEventLogEntryController::class, 'index'])->name('user-event-log-entry.index');
 Route::post('userEventLog/export', [UserEventLogEntryController::class, 'export'])->name('user-event-log-entry.export');
 
-// inschrijf routes
+// Event registrations
 Route::get('forms/{agendaItem}', [UserApplicationFormController::class, 'showRegistrationForm'])->name('forms.create');
 Route::delete('forms/{agendaItem}', [UserApplicationFormController::class, 'unregister'])->name('forms.unregister');
 Route::post('forms/{agendaItem}', [UserApplicationFormController::class, 'store'])->name('forms.store');
@@ -85,11 +85,12 @@ Route::get('forms/users/{user}/detail/{agendaItem}', [AgendaApplicationFormContr
 Route::get('forms/users/{agendaItem}/export', [AgendaApplicationFormController::class, 'exportData'])->name('forms.users.export');
 Route::delete('forms/{agendaItem}/remove/{applicationResponse}', [AgendaApplicationFormController::class, 'destroy'])->name('forms.destroy');
 
-// maillist routes
+// Mailing lists
 Route::delete('/mailList/{mailistid}/member/{memberid}', [MailListController::class, 'deleteMemberFromMailList'])->name('mailList.members.destroy');
 Route::post('/mailList/{mailistid}/member', [MailListController::class, 'addMember'])->name('mailList.members.store');
 Route::post('/mailList/massSync', [MailListController::class, 'massMemberMailListSync'])->name('mailList.massSync');
-// front-end routes
+
+// Front end
 Route::get('/zekeringen', [FrontEndController::class, 'zekeringen'])->name('front-end.zekeringen');
 Route::get('/library', [FrontEndController::class, 'library'])->name('front-end.library');
 Route::get('/agenda', [FrontEndController::class, 'agenda'])->name('front-end.agenda');

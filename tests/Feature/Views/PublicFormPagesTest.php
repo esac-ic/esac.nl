@@ -17,7 +17,7 @@ use Tests\TestCase;
  */
 class PublicFormPagesTest extends TestCase
 {
-    use RefreshDatabase, InspectsForms;
+    use InspectsForms, RefreshDatabase;
 
     protected function setUp(): void
     {
@@ -139,10 +139,10 @@ class PublicFormPagesTest extends TestCase
     public function the_news_page_shortens_long_items()
     {
         $this->createPage(MenuItem::NEWSURL);
-        NewsItem::factory()->create(['text' => '<p>' . str_repeat('a', 200) . '</p>']);
+        NewsItem::factory()->create(['text' => '<p>'.str_repeat('a', 200).'</p>']);
 
         $response = $this->get('news')->assertOk();
 
-        $response->assertSee(str_repeat('a', 150 - strlen('<p>')) . '...', false);
+        $response->assertSee(str_repeat('a', 150 - strlen('<p>')).'...', false);
     }
 }

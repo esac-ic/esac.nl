@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Created by PhpStorm.
  * User: Niekh
@@ -6,7 +7,7 @@
  * Time: 16:59
  */
 
-return array(
+return [
     'AF' => 'Afghanistan',
     'AX' => 'Åland Islands',
     'AL' => 'Albania',
@@ -260,4 +261,4 @@ return array(
     'YE' => 'Yemen',
     'ZM' => 'Zambia',
     'ZW' => 'Zimbabwe',
-);
+];

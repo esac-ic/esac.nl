@@ -14,9 +14,9 @@ trait InspectsForms
 {
     private function xpath(TestResponse $response): DOMXPath
     {
-        $document = new DOMDocument();
+        $document = new DOMDocument;
         libxml_use_internal_errors(true);
-        $document->loadHTML('<?xml encoding="UTF-8">' . $response->getContent());
+        $document->loadHTML('<?xml encoding="UTF-8">'.$response->getContent());
         libxml_clear_errors();
 
         return new DOMXPath($document);
@@ -38,7 +38,7 @@ trait InspectsForms
     {
         $xpath = $this->xpath($response);
         // Some views use a relative action
-        $forms = $xpath->query(sprintf('//form[@action="%s" or @action="%s"]', url($action), '/' . ltrim($action, '/')));
+        $forms = $xpath->query(sprintf('//form[@action="%s" or @action="%s"]', url($action), '/'.ltrim($action, '/')));
         $this->assertSame(1, $forms->length, "No form with action $action");
         $form = $forms->item(0);
         $this->assertInstanceOf(DOMElement::class, $form);

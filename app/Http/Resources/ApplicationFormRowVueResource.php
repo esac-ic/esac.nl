@@ -10,8 +10,6 @@ use Illuminate\Http\Resources\Json\JsonResource;
  * Class ApplicationFormRowVueResource
  *
  * @mixin ApplicationFormRow
- * @package App\Http\Resources
- *
  */
 class ApplicationFormRowVueResource extends JsonResource
 {

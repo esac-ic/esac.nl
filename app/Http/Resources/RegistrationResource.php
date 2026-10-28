@@ -19,8 +19,8 @@ class RegistrationResource extends JsonResource
             'name' => $this->agendaItem->title,
             'startDate' => $this->agendaItem->start_date->format('d-m-Y H:i'),
             'actions' => '
-                    <a href="' . route('forms.users.show', [$this->user_id, $this->agenda_id]) . '"><span title="' . 'Show entered information' . '" class="ion-eye" aria-hidden="true"></span></a>
-                    <a href="#" id="delete_button" data-url="' . route('forms.destroy', [$this->agenda_id, $this->resource]) . '"><span  class="ion-trash-a"></span></a>
+                    <a href="'.route('forms.users.show', [$this->user_id, $this->agenda_id]).'"><span title="'.'Show entered information'.'" class="ion-eye" aria-hidden="true"></span></a>
+                    <a href="#" id="delete_button" data-url="'.route('forms.destroy', [$this->agenda_id, $this->resource]).'"><span  class="ion-trash-a"></span></a>
                 ',
         ];
     }

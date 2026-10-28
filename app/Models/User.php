@@ -24,8 +24,8 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Str;
 use RuntimeException;
 
 #[Fillable([
@@ -82,6 +82,7 @@ class User extends Authenticatable
             'birthday' => 'date',
             'lid_af' => 'date:Y-m-d',
             'pending_user' => 'date:Y-m-d',
+            'incasso' => 'boolean',
         ];
     }
 

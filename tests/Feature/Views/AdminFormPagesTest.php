@@ -21,7 +21,7 @@ use Tests\TestCase;
  */
 class AdminFormPagesTest extends TestCase
 {
-    use RefreshDatabase, InspectsForms;
+    use InspectsForms, RefreshDatabase;
 
     /**
      * @var User
@@ -178,7 +178,7 @@ class AdminFormPagesTest extends TestCase
 
         $this->assertForm($response, 'PATCH', "users/{$this->user->id}");
         $this->assertTrue($this->field($response, 'kind_of_member')->hasAttribute('disabled'));
-        $this->get('users/' . User::factory()->create()->id . '/edit')->assertStatus(403);
+        $this->get('users/'.User::factory()->create()->id.'/edit')->assertStatus(403);
     }
 
     #[Test]
