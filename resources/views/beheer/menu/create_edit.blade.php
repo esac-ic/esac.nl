@@ -6,12 +6,11 @@
 
 @section('content')
 	@if($errors->any())
-		<div class="alert alert-danger alert-dismissable" role="alert">
-			<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+		<ul class="alert alert-danger">
 			@foreach ($errors->all() as $error)
-				<div>{{ $error }}</div>
+				<li>{{ $error }}</li>
 			@endforeach
-		</div>
+		</ul>
 	@endif
 	<form class="form-horizontal" action="{{url($fields['url'])}}" method="POST">
 		@csrf
