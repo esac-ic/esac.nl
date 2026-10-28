@@ -70,7 +70,7 @@ class EboekhoudenFacade
         $user->eboekhouden_id = $result['id'];
         $user->save();
 
-        // TODO add a subscription once eboekhouden adds this to their API
+        // TODO add a subscription (once this is possible with the eboekhouden API)
     }
 
     public function updateRelation(User $user)
@@ -87,6 +87,8 @@ class EboekhoudenFacade
         $this->eboekhoudenHandler->patch("/v1/relation/{$user->eboekhouden_id}",
             $this->getRelationInfo($user, $currentNotes . "\n[{$date}] Updated by esac.nl")
         );
+
+        // TODO possibly update the subscription (once this is possible with the eboekhouden API)
     }
 
 }
