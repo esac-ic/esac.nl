@@ -6,14 +6,14 @@ use App\Models\ApplicationForm\ApplicationForm;
 use App\Models\ApplicationForm\ApplicationFormRow;
 use App\Models\ApplicationForm\ApplicationFormRowOption;
 use App\Models\User;
-use Illuminate\Foundation\Testing\DatabaseMigrations;
-use Illuminate\Support\Facades\Artisan;
+use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Config;
-use TestCase;
+use PHPUnit\Framework\Attributes\Test;
+use Tests\TestCase;
 
 class UpdateApplicationFormTest extends TestCase
 {
-    use DatabaseMigrations;
+    use RefreshDatabase;
 
     /**
      * @var User
@@ -46,16 +46,7 @@ class UpdateApplicationFormTest extends TestCase
         session()->start();
     }
 
-    /**
-     * @return void
-     */
-    protected function tearDown(): void
-    {
-        Artisan::call('migrate:fresh');
-        parent::tearDown();
-    }
-
-    /** @test */
+    #[Test]
     public function update_application_form_as_content_administrator(): void
     {
         $applicationFormRow = ApplicationFormRow::factory()->create([
@@ -108,7 +99,7 @@ class UpdateApplicationFormTest extends TestCase
         $this->assertApplicationForm($this->applicationForm, $body);
     }
 
-    /** @test */
+    #[Test]
     public function update_application_form_as_administrator_should_return_403(): void
     {
         $this->user->roles()->sync([Config::get('constants.Administrator')]);
@@ -133,7 +124,7 @@ class UpdateApplicationFormTest extends TestCase
         $response->assertStatus(403);
     }
 
-    /** @test */
+    #[Test]
     public function update_application_form_as_certificate_administrator_should_return_403(): void
     {
         $this->user->roles()->sync([Config::get('constants.Certificate_administrator')]);

@@ -3,14 +3,14 @@
 namespace Tests\Feature\News;
 use App\Models\NewsItem;
 use App\Models\User;
-use Illuminate\Foundation\Testing\DatabaseMigrations;
-use Illuminate\Support\Facades\Artisan;
+use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Config;
-use TestCase;
+use PHPUnit\Framework\Attributes\Test;
+use Tests\TestCase;
 
 class DeleteNewsItemTest extends TestCase
 {
-    use DatabaseMigrations;
+    use RefreshDatabase;
 
     private $url = 'newsItems';
     private $newsItem;
@@ -27,12 +27,7 @@ class DeleteNewsItemTest extends TestCase
         session()->start();
     }
 
-    protected function tearDown(): void
-    {
-        Artisan::call('migrate:reset');
-        parent::tearDown();
-    }
-    /** @test */
+    #[Test]
     public function DeleteNewsItem(){
         $newsItem = NewsItem::factory()->create();
 

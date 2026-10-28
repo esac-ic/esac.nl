@@ -4,14 +4,14 @@ namespace Tests\Feature\Role;
 
 use App\Models\Rol;
 use App\Models\User;
-use Illuminate\Foundation\Testing\DatabaseMigrations;
-use Illuminate\Support\Facades\Artisan;
+use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Config;
-use TestCase;
+use PHPUnit\Framework\Attributes\Test;
+use Tests\TestCase;
 
 class DeleteRoleTest extends TestCase
 {
-    use DatabaseMigrations;
+    use RefreshDatabase;
 
     /**
      * @var string
@@ -34,13 +34,7 @@ class DeleteRoleTest extends TestCase
         session()->start();
     }
 
-    protected function tearDown(): void
-    {
-        Artisan::call('migrate:reset');
-        parent::tearDown();
-    }
-
-    /** @test */
+    #[Test]
     public function a_role_can_be_deleted_by_an_admin()
     {
         $role = Rol::factory()->create();
@@ -52,7 +46,7 @@ class DeleteRoleTest extends TestCase
         $this->assertNull(Rol::find($role->id));
     }
 
-    /** @test */
+    #[Test]
     public function a_user_can_not_delete_a_role()
     {
         $role = Rol::factory()->create();

@@ -2,17 +2,16 @@
 
 namespace Tests\Feature\ApplicationForm;
 
-
 use App\Models\ApplicationForm\ApplicationForm;
 use App\Models\User;
-use Illuminate\Foundation\Testing\DatabaseMigrations;
-use Illuminate\Support\Facades\Artisan;
+use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Config;
-use TestCase;
+use PHPUnit\Framework\Attributes\Test;
+use Tests\TestCase;
 
 class DeleteApplicationFormTest extends TestCase
 {
-    use DatabaseMigrations;
+    use RefreshDatabase;
 
     /**
      * @var User
@@ -45,16 +44,7 @@ class DeleteApplicationFormTest extends TestCase
         session()->start();
     }
 
-    /**
-     * @return void
-     */
-    protected function tearDown(): void
-    {
-        Artisan::call('migrate:fresh');
-        parent::tearDown();
-    }
-
-    /** @test */
+    #[Test]
     public function delete_application_form_as_content_administrator(): void
     {
         $response = $this->delete($this->url);
@@ -64,7 +54,7 @@ class DeleteApplicationFormTest extends TestCase
         $this->assertNull(ApplicationForm::find($this->applicationForm->id));
     }
 
-    /** @test */
+    #[Test]
     public function delete_application_form_as_activity_administrator(): void
     {
         $this->user->roles()->sync([Config::get('constants.Activity_administrator')]);
@@ -76,7 +66,7 @@ class DeleteApplicationFormTest extends TestCase
         $this->assertNull(ApplicationForm::find($this->applicationForm->id));
     }
 
-    /** @test */
+    #[Test]
     public function delete_application_form_as_administrator_should_return_403(): void
     {
         $this->user->roles()->sync([Config::get('constants.Administrator')]);
@@ -86,7 +76,7 @@ class DeleteApplicationFormTest extends TestCase
         $response->assertStatus(403);
     }
 
-    /** @test */
+    #[Test]
     public function delete_application_form_as_certificate_administrator_should_return_403(): void
     {
         $this->user->roles()->sync([Config::get('constants.Certificate_administrator')]);

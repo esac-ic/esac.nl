@@ -8,14 +8,14 @@ use App\Models\ApplicationForm\ApplicationFormRow;
 use App\Models\ApplicationForm\ApplicationResponse;
 use App\Models\User;
 use Carbon\Carbon;
-use Illuminate\Foundation\Testing\DatabaseMigrations;
-use Illuminate\Support\Facades\Artisan;
+use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Config;
-use TestCase;
+use PHPUnit\Framework\Attributes\Test;
+use Tests\TestCase;
 
 class RegisterForAgendaItemTest extends TestCase
 {
-    use DatabaseMigrations;
+    use RefreshDatabase;
 
     private $url = '/forms/';
 
@@ -31,13 +31,7 @@ class RegisterForAgendaItemTest extends TestCase
         session()->start();
     }
 
-    protected function tearDown(): void
-    {
-        Artisan::call('migrate:reset');
-        parent::tearDown();
-    }
-
-    /** @test */
+    #[Test]
     public function show_event_registration_form_for_not_existing_agenda_item()
     {
         $response = $this->get($this->url . 3424);
@@ -45,7 +39,7 @@ class RegisterForAgendaItemTest extends TestCase
         $response->assertStatus(404);
     }
 
-    /** @test */
+    #[Test]
     public function show_event_registration_form_for_agenda_item_without_registration_form()
     {
         $agendaItem = AgendaItem::factory()->create();
@@ -57,7 +51,7 @@ class RegisterForAgendaItemTest extends TestCase
         $response->assertViewHas('error', 'ERROR: No registration form available for this activity.');
     }
 
-    /** @test */
+    #[Test]
     public function show_event_registration_form_for_agenda_item_with_past_subscription_date()
     {
         $agendaItem = AgendaItem::factory()->create();
@@ -69,7 +63,7 @@ class RegisterForAgendaItemTest extends TestCase
         $response->assertViewHas('error', 'The registration date has expired, so you can no longer subscribe.');
     }
 
-    /** @test */
+    #[Test]
     public function show_event_registration_form_for_agenda_item_where_user_is_already_registered()
     {
         $agendaItem = AgendaItem::factory()->create();
@@ -91,7 +85,7 @@ class RegisterForAgendaItemTest extends TestCase
         $response->assertViewHas('error', 'You have already signed up for this event.');
     }
 
-    /** @test */
+    #[Test]
     public function register_for_agenda_item(): void
     {
         $agendaItem = AgendaItem::factory()->create();
@@ -139,7 +133,7 @@ class RegisterForAgendaItemTest extends TestCase
         }
     }
 
-    /** @test */
+    #[Test]
     public function register_user_for_agenda_item_as_normale_member_should_not_be_allowed(): void
     {
         $userToRegister = User::factory()->create();
@@ -175,7 +169,7 @@ class RegisterForAgendaItemTest extends TestCase
         $response->assertStatus(403);
     }
 
-    /** @test */
+    #[Test]
     public function register_user_for_agenda_item_as_administrator(): void
     {
         $this->user->roles()->attach(Config::get('constants.Content_administrator'));

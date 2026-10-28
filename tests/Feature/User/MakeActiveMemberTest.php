@@ -8,8 +8,9 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Event;
+use Tests\TestCase;
 
-class MakeActiveMemberTest extends \TestCase
+class MakeActiveMemberTest extends TestCase
 {
     use RefreshDatabase;
     

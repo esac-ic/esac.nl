@@ -10,8 +10,9 @@ use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Lang;
 use Mockery;
+use Tests\TestCase;
 
-class HandleMemberTypeChangedTest extends \TestCase
+class HandleMemberTypeChangedTest extends TestCase
 {
     use RefreshDatabase;
     
@@ -55,7 +56,7 @@ class HandleMemberTypeChangedTest extends \TestCase
         $this->mockedMailListFacade = Mockery::mock(MailListFacade::class);
         $this->user = User::factory()->member()->create();
 
-        Setting::truncate();
+        Setting::query()->delete();
         Setting::insert(collect($this->mailLists)->map(fn ($set) => new Setting([
             'name' => $set['key'],
             'type' => Setting::TYPE_STRING,

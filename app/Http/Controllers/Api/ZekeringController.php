@@ -4,7 +4,9 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Repositories\ZekeringenRepository;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Config;
 
 class ZekeringController extends Controller
@@ -15,14 +17,14 @@ class ZekeringController extends Controller
         $this->middleware('authorize:' . Config::get('constants.Activity_administrator'))->only('destroy');
     }
 
-    public function getZekeringen(ZekeringenRepository $zekeringenRepository)
+    public function getZekeringen(ZekeringenRepository $zekeringenRepository): array
     {
         $zekeringen = $zekeringenRepository->findBy('has_parent', false)->with('children')->get();
 
         return ['zekeringen' => $zekeringen];
     }
 
-    public function storeZekering(Request $request, ZekeringenRepository $zekeringenRepository)
+    public function storeZekering(Request $request, ZekeringenRepository $zekeringenRepository): RedirectResponse
     {
         $this->validateInput($request);
 
@@ -31,31 +33,31 @@ class ZekeringController extends Controller
         return redirect('/zekeringen');
     }
 
-    public function storeSubZekering(Request $request, ZekeringenRepository $zekeringenRepository)
+    public function storeSubZekering(Request $request, ZekeringenRepository $zekeringenRepository): Response
     {
         $this->validateInput($request);
 
         $data = $request->all();
-        $data['parent'] = $request->get('parent_id');
+        $data['parent'] = $request->input('parent_id');
 
         $zekeringenRepository->create($data);
 
         return response(["msg" => "Sub zekering created"], 200);
     }
 
-    public function destroy(int $id, ZekeringenRepository $zekeringenRepository)
+    public function destroy(int $id, ZekeringenRepository $zekeringenRepository): Response
     {
         $zekeringenRepository->delete($id);
 
         return response("", 200);
     }
 
-    private function validateInput(Request $request)
+    private function validateInput(Request $request): void
     {
         $request->validate($this->getValidationRules());
     }
 
-    private function getValidationRules()
+    private function getValidationRules(): array
     {
         return ['text' => 'required'];
     }

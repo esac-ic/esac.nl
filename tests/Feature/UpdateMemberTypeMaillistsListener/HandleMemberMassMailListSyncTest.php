@@ -9,9 +9,11 @@ use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Lang;
 use Mockery;
+use Tests\TestCase;
+
 use function PHPUnit\Framework\assertEquals;
 
-class HandleMemberMassMailListSyncTest extends \TestCase
+class HandleMemberMassMailListSyncTest extends TestCase
 {
     use RefreshDatabase;
     
@@ -55,7 +57,7 @@ class HandleMemberMassMailListSyncTest extends \TestCase
         $this->mockedMailListFacade = Mockery::mock(MailListFacade::class);
         $this->user = User::factory()->member()->create();
 
-        Setting::truncate();
+        Setting::query()->delete();
         Setting::insert(collect($this->mailLists)->map(fn ($set) => new Setting(['name' => $set['key'], 'type' => Setting::TYPE_STRING, 'value' => $set['value']]))->values()->toArray());
     }
     
@@ -69,8 +71,7 @@ class HandleMemberMassMailListSyncTest extends \TestCase
         $this->user->kind_of_member = Lang::get('member');
         $this->user->save();
         
-        $job = new MemberMassMailListSyncJob(User::all());
-        $job->handle($this->mockedMailListFacade);
+        User::all()->each(fn (User $user) => new MemberMassMailListSyncJob($user)->handle($this->mockedMailListFacade));
     }
 
     //Reasonable order of magnitude for a big mail list
@@ -90,9 +91,7 @@ class HandleMemberMassMailListSyncTest extends \TestCase
                 ->once();
         }
         
-        $job = new MemberMassMailListSyncJob(User::all());
-        
-        $job->handle($this->mockedMailListFacade);
+        User::all()->each(fn (User $user) => new MemberMassMailListSyncJob($user)->handle($this->mockedMailListFacade));
     }
     
     public function test_add_mix_of_members()
@@ -119,7 +118,6 @@ class HandleMemberMassMailListSyncTest extends \TestCase
             })
             ->times(User::count());
 
-        $job = new MemberMassMailListSyncJob(User::all());
-        $job->handle($this->mockedMailListFacade);
+        User::all()->each(fn (User $user) => new MemberMassMailListSyncJob($user)->handle($this->mockedMailListFacade));
     }
 }

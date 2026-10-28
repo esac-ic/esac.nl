@@ -3,49 +3,37 @@
 namespace App\Exports;
 
 use App\Repositories\UserEventLogEntryRepository;
-use Maatwebsite\Excel\Concerns\FromCollection;
-use Maatwebsite\Excel\Concerns\WithHeadings;
-use Maatwebsite\Excel\Concerns\WithMapping;
-use Maatwebsite\Excel\Concerns\WithTitle;
-use Maatwebsite\Excel\Concerns\ShouldAutoSize;
 use Illuminate\Support\Carbon;
-use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Collection;
 
-class UserEventLogExport implements FromCollection, WithTitle, WithHeadings, ShouldAutoSize, WithMapping
+class UserEventLogExport extends SpreadsheetExport
 {
-    private UserEventLogEntryRepository $repository;
-    private Array | null $names;
-    private Array | null $eventTypes;
-    private Carbon $startDate;
-    private Carbon $endDate;
-    
-     /**
+    /**
      * All properties to be included in the export. Maps model property to header label.
      * Note: the keys should be the same as the model attributes
      */
-    private const PROPERTY_LABELS = [
+    private const array PROPERTY_LABELS = [
         "Time",
         "Event Type",
         "User name",
         "Event Details",
     ];
     
-    public function __construct(UserEventLogEntryRepository $userEventLogEntryRepository, Array | null $eventTypes, Array | null $names, Carbon $startDate, Carbon $endDate)
-    {
-        $this->repository = $userEventLogEntryRepository;
-        $this->eventTypes = $eventTypes;
-        $this->names = $names;
-        $this->startDate = $startDate;
-        $this->endDate = $endDate;
+    public function __construct(
+        private readonly UserEventLogEntryRepository $repository,
+        private readonly ?array $eventTypes,
+        private readonly Carbon $startDate,
+        private readonly Carbon $endDate,
+    ) {
     }
     
-    public function collection()
+    public function collection(): Collection
     {
         $collection = $this->repository->findLogs($this->eventTypes, $this->startDate, $this->endDate);
         return $collection;
     }
     
-    public function title(): String
+    public function title(): string
     {
         //add one hour because at time of writing project timezone is set to UTC instead of UTC+1
         return 'Event Log (' . Carbon::now()->addHour()->format("d-m-Y_H:i") . ')';
@@ -66,7 +54,7 @@ class UserEventLogExport implements FromCollection, WithTitle, WithHeadings, Sho
         return array_values(UserEventLogExport::PROPERTY_LABELS);
     }
     
-    public function map($event): array
+    public function map(mixed $event): array
     {
         return [
             $event->created_at,

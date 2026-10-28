@@ -2,6 +2,7 @@
 
 namespace App\Models\ApplicationForm;
 
+use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -11,16 +12,12 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * Class ApplicationForm
  * @package App\Models\ApplicationForm
  */
+#[Fillable([
+    'name',
+])]
 class ApplicationForm extends Model
 {
     use HasFactory, SoftDeletes;
-
-    /**
-     * @var array
-     */
-    protected $fillable = [
-        'name',
-    ];
 
     /**
      * @return HasMany

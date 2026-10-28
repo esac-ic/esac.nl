@@ -4,35 +4,34 @@ namespace App\Http\Controllers;
 
 use App\Models\MenuItem;
 use App\Repositories\MenuRepository;
+use Illuminate\Contracts\View\View;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Session;
 
 class PaginaBeheerController extends Controller
 {
-    private MenuRepository $_menuRepository;
-
     /**
      * Create a new controller instance.
      *
      * @return void
      */
-    public function __construct(MenuRepository $menuRepository)
+    public function __construct(private readonly MenuRepository $_menuRepository)
     {
         $this->middleware('auth');
-        $this->middleware('authorize:' . \Illuminate\Support\Facades\Config::get('constants.Content_administrator'));
-
-        $this->_menuRepository = $menuRepository;
+        $this->middleware('authorize:' . Config::get('constants.Content_administrator'));
     }
 
     //gives the rol views
-    public function index()
+    public function index(): View
     {
-        $pages = $this->_menuRepository->all(array("name", "id", "after", "parent_id"));
+        $pages = $this->_menuRepository->all(["name", "id", "after", "parent_id"]);
         return view('beheer.menu.index', compact('pages'));
     }
 
     //show create screen
-    public function create()
+    public function create(): View
     {
         $fields = [
             'title_menu' => 'Add menu item ',
@@ -45,7 +44,7 @@ class PaginaBeheerController extends Controller
     }
 
     //store rol
-    public function store(Request $request)
+    public function store(Request $request): RedirectResponse
     {
         $this->validateData($request);
 
@@ -55,14 +54,14 @@ class PaginaBeheerController extends Controller
         return redirect('/pages');
     }
 
-    public function show(Request $request, MenuItem $page)
+    public function show(Request $request, MenuItem $page): View
     {
         $subItems = $page->getSubMenuItems($page->id);
         return view('beheer.menu.show', compact('page', 'subItems'));
     }
 
     //show edit screen
-    public function edit(Request $request, MenuItem $page)
+    public function edit(Request $request, MenuItem $page): View
     {
         $fields = [
             'title_menu' => 'Edit menu page',
@@ -74,7 +73,7 @@ class PaginaBeheerController extends Controller
     }
 
     //update page
-    public function update(Request $request, MenuItem $page)
+    public function update(Request $request, MenuItem $page): RedirectResponse
     {
         if ($page->urlName != $request->urlName && $page->editable) {
             $this->validateData($request);
@@ -86,7 +85,7 @@ class PaginaBeheerController extends Controller
         return redirect('/pages');
     }
 
-    public function destroy(Request $request, MenuItem $page)
+    public function destroy(Request $request, MenuItem $page): RedirectResponse
     {
         $this->_menuRepository->delete($page->id);
         Session::flash("message", 'Menu item removed');
@@ -94,7 +93,7 @@ class PaginaBeheerController extends Controller
         return redirect('/pages');
     }
 
-    private function validateData(Request $request)
+    private function validateData(Request $request): void
     {
         $this->validate($request, [
             'urlName' => 'required|max:255|unique:menu_items',
@@ -104,7 +103,7 @@ class PaginaBeheerController extends Controller
             'afterItem' => 'required',
         ]);
 
-        if ($request->get('itemType') === 'subItem') {
+        if ($request->input('itemType') === 'subItem') {
             $this->validate($request, [
                 'parentItem' => 'required',
             ]);

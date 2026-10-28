@@ -14,7 +14,7 @@ RUN npm ci --no-audit --no-fund
 COPY . .
 RUN npm run build
 
-FROM dunglas/frankenphp:1.13.2-php8.3.36-trixie AS base
+FROM dunglas/frankenphp:1.13.2-php8.5.12-trixie AS base
 
 # The MySQL client loads database/schema/mysql-schema.sql when migrating an empty database.
 # MySQL's certificate is self-signed, so the client keeps TLS but doesn't verify it.
@@ -22,7 +22,7 @@ RUN apt-get update \
     && apt-get install -y --no-install-recommends libcap2-bin default-mysql-client \
     && rm -rf /var/lib/apt/lists/* \
     && printf '[client]\nssl-verify-server-cert = off\n' > /etc/mysql/mariadb.conf.d/90-esac.cnf \
-    && install-php-extensions pdo_mysql gd zip opcache \
+    && install-php-extensions pdo_mysql gd zip opcache pcntl \
     && cp "$PHP_INI_DIR/php.ini-production" "$PHP_INI_DIR/php.ini" \
     && setcap CAP_NET_BIND_SERVICE=+eip /usr/local/bin/frankenphp
 
@@ -59,3 +59,6 @@ RUN php artisan package:discover --ansi \
     && chown -R www-data:www-data storage bootstrap/cache /data/caddy /config/caddy
 
 USER www-data
+
+ENTRYPOINT ["/app/infra/entrypoint.sh"]
+CMD ["--config", "/etc/frankenphp/Caddyfile", "--adapter", "caddyfile"]

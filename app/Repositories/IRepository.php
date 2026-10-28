@@ -16,9 +16,9 @@ interface IRepository
 
     public function delete($id);
 
-    public function find($id, $columns = array('*'));
+    public function find($id, $columns = ['*']);
 
-    public function findBy($field, $value, $columns = array('*'));
+    public function findBy($field, $value, $columns = ['*']);
 
-    public function all($columns = array('*'));
+    public function all($columns = ['*']);
 }

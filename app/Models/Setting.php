@@ -2,9 +2,15 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Log;
 
+#[Fillable([
+    'name',
+    'type',
+    'value',
+])]
 class Setting extends Model
 {
     /*
@@ -33,17 +39,11 @@ class Setting extends Model
 
     const SINGELTONNAME = 'setting';
 
-    private $_settings = array();
+    private array $_settings = [];
 
-    protected $fillable = [
-        'name',
-        'type',
-        'value',
-    ];
-
-    public function initialise()
+    public function initialise(): void
     {
-        $this->_settings = array();
+        $this->_settings = [];
         foreach (Setting::all() as $setting) {
             $this->_settings[$setting->name] = $setting->value;
         }

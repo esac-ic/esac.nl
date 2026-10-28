@@ -8,6 +8,7 @@ use App\Models\AgendaItem;
 use App\Models\ApplicationForm\ApplicationResponse;
 use App\Repositories\ApplicationFormRepositories\ApplicationFormRegistrationRepository;
 use Carbon\Carbon;
+use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -20,7 +21,7 @@ class UserApplicationFormController extends Controller
         $this->middleware('auth');
     }
 
-    public function showRegistrationForm(AgendaItem $agendaItem)
+    public function showRegistrationForm(AgendaItem $agendaItem): View
     {
         $user_id = Auth::user()->id;
 
@@ -68,7 +69,7 @@ class UserApplicationFormController extends Controller
         );
     }
 
-    public function store(Request $request, AgendaItem $agendaItem, ApplicationFormRegistrationRepository $repository)
+    public function store(Request $request, AgendaItem $agendaItem, ApplicationFormRegistrationRepository $repository): View|RedirectResponse
     {
         //check if the user has already signed up
         $signup = ApplicationResponse::where('user_id', Auth::user()->id)

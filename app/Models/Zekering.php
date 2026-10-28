@@ -8,21 +8,22 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
+#[Fillable([
+    'text',
+    'createdBy',
+    'score',
+    'parent_id',
+    'has_parent',
+])]
 class Zekering extends Model
 {
     use HasFactory;
     use SoftDeletes;
-    protected $fillable = [
-        'text',
-        'createdBy',
-        'score',
-        'parent_id',
-        'has_parent',
-    ];
 
     public function children()
     {

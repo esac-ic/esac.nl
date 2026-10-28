@@ -3,30 +3,22 @@
 namespace App\Exports;
 
 use App\Repositories\UserRepository;
-use Maatwebsite\Excel\Concerns\FromCollection;
-use Maatwebsite\Excel\Concerns\ShouldAutoSize;
-use Maatwebsite\Excel\Concerns\WithHeadings;
-use Maatwebsite\Excel\Concerns\WithTitle;
+use Illuminate\Support\Collection;
 
-class OldUsersExport implements FromCollection, WithTitle, WithHeadings, ShouldAutoSize
+class OldUsersExport extends SpreadsheetExport
 {
-    private $userRepository;
-
-    public function __construct(UserRepository $userRepository)
+    public function __construct(private readonly UserRepository $userRepository)
     {
-        $this->userRepository = $userRepository;
     }
 
     /**
-     * @return \Illuminate\Support\Collection
+     * @return Collection
      */
-    public function collection()
+    public function collection(): Collection
     {
         $oldUsers = $this->userRepository->getOldUsers(['id', 'firstname', 'preposition', 'lastname', 'created_at', 'lid_af']);
 
-        return $oldUsers->map(function ($user) {
-            return $user->toArray();
-        });
+        return $oldUsers->map(fn ($user) => $user->toArray());
     }
 
     /**

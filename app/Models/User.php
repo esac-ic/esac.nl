@@ -17,6 +17,7 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Str;
 use RuntimeException;
 
 class User extends Authenticatable
@@ -191,7 +192,10 @@ class User extends Authenticatable
     public function removeAsActiveMember(): void
     {
         $this->lid_af = Carbon::now();
+        // Logs them out everywhere: their sessions and remember-me cookies stop working
+        $this->setRememberToken(Str::random(60));
         $this->save();
+        DB::table(config('session.table'))->where('user_id', $this->id)->delete();
 
         $this->roles()->detach();
 
@@ -231,9 +235,11 @@ class User extends Authenticatable
      */
     public function approveAsPendingMember(): void
     {
-        $this->pending_user = null;
-        $this->save();
-        PendingUserApproved::dispatch($this);
+        DB::transaction(function () {
+            $this->pending_user = null;
+            $this->save();
+            PendingUserApproved::dispatch($this);
+        });
     }
     
     /**

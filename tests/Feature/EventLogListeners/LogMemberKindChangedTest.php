@@ -10,8 +10,9 @@ use App\Repositories\UserEventLogEntryRepository;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Lang;
 use InvalidArgumentException;
+use Tests\TestCase;
 
-class LogMemberKindChangedTest extends \TestCase
+class LogMemberKindChangedTest extends TestCase
 {
     use RefreshDatabase;
     

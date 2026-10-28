@@ -5,14 +5,14 @@ namespace Tests\Feature\Agenda;
 use App\Models\AgendaItem;
 use App\Models\AgendaItemCategory;
 use App\Models\User;
-use Illuminate\Foundation\Testing\DatabaseMigrations;
-use Illuminate\Support\Facades\Artisan;
+use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Config;
-use TestCase;
+use PHPUnit\Framework\Attributes\Test;
+use Tests\TestCase;
 
 class AgendaFilterTest extends TestCase
 {
-    use DatabaseMigrations;
+    use RefreshDatabase;
 
     /**
      * @var string
@@ -35,13 +35,7 @@ class AgendaFilterTest extends TestCase
         session()->start();
     }
 
-    protected function tearDown(): void
-    {
-        Artisan::call('migrate:fresh');
-        parent::tearDown();
-    }
-
-    /** @test */
+    #[Test]
     public function api_returns_filtered_agenda_items()
     {
         $agendaItemCategory = AgendaItemCategory::factory()->create();

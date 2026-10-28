@@ -3,24 +3,21 @@
 namespace App\Listeners;
 
 use App\CustomClasses\MailList\MailListFacade;
+use App\Events\MemberBecameOldMember;
 use App\Events\MemberKindChanged;
 use App\Events\OldMemberBecameMember;
 use App\Events\PendingUserApproved;
 use App\Models\Setting;
 use App\Models\User;
 use Illuminate\Contracts\Queue\ShouldQueue;
-use Illuminate\Events\Dispatcher;
 
 class UpdateMemberTypeMaillists implements ShouldQueue
 {
-    private MailListFacade $mailListFacade;
-    
     /**
      * Create the event listener.
      */
-    public function __construct(MailListFacade $mailListFacade)
+    public function __construct(private readonly MailListFacade $mailListFacade)
     {
-        $this->mailListFacade = $mailListFacade;
     }
     
     /**
@@ -70,14 +67,13 @@ class UpdateMemberTypeMaillists implements ShouldQueue
     {
         $this->addUserToMailLists($event->user, $event->user->kind_of_member);
     }
-    
-    public function subscribe(Dispatcher $events): array
+
+    /**
+     * Removes an old member from all their mail lists.
+     */
+    public function handleMemberBecameOldMember(MemberBecameOldMember $event): void
     {
-        return [
-            OldMemberBecameMember::class => 'handleOldMemberBecameMember',
-            MemberKindChanged::class => 'handleMemberKindChanged',
-            PendingUserApproved::class => 'handlePendingUserApproved',
-        ];
+        $this->mailListFacade->deleteUserForAllMailList($event->user);
     }
     
     /**

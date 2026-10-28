@@ -11,17 +11,17 @@ use App\Models\MenuItem;
 use App\Models\NewsItem;
 use App\Models\Rol;
 use App\Models\User;
-use Illuminate\Foundation\Testing\DatabaseMigrations;
-use Illuminate\Support\Facades\Artisan;
+use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Config;
-use TestCase;
+use PHPUnit\Framework\Attributes\Test;
+use Tests\TestCase;
 
 /**
  * Test Admin Form pages
  */
 class AdminFormPagesTest extends TestCase
 {
-    use DatabaseMigrations, InspectsForms;
+    use RefreshDatabase, InspectsForms;
 
     /**
      * @var User
@@ -37,13 +37,7 @@ class AdminFormPagesTest extends TestCase
         $this->be($user);
     }
 
-    protected function tearDown(): void
-    {
-        Artisan::call('migrate:reset');
-        parent::tearDown();
-    }
-
-    /** @test */
+    #[Test]
     public function the_book_forms_render()
     {
         $this->assertForm($this->get('books/create')->assertOk(), 'POST', 'books');
@@ -57,7 +51,7 @@ class AdminFormPagesTest extends TestCase
         $this->assertFieldValue($response, 'code', 'K1');
     }
 
-    /** @test */
+    #[Test]
     public function the_certificate_forms_render()
     {
         $this->assertForm($this->get('certificates/create')->assertOk(), 'POST', 'certificates');
@@ -70,7 +64,7 @@ class AdminFormPagesTest extends TestCase
         $this->assertFieldValue($response, 'abbreviation', 'TR');
     }
 
-    /** @test */
+    #[Test]
     public function the_role_forms_render()
     {
         $this->assertForm($this->get('rols/create')->assertOk(), 'POST', 'rols');
@@ -82,7 +76,7 @@ class AdminFormPagesTest extends TestCase
         $this->assertFieldValue($response, 'name', 'Penningmeester');
     }
 
-    /** @test */
+    #[Test]
     public function the_agenda_item_category_forms_render()
     {
         $this->assertForm($this->get('agendaItemCategories/create')->assertOk(), 'POST', 'agendaItemCategories');
@@ -94,7 +88,7 @@ class AdminFormPagesTest extends TestCase
         $this->assertFieldValue($response, 'name', 'Training');
     }
 
-    /** @test */
+    #[Test]
     public function the_news_item_forms_render()
     {
         $this->assertForm($this->get('newsItems/create')->assertOk(), 'POST', 'newsItems');
@@ -107,7 +101,7 @@ class AdminFormPagesTest extends TestCase
         $this->assertFieldValue($response, 'text', '<p>Open</p>');
     }
 
-    /** @test */
+    #[Test]
     public function the_page_forms_render()
     {
         $this->assertForm($this->get('pages/create')->assertOk(), 'POST', 'pages');
@@ -122,7 +116,7 @@ class AdminFormPagesTest extends TestCase
         $this->assertChecked($response, 'login', false);
     }
 
-    /** @test */
+    #[Test]
     public function the_application_form_forms_render()
     {
         $this->assertForm($this->get('beheer/applicationForms/create')->assertOk(), 'POST', 'beheer/applicationForms');
@@ -134,7 +128,7 @@ class AdminFormPagesTest extends TestCase
         $this->assertFieldValue($response, 'name', 'Weekend');
     }
 
-    /** @test */
+    #[Test]
     public function the_agenda_item_forms_render()
     {
         $this->assertForm($this->get('agendaItems/create')->assertOk(), 'POST', 'agendaItems');
@@ -156,7 +150,7 @@ class AdminFormPagesTest extends TestCase
         $this->assertChecked($response, 'climbing_activity', false);
     }
 
-    /** @test */
+    #[Test]
     public function the_user_forms_render()
     {
         $response = $this->get('users/create')->assertOk();
@@ -175,7 +169,7 @@ class AdminFormPagesTest extends TestCase
         $this->assertChecked($response, 'incasso');
     }
 
-    /** @test */
+    #[Test]
     public function a_member_can_edit_their_own_profile_but_not_their_kind_of_member()
     {
         $this->user->roles()->detach();
@@ -187,7 +181,7 @@ class AdminFormPagesTest extends TestCase
         $this->get('users/' . User::factory()->create()->id . '/edit')->assertStatus(403);
     }
 
-    /** @test */
+    #[Test]
     public function the_user_certificate_forms_render()
     {
         $member = User::factory()->create();
@@ -203,7 +197,7 @@ class AdminFormPagesTest extends TestCase
         $this->assertSelected($response, 'certificate_id', (string) $certificate->id);
     }
 
-    /** @test */
+    #[Test]
     public function the_user_page_forms_render()
     {
         $member = User::factory()->create();
@@ -213,7 +207,7 @@ class AdminFormPagesTest extends TestCase
         $this->assertForm($response, 'PATCH', "users/$member->id/removeAsActiveMember");
     }
 
-    /** @test */
+    #[Test]
     public function a_pending_member_page_has_the_approve_form()
     {
         $member = User::factory()->create(['pending_user' => now()]);
@@ -223,7 +217,7 @@ class AdminFormPagesTest extends TestCase
         $this->assertForm($response, 'PATCH', "users/$member->id/approveAsPendingMember");
     }
 
-    /** @test */
+    #[Test]
     public function an_old_member_page_has_the_make_active_form()
     {
         $member = User::factory()->create(['lid_af' => now()]);
@@ -233,25 +227,25 @@ class AdminFormPagesTest extends TestCase
         $this->assertForm($response, 'PATCH', "users/$member->id/makeActiveMember");
     }
 
-    /** @test */
+    #[Test]
     public function the_settings_form_renders()
     {
         $this->assertForm($this->get('beheer/settings/edit')->assertOk(), 'PUT', 'beheer/settings');
     }
 
-    /** @test */
+    #[Test]
     public function the_mail_list_form_renders()
     {
         $this->assertForm($this->get('mailList/create')->assertOk(), 'POST', 'mailList');
     }
 
-    /** @test */
+    #[Test]
     public function the_penno_export_form_renders()
     {
         $this->assertForm($this->get('users/pennoMemberExportView')->assertOk(), 'GET', route('users.pennoMemberExport'));
     }
 
-    /** @test */
+    #[Test]
     public function the_admin_registration_form_renders()
     {
         $agendaItem = AgendaItem::factory()->create(['application_form_id' => ApplicationForm::factory()->create()->id]);

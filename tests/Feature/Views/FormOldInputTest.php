@@ -5,17 +5,17 @@ namespace Tests\Feature\Views;
 use App\Models\AgendaItemCategory;
 use App\Models\ApplicationForm\ApplicationForm;
 use App\Models\User;
-use Illuminate\Foundation\Testing\DatabaseMigrations;
-use Illuminate\Support\Facades\Artisan;
+use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Config;
-use TestCase;
+use PHPUnit\Framework\Attributes\Test;
+use Tests\TestCase;
 
 /**
  * After a validation error, the form should show what was submitted instead of default values
  */
 class FormOldInputTest extends TestCase
 {
-    use DatabaseMigrations, InspectsForms;
+    use RefreshDatabase, InspectsForms;
 
     protected function setUp(): void
     {
@@ -28,13 +28,7 @@ class FormOldInputTest extends TestCase
         session()->start();
     }
 
-    protected function tearDown(): void
-    {
-        Artisan::call('migrate:reset');
-        parent::tearDown();
-    }
-
-    /** @test */
+    #[Test]
     public function text_fields_keep_the_submitted_values()
     {
         $response = $this->from('books/create')->followingRedirects()->post('books', [
@@ -51,7 +45,7 @@ class FormOldInputTest extends TestCase
         $this->assertFieldValue($response, 'code', 'K1');
     }
 
-    /** @test */
+    #[Test]
     public function page_checkboxes_keep_the_submitted_state()
     {
         $menuItem = $this->field($this->get('pages/create'), 'menuItem')->getAttribute('value');
@@ -72,7 +66,7 @@ class FormOldInputTest extends TestCase
         $this->assertChecked($response, 'login', false);
     }
 
-    /** @test */
+    #[Test]
     public function agenda_item_fields_keep_the_submitted_state()
     {
         AgendaItemCategory::factory()->create();
@@ -91,7 +85,7 @@ class FormOldInputTest extends TestCase
         $this->assertChecked($response, 'climbing_activity', false);
     }
 
-    /** @test */
+    #[Test]
     public function an_unchecked_incasso_stays_unchecked()
     {
         $member = User::factory()->create(['incasso' => true]);

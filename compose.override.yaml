@@ -3,6 +3,11 @@
 # Your user id, so created files are yours (on Linux, set UID/GID in .env if `id -u` isn't 1000)
 x-user: &user "${UID:-1000}:${GID:-1000}"
 
+# Production settings from compose.yaml that don't apply in dev
+x-dev-environment: &dev-environment
+  LOG_CHANNEL: !reset null
+  VIEW_COMPILED_PATH: !reset null
+
 services:
   app:
     image: esac-app-dev
@@ -13,6 +18,7 @@ services:
     # Laravel reads the mounted .env itself, so edits apply without recreating the container
     env_file: !reset []
     environment:
+      <<: *dev-environment
       # Any host, so 127.0.0.1 and your LAN IP work too
       SERVER_NAME: :80
       CADDY_EXTRA_CONFIG: ""
@@ -30,7 +36,7 @@ services:
     restart: !reset
     # Lets `up --wait` return once the site loads; the first start takes a few minutes
     healthcheck:
-      test: ["CMD", "curl", "-fso", "/dev/null", "http://localhost/login"]
+      test: ["CMD", "curl", "-fso", "/dev/null", "http://localhost/up"]
       start_period: 10m
       start_interval: 2s
     depends_on:
@@ -63,6 +69,21 @@ services:
     # The image's healthcheck probes FrankenPHP, which doesn't run here
     healthcheck:
       disable: true
+
+  worker: &dev-artisan
+    image: esac-app-dev
+    user: *user
+    env_file: !reset []
+    environment: *dev-environment
+    entrypoint: ["docker-php-entrypoint"]
+    volumes: !override
+      - .:/app
+    restart: !reset
+    depends_on:
+      app:
+        condition: service_healthy
+
+  scheduler: *dev-artisan
 
   mysql:
     ports:

@@ -7,27 +7,22 @@ use App\Models\ApplicationForm\ApplicationForm;
 use App\Models\MenuItem;
 use App\Models\NewsItem;
 use App\Models\User;
-use Illuminate\Foundation\Testing\DatabaseMigrations;
-use Illuminate\Support\Facades\Artisan;
-use TestCase;
+use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Support\Str;
+use PHPUnit\Framework\Attributes\Test;
+use Tests\TestCase;
 
 /**
  * Test the user facing public forms
  */
 class PublicFormPagesTest extends TestCase
 {
-    use DatabaseMigrations, InspectsForms;
+    use RefreshDatabase, InspectsForms;
 
     protected function setUp(): void
     {
         parent::setUp();
         session()->start();
-    }
-
-    protected function tearDown(): void
-    {
-        Artisan::call('migrate:reset');
-        parent::tearDown();
     }
 
     private function createPage(string $urlName, bool $login = false): void
@@ -43,7 +38,7 @@ class PublicFormPagesTest extends TestCase
         ]);
     }
 
-    /** @test */
+    #[Test]
     public function the_signup_form_renders()
     {
         $this->createPage(MenuItem::SUBSCRIBEURL);
@@ -57,7 +52,7 @@ class PublicFormPagesTest extends TestCase
         $this->assertChecked($response, 'termsconditions', false);
     }
 
-    /** @test */
+    #[Test]
     public function the_signup_form_keeps_the_submitted_values()
     {
         $this->createPage(MenuItem::SUBSCRIBEURL);
@@ -85,7 +80,7 @@ class PublicFormPagesTest extends TestCase
         $this->assertChecked($response, 'termsconditions', false);
     }
 
-    /** @test */
+    #[Test]
     public function the_login_form_keeps_the_email_after_a_failed_login()
     {
         $this->assertForm($this->get('login')->assertOk(), 'POST', 'login');
@@ -99,21 +94,22 @@ class PublicFormPagesTest extends TestCase
 
         $response->assertOk();
         $this->assertGuest();
-        $this->assertFieldValue($response, 'email', $user->email);
+        // Fortify lowercases the email before logging in
+        $this->assertFieldValue($response, 'email', Str::lower($user->email));
     }
 
-    /** @test */
+    #[Test]
     public function the_password_reset_forms_render()
     {
-        $this->assertForm($this->get('password/reset')->assertOk(), 'POST', 'password/email');
+        $this->assertForm($this->get('forgot-password')->assertOk(), 'POST', 'forgot-password');
 
-        $response = $this->get('password/reset/abc123')->assertOk();
+        $response = $this->get('reset-password/abc123')->assertOk();
 
-        $this->assertForm($response, 'POST', 'password/reset');
+        $this->assertForm($response, 'POST', 'reset-password');
         $this->assertFieldValue($response, 'token', 'abc123');
     }
 
-    /** @test */
+    #[Test]
     public function the_registration_form_renders()
     {
         $this->be(User::factory()->create());
@@ -127,7 +123,7 @@ class PublicFormPagesTest extends TestCase
         $this->assertForm($response, 'POST', "forms/$agendaItem->id");
     }
 
-    /** @test */
+    #[Test]
     public function the_zekeringen_form_renders()
     {
         $this->createPage(MenuItem::ZEKERINGURL, true);
@@ -139,7 +135,7 @@ class PublicFormPagesTest extends TestCase
         $this->assertFieldValue($response, 'text', '');
     }
 
-    /** @test */
+    #[Test]
     public function the_news_page_shortens_long_items()
     {
         $this->createPage(MenuItem::NEWSURL);

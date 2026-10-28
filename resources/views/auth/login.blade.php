@@ -45,7 +45,7 @@
                                     <strong>{{ $errors->first('password') }}</strong>
                                     </span>
                                     @endif
-                                    <p class="text-muted text-small mt-2">{{'Forgot password?'}} <a href="{{ url('/password/reset') }}">{{'Reset password'}}</a></p>
+                                    <p class="text-muted text-small mt-2">{{'Forgot password?'}} <a href="{{ route('password.request') }}">{{'Reset password'}}</a></p>
                                 </div>
                                 <div>
                                     <div class="custom-control custom-checkbox align-items-center">

@@ -3,23 +3,17 @@
 namespace App\Exports;
 
 use App\Models\Book;
-use APP\Repositories\BookRepository;
-use Maatwebsite\Excel\Concerns\FromCollection;
-use Maatwebsite\Excel\Concerns\ShouldAutoSize;
-use Maatwebsite\Excel\Concerns\WithHeadings;
-use Maatwebsite\Excel\Concerns\WithMapping;
-use Maatwebsite\Excel\Concerns\WithTitle;
+use App\Repositories\BookRepository;
+use Illuminate\Support\Collection;
 
-class LibraryExport implements FromCollection, WithTitle, WithHeadings, ShouldAutoSize, WithMapping
+class LibraryExport extends SpreadsheetExport
 {
-    
-    private BookRepository $bookRepository;
     
     /**
      * All properties to be included in the export. Maps model property to header label.
      * Note: the keys should be the same as the model attributes
      */
-    private const PROPERTY_LABELS = [
+    private const array PROPERTY_LABELS = [
         "id" => "#",
         "title" => "Title",
         "year" => "Year",
@@ -28,20 +22,19 @@ class LibraryExport implements FromCollection, WithTitle, WithHeadings, ShouldAu
         "code" => "Code",
     ];
 
-    public function __construct(BookRepository $bookRepository)
+    public function __construct(private readonly BookRepository $bookRepository)
     {
-        $this->bookRepository = $bookRepository;
     }
     
     /**
-    * @return \Illuminate\Support\Collection
-    */
-    public function collection()
+     * @return Collection
+     */
+    public function collection(): Collection
     {
         return $this->bookRepository->all(["*"]);
     }
     
-    public function title(): String
+    public function title(): string
     {
         return 'Books';
     }
@@ -58,7 +51,7 @@ class LibraryExport implements FromCollection, WithTitle, WithHeadings, ShouldAu
      * @param Book $book
      * @return array
      */
-    public function map($book): array
+    public function map(mixed $book): array
     {
         $properties = array_keys(LibraryExport::PROPERTY_LABELS);
         return $book->only($properties);

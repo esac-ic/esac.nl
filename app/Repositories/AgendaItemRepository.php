@@ -67,7 +67,7 @@ class AgendaItemRepository implements IRepository
         $agendaItem->delete();
 
         if ($agendaItem->image_url != "") {
-            Storage::delete('public/' . $agendaItem->image_url);
+            Storage::disk('public')->delete($agendaItem->image_url);
         }
     }
 

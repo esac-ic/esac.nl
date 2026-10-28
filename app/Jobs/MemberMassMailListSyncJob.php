@@ -5,40 +5,28 @@ namespace App\Jobs;
 use App\CustomClasses\MailList\MailListFacade;
 use App\Listeners\UpdateMemberTypeMaillists;
 use App\Models\User;
-use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
-use Illuminate\Database\Eloquent\Collection;
-use Illuminate\Foundation\Bus\Dispatchable;
-use Illuminate\Queue\InteractsWithQueue;
-use Illuminate\Queue\SerializesModels;
+use Illuminate\Foundation\Queue\Queueable;
 
+/**
+ * Adds one member to the mail lists of their kind of member.
+ */
 class MemberMassMailListSyncJob implements ShouldQueue
 {
-    use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
-    
+    use Queueable;
+
     public function __construct(
-        public Collection $users
+        public User $user
     )
     {
     }
-    
+
     public function handle(MailListFacade $mailListFacade): void
     {
-        \Log::info("Performing a mass mail list sync");
-        
-        //get maillists for each member type
-        $mailListsPerMemberKind = [];
-        foreach (User::KINDS_OF_MEMBER as $kind_of_member) {
-            $mailListsPerMemberKind[$kind_of_member] = UpdateMemberTypeMaillists::getMemberTypeMailLists($kind_of_member);
+        $mailLists = UpdateMemberTypeMaillists::getMemberTypeMailLists((string) $this->user->kind_of_member);
+
+        if ($mailLists) {
+            $mailListFacade->addUserToSpecifiedMailLists($this->user->email, $this->user->getName(), $mailLists);
         }
-        
-        foreach ($this->users as $user)
-        {
-            if ($mailListsPerMemberKind[$user->kind_of_member] ?? false) {
-                $mailListFacade->addUserToSpecifiedMailLists($user->email, $user->getName(), $mailListsPerMemberKind[$user->kind_of_member]);
-            }
-        }
-        
-        \Log::info("Mass mail list sync finished");
     }
 }

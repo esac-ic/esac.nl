@@ -18,9 +18,7 @@ updates:
     cooldown:
       default-days: 5
     ignore:
-      # Stay on LTS lines (MySQL 8.4, even-numbered Node)
-      - dependency-name: "mysql"
-        update-types: ["version-update:semver-major"]
+      # Upgrade majors by hand, LTS only
       - dependency-name: "node"
         update-types: ["version-update:semver-major"]
 
@@ -31,10 +29,8 @@ updates:
     cooldown:
       default-days: 5
     ignore:
-      # Stay on LTS lines (MySQL 8.4, even-numbered Node)
+      # Upgrade majors by hand, LTS only
       - dependency-name: "mysql"
-        update-types: ["version-update:semver-major"]
-      - dependency-name: "node"
         update-types: ["version-update:semver-major"]
 
   - package-ecosystem: "composer"

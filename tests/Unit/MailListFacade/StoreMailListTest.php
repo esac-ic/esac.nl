@@ -8,8 +8,9 @@ use GuzzleHttp\Exception\ClientException;
 use GuzzleHttp\Psr7\Request;
 use GuzzleHttp\Psr7\Response;
 use Mockery\MockInterface;
+use Tests\TestCase;
 
-class StoreMailListTest extends \TestCase
+class StoreMailListTest extends TestCase
 {
     public function testBasic()
     {

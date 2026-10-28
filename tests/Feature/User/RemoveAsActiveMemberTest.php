@@ -2,16 +2,16 @@
 
 namespace Tests\Feature\User;
 
-use App\CustomClasses\MailList\MailListFacade;
 use App\Events\MemberBecameOldMember;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Config;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Event;
-use Mockery\MockInterface;
+use Tests\TestCase;
 
-class RemoveAsActiveMemberTest extends \TestCase
+class RemoveAsActiveMemberTest extends TestCase
 {
     use RefreshDatabase;
     
@@ -36,19 +36,21 @@ class RemoveAsActiveMemberTest extends \TestCase
         Event::fake();
         Model::setEventDispatcher($initialDispenser);
         
-        $this->mock(MailListFacade::class, function (MockInterface $mock) use ($user) {
-            $mock->shouldReceive('deleteUserForAllMailList')
-                ->with(\Mockery::type(User::class))
-                ->with(\Mockery::on(function ($arg) use ($user) { //custom validator to check if the correct argument is passed
-                    return $user->is($arg);
-                }))
-                ->once();
-        });
-        
         $response = $this->actingAs($this->admin)->patch(route('users.removeAsActiveMember', $user));
         $response->assertRedirect(route('users.show', $user));
         Event::assertDispatched(MemberBecameOldMember::class);
         
         $this->assertNotNull(User::find($userId)->lid_af);
+    }
+
+    public function test_removing_an_active_member_logs_them_out_everywhere()
+    {
+        $user = User::factory()->create(['remember_token' => 'remembered']);
+        DB::table('sessions')->insert(['id' => 'session', 'user_id' => $user->id, 'payload' => '', 'last_activity' => time()]);
+
+        $this->actingAs($this->admin)->patch(route('users.removeAsActiveMember', $user));
+
+        $this->assertNotSame('remembered', $user->fresh()->getRememberToken());
+        $this->assertDatabaseMissing('sessions', ['user_id' => $user->id]);
     }
 }

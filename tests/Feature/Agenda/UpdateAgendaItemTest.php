@@ -7,14 +7,14 @@ use App\Models\AgendaItemCategory;
 use App\Models\ApplicationForm\ApplicationForm;
 use App\Models\User;
 use Carbon\Carbon;
-use Illuminate\Foundation\Testing\DatabaseMigrations;
-use Illuminate\Support\Facades\Artisan;
+use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Config;
-use TestCase;
+use PHPUnit\Framework\Attributes\Test;
+use Tests\TestCase;
 
 class UpdateAgendaItemTest extends TestCase
 {
-    use DatabaseMigrations;
+    use RefreshDatabase;
 
     private $url = 'agendaItems';
     private $agendaItem;
@@ -34,12 +34,7 @@ class UpdateAgendaItemTest extends TestCase
         session()->start();
     }
 
-    protected function tearDown(): void
-    {
-        Artisan::call('migrate:reset');
-        parent::tearDown();
-    }
-    /** @test */
+    #[Test]
     public function UpdateAgendaItemTest()
     {
         $agendaItem = AgendaItem::factory()->create();
