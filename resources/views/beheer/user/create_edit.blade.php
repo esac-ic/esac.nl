@@ -133,7 +133,7 @@
         </div>
         <div class="card-body">
             <div class="form-row">
-                <div class="form-group col-md-8">
+                <div class="form-group col-md-4">
                     {!! Form::label('IBAN', 'IBAN') !!}
                     {!! Form::text('IBAN', ($user != null) ? $user->IBAN : "", ['class' => 'form-control','required' => 'required']) !!}
                 </div>
