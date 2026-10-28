@@ -73,9 +73,11 @@
                     </a>
                 @endif
                 @if($user->isTreasurerPending() and \Illuminate\Support\Facades\Auth::user()->hasRole(Config::get('constants.Administrator')))
-                    {{ Form::open(array('url' => '/users/'.$user->id . '/approveAsTreasurerPending', 'method' => 'patch')) }}
-                        <button type="submit" class="btn btn-success"><em class="ion-checkmark"></em> {{'Treasurer approval'}}</button>
-                    {{ Form::close() }}
+                    <form method="post" action="{{ route('users.approveAsTreasurerPending', $user) }}">
+                        @csrf
+                        @method('PATCH')
+                        <button type="submit" class="btn btn-success"><em class="ion-checkmark"></em> Treasurer approval</button>
+                    </form>
                 @endif
                 @if(\Illuminate\Support\Facades\Auth::user()->hasRole(Config::get('constants.Administrator')))
                     @if($user->isActiveMember())

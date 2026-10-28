@@ -13,6 +13,7 @@ use App\Rules\EmailDomainValidator;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Config;
+use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Session;
 use Intervention\Validation\Rules\Bic;
 use Intervention\Validation\Rules\Iban;
@@ -164,7 +165,7 @@ class UserController extends Controller
     {
         $user->approveAsTreasurerPending();
         
-        return redirect('users/treasurer_pending');
+        return redirect(route('users.indexTreasurerPending'));
     }
 
     public function exportUsers(UsersExport $usersExport)
