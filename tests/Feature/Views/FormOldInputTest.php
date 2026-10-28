@@ -2,9 +2,9 @@
 
 namespace Tests\Feature\Views;
 
-use App\Enums\Role;
-use App\Models\AgendaItemCategory;
-use App\Models\ApplicationForm\ApplicationForm;
+use App\Enums\AdminRole;
+use App\Models\EventCategory;
+use App\Models\RegistrationForm;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use PHPUnit\Framework\Attributes\Test;
@@ -20,10 +20,7 @@ class FormOldInputTest extends TestCase
     protected function setUp(): void
     {
         parent::setUp();
-        $user = User::factory()->create();
-
-        $user->roles()->attach([Role::Administrator->value, Role::ContentAdministrator->value]);
-        $this->be($user);
+        $this->be(User::factory()->withRole(AdminRole::Administrator, AdminRole::ContentAdministrator)->create());
 
         session()->start();
     }
@@ -31,7 +28,7 @@ class FormOldInputTest extends TestCase
     #[Test]
     public function text_fields_keep_the_submitted_values()
     {
-        $response = $this->from('books/create')->followingRedirects()->post('books', [
+        $response = $this->from('admin/books/create')->followingRedirects()->post('admin/books', [
             'year' => '1999',
             'country' => 'NL',
             'type' => 'Gids',
@@ -48,55 +45,52 @@ class FormOldInputTest extends TestCase
     #[Test]
     public function page_checkboxes_keep_the_submitted_state()
     {
-        $menuItem = $this->field($this->get('pages/create'), 'menu_item')->getAttribute('value');
+        $showInMenu = $this->field($this->get('admin/pages/create'), 'show_in_menu')->getAttribute('value');
 
-        $response = $this->from('pages/create')->followingRedirects()->post('pages', [
-            'url_name' => 'test',
-            'itemType' => 'subItem',
-            'parentItem' => 0,
-            'afterItem' => 0,
+        $response = $this->from('admin/pages/create')->followingRedirects()->post('admin/pages', [
+            'slug' => 'test',
             'content' => 'Inhoud',
-            'menu_item' => $menuItem,
+            'show_in_menu' => $showInMenu,
             '_token' => csrf_token(),
         ]);
 
         $response->assertOk();
         $this->assertFieldValue($response, 'content', 'Inhoud');
-        $this->assertChecked($response, 'menu_item');
-        $this->assertChecked($response, 'login', false);
+        $this->assertChecked($response, 'show_in_menu');
+        $this->assertChecked($response, 'requires_login', false);
     }
 
     #[Test]
-    public function agenda_item_fields_keep_the_submitted_state()
+    public function event_fields_keep_the_submitted_state()
     {
-        AgendaItemCategory::factory()->create();
-        $category = AgendaItemCategory::factory()->create();
-        $applicationForm = ApplicationForm::factory()->create();
+        EventCategory::factory()->create();
+        $category = EventCategory::factory()->create();
+        $registrationForm = RegistrationForm::factory()->create();
 
-        $response = $this->from('agendaItems/create')->followingRedirects()->post('agendaItems', [
-            'category' => $category->id,
-            'applicationForm' => $applicationForm->id,
+        $response = $this->from('admin/events/create')->followingRedirects()->post('admin/events', [
+            'event_category_id' => $category->id,
+            'registration_form_id' => $registrationForm->id,
             '_token' => csrf_token(),
         ]);
 
         $response->assertOk();
-        $this->assertSelected($response, 'category', (string) $category->id);
-        $this->assertSelected($response, 'applicationForm', (string) $applicationForm->id);
-        $this->assertChecked($response, 'climbing_activity', false);
+        $this->assertSelected($response, 'event_category_id', (string) $category->id);
+        $this->assertSelected($response, 'registration_form_id', (string) $registrationForm->id);
+        $this->assertChecked($response, 'shows_certificates', false);
     }
 
     #[Test]
-    public function an_unchecked_incasso_stays_unchecked()
+    public function an_unchecked_direct_debit_stays_unchecked()
     {
-        $member = User::factory()->create(['incasso' => true]);
+        $member = User::factory()->create(['direct_debit' => true]);
 
-        $response = $this->from("users/$member->id/edit")->followingRedirects()->patch("users/$member->id", [
-            'firstname' => 'Piet',
+        $response = $this->from("admin/members/$member->id/edit")->followingRedirects()->patch("admin/members/$member->id", [
+            'first_name' => 'Piet',
             '_token' => csrf_token(),
         ]);
 
         $response->assertOk();
-        $this->assertFieldValue($response, 'firstname', 'Piet');
-        $this->assertChecked($response, 'incasso', false);
+        $this->assertFieldValue($response, 'first_name', 'Piet');
+        $this->assertChecked($response, 'direct_debit', false);
     }
 }

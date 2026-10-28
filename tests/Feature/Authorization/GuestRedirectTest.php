@@ -14,19 +14,19 @@ class GuestRedirectTest extends TestCase
     public static function protectedRoutes(): array
     {
         return [
-            'management home' => ['beheer/home'],
-            'application forms' => ['beheer/applicationForms'],
-            'settings' => ['beheer/settings'],
-            'roles' => ['rols'],
-            'pages' => ['pages'],
-            'certificates' => ['certificates'],
-            'agenda items' => ['agendaItems'],
-            'agenda item categories' => ['agendaItemCategories'],
-            'news items' => ['newsItems'],
-            'mail lists' => ['mailList'],
-            'books' => ['books'],
-            'users' => ['users'],
-            'user event log' => ['userEventLog'],
+            'admin dashboard' => ['admin'],
+            'registration forms' => ['admin/registration-forms'],
+            'settings' => ['admin/settings/edit'],
+            'roles' => ['admin/roles'],
+            'pages' => ['admin/pages'],
+            'certificates' => ['admin/certificates'],
+            'events' => ['admin/events'],
+            'event categories' => ['admin/event-categories'],
+            'news items' => ['admin/news-items'],
+            'mail lists' => ['admin/mail-lists'],
+            'books' => ['admin/books'],
+            'members' => ['admin/members'],
+            'member log' => ['admin/member-log'],
         ];
     }
 

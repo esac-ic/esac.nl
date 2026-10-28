@@ -2,7 +2,7 @@
 
 namespace Tests\Feature\Admin;
 
-use App\Enums\Role;
+use App\Enums\AdminRole;
 use App\Enums\SettingKey;
 use App\Models\Setting;
 use App\Models\User;
@@ -20,24 +20,21 @@ class SettingsControllerTest extends TestCase
     {
         parent::setUp();
 
-        $this->admin = User::factory()->create();
-        $this->admin->roles()->attach(Role::Administrator->value);
+        $this->admin = User::factory()->withRole(AdminRole::Administrator)->create();
     }
 
     #[Test]
     public function an_administrator_can_view_and_update_settings()
     {
-        $setting = Setting::where('name', SettingKey::NormalMemberMailLists->value)->first();
+        $setting = Setting::where('name', SettingKey::MemberMailLists)->first();
 
-        $this->actingAs($this->admin)->get('beheer/settings')
+        $this->actingAs($this->admin)->get('admin/settings/edit')
             ->assertOk()
             ->assertSee($setting->value);
 
-        $this->actingAs($this->admin)->get('beheer/settings/edit')->assertOk();
-
         $this->actingAs($this->admin)
-            ->put('beheer/settings', ['setting' => [$setting->name => 'updated-value']])
-            ->assertRedirect('beheer/settings');
+            ->put('admin/settings', ['settings' => [$setting->name->value => 'updated-value']])
+            ->assertRedirect('admin/settings/edit');
 
         $this->assertSame('updated-value', $setting->fresh()->value);
     }
@@ -45,11 +42,11 @@ class SettingsControllerTest extends TestCase
     #[Test]
     public function a_blank_setting_is_saved_as_empty()
     {
-        $setting = Setting::where('name', SettingKey::NormalMemberMailLists->value)->first();
+        $setting = Setting::where('name', SettingKey::MemberMailLists)->first();
 
         $this->actingAs($this->admin)
-            ->put('beheer/settings', ['setting' => [$setting->name => '']])
-            ->assertRedirect('beheer/settings');
+            ->put('admin/settings', ['settings' => [$setting->name->value => '']])
+            ->assertRedirect('admin/settings/edit');
 
         $this->assertSame('', $setting->fresh()->value);
     }
@@ -59,6 +56,6 @@ class SettingsControllerTest extends TestCase
     {
         $member = User::factory()->create();
 
-        $this->actingAs($member)->get('beheer/settings')->assertStatus(403);
+        $this->actingAs($member)->get('admin/settings/edit')->assertStatus(403);
     }
 }

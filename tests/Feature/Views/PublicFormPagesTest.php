@@ -2,10 +2,11 @@
 
 namespace Tests\Feature\Views;
 
-use App\Models\AgendaItem;
-use App\Models\ApplicationForm\ApplicationForm;
+use App\Enums\PageSlug;
+use App\Models\Event;
 use App\Models\MenuItem;
 use App\Models\NewsItem;
+use App\Models\RegistrationForm;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Str;
@@ -25,37 +26,37 @@ class PublicFormPagesTest extends TestCase
         session()->start();
     }
 
-    private function createPage(string $urlName, bool $login = false): void
+    private function createPage(PageSlug $slug, bool $requiresLogin = false): void
     {
         MenuItem::forceCreate([
-            'name' => $urlName,
-            'url_name' => $urlName,
-            'login' => $login,
+            'name' => $slug->value,
+            'slug' => $slug->value,
+            'requires_login' => $requiresLogin,
             'editable' => true,
             'deletable' => false,
-            'menu_item' => true,
-            'content' => "$urlName content",
+            'show_in_menu' => true,
+            'content' => "$slug->value content",
         ]);
     }
 
     #[Test]
     public function the_signup_form_renders()
     {
-        $this->createPage(MenuItem::SUBSCRIBEURL);
+        $this->createPage(PageSlug::SignUp);
         $response = $this->get('signup')->assertOk();
 
         $this->assertForm($response, 'POST', 'signup');
         $this->assertSelected($response, 'country', 'NL');
         $this->assertSelected($response, 'emergency_country', 'NL');
         $this->assertChecked($response, 'privacy_policy', false);
-        $this->assertChecked($response, 'incasso', false);
-        $this->assertChecked($response, 'termsconditions', false);
+        $this->assertChecked($response, 'direct_debit', false);
+        $this->assertChecked($response, 'terms_and_conditions', false);
     }
 
     #[Test]
     public function the_signup_form_keeps_the_submitted_values()
     {
-        $this->createPage(MenuItem::SUBSCRIBEURL);
+        $this->createPage(PageSlug::SignUp);
 
         $signup = $this->get('signup');
         $checked = fn (string $name) => $this->field($signup, $name)->getAttribute('value');
@@ -66,7 +67,7 @@ class PublicFormPagesTest extends TestCase
             'country' => 'BE',
             'emergency_country' => 'DE',
             'privacy_policy' => $checked('privacy_policy'),
-            'incasso' => $checked('incasso'),
+            'direct_debit' => $checked('direct_debit'),
             '_token' => csrf_token(),
         ]);
 
@@ -76,8 +77,8 @@ class PublicFormPagesTest extends TestCase
         $this->assertSelected($response, 'country', 'BE');
         $this->assertSelected($response, 'emergency_country', 'DE');
         $this->assertChecked($response, 'privacy_policy');
-        $this->assertChecked($response, 'incasso');
-        $this->assertChecked($response, 'termsconditions', false);
+        $this->assertChecked($response, 'direct_debit');
+        $this->assertChecked($response, 'terms_and_conditions', false);
     }
 
     #[Test]
@@ -113,20 +114,20 @@ class PublicFormPagesTest extends TestCase
     public function the_registration_form_renders()
     {
         $this->be(User::factory()->create());
-        $agendaItem = AgendaItem::factory()->create([
-            'application_form_id' => ApplicationForm::factory()->create()->id,
-            'subscription_end_date' => now()->addWeek(),
+        $event = Event::factory()->create([
+            'registration_form_id' => RegistrationForm::factory()->create()->id,
+            'registration_deadline' => now()->addWeek(),
         ]);
 
-        $response = $this->get("forms/$agendaItem->id")->assertOk();
+        $response = $this->get("forms/$event->id")->assertOk();
 
-        $this->assertForm($response, 'POST', "forms/$agendaItem->id");
+        $this->assertForm($response, 'POST', "forms/$event->id");
     }
 
     #[Test]
     public function the_zekeringen_form_renders()
     {
-        $this->createPage(MenuItem::ZEKERINGURL, true);
+        $this->createPage(PageSlug::Zekeringen, true);
         $this->be(User::factory()->create());
 
         $response = $this->get('zekeringen')->assertOk();
@@ -138,8 +139,8 @@ class PublicFormPagesTest extends TestCase
     #[Test]
     public function the_news_page_shortens_long_items()
     {
-        $this->createPage(MenuItem::NEWSURL);
-        NewsItem::factory()->create(['text' => '<p>'.str_repeat('a', 200).'</p>']);
+        $this->createPage(PageSlug::News);
+        NewsItem::factory()->create(['body' => '<p>'.str_repeat('a', 200).'</p>']);
 
         $response = $this->get('news')->assertOk();
 
