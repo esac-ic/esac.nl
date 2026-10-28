@@ -38,7 +38,7 @@ class UpdateUserTest extends \TestCase
             'emergencyzipcode' =>  '1111AA',
             'emergencycountry' => 'Initial',
             'birthday' => '1990-01-01',
-            'IBAN' =>  '123456789',
+            'IBAN' =>  'NL02ABNA0123456789',
             'kind_of_member' => 'Initial'
         
         ]);
@@ -69,7 +69,7 @@ class UpdateUserTest extends \TestCase
             'emergencyzipcode' =>  '2222AA',
             'emergencycountry' => 'Second',
             'birthDay' => '1990-02-02',
-            'IBAN' =>  '234567891',
+            'IBAN' =>  'BE71096123456769',
             'kind_of_member' => $this->admin->kind_of_member,
         ];
         $oldEmail = $this->admin->email;
@@ -130,7 +130,7 @@ class UpdateUserTest extends \TestCase
             'emergencyzipcode' =>  '2222AA',
             'emergencycountry' => 'Second',
             'birthDay' => '1990-02-02',
-            'IBAN' =>  '234567891',
+            'IBAN' =>  'BE71096123456769',
             'kind_of_member' => $this->admin->kind_of_member,
         ];
         
@@ -187,7 +187,7 @@ class UpdateUserTest extends \TestCase
             'emergencyzipcode' =>  '2222AA',
             'emergencycountry' => 'Second',
             'birthDay' => '1990-02-02',
-            'IBAN' =>  '234567891',
+            'IBAN' =>  'BE71096123456769',
             'kind_of_member' => 'reunist',
         ];
         
@@ -246,7 +246,7 @@ class UpdateUserTest extends \TestCase
             'emergencyzipcode' =>  '2222AA',
             'emergencycountry' => 'Second',
             'birthDay' => '1990-02-02',
-            'IBAN' =>  '234567891',
+            'IBAN' =>  'BE71096123456769',
             'kind_of_member' => $this->member->kind_of_member,
             'remark' => $this->member->remark,
         ];
@@ -308,7 +308,7 @@ class UpdateUserTest extends \TestCase
             'emergencyzipcode' =>  '2222AA',
             'emergencycountry' => 'Second',
             'birthDay' => '1990-02-02',
-            'IBAN' =>  '234567891',
+            'IBAN' =>  'BE71096123456769',
             'kind_of_member' => 'Second',
             'remark' => 'Second',
         ];
@@ -377,7 +377,7 @@ class UpdateUserTest extends \TestCase
             'emergencyzipcode' =>  '2222AA',
             'emergencycountry' => 'Second',
             'birthDay' => '1990-02-02',
-            'IBAN' =>  '234567891',
+            'IBAN' =>  'BE71096123456769',
             'kind_of_member' => $this->member->kind_of_member,
             'remark' => $this->member->remarks,
         ];

@@ -87,7 +87,7 @@
             <div class="form-row">
                 <div class="form-group col-md-6">
                     {!! Form::label('phonenumber', 'Phone number') !!}
-                    {!! Form::text('phonenumber', '', ['class' => 'form-control','required' => 'required']) !!}
+                    {!! Form::text('phonenumber', '', ['class' => 'form-control','required' => 'required', 'spellcheck' => 'false']) !!}
                 </div>
                 <div class="form-group col-md-6">
                     {!! Form::label('birthDay', 'Birthdate') !!}
@@ -108,12 +108,8 @@
         <div class="card-body">
             <div class="form-row">
                 <div class="form-group col-md-4">
-                    {!! Form::label('BIC', 'BIC') !!}
-                    {!! Form::text('BIC', '', ['class' => 'form-control']) !!}
-                </div>
-                <div class="form-group col-md-8">
                     {!! Form::label('IBAN', 'IBAN') !!}
-                    {!! Form::text('IBAN', '', ['class' => 'form-control','required' => 'required']) !!}
+                    {!! Form::text('IBAN', '', ['class' => 'form-control','required' => 'required', 'autocapitalize' => 'characters', 'spellcheck' => 'false']) !!}
                 </div>
             </div>
         </div>

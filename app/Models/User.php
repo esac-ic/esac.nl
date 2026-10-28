@@ -6,6 +6,7 @@ use App\Events\MemberBecameOldMember;
 use App\Events\OldMemberBecameMember;
 use App\Events\PendingUserApproved;
 use App\Events\PendingUserRemoved;
+use App\Events\UserFinancialsUpdated;
 use App\Models\ApplicationForm\ApplicationResponse;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Casts\Attribute;
@@ -50,7 +51,6 @@ class User extends Authenticatable
         'birthDay',
         'kind_of_member',
         'IBAN',
-        'BIC',
         'incasso',
         'remark',
     ];
@@ -250,6 +250,16 @@ class User extends Authenticatable
         }
         PendingUserRemoved::dispatch($this, $this->getName());
         $this->delete();
+    }
+
+    public static function boot()
+    {
+        parent::boot();
+
+        self::updating(function ($user) {
+            if(!$user->isDirty(['IBAN', 'incasso'])) return;
+            UserFinancialsUpdated::dispatch($user);
+        });
     }
 
 }
