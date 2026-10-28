@@ -35,7 +35,7 @@ class ApplicationFormRegistrationRepository
             $applicationResponseRow = new ApplicationResponseRow();
             $applicationResponseRow->application_response_id = $applicationResponseId;
             $applicationResponseRow->application_form_row_id = $key;
-            $applicationResponseRow->value = gettype($value) === 'array' ? implode(',', $value) : $value;
+            $applicationResponseRow->value = gettype($value) === 'array' ? implode(',', $value) : $value ?? '';
             $applicationResponseRow->save();
         }
     }

@@ -158,7 +158,7 @@ class UserRepository implements IRepository
     private function createUserFromDataArray(array $data): User
     {
         $user = new User($data);
-        $user->password = filled($user->password) ? bcrypt($user->password) : null;
+        $user->password = bcrypt($user->password);
         $birthDay = new \DateTime($data['birthDay']);
         $user->birthDay = Carbon::createFromFormat('d-m-Y H:i', $birthDay->format('d-m-Y') . ' ' . $birthDay->format('H:i'));
         $user->incasso = array_key_exists("incasso", $data);

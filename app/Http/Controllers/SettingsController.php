@@ -34,7 +34,7 @@ class SettingsController extends Controller
         $settings = Setting::all();
         foreach ($request->input('setting', []) as $key => $value) {
             $setting = $settings->where('name', '=', $key)->first();
-            $setting->value = $value;
+            $setting->value = $value ?? '';
             $setting->save();
         }
 

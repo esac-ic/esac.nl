@@ -1,9 +1,5 @@
 <?php
 
-use App\Actions\Fortify\EnsureMemberCanLogIn;
-use Laravel\Fortify\Actions\AttemptToAuthenticate;
-use Laravel\Fortify\Actions\CanonicalizeUsername;
-use Laravel\Fortify\Actions\PrepareAuthenticatedSession;
 use Laravel\Fortify\Features;
 
 return [
@@ -151,25 +147,6 @@ return [
             'reset' => '/password/reset/{token}',
             'email' => '/password/email',
             'update' => '/password/reset',
-        ],
-    ],
-
-    /*
-    |--------------------------------------------------------------------------
-    | Login Pipeline
-    |--------------------------------------------------------------------------
-    |
-    | Fortify's default login steps, plus a check that keeps old and pending
-    | members out.
-    |
-    */
-
-    'pipelines' => [
-        'login' => [
-            CanonicalizeUsername::class,
-            EnsureMemberCanLogIn::class,
-            AttemptToAuthenticate::class,
-            PrepareAuthenticatedSession::class,
         ],
     ],
 

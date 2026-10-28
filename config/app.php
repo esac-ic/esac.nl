@@ -13,7 +13,7 @@ return [
     |
     */
 
-    'name' => env('APP_NAME', 'Laravel'),
+    'name' => env('APP_NAME', 'ESAC'),
 
     /*
     |--------------------------------------------------------------------------
@@ -134,8 +134,8 @@ return [
     |
     */
 
-    'old_user_retention_years' => (int) env('OLD_USER_RETENTION_YEARS', 2),
+    'old_user_retention_years' => (int) env('OLD_USER_SAVE_PERIODE', 2),
 
-    'application_response_retention_years' => (int) env('APPLICATION_RESPONSE_RETENTION_YEARS', 2),
+    'application_response_retention_years' => (int) env('APPLICATION_RESPONSE_SAVE_PERIODE', 2),
 
 ];

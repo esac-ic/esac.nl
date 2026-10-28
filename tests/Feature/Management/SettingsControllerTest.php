@@ -42,6 +42,18 @@ class SettingsControllerTest extends TestCase
     }
 
     #[Test]
+    public function a_blank_setting_is_saved_as_empty()
+    {
+        $setting = Setting::where('name', Setting::SETTING_NORMAL_MEMBER_MAIL_LISTS)->first();
+
+        $this->actingAs($this->admin)
+            ->put('beheer/settings', ['setting' => [$setting->name => '']])
+            ->assertRedirect('beheer/settings');
+
+        $this->assertSame('', $setting->fresh()->value);
+    }
+
+    #[Test]
     public function a_member_without_the_administrator_role_can_not_view_settings()
     {
         $member = User::factory()->create();
