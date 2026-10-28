@@ -123,19 +123,4 @@ return [
         'store' => env('APP_MAINTENANCE_STORE', 'database'),
     ],
 
-    /*
-    |--------------------------------------------------------------------------
-    | Data Retention
-    |--------------------------------------------------------------------------
-    |
-    | The number of years after which the remove:oldUsers command erases the
-    | personal data of old members and the remove:oldApplications command
-    | deletes event registrations.
-    |
-    */
-
-    'old_user_retention_years' => (int) env('OLD_USER_SAVE_PERIODE', 2),
-
-    'application_response_retention_years' => (int) env('APPLICATION_RESPONSE_SAVE_PERIODE', 2),
-
 ];
