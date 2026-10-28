@@ -3,25 +3,25 @@
     <div class="card-body">
         <div class="form-row">
             <div class="form-group col-md-6">
-                {!! Form::label('name', 'Name') !!}
-                {!! Form::text('name', ($page != null) ? $page->name : "", ['class' => 'form-control','required' => 'required']) !!}
+                {{ html()->label('Name', 'name') }}
+                {{ html()->text('name', ($page != null) ? $page->name : "")->class('form-control')->required() }}
             </div>
             @if($page === null || $page->editable)
                 <div class="form-group col-md-6">
-                    {!! Form::label('urlName', 'URL name') !!}
-                    {!! Form::text('urlName', ($page != null) ? $page->urlName : "", ['class' => 'form-control','required' => 'required']) !!}
+                    {{ html()->label('URL name', 'urlName') }}
+                    {{ html()->text('urlName', ($page != null) ? $page->urlName : "")->class('form-control')->required() }}
                 </div>
             @endif
         </div>
         <div class="form-row">
             <div class="col-md-6">
                 <div class="form-group form-check">
-                    {!! Form::checkbox("menuItem",0,($page != null) ? ($page->menuItem) ? "checked" : "" : "",["class" => "form-check-input","id" => "menuItem"]) !!}
-                    {!! Form::label("menuItem", 'Show page in menu', ["class" => "form-check-label"]) !!}
+                    {{ html()->checkbox('menuItem', ! session()->hasOldInput() && $page != null && $page->menuItem)->class('form-check-input')->id('menuItem') }}
+                    {{ html()->label('Show page in menu', 'menuItem')->class('form-check-label') }}
                 </div>
                 <div class="form-group form-check">
-                    {!! Form::checkbox("login",0,($page != null) ? ($page->login) ? "checked" : "" : "",["class" => "form-check-input", "id" => "login"]) !!}
-                    {!! Form::label("login", 'User needs to be logged in to view the page', ["class" => "form-check-label"]) !!}
+                    {{ html()->checkbox('login', ! session()->hasOldInput() && $page != null && $page->login)->class('form-check-input')->id('login') }}
+                    {{ html()->label('User needs to be logged in to view the page', 'login')->class('form-check-label') }}
                 </div>
             </div>
         </div>
