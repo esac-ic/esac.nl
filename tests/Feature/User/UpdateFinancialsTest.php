@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Feature\Zekeringen;
+namespace Tests\Feature\User;
 
 use App\CustomClasses\Eboekhouden\EboekhoudenFacade;
 use App\Models\User;
