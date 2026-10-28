@@ -75,7 +75,7 @@ class AddUserTest extends TestCase {
         });
 
         $facade = $this->app->make(EboekhoudenFacade::class);
-        $facade->createRelation($user);
+        $facade->syncRelation($user);
     }
 
     public function test_reunist() {
@@ -88,7 +88,7 @@ class AddUserTest extends TestCase {
         });
 
         $facade = $this->app->make(EboekhoudenFacade::class);
-        $facade->createRelation($user);
+        $facade->syncRelation($user);
     }
 
     protected function test_too_long($field, $length) {
@@ -101,7 +101,7 @@ class AddUserTest extends TestCase {
         $user = User::factory()->member()->create();
         $user[$field] = str_repeat('a', $length);
         $facade = $this->app->make(EboekhoudenFacade::class);
-        $facade->createRelation($user);
+        $facade->syncRelation($user);
     }
 
     public function test_name_too_long() {

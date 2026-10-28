@@ -54,8 +54,14 @@ class EboekhoudenFacade
             'note' => $notes
         ];
     }
+
+    public function syncRelation(User $user)
+    {
+        if($user->eboekhouden_id == null) $this->createRelation($user);
+        else $this->updateRelation($user);
+    }
     
-    public function createRelation(User $user)
+    protected function createRelation(User $user)
     {
         // The eboekhouden API should catch this, but just in case they change their behaviour
         //  check if the user isn't already in eboekhouden
@@ -73,7 +79,7 @@ class EboekhoudenFacade
         // TODO add a subscription (once this is possible with the eboekhouden API)
     }
 
-    public function updateRelation(User $user)
+    protected function updateRelation(User $user)
     {
         if($user->eboekhouden_id == null) throw new Exception('Cannot update a user that does not have an eboekhouden id (it hasn\'t been added to eboekhouden yet)');
 

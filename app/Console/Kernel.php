@@ -15,6 +15,7 @@ class Kernel extends ConsoleKernel
         $schedule->command('remove:oldUsers')->weekly();
         $schedule->command('remove:oldApplications')->weekly();
         $schedule->command('auth:clear-resets')->weekly();
+        $schedule->command('eboekhouden:sync')->daily();
     }
 
     /**

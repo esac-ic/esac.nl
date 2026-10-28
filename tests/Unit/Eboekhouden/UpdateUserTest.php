@@ -78,7 +78,7 @@ class UpdateUserTest extends TestCase {
         });
 
         $facade = $this->app->make(EboekhoudenFacade::class);
-        $facade->updateRelation($user);
+        $facade->syncRelation($user);
     }
 
     public function test_reunist() {
@@ -94,7 +94,7 @@ class UpdateUserTest extends TestCase {
         });
 
         $facade = $this->app->make(EboekhoudenFacade::class);
-        $facade->updateRelation($user);
+        $facade->syncRelation($user);
     }
 
     protected function test_too_long($field, $length) {
@@ -112,7 +112,7 @@ class UpdateUserTest extends TestCase {
         });
 
         $facade = $this->app->make(EboekhoudenFacade::class);
-        $facade->updateRelation($user);
+        $facade->syncRelation($user);
     }
 
     public function test_name_too_long() {
