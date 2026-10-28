@@ -1,6 +1,6 @@
 <?php
 
-use App\Rol;
+use App\Models\Rol;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Http;
 

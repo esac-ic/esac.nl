@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Certificate;
+use App\Models\Certificate;
 use App\Repositories\CertificateRepository;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Config;
@@ -10,7 +10,7 @@ use Illuminate\Support\Facades\Session;
 
 class CertificateController extends Controller
 {
-    private $_certificateRepository;
+    private CertificateRepository $_certificateRepository;
 
     public function __construct(CertificateRepository $certificateRepository)
     {

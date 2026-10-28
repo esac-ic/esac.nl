@@ -91,7 +91,7 @@
 </div>
 
 @push('scripts')
-    <script>
+    <script type="module">
         var navId = $('#scrollNav');
         var timeOut;
         

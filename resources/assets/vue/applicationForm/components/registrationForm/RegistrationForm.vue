@@ -4,7 +4,7 @@
             <label>{{getLabel(row)}}<span v-if="isRequired(row)">*</span></label>
             <component :is="getComponentName(row)" :row="row"></component>
         </div>
-        <span class="text-small text-muted">*Mandatory question</span>
+        <span v-if="hasMandatoryQuestions" class="text-small text-muted">*Mandatory question</span>
     </div>
 </template>
 
@@ -45,6 +45,12 @@
             isRequired(row) {
                 return row.required;
             }
+        },
+        computed: {
+            hasMandatoryQuestions()
+            {
+                return this.applicationFormRows.some(this.isRequired);
+            },
         },
         mounted(){
             this.applicationFormRows = JSON.parse(this.rows);

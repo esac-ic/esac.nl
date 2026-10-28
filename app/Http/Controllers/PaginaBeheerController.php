@@ -2,14 +2,14 @@
 
 namespace App\Http\Controllers;
 
-use App\MenuItem;
+use App\Models\MenuItem;
 use App\Repositories\MenuRepository;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Session;
 
 class PaginaBeheerController extends Controller
 {
-    private $_menuRepository;
+    private MenuRepository $_menuRepository;
 
     /**
      * Create a new controller instance.

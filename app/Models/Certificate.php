@@ -1,14 +1,15 @@
 <?php
 
-namespace App;
+namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-class Rol extends Model
+class Certificate extends Model
 {
     use SoftDeletes;
     protected $fillable = [
         'name',
+        'abbreviation',
     ];
 }

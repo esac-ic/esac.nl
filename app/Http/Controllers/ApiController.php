@@ -2,13 +2,13 @@
 
 namespace App\Http\Controllers;
 
-use App\MenuItem;
+use App\Models\MenuItem;
 use App\Repositories\UserRepository;
 use Illuminate\Http\Request;
 
 class ApiController extends Controller
 {
-    private $_userRepository;
+    private UserRepository $_userRepository;
 
     public function __construct(UserRepository $userRepository)
     {

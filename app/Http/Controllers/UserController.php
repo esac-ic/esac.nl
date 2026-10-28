@@ -6,18 +6,15 @@ use App\CustomClasses\MailList\MailListFacade;
 use App\Exports\OldUsersExport;
 use App\Exports\PennoMemberExport;
 use App\Exports\UsersExport;
+use App\Models\Rol;
+use App\Models\User;
 use App\Repositories\UserRepository;
-use App\Rol;
 use App\Rules\EmailDomainValidator;
-use App\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Session;
 use Maatwebsite\Excel\Facades\Excel;
-use App\Events\MemberKindChanged;
-use App\Events\MemberBecameOldMember;
-use App\Events\OldMemberBecameMember;
 
 class UserController extends Controller
 {

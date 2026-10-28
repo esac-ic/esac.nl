@@ -2,7 +2,7 @@
 
 namespace App\Rules;
 
-use App\Setting;
+use App\Models\Setting;
 use Illuminate\Contracts\Validation\Rule;
 
 class EmailDomainValidator implements Rule

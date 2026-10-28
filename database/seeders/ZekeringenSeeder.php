@@ -2,10 +2,15 @@
 
 namespace Database\Seeders;
 
+use App\Models\Zekering;
 use Illuminate\Database\Seeder;
 
 class ZekeringenSeeder extends Seeder
 {
+    private const AMOUNT = 150;
+
+    private const MAX_CHILDREN = 4;
+
     /**
      * Run the database seeds.
      *
@@ -13,35 +18,13 @@ class ZekeringenSeeder extends Seeder
      */
     public function run()
     {
-        //inserting test data
-        $zekering = new \App\Zekering();
-        $zekering->text = "dit is een dummy tekst voor een zekering";
-        $zekering->createdBy = 1;
-        $zekering->score = 1;
-        $zekering->parent_id = 1;
-        $zekering->has_parent = 0;
+        $zekeringen = Zekering::factory()->count(self::AMOUNT)->create(['createdBy' => 1]);
 
-        //add zekering(en)
-        $zekering->save();
-
-        $zekering = new \App\Zekering();
-        $zekering->text = "dit is een dummy tekst 2 voor een zekering";
-        $zekering->createdBy = 1;
-        $zekering->score = 1;
-        $zekering->parent_id = 2;
-        $zekering->has_parent = 0;
-
-        //add zekering(en)
-        $zekering->save();
-
-        $zekering = new \App\Zekering();
-        $zekering->text = "dit is een dummy tekst 2 voor een zekering met een parent";
-        $zekering->createdBy = 1;
-        $zekering->score = 1;
-        $zekering->parent_id = 2;
-        $zekering->has_parent = 1;
-
-        //add zekering(en)
-        $zekering->save();
+        foreach ($zekeringen as $zekering) {
+            Zekering::factory()
+                ->count(rand(0, self::MAX_CHILDREN))
+                ->childOf($zekering)
+                ->create(['createdBy' => 1]);
+        }
     }
 }

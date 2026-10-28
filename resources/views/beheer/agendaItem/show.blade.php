@@ -20,9 +20,14 @@
                         <em class="ion-android-arrow-back"></em> {{'Back'}}
                     </a>
                 @endif
-                {{ Form::open(array('url' => 'agendaItems/' . $agendaItem->id, 'method' => 'delete')) }}
-                <button type="submit" class="btn btn-danger"><em class="ion-trash-a"></em> {{'Remove'}}</button>
-                {{ Form::close() }}
+                <form method="post"
+                      action="{{ route("agendaItems.destroy", $agendaItem) }}"
+                      onsubmit="return confirm('Are you sure you want to delete this agenda item?');"
+                >
+                    @csrf
+                    @method('DELETE')
+                    <button type="submit" class="btn btn-danger"><em class="ion-trash-a"></em> {{'Remove'}}</button>
+                </form>
             </div>
         </div>
     </div>

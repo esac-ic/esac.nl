@@ -1,5 +1,5 @@
 //This file contains the api methode for managing ships
-import axios from "axios/index";
+import axios from "axios";
 import * as constants from "../constants";
 
 export default {

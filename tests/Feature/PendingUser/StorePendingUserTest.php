@@ -3,11 +3,10 @@
 namespace Tests\Feature\PendingUser;
 
 use App\Events\PendingUserCreated;
-use App\User;
+use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Event;
-use Illuminate\Support\Facades\Log;
 
 class StorePendingUserTest extends \TestCase
 {

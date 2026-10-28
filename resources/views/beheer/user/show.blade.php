@@ -4,9 +4,6 @@
 {{'Info of ' . $user->getName()}}
 @endsection
 
-@push('styles')
-    <link rel="stylesheet" type="text/css" href="{{mix("css/vendor/datatables.css")}}">
-@endpush
 
 @section('content')
     @if(Session::has('message'))
@@ -29,9 +26,14 @@
                 <button type="submit" class="btn btn-success"><em class="ion-checkmark"></em> {{'Approve as member'}}</button>
                 {{ Form::close() }}
                 
-                {{ Form::open(array('url' => '/users/'.$user->id . '/removeAsPendingMember', 'method' => 'patch')) }}
-                <button type="submit" class="btn btn-danger"><em class="ion-trash-a"></em> {{'Remove as pending'}}</button>
-                {{ Form::close() }}
+                <form method="post"
+                      action="{{ route("users.removeAsPendingMember", $user) }}"
+                      onsubmit="return confirm('Are you sure you want to remove {{$user->getName()}} as a pending member?');"
+                >
+                    @csrf
+                    @method('PATCH')
+                    <button type="submit" class="btn btn-danger"><em class="ion-trash-a"></em> {{'Remove as pending'}}</button>
+                </form>
             @else
                 @if($user->isOldMember() and \Illuminate\Support\Facades\Auth::user()->hasRole(Config::get('constants.Administrator')))
                     {{ Form::open(array('url' => '/users/'.$user->id . '/makeActiveMember', 'method' => 'patch')) }}
@@ -300,8 +302,8 @@
 @endsection
 
 @push('scripts')
-    <script src="{{mix("js/vendor/datatables.js")}}"></script>
-    <script>
+    @vite(['resources/assets/js/vendor/datatables.js'])
+    <script type="module">
         $('#registrations_table').DataTable({
             "order": [[ 1, "asc" ]],
             "ajax": {

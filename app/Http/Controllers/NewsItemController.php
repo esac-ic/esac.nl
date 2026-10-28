@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\NewsItem;
+use App\Models\NewsItem;
 use App\Repositories\NewsItemRepository;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Config;
@@ -12,7 +12,7 @@ use Intervention\Image\ImageManagerStatic as Image;
 
 class NewsItemController extends Controller
 {
-    private $_newsItemRepository;
+    private NewsItemRepository $_newsItemRepository;
 
     public function __construct(NewsItemRepository $newsItemRepository)
     {

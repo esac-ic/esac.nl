@@ -8,7 +8,7 @@
 
 namespace App\Repositories;
 
-use App\NewsItem;
+use App\Models\NewsItem;
 
 class NewsItemRepository implements IRepository
 {

@@ -21,9 +21,14 @@ Page
                     {{'Back'}}
                 </a>
                 @if($page->deletable)
-                    {{ Form::open(array('url' => 'pages/' .$page->id, 'method' => 'delete')) }}
-                    <button type="submit" class="btn btn-danger"><span class="ion-trash-a"></span> Remove</button>
-                    {{ Form::close() }}
+                    <form method="post"
+                          action="{{ route("pages.destroy", $page) }}"
+                          onsubmit="return confirm('Are you sure you want to delete this page?');"
+                    >
+                        @csrf
+                        @method('DELETE')
+                        <button type="submit" class="btn btn-danger"><em class="ion-trash-a"></em> {{'Remove'}}</button>
+                    </form>
                 @endif
             </div>
         </div>

@@ -2,7 +2,7 @@
 
 namespace App\Services;
 
-use App\AgendaItem;
+use App\Models\AgendaItem;
 use Illuminate\Support\Collection;
 
 class AgendaApplicationFormService

@@ -3,7 +3,7 @@
 namespace Tests\Feature\User;
 
 use App\Events\OldMemberBecameMember;
-use App\User;
+use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Config;

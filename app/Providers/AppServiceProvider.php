@@ -3,7 +3,7 @@
 namespace App\Providers;
 
 use App\CustomClasses\MenuSingleton;
-use App\Setting;
+use App\Models\Setting;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;

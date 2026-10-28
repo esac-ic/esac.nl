@@ -4,8 +4,8 @@ namespace App\Http\Controllers;
 
 use App\CustomClasses\MailList\MailListFacade;
 use App\Jobs\MemberMassMailListSyncJob;
+use App\Models\User;
 use App\Repositories\UserRepository;
-use App\User;
 use Illuminate\Http\Client\RequestException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Config;

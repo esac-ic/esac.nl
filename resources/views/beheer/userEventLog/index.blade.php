@@ -48,9 +48,9 @@
 @endsection
 
 @push('scripts')
-    <script src="{{mix("js/vendor/datatables.js")}}"></script>
+    @vite(['resources/assets/js/vendor/datatables.js'])
     @yield('modal_javascript')
-    <script>
+    <script type="module">
         $('#eventLog').DataTable({
             order: [[1, 'desc']],
         });

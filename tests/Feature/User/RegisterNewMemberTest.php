@@ -2,8 +2,8 @@
 
 namespace Tests\Feature\User;
 
-use App\Events\PendingUserApproved;
 use App\Events\PendingUserCreated;
+use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Support\Facades\Artisan;
@@ -71,7 +71,7 @@ class RegisterNewMemberTest extends TestCase
         $response->assertStatus(302);
         Event::assertDispatched(PendingUserCreated::class);
 
-        $user = \App\User::all()->last();
+        $user = User::all()->last();
 
         $this->assertEquals($body['email'], $user->email);
         $this->assertEquals($body['firstname'], $user->firstname);

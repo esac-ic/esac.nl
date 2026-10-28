@@ -6,13 +6,15 @@
  * Time: 22:20
  */
 
-namespace App;
+namespace App\Models;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Zekering extends Model
 {
+    use HasFactory;
     use SoftDeletes;
     protected $fillable = [
         'text',
@@ -24,6 +26,6 @@ class Zekering extends Model
 
     public function children()
     {
-        return $this->hasMany(Zekering::class, 'parent_id', 'id')->where('id', '!=', 'parent_id')->orderBy('id', 'asc');
+        return $this->hasMany(Zekering::class, 'parent_id', 'id')->whereColumn('id', '!=', 'parent_id')->orderBy('id', 'asc');
     }
 }

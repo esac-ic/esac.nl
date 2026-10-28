@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\AgendaItemCategory;
+use App\Models\AgendaItemCategory;
 use App\Repositories\AgendaItemCategoryRepository;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Config;
@@ -10,7 +10,7 @@ use Illuminate\Support\Facades\Session;
 
 class AgendaItemCategoryController extends Controller
 {
-    private $agendaItemCategoryRepository;
+    private AgendaItemCategoryRepository $agendaItemCategoryRepository;
 
     public function __construct(AgendaItemCategoryRepository $agendaItemCategoryRepository)
     {

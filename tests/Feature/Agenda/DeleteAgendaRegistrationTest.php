@@ -3,7 +3,7 @@
 namespace Tests\Feature\Agenda;
 
 use App\Models\ApplicationForm\ApplicationResponse;
-use App\User;
+use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Support\Facades\Artisan;

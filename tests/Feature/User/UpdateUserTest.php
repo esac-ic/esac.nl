@@ -4,14 +4,11 @@ namespace Tests\Feature\User;
 
 use App\CustomClasses\MailList\MailListFacade;
 use App\Events\MemberKindChanged;
-use App\User;
-use DateTime;
-use Illuminate\Foundation\Testing\DatabaseMigrations;
+use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Event;
-use Mockery;
 use Mockery\MockInterface;
 
 class UpdateUserTest extends \TestCase

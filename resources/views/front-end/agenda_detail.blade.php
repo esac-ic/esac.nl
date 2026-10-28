@@ -8,7 +8,18 @@
                     <img class="card-img-top" src="{{$agendaItem->getImageUrl()}}">
                     <div class="card-body">
                         <h3 class="card-title">{{$agendaItem->title}}</h3>
-                        <p class="card-text">{{'From'}} <span class="badge badge-secondary font-size-100">{{trans(\Carbon\Carbon::parse($agendaItem->startDate)->format('d M H:i'))}}</span> {{'to'}} <span class="badge badge-secondary font-size-100">{{trans(\Carbon\Carbon::parse($agendaItem->endDate)->format('d M H:i'))}}</span></p>
+                        <p class="card-text">
+                            From
+                            <span class="badge badge-secondary font-size-100">{{trans(\Carbon\Carbon::parse($agendaItem->startDate)->format('d M H:i'))}}</span>
+                            to
+                            <span class="badge badge-secondary font-size-100">{{trans(\Carbon\Carbon::parse($agendaItem->endDate)->format('d M H:i'))}}</span>
+                        </p>
+                        @if($agendaItem->canRegister())
+                            <p class="card-text">
+                                Subscriptions close
+                                <span class="badge badge-secondary font-size-100">{{trans(\Carbon\Carbon::parse($agendaItem->subscription_endDate)->format('d M H:i'))}}</span>
+                            </p>
+                        @endif
                     </div>
                     <div class="card-footer bg-white p-3">
                         <div class="row justify-content-between align-items-center">
@@ -44,7 +55,7 @@
                         <h4 class="card-title">{{'General information'}}</h4>
                         <p class="card-text">{!! $agendaItem->text !!}</p>
                         @if($agendaItem->application_form_id != null && !Auth::guest())
-                            <h4 class="card-title">{{'Registrations'}}</h2>
+                            <h4 class="card-title">{{'Registrations'}}</h4>
                             <ol class="column-count-lg-3">
                                 @foreach($users as $user)
                                     <li>{{$user['name']}}

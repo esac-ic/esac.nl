@@ -6,6 +6,8 @@ use App\CustomClasses\MailList\MailListFacade;
 use App\Events\MemberKindChanged;
 use App\Events\OldMemberBecameMember;
 use App\Events\PendingUserApproved;
+use App\Models\Setting;
+use App\Models\User;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Events\Dispatcher;
 
@@ -80,11 +82,11 @@ class UpdateMemberTypeMaillists implements ShouldQueue
     
     /**
      * Add user to the maillists for their kind of member specified in the settings table
-     * @param \App\User $user
+     * @param User $user
      * @param string $memberType
      * @return void
      */
-    public function addUserToMailLists(\App\User $user, string $memberType): void
+    public function addUserToMailLists(User $user, string $memberType): void
     {
         $mailLists = collect(self::getMemberTypeMailLists($memberType));
         
@@ -104,25 +106,25 @@ class UpdateMemberTypeMaillists implements ShouldQueue
         //check member type and fetch the maillists
         switch ($memberType) {
             case "member":
-                $mailLists = trim(app(\App\Setting::SINGELTONNAME)->getSetting(\App\Setting::SETTING_NORMAL_MEMBER_MAIL_LISTS));
+                $mailLists = trim(app(Setting::SINGELTONNAME)->getSetting(Setting::SETTING_NORMAL_MEMBER_MAIL_LISTS));
                 break;
             case "extraordinary_member":
-                $mailLists = trim(app(\App\Setting::SINGELTONNAME)->getSetting(\App\Setting::SETTING_EXTRAORDINARY_MEMBER_MAIL_LISTS));
+                $mailLists = trim(app(Setting::SINGELTONNAME)->getSetting(Setting::SETTING_EXTRAORDINARY_MEMBER_MAIL_LISTS));
                 break;
             case "reunist":
-                $mailLists = trim(app(\App\Setting::SINGELTONNAME)->getSetting(\App\Setting::SETTING_REUNIST_MEMBER_MAIL_LISTS));
+                $mailLists = trim(app(Setting::SINGELTONNAME)->getSetting(Setting::SETTING_REUNIST_MEMBER_MAIL_LISTS));
                 break;
             case "honorary_member":
-                $mailLists = trim(app(\App\Setting::SINGELTONNAME)->getSetting(\App\Setting::SETTING_HONORARY_MEMBER_MAIL_LISTS));
+                $mailLists = trim(app(Setting::SINGELTONNAME)->getSetting(Setting::SETTING_HONORARY_MEMBER_MAIL_LISTS));
                 break;
             case "member_of_merit":
-                $mailLists = trim(app(\App\Setting::SINGELTONNAME)->getSetting(\App\Setting::SETTING_MERIT_MEMBER_MAIL_LISTS));
+                $mailLists = trim(app(Setting::SINGELTONNAME)->getSetting(Setting::SETTING_MERIT_MEMBER_MAIL_LISTS));
                 break;
             case "trainer":
-                $mailLists = trim(app(\App\Setting::SINGELTONNAME)->getSetting(\App\Setting::SETTING_TRAINER_MEMBER_MAIL_LISTS));
+                $mailLists = trim(app(Setting::SINGELTONNAME)->getSetting(Setting::SETTING_TRAINER_MEMBER_MAIL_LISTS));
                 break;
             case "relationship":
-                $mailLists = trim(app(\App\Setting::SINGELTONNAME)->getSetting(\App\Setting::SETTING_RELATIONSHIP_MEMBER_MAIL_LISTS));
+                $mailLists = trim(app(Setting::SINGELTONNAME)->getSetting(Setting::SETTING_RELATIONSHIP_MEMBER_MAIL_LISTS));
                 break;
             default:
                 //in case something goes wrong don't add the member to any maillists

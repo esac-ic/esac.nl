@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\AgendaItem;
+use App\Models\AgendaItem;
 use DateTimeImmutable;
 use DateTimeZone as PhpDateTimeZone;
 use Eluceo\iCal\Domain\Entity\Calendar;

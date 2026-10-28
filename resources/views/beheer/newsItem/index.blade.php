@@ -54,13 +54,9 @@
     </table>
 @endsection
 
-@push('styles')
-    <link rel="stylesheet" type="text/css" href="{{mix("css/vendor/datatables.css")}}">
-@endpush
-
 @push('scripts')
-    <script src="{{mix("js/vendor/datatables.js")}}"></script>
-    <script>
+    @vite(['resources/assets/js/vendor/datatables.js'])
+    <script type="module">
         $('#newsItems').DataTable({
             columnDefs: [
                 {type: 'de_datetime', targets: 1},

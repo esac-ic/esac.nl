@@ -1,0 +1,60 @@
+#cloud-config
+
+users:
+  - name: ic
+    shell: /bin/bash
+    sudo: "ALL=(ALL) NOPASSWD:ALL"
+
+package_update: true
+package_upgrade: true
+packages:
+  - curl
+  - unattended-upgrades
+
+write_files:
+  - path: /etc/ssh/sshd_config.d/10-esac.conf
+    content: |
+      PasswordAuthentication no
+      PermitRootLogin no
+
+  - path: /etc/apt/apt.conf.d/52esac
+    content: |
+      APT::Periodic::Update-Package-Lists "1";
+      APT::Periodic::Unattended-Upgrade "1";
+      Unattended-Upgrade::Origins-Pattern:: "origin=Docker";
+      Unattended-Upgrade::Automatic-Reboot "true";
+      Unattended-Upgrade::Automatic-Reboot-Time "04:00";
+
+  - path: /etc/docker/daemon.json
+    content: |
+      {"log-driver": "json-file", "log-opts": {"max-size": "10m", "max-file": "3"}}
+
+  - path: /etc/systemd/system/esac-backup.service
+    content: |
+      [Unit]
+      Description=esac.nl nightly off-site backup
+      [Service]
+      Type=oneshot
+      User=ic
+      ExecStart=/srv/esac/backup.sh
+
+  - path: /etc/systemd/system/esac-backup.timer
+    content: |
+      [Unit]
+      Description=esac.nl nightly off-site backup
+      [Timer]
+      OnCalendar=*-*-* 03:17
+      Persistent=true
+      [Install]
+      WantedBy=timers.target
+
+runcmd:
+  - install -d -m 700 -o ic -g ic /home/ic/.ssh
+  - install -m 600 -o ic -g ic /root/.ssh/authorized_keys /home/ic/.ssh/authorized_keys
+  - [sh, -c, "fallocate -l 1G /swapfile && chmod 600 /swapfile && mkswap /swapfile && swapon /swapfile && echo '/swapfile none swap sw 0 0' >> /etc/fstab"]
+  - curl -fsSL https://get.docker.com | sh
+  - usermod -aG docker ic
+  - install -d -o ic -g ic /srv/esac
+  - systemctl daemon-reload
+  - systemctl enable esac-backup.timer
+  - systemctl restart ssh

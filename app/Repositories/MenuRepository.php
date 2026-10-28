@@ -2,7 +2,7 @@
 
 namespace App\Repositories;
 
-use App\MenuItem;
+use App\Models\MenuItem;
 
 class MenuRepository implements IRepository
 {

@@ -16,7 +16,7 @@ class ApplicationFormSeeder extends Seeder
     public function run()
     {
         $applicationForm = new ApplicationForm();
-        $applicationForm->name = 'Aplication form climbing weekend';
+        $applicationForm->name = 'Application form climbing weekend';
         $applicationForm->save();
 
         $row = new ApplicationFormRow();
@@ -34,7 +34,7 @@ class ApplicationFormSeeder extends Seeder
         $row->save();
 
         $row = new ApplicationFormRow();
-        $row->name = 'Food reqeusts';
+        $row->name = 'Food requests';
         $row->type = "Text";
         $row->required = 0;
         $row->application_form_id = $applicationForm->id;
@@ -42,10 +42,10 @@ class ApplicationFormSeeder extends Seeder
 
         //second application form
         $applicationForm = new ApplicationForm();
-        $applicationForm->name = 'Aplication form activity';
+        $applicationForm->name = 'Application form activity';
         $applicationForm->save();
         $row = new ApplicationFormRow();
-        $row->name = 'Food reqeusts';
+        $row->name = 'Food requests';
         $row->type = "Text";
         $row->required = 0;
         $row->application_form_id = $applicationForm->id;

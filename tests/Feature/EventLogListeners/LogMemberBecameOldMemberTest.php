@@ -4,9 +4,9 @@ namespace Tests\Feature\EventLogListeners;
 
 use App\Events\MemberBecameOldMember;
 use App\Listeners\LogMemberBecameOldMember;
+use App\Models\User;
 use App\Models\UserEventLogEntry;
 use App\Repositories\UserEventLogEntryRepository;
-use App\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
 class LogMemberBecameOldMemberTest extends \TestCase
