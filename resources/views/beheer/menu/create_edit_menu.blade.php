@@ -16,11 +16,11 @@
         <div class="form-row">
             <div class="col-md-6">
                 <div class="form-group form-check">
-                    {{ html()->checkbox('menuItem', ! session()->hasOldInput() && $page != null && $page->menuItem, 0)->class('form-check-input')->id('menuItem') }}
+                    {{ html()->checkbox('menuItem', ! session()->hasOldInput() && $page != null && $page->menuItem)->class('form-check-input')->id('menuItem') }}
                     {{ html()->label('Show page in menu', 'menuItem')->class('form-check-label') }}
                 </div>
                 <div class="form-group form-check">
-                    {{ html()->checkbox('login', ! session()->hasOldInput() && $page != null && $page->login, 0)->class('form-check-input')->id('login') }}
+                    {{ html()->checkbox('login', ! session()->hasOldInput() && $page != null && $page->login)->class('form-check-input')->id('login') }}
                     {{ html()->label('User needs to be logged in to view the page', 'login')->class('form-check-label') }}
                 </div>
             </div>

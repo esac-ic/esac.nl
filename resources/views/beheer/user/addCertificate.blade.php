@@ -26,7 +26,7 @@
             {{ html()->form($fields['method'], url($fields['url']))->open() }}
             <div class="form-group">
                 {{ html()->label('Certificate', 'certificate_id') }}
-                {{ html()->select('certificate_id', $certificates, ($userCertificate != null) ? $userCertificate->certificate_id : "")->class('form-control')->required() }}
+                {{ html()->select('certificate_id', $certificates, ($userCertificate != null) ? $userCertificate->id : "")->class('form-control')->required() }}
             </div>
         </div>
     </div>

@@ -210,7 +210,7 @@ class AdminFormPagesTest extends TestCase
 
         $response = $this->get("users/$member->id")->assertOk();
 
-        $this->assertForm($response, 'POST', "users/$member->id/removeAsActiveMember");
+        $this->assertForm($response, 'PATCH', "users/$member->id/removeAsActiveMember");
     }
 
     /** @test */
@@ -220,7 +220,7 @@ class AdminFormPagesTest extends TestCase
 
         $response = $this->get("users/$member->id")->assertOk();
 
-        $this->assertForm($response, 'POST', "users/$member->id/approveAsPendingMember");
+        $this->assertForm($response, 'PATCH', "users/$member->id/approveAsPendingMember");
     }
 
     /** @test */
@@ -230,7 +230,7 @@ class AdminFormPagesTest extends TestCase
 
         $response = $this->get("users/$member->id")->assertOk();
 
-        $this->assertForm($response, 'POST', "users/$member->id/makeActiveMember");
+        $this->assertForm($response, 'PATCH', "users/$member->id/makeActiveMember");
     }
 
     /** @test */
