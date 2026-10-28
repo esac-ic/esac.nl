@@ -5,8 +5,9 @@ namespace Tests\Feature\Certificate;
 use App\Models\Certificate;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Tests\TestCase;
 
-class DeleteCertificateTest extends \TestCase
+class DeleteCertificateTest extends TestCase
 {
     use RefreshDatabase;
 
