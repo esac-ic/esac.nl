@@ -101,11 +101,11 @@ class PublicFormPagesTest extends TestCase
     #[Test]
     public function the_password_reset_forms_render()
     {
-        $this->assertForm($this->get('password/reset')->assertOk(), 'POST', 'password/email');
+        $this->assertForm($this->get('forgot-password')->assertOk(), 'POST', 'forgot-password');
 
-        $response = $this->get('password/reset/abc123')->assertOk();
+        $response = $this->get('reset-password/abc123')->assertOk();
 
-        $this->assertForm($response, 'POST', 'password/reset');
+        $this->assertForm($response, 'POST', 'reset-password');
         $this->assertFieldValue($response, 'token', 'abc123');
     }
 

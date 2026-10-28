@@ -133,25 +133,6 @@ return [
 
     /*
     |--------------------------------------------------------------------------
-    | Paths
-    |--------------------------------------------------------------------------
-    |
-    | The password reset pages keep the URLs that are in reset emails already
-    | sent and in members' bookmarks.
-    |
-    */
-
-    'paths' => [
-        'password' => [
-            'request' => '/password/reset',
-            'reset' => '/password/reset/{token}',
-            'email' => '/password/email',
-            'update' => '/password/reset',
-        ],
-    ],
-
-    /*
-    |--------------------------------------------------------------------------
     | Features
     |--------------------------------------------------------------------------
     |

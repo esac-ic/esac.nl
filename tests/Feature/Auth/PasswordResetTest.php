@@ -17,7 +17,7 @@ class PasswordResetTest extends TestCase
     #[Test]
     public function the_reset_request_page_is_shown()
     {
-        $this->get('/password/reset')->assertOk()->assertSee('Send password reset link');
+        $this->get('/forgot-password')->assertOk()->assertSee('Send password reset link');
     }
 
     #[Test]
@@ -26,20 +26,20 @@ class PasswordResetTest extends TestCase
         Notification::fake();
         $user = User::factory()->create();
 
-        $this->post('/password/email', ['email' => $user->email])->assertSessionHas('status');
+        $this->post('/forgot-password', ['email' => $user->email])->assertSessionHas('status');
 
         $token = null;
         Notification::assertSentTo($user, ResetPassword::class, function (ResetPassword $notification) use (&$token, $user) {
             $token = $notification->token;
 
-            return str_contains($notification->toMail($user)->actionUrl, '/password/reset/'.$token);
+            return str_contains($notification->toMail($user)->actionUrl, '/reset-password/'.$token);
         });
 
-        $this->get('/password/reset/'.$token.'?email='.urlencode($user->email))
+        $this->get('/reset-password/'.$token.'?email='.urlencode($user->email))
             ->assertOk()
             ->assertSee($token);
 
-        $this->post('/password/reset', [
+        $this->post('/reset-password', [
             'token' => $token,
             'email' => $user->email,
             'password' => 'a-new-password',
