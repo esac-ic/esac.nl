@@ -8,6 +8,7 @@ use App\Repositories\ApiTokenRepository;
 use Exception;
 use Illuminate\Http\Client\PendingRequest;
 use Illuminate\Http\Client\RequestException;
+use Illuminate\Http\Client\Response;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Http;
@@ -27,13 +28,12 @@ class Eboekhouden
     protected function startSession(): ApiToken
     {
         // Request an access token
-        $response = Http::post($this->_baseUrl . '/session', [
+        $response = Http::post($this->_baseUrl . '/v1/session', [
             'accessToken' => Config::get('eboekhouden.api_token'),
             'source' => Config::get('eboekhouden.source'),
         ]);
         
         $response->throw();
-        \Log::debug($response->json());
         
         // Store the token in the database
         if ($response->ok()) {

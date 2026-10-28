@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('api_tokens', function (Blueprint $table) {
             $table->unsignedInteger('id')->unique()->primary();
-            $table->string('token');
+            $table->text('token');
             $table->timestamp('expires_at');
         });
     }
