@@ -11,6 +11,7 @@ return [
     'api_token' => env('EBOEKHOUDEN_API_TOKEN', ''),
     /*
      * An identifier for the support team of eboekhouden to identify the requests.
+     * Must be a maximum of 10 characters and match the following regex: ^[\w_ ]{1,10}$
      */
-    'source' => env('EBOEKHOUDEN_SOURCE', 'Esac website'),
+    'source' => env('EBOEKHOUDEN_SOURCE', 'esac_web'),
 ];

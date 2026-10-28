@@ -28,7 +28,7 @@ class EboekhoudenFacade
         if(strlen($user->city) > 50) throw new Exception('The users city is too long to be added to eboekhouden');
         if(strlen($user->country) > 50) throw new Exception('The users country is too long to be added to eboekhouden');
         if(strlen($user->phonenumber) > 50) throw new Exception('The users phonenumber is too long to be added to eboekhouden');
-        if(strlen($user->email) > 50) throw new Exception('The users emailAddress is too long to be added to eboekhouden');
+        if(strlen($user->email) > 150) throw new Exception('The users emailAddress is too long to be added to eboekhouden');
         if(strlen($user->IBAN) > 50) throw new Exception('The users IBAN is too long to be added to eboekhouden');
         if(strlen($user->BIC) > 50) throw new Exception('The users BIC is too long to be added to eboekhouden');
         if(strlen($notes) > 40000) throw new Exception('Received relation note that is too long to be added to eboekhouden');

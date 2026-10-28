@@ -12,6 +12,7 @@
         "doctrine/dbal": "^3.7",
         "eluceo/ical": "^2.12",
         "intervention/image": "^2.7",
+        "intervention/validation": "^4.7",
         "laravel/framework": "10.*",
         "laravel/helpers": "^1.6",
         "laravel/legacy-factories": "^1.3",

@@ -2,14 +2,11 @@
 
 namespace App\CustomClasses\Eboekhouden;
 
-use App\Models\ApiToken;
-use App\Repositories\Api;
-use App\Repositories\ApiTokenRepository;
 use Exception;
 use Illuminate\Http\Client\PendingRequest;
 use Illuminate\Http\Client\RequestException;
-use Illuminate\Http\Client\Response;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
@@ -17,12 +14,10 @@ use Illuminate\Support\Facades\Log;
 class Eboekhouden
 {
     private string $_baseUrl;
-    private $_apiTokenRepository;
 
-    public function __construct(ApiTokenRepository $apiTokenRepository)
+    public function __construct()
     {
         $this->_baseUrl = Config::get('eboekhouden.url') ?? '';
-        $this->_apiTokenRepository = $apiTokenRepository;
     }
 
     protected function startSession(): ApiToken
@@ -39,20 +34,18 @@ class Eboekhouden
         if ($response->ok()) {
             $response = $response->json();
             // Subtract a couple of seconds of the expiry time to compensate for the RTT between us and eboekhouden
-            return $this->_apiTokenRepository->set(
-                Api::eboekhouden,
-                $response['token'],
-                $response['expiresIn'] - 5
-            );
+            return new ApiToken($response['token'], $response['expiresIn'] - 5);
         }
         throw new Exception("Failed to retrieve an eboekhouden access token");
     }
 
     protected function getSession(): string
     {
-        $token = $this->_apiTokenRepository->get(Api::eboekhouden);
-        if($token === null) {
+        $token = Cache::get('eboekhouden-api-token');
+        if($token === null || $token->isExpired()) {
+            $token = null;
             $token = $this->startSession();
+            Cache::set('eboekhouden-api-token', $token);
         }
         return $token->token;
     }

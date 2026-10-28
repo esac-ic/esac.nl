@@ -105,10 +105,10 @@ class AddUserTest extends TestCase {
     }
 
     public function test_name_too_long() {
-        $this->test_too_long('name', 100);
+        $this->test_too_long('firstname', 100);
     }
     public function test_street_too_long() {
-        $this->test_too_long('housenumber', 150);
+        $this->test_too_long('houseNumber', 150);
     }
     public function test_zipcode_too_long() {
         $this->test_too_long('zipcode', 50);
@@ -119,8 +119,8 @@ class AddUserTest extends TestCase {
     public function test_country_too_long() {
         $this->test_too_long('country', 50);
     }
-    public function test_phoneNumber_too_long() {
-        $this->test_too_long('phoneNumber', 50);
+    public function test_phonenumber_too_long() {
+        $this->test_too_long('phonenumber', 50);
     }
     public function test_email_too_long() {
         $this->test_too_long('email', 50);
