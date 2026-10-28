@@ -8,7 +8,6 @@ use Illuminate\Contracts\View\View;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controllers\HasMiddleware;
 use Illuminate\Routing\Controllers\Middleware;
-use Illuminate\Support\Carbon;
 use Symfony\Component\HttpFoundation\StreamedResponse;
 
 class UserEventLogEntryController extends Controller implements HasMiddleware
@@ -31,10 +30,17 @@ class UserEventLogEntryController extends Controller implements HasMiddleware
 
     public function export(Request $request): StreamedResponse
     {
+        $request->validate([
+            'eventTypes' => ['nullable', 'array'],
+            'eventTypes.*' => ['string'],
+            'startDate' => ['required', 'date_format:d-m-Y H:i'],
+            'endDate' => ['required', 'date_format:d-m-Y H:i'],
+        ]);
+
         $export = new UserEventLogExport(
             $request->input('eventTypes'),
-            Carbon::parse($request->input('startDate')),
-            Carbon::parse($request->input('endDate')),
+            $request->date('startDate', 'd-m-Y H:i', config('app.display_timezone'))->utc(),
+            $request->date('endDate', 'd-m-Y H:i', config('app.display_timezone'))->utc(),
         );
 
         return $export->download($export->fileName().'.xlsx');

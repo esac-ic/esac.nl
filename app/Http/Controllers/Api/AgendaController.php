@@ -18,20 +18,31 @@ class AgendaController extends Controller
         $request->validate([
             'startDate' => ['nullable', 'date_format:d-m-Y'],
             'endDate' => ['nullable', 'date_format:d-m-Y'],
+            'start' => ['nullable', 'integer', 'min:0'],
+            // The admin agenda table loads every event at once.
+            'limit' => ['nullable', 'integer', 'min:1'],
+            'category' => ['nullable', 'integer'],
         ]);
 
-        $agendaItemQuery = AgendaItem::with(['agendaItemCategory']);
+        $agendaItemQuery = AgendaItem::query()
+            ->with([
+                'agendaItemCategory',
+                'getApplicationForm',
+                // Only the current user's registration, to show whether they signed up.
+                'getApplicationFormResponses' => fn ($query) => $query->where('user_id', $request->user()?->id),
+            ])
+            ->withCount('getApplicationFormResponses');
 
-        $limit = $request->input('limit', 9);
-        $start = $request->input('start', 0);
+        $limit = $request->integer('limit', 9);
+        $start = $request->integer('start');
 
         // Apply filters
-        if ($category = $request->input('category')) {
-            $agendaItemQuery->where('category', intval($category));
+        if ($category = $request->integer('category')) {
+            $agendaItemQuery->where('category', $category);
         }
 
         if ($startDate = $request->input('startDate')) {
-            $startDate = Carbon::createFromFormat('d-m-Y', $startDate)->startOfDay();
+            $startDate = Carbon::createFromFormat('d-m-Y', $startDate, config('app.display_timezone'))->startOfDay()->utc();
             $agendaItemQuery->where(function ($query) use ($startDate) {
                 $query->where('start_date', '>=', $startDate)
                     ->orWhere('end_date', '>=', $startDate);
@@ -39,7 +50,7 @@ class AgendaController extends Controller
         }
 
         if ($endDate = $request->input('endDate')) {
-            $endDate = Carbon::createFromFormat('d-m-Y', $endDate)->endOfDay();
+            $endDate = Carbon::createFromFormat('d-m-Y', $endDate, config('app.display_timezone'))->endOfDay()->utc();
             $agendaItemQuery->where('start_date', '<=', $endDate);
         }
 

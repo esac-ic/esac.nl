@@ -61,7 +61,7 @@ class UserController extends Controller implements HasMiddleware
 
     public function store(UserRequest $request): RedirectResponse
     {
-        $user = User::fromForm($request->all());
+        $user = User::fromForm($request->validated());
         $user->save();
         if ($request->get('roles') != null) {
             $user->roles()->sync($request->get('roles'));
@@ -99,7 +99,7 @@ class UserController extends Controller implements HasMiddleware
             $mailman->updateUserEmailForAllMailList($user, $user->email, $request['email']);
         }
 
-        $user->updateFromForm($request->all());
+        $user->updateFromForm($request->validated());
 
         if ($request->user()->can('manage-members')) {
             $user->roles()->sync($request->get('roles', []));

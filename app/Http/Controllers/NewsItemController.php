@@ -100,6 +100,6 @@ class NewsItemController extends Controller implements HasMiddleware
     private function resizeImage(string $path, int $width, int $height): void
     {
         $imagePath = Storage::disk('public')->path($path);
-        ImageManager::usingDriver(Driver::class)->decodePath($imagePath)->cover($width, $height)->save($imagePath);
+        ImageManager::usingDriver(Driver::class, decodeAnimation: false)->decodePath($imagePath)->cover($width, $height)->save($imagePath);
     }
 }

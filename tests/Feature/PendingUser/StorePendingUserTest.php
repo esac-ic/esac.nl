@@ -34,6 +34,8 @@ class StorePendingUserTest extends TestCase
             'emergency_country' => 'Initial',
             'birthday' => '1990-01-01',
             'iban' => '123456789',
+            'password' => 'a-password',
+            'password_confirmation' => 'a-password',
             'g-recaptcha-response' => 'True',
             'incasso' => 'True',
             'privacy_policy' => 'True',

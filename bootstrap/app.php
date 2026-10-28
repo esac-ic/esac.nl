@@ -7,6 +7,8 @@ use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
 use Illuminate\Foundation\Http\Middleware\PreventRequestForgery;
+use Illuminate\Http\Client\ConnectionException;
+use Illuminate\Http\Client\RequestException;
 use Illuminate\Http\Request;
 use Illuminate\Session\Middleware\StartSession;
 
@@ -36,4 +38,16 @@ return Application::configure(basePath: dirname(__DIR__))
         $exceptions->shouldRenderJsonWhen(
             fn (Request $request) => $request->is('api/*') || $request->expectsJson(),
         );
+
+        // Mailman is the only HTTP API the admin actions call; show its failures instead of a server error.
+        $exceptions->render(function (RequestException|ConnectionException $e, Request $request) {
+            $message = 'Mailman failed: '.$e->getMessage();
+
+            if ($request->expectsJson()) {
+                return response()->json(['message' => $message], 502);
+            }
+
+            // A failing page would redirect back to itself, so only actions go back.
+            return $request->isMethod('GET') ? null : back()->withInput($request->except('password', 'password_confirmation'))->with('error', $message);
+        });
     })->create();

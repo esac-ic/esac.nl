@@ -26,7 +26,7 @@
                 {{ html()->label('Start date', 'startDate') }}
                 <div class="input-group date" id="startDateBox" data-target-input="nearest">
                     <input type='text' class="form-control datetimepicker-input" id="startDate" name="startDate"
-                           data-target="#startDateBox" value="{{ now()->addHour()->format('d-m-Y') }}"
+                           data-target="#startDateBox" value="{{ now(config('app.display_timezone'))->format('d-m-Y') }}"
                            required/>
                     <div class="input-group-append" data-target="#startDateBox" data-toggle="datetimepicker">
                         <div class="input-group-text"><i class="ion-calendar"></i></div>
@@ -123,7 +123,7 @@
             if (data.application_form_id != null) {
                 actions += '<a class="mr-1 ml-1" href="' + '{{ route('forms.users.index', '__id__') }}'.replace('__id__', data.id) + '"><span title="{{'Show sign ups'}}" class="ion-android-list font-size-120 icon" aria-hidden="true"></span></a>';
             }
-            actions += '<a class="mr-1 ml-1" href="' + '{{ route('copyAgendaItem', '__id__') }}'.replace('__id__', data.id) + '"><span title="{{'Copy event'}}" class="ion-ios-copy font-size-120 icon" aria-hidden="true"></span></a>';
+            actions += '<form class="d-inline" method="POST" action="' + '{{ route('copyAgendaItem', '__id__') }}'.replace('__id__', data.id) + '"><input type="hidden" name="_token" value="{{ csrf_token() }}"><button type="submit" class="btn btn-link p-0 mr-1 ml-1"><span title="{{'Copy event'}}" class="ion-ios-copy font-size-120 icon" aria-hidden="true"></span></button></form>';
             return actions;
         }
 

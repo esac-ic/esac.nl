@@ -232,25 +232,4 @@ class Mailman
             //suppress errors so we don't break when a member is no longer part of a mail list
             ->each(fn ($listId) => $this->deleteMemberFromMailList($listId, $email, true));
     }
-
-    /**
-     * Deletes all users from a specified mail list.
-     *
-     * @param  string  $mailListId  the ID of the mail list that is to be emptied
-     * @throws RequestException
-     */
-    public function deleteAllUsersFromMailList(string $mailListId): void
-    {
-        try {
-            $this->delete('/lists/'.$mailListId.'/roster/member', [
-                'emails' => collect($this->getMailList($mailListId)->members)->pluck('address')->all(),
-            ]);
-        } catch (RequestException $e) {
-            if ($e->getCode() === 404) {
-                Log::warning("Tried to delete all users from mail list that doesn't exist: $mailListId");
-                return;
-            }
-            throw $e;
-        }
-    }
 }

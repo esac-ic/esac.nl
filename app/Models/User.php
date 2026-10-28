@@ -22,7 +22,6 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
-use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
@@ -112,8 +111,7 @@ class User extends Authenticatable
      */
     public static function fromForm(array $data): self
     {
-        $user = new self(Arr::except($data, 'password'));
-        $user->password = $data['password'] ?? null;
+        $user = new self($data);
         $user->birthday = Carbon::parse($data['birthday'])->startOfMinute();
         $user->incasso = array_key_exists('incasso', $data);
 
@@ -124,7 +122,8 @@ class User extends Authenticatable
     {
         $user = self::fromForm($data);
 
-        $user->pending_user = Carbon::now();
+        // A date column, so the date in Amsterdam rather than in UTC.
+        $user->pending_user = today(config('app.display_timezone'));
         $user->kind_of_member = 'member';
         $user->lid_af = null;
 
@@ -136,15 +135,12 @@ class User extends Authenticatable
     }
 
     /**
-     * Updates the user from the member form's data, keeping the password when none is given.
+     * Updates the user from the member form's data.
      */
     public function updateFromForm(array $data): void
     {
         $data['birthday'] = Carbon::parse($data['birthday'])->startOfMinute();
         $data['incasso'] = array_key_exists('incasso', $data);
-        if (blank($data['password'] ?? null)) {
-            unset($data['password']);
-        }
 
         $oldKindOfMember = $this->kind_of_member;
 
@@ -239,7 +235,7 @@ class User extends Authenticatable
 
     public function removeAsActiveMember(): void
     {
-        $this->lid_af = Carbon::now();
+        $this->lid_af = today(config('app.display_timezone'));
         // Logs them out everywhere: their sessions and remember-me cookies stop working
         $this->setRememberToken(Str::random(60));
         $this->save();

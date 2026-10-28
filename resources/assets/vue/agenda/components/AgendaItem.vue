@@ -17,7 +17,11 @@
                         <span class="ion-person-stalker"></span> {{agenda.amountOfPeopleRegisterd}}
                     </div>
                     <div v-show="agenda.canRegister" class="col-auto">
-                        <a v-if="checkIfCurrentUserSignedUp()" class="btn btn-outline-danger" :href="makeAgendaSignOffUrl()">{{deregesterText}}</a>
+                        <form v-if="checkIfCurrentUserSignedUp()" method="POST" :action="makeApplicationFormUrl()">
+                            <input type="hidden" name="_method" value="DELETE">
+                            <input type="hidden" name="_token" :value="csrfToken">
+                            <button type="submit" class="btn btn-outline-danger">{{deregesterText}}</button>
+                        </form>
                         <a v-if="!checkIfCurrentUserSignedUp()" class="btn btn-outline-primary" :href="makeApplicationFormUrl()">{{regesterText}}</a>
                     </div>
                 </div>
@@ -40,9 +44,6 @@
             makeAgendaDetailUrl(){
                 return '/agenda/' + this.agenda.id
             },
-            makeAgendaSignOffUrl(){
-                return '/forms/' + this.agenda.id + "/unregister/0" //0 is added to redirect to agenda page and not the agenda item
-            },
             checkIfCurrentUserSignedUp() {
                 return this.agenda.currentUserSignedUp;
             }
@@ -50,7 +51,8 @@
         data() {
             return {
                 deregesterText: 'Unregister',
-                regesterText: 'Register now'
+                regesterText: 'Register now',
+                csrfToken: window.Laravel.csrfToken,
             }
         },
         mounted() {

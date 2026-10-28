@@ -27,6 +27,11 @@ services:
       CADDY_SERVER_EXTRA_DIRECTIVES: |
         header X-Frame-Options "SAMEORIGIN"
         header X-Content-Type-Options "nosniff"
+        # Uploads are served as files, never run as PHP
+        @storage path /storage/*
+        handle @storage {
+          file_server
+        }
     ports:
       - "80:80"
       - "443:443"

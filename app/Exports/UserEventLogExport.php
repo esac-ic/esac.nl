@@ -37,8 +37,7 @@ class UserEventLogExport extends SpreadsheetExport
     
     public function title(): string
     {
-        //add one hour because at time of writing project timezone is set to UTC instead of UTC+1
-        return 'Event Log (' . Carbon::now()->addHour()->format("d-m-Y_H:i") . ')';
+        return 'Event Log (' . now(config('app.display_timezone'))->format("d-m-Y_H:i") . ')';
     }
     
     /**

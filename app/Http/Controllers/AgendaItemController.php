@@ -39,7 +39,7 @@ class AgendaItemController extends Controller implements HasMiddleware
 
     public function store(AgendaItemRequest $request): RedirectResponse
     {
-        $agendaItem = new AgendaItem($request->validated())->fillFromForm($request->all());
+        $agendaItem = new AgendaItem($request->validated())->fillFromForm($request->validated());
         $agendaItem->image_url = '';
         $agendaItem->created_by = $request->user()->id;
         $agendaItem->save();
@@ -63,7 +63,7 @@ class AgendaItemController extends Controller implements HasMiddleware
     public function update(AgendaItemRequest $request, AgendaItem $agendaItem): RedirectResponse
     {
         $agendaItem->fill($request->safe()->only(['title', 'text', 'short_description', 'category']))
-            ->fillFromForm($request->all())
+            ->fillFromForm($request->validated())
             ->save();
         $this->handleImage($request, $agendaItem);
 
@@ -105,8 +105,8 @@ class AgendaItemController extends Controller implements HasMiddleware
         return view('beheer.agendaItem.create_edit', [
             'fields' => $fields,
             'agendaItem' => $agendaItem,
-            'agendaItemCategories' => AgendaItemCategory::query()->pluck('name', 'id')->all(),
-            'applicationForms' => ApplicationForm::query()->pluck('name', 'id')->all(),
+            'agendaItemCategories' => AgendaItemCategory::query()->orderBy('name')->pluck('name', 'id')->all(),
+            'applicationForms' => ApplicationForm::query()->orderBy('name')->pluck('name', 'id')->all(),
         ]);
     }
 
@@ -118,7 +118,7 @@ class AgendaItemController extends Controller implements HasMiddleware
             $agendaItem->image_url = 'agendaItem/'.$name;
             $agendaItem->save();
             $img_path = Storage::disk('public')->path($agendaItem->image_url);
-            ImageManager::usingDriver(Driver::class)->decodePath($img_path)->cover(400, 300)->save($img_path);
+            ImageManager::usingDriver(Driver::class, decodeAnimation: false)->decodePath($img_path)->cover(400, 300)->save($img_path);
         }
     }
 }

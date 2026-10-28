@@ -6,12 +6,12 @@ use App\Jobs\MemberMassMailListSyncJob;
 use App\Models\User;
 use App\Services\Mailman;
 use Illuminate\Contracts\View\View;
-use Illuminate\Http\Client\RequestException;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 use Illuminate\Routing\Controllers\HasMiddleware;
 use Illuminate\Routing\Controllers\Middleware;
-use Illuminate\Support\Facades\Log;
+use Illuminate\Validation\Rule;
 
 class MailListController extends Controller implements HasMiddleware
 {
@@ -44,14 +44,9 @@ class MailListController extends Controller implements HasMiddleware
 
     public function store(Request $request): RedirectResponse
     {
-        try {
-            $this->mailman->storeMailList($request->all());
-        } catch (RequestException $e) {
-            $message = "Error {$e->getCode()}: {$e->getMessage()}";
-            Log::error($message, ['exception' => $e]);
+        $data = $request->validate(['address' => ['required', 'alpha_dash', 'max:255']]);
 
-            return to_route('mailList.index')->with('error', $message);
-        }
+        $this->mailman->storeMailList($data);
 
         return to_route('mailList.index')->with('message', 'Mailing list added');
     }
@@ -68,19 +63,25 @@ class MailListController extends Controller implements HasMiddleware
         return to_route('mailList.index');
     }
 
-    public function addMember(Request $request, string $mailList): string
+    public function addMember(Request $request, string $mailList): Response
     {
-        $users = User::find($request->input('userIds'));
-        foreach ($users as $user) {
+        $request->validate([
+            'userIds' => ['required', 'array'],
+            'userIds.*' => ['integer', Rule::exists('users', 'id')],
+        ]);
+
+        foreach (User::query()->findMany($request->input('userIds')) as $user) {
             $this->mailman->addMember($mailList, $user->email, $user->getName());
         }
 
-        return '';
+        return response()->noContent();
     }
 
-    public function deleteMemberFromMailList(string $mailList, string $member): void
+    public function deleteMemberFromMailList(string $mailList, string $member): Response
     {
         $this->mailman->deleteMemberFromMailList($mailList, $member);
+
+        return response()->noContent();
     }
 
     public function massMemberMailListSync(): RedirectResponse

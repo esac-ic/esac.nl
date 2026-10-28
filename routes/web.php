@@ -69,15 +69,14 @@ Route::resource('mailList', MailListController::class)->except(['edit', 'update'
 Route::post('/signup', [PendingUserController::class, 'storePendingUser'])->name('user.signup');
 Route::resource('books', LibraryController::class);
 Route::post('images/upload', [StorageController::class, 'uploadImage'])->name('images.store');
-Route::delete('images/delete', [StorageController::class, 'deleteImage'])->name('images.destroy');
-Route::get('agendaItems/{agendaItem}/copy', [AgendaItemController::class, 'copy'])->name('copyAgendaItem');
+Route::post('agendaItems/{agendaItem}/copy', [AgendaItemController::class, 'copy'])->name('copyAgendaItem');
 
 Route::get('userEventLog', [UserEventLogEntryController::class, 'index'])->name('user-event-log-entry.index');
 Route::post('userEventLog/export', [UserEventLogEntryController::class, 'export'])->name('user-event-log-entry.export');
 
 // inschrijf routes
 Route::get('forms/{agendaItem}', [UserApplicationFormController::class, 'showRegistrationForm'])->name('forms.create');
-Route::get('forms/{agendaItem}/unregister/{fromAgendaItem?}', [UserApplicationFormController::class, 'unregister'])->name('forms.unregister');
+Route::delete('forms/{agendaItem}', [UserApplicationFormController::class, 'unregister'])->name('forms.unregister');
 Route::post('forms/{agendaItem}', [UserApplicationFormController::class, 'store'])->name('forms.store');
 Route::get('forms/admin/{agendaItem}', [AgendaApplicationFormController::class, 'registerUser'])->name('forms.admin.create');
 Route::post('forms/admin/{agendaItem}', [AgendaApplicationFormController::class, 'saveRegistration'])->name('forms.admin.store');

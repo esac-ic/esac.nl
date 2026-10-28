@@ -16,8 +16,6 @@ use Illuminate\Support\Facades\Auth;
     'url_name',
     'after',
     'menu_item',
-    'deletable',
-    'editable',
     'content',
 ])]
 class MenuItem extends Model

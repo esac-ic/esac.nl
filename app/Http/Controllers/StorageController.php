@@ -19,13 +19,8 @@ class StorageController extends Controller implements HasMiddleware
 
     public function uploadImage(Request $request): string
     {
-        $path = $request->file('image')->store('image_uploads', 'public');
+        $request->validate(['image' => ['required', 'image', 'max:10240']]);
 
-        return '/storage/'.$path;
-    }
-
-    public function deleteImage(Request $request): void
-    {
-        Storage::disk('public')->delete($request->input('path'));
+        return Storage::disk('public')->url($request->file('image')->store('image_uploads', 'public'));
     }
 }

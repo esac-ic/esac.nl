@@ -45,8 +45,8 @@ class RegisterForAgendaItemTest extends TestCase
         $agendaItem->save();
         $response = $this->get($this->url.$agendaItem->id);
 
-        $response->assertStatus(200);
-        $response->assertViewHas('error', 'ERROR: No registration form available for this activity.');
+        $response->assertRedirect(route('agenda.detail', $agendaItem));
+        $response->assertSessionHas('error', 'ERROR: No registration form available for this activity.');
     }
 
     #[Test]
@@ -57,8 +57,8 @@ class RegisterForAgendaItemTest extends TestCase
         $agendaItem->save();
         $response = $this->get($this->url.$agendaItem->id);
 
-        $response->assertStatus(200);
-        $response->assertViewHas('error', 'The registration date has expired, so you can no longer subscribe.');
+        $response->assertRedirect(route('agenda.detail', $agendaItem));
+        $response->assertSessionHas('error', 'The registration date has expired, so you can no longer subscribe.');
     }
 
     #[Test]
@@ -79,8 +79,8 @@ class RegisterForAgendaItemTest extends TestCase
 
         $response = $this->get($this->url.$agendaItem->id);
 
-        $response->assertStatus(200);
-        $response->assertViewHas('error', 'You have already signed up for this event.');
+        $response->assertRedirect(route('agenda.detail', $agendaItem));
+        $response->assertSessionHas('error', 'You have already signed up for this event.');
     }
 
     #[Test]
@@ -216,5 +216,26 @@ class RegisterForAgendaItemTest extends TestCase
             $appliationForRowIds[] = $responseRow->application_form_row_id;
             $this->assertEquals($body[$responseRow->application_form_row_id], $responseRow->value);
         }
+    }
+
+    #[Test]
+    public function answers_are_validated_against_the_events_form(): void
+    {
+        $agendaItem = AgendaItem::factory()->create(['subscription_end_date' => Carbon::now()->addWeek()]);
+        $agendaItem->getApplicationForm()->associate(ApplicationForm::factory()->create())->save();
+        $required = ApplicationFormRow::factory()->create([
+            'application_form_id' => $agendaItem->application_form_id,
+            'type' => ApplicationFormRow::FORM_TYPE_NUMBER,
+            'required' => true,
+        ]);
+        $otherFormsRow = ApplicationFormRow::factory()->create();
+
+        $this->post($this->url.$agendaItem->id, [$required->id => 'not a number'])->assertInvalid([$required->id]);
+        $this->post($this->url.$agendaItem->id, [$required->id => 3, $otherFormsRow->id => 'x'])->assertValid();
+
+        $this->assertSame(
+            [$required->id => '3'],
+            ApplicationResponse::sole()->getApplicationFormResponseRows->pluck('value', 'application_form_row_id')->all(),
+        );
     }
 }

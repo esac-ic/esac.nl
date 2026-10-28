@@ -3,9 +3,11 @@
 namespace App\Http\Controllers\ApplicationForm;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\RegistrationRequest;
 use App\Http\Resources\ApplicationFormRowVueResource;
 use App\Models\AgendaItem;
 use App\Models\ApplicationForm\ApplicationResponse;
+use App\Models\User;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -20,25 +22,13 @@ class UserApplicationFormController extends Controller implements HasMiddleware
         ];
     }
 
-    public function showRegistrationForm(Request $request, AgendaItem $agendaItem): View
+    public function showRegistrationForm(Request $request, AgendaItem $agendaItem): View|RedirectResponse
     {
-        if (! $agendaItem->canRegister()) {
-            return $this->error('The registration date has expired, so you can no longer subscribe.');
+        if ($error = $this->registrationError($agendaItem, $request->user())) {
+            return to_route('agenda.detail', $agendaItem)->with('error', $error);
         }
 
         $applicationForm = $agendaItem->getApplicationForm;
-        if ($applicationForm == null) {
-            return $this->error('ERROR: No registration form available for this activity.');
-        }
-
-        $alreadySignedUp = ApplicationResponse::where('user_id', $request->user()->id)
-            ->where('inschrijf_form_id', $applicationForm->id)
-            ->where('agenda_id', $agendaItem->id)
-            ->exists();
-
-        if ($alreadySignedUp) {
-            return $this->error('You have already signed up for this event.');
-        }
 
         return view('forms.inschrijven', [
             'rows' => ApplicationFormRowVueResource::collection($applicationForm->applicationFormRows),
@@ -49,29 +39,21 @@ class UserApplicationFormController extends Controller implements HasMiddleware
         ]);
     }
 
-    public function store(Request $request, AgendaItem $agendaItem): View|RedirectResponse
+    public function store(RegistrationRequest $request, AgendaItem $agendaItem): RedirectResponse
     {
-        $alreadySignedUp = ApplicationResponse::where('user_id', $request->user()->id)
-            ->where('inschrijf_form_id', $agendaItem->application_form_id)
-            ->where('agenda_id', $agendaItem->id)
-            ->exists();
-
-        if ($alreadySignedUp) {
-            return $this->error('You have already signed up for this event.');
+        if ($error = $this->registrationError($agendaItem, $request->user())) {
+            return to_route('agenda.detail', $agendaItem)->with('error', $error);
         }
 
-        $agendaItem->register($request->user()->id, $request->except(['_token']));
+        $agendaItem->register($request->user()->id, $request->validated());
 
         return to_route('agenda.detail', $agendaItem);
     }
 
-    public function unregister(Request $request, AgendaItem $agendaItem, int $fromAgendaItem = 1): RedirectResponse
+    public function unregister(Request $request, AgendaItem $agendaItem): RedirectResponse
     {
-        // 0 means the member unregistered from the agenda overview.
-        $redirect = $fromAgendaItem == 1 ? to_route('agenda.detail', $agendaItem) : to_route('front-end.agenda');
-
         if (! $agendaItem->canRegister()) {
-            return $redirect->with('message', 'The registration date has expired, so you can no longer unsubscribe.');
+            return back()->with('message', 'The registration date has expired, so you can no longer unsubscribe.');
         }
 
         ApplicationResponse::query()
@@ -79,14 +61,19 @@ class UserApplicationFormController extends Controller implements HasMiddleware
             ->where('user_id', $request->user()->id)
             ->delete();
 
-        return $redirect->with('message', 'You successfully unsubscribed from the event.');
+        return back()->with('message', 'You successfully unsubscribed from the event.');
     }
 
-    private function error(string $error): View
+    /**
+     * Why the user can't register for the event, or null when they can.
+     */
+    private function registrationError(AgendaItem $agendaItem, User $user): ?string
     {
-        return view('forms.inschrijven_error', [
-            'error' => $error,
-            'curPageName' => $error,
-        ]);
+        return match (true) {
+            ! $agendaItem->canRegister() => 'The registration date has expired, so you can no longer subscribe.',
+            $agendaItem->application_form_id === null => 'ERROR: No registration form available for this activity.',
+            $agendaItem->getApplicationFormResponses()->where('user_id', $user->id)->exists() => 'You have already signed up for this event.',
+            default => null,
+        };
     }
 }

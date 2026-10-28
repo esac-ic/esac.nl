@@ -10,14 +10,12 @@ use Symfony\Component\HttpFoundation\Response;
 
 class CheckKillswitch
 {
-    protected array $excludedRoutes = [
-        'beheer/*',
-        'login',
-    ];
-
     public function handle(Request $request, Closure $next): Response
     {
-        if (Setting::isEnabled(SettingKey::Killswitch) && ! $request->is($this->excludedRoutes)) {
+        // The admin pages and Fortify's login, logout and password routes stay available.
+        $excluded = $request->is('beheer/*') || $request->routeIs('login', 'login.*', 'logout', 'password.*');
+
+        if (! $excluded && Setting::isEnabled(SettingKey::Killswitch)) {
             return response()->view('errors.killswitch', ['curPageName' => 'Website offline'], 404);
         }
 

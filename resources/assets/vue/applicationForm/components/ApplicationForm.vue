@@ -9,7 +9,7 @@
             </h3>
         </div>
         <div class="card-body">
-            <div v-for="(row, index) in applicationRows" :key="index" class="application-form-row">
+            <div v-for="(row, index) in applicationRows" :key="row.key" class="application-form-row">
                 <div class="row">
                     <div class="col-md-6">
                         <div class="form-group">
@@ -60,6 +60,8 @@
     import { FORM_TYPES, ROW_OPTION_FORM_TYPE } from '../constants';
     import ApplicationFormRowOptions from "./ApplicationFormRowOptions.vue";
 
+    let nextKey = 0;
+
     export default {
         name: "ApplicationForm",
         components: {ApplicationFormRowOptions},
@@ -74,6 +76,7 @@
         methods:{
             addRow(){
                 this.applicationRows.push({
+                    'key' : nextKey++,
                     'name' : "",
                     'type' : "",
                     'required' : false,
@@ -91,7 +94,8 @@
             if(undefined === this.rows || this.rows.length === 0){
                 this.addRow();
             } else {
-                this.applicationRows = JSON.parse(JSON.stringify(this.rows));
+                // A stable key per row, so removing a row doesn't hand its options to the next row.
+                this.applicationRows = JSON.parse(JSON.stringify(this.rows)).map(row => ({...row, key: nextKey++}));
             }
         }
     }

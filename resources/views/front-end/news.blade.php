@@ -20,7 +20,7 @@
                         <img class="card-img-top" src="{{$newsItem->getThumbnailUrl()}}" alt="Card image cap">
                     </a>
                     @endif
-                    <span class="card-date position-absolute bg-light py-1 px-3 rounded">{{ $newsItem->created_at->format('d M') }}</span>
+                    <span class="card-date position-absolute bg-light py-1 px-3 rounded">{{ $newsItem->created_at->tz(config('app.display_timezone'))->format('d M') }}</span>
                     <div class="card-body">
                         <a href="{{ route('front-end.news.detail', $newsItem) }}">
                             <h4 class="card-title">{{$newsItem->title}}</h4>
