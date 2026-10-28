@@ -92,7 +92,7 @@ class User extends Authenticatable
     public function certificates(): BelongsToMany
     {
         return $this->belongsToMany(Certificate::class)
-            ->withTimestamps()->withTrashed();
+            ->withTimestamps();
     }
     public function applicationResponses(): HasMany
     {
