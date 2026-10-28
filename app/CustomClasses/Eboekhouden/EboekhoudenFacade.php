@@ -79,7 +79,7 @@ class EboekhoudenFacade
 
         $response = $this->eboekhoudenHandler->get("/v1/relation/{$user->eboekhouden_id}");
         if($response['code'] != $this->getRelationCode($user))
-            throw new Exception("User code was the expected value in eboekhouden (found {$response['code']} instead of {$this->getRelationCode($user)}");
+            throw new Exception("User code wasn\'t the expected value in eboekhouden (found {$response['code']} instead of {$this->getRelationCode($user)}");
 
 
         $currentNotes = $response['note'];

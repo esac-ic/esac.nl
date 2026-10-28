@@ -13,22 +13,86 @@ use TestCase;
 class UpdateUserTest extends TestCase {
     use RefreshDatabase;
 
+    protected function get_relation_return($id) {
+        return collect([
+            "id" => 1,
+            "type" => "B",
+            "code" => "lid_{$id}",
+            "date" => "2026-10-28T00:00:00+01:00",
+            "name" => "Company",
+            "salutation" => "Mr.",
+            "contact" => "John Doe",
+            "gender" => "m",
+            "address" => "Company Street 2",
+            "postalCode" => "1000 AB",
+            "city" => "Amsterdam",
+            "country" => "Netherlands",
+            "address2" => "Secondary Street 5",
+            "postalCode2" => "2000 CD",
+            "city2" => "Rotterdam",
+            "country2" => "Netherlands",
+            "phoneNumber" => "+31612345678",
+            "mobilePhoneNumber" => "+31687654321",
+            "faxNumber" => "+31201234567",
+            "emailAddress" => "contact@company.com",
+            "emailAddressInvoice" => "invoice@company.com",
+            "emailAddressReminder" => "reminder@company.com",
+            "website" => "https://www.e-boekhouden.nl/",
+            "note" => "This is a test note.",
+            "catNumber" => "NL123456789B01",
+            "inactive" => false,
+            "termOfPayment" => 30,
+            "companyRegistrationNumber" => "12345678",
+            "iban" => "NL91ABNA0417164300",
+            "bic" => "ABNANL2A",
+            "freeText1" => "",
+            "freeText2" => "",
+            "freeText3" => "",
+            "freeText4" => "",
+            "freeText5" => "",
+            "freeText6" => "",
+            "freeText7" => "",
+            "freeText8" => "",
+            "freeText9" => "",
+            "freeText10" => "",
+            "isClubOrAssociationMember" => 0,
+            "doNotReceiveNewsletters" => 0,
+            "ledgerId" => 101,
+            "mandate" => true,
+            "mandateType" => "D",
+            "mandateId" => "MAND12345",
+            "mandateSignedDate" => "2023-10-01",
+        ]);
+    }
+
     public function test_member() {
-        $this->mock(Eboekhouden::class, function (MockInterface $mock) {
-            $mock->expects('patch')->once();
+        $user = User::factory()->member()->create();
+        $user->eboekhouden_id = 1;
+        $user->save();
+
+        $id = $user->id;
+
+        $this->mock(Eboekhouden::class, function (MockInterface $mock) use($id) {
+            $mock->shouldReceive('get')->with('/v1/relation/1')->once()->andReturn($this->get_relation_return($id));
+            $mock->shouldReceive('patch')->once()->andReturn($this->get_relation_return($id));
         });
 
-        $user = User::factory()->member()->create();
         $facade = $this->app->make(EboekhoudenFacade::class);
         $facade->updateRelation($user);
     }
 
     public function test_reunist() {
-        $this->mock(Eboekhouden::class, function (MockInterface $mock) {
-            $mock->expects('patch')->once();
+        $user = User::factory()->reunist()->create();
+        $user->eboekhouden_id = 1;
+        $user->save();
+
+        $id = $user->id;
+
+        $this->mock(Eboekhouden::class, function (MockInterface $mock) use($id) {
+            $mock->shouldReceive('get')->with('/v1/relation/1')->once()->andReturn($this->get_relation_return($id));
+            $mock->shouldReceive('patch')->once()->andReturn($this->get_relation_return($id));
         });
 
-        $user = User::factory()->reunist()->create();
         $facade = $this->app->make(EboekhoudenFacade::class);
         $facade->updateRelation($user);
     }
@@ -36,12 +100,17 @@ class UpdateUserTest extends TestCase {
     protected function test_too_long($field, $length) {
         $this->expectException(Exception::class);
 
-        $this->mock(Eboekhouden::class, function (MockInterface $mock) {
+        $user = User::factory()->member()->create();
+        $user->eboekhouden_id = 1;
+        $user[$field] = str_repeat('a', $length);
+        $user->save();
 
+        $id = $user->id;
+
+        $this->mock(Eboekhouden::class, function (MockInterface $mock) use($id) {
+            $mock->shouldReceive('get')->with('/v1/relation/1')->once()->andReturn($this->get_relation_return($id));
         });
 
-        $user = User::factory()->member()->create();
-        $user[$field] = str_repeat('a', $length);
         $facade = $this->app->make(EboekhoudenFacade::class);
         $facade->updateRelation($user);
     }

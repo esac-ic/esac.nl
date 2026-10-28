@@ -25,7 +25,7 @@ class SessionTokenTest extends TestCase {
     {
         Http::preventStrayRequests();
         Http::fake([
-            ($this->_baseurl . '/session') => ['token' => "specialToken", 'expiresIn' => 10000],
+            ($this->_baseurl . '/v1/session') => ['token' => "specialToken", 'expiresIn' => 10000],
             ($this->_baseurl . '/test-request') => [ 'some-header' => "ok" ],
         ]);
 
@@ -36,7 +36,7 @@ class SessionTokenTest extends TestCase {
 
         // Session request
         Http::assertSent(function (Request $request) {
-            return $request->url() == $this->_baseurl . '/session' &&
+            return $request->url() == $this->_baseurl . '/v1/session' &&
                 $request['accessToken'] == Config::get('eboekhouden.api_token') &&
                 $request['source'] == Config::get('eboekhouden.source');
         });
@@ -53,7 +53,7 @@ class SessionTokenTest extends TestCase {
     {
         Http::preventStrayRequests();
         Http::fake([
-            ($this->_baseurl . '/session') => ['token' => "specialToken", 'expiresIn' => 10000],
+            ($this->_baseurl . '/v1/session') => ['token' => "specialToken", 'expiresIn' => 10000],
             ($this->_baseurl . '/test-request') => [ 'some-header' => "ok" ],
         ]);
 
@@ -68,7 +68,7 @@ class SessionTokenTest extends TestCase {
 
         // Session request
         Http::assertSent(function (Request $request) {
-            return $request->url() == $this->_baseurl . '/session' &&
+            return $request->url() == $this->_baseurl . '/v1/session' &&
                 $request['accessToken'] == Config::get('eboekhouden.api_token') &&
                 $request['source'] == Config::get('eboekhouden.source');
         });
@@ -80,12 +80,12 @@ class SessionTokenTest extends TestCase {
 
         Http::assertSentCount(3);
     }
-    
+
     public function test_token_expiration()
     {
         Http::preventStrayRequests();
         Http::fake([
-            ($this->_baseurl . '/session') => ['token' => "specialToken", 'expiresIn' => 0],
+            ($this->_baseurl . '/v1/session') => ['token' => "specialToken", 'expiresIn' => 0],
             ($this->_baseurl . '/test-request') => [ 'some-header' => "ok" ],
         ]);
 
@@ -100,7 +100,7 @@ class SessionTokenTest extends TestCase {
 
         // Session request
         Http::assertSent(function (Request $request) {
-            return $request->url() == $this->_baseurl . '/session' &&
+            return $request->url() == $this->_baseurl . '/v1/session' &&
                 $request['accessToken'] == Config::get('eboekhouden.api_token') &&
                 $request['source'] == Config::get('eboekhouden.source');
         });
