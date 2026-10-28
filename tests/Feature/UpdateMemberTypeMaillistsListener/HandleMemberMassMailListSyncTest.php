@@ -71,8 +71,7 @@ class HandleMemberMassMailListSyncTest extends TestCase
         $this->user->kind_of_member = Lang::get('member');
         $this->user->save();
         
-        $job = new MemberMassMailListSyncJob(User::all());
-        $job->handle($this->mockedMailListFacade);
+        User::all()->each(fn (User $user) => new MemberMassMailListSyncJob($user)->handle($this->mockedMailListFacade));
     }
 
     //Reasonable order of magnitude for a big mail list
@@ -92,9 +91,7 @@ class HandleMemberMassMailListSyncTest extends TestCase
                 ->once();
         }
         
-        $job = new MemberMassMailListSyncJob(User::all());
-        
-        $job->handle($this->mockedMailListFacade);
+        User::all()->each(fn (User $user) => new MemberMassMailListSyncJob($user)->handle($this->mockedMailListFacade));
     }
     
     public function test_add_mix_of_members()
@@ -121,7 +118,6 @@ class HandleMemberMassMailListSyncTest extends TestCase
             })
             ->times(User::count());
 
-        $job = new MemberMassMailListSyncJob(User::all());
-        $job->handle($this->mockedMailListFacade);
+        User::all()->each(fn (User $user) => new MemberMassMailListSyncJob($user)->handle($this->mockedMailListFacade));
     }
 }

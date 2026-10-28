@@ -94,9 +94,8 @@ class MailListController extends Controller
     
     public function massMemberMailListSync(): RedirectResponse
     {
-        $users = $this->userRepository->getCurrentUsers(); //should give user objects
-        
-        MemberMassMailListSyncJob::dispatch($users); //add all these users to the maillists corresponding to their member types.
+        // One job per member, so a long list doesn't hit the worker's timeout and each member is retried on its own
+        $this->userRepository->getCurrentUsers()->each(fn (User $user) => MemberMassMailListSyncJob::dispatch($user));
         return redirect('/mailList');
     }
 }

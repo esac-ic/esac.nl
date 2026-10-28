@@ -41,7 +41,8 @@ return [
         'public' => [
             'driver' => 'local',
             'root' => storage_path('app/public'),
-            'url' => rtrim(env('APP_URL', 'http://localhost'), '/').'/storage',
+            // Relative, so stored editor content works on every domain
+            'url' => '/storage',
             'visibility' => 'public',
             'throw' => false,
             'report' => false,
