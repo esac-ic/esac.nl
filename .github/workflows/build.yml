@@ -131,11 +131,10 @@ jobs:
         echo "$SSH_PRIVATE_KEY" > ~/.ssh/id_ed25519 && chmod 600 ~/.ssh/id_ed25519
         scp compose.yaml infra/backup.sh "ic@$SSH_HOST:/srv/esac/"
         ssh "ic@$SSH_HOST" "set -e; cd /srv/esac
-          APP_IMAGE=$IMAGE docker compose pull app
-          sed -i 's|^APP_IMAGE=.*|APP_IMAGE=$IMAGE|' .env
+          export APP_IMAGE=$IMAGE
+          docker compose pull app
           ./backup.sh < /dev/null
+          docker compose run --rm -T app php artisan migrate --force < /dev/null
+          sed -i '/^APP_IMAGE=/d' .env && echo 'APP_IMAGE=$IMAGE' >> .env
           docker compose up -d
-          docker compose exec -T app php artisan migrate --force < /dev/null
-          docker compose exec -T app php artisan optimize < /dev/null
-          docker compose exec -T app php artisan reload < /dev/null
           docker image prune -af --filter until=168h"

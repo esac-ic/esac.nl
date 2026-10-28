@@ -59,3 +59,6 @@ RUN php artisan package:discover --ansi \
     && chown -R www-data:www-data storage bootstrap/cache /data/caddy /config/caddy
 
 USER www-data
+
+ENTRYPOINT ["/app/infra/entrypoint.sh"]
+CMD ["--config", "/etc/frankenphp/Caddyfile", "--adapter", "caddyfile"]
