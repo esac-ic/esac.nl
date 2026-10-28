@@ -2,10 +2,14 @@
 
 namespace App\Models;
 
+use App\Enums\SettingKey;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Log;
 
+/**
+ * The settings rows are added by migrations, not by a seeder or the management pages.
+ */
 #[Fillable([
     'name',
     'type',
@@ -13,49 +17,25 @@ use Illuminate\Support\Facades\Log;
 ])]
 class Setting extends Model
 {
-    /*
-     * IMPORTANT INFO
-     * The specific settings are initialized through migrations (so not via a seeder or ui)
-     * This note is here because squashing the migrations removed the INSERT operations.
-     */
-    
-    
-    //setting names
-    const SETTING_BLOCKED_EMAIL_DOMAINS = 'SETTING_BLOCKED_EMAIL_DOMAINS';
-    const SETTING_KILLSWITCH = 'SETTING_KILLSWITCH';
-    const SETTING_SHOW_INTRO_OPTION = 'SETTING_SHOW_INTRO_OPTION';
-    const SETTING_FOOTER_PHONE_NR = 'SETTING_FOOTER_PHONE_NR';
-    const SETTING_NORMAL_MEMBER_MAIL_LISTS = 'SETTING_NORMAL_MEMBER_MAIL_LISTS';
-    const SETTING_EXTRAORDINARY_MEMBER_MAIL_LISTS = 'SETTING_EXTRAORDINARY_MEMBER_MAIL_LISTS';
-    const SETTING_REUNIST_MEMBER_MAIL_LISTS = 'SETTING_REUNIST_MEMBER_MAIL_LISTS';
-    const SETTING_HONORARY_MEMBER_MAIL_LISTS = 'SETTING_HONORARY_MEMBER_MAIL_LISTS';
-    const SETTING_MERIT_MEMBER_MAIL_LISTS = 'SETTING_MERIT_MEMBER_MAIL_LISTS';
-    const SETTING_TRAINER_MEMBER_MAIL_LISTS = 'SETTING_TRAINER_MEMBER_MAIL_LISTS';
-    const SETTING_RELATIONSHIP_MEMBER_MAIL_LISTS = 'SETTING_RELATIONSHIP_MEMBER_MAIL_LISTS';
-
-    //setting types
     const TYPE_STRING = 'TYPE_STRING';
+
     const TYPE_BOOLEAN = 'TYPE_BOOLEAN';
 
-    const SINGELTONNAME = 'setting';
-
-    private array $_settings = [];
-
-    public function initialise(): void
+    public static function valueOf(SettingKey $key): string
     {
-        $this->_settings = [];
-        foreach (Setting::all() as $setting) {
-            $this->_settings[$setting->name] = $setting->value;
+        $setting = static::firstWhere('name', $key->value);
+
+        if ($setting === null) {
+            Log::alert('Setting with the name: '.$key->value.' asked but not found in settings list!');
+
+            return '';
         }
+
+        return (string) $setting->value;
     }
 
-    public function getSetting($name)
+    public static function isEnabled(SettingKey $key): bool
     {
-        if (array_key_exists($name, $this->_settings)) {
-            return $this->_settings[$name];
-        } else {
-            Log::alert('Setting with the name: ' . $name . ' asked but not found in settings list!');
-            return "";
-        }
+        return (bool) static::valueOf($key);
     }
 }

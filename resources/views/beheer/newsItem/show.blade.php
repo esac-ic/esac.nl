@@ -15,7 +15,7 @@
                 <a href="{{route('newsItems.edit', $newsItem)}}" class="btn btn-primary">
                     <em class="ion-edit"></em> {{'Edit'}}
                 </a>
-                @if(app('request')->input('back') != 'false')
+                @if(request('back') != 'false')
                     <a href="{{route('newsItems.index')}}" class="btn btn-primary">
                         <em class="ion-android-arrow-back"></em> {{'Back'}}
                     </a>
@@ -43,7 +43,7 @@
                 </tr>
                 <tr>
                     <td>{{'Created at'}}</td>
-                    <td>{{\Carbon\Carbon::parse($newsItem->created_at)->format('d-m-Y h:i')}}</td>
+                    <td>{{ $newsItem->created_at->format('d-m-Y h:i') }}</td>
                 </tr>
                 <tr>
                     <td>{{'Created by'}}</td>

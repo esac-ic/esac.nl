@@ -4,10 +4,10 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\StorePendingUserRequest;
 use App\Models\User;
-use Illuminate\Http\Request;
+use Illuminate\Contracts\View\View;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Routing\Controllers\HasMiddleware;
 use Illuminate\Routing\Controllers\Middleware;
-use Illuminate\Support\Facades\Session;
 
 class PendingUserController extends Controller implements HasMiddleware
 {
@@ -19,35 +19,32 @@ class PendingUserController extends Controller implements HasMiddleware
         ];
     }
 
-    //pending users view
-    public function indexPendingMembers()
+    public function indexPendingMembers(): View
     {
-        $users = User::pending()->get(['id', 'firstname', 'lastname', 'email', 'preposition', 'kind_of_member']);
-
-        return view('beheer.user.index_pending_users', compact('users'));
+        return view('beheer.user.index_pending_users', [
+            'users' => User::pending()->get(['id', 'firstname', 'lastname', 'email', 'preposition', 'kind_of_member']),
+        ]);
     }
 
-    //store pending user
-    public function storePendingUser(StorePendingUserRequest $request)
+    public function storePendingUser(StorePendingUserRequest $request): RedirectResponse
     {
         User::createPending($request->all());
-        
-        Session::flash("message", 'Your membership request is pending, we will get back to you as soon as possible');
 
-        return to_route('front-end.signup');
+        return to_route('front-end.signup')
+            ->with('message', 'Your membership request is pending, we will get back to you as soon as possible');
     }
 
-    public function removeAsPendingMember(Request $request, User $user)
+    public function removeAsPendingMember(User $user): RedirectResponse
     {
         $user->removeAsPendingMember();
 
         return to_route('users.indexPendingMembers');
     }
 
-    public function approveAsPendingMember(Request $request, User $user)
+    public function approveAsPendingMember(User $user): RedirectResponse
     {
         $user->approveAsPendingMember();
-        
+
         return to_route('users.indexPendingMembers');
     }
 }

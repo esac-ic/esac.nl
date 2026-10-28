@@ -4,41 +4,34 @@ namespace Tests\Feature\Agenda;
 
 use App\Enums\Role;
 use App\Models\AgendaItem;
-use App\Models\Rol;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use PHPUnit\Framework\Attributes\Test;
 use Tests\TestCase;
 
-class CopyAgendaItem extends TestCase
+class CopyAgendaItemTest extends TestCase
 {
     use RefreshDatabase;
 
     private $url = 'agendaItems/';
-    private $user;
-    private $role;
 
-    protected function setUp() : void
+    private $user;
+
+    protected function setUp(): void
     {
         parent::setUp();
         $this->user = User::factory()->create();
-
-        $this->role = Rol::factory()->create([
-            'id' => 3
-        ]);
-
         $this->user->roles()->attach(Role::ActivityAdministrator->value);
 
         $this->be($this->user);
-
-        session()->start();
     }
 
     #[Test]
-    public function agenda_item_can_be_copied(){
-        $agendaItem = AgendaItem::factory()->create(['image_url' => ""]);
+    public function agenda_item_can_be_copied()
+    {
+        $agendaItem = AgendaItem::factory()->create(['image_url' => '']);
 
-        $response = $this->get($this->url . $agendaItem->id . '/copy');
+        $response = $this->get($this->url.$agendaItem->id.'/copy');
 
         $response->assertStatus(302);
 

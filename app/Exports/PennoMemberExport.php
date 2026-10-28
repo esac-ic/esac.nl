@@ -15,9 +15,6 @@ class PennoMemberExport extends SpreadsheetExport
         $this->fromDate = Carbon::today()->subDays($daysAgo);
     }
 
-    /**
-     * @return \Illuminate\Support\Collection
-     */
     public function collection(): Collection
     {
         $users = User::current()->where('created_at', '>=', $this->fromDate)->get($this->columns());
@@ -27,26 +24,21 @@ class PennoMemberExport extends SpreadsheetExport
             $export['iban'] = str_replace(' ', '', $export['iban']);
             // Remove the time component of the created_at field:
             $export['created_at'] = $user->created_at->toDateString();
-            $export['incasso'] = $user->incasso ? "Yes" : "No";
+            $export['incasso'] = $user->incasso ? 'Yes' : 'No';
+
             return $export;
         });
     }
 
-    /**
-     * @return string
-     */
     public function title(): string
     {
         return 'Non administrated members';
     }
 
-    /**
-     * @return array
-     */
     private function columns(): array
     {
         return [
-            "id",
+            'id',
             'email',
             'firstname',
             'preposition',
@@ -57,17 +49,14 @@ class PennoMemberExport extends SpreadsheetExport
             'iban',
             'bic',
             'incasso',
-            'created_at'
+            'created_at',
         ];
     }
 
-    /**
-     * @return array
-     */
     public function headings(): array
     {
         return [
-            "#",
+            '#',
             'Email address',
             'First name',
             'Preposition',
@@ -78,7 +67,7 @@ class PennoMemberExport extends SpreadsheetExport
             'IBAN',
             'BIC',
             'Accept Automatic Collection',
-            'User created at'
+            'User created at',
         ];
     }
 

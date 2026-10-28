@@ -13,14 +13,8 @@ class UpdateRoleTest extends TestCase
 {
     use RefreshDatabase;
 
-    /**
-     * @var string
-     */
     private $url = 'rols';
 
-    /**
-     * @var
-     */
     private $user;
 
     protected function setUp(): void
@@ -30,8 +24,6 @@ class UpdateRoleTest extends TestCase
 
         $user->roles()->attach(Role::Administrator->value);
         $this->be($user);
-
-        session()->start();
     }
 
     #[Test]
@@ -40,10 +32,9 @@ class UpdateRoleTest extends TestCase
         $role = Rol::factory()->create();
         $body = [
             'name' => 'test role',
-            '_token' => csrf_token(),
         ];
 
-        $response = $this->patch($this->url . "/" . $role->id, $body);
+        $response = $this->patch($this->url.'/'.$role->id, $body);
 
         $response->assertStatus(302);
 
@@ -58,12 +49,11 @@ class UpdateRoleTest extends TestCase
         $role = Rol::factory()->create();
         $body = [
             'name' => 'test role',
-            '_token' => csrf_token(),
         ];
 
         $this->user->roles()->detach();
 
-        $response = $this->patch($this->url . "/" . $role->id, $body);
+        $response = $this->patch($this->url.'/'.$role->id, $body);
 
         $response->assertStatus(403);
     }
@@ -73,16 +63,15 @@ class UpdateRoleTest extends TestCase
     {
         $role = Rol::factory()->create();
         $body = [
-            '_token' => csrf_token(),
         ];
 
-        $response = $this->patch($this->url . "/" . $role->id, $body);
+        $response = $this->patch($this->url.'/'.$role->id, $body);
 
         $response->assertStatus(302);
 
         $response->assertSessionHasErrors();
         $errors = session('errors');
         $this->assertCount(1, $errors);
-        $this->assertEquals("Field name is required", $errors->get('name')[0]);
+        $this->assertEquals('Field name is required', $errors->get('name')[0]);
     }
 }

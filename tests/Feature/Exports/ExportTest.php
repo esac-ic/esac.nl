@@ -136,9 +136,6 @@ class ExportTest extends TestCase
         $this->assertCount(1 + 2, $rows);
     }
 
-    /**
-     * @return array{string, list<list<mixed>>} the sheet name and the rows of the only sheet
-     */
     private function readSpreadsheet(TestResponse $response, ?string $fileName = null): array
     {
         $response->assertOk();

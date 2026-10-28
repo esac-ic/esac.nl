@@ -2,19 +2,20 @@
 
 namespace App\Http\Controllers;
 
-use App\Services\Mailman;
 use App\Exports\OldUsersExport;
 use App\Exports\PennoMemberExport;
 use App\Exports\UsersExport;
 use App\Http\Requests\UserRequest;
 use App\Models\Rol;
 use App\Models\User;
+use App\Services\Mailman;
+use Illuminate\Contracts\View\View;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controllers\HasMiddleware;
 use Illuminate\Routing\Controllers\Middleware;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Gate;
-use Illuminate\Support\Facades\Session;
+use Symfony\Component\HttpFoundation\StreamedResponse;
 
 class UserController extends Controller implements HasMiddleware
 {
@@ -29,37 +30,36 @@ class UserController extends Controller implements HasMiddleware
         ];
     }
 
-    //gives the user views
-    public function index()
+    public function index(): View
     {
-        $users = User::current()->with('roles')->get(['id', 'firstname', 'lastname', 'email', 'preposition', 'kind_of_member']);
-        $roles = Rol::all();
-
-        return view('beheer.user.index', compact('users', 'roles'));
+        return view('beheer.user.index', [
+            'users' => User::current()->with('roles')->get(['id', 'firstname', 'lastname', 'email', 'preposition', 'kind_of_member']),
+            'roles' => Rol::all(),
+        ]);
     }
 
-    //gives the old users view
-    public function indexOldMembers()
+    public function indexOldMembers(): View
     {
-        $users = User::old()->get(['id', 'firstname', 'lastname', 'email', 'preposition', 'kind_of_member']);
-
-        return view('beheer.user.index_old_users', compact('users'));
+        return view('beheer.user.index_old_users', [
+            'users' => User::old()->get(['id', 'firstname', 'lastname', 'email', 'preposition', 'kind_of_member']),
+        ]);
     }
 
-    //show create screen
-    public function create()
+    public function create(): View
     {
-        $fields = ['title' => 'Add user',
-            'method' => 'POST',
-            'url' => route('users.store')];
-        $user = null;
-        $roles = Rol::all();
-        $ownedRoles = collect();
-        return view('beheer.user.create_edit', compact('fields', 'user', 'roles', 'ownedRoles'));
+        return view('beheer.user.create_edit', [
+            'fields' => [
+                'title' => 'Add user',
+                'method' => 'POST',
+                'url' => route('users.store'),
+            ],
+            'user' => null,
+            'roles' => Rol::all(),
+            'ownedRoles' => collect(),
+        ]);
     }
 
-    //store user
-    public function store(UserRequest $request)
+    public function store(UserRequest $request): RedirectResponse
     {
         $user = User::fromForm($request->all());
         $user->save();
@@ -67,94 +67,91 @@ class UserController extends Controller implements HasMiddleware
             $user->roles()->sync($request->get('roles'));
         }
 
-        Session::flash("message", 'User is added');
-
-        return to_route('users.index');
+        return to_route('users.index')->with('message', 'User is added');
     }
 
-    public function show(User $user)
+    public function show(User $user): View
     {
         Gate::authorize('view', $user);
 
-        return view('beheer.user.show', compact('user'));
+        return view('beheer.user.show', ['user' => $user]);
     }
 
-    //show edit screen
-    public function edit(User $user)
+    public function edit(User $user): View
     {
         Gate::authorize('update', $user);
 
-        $fields = ['title' => 'Edit user',
-            'method' => 'PATCH',
-            'url' => route('users.update', $user)];
-
-        $roles = Rol::all();
-        $ownedRoles = $user->roles;
-        return view('beheer.user.create_edit', compact('fields', 'user', 'roles', 'ownedRoles'));
+        return view('beheer.user.create_edit', [
+            'fields' => [
+                'title' => 'Edit user',
+                'method' => 'PATCH',
+                'url' => route('users.update', $user),
+            ],
+            'user' => $user,
+            'roles' => Rol::all(),
+            'ownedRoles' => $user->roles,
+        ]);
     }
 
-    //update user
-    public function update(UserRequest $request, User $user, Mailman $mailman)
+    public function update(UserRequest $request, User $user, Mailman $mailman): RedirectResponse
     {
         if ($user->email != $request['email']) {
             $mailman->updateUserEmailForAllMailList($user, $user->email, $request['email']);
         }
-        
+
         $user->updateFromForm($request->all());
-        
-        if (Auth::user()->can('manage-members')) {
+
+        if ($request->user()->can('manage-members')) {
             $user->roles()->sync($request->get('roles', []));
         }
 
-        if (Auth::user()->id === $user->id) {
+        if ($request->user()->is($user)) {
             return to_route('users.show', [$user, 'back' => 'false']);
-        } else {
-            Session::flash("message", 'Changes to user have been saved');
-
-            return to_route('users.index');
         }
+
+        return to_route('users.index')->with('message', 'Changes to user have been saved');
     }
 
-    public function removeAsActiveMember(Request $request, User $user)
+    public function removeAsActiveMember(User $user): RedirectResponse
     {
         $user->removeAsActiveMember();
 
         return to_route('users.show', $user);
     }
 
-    public function exportUsers(UsersExport $usersExport)
+    public function exportUsers(UsersExport $usersExport): StreamedResponse
     {
         return $usersExport->download('Members.xlsx');
     }
-    public function pennoMemberExportSelect(Request $request)
+
+    public function pennoMemberExportSelect(): View
     {
         return view('beheer.user.penno_member_export');
     }
-    public function pennoMemberExport(Request $request)
+
+    public function pennoMemberExport(Request $request): StreamedResponse
     {
         $request->validate([
-            'days_ago' => 'required|integer|min:0'
+            'days_ago' => 'required|integer|min:0',
         ]);
         $export = new PennoMemberExport($request->integer('days_ago'));
         $exportDate = $export->getFromDate()->toDateString();
+
         return $export->download("Members (created after $exportDate).xlsx");
     }
 
-    public function exportOldUsers(OldUsersExport $oldUsersExport)
+    public function exportOldUsers(OldUsersExport $oldUsersExport): StreamedResponse
     {
         return $oldUsersExport->download('Old members.xlsx');
     }
 
-    public function makeActiveMember(Request $request, User $user)
+    public function makeActiveMember(User $user): RedirectResponse
     {
-        if ($user->makeActiveMember()) //this should never fail unless some validation fails somewhere or the intended flow of the website breaks
-        {
+        // This only fails when the member is already active or has no email address.
+        if ($user->makeActiveMember()) {
             return to_route('users.show', $user);
         }
-        else
-        {
-            Session::flash("error", 'Failed to make member active');
-            return to_route('users.index-old-members');
-        }
+
+        return to_route('users.index-old-members')->with('error', 'Failed to make member active');
     }
 }

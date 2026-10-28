@@ -4,7 +4,6 @@ namespace Database\Factories;
 
 use App\Events\MemberBecameOldMember;
 use App\Events\MemberKindChanged;
-use App\Events\MemberTypeChanged;
 use App\Events\OldMemberBecameMember;
 use App\Events\PendingUserApproved;
 use App\Events\PendingUserCreated;
@@ -30,7 +29,7 @@ class UserEventLogEntryFactory extends Factory
         PendingUserApproved::class,
         PendingUserRemoved::class,
     ];
-    
+
     /**
      * Define the model's default state.
      *
@@ -39,29 +38,29 @@ class UserEventLogEntryFactory extends Factory
     public function definition(): array
     {
         $eventType = fake()->randomElement(UserEventLogEntryFactory::LOGGABLE_USER_EVENTS);
-        
+
         $eventDetails = match ($eventType) {
-            MemberKindChanged::class => "User changed from ... to ...",
-            MemberBecameOldMember::class => "User became old member",
-            PendingUserCreated::class => "New pending user: ...",
-            OldMemberBecameMember::class => "User became a member again",
-            PendingUserApproved::class => "User was approved as a member",
-            PendingUserRemoved::class => "User was removed as a pending member",
-            default => "Unknown event type",
+            MemberKindChanged::class => 'User changed from ... to ...',
+            MemberBecameOldMember::class => 'User became old member',
+            PendingUserCreated::class => 'New pending user: ...',
+            OldMemberBecameMember::class => 'User became a member again',
+            PendingUserApproved::class => 'User was approved as a member',
+            PendingUserRemoved::class => 'User was removed as a pending member',
+            default => 'Unknown event type',
         };
-        
-        $eventType = (new ReflectionClass($eventType))->getShortName(); //turn it to the display name
-        
+
+        $eventType = (new ReflectionClass($eventType))->getShortName(); // turn it to the display name
+
         return [
             'event_type' => $eventType,
             'event_details' => $eventDetails,
             'created_at' => fake()->dateTimeThisYear(),
         ];
     }
-    
+
     public function randomUser(int $totalNrOfUsers): Factory
     {
-        return $this->state(function (array $attributes) use($totalNrOfUsers) {
+        return $this->state(function (array $attributes) use ($totalNrOfUsers) {
             return [
                 'user_id' => random_int(1, $totalNrOfUsers),
             ];

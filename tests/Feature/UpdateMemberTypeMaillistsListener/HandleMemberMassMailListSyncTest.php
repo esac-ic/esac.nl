@@ -2,122 +2,55 @@
 
 namespace Tests\Feature\UpdateMemberTypeMaillistsListener;
 
-use App\Services\Mailman;
 use App\Jobs\MemberMassMailListSyncJob;
-use App\Models\Setting;
 use App\Models\User;
+use App\Services\Mailman;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Support\Facades\Lang;
 use Mockery;
+use PHPUnit\Framework\Attributes\Test;
+use Tests\Concerns\FakesMailListSettings;
 use Tests\TestCase;
-
-use function PHPUnit\Framework\assertEquals;
 
 class HandleMemberMassMailListSyncTest extends TestCase
 {
-    use RefreshDatabase;
-    
-    private $mockedMailman;
-    private User  $user;
-    private array $mailLists = [
-        'member' => [
-            'key' => Setting::SETTING_NORMAL_MEMBER_MAIL_LISTS,
-            'value' => 'member.esac.nl',
-        ],
-        'extraordinary_member' => [
-            'key' => Setting::SETTING_EXTRAORDINARY_MEMBER_MAIL_LISTS,
-            'value' => 'extraordinary.esac.nl',
-        ],
-        'reunist' => [
-            'key' => Setting::SETTING_REUNIST_MEMBER_MAIL_LISTS,
-            'value' => 'reunist.esac.nl',
-        ],
-        'honorary_member' => [
-            'key' => Setting::SETTING_HONORARY_MEMBER_MAIL_LISTS,
-            'value' => 'honorary.esac.nl',
-        ],
-        'member_of_merit' => [
-            'key' => Setting::SETTING_MERIT_MEMBER_MAIL_LISTS,
-            'value' => 'merit.esac.nl',
-        ],
-        'trainer' => [
-            'key' => Setting::SETTING_TRAINER_MEMBER_MAIL_LISTS,
-            'value' => 'trainer.esac.nl',
-        ],
-        'relationship' => [
-            'key' => Setting::SETTING_RELATIONSHIP_MEMBER_MAIL_LISTS,
-            'value' => 'relationship.esac.nl',
-        ],
-    ];
-    
+    use FakesMailListSettings, RefreshDatabase;
+
     protected function setUp(): void
     {
         parent::setUp();
-        
-        $this->mockedMailman = Mockery::mock(Mailman::class);
-        $this->user = User::factory()->member()->create();
 
-        Setting::query()->delete();
-        Setting::insert(collect($this->mailLists)->map(fn ($set) => new Setting(['name' => $set['key'], 'type' => Setting::TYPE_STRING, 'value' => $set['value']]))->values()->toArray());
+        $this->fakeMailListSettings();
     }
-    
-    public function test_add_single_normal_member()
+
+    #[Test]
+    public function a_member_is_added_to_the_member_mail_lists()
     {
-        $this->mockedMailman->shouldNotReceive('removeUserFromSpecifiedMailLists');
-        $this->mockedMailman->shouldReceive('addUserToSpecifiedMailLists')
-            ->with($this->user->email, $this->user->getName(), ['member.esac.nl'])
+        $user = User::factory()->member()->create();
+
+        $mailman = Mockery::mock(Mailman::class);
+        $mailman->shouldNotReceive('removeUserFromSpecifiedMailLists');
+        $mailman->shouldReceive('addUserToSpecifiedMailLists')
+            ->with($user->email, $user->getName(), ['member.esac.nl'])
             ->once();
 
-        $this->user->kind_of_member = Lang::get('member');
-        $this->user->save();
-        
-        User::all()->each(fn (User $user) => new MemberMassMailListSyncJob($user)->handle($this->mockedMailman));
+        User::all()->each(fn (User $user) => new MemberMassMailListSyncJob($user)->handle($mailman));
     }
 
-    //Reasonable order of magnitude for a big mail list
-    public function test_add_200_members()
+    #[Test]
+    public function every_kind_of_member_is_added_to_their_own_mail_lists()
     {
-        $this->user->kind_of_member = Lang::get('member');
-        $this->user->save();
-        User::factory()->member()->count(199)->create();
+        foreach (User::KINDS_OF_MEMBER as $kind) {
+            User::factory()->create(['kind_of_member' => $kind]);
+        }
 
-
-        $this->mockedMailman->shouldNotReceive('removeUserFromSpecifiedMailLists');
-
-        foreach (User::all() as $user)
-        {
-            $this->mockedMailman->shouldReceive('addUserToSpecifiedMailLists')
-                ->with($user->email, $user->getName(), ['member.esac.nl'])
+        $mailman = Mockery::mock(Mailman::class);
+        $mailman->shouldNotReceive('removeUserFromSpecifiedMailLists');
+        foreach (User::all() as $user) {
+            $mailman->shouldReceive('addUserToSpecifiedMailLists')
+                ->with($user->email, $user->getName(), [$this->mailListOf($user->kind_of_member)])
                 ->once();
         }
-        
-        User::all()->each(fn (User $user) => new MemberMassMailListSyncJob($user)->handle($this->mockedMailman));
-    }
-    
-    public function test_add_mix_of_members()
-    {
-        $this->user->kind_of_member = Lang::get('member');
-        $this->user->save();
-        
-        User::factory()->reunist()->create();
-        User::factory()->extraordinary_participant()->create();
-        User::factory()->honorary_member()->create();
-        User::factory()->member_of_merit()->create();
-        User::factory()->trainer()->create();
-        User::factory()->relationship()->create();
-        
-        $this->mockedMailman->shouldNotReceive('removeUserFromSpecifiedMailLists');
 
-
-        $this->mockedMailman->shouldReceive('addUserToSpecifiedMailLists')
-            ->withArgs(function ($email, $name, $lists) {
-                assertEquals([
-                    $this->mailLists[User::firstWhere('email', $email)->kind_of_member]['value']
-                ], $lists);
-                return true;
-            })
-            ->times(User::count());
-
-        User::all()->each(fn (User $user) => new MemberMassMailListSyncJob($user)->handle($this->mockedMailman));
+        User::all()->each(fn (User $user) => new MemberMassMailListSyncJob($user)->handle($mailman));
     }
 }

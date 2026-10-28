@@ -3,25 +3,18 @@
 namespace App\Events;
 
 use App\Models\User;
-use Illuminate\Broadcasting\InteractsWithSockets;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
 
 class PendingUserRemoved implements LoggableUserEventInterface
 {
-    use Dispatchable, InteractsWithSockets, SerializesModels;
+    use Dispatchable, SerializesModels;
 
-    /**
-     * Create a new event instance.
-     */
-    public function __construct(public User $user, public string $userName)
-    {
-        //
-    }
+    public function __construct(public User $user, public string $userName) {}
 
     public function logDetails(): string
     {
-        return $this->userName . " was removed as a pending member";
+        return $this->userName.' was removed as a pending member';
     }
 
     public function loggedUser(): ?User

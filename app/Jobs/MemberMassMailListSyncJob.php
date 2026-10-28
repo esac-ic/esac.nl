@@ -2,9 +2,9 @@
 
 namespace App\Jobs;
 
-use App\Services\Mailman;
 use App\Listeners\UpdateMemberTypeMaillists;
 use App\Models\User;
+use App\Services\Mailman;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Queue\Queueable;
 
@@ -15,11 +15,7 @@ class MemberMassMailListSyncJob implements ShouldQueue
 {
     use Queueable;
 
-    public function __construct(
-        public User $user
-    )
-    {
-    }
+    public function __construct(public User $user) {}
 
     public function handle(Mailman $mailman): void
     {

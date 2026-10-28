@@ -13,35 +13,21 @@ class DeleteApplicationFormTest extends TestCase
 {
     use RefreshDatabase;
 
-    /**
-     * @var User
-     */
     private $user;
 
-    /**
-     * @var ApplicationForm
-     */
     private $applicationForm;
 
-    /**
-     * @var string
-     */
     private $url = 'beheer/applicationForms';
 
-    /**
-     * @return void
-     */
     protected function setUp(): void
     {
         parent::setUp();
         $this->applicationForm = ApplicationForm::factory()->create();
         $this->user = $user = User::factory()->create();
-        $this->url .= "/" . $this->applicationForm->id;
+        $this->url .= '/'.$this->applicationForm->id;
 
         $user->roles()->attach(Role::ContentAdministrator->value);
         $this->be($user);
-
-        session()->start();
     }
 
     #[Test]

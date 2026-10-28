@@ -5,22 +5,7 @@
 @endsection
 
 @section('content')
-    @if(Session::has('message'))
-        <div class="alert alert-success alert-dismissible fade show" role="alert">
-            {{Session::get('message')}}
-            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                <span aria-hidden="true">&times;</span>
-            </button>
-        </div>
-    @endif
-    @if(Session::has('error'))
-        <div class="alert alert-danger alert-dismissible fade show" role="alert">
-            {{Session::get('error')}}
-            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                <span aria-hidden="true">&times;</span>
-            </button>
-        </div>
-    @endif
+    @include('includes.flash')
     
     <div class="row mb-3">
         <div class="col-md-6">
@@ -30,7 +15,7 @@
         <div class="col-md-6">
             <div class="btn-group mt-2 float-md-right" role="group" aria-label="Actions">
                 <form method="post"
-                      action="{{ action([App\Http\Controllers\MailListController::class, 'massMemberMailListSync']) }}"
+                      action="{{ route('mailList.massSync') }}"
                       onsubmit="return confirm('Are you sure?\nThis action adds users to all maillists associated with their membership type.\nThis may cause people who have unsubscribed from a maillist to be readded.')"
                 >
                     @csrf

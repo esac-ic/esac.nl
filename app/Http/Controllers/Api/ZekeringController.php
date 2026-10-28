@@ -3,10 +3,10 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\ZekeringRequest;
 use App\Http\Resources\ZekeringResource;
 use App\Models\Zekering;
 use Illuminate\Http\RedirectResponse;
-use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Routing\Controllers\HasMiddleware;
 use Illuminate\Routing\Controllers\Middleware;
@@ -28,49 +28,35 @@ class ZekeringController extends Controller implements HasMiddleware
         return ['zekeringen' => ZekeringResource::collection($zekeringen)];
     }
 
-    public function storeZekering(Request $request): RedirectResponse
+    public function storeZekering(ZekeringRequest $request): RedirectResponse
     {
-        $this->validateInput($request);
-
         $this->createZekering($request, $request->has('parent'), $request->input('parent'));
 
         return to_route('front-end.zekeringen');
     }
 
-    public function storeSubZekering(Request $request): Response
+    public function storeSubZekering(ZekeringRequest $request): Response
     {
-        $this->validateInput($request);
-
         $this->createZekering($request, true, $request->input('parent_id'));
 
-        return response(["msg" => "Sub zekering created"], 200);
+        return response(['msg' => 'Sub zekering created'], 200);
     }
 
     public function destroy(int $id): Response
     {
         Zekering::destroy($id);
 
-        return response("", 200);
+        return response('', 200);
     }
 
-    private function createZekering(Request $request, bool $hasParent, $parentId): void
+    private function createZekering(ZekeringRequest $request, bool $hasParent, $parentId): void
     {
-        $zekering = new Zekering();
+        $zekering = new Zekering;
         $zekering->text = $request->input('text');
         $zekering->created_by = $request->user()->id;
         $zekering->score = 1;
         $zekering->parent_id = $hasParent ? $parentId : null;
         $zekering->has_parent = $hasParent;
         $zekering->save();
-    }
-
-    private function validateInput(Request $request): void
-    {
-        $request->validate($this->getValidationRules());
-    }
-
-    private function getValidationRules(): array
-    {
-        return ['text' => 'required'];
     }
 }

@@ -13,14 +13,8 @@ class DeleteAgendaRegistrationTest extends TestCase
 {
     use RefreshDatabase;
 
-    /**
-     * @var string
-     */
     private $url = '/forms/';
 
-    /**
-     * @var User
-     */
     private $user;
 
     protected function setUp(): void
@@ -29,8 +23,6 @@ class DeleteAgendaRegistrationTest extends TestCase
         $this->user = $user = User::factory()->create();
 
         $this->be($user);
-
-        session()->start();
     }
 
     #[Test]
@@ -43,7 +35,7 @@ class DeleteAgendaRegistrationTest extends TestCase
         $agendaItem->subscription_end_date = Carbon::now()->addWeek();
         $agendaItem->save();
 
-        $response = $this->get('forms/' . $agendaItem->id . '/unregister');
+        $response = $this->get('forms/'.$agendaItem->id.'/unregister');
 
         $response->assertStatus(302);
 
@@ -60,7 +52,7 @@ class DeleteAgendaRegistrationTest extends TestCase
         $agendaItem->subscription_end_date = Carbon::now()->subWeek();
         $agendaItem->save();
 
-        $response = $this->get('forms/' . $agendaItem->id . '/unregister');
+        $response = $this->get('forms/'.$agendaItem->id.'/unregister');
 
         $response->assertStatus(302);
 

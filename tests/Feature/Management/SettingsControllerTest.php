@@ -3,6 +3,7 @@
 namespace Tests\Feature\Management;
 
 use App\Enums\Role;
+use App\Enums\SettingKey;
 use App\Models\Setting;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -26,7 +27,7 @@ class SettingsControllerTest extends TestCase
     #[Test]
     public function an_administrator_can_view_and_update_settings()
     {
-        $setting = Setting::where('name', Setting::SETTING_NORMAL_MEMBER_MAIL_LISTS)->first();
+        $setting = Setting::where('name', SettingKey::NormalMemberMailLists->value)->first();
 
         $this->actingAs($this->admin)->get('beheer/settings')
             ->assertOk()
@@ -44,7 +45,7 @@ class SettingsControllerTest extends TestCase
     #[Test]
     public function a_blank_setting_is_saved_as_empty()
     {
-        $setting = Setting::where('name', Setting::SETTING_NORMAL_MEMBER_MAIL_LISTS)->first();
+        $setting = Setting::where('name', SettingKey::NormalMemberMailLists->value)->first();
 
         $this->actingAs($this->admin)
             ->put('beheer/settings', ['setting' => [$setting->name => '']])

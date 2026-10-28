@@ -10,14 +10,14 @@
                         <h3 class="card-title">{{$agendaItem->title}}</h3>
                         <p class="card-text">
                             From
-                            <span class="badge badge-secondary font-size-100">{{trans(\Carbon\Carbon::parse($agendaItem->start_date)->format('d M H:i'))}}</span>
+                            <span class="badge badge-secondary font-size-100">{{ $agendaItem->start_date->format('d M H:i') }}</span>
                             to
-                            <span class="badge badge-secondary font-size-100">{{trans(\Carbon\Carbon::parse($agendaItem->end_date)->format('d M H:i'))}}</span>
+                            <span class="badge badge-secondary font-size-100">{{ $agendaItem->end_date->format('d M H:i') }}</span>
                         </p>
                         @if($agendaItem->canRegister())
                             <p class="card-text">
                                 Subscriptions close
-                                <span class="badge badge-secondary font-size-100">{{trans(\Carbon\Carbon::parse($agendaItem->subscription_end_date)->format('d M H:i'))}}</span>
+                                <span class="badge badge-secondary font-size-100">{{ $agendaItem->subscription_end_date->format('d M H:i') }}</span>
                             </p>
                         @endif
                     </div>
@@ -30,11 +30,11 @@
                             </div>
                             <div class="col-auto">
                                 @if($agendaItem->application_form_id != null)
-                                    @if(Auth::guest())
+                                    @guest
                                         {{'Please log in to register'}}
                                     @else
                                         @if($agendaItem->canRegister())
-                                            @if($agendaItem->subscription_end_date > \Carbon\Carbon::now() && array_key_exists(Auth::id(), $users))
+                                            @if(array_key_exists(auth()->id(), $users))
                                                 <a class="btn btn-outline-danger" href="{{ route('forms.unregister', $agendaItem) }}">{{ 'Unregister' }} </a>
                                             @else
                                                 <a class="btn btn-outline-primary" href="{{ route('forms.create', $agendaItem) }}">{{'Register now'}}</a>
@@ -42,7 +42,7 @@
                                         @else
                                         {{'Registration not possible'}}
                                         @endif
-                                    @endif
+                                    @endguest
                                 @endif
                             </div>
                         </div>
@@ -54,7 +54,7 @@
                     <div class="card-body">
                         <h4 class="card-title">{{'General information'}}</h4>
                         <p class="card-text">{!! $agendaItem->text !!}</p>
-                        @if($agendaItem->application_form_id != null && !Auth::guest())
+                        @if($agendaItem->application_form_id != null && auth()->check())
                             <h4 class="card-title">{{'Registrations'}}</h4>
                             <ol class="column-count-lg-3">
                                 @foreach($users as $user)

@@ -12,24 +12,24 @@ use Tests\TestCase;
 class LogOldMemberBecameMemberTest extends TestCase
 {
     use RefreshDatabase;
-    
+
     public function test_member_becomes_old_member()
     {
         $user = User::factory()->create();
-        
+
         $event = new OldMemberBecameMember($user);
-        
+
         $this->assertEquals(0, UserEventLogEntry::all()->count());
-        
-        $listener = new LogUserEvent();
+
+        $listener = new LogUserEvent;
         $listener->handle($event);
-        
+
         $this->assertEquals(1, UserEventLogEntry::all()->count());
         $logEntry = UserEventLogEntry::all()->first();
-        
-        //assert correct event format
+
+        // assert correct event format
         $this->assertTrue($user->is($logEntry->user));
-        $this->assertEquals((new \ReflectionClass(OldMemberBecameMember::class))->getShortName(),  $logEntry->event_type);
-        $this->assertEquals($user->getName() . " became a member again", $logEntry->event_details);
+        $this->assertEquals((new \ReflectionClass(OldMemberBecameMember::class))->getShortName(), $logEntry->event_type);
+        $this->assertEquals($user->getName().' became a member again', $logEntry->event_details);
     }
 }

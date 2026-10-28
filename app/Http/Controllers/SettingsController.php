@@ -8,7 +8,6 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controllers\HasMiddleware;
 use Illuminate\Routing\Controllers\Middleware;
-use Illuminate\Support\Facades\Session;
 
 class SettingsController extends Controller implements HasMiddleware
 {
@@ -22,14 +21,12 @@ class SettingsController extends Controller implements HasMiddleware
 
     public function index(): View
     {
-        $settings = Setting::all();
-        return view('beheer.settings.index', compact('settings'));
+        return view('beheer.settings.index', ['settings' => Setting::all()]);
     }
 
     public function edit(): View
     {
-        $settings = Setting::all();
-        return view('beheer.settings.edit', compact('settings'));
+        return view('beheer.settings.edit', ['settings' => Setting::all()]);
     }
 
     public function update(Request $request): RedirectResponse
@@ -41,7 +38,6 @@ class SettingsController extends Controller implements HasMiddleware
             $setting->save();
         }
 
-        Session::flash("message", 'Settings updated');
-        return to_route('beheer.settings.index');
+        return to_route('beheer.settings.index')->with('message', 'Settings updated');
     }
 }

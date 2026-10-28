@@ -13,14 +13,8 @@ class DeleteRoleTest extends TestCase
 {
     use RefreshDatabase;
 
-    /**
-     * @var string
-     */
     private $url = 'rols';
 
-    /**
-     * @var
-     */
     private $user;
 
     protected function setUp(): void
@@ -30,8 +24,6 @@ class DeleteRoleTest extends TestCase
 
         $user->roles()->attach(Role::Administrator->value);
         $this->be($user);
-
-        session()->start();
     }
 
     #[Test]
@@ -39,7 +31,7 @@ class DeleteRoleTest extends TestCase
     {
         $role = Rol::factory()->create();
 
-        $response = $this->delete($this->url . '/' . $role->id, ['_token' => csrf_token()]);
+        $response = $this->delete($this->url.'/'.$role->id);
 
         $response->assertStatus(302);
 
@@ -52,7 +44,7 @@ class DeleteRoleTest extends TestCase
         $role = Rol::factory()->create();
         $this->user->roles()->detach();
 
-        $response = $this->delete($this->url . '/' . $role->id, ['_token' => csrf_token()]);
+        $response = $this->delete($this->url.'/'.$role->id);
 
         $response->assertStatus(403);
 

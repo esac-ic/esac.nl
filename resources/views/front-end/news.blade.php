@@ -20,11 +20,11 @@
                         <img class="card-img-top" src="{{$newsItem->getThumbnailUrl()}}" alt="Card image cap">
                     </a>
                     @endif
-                    <span class="card-date position-absolute bg-light py-1 px-3 rounded">{{\Carbon\Carbon::parse($newsItem->created_at)->format('d M')}}</span>
+                    <span class="card-date position-absolute bg-light py-1 px-3 rounded">{{ $newsItem->created_at->format('d M') }}</span>
                     <div class="card-body">
                         <a href="{{ route('front-end.news.detail', $newsItem) }}">
                             <h4 class="card-title">{{$newsItem->title}}</h4>
-                            <p class="card-text text-body">{{ strip_tags(\Illuminate\Support\Str::limit($newsItem->text, 150, '...')) }}</p>
+                            <p class="card-text text-body">{{ str($newsItem->text)->limit(150, '...')->stripTags() }}</p>
                         </a>
                     </div>
                     <div class="card-footer bg-white p-3">
