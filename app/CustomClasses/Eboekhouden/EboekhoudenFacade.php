@@ -64,7 +64,14 @@ class EboekhoudenFacade
         // The eboekhouden API should catch this, but just in case they change their behaviour
         //  check if the user isn't already in eboekhouden
         $users = $this->eboekhoudenHandler->get("/v1/relation?code={$this->getRelationCode($user)}");
-        if($users['count'] > 0) throw new Exception('User already exists in eboekhouden, cannot create the relationship twice');
+        if($users['count'] > 0) {
+            // Fallback to updating the relation:
+            \Log::error("Found a user without an eboekhouden_id set, that is already in the eboekhouden administration");
+            $user->eboekhouden_id = $users['items']['id'];
+            $user->save();
+            $this->updateRelation($user);
+            return;
+        }
 
         $date = Carbon::now()->toDateTimeString();
         $result = $this->eboekhoudenHandler->post('/v1/relation', 
