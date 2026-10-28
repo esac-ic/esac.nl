@@ -18,7 +18,7 @@ class DeleteOldUsersCommandTest extends TestCase
     {
         parent::setUp();
         // Transactions dont reset the incremental id
-        $this->id = User::factory()->create(['phonenumber_alt' => '0612345678', 'incasso' => true])->id;
+        $this->id = User::factory()->create(['phonenumber_alt' => '0612345678', 'incasso' => true, 'remember_token' => 'token'])->id;
     }
 
     public function testDeleteOldUserWichIsLidAfFor3Years()
@@ -53,6 +53,7 @@ class DeleteOldUsersCommandTest extends TestCase
         $this->assertEquals(null, $user->BIC);
         $this->assertEquals(null, $user->remark);
         $this->assertEquals(0, $user->incasso);
+        $this->assertEquals(null, $user->remember_token);
     }
 
     public function testDeleteOldUserWichIsLidAfFor1Years()

@@ -63,6 +63,7 @@ class RemoveOldUsers extends Command
                 'BIC' => null,
                 'incasso' => false,
                 'remark' => null,
+                'remember_token' => null,
             ]);
     }
 }

@@ -18,7 +18,8 @@ class AgendaApplicationFormService
 
         // Retrieve necessary objects
         $applicationForm = $agendaItem->getApplicationForm;
-        $applicationResponses = $agendaItem->getApplicationFormResponses;
+        // Anonymised registrations still count, but have no one to list
+        $applicationResponses = $agendaItem->getApplicationFormResponses->whereNotNull('user_id');
 
         if (is_null($applicationForm)) {
             return [
@@ -58,7 +59,8 @@ class AgendaApplicationFormService
 
         // Retrieve necessary objects
         $applicationForm = $agendaItem->getApplicationForm;
-        $applicationResponses = $agendaItem->getApplicationFormResponses;
+        // Anonymised registrations still count, but have no one to list
+        $applicationResponses = $agendaItem->getApplicationFormResponses->whereNotNull('user_id');
 
         if (is_null($applicationForm)) {
             return [
@@ -106,7 +108,7 @@ class AgendaApplicationFormService
     public function getRegisteredUserIds(AgendaItem $agendaItem): array
     {
         // This method now only returns user IDs
-        $applicationResponses = $agendaItem->getApplicationFormResponses;
+        $applicationResponses = $agendaItem->getApplicationFormResponses->whereNotNull('user_id');
 
         // Map user data
         $userdataIds = $applicationResponses->map(function ($response) {
