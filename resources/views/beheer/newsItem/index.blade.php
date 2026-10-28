@@ -21,7 +21,7 @@
 
         <div class="col-md-6">
             <div class="btn-group mt-2 float-md-right" role="group" aria-label="Actions">
-                <a href="{{url('newsItems/create')}}" class="btn btn-primary">
+                <a href="{{route('newsItems.create')}}" class="btn btn-primary">
                     <span title="{{'New user'}}" class="ion-plus" aria-hidden="true"></span>
                     {{'New news item '}}
                 </a>
@@ -45,8 +45,8 @@
                 <td>{{$newsItem->author}}</td>
                 <td>{{\Carbon\Carbon::parse($newsItem->created_at)->format('d-m-Y h:i')}}</td>
                 <td>
-                    <a class="mr-1 ml-1" href="{{url('/newsItems/' . $newsItem->id . '/edit')}}"><span title="Edit news item" class="ion-edit font-size-120" aria-hidden="true"></span></a>
-                    <a class="mr-1 ml-1" href="{{url('/newsItems/'. $newsItem->id)}}"><span title="Show news item" class="ion-eye font-size-120" aria-hidden="true"></span></a>
+                    <a class="mr-1 ml-1" href="{{route('newsItems.edit', $newsItem)}}"><span title="Edit news item" class="ion-edit font-size-120" aria-hidden="true"></span></a>
+                    <a class="mr-1 ml-1" href="{{route('newsItems.show', $newsItem)}}"><span title="Show news item" class="ion-eye font-size-120" aria-hidden="true"></span></a>
                 </td>
             </tr>
         @endforeach

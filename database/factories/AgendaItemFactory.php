@@ -17,12 +17,12 @@ class AgendaItemFactory extends Factory
         return [
             'title' => fake()->word(),
             'text' => fake()->text(),
-            'shortDescription' => fake()->word(),
-            'createdBy' => User::factory(),
+            'short_description' => fake()->word(),
+            'created_by' => User::factory(),
             'category' => AgendaItemCategory::factory(),
-            'startDate' => fake()->date(),
-            'endDate' => fake()->date(),
-            'subscription_endDate' => fake()->date(),
+            'start_date' => fake()->date(),
+            'end_date' => fake()->date(),
+            'subscription_end_date' => fake()->date(),
             'image_url' => '',
             'climbing_activity' => fake()->boolean(),
         ];

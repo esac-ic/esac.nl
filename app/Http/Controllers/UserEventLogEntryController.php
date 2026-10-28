@@ -3,33 +3,37 @@
 namespace App\Http\Controllers;
 
 use App\Exports\UserEventLogExport;
-use App\Repositories\UserEventLogEntryRepository;
+use App\Models\UserEventLogEntry;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\Request;
+use Illuminate\Routing\Controllers\HasMiddleware;
+use Illuminate\Routing\Controllers\Middleware;
 use Illuminate\Support\Carbon;
-use Illuminate\Support\Facades\Config;
 
-class UserEventLogEntryController extends Controller
+class UserEventLogEntryController extends Controller implements HasMiddleware
 {
-    public function __construct(private readonly UserEventLogEntryRepository $repository) 
+    public static function middleware(): array
     {
-        $this->middleware('auth');
-        $this->middleware('authorize:' . Config::get('constants.Administrator'));
+        return [
+            'auth',
+            new Middleware('can:view-user-event-log'),
+        ];
     }
-    
+
     public function index(): View 
     {
-        $events = $this->repository->all(['*']);
-        return view('beheer.userEventLog.index', compact('events'));
+        $events = UserEventLogEntry::all();
+        $eventTypes = UserEventLogEntry::distinct('event_type')->pluck('event_type')->sort();
+        return view('beheer.userEventLog.index', compact('events', 'eventTypes'));
     }
     
-    public function export(Request $request, UserEventLogEntryRepository $repo)
+    public function export(Request $request)
     {
         $eventTypes = $request->eventTypes;
         $startDate = Carbon::parse($request->startDate);
         $endDate = Carbon::parse($request->endDate);
 
-        $export = new UserEventLogExport($repo, $eventTypes, $startDate, $endDate);
+        $export = new UserEventLogExport($eventTypes, $startDate, $endDate);
         return $export->download($export->fileName() . '.xlsx');
     }
 }

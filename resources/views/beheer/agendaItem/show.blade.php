@@ -12,11 +12,11 @@
 
         <div class="col-md-6">
             <div class="btn-group mt-2 float-md-right" role="group" aria-label="Actions">
-                <a href="{{url('/agendaItems/'.$agendaItem->id . '/edit' )}}" class="btn btn-primary">
+                <a href="{{route('agendaItems.edit', $agendaItem)}}" class="btn btn-primary">
                     <em class="ion-edit"></em> {{'Edit'}}
                 </a>
                 @if(app('request')->input('back') != 'false')
-                    <a href="{{url('/agendaItems/')}}" class="btn btn-primary">
+                    <a href="{{route('agendaItems.index')}}" class="btn btn-primary">
                         <em class="ion-android-arrow-back"></em> {{'Back'}}
                     </a>
                 @endif
@@ -43,19 +43,19 @@
                 </tr>
                 <tr>
                     <td>{{'Short description'}}</td>
-                    <td>{{$agendaItem->shortDescription}}</td>
+                    <td>{{$agendaItem->short_description}}</td>
                 </tr>
                 <tr>
                     <td>{{'Start date'}}</td>
-                    <td>{{\Carbon\Carbon::parse($agendaItem->startDate)->format('d-m-Y h:i')}}</td>
+                    <td>{{\Carbon\Carbon::parse($agendaItem->start_date)->format('d-m-Y h:i')}}</td>
                 </tr>
                 <tr>
                     <td>{{'End date'}}</td>
-                    <td>{{\Carbon\Carbon::parse($agendaItem->endDate)->format('d-m-Y h:i')}}</td>
+                    <td>{{\Carbon\Carbon::parse($agendaItem->end_date)->format('d-m-Y h:i')}}</td>
                 </tr>
                 <tr>
                     <td>{{'Last possible registration date'}}</td>
-                    <td>{{($agendaItem->subscription_endDate !=null)? \Carbon\Carbon::parse($agendaItem->subscription_endDate)->format('d-m-Y h:i') : ""}}</td>
+                    <td>{{($agendaItem->subscription_end_date !=null)? \Carbon\Carbon::parse($agendaItem->subscription_end_date)->format('d-m-Y h:i') : ""}}</td>
                 </tr>
                 <tr>
                     <td>{{'Category'}}</td>

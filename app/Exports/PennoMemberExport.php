@@ -3,18 +3,15 @@
 namespace App\Exports;
 
 use App\Models\User;
-use App\Repositories\UserRepository;
 use Carbon\Carbon;
 use Illuminate\Support\Collection;
 
 class PennoMemberExport extends SpreadsheetExport
 {
-    private UserRepository $userRepository;
     private Carbon $fromDate;
 
-    public function __construct(UserRepository $userRepository, int $daysAgo)
+    public function __construct(int $daysAgo)
     {
-        $this->userRepository = $userRepository;
         $this->fromDate = Carbon::today()->subDays($daysAgo);
     }
 
@@ -23,11 +20,11 @@ class PennoMemberExport extends SpreadsheetExport
      */
     public function collection(): Collection
     {
-        $users = $this->userRepository->getCurrentUsersAfterSignupDate($this->columns(), $this->fromDate);
+        $users = User::current()->where('created_at', '>=', $this->fromDate)->get($this->columns());
 
         return $users->map(function (User $user) {
             $export = $user->toArray();
-            $export['IBAN'] = str_replace(' ', '', $export['IBAN']);
+            $export['iban'] = str_replace(' ', '', $export['iban']);
             // Remove the time component of the created_at field:
             $export['created_at'] = $user->created_at->toDateString();
             $export['incasso'] = $user->incasso ? "Yes" : "No";
@@ -57,8 +54,8 @@ class PennoMemberExport extends SpreadsheetExport
             'city',
             'country',
             'kind_of_member',
-            'IBAN',
-            'BIC',
+            'iban',
+            'bic',
             'incasso',
             'created_at'
         ];

@@ -3,22 +3,21 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Contracts\View\View;
-use Illuminate\Support\Facades\Auth;
+use Illuminate\Routing\Controllers\HasMiddleware;
+use Illuminate\Routing\Controllers\Middleware;
 
-class ManageController extends Controller
+class ManageController extends Controller implements HasMiddleware
 {
-
-    public function __construct()
+    public static function middleware(): array
     {
-        $this->middleware('auth');
+        return [
+            'auth',
+            new Middleware('can:access-admin'),
+        ];
     }
 
     public function index(): View
     {
-        if (Auth::guest() || !Auth::user()->hasBackendRights()) {
-            abort(403, 'You do not have sufficient access to view this page');
-        }
-
         return view('beheer/home');
     }
 }

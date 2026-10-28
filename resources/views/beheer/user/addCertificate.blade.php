@@ -23,7 +23,7 @@
     <div class="card">
         <div class="card-header"><h3>{{$fields['title']}}</h3></div>
         <div class="card-body">
-            {{ html()->form($fields['method'], url($fields['url']))->open() }}
+            {{ html()->form($fields['method'], $fields['url'])->open() }}
             <div class="form-group">
                 {{ html()->label('Certificate', 'certificate_id') }}
                 {{ html()->select('certificate_id', $certificates, ($userCertificate != null) ? $userCertificate->id : "")->class('form-control')->required() }}

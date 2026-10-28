@@ -2,6 +2,7 @@
 
 namespace Tests\Feature\Agenda;
 
+use App\Enums\Role;
 use App\Models\AgendaItem;
 use App\Models\AgendaItemCategory;
 use App\Models\ApplicationForm\ApplicationForm;
@@ -9,7 +10,6 @@ use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Http\UploadedFile;
-use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Storage;
 use PHPUnit\Framework\Attributes\Test;
 use Tests\TestCase;
@@ -37,7 +37,7 @@ class CreateAgendaItemTest extends TestCase
     public function CreateAgendaItem()
     {
         //Attach
-        $this->user->roles()->attach(Config::get('constants.Activity_administrator'));
+        $this->user->roles()->attach(Role::ActivityAdministrator->value);
 
         $agendaItemCategory = AgendaItemCategory::factory()->create();
 
@@ -45,12 +45,12 @@ class CreateAgendaItemTest extends TestCase
             '_token' => csrf_token(),
             'title' => 'test agenda',
             'text' => 'test agenda',
-            'shortDescription' => 'test agenda',
+            'short_description' => 'test agenda',
             'category' => $agendaItemCategory->id,
             'applicationForm' => ApplicationForm::factory()->create()->id,
-            'subscription_endDate' => Carbon::now()->addDays(2),
-            'endDate' => Carbon::now()->addDays(3),
-            'startDate' => Carbon::now()->addDays(1),
+            'subscription_end_date' => Carbon::now()->addDays(2),
+            'end_date' => Carbon::now()->addDays(3),
+            'start_date' => Carbon::now()->addDays(1),
         ];
         $response = $this->post($this->url, $body);
         $response->assertStatus(302);
@@ -65,17 +65,17 @@ class CreateAgendaItemTest extends TestCase
     public function creating_an_agenda_item_stores_a_resized_thumbnail()
     {
         Storage::fake('public');
-        $this->user->roles()->attach(Config::get('constants.Activity_administrator'));
+        $this->user->roles()->attach(Role::ActivityAdministrator->value);
 
         $response = $this->post($this->url, [
             'title' => 'test agenda',
             'text' => 'test agenda',
-            'shortDescription' => 'test agenda',
+            'short_description' => 'test agenda',
             'category' => AgendaItemCategory::factory()->create()->id,
             'applicationForm' => 0,
-            'subscription_endDate' => Carbon::now()->addDays(2),
-            'endDate' => Carbon::now()->addDays(3),
-            'startDate' => Carbon::now()->addDays(1),
+            'subscription_end_date' => Carbon::now()->addDays(2),
+            'end_date' => Carbon::now()->addDays(3),
+            'start_date' => Carbon::now()->addDays(1),
             'thumbnail' => UploadedFile::fake()->image('photo.png', 1000, 1000),
         ]);
         $response->assertStatus(302);
@@ -94,12 +94,12 @@ class CreateAgendaItemTest extends TestCase
             '_token' => csrf_token(),
             'title' => 'test agenda',
             'text' => 'test agenda',
-            'shortDescription' => 'test agenda',
+            'short_description' => 'test agenda',
             'category' => $agendaItemCategory->id,
             'applicationForm' => ApplicationForm::factory()->create()->id,
-            'subscription_endDate' => Carbon::now()->addDays(2),
-            'endDate' => Carbon::now()->addDays(3),
-            'startDate' => Carbon::now()->addDays(1),
+            'subscription_end_date' => Carbon::now()->addDays(2),
+            'end_date' => Carbon::now()->addDays(3),
+            'start_date' => Carbon::now()->addDays(1),
         ];
         $response = $this->post($this->url, $body);
         $response->assertStatus(403);
@@ -108,19 +108,19 @@ class CreateAgendaItemTest extends TestCase
 
     public function CreateAgendaWithEmptyFields()
     {
-        $this->user->roles()->attach(Config::get('constants.Activity_administrator'));
+        $this->user->roles()->attach(Role::ActivityAdministrator->value);
 
         $agendaItemCategory = AgendaItemCategory::factory()->create();
         $body = [
             '_token' => csrf_token(),
             'title' => '',
             'text' => 'test agenda',
-            'shortDescription' => 'test agenda',
+            'short_description' => 'test agenda',
             'category' => $agendaItemCategory->id,
             'applicationForm' => ApplicationForm::factory()->create()->id,
-            'subscription_endDate' => Carbon::now()->addDays(2),
-            'endDate' => Carbon::now()->addDays(3),
-            'startDate' => Carbon::now()->addDays(1),
+            'subscription_end_date' => Carbon::now()->addDays(2),
+            'end_date' => Carbon::now()->addDays(3),
+            'start_date' => Carbon::now()->addDays(1),
         ];
         $response = $this->post($this->url, $body);
         $response->assertStatus(500);
@@ -129,7 +129,7 @@ class CreateAgendaItemTest extends TestCase
     public function CreateAgendaItemWithEmoji()
     {
         //Attach
-        $this->user->roles()->attach(Config::get('constants.Activity_administrator'));
+        $this->user->roles()->attach(Role::ActivityAdministrator->value);
 
         $agendaItemCategory = AgendaItemCategory::factory()->create();
 
@@ -137,12 +137,12 @@ class CreateAgendaItemTest extends TestCase
             '_token' => csrf_token(),
             'title' => 'test agenda 😀',
             'text' => 'test agenda 😀',
-            'shortDescription' => 'test agenda 😀',
+            'short_description' => 'test agenda 😀',
             'category' => $agendaItemCategory->id,
             'applicationForm' => ApplicationForm::factory()->create()->id,
-            'subscription_endDate' => Carbon::now()->addDays(2),
-            'endDate' => Carbon::now()->addDays(3),
-            'startDate' => Carbon::now()->addDays(1),
+            'subscription_end_date' => Carbon::now()->addDays(2),
+            'end_date' => Carbon::now()->addDays(3),
+            'start_date' => Carbon::now()->addDays(1),
         ];
         $response = $this->post($this->url, $body);
         $response->assertStatus(302);

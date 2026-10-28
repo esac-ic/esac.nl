@@ -24,8 +24,8 @@
                 
                 <div class="collapse navbar-collapse justify-content-between" id="navbarNav">
                     <ul class="navbar-nav">
-                        @php($menu = app()->make(\App\CustomClasses\MenuSingleton::MENUSINGLETON)) @foreach($menu->getMenuItems() as $menuItem)
-                            @if(count($menu->getSubMenuItem($menuItem->id)) > 0)
+                        @foreach($menuItems as $menuItem)
+                            @if(count($subMenuItems[$menuItem->id]) > 0)
                                 {{--has submenu items so it wil be a dropdown menu--}}
                                 <li class="nav-item dropdown">
                                     <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink"
@@ -33,56 +33,56 @@
                                         {{$menuItem->name}}
                                     </a>
                                     <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-                                        @foreach($menu->getSubMenuItem($menuItem->id) as $subItem)
+                                        @foreach($subMenuItems[$menuItem->id] as $subItem)
                                             <a class="dropdown-item"
-                                               href="{{url('/'. $subItem->urlName)}}">{{$subItem->name}}</a>
+                                               href="{{ route('front-end.page', $subItem->url_name) }}">{{$subItem->name}}</a>
                                         @endforeach
                                     </div>
                                 </li>
                             @else
                                 <li class="nav-item">
-                                    <a class="nav-link" href="{{url('/'. $menuItem->urlName)}}">{{$menuItem->name}}</a>
+                                    <a class="nav-link" href="{{ route('front-end.page', $menuItem->url_name) }}">{{$menuItem->name}}</a>
                                 </li>
                             @endif
                         @endforeach
                     </ul>
                     
                     <ul class="navbar-nav">
-                        @if (Auth::guest())
+                        @guest
                             <li class="nav-item mr-2">
-                                <a class="nav-link" href="{{ url('/login') }}" class="nav-link">
+                                <a class="nav-link" href="{{ route('login') }}" class="nav-link">
                                     Login
                                 </a>
                             </li>
                         @else
-                            @if(Auth::user()->hasBackendRights())
+                            @can('access-admin')
                                 <li class="nav-item">
-                                    <a class="nav-link" href="{{ url('beheer/home') }}" class="nav-link">
+                                    <a class="nav-link" href="{{ route('beheer.home') }}" class="nav-link">
                                         {{'Management'}}
                                     </a>
                                 </li>
-                            @endif
+                            @endcan
                             <li class="nav-item dropdown mr-2">
                                 <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink"
                                    data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                    {{ Auth::user()->firstname }}
+                                    {{ auth()->user()->firstname }}
                                 </a>
                                 <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
                                     <a class="dropdown-item"
-                                       href="{{ url('/users/'. Auth::user()->id) . '?back=false'}}">{{ 'Account overview' }}</a>
-                                    <a class="dropdown-item" href="{{ url('/logout') }}"
+                                       href="{{ route('users.show', [auth()->user(), 'back' => 'false']) }}">{{ 'Account overview' }}</a>
+                                    <a class="dropdown-item" href="{{ route('logout') }}"
                                        onclick="event.preventDefault(); document.getElementById('logout-form').submit();">Logout</a>
-                                    <form id="logout-form" action="{{ url('/logout') }}" method="POST"
+                                    <form id="logout-form" action="{{ route('logout') }}" method="POST"
                                           style="display: none;">
                                         @csrf
                                     </form>
                                 </div>
                             </li>
-                        @endif @if (Auth::guest())
+                        @endguest @guest
                             <li class="nav-item d-flex align-items-center">
-                                <a class="btn btn-info text-dark" href="/signup">{{ 'Become a member' }}</a>
+                                <a class="btn btn-info text-dark" href="{{ route('front-end.signup') }}">{{ 'Become a member' }}</a>
                             </li>
-                        @endif
+                        @endguest
                     </ul>
                 </div>
             </nav>

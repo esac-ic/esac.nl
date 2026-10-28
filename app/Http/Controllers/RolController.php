@@ -3,31 +3,27 @@
 namespace App\Http\Controllers;
 
 use App\Models\Rol;
-use App\Repositories\RolRepository;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Config;
+use Illuminate\Routing\Controllers\HasMiddleware;
+use Illuminate\Routing\Controllers\Middleware;
 use Illuminate\Support\Facades\Session;
 
-class RolController extends Controller
+class RolController extends Controller implements HasMiddleware
 {
-
-    /**
-     * Create a new controller instance.
-     *
-     * @return void
-     */
-    public function __construct(private readonly RolRepository $_rolRepository)
+    public static function middleware(): array
     {
-        $this->middleware('auth');
-        $this->middleware('authorize:' . Config::get('constants.Administrator'));
+        return [
+            'auth',
+            new Middleware('can:manage-roles'),
+        ];
     }
 
     //gives the rol views
     public function index(): View
     {
-        $rols = $this->_rolRepository->all(['name', 'id']);
+        $rols = Rol::all(['name', 'id']);
         return view('beheer.rol.index', compact('rols'));
     }
 
@@ -36,7 +32,7 @@ class RolController extends Controller
     {
         $fields = ['title' => 'Add a role',
             'method' => 'POST',
-            'url' => '/rols'];
+            'url' => route('rols.store')];
         $rol = null;
         return view('beheer.rol.create_edit', compact('fields', 'rol'));
     }
@@ -44,12 +40,10 @@ class RolController extends Controller
     //store rol
     public function store(Request $request): RedirectResponse
     {
-        $this->validateInput($request);
-
-        $this->_rolRepository->create($request->all());
+        Rol::create($this->validateInput($request));
 
         Session::flash("message", 'Role added');
-        return redirect('/rols');
+        return to_route('rols.index');
     }
 
     public function show(Request $request, Rol $rol): View
@@ -62,7 +56,7 @@ class RolController extends Controller
     {
         $fields = ['title' => 'Edit role',
             'method' => 'PATCH',
-            'url' => '/rols/' . $rol->id];
+            'url' => route('rols.update', $rol)];
 
         return view('beheer.rol.create_edit', compact('fields', 'rol'));
     }
@@ -70,25 +64,23 @@ class RolController extends Controller
     //update rol
     public function update(Request $request, Rol $rol): RedirectResponse
     {
-        $this->validateInput($request);
-
-        $this->_rolRepository->update($rol->id, $request->all());
+        $rol->update($this->validateInput($request));
 
         Session::flash("message", 'Role edited');
-        return redirect('/rols');
+        return to_route('rols.index');
     }
 
     public function destroy(Request $request, Rol $rol): RedirectResponse
     {
-        $this->_rolRepository->delete($rol->id);
+        $rol->delete();
 
         Session::flash("message", 'Role removed');
-        return redirect('/rols');
+        return to_route('rols.index');
     }
 
-    private function validateInput(Request $request): void
+    private function validateInput(Request $request): array
     {
-        $this->validate($request, [
+        return $request->validate([
             'name' => 'required|max:255',
         ]);
     }

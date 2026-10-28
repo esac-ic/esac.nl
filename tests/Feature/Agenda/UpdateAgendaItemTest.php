@@ -2,13 +2,13 @@
 
 namespace Tests\Feature\Agenda;
 
+use App\Enums\Role;
 use App\Models\AgendaItem;
 use App\Models\AgendaItemCategory;
 use App\Models\ApplicationForm\ApplicationForm;
 use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Support\Facades\Config;
 use PHPUnit\Framework\Attributes\Test;
 use Tests\TestCase;
 
@@ -28,7 +28,7 @@ class UpdateAgendaItemTest extends TestCase
     {
         parent::setUp();
         $this->user = $user = User::factory()->create();
-        $user->roles()->attach(Config::get('constants.Activity_administrator'));
+        $user->roles()->attach(Role::ActivityAdministrator->value);
         $this->be($user);
 
         session()->start();
@@ -44,12 +44,12 @@ class UpdateAgendaItemTest extends TestCase
             '_token' => csrf_token(),
             'title' => 'test agenda',
             'text' => 'test agenda',
-            'shortDescription' => 'test agenda',
+            'short_description' => 'test agenda',
             'category' => $agendaItemCategory->id,
             'applicationForm' => ApplicationForm::factory()->create()->id,
-            'subscription_endDate' => Carbon::now()->addDays(2),
-            'endDate' => Carbon::now()->addDays(3),
-            'startDate' => Carbon::now()->addDays(1),
+            'subscription_end_date' => Carbon::now()->addDays(2),
+            'end_date' => Carbon::now()->addDays(3),
+            'start_date' => Carbon::now()->addDays(1),
         ];
 
         $response = $this->patch($this->url . "/" . $agendaItem->id, $body);

@@ -11,7 +11,7 @@
     <div class="row">
         <div class="col-lg-2 fixed-left px-0 pt-lg-5 h-lg-100" style="z-index:100">
             <nav class="navbar navbar-expand-lg navbar-light bg-white border-right h-lg-100">
-                <a class="navbar-brand d-lg-none" href="{{ url('beheer/home') }}">Dashboard</a>
+                <a class="navbar-brand d-lg-none" href="{{ route('beheer.home') }}">Dashboard</a>
                 <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarDashboard" aria-controls="navbarDashboard" aria-expanded="false" aria-label="Toggle navigation">
                     <span class="ion-ios-arrow-down h4"></span>
                 </button>
@@ -24,18 +24,18 @@
                         </span>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="{{ url('/users/'. Auth::user()->id) . '?back=false'}}">
+                        <a class="nav-link" href="{{ route('users.show', [auth()->user(), 'back' => 'false']) }}">
                             {{ 'Account overview' }}
                         </a>
                     </li>
-                    @if (Auth::guest())
+                    @guest
                         <li class="nav-item">
-                            <a href="{{ url('/login') }}" class="nav-link">
+                            <a href="{{ route('login') }}" class="nav-link">
                             Login
                             </a>
                         </li>
                     @else
-                        @if(\Illuminate\Support\Facades\Auth::user()->hasRole(Config::get('constants.Administrator'),Config::get('constants.Activity_administrator'),Config::get('constants.Content_administrator'),Config::get('constants.Certificate_administrator')))
+                        @can('access-admin')
                             <hr class="my-3">
 
                             <li class="nav-item active">
@@ -44,73 +44,81 @@
                                 </span>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link" href="{{ url('beheer/home') }}">
+                                <a class="nav-link" href="{{ route('beheer.home') }}">
                                 Dashboard
                                 </a>
                             </li>
-                        @endif
-                        @if(\Illuminate\Support\Facades\Auth::user()->hasRole(Config::get('constants.Administrator'),Config::get('constants.Certificate_administrator')))
+                        @endcan
+                        @can('view-members')
                             <li class="nav-item dropdown">
                                 <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                     {{'Members'}}
                                 </a>
                                 <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-                                    <a class="dropdown-item" href="{{ url('users') }}">{{'Current members'}}</a>
-                                    @if(\Illuminate\Support\Facades\Auth::user()->hasRole(Config::get('constants.Administrator')))
-                                        <a class="dropdown-item" href="{{ url('users/old_members') }}">{{'Old members'}}</a>
-                                        <a class="dropdown-item" href="{{ url('users/pending_members') }}">{{'Pending users'}}</a>
-                                        <a class="dropdown-item" href="{{ url('rols') }}">{{'Roles'}}</a>
-                                    @endif
-                                    <a class="dropdown-item" href="{{ url('certificates') }}">{{'Certificates'}}</a>
+                                    <a class="dropdown-item" href="{{ route('users.index') }}">{{'Current members'}}</a>
+                                    @can('manage-members')
+                                        <a class="dropdown-item" href="{{ route('users.index-old-members') }}">{{'Old members'}}</a>
+                                        <a class="dropdown-item" href="{{ route('users.indexPendingMembers') }}">{{'Pending users'}}</a>
+                                    @endcan
+                                    @can('manage-roles')
+                                        <a class="dropdown-item" href="{{ route('rols.index') }}">{{'Roles'}}</a>
+                                    @endcan
+                                    @can('manage-certificates')
+                                        <a class="dropdown-item" href="{{ route('certificates.index') }}">{{'Certificates'}}</a>
+                                    @endcan
                                 </div>
                             </li>
-                        @endif
-                        @if(\Illuminate\Support\Facades\Auth::user()->hasRole(Config::get('constants.Content_administrator'),Config::get('constants.Activity_administrator')))
+                        @endcan
+                        @can('manage-agenda')
                             <li class="nav-item dropdown">
                                 <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                     {{'Activities'}}
                                 </a>
                                 <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-                                    <a class="dropdown-item" href="{{ url('agendaItems') }}">{{'Events'}}</a>
+                                    <a class="dropdown-item" href="{{ route('agendaItems.index') }}">{{'Events'}}</a>
                                     <a class="dropdown-item" href="{{ route('beheer.applicationForms.index') }}">{{'Application forms'}}</a>
-                                    @if(\Illuminate\Support\Facades\Auth::user()->hasRole(Config::get('constants.Administrator')))
-                                        <a class="dropdown-item" href="{{ url('agendaItemCategories') }}">{{'Event categories'}}</a>
-                                    @endif
+                                    @can('manage-agenda-categories')
+                                        <a class="dropdown-item" href="{{ route('agendaItemCategories.index') }}">{{'Event categories'}}</a>
+                                    @endcan
                                 </div>
                             </li>
-                        @endif
-                        @if(\Illuminate\Support\Facades\Auth::user()->hasRole(Config::get('constants.Content_administrator')))
+                        @endcan
+                        @can('manage-pages')
                             <li class="nav-item dropdown">
                                 <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                     {{'Content'}}
                                 </a>
                                 <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-                                    <a class="dropdown-item" href="{{ url('pages') }}">{{'Page management'}}</a>
-                                    <a class="dropdown-item" href="{{ url('newsItems') }}">{{'News items'}}</a>
-                                    @if(\Illuminate\Support\Facades\Auth::user()->hasRole(Config::get('constants.Administrator')))
-                                        <a class="dropdown-item" href="{{ url('books') }}">{{'Books'}}</a>
-                                    @endif
+                                    <a class="dropdown-item" href="{{ route('pages.index') }}">{{'Page management'}}</a>
+                                    <a class="dropdown-item" href="{{ route('newsItems.index') }}">{{'News items'}}</a>
+                                    @can('manage-library')
+                                        <a class="dropdown-item" href="{{ route('books.index') }}">{{'Books'}}</a>
+                                    @endcan
                                 </div>
                             </li>
-                        @endif
-                        @if(\Illuminate\Support\Facades\Auth::user()->hasRole(Config::get('constants.Administrator')))
+                        @endcan
+                        @can('manage-mail-lists')
                             <li class="nav-item">
-                                <a href="{{ url('mailList') }}" class="nav-link">
+                                <a href="{{ route('mailList.index') }}" class="nav-link">
                                     {{'Mailing lists'}}
                                 </a>
                             </li>
+                        @endcan
+                        @can('view-user-event-log')
                             <li class="nav-item">
-                                <a href="{{ url('userEventLog') }}" class="nav-link">
+                                <a href="{{ route('user-event-log-entry.index') }}" class="nav-link">
                                     {{'User event log'}}
                                 </a>
                             </li>
+                        @endcan
+                        @can('manage-settings')
                             <li class="nav-item">
-                                <a href="{{ url('beheer/settings') }}" class="nav-link">
+                                <a href="{{ route('beheer.settings.index') }}" class="nav-link">
                                     {{'Setting'}}
                                 </a>
                             </li>
-                        @endif
-                    @endif
+                        @endcan
+                    @endguest
                 </ul>
               </div>
             </nav>

@@ -2,10 +2,10 @@
 
 namespace Tests\Feature\Management;
 
+use App\Enums\Role;
 use App\Models\Setting;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Support\Facades\Config;
 use PHPUnit\Framework\Attributes\Test;
 use Tests\TestCase;
 
@@ -20,7 +20,7 @@ class SettingsControllerTest extends TestCase
         parent::setUp();
 
         $this->admin = User::factory()->create();
-        $this->admin->roles()->attach(Config::get('constants.Administrator'));
+        $this->admin->roles()->attach(Role::Administrator->value);
     }
 
     #[Test]
@@ -54,7 +54,7 @@ class SettingsControllerTest extends TestCase
     }
 
     #[Test]
-    public function a_member_without_the_administrator_role_can_not_view_settings()
+    public function a_member_without_the_ability_can_not_view_settings()
     {
         $member = User::factory()->create();
 

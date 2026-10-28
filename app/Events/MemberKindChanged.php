@@ -18,4 +18,14 @@ class MemberKindChanged implements LoggableUserEventInterface
     {
         //
     }
+
+    public function logDetails(): string
+    {
+        return $this->user->getName() . " changed from " . $this->previousMemberType . " to " . $this->newMemberType;
+    }
+
+    public function loggedUser(): ?User
+    {
+        return $this->user;
+    }
 }

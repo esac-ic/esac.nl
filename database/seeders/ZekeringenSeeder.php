@@ -18,13 +18,13 @@ class ZekeringenSeeder extends Seeder
      */
     public function run()
     {
-        $zekeringen = Zekering::factory()->count(self::AMOUNT)->create(['createdBy' => 1]);
+        $zekeringen = Zekering::factory()->count(self::AMOUNT)->create(['created_by' => 1]);
 
         foreach ($zekeringen as $zekering) {
             Zekering::factory()
                 ->count(rand(0, self::MAX_CHILDREN))
                 ->childOf($zekering)
-                ->create(['createdBy' => 1]);
+                ->create(['created_by' => 1]);
         }
     }
 }

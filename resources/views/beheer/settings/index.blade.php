@@ -21,7 +21,7 @@
 
         <div class="col-md-6">
             <div class="btn-group mt-2 float-md-right" role="group" aria-label="Actions">
-                <a class="mr-1 ml-1" href="{{ url('beheer/settings/edit') }}" class="btn btn-primary">
+                <a class="mr-1 ml-1" href="{{ route('beheer.settings.edit') }}" class="btn btn-primary">
                     <span title="{{ 'Edit settings' }}" class="ion-edit font-size-120" aria-hidden="true"></span>
                     {{ 'Edit settings' }}
                 </a>

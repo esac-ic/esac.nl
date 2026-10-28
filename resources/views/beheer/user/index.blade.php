@@ -5,29 +5,29 @@
 @endsection
 
 @section('content')
-    @if(Session::has('message'))
+    @session('message')
         <div class="alert alert-success alert-dismissible fade show" role="alert">
-            {{Session::get('message')}}
+            {{ $value }}
             <button type="button" class="close" data-dismiss="alert" aria-label="Close">
                 <span aria-hidden="true">&times;</span>
             </button>
         </div>
-    @endif
-    @if(Session::has('error'))
+    @endsession
+    @session('error')
         <div class="alert alert-danger alert-dismissible fade show" role="alert">
-            {{Session::get('error')}}
+            {{ $value }}
             <button type="button" class="close" data-dismiss="alert" aria-label="Close">
                 <span aria-hidden="true">&times;</span>
             </button>
         </div>
-    @endif
+    @endsession
 
     <div class="row mb-3">
         <div class="col-md-6">
             <h1>{{'Current members'}}</h1>
         </div>
 
-        @if(\Illuminate\Support\Facades\Auth::user()->hasRole(Config::get('constants.Administrator')))
+        @can('manage-members')
         <div class="col-md-6">
             <div class="btn-group mt-2 float-md-right" role="group" aria-label="Actions">
                 <a href="{{route('users.create')}}" class="btn btn-primary" title="{{'New user'}}">
@@ -44,7 +44,7 @@
                 </a>
             </div>
         </div>
-        @endif
+        @endcan
     </div>
     <table id="users" class="table table-striped dt-responsive nowrap" style="width:100%">
         <thead>
@@ -64,8 +64,8 @@
                 <td>{{trans('kind_of_member.' . $user->kind_of_member)}}</td>
                 <td>@for($i=0; $i<count($user->roles);$i++) {{$user->roles[$i]->id}}@endfor</td>
                 <td>
-                    <a class="mr-1 ml-1" href="{{url('/users/' . $user->id . '/edit')}}"><span title="{{'Edit user'}}" class="ion-edit font-size-120" aria-hidden="true"></span></a>
-                    <a class="mr-1 ml-1" href="{{url('/users/'. $user->id)}}"><span title="{{'Show user information'}}" class="ion-eye font-size-120" aria-hidden="true"></span></a>
+                    <a class="mr-1 ml-1" href="{{route('users.edit', $user)}}"><span title="{{'Edit user'}}" class="ion-edit font-size-120" aria-hidden="true"></span></a>
+                    <a class="mr-1 ml-1" href="{{route('users.show', $user)}}"><span title="{{'Show user information'}}" class="ion-eye font-size-120" aria-hidden="true"></span></a>
                 </td>
             </tr>
         @endforeach

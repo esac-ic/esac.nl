@@ -2,11 +2,11 @@
 
 namespace Tests\Feature\Agenda;
 
+use App\Enums\Role;
 use App\Models\AgendaItem;
 use App\Models\AgendaItemCategory;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Support\Facades\Config;
 use PHPUnit\Framework\Attributes\Test;
 use Tests\TestCase;
 
@@ -29,7 +29,7 @@ class AgendaFilterTest extends TestCase
         parent::setUp();
         $this->user = $user = User::factory()->create();
 
-        $user->roles()->attach(Config::get('constants.Administrator'));
+        $user->roles()->attach(Role::Administrator->value);
         $this->be($user);
 
         session()->start();

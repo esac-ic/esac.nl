@@ -3,26 +3,26 @@
 namespace App\Http\Controllers;
 
 use App\Models\AgendaItem;
-use App\Repositories\AgendaItemCategoryRepository;
-use App\Repositories\AgendaItemRepository;
-use App\Repositories\ApplicationFormRepositories\ApplicationFormRepository;
+use App\Models\AgendaItemCategory;
+use App\Models\ApplicationForm\ApplicationForm;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Routing\Controllers\HasMiddleware;
+use Illuminate\Routing\Controllers\Middleware;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Storage;
 use Intervention\Image\Drivers\Gd\Driver;
 use Intervention\Image\ImageManager;
 
-class AgendaItemController extends Controller
+class AgendaItemController extends Controller implements HasMiddleware
 {
-    public function __construct(
-        private readonly AgendaItemRepository $_agendaItemRepository,
-        private readonly AgendaItemCategoryRepository $_agendaItemCategoryRepository,
-        private readonly ApplicationFormRepository $_applicationFormRepository
-    ) {
-        $this->middleware('auth');
-        $this->middleware('authorize:' . config('constants.Content_administrator') . ',' . config('constants.Activity_administrator'));
+    public static function middleware(): array
+    {
+        return [
+            'auth',
+            new Middleware('can:manage-agenda'),
+        ];
     }
 
     public function index(): View
@@ -32,17 +32,20 @@ class AgendaItemController extends Controller
 
     public function create()
     {
-        $fields = $this->getFields('POST', '/agendaItems', 'Add an event');
+        $fields = $this->getFields('POST', route('agendaItems.store'), 'Add an event');
         return $this->renderCreateEditView(null, $fields);
     }
 
     public function store(Request $request): RedirectResponse
     {
         $this->validateInput($request);
-        $agendaItem = $this->_agendaItemRepository->create($request->all());
+        $agendaItem = new AgendaItem($request->all())->fillFromForm($request->all());
+        $agendaItem->image_url = "";
+        $agendaItem->created_by = $request->user()->id;
+        $agendaItem->save();
         $this->handleImage($request, $agendaItem);
         Session::flash("message", 'Event added');
-        return redirect('/agendaItems');
+        return to_route('agendaItems.index');
     }
 
     public function show(AgendaItem $agendaItem): View
@@ -52,43 +55,52 @@ class AgendaItemController extends Controller
 
     public function edit(AgendaItem $agendaItem)
     {
-        $fields = $this->getFields('PATCH', '/agendaItems/' . $agendaItem->id, 'Edit event');
+        $fields = $this->getFields('PATCH', route('agendaItems.update', $agendaItem), 'Edit event');
         return $this->renderCreateEditView($agendaItem, $fields);
     }
 
     public function update(Request $request, AgendaItem $agendaItem): RedirectResponse
     {
         $this->validateInput($request);
-        $this->_agendaItemRepository->update($agendaItem->id, $request->all());
+        $agendaItem->title = $request->input('title');
+        $agendaItem->text = $request->input('text');
+        $agendaItem->short_description = $request->input('short_description');
+        $agendaItem->category = $request->input('category');
+        $agendaItem->fillFromForm($request->all())->save();
         $this->handleImage($request, $agendaItem);
         Session::flash("message", 'Event edited');
-        return redirect('/agendaItems');
+        return to_route('agendaItems.index');
     }
 
-    public function destroy($id): RedirectResponse
+    public function destroy(AgendaItem $agendaItem): RedirectResponse
     {
-        $this->_agendaItemRepository->delete($id);
+        $agendaItem->delete();
+
+        if ($agendaItem->image_url != "") {
+            Storage::disk('public')->delete($agendaItem->image_url);
+        }
+
         Session::flash("message", 'Event removed');
-        return redirect('/agendaItems');
+        return to_route('agendaItems.index');
     }
 
-    public function copy(AgendaItem $agendaItem): RedirectResponse
+    public function copy(Request $request, AgendaItem $agendaItem): RedirectResponse
     {
-        $newAgendaItem = $this->_agendaItemRepository->copy($agendaItem);
-        return redirect('/agendaItems/' . $newAgendaItem->id . '/edit');
+        $newAgendaItem = $agendaItem->copyFor($request->user());
+        return to_route('agendaItems.edit', $newAgendaItem);
     }
 
     private function validateInput(Request $request): void
     {
-        $this->validate($request, [
+        $request->validate([
             'title' => 'required|max:255',
-            'shortDescription' => 'required|max:100',
+            'short_description' => 'required|max:100',
             'text' => 'required',
             'thumbnail' => 'image|mimes:jpeg,png,jpg',
             'category' => 'required|numeric|min:1',
             'applicationForm' => 'required|numeric|min:0',
-            'endDate' => 'required|date',
-            'startDate' => 'required|date',
+            'end_date' => 'required|date',
+            'start_date' => 'required|date',
         ]);
     }
 
@@ -117,7 +129,7 @@ class AgendaItemController extends Controller
     private function getCategories(): array
     {
         $categories = [];
-        foreach ($this->_agendaItemCategoryRepository->all(['id', 'name']) as $category) {
+        foreach (AgendaItemCategory::all(['id', 'name']) as $category) {
             $categories[$category->id] = $category->name;
         }
         return $categories;
@@ -129,7 +141,7 @@ class AgendaItemController extends Controller
     private function getForms(): array
     {
         $forms = [];
-        foreach ($this->_applicationFormRepository->all(['id', 'name']) as $form) {
+        foreach (ApplicationForm::all(['id', 'name']) as $form) {
             $forms[$form->id] = $form->name;
         }
         return $forms;

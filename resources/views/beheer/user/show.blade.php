@@ -1,4 +1,5 @@
 @extends('layouts.beheer')
+@use('Illuminate\Support\Carbon')
 
 @section('title')
 {{'Info of ' . $user->getName()}}
@@ -6,14 +7,14 @@
 
 
 @section('content')
-    @if(Session::has('message'))
+    @session('message')
         <div class="alert alert-success alert-dismissible fade show" role="alert">
-            {{Session::get('message')}}
+            {{ $value }}
             <button type="button" class="close" data-dismiss="alert" aria-label="Close">
                 <span aria-hidden="true">&times;</span>
             </button>
         </div>
-    @endif
+    @endsession
 
     <div class="row mb-3">
         <div class="col-md-6">
@@ -21,8 +22,8 @@
         </div>
         <div class="col-md-6">
             <div class="btn-group mt-2 float-md-right" role="group" aria-label="Actions">
-            @if($user->isPendingMember() and \Illuminate\Support\Facades\Auth::user()->hasRole(Config::get('constants.Administrator')))
-                {{ html()->form('POST', url('/users/'.$user->id . '/approveAsPendingMember'))->open() }}
+            @if($user->isPendingMember() && auth()->user()->can('manage-members'))
+                {{ html()->form('POST', route('users.approveAsPendingMember', $user))->open() }}
                 @method('PATCH')
                 <button type="submit" class="btn btn-success"><em class="ion-checkmark"></em> {{'Approve as member'}}</button>
                 {{ html()->form()->close() }}
@@ -36,36 +37,36 @@
                     <button type="submit" class="btn btn-danger"><em class="ion-trash-a"></em> {{'Remove as pending'}}</button>
                 </form>
             @else
-                @if($user->isOldMember() and \Illuminate\Support\Facades\Auth::user()->hasRole(Config::get('constants.Administrator')))
-                    {{ html()->form('POST', url('/users/'.$user->id . '/makeActiveMember'))->open() }}
+                @if($user->isOldMember() && auth()->user()->can('manage-members'))
+                    {{ html()->form('POST', route('users.makeActiveMember', $user))->open() }}
                     @method('PATCH')
                         <button type="submit" class="btn btn-success"><em class="ion-plus"></em> {{'Make active member'}}</button>
                     {{ html()->form()->close() }}
                 @endif
-                <a href="{{url('/users/'.$user->id . '/edit' )}}" class="btn btn-primary">
+                <a href="{{route('users.edit', $user)}}" class="btn btn-primary">
                     <span title="{{'Edit'}}" class="ion-edit" aria-hidden="true"></span>
                     {{'Edit'}}
                 </a>
-                @if(\Illuminate\Support\Facades\Auth::user()->hasRole(Config::get('constants.Administrator'),Config::get('constants.Certificate_administrator')))
-                    <a href="{{url('/users/'.$user->id . '/addCertificate' )}}" class="btn btn-primary">
+                @can('manage-certificates')
+                    <a href="{{ route('users.certificates.create', $user) }}" class="btn btn-primary">
                         <span title="{{'Add certificate'}}" class="ion-plus" aria-hidden="true"></span>
                         {{'Add certificate'}}
                     </a>
-                @endif
+                @endcan
                 @if(app('request')->input('back') != "false")
-                    <a href="{{url('/users/')}}" class="btn btn-primary">
+                    <a href="{{route('users.index')}}" class="btn btn-primary">
                         <span title="{{'Back'}}" class="ion-android-arrow-back" aria-hidden="true"></span>
                         {{'Back'}}
                     </a>
                 @endif
-                @if(\Illuminate\Support\Facades\Auth::user()->hasRole(Config::get('constants.Administrator')))
+                @can('manage-members')
                     @if($user->isActiveMember())
-                        {{ html()->form('POST', url('/users/'.$user->id . '/removeAsActiveMember'))->open() }}
+                        {{ html()->form('POST', route('users.removeAsActiveMember', $user))->open() }}
                         @method('PATCH')
                         <button type="submit" class="btn btn-danger"><em class="ion-trash-a"></em> {{'Remove as active member'}}</button>
                         {{ html()->form()->close() }}
                     @endif
-                @endif
+                @endcan
             @endif
             </div>
         </div>
@@ -95,7 +96,7 @@
                     <a class="nav-link" id="tab3" data-toggle="tab" href="#registrations" role="tab" aria-controls="security" aria-selected="false">{{'Registrations' }}</a>
                 </li>
             </ul>
-            @if(\Illuminate\Support\Facades\Auth::user()->hasRole(Config::get('constants.Administrator')) || \Illuminate\Support\Facades\Auth::user()->id === $user->id)
+            @can('update', $user)
             <div class="tab-content space-sm">
                 <div class="tab-pane fade show active" id="tab1-content" role="tabpanel" aria-labelledby="tab1-content">
                     <table class="table table-striped" style="width:100%">
@@ -109,7 +110,7 @@
                         </tr>
                         <tr>
                             <td>{{'Phone number'}}</td>
-                            <td>{{$user->phonenumber}}</td>
+                            <td>{{$user->phone_number}}</td>
                         </tr>
                         <tr>
                             <td>{{'First name'}}</td>
@@ -125,7 +126,7 @@
                         </tr>
                         <tr>
                             <td>{{'Address'}}</td>
-                            <td>{{$user->street . " " . $user->houseNumber}}</td>
+                            <td>{{$user->street . " " . $user->house_number}}</td>
                         </tr>
                         <tr>
                             <td>{{'City'}}</td>
@@ -145,11 +146,11 @@
                         </tr>
                         <tr>
                             <td>{{'Alternative phone number'}}</td>
-                            <td>{{$user->phonenumber_alt}}</td>
+                            <td>{{$user->phone_number_alt}}</td>
                         </tr>
                         <tr>
                             <td>{{'Birthdate'}}</td>
-                            <td>{{$user->birthDay}}</td>
+                            <td>{{$user->birthday}}</td>
                         </tr>
                         <tr>
                             <td>{{'Kind of member'}}</td>
@@ -165,11 +166,11 @@
                         </tr>
                         <tr>
                             <td>{{'User created at'}}</td>
-                            <td>{{\Carbon\Carbon::parse($user->created_at)->format('d-m-Y')}}</td>
+                            <td>{{ Carbon::parse($user->created_at)->format('d-m-Y') }}</td>
                         </tr>
                         <tr>
                             <td>{{'User updated at'}}</td>
-                            <td>{{\Carbon\Carbon::parse($user->updated_at)->format('d-m-Y')}}</td>
+                            <td>{{ Carbon::parse($user->updated_at)->format('d-m-Y') }}</td>
                         </tr>
                         <tr>
                             <td>{{'ID'}}</td>
@@ -178,7 +179,7 @@
                         @isset($user->lid_af)
                         <tr>
                             <td>User removed as active member at</td>
-                            <td>{{\Carbon\Carbon::parse($user->lid_af)->format('d-m-Y')}}</td>
+                            <td>{{ Carbon::parse($user->lid_af)->format('d-m-Y') }}</td>
                         </tr>
                         @endisset
                     </table>
@@ -187,11 +188,11 @@
                     <table class="table table-striped" style="width:100%">
                         <tr>
                             <td>{{'IBAN'}}</td>
-                            <td>{{$user->IBAN}}</td>
+                            <td>{{$user->iban}}</td>
                         </tr>
                         <tr>
                             <td>{{'BIC'}}</td>
-                            <td>{{$user->BIC}}</td>
+                            <td>{{$user->bic}}</td>
                         </tr>
                         <tr>
                             <td>{{'Accept Automatic Collection'}}</td>
@@ -203,27 +204,27 @@
                     <table class="table table-striped" style="width:100%">
                         <tr>
                             <td>{{'Emergency address street'}}</td>
-                            <td>{{$user->emergencystreet}}</td>
+                            <td>{{$user->emergency_street}}</td>
                         </tr>
                         <tr>
                             <td>{{'Emergency address house number'}}</td>
-                            <td>{{$user->emergencyHouseNumber}}</td>
+                            <td>{{$user->emergency_house_number}}</td>
                         </tr>
                         <tr>
                             <td>{{'Emergency address postal code'}}</td>
-                            <td>{{$user->emergencyzipcode}}</td>
+                            <td>{{$user->emergency_zipcode}}</td>
                         </tr>
                         <tr>
                             <td>{{'Emergency address city'}}</td>
-                            <td>{{$user->emergencycity}}</td>
+                            <td>{{$user->emergency_city}}</td>
                         </tr>
                         <tr>
                             <td>{{'Emergency address country'}}</td>
-                            <td>{{trans('countries.' . $user->emergencycountry)}}</td>
+                            <td>{{trans('countries.' . $user->emergency_country)}}</td>
                         </tr>
                         <tr>
                             <td>{{'Emergency phone number'}}</td>
-                            <td>{{$user->emergencyNumber}}</td>
+                            <td>{{$user->emergency_number}}</td>
                         </tr>
                     </table>
                 </div>
@@ -242,7 +243,7 @@
                         @endif
                     </table>
                 </div>
-                @endif
+                @endcan
                 <div class="tab-pane fade" id="certifications" role="tabpanel" aria-labelledby="tab3-content">
                     <table class="table table-striped" style="width:100%">
                         <thead>
@@ -268,11 +269,11 @@
                                     {{$certificate->abbreviation}}
                                 </td>
                                 <td>
-                                    <a href="{{url('/users/' . $user->id . '/addCertificate/' . $certificate->id)}}"><span title="Edit Certificate" class="ion-edit" aria-hidden="true"></span></a>
-                                    <a href="{{url('/users/' . $user->id . '/addCertificate/' . $certificate->id)}}" onclick="event.preventDefault(); document.getElementById('delete-usercertificate-{{$certificate->id}}').submit();">
+                                    <a href="{{ route('users.certificates.edit', [$user, $certificate]) }}"><span title="Edit Certificate" class="ion-edit" aria-hidden="true"></span></a>
+                                    <a href="{{ route('users.certificates.destroy', [$user, $certificate]) }}" onclick="event.preventDefault(); document.getElementById('delete-usercertificate-{{$certificate->id}}').submit();">
                                         <span title="Remove Certificate" class="ion-trash-a" aria-hidden="true"></span>
                                     </a>
-                                    {{ html()->form('POST', url('/users/' . $user->id . '/addCertificate/' . $certificate->id))->id("delete-usercertificate-$certificate->id")->open() }}
+                                    {{ html()->form('POST', route('users.certificates.destroy', [$user, $certificate]))->id("delete-usercertificate-$certificate->id")->open() }}
                                     @method('DELETE')
                                     {{ html()->form()->close() }}
                                 </td>
@@ -311,7 +312,7 @@
         $('#registrations_table').DataTable({
             "order": [[ 1, "asc" ]],
             "ajax": {
-                'url' : '{{url('api/user/registrations?user_id=' . $user->id)}}',
+                'url' : '{{ route('api.user.registrations', ['user_id' => $user->id]) }}',
                 "dataSrc": ""
             },
             "columns": [

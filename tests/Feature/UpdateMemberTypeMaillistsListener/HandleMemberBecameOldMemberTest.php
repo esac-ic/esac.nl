@@ -2,7 +2,7 @@
 
 namespace Tests\Feature\UpdateMemberTypeMaillistsListener;
 
-use App\CustomClasses\MailList\MailListFacade;
+use App\Services\Mailman;
 use App\Events\MemberBecameOldMember;
 use App\Listeners\UpdateMemberTypeMaillists;
 use App\Models\User;
@@ -20,12 +20,12 @@ class HandleMemberBecameOldMemberTest extends TestCase
     public function an_old_member_is_removed_from_all_mail_lists()
     {
         $user = User::factory()->create();
-        $mailListFacade = Mockery::mock(MailListFacade::class);
-        $mailListFacade->shouldReceive('deleteUserForAllMailList')
+        $mailman = Mockery::mock(Mailman::class);
+        $mailman->shouldReceive('deleteUserForAllMailList')
             ->with(Mockery::on(fn ($argument) => $user->is($argument)))
             ->once();
 
-        new UpdateMemberTypeMaillists($mailListFacade)->handleMemberBecameOldMember(new MemberBecameOldMember($user));
+        new UpdateMemberTypeMaillists($mailman)->handleMemberBecameOldMember(new MemberBecameOldMember($user));
     }
 
     #[Test]

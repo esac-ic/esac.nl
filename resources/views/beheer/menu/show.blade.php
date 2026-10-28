@@ -12,11 +12,11 @@ Page
 
         <div class="col-md-6">
             <div class="btn-group mt-2 float-md-right" role="group" aria-label="Actions">
-                <a href="{{url('/pages/'.$page->id . '/edit' )}}" class="btn btn-primary">
+                <a href="{{route('pages.edit', $page)}}" class="btn btn-primary">
                     <span title="{{'Edit'}}" class="ion-edit" aria-hidden="true"></span>
                     {{'Edit'}}
                 </a>
-                <a href="{{url('/pages/')}}" class="btn btn-primary">
+                <a href="{{route('pages.index')}}" class="btn btn-primary">
                     <span title="{{'Back'}}" class="ion-android-arrow-back" aria-hidden="true"></span>
                     {{'Back'}}
                 </a>
@@ -49,7 +49,7 @@ Page
                 </tr>
                 <tr>
                     <td>{{'URL name'}}</td>
-                    <td>{{$page->urlName}}</td>
+                    <td>{{$page->url_name}}</td>
                 </tr>
                 <tr>
                     <td>{{'User needs to be logged in to view the page'}}</td>

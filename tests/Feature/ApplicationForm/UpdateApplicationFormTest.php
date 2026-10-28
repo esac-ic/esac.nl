@@ -2,12 +2,12 @@
 
 namespace Tests\Feature\ApplicationForm;
 
+use App\Enums\Role;
 use App\Models\ApplicationForm\ApplicationForm;
 use App\Models\ApplicationForm\ApplicationFormRow;
 use App\Models\ApplicationForm\ApplicationFormRowOption;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Support\Facades\Config;
 use PHPUnit\Framework\Attributes\Test;
 use Tests\TestCase;
 
@@ -40,7 +40,7 @@ class UpdateApplicationFormTest extends TestCase
         $this->user = $user = User::factory()->create();
         $this->url .= "/" . $this->applicationForm->id;
 
-        $user->roles()->attach(Config::get('constants.Content_administrator'));
+        $user->roles()->attach(Role::ContentAdministrator->value);
         $this->be($user);
 
         session()->start();
@@ -102,7 +102,7 @@ class UpdateApplicationFormTest extends TestCase
     #[Test]
     public function update_application_form_as_administrator_should_return_403(): void
     {
-        $this->user->roles()->sync([Config::get('constants.Administrator')]);
+        $this->user->roles()->sync([Role::Administrator->value]);
 
         $body = [
             'name' => 'test name',
@@ -127,7 +127,7 @@ class UpdateApplicationFormTest extends TestCase
     #[Test]
     public function update_application_form_as_certificate_administrator_should_return_403(): void
     {
-        $this->user->roles()->sync([Config::get('constants.Certificate_administrator')]);
+        $this->user->roles()->sync([Role::CertificateAdministrator->value]);
 
         $body = [
             'name' => 'test name',

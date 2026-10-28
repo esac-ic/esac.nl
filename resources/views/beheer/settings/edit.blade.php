@@ -10,7 +10,7 @@
             <h3>{{'Edit settings'}}</h3>
         </div>
         <div class="card-body">
-            {{ html()->form('POST', url('/beheer/settings'))->acceptsFiles()->open() }}
+            {{ html()->form('POST', route('beheer.settings.update'))->acceptsFiles()->open() }}
             @method('PUT')
             @foreach($settings as $setting)
                 <div class="form-group">
@@ -23,7 +23,7 @@
 
     <div class="my-4">
         {{ html()->submit('Save')->class('btn btn-primary') }}
-        <a class="btn btn-danger btn-close" href="{{url('/beheer/settings')}}">{{'Cancel'}}</a>
+        <a class="btn btn-danger btn-close" href="{{ route('beheer.settings.index') }}">{{'Cancel'}}</a>
         {{ html()->form()->close() }}
     </div>
 @endsection

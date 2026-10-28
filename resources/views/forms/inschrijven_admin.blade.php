@@ -6,7 +6,7 @@
 
 @section('content')
     <div id="app">
-        {{ html()->form('POST', url('forms/admin/' . $agendaItem->id))->open() }}
+        {{ html()->form('POST', route('forms.admin.store', $agendaItem))->open() }}
             @csrf
             <div class="card">
                 <div class="card-header">
@@ -23,7 +23,7 @@
 
             <div class="my-4">
                 {{ html()->submit('Submit')->class('btn btn-primary') }}
-                <a class="btn btn-danger btn-close" href="{{url('/forms/users/'. $agendaItem->id)}}">{{'Cancel'}}</a>
+                <a class="btn btn-danger btn-close" href="{{route('forms.users.index', $agendaItem)}}">{{'Cancel'}}</a>
             </div>
         {{ html()->form()->close() }}
     </div>

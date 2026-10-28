@@ -131,12 +131,12 @@ class AgendaApplicationFormService
             "preposition",
             "lastname",
             "street",
-            "houseNumber",
+            "house_number",
             "city",
             "zipcode",
             "email",
-            "phonenumber",
-            "birthDayFormatted",
+            "phone_number",
+            "birthdayFormatted",
         ];
         $selectedElements = array_merge($selectedElements, $users["customfields"]);
 

@@ -4,37 +4,33 @@ namespace App\Http\Controllers;
 
 use App\Models\Certificate;
 use App\Models\User;
-use App\Repositories\CertificateRepository;
-use App\Repositories\UserRepository;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Config;
+use Illuminate\Routing\Controllers\HasMiddleware;
+use Illuminate\Routing\Controllers\Middleware;
 
-class UserCertificateController extends Controller
+class UserCertificateController extends Controller implements HasMiddleware
 {
-    /**
-     * Create a new controller instance.
-     *
-     * @return void
-     */
-    public function __construct(private readonly UserRepository $_userRepository, private readonly CertificateRepository $_certificateRepository)
+    public static function middleware(): array
     {
-        $this->middleware('auth');
-        $this->middleware('authorize:' . Config::get('constants.Administrator') . ',' . Config::get('constants.Certificate_administrator'));
+        return [
+            'auth',
+            new Middleware('can:manage-certificates'),
+        ];
     }
 
     public function addCertificate(Request $request, User $user): View
     {
         $fields = ['title' => 'Add certificate',
             'method' => 'POST',
-            'url' => '/users/' . $user->id . '/addCertificate'];
+            'url' => route('users.certificates.store', $user)];
 
         $certificates = [];
 
-        $userCertificates = $this->_userRepository->getUserCertificates($user->id);
+        $userCertificates = $user->certificates;
 
-        foreach ($this->_certificateRepository->all() as $cetificate) {
+        foreach (Certificate::all() as $cetificate) {
             if (!$userCertificates->contains($cetificate)) {
                 $certificates[$cetificate->id] = $cetificate->name;
             }
@@ -48,20 +44,20 @@ class UserCertificateController extends Controller
     public function saveCertificate(Request $request, User $user): RedirectResponse
     {
         $this->validateInput($request);
-        $this->_userRepository->addCertificate($user->id, $request->all());
+        $user->certificates()->attach($request->input('certificate_id'));
 
-        return redirect('/users/' . $user->id);
+        return to_route('users.show', $user);
     }
 
     public function editUserCertificate(Request $request, User $user, Certificate $certificate): View
     {
         $fields = ['title' => 'Edit certificate',
             'method' => 'PATCH',
-            'url' => '/users/' . $user->id . '/addCertificate/' . $certificate->id];
+            'url' => route('users.certificates.update', [$user, $certificate])];
 
         $certificates = [];
 
-        foreach ($this->_certificateRepository->all() as $cetificate) {
+        foreach (Certificate::all() as $cetificate) {
             $certificates[$cetificate->id] = $cetificate->name;
         }
 
@@ -74,20 +70,20 @@ class UserCertificateController extends Controller
     {
         $this->validateInput($request);
         $user->certificates()->detach($certificate->id);
-        $this->_userRepository->addCertificate($user->id, $request->all());
-        return redirect('/users/' . $user->id);
+        $user->certificates()->attach($request->input('certificate_id'));
+        return to_route('users.show', $user);
     }
 
     public function deleteUserCertificate(Request $request, User $user, Certificate $certificate): RedirectResponse
     {
         $user->certificates()->detach($certificate->id);
 
-        return redirect('/users/' . $user->id);
+        return to_route('users.show', $user);
     }
 
     private function validateInput(Request $request): void
     {
-        $this->validate($request, [
+        $request->validate([
             'certificate_id' => 'required|numeric|min:0',
         ]);
     }

@@ -29,11 +29,11 @@ class PublicFormPagesTest extends TestCase
     {
         MenuItem::forceCreate([
             'name' => $urlName,
-            'urlName' => $urlName,
+            'url_name' => $urlName,
             'login' => $login,
             'editable' => true,
             'deletable' => false,
-            'menuItem' => true,
+            'menu_item' => true,
             'content' => "$urlName content",
         ]);
     }
@@ -46,7 +46,7 @@ class PublicFormPagesTest extends TestCase
 
         $this->assertForm($response, 'POST', 'signup');
         $this->assertSelected($response, 'country', 'NL');
-        $this->assertSelected($response, 'emergencycountry', 'NL');
+        $this->assertSelected($response, 'emergency_country', 'NL');
         $this->assertChecked($response, 'privacy_policy', false);
         $this->assertChecked($response, 'incasso', false);
         $this->assertChecked($response, 'termsconditions', false);
@@ -64,7 +64,7 @@ class PublicFormPagesTest extends TestCase
             'email' => 'piet@example.com',
             'password' => 'geheim123',
             'country' => 'BE',
-            'emergencycountry' => 'DE',
+            'emergency_country' => 'DE',
             'privacy_policy' => $checked('privacy_policy'),
             'incasso' => $checked('incasso'),
             '_token' => csrf_token(),
@@ -74,7 +74,7 @@ class PublicFormPagesTest extends TestCase
         $this->assertFieldValue($response, 'email', 'piet@example.com');
         $this->assertFieldValue($response, 'password', '');
         $this->assertSelected($response, 'country', 'BE');
-        $this->assertSelected($response, 'emergencycountry', 'DE');
+        $this->assertSelected($response, 'emergency_country', 'DE');
         $this->assertChecked($response, 'privacy_policy');
         $this->assertChecked($response, 'incasso');
         $this->assertChecked($response, 'termsconditions', false);
@@ -115,7 +115,7 @@ class PublicFormPagesTest extends TestCase
         $this->be(User::factory()->create());
         $agendaItem = AgendaItem::factory()->create([
             'application_form_id' => ApplicationForm::factory()->create()->id,
-            'subscription_endDate' => now()->addWeek(),
+            'subscription_end_date' => now()->addWeek(),
         ]);
 
         $response = $this->get("forms/$agendaItem->id")->assertOk();

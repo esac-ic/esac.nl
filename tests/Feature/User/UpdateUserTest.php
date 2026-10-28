@@ -2,12 +2,12 @@
 
 namespace Tests\Feature\User;
 
-use App\CustomClasses\MailList\MailListFacade;
+use App\Services\Mailman;
+use App\Enums\Role;
 use App\Events\MemberKindChanged;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Carbon;
-use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Event;
 use Mockery\MockInterface;
 use Tests\TestCase;
@@ -27,23 +27,23 @@ class UpdateUserTest extends TestCase
             'firstname' => 'Initial',
             'lastname' => 'Initial',
             'street' => 'Initial',
-            'houseNumber' => '1',
+            'house_number' => '1',
             'city' => 'Initial',
             'zipcode' => '1111AA',
             'country' => 'Initial',
-            'phonenumber' => '123456789',
-            'emergencyNumber' => '123456789',
-            'emergencyHouseNumber' => '1',
-            'emergencystreet' =>  'Initial',
-            'emergencycity' => 'Initial',
-            'emergencyzipcode' =>  '1111AA',
-            'emergencycountry' => 'Initial',
+            'phone_number' => '123456789',
+            'emergency_number' => '123456789',
+            'emergency_house_number' => '1',
+            'emergency_street' =>  'Initial',
+            'emergency_city' => 'Initial',
+            'emergency_zipcode' =>  '1111AA',
+            'emergency_country' => 'Initial',
             'birthday' => '1990-01-01',
-            'IBAN' =>  '123456789',
+            'iban' =>  '123456789',
             'kind_of_member' => 'Initial'
         
         ]);
-        $this->admin->roles()->attach(Config::get('constants.Administrator'));
+        $this->admin->roles()->attach(Role::Administrator->value);
         
         $this->member = User::factory()->member()->create([
             'email' => 'Initial', //email should change
@@ -56,28 +56,28 @@ class UpdateUserTest extends TestCase
             'email' => $this->admin->email,
             'firstname' => 'New',
             'lastname' => 'Second',
-            'password' => '', //password doesn't change, but the userRepository errors when password is not present in the request
+            'password' => '', //password doesn't change, but updating the user errors when password is not present in the request
             'street' => 'Second',
-            'houseNumber' => '2',
+            'house_number' => '2',
             'city' => 'Second',
             'zipcode' => '2222AA',
             'country' => 'Second',
-            'phonenumber' => '234567891',
-            'emergencyNumber' => '234567891',
-            'emergencyHouseNumber' => '2',
-            'emergencystreet' =>  'Second',
-            'emergencycity' => 'Second',
-            'emergencyzipcode' =>  '2222AA',
-            'emergencycountry' => 'Second',
-            'birthDay' => '1990-02-02',
-            'IBAN' =>  '234567891',
+            'phone_number' => '234567891',
+            'emergency_number' => '234567891',
+            'emergency_house_number' => '2',
+            'emergency_street' =>  'Second',
+            'emergency_city' => 'Second',
+            'emergency_zipcode' =>  '2222AA',
+            'emergency_country' => 'Second',
+            'birthday' => '1990-02-02',
+            'iban' =>  '234567891',
             'kind_of_member' => $this->admin->kind_of_member,
         ];
         $oldEmail = $this->admin->email;
         
         Event::fake(); //make sure event listeners are not called
         
-        $mock = $this->mock(MailListFacade::class, function (MockInterface $mock) {
+        $mock = $this->mock(Mailman::class, function (MockInterface $mock) {
             $mock->shouldNotReceive('updateUserEmailFormAllMailList');
         });
         
@@ -95,19 +95,19 @@ class UpdateUserTest extends TestCase
         $this->assertEquals($newAdmin->firstname, $updateData['firstname']);
         $this->assertEquals($newAdmin->lastname, $updateData['lastname']);
         $this->assertEquals($newAdmin->street, $updateData['street']);
-        $this->assertEquals($newAdmin->houseNumber, $updateData['houseNumber']);
+        $this->assertEquals($newAdmin->house_number, $updateData['house_number']);
         $this->assertEquals($newAdmin->city, $updateData['city']);
         $this->assertEquals($newAdmin->zipcode, $updateData['zipcode']);
         $this->assertEquals($newAdmin->country, $updateData['country']);
-        $this->assertEquals($newAdmin->phonenumber, $updateData['phonenumber']);
-        $this->assertEquals($newAdmin->emergencyNumber, $updateData['emergencyNumber']);
-        $this->assertEquals($newAdmin->emergencyHouseNumber, $updateData['emergencyHouseNumber']);
-        $this->assertEquals($newAdmin->emergencystreet, $updateData['emergencystreet']);
-        $this->assertEquals($newAdmin->emergencycity, $updateData['emergencycity']);
-        $this->assertEquals($newAdmin->emergencyzipcode, $updateData['emergencyzipcode']);
-        $this->assertEquals($newAdmin->emergencycountry, $updateData['emergencycountry']);
-        $this->assertEquals($newAdmin->birthDay, new Carbon($updateData['birthDay']));
-        $this->assertEquals($newAdmin->IBAN, $updateData['IBAN']);
+        $this->assertEquals($newAdmin->phone_number, $updateData['phone_number']);
+        $this->assertEquals($newAdmin->emergency_number, $updateData['emergency_number']);
+        $this->assertEquals($newAdmin->emergency_house_number, $updateData['emergency_house_number']);
+        $this->assertEquals($newAdmin->emergency_street, $updateData['emergency_street']);
+        $this->assertEquals($newAdmin->emergency_city, $updateData['emergency_city']);
+        $this->assertEquals($newAdmin->emergency_zipcode, $updateData['emergency_zipcode']);
+        $this->assertEquals($newAdmin->emergency_country, $updateData['emergency_country']);
+        $this->assertEquals($newAdmin->birthday, new Carbon($updateData['birthday']));
+        $this->assertEquals($newAdmin->iban, $updateData['iban']);
         $this->assertEquals($newAdmin->kind_of_member, $updateData['kind_of_member']);
     }
     
@@ -117,27 +117,27 @@ class UpdateUserTest extends TestCase
             'email' => 'Second@esac.nl',
             'firstname' => 'New',
             'lastname' => 'Second',
-            'password' => '', //password doesn't change, but the userRepository errors when password is not present in the request
+            'password' => '', //password doesn't change, but updating the user errors when password is not present in the request
             'street' => 'Second',
-            'houseNumber' => '2',
+            'house_number' => '2',
             'city' => 'Second',
             'zipcode' => '2222AA',
             'country' => 'Second',
-            'phonenumber' => '234567891',
-            'emergencyNumber' => '234567891',
-            'emergencyHouseNumber' => '2',
-            'emergencystreet' =>  'Second',
-            'emergencycity' => 'Second',
-            'emergencyzipcode' =>  '2222AA',
-            'emergencycountry' => 'Second',
-            'birthDay' => '1990-02-02',
-            'IBAN' =>  '234567891',
+            'phone_number' => '234567891',
+            'emergency_number' => '234567891',
+            'emergency_house_number' => '2',
+            'emergency_street' =>  'Second',
+            'emergency_city' => 'Second',
+            'emergency_zipcode' =>  '2222AA',
+            'emergency_country' => 'Second',
+            'birthday' => '1990-02-02',
+            'iban' =>  '234567891',
             'kind_of_member' => $this->admin->kind_of_member,
         ];
         
         Event::fake(); //make sure event listeners are not called
         
-        $mock = $this->mock(MailListFacade::class, function (MockInterface $mock) {
+        $mock = $this->mock(Mailman::class, function (MockInterface $mock) {
             $mock->shouldReceive('updateUserEmailForAllMailList')->once();
         });
         
@@ -153,19 +153,19 @@ class UpdateUserTest extends TestCase
         $this->assertEquals($newAdmin->firstname, $updateData['firstname']);
         $this->assertEquals($newAdmin->lastname, $updateData['lastname']);
         $this->assertEquals($newAdmin->street, $updateData['street']);
-        $this->assertEquals($newAdmin->houseNumber, $updateData['houseNumber']);
+        $this->assertEquals($newAdmin->house_number, $updateData['house_number']);
         $this->assertEquals($newAdmin->city, $updateData['city']);
         $this->assertEquals($newAdmin->zipcode, $updateData['zipcode']);
         $this->assertEquals($newAdmin->country, $updateData['country']);
-        $this->assertEquals($newAdmin->phonenumber, $updateData['phonenumber']);
-        $this->assertEquals($newAdmin->emergencyNumber, $updateData['emergencyNumber']);
-        $this->assertEquals($newAdmin->emergencyHouseNumber, $updateData['emergencyHouseNumber']);
-        $this->assertEquals($newAdmin->emergencystreet, $updateData['emergencystreet']);
-        $this->assertEquals($newAdmin->emergencycity, $updateData['emergencycity']);
-        $this->assertEquals($newAdmin->emergencyzipcode, $updateData['emergencyzipcode']);
-        $this->assertEquals($newAdmin->emergencycountry, $updateData['emergencycountry']);
-        $this->assertEquals($newAdmin->birthDay, new Carbon($updateData['birthDay']));
-        $this->assertEquals($newAdmin->IBAN, $updateData['IBAN']);
+        $this->assertEquals($newAdmin->phone_number, $updateData['phone_number']);
+        $this->assertEquals($newAdmin->emergency_number, $updateData['emergency_number']);
+        $this->assertEquals($newAdmin->emergency_house_number, $updateData['emergency_house_number']);
+        $this->assertEquals($newAdmin->emergency_street, $updateData['emergency_street']);
+        $this->assertEquals($newAdmin->emergency_city, $updateData['emergency_city']);
+        $this->assertEquals($newAdmin->emergency_zipcode, $updateData['emergency_zipcode']);
+        $this->assertEquals($newAdmin->emergency_country, $updateData['emergency_country']);
+        $this->assertEquals($newAdmin->birthday, new Carbon($updateData['birthday']));
+        $this->assertEquals($newAdmin->iban, $updateData['iban']);
     }
     
     public function test_admin_updates_other_member()
@@ -174,26 +174,26 @@ class UpdateUserTest extends TestCase
             'email' => 'Second@esac.nl',
             'firstname' => 'New',
             'lastname' => 'Second',
-            'password' => '', //password doesn't change, but the userRepository errors when password is not present in the request
+            'password' => '', //password doesn't change, but updating the user errors when password is not present in the request
             'street' => 'Second',
-            'houseNumber' => '2',
+            'house_number' => '2',
             'city' => 'Second',
             'zipcode' => '2222AA',
             'country' => 'Second',
-            'phonenumber' => '234567891',
-            'emergencyNumber' => '234567891',
-            'emergencyHouseNumber' => '2',
-            'emergencystreet' =>  'Second',
-            'emergencycity' => 'Second',
-            'emergencyzipcode' =>  '2222AA',
-            'emergencycountry' => 'Second',
-            'birthDay' => '1990-02-02',
-            'IBAN' =>  '234567891',
+            'phone_number' => '234567891',
+            'emergency_number' => '234567891',
+            'emergency_house_number' => '2',
+            'emergency_street' =>  'Second',
+            'emergency_city' => 'Second',
+            'emergency_zipcode' =>  '2222AA',
+            'emergency_country' => 'Second',
+            'birthday' => '1990-02-02',
+            'iban' =>  '234567891',
             'kind_of_member' => 'reunist',
         ];
         
         Event::fake(); //make sure event listeners are not called
-        $mock = $this->mock(MailListFacade::class, function (MockInterface $mock) {
+        $mock = $this->mock(Mailman::class, function (MockInterface $mock) {
             $mock->shouldReceive('updateUserEmailForAllMailList');
         });
         
@@ -211,19 +211,19 @@ class UpdateUserTest extends TestCase
         $this->assertEquals($newMember->firstname, $updateData['firstname']);
         $this->assertEquals($newMember->lastname, $updateData['lastname']);
         $this->assertEquals($newMember->street, $updateData['street']);
-        $this->assertEquals($newMember->houseNumber, $updateData['houseNumber']);
+        $this->assertEquals($newMember->house_number, $updateData['house_number']);
         $this->assertEquals($newMember->city, $updateData['city']);
         $this->assertEquals($newMember->zipcode, $updateData['zipcode']);
         $this->assertEquals($newMember->country, $updateData['country']);
-        $this->assertEquals($newMember->phonenumber, $updateData['phonenumber']);
-        $this->assertEquals($newMember->emergencyNumber, $updateData['emergencyNumber']);
-        $this->assertEquals($newMember->emergencyHouseNumber, $updateData['emergencyHouseNumber']);
-        $this->assertEquals($newMember->emergencystreet, $updateData['emergencystreet']);
-        $this->assertEquals($newMember->emergencycity, $updateData['emergencycity']);
-        $this->assertEquals($newMember->emergencyzipcode, $updateData['emergencyzipcode']);
-        $this->assertEquals($newMember->emergencycountry, $updateData['emergencycountry']);
-        $this->assertEquals($newMember->birthDay, new Carbon($updateData['birthDay']));
-        $this->assertEquals($newMember->IBAN, $updateData['IBAN']);
+        $this->assertEquals($newMember->phone_number, $updateData['phone_number']);
+        $this->assertEquals($newMember->emergency_number, $updateData['emergency_number']);
+        $this->assertEquals($newMember->emergency_house_number, $updateData['emergency_house_number']);
+        $this->assertEquals($newMember->emergency_street, $updateData['emergency_street']);
+        $this->assertEquals($newMember->emergency_city, $updateData['emergency_city']);
+        $this->assertEquals($newMember->emergency_zipcode, $updateData['emergency_zipcode']);
+        $this->assertEquals($newMember->emergency_country, $updateData['emergency_country']);
+        $this->assertEquals($newMember->birthday, new Carbon($updateData['birthday']));
+        $this->assertEquals($newMember->iban, $updateData['iban']);
     }
     
     public function test_member_updates_self()
@@ -233,28 +233,28 @@ class UpdateUserTest extends TestCase
             'firstname' => $this->member->firstname,
             'preposition' => $this->member->preposition,
             'lastname' => $this->member->lastname,
-            'password' => '', //password doesn't change, but the userRepository errors when password is not present in the request
+            'password' => '', //password doesn't change, but updating the user errors when password is not present in the request
             'street' => 'Second',
-            'houseNumber' => '2',
+            'house_number' => '2',
             'city' => 'Second',
             'zipcode' => '2222AA',
             'country' => 'Second',
-            'phonenumber' => '234567891',
-            'emergencyNumber' => '234567891',
-            'emergencyHouseNumber' => '2',
-            'emergencystreet' =>  'Second',
-            'emergencycity' => 'Second',
-            'emergencyzipcode' =>  '2222AA',
-            'emergencycountry' => 'Second',
-            'birthDay' => '1990-02-02',
-            'IBAN' =>  '234567891',
+            'phone_number' => '234567891',
+            'emergency_number' => '234567891',
+            'emergency_house_number' => '2',
+            'emergency_street' =>  'Second',
+            'emergency_city' => 'Second',
+            'emergency_zipcode' =>  '2222AA',
+            'emergency_country' => 'Second',
+            'birthday' => '1990-02-02',
+            'iban' =>  '234567891',
             'kind_of_member' => $this->member->kind_of_member,
             'remark' => $this->member->remark,
         ];
         
         Event::fake(); //make sure event listeners are not called
         
-        $mock = $this->mock(MailListFacade::class, function (MockInterface $mock) {
+        $mock = $this->mock(Mailman::class, function (MockInterface $mock) {
             $mock->shouldReceive('updateUserEmailForAllMailList')->once();
         });
         
@@ -271,19 +271,19 @@ class UpdateUserTest extends TestCase
         $this->assertEquals($newMember->preposition, $updateData['preposition']);
         $this->assertEquals($newMember->lastname, $updateData['lastname']);
         $this->assertEquals($newMember->street, $updateData['street']);
-        $this->assertEquals($newMember->houseNumber, $updateData['houseNumber']);
+        $this->assertEquals($newMember->house_number, $updateData['house_number']);
         $this->assertEquals($newMember->city, $updateData['city']);
         $this->assertEquals($newMember->zipcode, $updateData['zipcode']);
         $this->assertEquals($newMember->country, $updateData['country']);
-        $this->assertEquals($newMember->phonenumber, $updateData['phonenumber']);
-        $this->assertEquals($newMember->emergencyNumber, $updateData['emergencyNumber']);
-        $this->assertEquals($newMember->emergencyHouseNumber, $updateData['emergencyHouseNumber']);
-        $this->assertEquals($newMember->emergencystreet, $updateData['emergencystreet']);
-        $this->assertEquals($newMember->emergencycity, $updateData['emergencycity']);
-        $this->assertEquals($newMember->emergencyzipcode, $updateData['emergencyzipcode']);
-        $this->assertEquals($newMember->emergencycountry, $updateData['emergencycountry']);
-        $this->assertEquals($newMember->birthDay, new Carbon($updateData['birthDay']));
-        $this->assertEquals($newMember->IBAN, $updateData['IBAN']);
+        $this->assertEquals($newMember->phone_number, $updateData['phone_number']);
+        $this->assertEquals($newMember->emergency_number, $updateData['emergency_number']);
+        $this->assertEquals($newMember->emergency_house_number, $updateData['emergency_house_number']);
+        $this->assertEquals($newMember->emergency_street, $updateData['emergency_street']);
+        $this->assertEquals($newMember->emergency_city, $updateData['emergency_city']);
+        $this->assertEquals($newMember->emergency_zipcode, $updateData['emergency_zipcode']);
+        $this->assertEquals($newMember->emergency_country, $updateData['emergency_country']);
+        $this->assertEquals($newMember->birthday, new Carbon($updateData['birthday']));
+        $this->assertEquals($newMember->iban, $updateData['iban']);
         $this->assertEquals($newMember->kind_of_member, $updateData['kind_of_member']);
         $this->assertEquals($newMember->remark,  $updateData['remark']);
     }
@@ -295,21 +295,21 @@ class UpdateUserTest extends TestCase
             'firstname' => 'Second',
             'preposition' => 'Second',
             'lastname' => 'Second',
-            'password' => '', //password doesn't change, but the userRepository errors when password is not present in the request
+            'password' => '', //password doesn't change, but updating the user errors when password is not present in the request
             'street' => 'Second',
-            'houseNumber' => '2',
+            'house_number' => '2',
             'city' => 'Second',
             'zipcode' => '2222AA',
             'country' => 'Second',
-            'phonenumber' => '234567891',
-            'emergencyNumber' => '234567891',
-            'emergencyHouseNumber' => '2',
-            'emergencystreet' =>  'Second',
-            'emergencycity' => 'Second',
-            'emergencyzipcode' =>  '2222AA',
-            'emergencycountry' => 'Second',
-            'birthDay' => '1990-02-02',
-            'IBAN' =>  '234567891',
+            'phone_number' => '234567891',
+            'emergency_number' => '234567891',
+            'emergency_house_number' => '2',
+            'emergency_street' =>  'Second',
+            'emergency_city' => 'Second',
+            'emergency_zipcode' =>  '2222AA',
+            'emergency_country' => 'Second',
+            'birthday' => '1990-02-02',
+            'iban' =>  '234567891',
             'kind_of_member' => 'Second',
             'remark' => 'Second',
         ];
@@ -322,7 +322,7 @@ class UpdateUserTest extends TestCase
         
         Event::fake(); //make sure event listeners are not called
         
-        $mock = $this->mock(MailListFacade::class, function (MockInterface $mock) {
+        $mock = $this->mock(Mailman::class, function (MockInterface $mock) {
             $mock->shouldReceive('updateUserEmailForAllMailList')->once();
         });
         
@@ -342,19 +342,19 @@ class UpdateUserTest extends TestCase
         
         $this->assertEquals($newMember->email, $updateData['email']);
         $this->assertEquals($newMember->street, $updateData['street']);
-        $this->assertEquals($newMember->houseNumber, $updateData['houseNumber']);
+        $this->assertEquals($newMember->house_number, $updateData['house_number']);
         $this->assertEquals($newMember->city, $updateData['city']);
         $this->assertEquals($newMember->zipcode, $updateData['zipcode']);
         $this->assertEquals($newMember->country, $updateData['country']);
-        $this->assertEquals($newMember->phonenumber, $updateData['phonenumber']);
-        $this->assertEquals($newMember->emergencyNumber, $updateData['emergencyNumber']);
-        $this->assertEquals($newMember->emergencyHouseNumber, $updateData['emergencyHouseNumber']);
-        $this->assertEquals($newMember->emergencystreet, $updateData['emergencystreet']);
-        $this->assertEquals($newMember->emergencycity, $updateData['emergencycity']);
-        $this->assertEquals($newMember->emergencyzipcode, $updateData['emergencyzipcode']);
-        $this->assertEquals($newMember->emergencycountry, $updateData['emergencycountry']);
-        $this->assertEquals($newMember->birthDay, new Carbon($updateData['birthDay']));
-        $this->assertEquals($newMember->IBAN, $updateData['IBAN']);
+        $this->assertEquals($newMember->phone_number, $updateData['phone_number']);
+        $this->assertEquals($newMember->emergency_number, $updateData['emergency_number']);
+        $this->assertEquals($newMember->emergency_house_number, $updateData['emergency_house_number']);
+        $this->assertEquals($newMember->emergency_street, $updateData['emergency_street']);
+        $this->assertEquals($newMember->emergency_city, $updateData['emergency_city']);
+        $this->assertEquals($newMember->emergency_zipcode, $updateData['emergency_zipcode']);
+        $this->assertEquals($newMember->emergency_country, $updateData['emergency_country']);
+        $this->assertEquals($newMember->birthday, new Carbon($updateData['birthday']));
+        $this->assertEquals($newMember->iban, $updateData['iban']);
     }
     
     public function test_member_cannot_update_others()
@@ -364,21 +364,21 @@ class UpdateUserTest extends TestCase
             'firstname' => $this->member->firstname,
             'preposition' => $this->member->preposition,
             'lastname' => $this->member->lastname,
-            'password' => '', //password doesn't change, but the userRepository errors when password is not present in the request
+            'password' => '', //password doesn't change, but updating the user errors when password is not present in the request
             'street' => 'Second',
-            'houseNumber' => '2',
+            'house_number' => '2',
             'city' => 'Second',
             'zipcode' => '2222AA',
             'country' => 'Second',
-            'phonenumber' => '234567891',
-            'emergencyNumber' => '234567891',
-            'emergencyHouseNumber' => '2',
-            'emergencystreet' =>  'Second',
-            'emergencycity' => 'Second',
-            'emergencyzipcode' =>  '2222AA',
-            'emergencycountry' => 'Second',
-            'birthDay' => '1990-02-02',
-            'IBAN' =>  '234567891',
+            'phone_number' => '234567891',
+            'emergency_number' => '234567891',
+            'emergency_house_number' => '2',
+            'emergency_street' =>  'Second',
+            'emergency_city' => 'Second',
+            'emergency_zipcode' =>  '2222AA',
+            'emergency_country' => 'Second',
+            'birthday' => '1990-02-02',
+            'iban' =>  '234567891',
             'kind_of_member' => $this->member->kind_of_member,
             'remark' => $this->member->remarks,
         ];
@@ -387,7 +387,7 @@ class UpdateUserTest extends TestCase
         
         $oldAdminAttributes = User::find($this->admin->id)->getAttributes();
         
-        $mock = $this->mock(MailListFacade::class, function (MockInterface $mock) {
+        $mock = $this->mock(Mailman::class, function (MockInterface $mock) {
             $mock->shouldNotReceive('updateUserEmailFormAllMailList');
         });
         

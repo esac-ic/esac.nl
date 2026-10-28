@@ -38,7 +38,7 @@
         function initializeDataTable() {
             datatable = $('#maillistUserList').DataTable({
                 buttons: ['pageLength'],
-                ajax: '/api/users',
+                ajax: '{{ route('api.users.index') }}',
                 columns: [
                     {
                         data: "id",
@@ -63,9 +63,9 @@
         }
 
         function addUsersToMailList() {
-            var mailListId = '{{$mailList->getId()}}';
+            var mailListId = '{{$mailList->id}}';
             $.ajax({
-                url: '/mailList/' + mailListId + '/member',
+                url: '{{ route('mailList.members.store', '__list__') }}'.replace('__list__', mailListId),
                 data: {
                     userIds: selectedUserIds,
                     _token: window.Laravel.csrfToken

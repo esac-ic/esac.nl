@@ -2,6 +2,7 @@
 
 namespace Tests\Feature\Views;
 
+use App\Enums\Role;
 use App\Models\AgendaItem;
 use App\Models\AgendaItemCategory;
 use App\Models\ApplicationForm\ApplicationForm;
@@ -12,7 +13,6 @@ use App\Models\NewsItem;
 use App\Models\Rol;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Support\Facades\Config;
 use PHPUnit\Framework\Attributes\Test;
 use Tests\TestCase;
 
@@ -33,7 +33,7 @@ class AdminFormPagesTest extends TestCase
         parent::setUp();
         $this->user = $user = User::factory()->create();
 
-        $user->roles()->attach([Config::get('constants.Administrator'), Config::get('constants.Content_administrator')]);
+        $user->roles()->attach([Role::Administrator->value, Role::ContentAdministrator->value]);
         $this->be($user);
     }
 
@@ -106,13 +106,13 @@ class AdminFormPagesTest extends TestCase
     {
         $this->assertForm($this->get('pages/create')->assertOk(), 'POST', 'pages');
 
-        $page = MenuItem::forceCreate(['name' => 'Over ons', 'urlName' => 'over-ons', 'content' => '<p>Wij</p>', 'menuItem' => true, 'login' => false, 'deletable' => true, 'editable' => true]);
+        $page = MenuItem::forceCreate(['name' => 'Over ons', 'url_name' => 'over-ons', 'content' => '<p>Wij</p>', 'menu_item' => true, 'login' => false, 'deletable' => true, 'editable' => true]);
         $response = $this->get("pages/$page->id/edit")->assertOk();
 
         $this->assertForm($response, 'PATCH', "pages/$page->id");
         $this->assertFieldValue($response, 'name', 'Over ons');
         $this->assertFieldValue($response, 'content', '<p>Wij</p>');
-        $this->assertChecked($response, 'menuItem');
+        $this->assertChecked($response, 'menu_item');
         $this->assertChecked($response, 'login', false);
     }
 

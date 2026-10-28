@@ -42,19 +42,19 @@ class RegisterNewMemberTest extends TestCase
             'firstname' => 'esac',
             'lastname' => 'esac last name',
             'street' => 'stastion street',
-            'houseNumber' => 3,
+            'house_number' => 3,
             'city' => 'eindhoven',
             'zipcode' => '5781JH',
             'country' => 'NL',
-            'phonenumber' => 28743939,
-            'emergencyNumber' => 112,
-            'emergencyHouseNumber' => '2a',
-            'emergencystreet' => 'nursery',
-            'emergencycity' => 'dead',
-            'emergencyzipcode' => '3473JP',
-            'emergencycountry' => 'NL',
-            'birthDay' => Carbon::now()->subCenturies(2)->format('d-m-Y'),
-            'IBAN' => "BLNDj838474784848",
+            'phone_number' => 28743939,
+            'emergency_number' => 112,
+            'emergency_house_number' => '2a',
+            'emergency_street' => 'nursery',
+            'emergency_city' => 'dead',
+            'emergency_zipcode' => '3473JP',
+            'emergency_country' => 'NL',
+            'birthday' => Carbon::now()->subCenturies(2)->format('d-m-Y'),
+            'iban' => "BLNDj838474784848",
             'incasso' => 1,
             'privacy_policy' => 1,
             'termsconditions' => 1,
@@ -73,20 +73,20 @@ class RegisterNewMemberTest extends TestCase
         $this->assertEquals($body['firstname'], $user->firstname);
         $this->assertEquals($body['lastname'], $user->lastname);
         $this->assertEquals($body['street'], $user->street);
-        $this->assertEquals($body['houseNumber'], $user->houseNumber);
+        $this->assertEquals($body['house_number'], $user->house_number);
         $this->assertEquals($body['city'], $user->city);
         $this->assertEquals($body['zipcode'], $user->zipcode);
         $this->assertEquals($body['country'], $user->country);
-        $this->assertEquals($body['phonenumber'], $user->phonenumber);
-        $this->assertEquals($body['emergencyNumber'], $user->emergencyNumber);
-        $this->assertEquals($body['emergencyHouseNumber'], $user->emergencyHouseNumber);
-        $this->assertEquals($body['emergencystreet'], $user->emergencystreet);
-        $this->assertEquals($body['emergencycity'], $user->emergencycity);
-        $this->assertEquals($body['emergencyzipcode'], $user->emergencyzipcode);
-        $this->assertEquals($body['emergencycountry'], $user->emergencycountry);
-        $this->assertEquals($body['birthDay'], Carbon::parse($user->birthDay)->format('d-m-Y'));
+        $this->assertEquals($body['phone_number'], $user->phone_number);
+        $this->assertEquals($body['emergency_number'], $user->emergency_number);
+        $this->assertEquals($body['emergency_house_number'], $user->emergency_house_number);
+        $this->assertEquals($body['emergency_street'], $user->emergency_street);
+        $this->assertEquals($body['emergency_city'], $user->emergency_city);
+        $this->assertEquals($body['emergency_zipcode'], $user->emergency_zipcode);
+        $this->assertEquals($body['emergency_country'], $user->emergency_country);
+        $this->assertEquals($body['birthday'], Carbon::parse($user->birthday)->format('d-m-Y'));
         $this->assertEquals('member', $user->kind_of_member);
-        $this->assertEquals($body['IBAN'], $user->IBAN);
+        $this->assertEquals($body['iban'], $user->iban);
         $this->assertEquals($body['incasso'], $user->incasso);
         $this->assertNotNull($user->pending_user);
     }
@@ -111,15 +111,15 @@ class RegisterNewMemberTest extends TestCase
         $this->assertEquals("Field firstname is required", $errors->get('firstname')[0]);
         $this->assertEquals("Field lastname is required", $errors->get('lastname')[0]);
         $this->assertEquals("Field street is required", $errors->get('street')[0]);
-        $this->assertEquals("Field house number is required", $errors->get('houseNumber')[0]);
+        $this->assertEquals("Field house number is required", $errors->get('house_number')[0]);
         $this->assertEquals("Field city is required", $errors->get('city')[0]);
-        $this->assertEquals("Field phonenumber is required", $errors->get('phonenumber')[0]);
-        $this->assertEquals("Field emergency number is required", $errors->get('emergencyNumber')[0]);
-        $this->assertEquals("Field emergencystreet is required", $errors->get('emergencystreet')[0]);
-        $this->assertEquals("Field emergencyzipcode is required", $errors->get('emergencyzipcode')[0]);
-        $this->assertEquals("Field emergencycountry is required", $errors->get('emergencycountry')[0]);
-        $this->assertEquals("Field birth day is required", $errors->get('birthDay')[0]);
-        $this->assertEquals("Field i b a n is required", $errors->get('IBAN')[0]);
+        $this->assertEquals("Field phone number is required", $errors->get('phone_number')[0]);
+        $this->assertEquals("Field emergency number is required", $errors->get('emergency_number')[0]);
+        $this->assertEquals("Field emergency street is required", $errors->get('emergency_street')[0]);
+        $this->assertEquals("Field emergency zipcode is required", $errors->get('emergency_zipcode')[0]);
+        $this->assertEquals("Field emergency country is required", $errors->get('emergency_country')[0]);
+        $this->assertEquals("Field birthday is required", $errors->get('birthday')[0]);
+        $this->assertEquals("Field IBAN is required", $errors->get('iban')[0]);
         $this->assertEquals("'I'm not a robot' validation is required", $errors->get('g-recaptcha-response')[0]);
         $this->assertEquals("Field Automatic Collection is required", $errors->get('incasso')[0]);
         $this->assertEquals("Field Privacy Policy is required", $errors->get('privacy_policy')[0]);

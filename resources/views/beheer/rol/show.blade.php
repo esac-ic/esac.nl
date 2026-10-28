@@ -12,10 +12,10 @@
 
         <div class="col-md-6">
             <div class="btn-group mt-2 float-md-right" role="group" aria-label="Actions">
-                <a href="{{url('/rols/'.$rol->id . '/edit' )}}" class="btn btn-primary">
+                <a href="{{route('rols.edit', $rol)}}" class="btn btn-primary">
                     <em class="ion-edit"></em> {{'Edit'}}
                 </a>
-                <a href="{{url('/rols/')}}" class="btn btn-block btn-primary">
+                <a href="{{route('rols.index')}}" class="btn btn-block btn-primary">
                     <em class="ion-android-arrow-back"></em> {{'Back'}}
                 </a>
                 <form method="post"

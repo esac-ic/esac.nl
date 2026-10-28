@@ -16,7 +16,7 @@
                     © {{ now()->year }} ESAC
                     <br>Eindhovense Studenten
                     <br>Alpen Club
-                    <br><br>T: {{ app(\App\Models\Setting::SINGELTONNAME)->getsetting(\App\Models\Setting::SETTING_FOOTER_PHONE_NR) }}
+                    <br><br>T: {{ $footerPhoneNumber }}
                     <br>M: bestuur@esac.nl
                     <br>B: NL75 RABO 0117 0524 85
                     <br>KvK: 40236076

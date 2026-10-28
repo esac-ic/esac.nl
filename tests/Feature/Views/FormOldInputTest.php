@@ -2,11 +2,11 @@
 
 namespace Tests\Feature\Views;
 
+use App\Enums\Role;
 use App\Models\AgendaItemCategory;
 use App\Models\ApplicationForm\ApplicationForm;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Support\Facades\Config;
 use PHPUnit\Framework\Attributes\Test;
 use Tests\TestCase;
 
@@ -22,7 +22,7 @@ class FormOldInputTest extends TestCase
         parent::setUp();
         $user = User::factory()->create();
 
-        $user->roles()->attach([Config::get('constants.Administrator'), Config::get('constants.Content_administrator')]);
+        $user->roles()->attach([Role::Administrator->value, Role::ContentAdministrator->value]);
         $this->be($user);
 
         session()->start();
@@ -48,21 +48,21 @@ class FormOldInputTest extends TestCase
     #[Test]
     public function page_checkboxes_keep_the_submitted_state()
     {
-        $menuItem = $this->field($this->get('pages/create'), 'menuItem')->getAttribute('value');
+        $menuItem = $this->field($this->get('pages/create'), 'menu_item')->getAttribute('value');
 
         $response = $this->from('pages/create')->followingRedirects()->post('pages', [
-            'urlName' => 'test',
+            'url_name' => 'test',
             'itemType' => 'subItem',
             'parentItem' => 0,
             'afterItem' => 0,
             'content' => 'Inhoud',
-            'menuItem' => $menuItem,
+            'menu_item' => $menuItem,
             '_token' => csrf_token(),
         ]);
 
         $response->assertOk();
         $this->assertFieldValue($response, 'content', 'Inhoud');
-        $this->assertChecked($response, 'menuItem');
+        $this->assertChecked($response, 'menu_item');
         $this->assertChecked($response, 'login', false);
     }
 

@@ -6,15 +6,18 @@ use App\Models\Setting;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Config;
+use Illuminate\Routing\Controllers\HasMiddleware;
+use Illuminate\Routing\Controllers\Middleware;
 use Illuminate\Support\Facades\Session;
 
-class SettingsController extends Controller
+class SettingsController extends Controller implements HasMiddleware
 {
-    public function __construct()
+    public static function middleware(): array
     {
-        $this->middleware('auth');
-        $this->middleware('authorize:' . Config::get('constants.Administrator'));
+        return [
+            'auth',
+            new Middleware('can:manage-settings'),
+        ];
     }
 
     public function index(): View
@@ -39,6 +42,6 @@ class SettingsController extends Controller
         }
 
         Session::flash("message", 'Settings updated');
-        return redirect('/beheer/settings');
+        return to_route('beheer.settings.index');
     }
 }
