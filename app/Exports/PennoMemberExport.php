@@ -61,7 +61,6 @@ class PennoMemberExport implements FromCollection, WithTitle, WithHeadings, Shou
             'country',
             'kind_of_member',
             'IBAN',
-            'BIC',
             'incasso',
             'created_at'
         ];
@@ -82,7 +81,6 @@ class PennoMemberExport implements FromCollection, WithTitle, WithHeadings, Shou
             'Country',
             'Kind of member',
             'IBAN',
-            'BIC',
             'Accept Automatic Collection',
             'User created at'
         ];

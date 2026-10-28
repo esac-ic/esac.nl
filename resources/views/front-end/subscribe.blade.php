@@ -107,10 +107,6 @@
         </div>
         <div class="card-body">
             <div class="form-row">
-                <div class="form-group col-md-4">
-                    {!! Form::label('BIC', 'BIC') !!}
-                    {!! Form::text('BIC', '', ['class' => 'form-control']) !!}
-                </div>
                 <div class="form-group col-md-8">
                     {!! Form::label('IBAN', 'IBAN') !!}
                     {!! Form::text('IBAN', '', ['class' => 'form-control','required' => 'required']) !!}

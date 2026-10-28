@@ -51,7 +51,6 @@ class User extends Authenticatable
         'birthDay',
         'kind_of_member',
         'IBAN',
-        'BIC',
         'incasso',
         'remark',
     ];

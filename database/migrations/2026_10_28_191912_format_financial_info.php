@@ -2,6 +2,7 @@
 
 use App\Models\User;
 use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
 
 return new class extends Migration
 {
@@ -15,6 +16,10 @@ return new class extends Migration
             $user->IBAN = $user->IBAN;
             $user->save();
         });
+
+        Schema::table('users', function (Blueprint $table) {
+            $table->dropColumn('BIC');
+        });
     }
 
     /**
@@ -22,6 +27,8 @@ return new class extends Migration
      */
     public function down(): void
     {
-        // Aint no undoing this :)
+        Schema::table('users', function (Blueprint $table) {
+            $table->string('BIC', 255)->nullable();
+        });
     }
 };

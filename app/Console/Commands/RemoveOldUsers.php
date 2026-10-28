@@ -60,7 +60,6 @@ class RemoveOldUsers extends Command
                 'birthDay' => null,
                 'kind_of_member' => null,
                 'IBAN' => null,
-                'BIC' => null,
                 'incasso' => false,
                 'remark' => null,
             ]);

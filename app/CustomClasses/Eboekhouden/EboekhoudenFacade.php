@@ -30,7 +30,6 @@ class EboekhoudenFacade
         if(strlen($user->phonenumber) > 50) throw new Exception('The users phonenumber is too long to be added to eboekhouden');
         if(strlen($user->email) > 150) throw new Exception('The users emailAddress is too long to be added to eboekhouden');
         if(strlen($user->IBAN) > 50) throw new Exception('The users IBAN is too long to be added to eboekhouden');
-        if(strlen($user->BIC) > 50) throw new Exception('The users BIC is too long to be added to eboekhouden');
         if(strlen($notes) > 40000) throw new Exception('Received relation note that is too long to be added to eboekhouden');
 
         return [
@@ -45,7 +44,6 @@ class EboekhoudenFacade
             'emailAddressInvoice' => $user->email,
             'emailAddressReminder' => $user->email,
             'iban' => $user->IBAN,
-            'bic' => $user->BIC,
             'mandate' => $user->incasso == 1,
             'mandateType' => 'D',
             'mandateSignedDate' => $user->created_at->format('Y-m-d'),

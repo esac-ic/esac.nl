@@ -70,7 +70,6 @@ class UsersExport implements FromCollection, WithTitle, WithHeadings, ShouldAuto
             'Birthdate',
             'Kind of member',
             'IBAN',
-            'BIC',
             'Accept Automatic Collection',
             'Remarks',
             'User created at',

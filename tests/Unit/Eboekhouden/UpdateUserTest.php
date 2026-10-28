@@ -44,7 +44,6 @@ class UpdateUserTest extends TestCase {
             "termOfPayment" => 30,
             "companyRegistrationNumber" => "12345678",
             "iban" => "NL91ABNA0417164300",
-            "bic" => "ABNANL2A",
             "freeText1" => "",
             "freeText2" => "",
             "freeText3" => "",
@@ -138,9 +137,6 @@ class UpdateUserTest extends TestCase {
     }
     public function test_iban_too_long() {
         $this->test_too_long('IBAN', 50);
-    }
-    public function test_bic_too_long() {
-        $this->test_too_long('BIC', 50);
     }
 
 }
