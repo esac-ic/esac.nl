@@ -2,7 +2,7 @@
 
 namespace Tests\Feature\Http;
 
-use App\Enums\Role;
+use App\Enums\AdminRole;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use PHPUnit\Framework\Attributes\Test;
@@ -34,7 +34,7 @@ class RoutingTest extends TestCase
     public function a_forbidden_page_shows_the_no_access_page()
     {
         $this->actingAs(User::factory()->create())
-            ->get('/users/create')
+            ->get('/admin/members/create')
             ->assertForbidden()
             ->assertSee('You do not have sufficient access to view this page')
             ->assertSee('<nav', false);
@@ -50,24 +50,21 @@ class RoutingTest extends TestCase
     public function api_errors_are_json()
     {
         $this->get('api/does-not-exist')->assertNotFound()->assertHeader('Content-Type', 'application/json');
-        $this->get('api/user/registrations')->assertUnauthorized()->assertJson(['message' => 'Unauthenticated.']);
+        $this->get('api/zekeringen')->assertUnauthorized()->assertJson(['message' => 'Unauthenticated.']);
     }
 
     #[Test]
     public function the_api_uses_the_session_of_the_site()
     {
-        $user = User::factory()->create();
-
-        $this->actingAs($user)
-            ->getJson('api/user/registrations?user_id='.$user->id)
+        $this->actingAs(User::factory()->create())
+            ->getJson('api/zekeringen')
             ->assertOk();
     }
 
     #[Test]
     public function api_writes_need_the_csrf_token_of_the_page()
     {
-        $user = User::factory()->create();
-        $user->roles()->attach(Role::ActivityAdministrator->value);
+        $user = User::factory()->withRole(AdminRole::EventAdministrator)->create();
         // Laravel skips the CSRF check in tests
         $this->app['env'] = 'local';
 

@@ -16,8 +16,8 @@ class ScheduleTest extends TestCase
     public static function weeklyCommands(): array
     {
         return [
-            'remove:oldUsers' => ['remove:oldUsers'],
-            'remove:oldApplications' => ['remove:oldApplications'],
+            'members:anonymize-former' => ['members:anonymize-former'],
+            'registrations:prune' => ['registrations:prune'],
             'auth:clear-resets' => ['auth:clear-resets'],
         ];
     }

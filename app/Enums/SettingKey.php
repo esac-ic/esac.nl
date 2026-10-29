@@ -7,32 +7,15 @@ namespace App\Enums;
  */
 enum SettingKey: string
 {
-    case BlockedEmailDomains = 'SETTING_BLOCKED_EMAIL_DOMAINS';
-    case Killswitch = 'SETTING_KILLSWITCH';
-    case ShowIntroOption = 'SETTING_SHOW_INTRO_OPTION';
-    case FooterPhoneNumber = 'SETTING_FOOTER_PHONE_NR';
-    case NormalMemberMailLists = 'SETTING_NORMAL_MEMBER_MAIL_LISTS';
-    case ExtraordinaryMemberMailLists = 'SETTING_EXTRAORDINARY_MEMBER_MAIL_LISTS';
-    case ReunistMemberMailLists = 'SETTING_REUNIST_MEMBER_MAIL_LISTS';
-    case HonoraryMemberMailLists = 'SETTING_HONORARY_MEMBER_MAIL_LISTS';
-    case MeritMemberMailLists = 'SETTING_MERIT_MEMBER_MAIL_LISTS';
-    case TrainerMemberMailLists = 'SETTING_TRAINER_MEMBER_MAIL_LISTS';
-    case RelationshipMemberMailLists = 'SETTING_RELATIONSHIP_MEMBER_MAIL_LISTS';
+    case BlockedEmailDomains = 'blocked_email_domains';
+    case Killswitch = 'killswitch';
+    case FooterPhoneNumber = 'footer_phone_number';
+    case MemberMailLists = 'member_mail_lists';
+    case ExtraordinaryParticipantMailLists = 'extraordinary_participant_mail_lists';
+    case ReunistMailLists = 'reunist_mail_lists';
+    case HonoraryMemberMailLists = 'honorary_member_mail_lists';
+    case MemberOfServiceMailLists = 'member_of_service_mail_lists';
+    case TrainerMailLists = 'trainer_mail_lists';
+    case RelationshipMailLists = 'relationship_mail_lists';
 
-    /**
-     * The setting with the mail lists for a kind of member.
-     */
-    public static function mailListsFor(string $kindOfMember): ?self
-    {
-        return match ($kindOfMember) {
-            'member' => self::NormalMemberMailLists,
-            'extraordinary_member' => self::ExtraordinaryMemberMailLists,
-            'reunist' => self::ReunistMemberMailLists,
-            'honorary_member' => self::HonoraryMemberMailLists,
-            'member_of_merit' => self::MeritMemberMailLists,
-            'trainer' => self::TrainerMemberMailLists,
-            'relationship' => self::RelationshipMemberMailLists,
-            default => null,
-        };
-    }
 }

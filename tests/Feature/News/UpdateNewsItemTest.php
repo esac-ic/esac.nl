@@ -2,7 +2,7 @@
 
 namespace Tests\Feature\News;
 
-use App\Enums\Role;
+use App\Enums\AdminRole;
 use App\Models\NewsItem;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -13,39 +13,15 @@ class UpdateNewsItemTest extends TestCase
 {
     use RefreshDatabase;
 
-    private $url = 'newsItems';
-
-    private $newsItem;
-
-    private $user;
-
-    protected function setUp(): void
-    {
-        parent::setUp();
-        $this->user = $user = User::factory()->create();
-
-        $user->roles()->attach(Role::ActivityAdministrator->value);
-        $this->be($user);
-    }
-
     #[Test]
-    public function update_news_item()
+    public function a_content_administrator_can_update_a_news_item()
     {
         $newsItem = NewsItem::factory()->create();
-        $body = [
-            'title' => 'test news',
-            'text' => 'test nieuws',
-            'author' => 'Gebruiker1',
-        ];
+        $body = ['title' => 'test news', 'body' => 'test nieuws', 'author' => 'Gebruiker1'];
+        $this->actingAs(User::factory()->withRole(AdminRole::EventAdministrator)->create());
 
-        $response = $this->patch($this->url.'/'.$newsItem->id, $body);
+        $this->patch('admin/news-items/'.$newsItem->id, $body)->assertRedirect();
 
-        $response->assertStatus(302);
-
-        $newsItem = $newsItem->refresh();
-
-        $this->assertEquals($body['text'], $newsItem->text);
-        $this->assertEquals($body['title'], $newsItem->title);
-        $this->assertEquals($body['author'], $newsItem->author);
+        $this->assertDatabaseHas(NewsItem::class, ['id' => $newsItem->id, ...$body]);
     }
 }

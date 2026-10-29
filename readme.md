@@ -15,7 +15,6 @@ The following libaries and framework are used:
 - [Vite](https://vite.dev) (via [laravel-vite-plugin](https://github.com/laravel/vite-plugin))
 - [Bootstrap](https://getbootstrap.com/)
 - [Vue](https://vuejs.org)
-- [Tempus Dominus](https://tempusdominus.github.io/bootstrap-4/)
 
 
 ## Setting up steps
@@ -163,7 +162,7 @@ Tests run against their own `esac_testing` database
 If you get errors that you cannot access the database or that the database is down, you can start mysql using `sudo service mysql start`. If you want to, you can check if mysql is running with `sudo service mysql status`.
 
 ### Reseeding the database
-If you want to reseed the database because, for example, you want to regenerate the agenda items, run the following commands:
+If you want to reseed the database because, for example, you want to regenerate the events, run the following commands:
 
 > [!WARNING]  
 > Don't use the first command if there is any important data in your database that isn't backed up.
@@ -241,7 +240,7 @@ layout: here
 # delivered to a human, but which can't be delivered to a list owner (e.g. a
 # bounce from a list owner), will be sent to this address.  It should point to
 # a human.
-site_owner: YOUR_OWN_EMAIL_ADRESS
+site_owner: YOUR_OWN_EMAIL_ADDRESS
 
 [database]
 class: mailman.database.mysql.MySQLDatabase
@@ -310,7 +309,7 @@ REST root url: http://localhost:8001/3.1/
 REST credentials: restadmin:restpass 
 ```
 
-16. Add some essential maillists by running the following commands:
+16. Add some essential mail lists by running the following commands:
 ```
 mailman create alle-leden@esac.nl
 mailman create lid@esac.nl

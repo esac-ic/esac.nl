@@ -9,7 +9,7 @@
 </template>
 
 <script>
-    import { FORM_TYPE_CHECK_BOX, FORM_TYPE_CHECK_BOXEN, FORM_TYPE_NUMBER, FORM_TYPE_RADIO, FORM_TYPE_SELECT, FORM_TYPE_TEXT, FORM_TYPE_TEXT_BOX } from "../../constants";
+    import { FORM_TYPE_CHECK_BOX, FORM_TYPE_CHECK_BOXES, FORM_TYPE_NUMBER, FORM_TYPE_RADIO, FORM_TYPE_SELECT, FORM_TYPE_TEXT, FORM_TYPE_TEXT_BOX } from "../../constants";
 
     export default {
         name: "RegistrationForm",
@@ -33,7 +33,7 @@
                     case FORM_TYPE_SELECT:
                         return "registration-select-field";
                     case FORM_TYPE_RADIO:
-                    case FORM_TYPE_CHECK_BOXEN:
+                    case FORM_TYPE_CHECK_BOXES:
                         return "registration-radio-checkbox-field";
                 }
 
