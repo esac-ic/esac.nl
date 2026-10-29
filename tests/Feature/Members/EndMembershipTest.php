@@ -45,7 +45,8 @@ class EndMembershipTest extends TestCase
         $this->assertNotNull(User::find($userId)->membership_ended_on);
     }
 
-    public function test_removing_an_active_member_logs_them_out_everywhere()
+    #[Test]
+    public function ending_a_membership_logs_the_member_out_everywhere()
     {
         $user = User::factory()->create(['remember_token' => 'remembered']);
         DB::table('sessions')->insert(['id' => 'session', 'user_id' => $user->id, 'payload' => '', 'last_activity' => time()]);

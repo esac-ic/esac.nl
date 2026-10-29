@@ -76,9 +76,20 @@ class CreatePageTest extends TestCase
     }
 
     #[Test]
+    public function a_page_with_an_older_slug_can_be_saved_without_renaming_it()
+    {
+        $this->post('admin/pages', $this->body(['parent_id' => null]))->assertValid();
+        $page = MenuItem::query()->where('slug', 'test')->sole();
+        $page->forceFill(['slug' => 'Huisregels'])->save();
+
+        $this->patch(route('admin.pages.update', $page), $this->body(['slug' => 'Huisregels', 'parent_id' => null]))->assertValid();
+        $this->patch(route('admin.pages.update', $page), $this->body(['slug' => 'Huis.regels', 'parent_id' => null]))->assertInvalid('slug');
+    }
+
+    #[Test]
     public function other_roles_can_not_create_a_page()
     {
-        $this->actingAs(User::factory()->withRole(AdminRole::Administrator, AdminRole::EventAdministrator, AdminRole::CertificateAdministrator)->create());
+        $this->actingAs(User::factory()->withRole(AdminRole::EventAdministrator, AdminRole::CertificateAdministrator)->create());
 
         $this->post('admin/pages', $this->body())->assertForbidden();
 
@@ -113,6 +124,16 @@ class CreatePageTest extends TestCase
         $this->post('admin/pages')
             ->assertRedirect()
             ->assertInvalid(['slug', 'name', 'content']);
+
+        $this->assertDatabaseCount(MenuItem::class, 1);
+    }
+
+    #[Test]
+    public function a_page_can_not_take_a_reserved_or_malformed_slug()
+    {
+        foreach (['events', 'agenda', 'admin', 'Test', 'a/b'] as $slug) {
+            $this->post('admin/pages', $this->body(['slug' => $slug]))->assertInvalid('slug');
+        }
 
         $this->assertDatabaseCount(MenuItem::class, 1);
     }

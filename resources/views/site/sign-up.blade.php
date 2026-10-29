@@ -15,7 +15,7 @@
         </ul>
     @endif
 
-    {{ html()->form('POST', route('signup.store'))->open() }}
+    {{ html()->form('POST', route('sign-up.store'))->open() }}
     <x-card title="Personal" class="mt-4">
         <div class="form-row">
             <x-field name="first_name" label="First name" col="5" required />

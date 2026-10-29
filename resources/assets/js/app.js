@@ -18,7 +18,7 @@ window.summernoteSettings = {
     callbacks: {
         onImageUpload: function (files) {
             uploadFile(files[0], this);
-        },
+        }
     }
 };
 
@@ -27,7 +27,7 @@ function uploadFile (file, summernote) {
     data.append('image', file);
 
     axios
-        .post('/admin/editor-images', data)
+        .post($(summernote).data('images-url'), data)
         .then(response => {
             $(summernote).summernote('insertImage', response.data);
         });

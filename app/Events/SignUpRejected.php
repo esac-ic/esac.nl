@@ -5,13 +5,12 @@ namespace App\Events;
 use App\Enums\MemberLogType;
 use App\Models\User;
 use Illuminate\Foundation\Events\Dispatchable;
-use Illuminate\Queue\SerializesModels;
 
 class SignUpRejected implements LogsToMemberLog
 {
-    use Dispatchable, SerializesModels;
+    use Dispatchable;
 
-    public function __construct(public User $user, public string $memberName) {}
+    public function __construct(public string $memberName) {}
 
     public function logType(): MemberLogType
     {

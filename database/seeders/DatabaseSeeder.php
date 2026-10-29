@@ -32,7 +32,7 @@ class DatabaseSeeder extends Seeder
             return;
         }
 
-        $this->call([RoleSeeder::class, MenuItemSeeder::class]);
+        $this->call(MenuItemSeeder::class);
 
         $admin = User::factory()
             ->withRole(AdminRole::Administrator, AdminRole::ContentAdministrator, AdminRole::EventAdministrator)

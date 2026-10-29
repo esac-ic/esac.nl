@@ -9,11 +9,11 @@
         <div class="col-lg-2 fixed-left px-0 pt-lg-5 h-lg-100" style="z-index:100">
             <nav class="navbar navbar-expand-lg navbar-light bg-white border-right h-lg-100">
                 <a class="navbar-brand d-lg-none" href="{{ route('admin.dashboard') }}">Dashboard</a>
-                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarDashboard" aria-controls="navbarDashboard" aria-expanded="false" aria-label="Toggle navigation">
+                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#admin-menu" aria-controls="admin-menu" aria-expanded="false" aria-label="Toggle navigation">
                     <span class="ion-ios-arrow-down h4"></span>
                 </button>
 
-              <div class="collapse navbar-collapse align-self-start" id="navbarDashboard">
+              <div class="collapse navbar-collapse align-self-start" id="admin-menu">
                 <ul class="navbar-nav mr-auto mt-2 mt-lg-0 flex-lg-column">
                     <li class="nav-item active">
                         <span class="nav-link">
@@ -21,33 +21,28 @@
                         </span>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="{{ route('admin.members.show', auth()->user()) }}">
+                        <a class="nav-link" href="{{ route('account.show') }}">
                             Account overview
                         </a>
                     </li>
-                    @can('access-admin')
-                        <hr class="my-3">
+                    <hr class="my-3">
 
-                        <li class="nav-item active">
-                            <span class="nav-link">
-                                Admin
-                            </span>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="{{ route('admin.dashboard') }}">
-                            Dashboard
-                            </a>
-                        </li>
-                    @endcan
+                    <li class="nav-item active">
+                        <span class="nav-link">
+                            Admin
+                        </span>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ route('admin.dashboard') }}">
+                        Dashboard
+                        </a>
+                    </li>
                     @can('view-members')
                         <x-nav-dropdown label="Members">
                             <a class="dropdown-item" href="{{ route('admin.members.index') }}">Current members</a>
                             @can('manage-members')
                                 <a class="dropdown-item" href="{{ route('admin.former-members.index') }}">Former members</a>
                                 <a class="dropdown-item" href="{{ route('admin.pending-members.index') }}">Pending members</a>
-                            @endcan
-                            @can('manage-roles')
-                                <a class="dropdown-item" href="{{ route('admin.roles.index') }}">Roles</a>
                             @endcan
                             @can('manage-certificates')
                                 <a class="dropdown-item" href="{{ route('admin.certificates.index') }}">Certificates</a>
@@ -63,15 +58,19 @@
                             @endcan
                         </x-nav-dropdown>
                     @endcan
-                    @can('manage-pages')
+                    @canany(['manage-pages', 'manage-news', 'manage-library'])
                         <x-nav-dropdown label="Content">
-                            <a class="dropdown-item" href="{{ route('admin.pages.index') }}">Pages</a>
-                            <a class="dropdown-item" href="{{ route('admin.news-items.index') }}">News items</a>
+                            @can('manage-pages')
+                                <a class="dropdown-item" href="{{ route('admin.pages.index') }}">Pages</a>
+                            @endcan
+                            @can('manage-news')
+                                <a class="dropdown-item" href="{{ route('admin.news-items.index') }}">News items</a>
+                            @endcan
                             @can('manage-library')
                                 <a class="dropdown-item" href="{{ route('admin.books.index') }}">Books</a>
                             @endcan
                         </x-nav-dropdown>
-                    @endcan
+                    @endcanany
                     @can('manage-mail-lists')
                         <li class="nav-item">
                             <a href="{{ route('admin.mail-lists.index') }}" class="nav-link">

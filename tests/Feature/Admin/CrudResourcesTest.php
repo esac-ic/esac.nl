@@ -89,6 +89,6 @@ class CrudResourcesTest extends TestCase
 
         $this->actingAs($this->admin)->get('library')->assertOk()->assertSee('Alpine climbing');
         $this->get('home')->assertOk();
-        $this->get('agenda')->assertOk();
+        $this->get('events')->assertOk();
     }
 }

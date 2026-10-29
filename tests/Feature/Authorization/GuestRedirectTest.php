@@ -17,7 +17,6 @@ class GuestRedirectTest extends TestCase
             'admin dashboard' => ['admin'],
             'registration forms' => ['admin/registration-forms'],
             'settings' => ['admin/settings/edit'],
-            'roles' => ['admin/roles'],
             'pages' => ['admin/pages'],
             'certificates' => ['admin/certificates'],
             'events' => ['admin/events'],

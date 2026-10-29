@@ -17,7 +17,7 @@
                     <div class="card-body">
                         <a href="{{ route('news.show', $newsItem) }}">
                             <h4 class="card-title">{{$newsItem->title}}</h4>
-                            <p class="card-text text-body">{{ str($newsItem->body)->limit(150, '...')->stripTags() }}</p>
+                            <p class="card-text text-body">{{ str($newsItem->body)->stripTags()->pipe('html_entity_decode')->limit(150) }}</p>
                         </a>
                     </div>
                     <div class="card-footer bg-white p-3">

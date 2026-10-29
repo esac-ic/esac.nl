@@ -2,77 +2,67 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Enums\AdminRole;
 use App\Enums\MemberType;
+use App\Exports\MembersExport;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\MemberRequest;
-use App\Models\Role;
 use App\Models\User;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Routing\Controllers\HasMiddleware;
 use Illuminate\Routing\Controllers\Middleware;
-use Illuminate\Support\Facades\Gate;
+use Symfony\Component\HttpFoundation\StreamedResponse;
 
 class MemberController extends Controller implements HasMiddleware
 {
     public static function middleware(): array
     {
-        // The edit, update, and show methods check the authorization themselves, so they get no ability middleware.
-        // The index is also open to those who can only view members.
+        // Those who can only view members see the list and a member's certificates and registrations.
         return [
-            'auth',
-            new Middleware('can:manage-members', only: ['create', 'store']),
-            new Middleware('can:view-members', only: ['index']),
+            new Middleware('can:view-members', only: ['index', 'show']),
+            new Middleware('can:manage-members', except: ['index', 'show']),
         ];
     }
 
     public function index(): View
     {
         return view('admin.members.index', [
-            'users' => User::query()->active()->with('roles')->get(['id', 'first_name', 'last_name', 'email', 'preposition', 'member_type']),
-            'roles' => Role::all(),
+            'users' => User::query()->active()->get(['id', 'first_name', 'last_name', 'email', 'preposition', 'member_type', 'roles']),
         ]);
     }
 
     public function create(): View
     {
-        return view('admin.members.form', ['user' => new User, 'roles' => Role::all(), 'memberTypes' => MemberType::options()]);
+        return view('admin.members.form', ['user' => new User, 'roles' => AdminRole::cases(), 'memberTypes' => MemberType::options()]);
     }
 
     public function store(MemberRequest $request): RedirectResponse
     {
-        $user = User::query()->create($request->validated());
-        $user->roles()->sync($request->input('roles', []));
+        User::query()->create($request->validated());
 
         return to_route('admin.members.index')->with('message', 'Member added');
     }
 
     public function show(User $user): View
     {
-        Gate::authorize('view', $user);
-
         return view('admin.members.show', ['user' => $user->load('registrations.event')]);
     }
 
     public function edit(User $user): View
     {
-        Gate::authorize('update', $user);
-
-        return view('admin.members.form', ['user' => $user, 'roles' => Role::all(), 'memberTypes' => MemberType::options()]);
+        return view('admin.members.form', ['user' => $user, 'roles' => AdminRole::cases(), 'memberTypes' => MemberType::options()]);
     }
 
     public function update(MemberRequest $request, User $user): RedirectResponse
     {
         $user->updateFromForm($request->validated());
 
-        if ($request->user()->can('manage-members')) {
-            $user->roles()->sync($request->input('roles', []));
-        }
-
-        if ($request->user()->is($user)) {
-            return to_route('admin.members.show', $user);
-        }
-
         return to_route('admin.members.index')->with('message', 'Member saved');
+    }
+
+    public function export(MembersExport $membersExport): StreamedResponse
+    {
+        return $membersExport->download('Members.xlsx');
     }
 }

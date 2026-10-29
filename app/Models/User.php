@@ -15,17 +15,20 @@ use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Attributes\Hidden;
 use Illuminate\Database\Eloquent\Attributes\Scope;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Casts\AsEnumCollection;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
-use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
-use RuntimeException;
 
+/**
+ * @property Collection<int, AdminRole> $roles
+ */
 #[Fillable([
     'email',
     'password',
@@ -47,6 +50,7 @@ use RuntimeException;
     'emergency_country',
     'birthday',
     'member_type',
+    'roles',
     'iban',
     'bic',
     'direct_debit',
@@ -58,7 +62,14 @@ use RuntimeException;
 ])]
 class User extends Authenticatable
 {
-    use HasFactory, Notifiable, SoftDeletes;
+    use HasFactory, Notifiable;
+
+    /**
+     * New members have no roles.
+     */
+    protected $attributes = [
+        'roles' => '[]',
+    ];
 
     protected function casts(): array
     {
@@ -69,6 +80,7 @@ class User extends Authenticatable
             'pending_since' => 'date:Y-m-d',
             'direct_debit' => 'boolean',
             'member_type' => MemberType::class,
+            'roles' => AsEnumCollection::of(AdminRole::class),
         ];
     }
 
@@ -128,14 +140,6 @@ class User extends Authenticatable
     }
 
     /**
-     * @return BelongsToMany<Role, $this>
-     */
-    public function roles(): BelongsToMany
-    {
-        return $this->belongsToMany(Role::class);
-    }
-
-    /**
      * @return BelongsToMany<Certificate, $this>
      */
     public function certificates(): BelongsToMany
@@ -162,13 +166,7 @@ class User extends Authenticatable
 
     public function hasRole(AdminRole ...$roles): bool
     {
-        foreach ($roles as $role) {
-            if ($this->roles->contains($role->value)) {
-                return true;
-            }
-        }
-
-        return false;
+        return collect($roles)->contains(fn (AdminRole $role) => $this->roles->contains($role));
     }
 
     /**
@@ -219,15 +217,17 @@ class User extends Authenticatable
         return $this->membership_ended_on === null && $this->pending_since === null;
     }
 
+    /**
+     * Ends the membership and logs the former member out everywhere: their sessions and remember-me cookies stop working.
+     */
     public function endMembership(): void
     {
         $this->membership_ended_on = today(config('app.display_timezone'));
-        // Logs them out everywhere: their sessions and remember-me cookies stop working
+        $this->roles = collect();
         $this->setRememberToken(Str::random(60));
         $this->save();
-        DB::table(config('session.table'))->where('user_id', $this->id)->delete();
 
-        $this->roles()->detach();
+        DB::table(config('session.table'))->where('user_id', $this->id)->delete();
 
         MembershipEnded::dispatch($this);
     }
@@ -251,14 +251,13 @@ class User extends Authenticatable
     }
 
     /**
-     * @throws RuntimeException when the user isn't a pending member
+     * Deletes the pending member with all their details; the member log keeps their name.
      */
     public function rejectSignUp(): void
     {
-        if (! $this->isPendingMember()) {
-            throw new RuntimeException('User is not a pending member.');
-        }
-        SignUpRejected::dispatch($this, $this->name);
+        SignUpRejected::dispatch($this->name);
+        // certificate_user has no foreign key to clean up after it
+        $this->certificates()->detach();
         $this->delete();
     }
 }
