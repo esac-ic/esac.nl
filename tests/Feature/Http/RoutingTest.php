@@ -68,10 +68,10 @@ class RoutingTest extends TestCase
         // Laravel skips the CSRF check in tests
         $this->app['env'] = 'local';
 
-        $this->actingAs($user)->postJson('api/subzekering', ['text' => 'no token'])->assertStatus(419);
+        $this->actingAs($user)->postJson('api/zekeringen', ['text' => 'no token'])->assertStatus(419);
 
         $this->withSession(['_token' => 'page-token'])
-            ->postJson('api/subzekering', ['text' => 'with token'], ['X-CSRF-TOKEN' => 'page-token'])
+            ->postJson('api/zekeringen', ['text' => 'with token'], ['X-CSRF-TOKEN' => 'page-token'])
             ->assertCreated();
     }
 }
