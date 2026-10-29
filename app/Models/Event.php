@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Casts\DisplayDateTime;
+use App\Enums\FormFieldType;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Attributes\Scope;
 use Illuminate\Database\Eloquent\Builder;
@@ -11,12 +12,13 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\UniqueConstraintViolationException;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 
 #[Fillable([
     'title',
-    'text',
+    'body',
     'short_description',
     'registration_deadline',
     'start_date',
@@ -61,23 +63,17 @@ class Event extends Model
     }
 
     /**
-     * Saves a copy of the event, with a copy of its image, created by the given member.
+     * Gives the event its own copy of the other event's image, so each event has a file to replace or delete.
      */
-    public function copyFor(User $creator): Event
+    public function copyImageFrom(Event $source): void
     {
-        $copy = $this->replicate();
-        $copy->created_by = $creator->id;
-        $copy->save();
-
-        if ($this->image_path !== '') {
-            // Named after the new event, so each event has its own file to replace or delete.
-            $copyImagePath = 'agendaItem/'.$copy->id.'-thumbnail.'.pathinfo($this->image_path, PATHINFO_EXTENSION);
-            Storage::disk('public')->copy($this->image_path, $copyImagePath);
-            $copy->image_path = $copyImagePath;
-            $copy->save();
+        if ($source->image_path === '') {
+            return;
         }
 
-        return $copy;
+        $this->image_path = 'agendaItem/'.$this->id.'-thumbnail.'.pathinfo($source->image_path, PATHINFO_EXTENSION);
+        Storage::disk('public')->copy($source->image_path, $this->image_path);
+        $this->save();
     }
 
     /**
@@ -85,18 +81,33 @@ class Event extends Model
      */
     public function register(int $userId, array $answers): void
     {
+        try {
+            $this->createRegistration($userId, $answers);
+        } catch (UniqueConstraintViolationException) {
+            // A request at the same moment registered the member first.
+        }
+    }
+
+    private function createRegistration(int $userId, array $answers): void
+    {
         DB::transaction(function () use ($userId, $answers) {
             $registration = $this->registrations()->create([
                 'registration_form_id' => $this->registration_form_id,
                 'user_id' => $userId,
             ]);
+            $fields = $this->registrationForm->fields->keyBy('id');
 
             // Unanswered optional fields are saved as blank answers.
             $registration->answers()->createMany(
                 collect($answers)
                     ->map(fn ($value, $fieldId) => [
                         'registration_form_field_id' => $fieldId,
-                        'value' => is_array($value) ? implode(',', $value) : $value ?? '',
+                        'question' => $fields[$fieldId]->name,
+                        'value' => match (true) {
+                            $fields[$fieldId]->type === FormFieldType::Checkbox => $value === 'on' ? 'Yes' : 'No',
+                            is_array($value) => implode(', ', $value),
+                            default => $value ?? '',
+                        },
                     ])
                     ->values(),
             );
@@ -108,7 +119,7 @@ class Event extends Model
      */
     public function registrationForm(): BelongsTo
     {
-        return $this->belongsTo(RegistrationForm::class, 'registration_form_id');
+        return $this->belongsTo(RegistrationForm::class, 'registration_form_id')->withTrashed();
     }
 
     /**
@@ -136,7 +147,7 @@ class Event extends Model
     {
         return Attribute::get(fn (): string => $this->image_path != ''
             ? Storage::disk('public')->url($this->image_path)
-            : '/img/default_agenda_item_cover.jpg');
+            : '/img/default-event-cover.jpg');
     }
 
     /**
@@ -151,12 +162,19 @@ class Event extends Model
     {
         return $this->registrations()
             ->whereBelongsTo($user)
-            ->where('registration_form_id', $this->registration_form_id)
             ->exists();
     }
 
     public function isRegistrationOpen(): bool
     {
         return $this->registration_deadline?->isFuture() ?? false;
+    }
+
+    /**
+     * New registrations need an open deadline and a form that hasn't been deleted; existing ones can still be cancelled.
+     */
+    public function acceptsRegistrations(): bool
+    {
+        return $this->isRegistrationOpen() && $this->registrationForm?->trashed() === false;
     }
 }

@@ -2,7 +2,7 @@
 
 namespace App\Enums;
 
-use App\Models\Setting;
+use App\Settings\SiteSettings;
 
 /**
  * The kind of participant of the association (statutes and HR), which decides a member's mail lists.
@@ -31,34 +31,14 @@ enum MemberType: string
     }
 
     /**
-     * The setting that lists this member type's mail lists.
-     */
-    public function mailListSetting(): SettingKey
-    {
-        return match ($this) {
-            self::Member => SettingKey::MemberMailLists,
-            self::ExtraordinaryParticipant => SettingKey::ExtraordinaryParticipantMailLists,
-            self::Reunist => SettingKey::ReunistMailLists,
-            self::HonoraryMember => SettingKey::HonoraryMemberMailLists,
-            self::MemberOfService => SettingKey::MemberOfServiceMailLists,
-            self::Trainer => SettingKey::TrainerMailLists,
-            self::Relationship => SettingKey::RelationshipMailLists,
-        };
-    }
-
-    /**
      * @return string[]
      */
     public function mailLists(): array
     {
-        $mailLists = trim(Setting::valueOf($this->mailListSetting()));
-
-        return $mailLists === '' ? [] : explode(';', $mailLists);
+        return app(SiteSettings::class)->mail_lists[$this->value];
     }
 
     /**
-     * The labels by value, for a select.
-     *
      * @return array<string, string>
      */
     public static function options(): array

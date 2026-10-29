@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Arr;
 
 #[Fillable([
     'name',
@@ -35,12 +36,8 @@ class RegistrationFormField extends Model
         $optionIds = [];
 
         foreach ($options as $optionData) {
-            if (array_key_exists('id', $optionData)) {
-                $option = $this->options()->findOrFail($optionData['id']);
-                $option->update($optionData);
-            } else {
-                $option = $this->options()->create($optionData);
-            }
+            $option = $this->options()->findOrNew($optionData['id'] ?? null);
+            $option->fill(Arr::only($optionData, ['name', 'value']))->save();
             $optionIds[] = $option->id;
         }
 

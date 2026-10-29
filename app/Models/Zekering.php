@@ -16,10 +16,6 @@ class Zekering extends Model
 {
     use HasFactory, SoftDeletes;
 
-    protected $attributes = [
-        'score' => 1,
-    ];
-
     /**
      * @return HasMany<Zekering, $this>
      */

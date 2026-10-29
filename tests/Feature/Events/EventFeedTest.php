@@ -17,7 +17,7 @@ class EventFeedTest extends TestCase
         $this->travelTo('2026-06-01');
         $item = Event::factory()->create([
             'title' => 'Climbing weekend',
-            'text' => '<p>Bring a rope &amp; harness</p>',
+            'body' => '<p>Bring a rope &amp; harness</p>',
             'start_date' => '2026-05-01 10:00:00',
             'end_date' => '2026-05-03 18:30:00',
         ]);

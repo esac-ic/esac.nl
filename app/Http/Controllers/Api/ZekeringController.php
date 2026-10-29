@@ -6,7 +6,6 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\ZekeringRequest;
 use App\Http\Resources\ZekeringResource;
 use App\Models\Zekering;
-use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Response;
 
 class ZekeringController extends Controller
@@ -18,24 +17,15 @@ class ZekeringController extends Controller
         return ['zekeringen' => ZekeringResource::collection($zekeringen)];
     }
 
-    public function store(ZekeringRequest $request): RedirectResponse
+    public function storeChild(ZekeringRequest $request): ZekeringResource
     {
-        $request->user()->zekeringen()->create($request->validated());
-
-        return to_route('zekeringen');
-    }
-
-    public function storeChild(ZekeringRequest $request): Response
-    {
-        $request->user()->zekeringen()->create($request->validated());
-
-        return response(['msg' => 'Sub zekering created'], 200);
+        return new ZekeringResource($request->user()->zekeringen()->create($request->validated()));
     }
 
     public function destroy(Zekering $zekering): Response
     {
         $zekering->delete();
 
-        return response('', 200);
+        return response()->noContent();
     }
 }

@@ -1,26 +1,7 @@
 @extends('layouts.app')
 @section('content')
 <div class="container intro-container pb-3">
-    <div class="card">
-        <div class="position-relative">
-            @if($newsItem->image_path != "")
-            <img class="card-img-top" src="{{$newsItem->image_url}}" alt="Card image cap">
-            @endif
-            <span class="card-date position-absolute bg-light py-1 px-3 rounded"><x-local-time :value="$newsItem->created_at" format="d M" /></span>
-        </div>
-        <div class="card-body">
-            <h4 class="card-title">{{$newsItem->title}}</h4>
-            <p class="card-text text-body">
-                {!! $newsItem->body !!}
-            </p>
-        </div>
-        <div class="card-footer bg-white p-3">
-            <div class="row justify-content-between">
-                <div class="col-auto text-muted">
-                    <span class="ion-person"></span> {{$newsItem->author}}
-                </div>
-            </div>
-        </div>
-    </div>
+    <x-news-card :$newsItem />
+    <a class="btn btn-outline-primary mt-3" href="{{ route('news.index') }}"><span class="ion-android-arrow-back" aria-hidden="true"></span> Back to news</a>
 </div>
 @endsection

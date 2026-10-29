@@ -29,6 +29,7 @@
     </head>
     <body>
         @yield('main')
+        <x-confirm-dialog />
 
         @vite(['resources/assets/js/vendor/jquery-bootstrap.js'])
         @vite(['resources/assets/js/app.js'])

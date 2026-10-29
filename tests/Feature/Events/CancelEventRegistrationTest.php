@@ -31,7 +31,7 @@ class CancelEventRegistrationTest extends TestCase
 
         $this->delete('events/'.$registration->event_id.'/registration')->assertRedirect();
 
-        $this->assertSoftDeleted($registration);
+        $this->assertModelMissing($registration);
     }
 
     #[Test]
@@ -41,9 +41,9 @@ class CancelEventRegistrationTest extends TestCase
 
         $this->delete('events/'.$registration->event_id.'/registration')
             ->assertRedirect()
-            ->assertSessionHas('message', 'The registration deadline has passed, so you can no longer unregister.');
+            ->assertSessionHas('error', 'The registration deadline has passed, so you can no longer unregister.');
 
-        $this->assertNotSoftDeleted($registration);
+        $this->assertModelExists($registration);
     }
 
     #[Test]
@@ -55,6 +55,6 @@ class CancelEventRegistrationTest extends TestCase
         $this->delete(route('admin.events.registrations.destroy', [Event::factory()->create(), $registration]))->assertNotFound();
         $this->delete(route('admin.events.registrations.destroy', [$registration->event_id, $registration]))->assertRedirect();
 
-        $this->assertSoftDeleted($registration);
+        $this->assertModelMissing($registration);
     }
 }

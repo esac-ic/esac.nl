@@ -5,27 +5,16 @@ Registration
 @endsection
 
 @section('content')
-    <x-page-header title="Registration">
-        <a href="{{url()->previous()}}" class="btn btn-primary">
-            <em class="ion-android-arrow-back"></em> Back
-        </a>
+    <x-page-header title="Registration" :back="route('admin.events.registrations.index', $event)" back-label="Registrations">
     </x-page-header>
     <x-card title="Answers" class="mt-4">
-        <table class="table table-striped" style="width:100%">
-            <thead>
-            <tr>
-                <th>Field</th>
-                <th>Answer</th>
-            </tr>
-            </thead>
-            <tbody>
+        <x-data-table :columns="['Field', 'Answer']">
             @foreach($answers as $answer)
                 <tr>
-                    <td>{{ $answer->field->name }}</td>
-                    <td>{{ $answer->formatted_value }}</td>
+                    <td>{{ $answer->question }}</td>
+                    <td>{{ $answer->value }}</td>
                 </tr>
             @endforeach
-            </tbody>
-        </table>
+        </x-data-table>
     </x-card>
 @endsection

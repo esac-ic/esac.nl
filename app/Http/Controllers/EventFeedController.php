@@ -11,9 +11,6 @@ use Eluceo\iCal\Domain\ValueObject\UniqueIdentifier;
 use Eluceo\iCal\Presentation\Factory\CalendarFactory;
 use Illuminate\Http\Response;
 
-/**
- * The events as an iCal feed that calendar apps subscribe to.
- */
 class EventFeedController extends Controller
 {
     public function __invoke(): Response
@@ -35,7 +32,7 @@ class EventFeedController extends Controller
                 ))
                 ->setSummary($event->title)
                 ->setDescription(
-                    html_entity_decode(strip_tags($event->text)).
+                    html_entity_decode(strip_tags($event->body)).
                     "\r\n\r\n----------\r\n".
                     'More information: '.route('events.show', $event)
                 );

@@ -28,5 +28,10 @@ class MailListRoutesTest extends TestCase
             ->deleteJson(route('admin.mail-lists.members.destroy', ['test.esac.nl', 'a@example.com']))
             ->assertStatus(502)
             ->assertJsonPath('message', fn (string $message) => str_starts_with($message, 'Mailman failed: '));
+
+        $this->actingAs($admin)
+            ->get(route('admin.mail-lists.index'))
+            ->assertStatus(502)
+            ->assertSee('Mail lists unavailable');
     }
 }

@@ -8,22 +8,6 @@ use App\Models\User;
 
 trait ManagesRegistrationForms
 {
-    public static function managingRoles(): array
-    {
-        return [
-            'administrator' => [AdminRole::Administrator],
-            'content administrator' => [AdminRole::ContentAdministrator],
-            'event administrator' => [AdminRole::EventAdministrator],
-        ];
-    }
-
-    public static function otherRoles(): array
-    {
-        return [
-            'certificate administrator' => [AdminRole::CertificateAdministrator],
-        ];
-    }
-
     private function actingAsRole(AdminRole ...$roles): void
     {
         $this->actingAs(User::factory()->withRole(...$roles)->create());
@@ -31,6 +15,7 @@ trait ManagesRegistrationForms
 
     private function assertRegistrationForm(RegistrationForm $registrationForm, array $data): void
     {
+        $registrationForm->load('fields.options');
         $this->assertEquals($data['name'], $registrationForm->name);
         $this->assertCount(count($data['rows']), $registrationForm->fields);
 

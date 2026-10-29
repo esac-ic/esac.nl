@@ -25,11 +25,10 @@ use App\Http\Controllers\EventFeedController;
 use App\Http\Controllers\RegistrationController;
 use App\Http\Controllers\SignUpController;
 use App\Http\Controllers\SiteController;
+use App\Http\Controllers\ZekeringController;
 use Illuminate\Support\Facades\Route;
 
 Route::resourceParameters(['members' => 'user', 'pending-members' => 'pending_member']);
-
-Route::permanentRedirect('/', '/home');
 
 Route::prefix('admin')->name('admin.')->middleware(['auth', 'can:access-admin'])->group(function () {
     Route::get('/', DashboardController::class)->name('dashboard');
@@ -50,7 +49,6 @@ Route::prefix('admin')->name('admin.')->middleware(['auth', 'can:access-admin'])
     Route::resource('members.certificates', MemberCertificateController::class)->except(['index', 'show'])->scoped();
 
     Route::resource('events', EventController::class);
-    Route::post('events/{event}/copy', [EventController::class, 'copy'])->name('events.copy');
     Route::resource('registration-forms', RegistrationFormController::class);
 
     Route::get('events/{event}/registrations/export', [EventRegistrationController::class, 'export'])->name('events.registrations.export');
@@ -79,9 +77,12 @@ Route::prefix('admin')->name('admin.')->middleware(['auth', 'can:access-admin'])
 
 Route::middleware('auth')->group(function () {
     Route::singleton('account', AccountController::class);
+    // Fortify saves the email address and password
+    Route::view('account/login/edit', 'account.login', ['pageTitle' => 'Email and password'])->name('account.login.edit');
 
     Route::get('members', [SiteController::class, 'members'])->name('members.index');
     Route::get('zekeringen', [SiteController::class, 'zekeringen'])->name('zekeringen');
+    Route::post('zekeringen', [ZekeringController::class, 'store'])->name('zekeringen.store');
 
     // A member's registration for an event
     Route::controller(RegistrationController::class)->prefix('events/{event}/registration')->name('events.registration.')->group(function () {
@@ -102,15 +103,19 @@ Route::get('ical', EventFeedController::class);
 Route::permanentRedirect('agenda', '/events');
 Route::permanentRedirect('agenda/{event}', '/events/{event}');
 Route::permanentRedirect('memberlist', '/members');
-Route::get('signup', fn () => to_route('sign-up.create', status: 301));
-Route::get('forms/{event}', fn (string $event) => to_route('events.registration.create', $event, 301));
+Route::permanentRedirect('signup', '/sign-up');
+Route::permanentRedirect('forms/{event}', '/events/{event}/registration');
+Route::permanentRedirect('password/reset', '/forgot-password');
+Route::permanentRedirect('password/reset/{token}', '/reset-password/{token}');
 
 Route::controller(SiteController::class)->group(function () {
-    Route::get('home', 'home')->name('home');
+    Route::get('/', 'home')->name('home');
+    // Browsers keep the old 301 from / to /home, so /home redirecting back would loop
+    Route::get('home', 'home');
     Route::get('events', 'events')->name('events.index');
     Route::get('events/{event}', 'showEvent')->name('events.show');
     Route::get('news', 'news')->name('news.index');
     Route::get('news/{news_item}', 'showNewsItem')->name('news.show');
     Route::get('library', 'library')->name('library');
-    Route::get('{menu_item:slug}', 'showPage')->name('pages.show');
+    Route::get('{page:slug}', 'showPage')->name('pages.show');
 });

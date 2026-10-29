@@ -16,9 +16,6 @@ use Illuminate\Routing\Controllers\Middleware;
 use Illuminate\Support\Str;
 use Symfony\Component\HttpFoundation\StreamedResponse;
 
-/**
- * The registrations of an event, managed by the event administrators.
- */
 class EventRegistrationController extends Controller implements HasMiddleware
 {
     public static function middleware(): array
@@ -39,6 +36,7 @@ class EventRegistrationController extends Controller implements HasMiddleware
 
     public function create(Event $event): View
     {
+        abort_if($event->registrationForm?->trashed() !== false, 404);
         $registrationForm = $event->registrationForm->load('fields.options');
 
         $users = User::query()->active()
@@ -57,7 +55,8 @@ class EventRegistrationController extends Controller implements HasMiddleware
 
     public function store(AdminRegistrationRequest $request, Event $event): RedirectResponse
     {
-        $event->register($request->validated('user'), $request->safe()->except('user'));
+        abort_if($event->registrationForm?->trashed() !== false, 404);
+        $event->register($request->validated('user_id'), $request->safe()->except('user_id'));
 
         return to_route('admin.events.registrations.index', $event);
     }
@@ -65,7 +64,8 @@ class EventRegistrationController extends Controller implements HasMiddleware
     public function show(Event $event, Registration $registration): View
     {
         return view('admin.events.registrations.show', [
-            'answers' => $registration->answers()->with('field')->get(),
+            'event' => $event,
+            'answers' => $registration->answers,
         ]);
     }
 

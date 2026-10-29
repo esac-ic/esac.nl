@@ -96,6 +96,10 @@ class RegisterForEventTest extends TestCase
         ]);
 
         $this->get('/events/'.$event->id.'/registration')
+            ->assertRedirect(route('events.show', $event))
+            ->assertSessionMissing('error');
+
+        $this->post('/events/'.$event->id.'/registration', $this->answers($event))
             ->assertRedirect()
             ->assertSessionHas('error', 'You are already registered for this event.');
     }
@@ -106,7 +110,9 @@ class RegisterForEventTest extends TestCase
         $event = $this->eventWithRegistrationForm();
         $answers = $this->answers($event);
 
-        $this->post('/events/'.$event->id.'/registration', $answers)->assertRedirect();
+        $this->post('/events/'.$event->id.'/registration', $answers)
+            ->assertRedirect(route('events.show', $event))
+            ->assertSessionHas('message', 'You are registered for '.$event->title.'.');
 
         $this->assertRegistered($this->user, $event, $answers);
     }
@@ -116,7 +122,7 @@ class RegisterForEventTest extends TestCase
     {
         $event = $this->eventWithRegistrationForm();
 
-        $this->post(route('admin.events.registrations.store', $event), ['user' => User::factory()->create()->id] + $this->answers($event))
+        $this->post(route('admin.events.registrations.store', $event), ['user_id' => User::factory()->create()->id] + $this->answers($event))
             ->assertForbidden();
     }
 
@@ -128,7 +134,7 @@ class RegisterForEventTest extends TestCase
         $event = $this->eventWithRegistrationForm();
         $answers = $this->answers($event);
 
-        $this->post(route('admin.events.registrations.store', $event), ['user' => $userToRegister->id] + $answers)->assertRedirect();
+        $this->post(route('admin.events.registrations.store', $event), ['user_id' => $userToRegister->id] + $answers)->assertRedirect();
 
         $this->assertRegistered($userToRegister, $event, $answers);
     }
@@ -148,5 +154,27 @@ class RegisterForEventTest extends TestCase
         $this->post('/events/'.$event->id.'/registration', $this->answers($event) + [$required->id => 3, $otherFormsRow->id => 'x'])->assertValid();
 
         $this->assertNotContains($otherFormsRow->id, Registration::sole()->answers->pluck('registration_form_field_id'));
+    }
+
+    #[Test]
+    public function an_event_whose_form_was_deleted_takes_no_new_registrations(): void
+    {
+        $event = Event::factory()->for(RegistrationForm::factory())->create(['registration_deadline' => now()->addDay()]);
+        $event->registrationForm->delete();
+
+        $this->actingAs(User::factory()->create())->get(route('events.registration.create', $event))->assertSessionHas('error', 'This event has no registration form.');
+        $this->actingAs(User::factory()->withRole(AdminRole::EventAdministrator)->create())->get(route('admin.events.registrations.create', $event))->assertNotFound();
+    }
+
+    #[Test]
+    public function a_member_registers_only_once_even_when_two_requests_arrive_together(): void
+    {
+        $event = Event::factory()->for(RegistrationForm::factory())->create();
+        $user = User::factory()->create();
+
+        $event->register($user->id, []);
+        $event->register($user->id, []);
+
+        $this->assertSame(1, $event->registrations()->count());
     }
 }

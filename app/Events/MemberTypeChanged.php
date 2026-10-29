@@ -26,7 +26,7 @@ class MemberTypeChanged implements LogsToMemberLog
 
     public function logDetails(): string
     {
-        return $this->user->name.' changed from '.$this->previousMemberType->value.' to '.$this->newMemberType->value;
+        return $this->user->name.' changed from '.$this->previousMemberType->label().' to '.$this->newMemberType->label();
     }
 
     public function loggedUser(): ?User

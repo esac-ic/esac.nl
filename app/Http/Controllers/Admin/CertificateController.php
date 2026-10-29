@@ -22,7 +22,7 @@ class CertificateController extends Controller implements HasMiddleware
     public function index(): View
     {
         return view('admin.certificates.index', [
-            'certificates' => Certificate::all(['id', 'name']),
+            'certificates' => Certificate::all(),
         ]);
     }
 

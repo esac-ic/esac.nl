@@ -1,6 +1,6 @@
 <template>
     <div>
-        <input class="form-control" v-model="value" :type="inputType" :required="row.required" :name="row.id">
+        <input :class="row.type === FORM_TYPE_CHECK_BOX ? 'd-block' : 'form-control'" v-model="value" :type="inputType" :required="row.required" :name="row.id">
         <input v-if="row.type === FORM_TYPE_CHECK_BOX && !value" type="hidden" value="0" :name="row.id">
     </div>
 </template>

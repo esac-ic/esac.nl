@@ -7,8 +7,6 @@ use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 /**
- * An event as the events page's JavaScript reads it.
- *
  * @mixin Event
  */
 class EventResource extends JsonResource

@@ -49,13 +49,13 @@ class FormOldInputTest extends TestCase
 
         $response = $this->from('admin/pages/create')->followingRedirects()->post('admin/pages', [
             'slug' => 'test',
-            'content' => 'Inhoud',
+            'body' => 'Inhoud',
             'show_in_menu' => $showInMenu,
             '_token' => csrf_token(),
         ]);
 
         $response->assertOk();
-        $this->assertFieldValue($response, 'content', 'Inhoud');
+        $this->assertFieldValue($response, 'body', 'Inhoud');
         $this->assertChecked($response, 'show_in_menu');
         $this->assertChecked($response, 'requires_login', false);
     }

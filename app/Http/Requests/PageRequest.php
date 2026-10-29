@@ -3,17 +3,27 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Routing\Route as RouteDefinition;
+use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Str;
 use Illuminate\Validation\Rule;
 
 class PageRequest extends FormRequest
 {
     /**
-     * The first URL segments of the site's own routes, the old ones that redirect included, which a page's slug can't take.
+     * A page's URL can't take the first segment of the site's own routes or of a public folder, e.g. /admin or /build.
      */
-    private const array RESERVED_SLUGS = [
-        'account', 'admin', 'agenda', 'api', 'events', 'forms', 'home', 'ical', 'library', 'login', 'logout',
-        'memberlist', 'members', 'news', 'password', 'sign-up', 'signup', 'storage', 'up', 'user', 'zekeringen',
-    ];
+    private function reservedSlugs(): array
+    {
+        return collect(Route::getRoutes()->getRoutes())
+            ->map(fn (RouteDefinition $route) => Str::before($route->uri(), '/'))
+            ->merge(array_map(basename(...), File::directories(public_path())))
+            ->reject(fn (string $segment) => Str::startsWith($segment, '{'))
+            ->unique()
+            ->values()
+            ->all();
+    }
 
     public function rules(): array
     {
@@ -25,14 +35,14 @@ class PageRequest extends FormRequest
                 'required',
                 'max:255',
                 // Older pages keep their slug until it's changed
-                Rule::when($this->input('slug') !== $page?->slug, ['lowercase', 'alpha_dash:ascii', Rule::notIn(self::RESERVED_SLUGS)]),
-                Rule::unique('menu_items', 'slug')->ignore($page),
+                Rule::when($this->input('slug') !== $page?->slug, ['lowercase', 'alpha_dash:ascii', Rule::notIn($this->reservedSlugs())]),
+                Rule::unique('pages', 'slug')->ignore($page),
             ],
             'name' => ['required', 'max:255'],
             // The content of a non-editable page can only be changed in the database.
-            'content' => [Rule::excludeIf($page?->editable === false), 'required'],
+            'body' => [Rule::excludeIf($page?->editable === false), 'required'],
             // The menu has two levels: a sub page's parent is a top-level page, and a page with sub pages stays top-level.
-            'parent_id' => [Rule::prohibitedIf($page?->children()->exists() ?? false), 'nullable', Rule::exists('menu_items', 'id')->whereNull('parent_id')->when($page, fn ($rule) => $rule->whereNot('id', $page->id))],
+            'parent_id' => [Rule::prohibitedIf($page?->children()->exists() ?? false), 'nullable', Rule::exists('pages', 'id')->whereNull('parent_id')->when($page, fn ($rule) => $rule->whereNot('id', $page->id))],
             // The site's own routes decide who can see the pages with a fixed slug.
             'requires_login' => [Rule::excludeIf($page?->hasFixedSlug() ?? false), 'boolean'],
             'show_in_menu' => ['boolean'],

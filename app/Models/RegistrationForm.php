@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Arr;
 
 #[Fillable([
     'name',
@@ -14,6 +15,14 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 class RegistrationForm extends Model
 {
     use HasFactory, SoftDeletes;
+
+    /**
+     * @return HasMany<Event, $this>
+     */
+    public function events(): HasMany
+    {
+        return $this->hasMany(Event::class, 'registration_form_id');
+    }
 
     /**
      * @return HasMany<RegistrationFormField, $this>
@@ -31,15 +40,8 @@ class RegistrationForm extends Model
         $fieldIds = [];
 
         foreach ($fields as $fieldData) {
-            if (array_key_exists('id', $fieldData) === true) {
-                $field = $this->fields()->findOrFail($fieldData['id']);
-            } else {
-                $field = new RegistrationFormField;
-                $field->registration_form_id = $this->id;
-            }
-            $field->fill($fieldData);
-            $field->required = $fieldData['required'] ?? false;
-            $field->save();
+            $field = $this->fields()->findOrNew($fieldData['id'] ?? null);
+            $field->fill(Arr::only($fieldData, ['name', 'type', 'required']))->save();
             $field->syncOptions($fieldData['options'] ?? []);
             $fieldIds[] = $field->id;
         }

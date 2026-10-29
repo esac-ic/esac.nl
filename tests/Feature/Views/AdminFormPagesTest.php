@@ -7,8 +7,8 @@ use App\Models\Book;
 use App\Models\Certificate;
 use App\Models\Event;
 use App\Models\EventCategory;
-use App\Models\MenuItem;
 use App\Models\NewsItem;
+use App\Models\Page;
 use App\Models\RegistrationForm;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -92,12 +92,12 @@ class AdminFormPagesTest extends TestCase
     {
         $this->assertForm($this->get('admin/pages/create')->assertOk(), 'POST', 'admin/pages');
 
-        $page = MenuItem::forceCreate(['name' => 'Over ons', 'slug' => 'over-ons', 'content' => '<p>Wij</p>', 'show_in_menu' => true, 'requires_login' => false, 'deletable' => true, 'editable' => true]);
+        $page = Page::forceCreate(['name' => 'Over ons', 'slug' => 'over-ons', 'body' => '<p>Wij</p>', 'show_in_menu' => true, 'requires_login' => false, 'deletable' => true, 'editable' => true]);
         $response = $this->get("admin/pages/$page->id/edit")->assertOk();
 
         $this->assertForm($response, 'PATCH', "admin/pages/$page->id");
         $this->assertFieldValue($response, 'name', 'Over ons');
-        $this->assertFieldValue($response, 'content', '<p>Wij</p>');
+        $this->assertFieldValue($response, 'body', '<p>Wij</p>');
         $this->assertChecked($response, 'show_in_menu');
         $this->assertChecked($response, 'requires_login', false);
     }
@@ -110,7 +110,7 @@ class AdminFormPagesTest extends TestCase
         $registrationForm = RegistrationForm::factory()->create(['name' => 'Weekend']);
         $response = $this->get("admin/registration-forms/$registrationForm->id/edit")->assertOk();
 
-        $this->assertForm($response, 'PUT', "admin/registration-forms/$registrationForm->id");
+        $this->assertForm($response, 'PATCH', "admin/registration-forms/$registrationForm->id");
         $this->assertFieldValue($response, 'name', 'Weekend');
     }
 
@@ -163,7 +163,7 @@ class AdminFormPagesTest extends TestCase
         $response = $this->get('account/edit')->assertOk();
 
         $this->assertForm($response, 'PATCH', 'account');
-        $this->assertTrue($this->field($response, 'member_type')->hasAttribute('disabled'));
+        $this->assertSame(0, $this->xpath($response)->query('//form//*[@name="member_type"]')->length);
         $this->get("admin/members/{$this->user->id}/edit")->assertStatus(403);
     }
 
@@ -239,6 +239,6 @@ class AdminFormPagesTest extends TestCase
         $response = $this->get("admin/events/$event->id/registrations/create")->assertOk();
 
         $this->assertForm($response, 'POST', "admin/events/$event->id/registrations");
-        $this->field($response, 'user');
+        $this->field($response, 'user_id');
     }
 }

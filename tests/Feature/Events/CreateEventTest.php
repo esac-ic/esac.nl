@@ -27,7 +27,7 @@ class CreateEventTest extends TestCase
     {
         return [
             'title' => 'test agenda',
-            'text' => 'test agenda',
+            'body' => 'test agenda',
             'short_description' => 'test agenda',
             'event_category_id' => EventCategory::factory()->create()->id,
             'registration_form_id' => RegistrationForm::factory()->create()->id,
@@ -51,13 +51,13 @@ class CreateEventTest extends TestCase
     public function an_event_administrator_can_create_an_event(string $text)
     {
         $this->actingAsEventAdministrator();
-        $body = $this->body(['title' => $text, 'text' => $text, 'short_description' => $text]);
+        $body = $this->body(['title' => $text, 'body' => $text, 'short_description' => $text]);
 
         $this->post('admin/events', $body)->assertRedirect();
 
         $this->assertDatabaseHas(Event::class, [
             'title' => $text,
-            'text' => $text,
+            'body' => $text,
             'event_category_id' => $body['event_category_id'],
         ]);
     }
@@ -70,7 +70,7 @@ class CreateEventTest extends TestCase
 
         $this->post('admin/events', $this->body([
             'registration_form_id' => null,
-            'thumbnail' => UploadedFile::fake()->image('photo.png', 1000, 1000),
+            'image' => UploadedFile::fake()->image('photo.png', 1000, 1000),
         ]))->assertRedirect();
 
         $this->assertSame([400, 300], array_slice(getimagesize(Storage::disk('public')->path(Event::sole()->image_path)), 0, 2));

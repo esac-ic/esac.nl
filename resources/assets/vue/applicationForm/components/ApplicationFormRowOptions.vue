@@ -1,12 +1,12 @@
 <template>
     <div class="row-option-box">
         <div class="title-box">
-            <h3>
+            <h5 class="d-flex justify-content-between align-items-center">
                 Options
-                <span v-on:click="addRow()" class="float-right" style="cursor: pointer">
-                    <i class="ion-plus"></i>
-                </span>
-            </h3>
+                <button type="button" class="btn btn-sm btn-outline-primary mb-2" v-on:click="addRow()">
+                    <i class="ion-plus" aria-hidden="true"></i> Add option
+                </button>
+            </h5>
         </div>
         <div v-for="(row, index) in optionRows" :key="row.key" class="row" style="margin-bottom: 5px">
             <div class="col-md-4">
@@ -26,11 +26,10 @@
                         :name="'rows[' + applicationFormIndex + '][options][' + index + '][value]'"
                         :placeholder="row.name">
             </div>
-            <div class="col-md-1">
-                <div class="form-group">
-                    <label>Delete</label>
-                    <button type="button" class="btn btn-danger form-control" v-on:click="deleteRow(index)">
-                        <i class="ion-trash-a"></i>
+            <div class="col-md-2 d-flex align-items-end">
+                <div class="form-group mb-0">
+                    <button type="button" class="btn btn-outline-danger text-nowrap" v-on:click="deleteRow(index)">
+                        <i class="ion-trash-a" aria-hidden="true"></i> Remove
                     </button>
                 </div>
             </div>

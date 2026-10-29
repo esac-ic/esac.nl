@@ -152,6 +152,40 @@ class ExportTest extends TestCase
         $this->assertCount(1 + 2, $rows);
     }
 
+    #[Test]
+    public function registrations_export_keeps_questions_with_the_same_name_apart()
+    {
+        $form = RegistrationForm::factory()->create();
+        $fields = RegistrationFormField::factory()->count(2)->create(['registration_form_id' => $form->id, 'name' => 'Other', 'type' => FormFieldType::Text]);
+        $event = Event::factory()->create(['title' => 'Trip', 'registration_form_id' => $form->id]);
+        $registration = Registration::factory()->create(['event_id' => $event->id, 'registration_form_id' => $form->id]);
+        foreach ($fields as $index => $field) {
+            $registration->answers()->create(['registration_form_field_id' => $field->id, 'question' => 'Other', 'value' => "Answer $index"]);
+        }
+
+        [, $rows] = $this->readSpreadsheet($this->get("admin/events/{$event->id}/registrations/export"));
+
+        $this->assertSame(['Other', 'Other'], array_slice($rows[0], 10));
+        $this->assertSame(['Answer 0', 'Answer 1'], array_slice($rows[1], 10));
+    }
+
+    #[Test]
+    public function registrations_export_keeps_answers_under_the_question_as_it_was_asked()
+    {
+        $form = RegistrationForm::factory()->create();
+        $field = RegistrationFormField::factory()->create(['registration_form_id' => $form->id, 'name' => 'Diet', 'type' => FormFieldType::Text]);
+        $event = Event::factory()->create(['title' => 'Trip', 'registration_form_id' => $form->id]);
+        $registration = Registration::factory()->create(['event_id' => $event->id, 'registration_form_id' => $form->id]);
+        $registration->answers()->create(['registration_form_field_id' => $field->id, 'question' => 'Diet', 'value' => 'Vegan']);
+        $field->update(['name' => 'Allergies']);
+
+        [, $rows] = $this->readSpreadsheet($this->get("admin/events/{$event->id}/registrations/export"));
+
+        $this->assertSame(['Diet', 'Allergies'], array_slice($rows[0], 10));
+        $this->assertSame('Vegan', $rows[1][10]);
+        $this->assertSame('', $rows[1][11] ?? '');
+    }
+
     private function readSpreadsheet(TestResponse $response, ?string $fileName = null): array
     {
         $response->assertOk();

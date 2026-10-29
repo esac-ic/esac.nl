@@ -8,9 +8,6 @@ use Illuminate\Contracts\Queue\ShouldQueueAfterCommit;
 
 class WriteMemberLogEntry implements ShouldQueueAfterCommit
 {
-    /**
-     * Adds the event to the member log.
-     */
     public function handle(LogsToMemberLog $event): void
     {
         $logEntry = new MemberLogEntry([

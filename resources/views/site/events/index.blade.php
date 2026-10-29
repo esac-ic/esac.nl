@@ -6,7 +6,7 @@
     {{-- Vue mounts the events list here --}}
     <agenda></agenda>
 
-    <div id="ExportModal" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
+    <div id="export-calendar-modal" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">

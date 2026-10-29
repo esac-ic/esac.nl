@@ -3,17 +3,16 @@
 namespace App\Providers;
 
 use App\Enums\AdminRole;
-use App\Enums\SettingKey;
-use App\Models\Setting;
 use App\Models\User;
+use App\Settings\SiteSettings;
 use App\View\Composers\MenuComposer;
 use Illuminate\Auth\Access\Response;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Pagination\Paginator;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Gate;
-use Illuminate\Support\Facades\Queue;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\View;
-use Illuminate\Support\Once;
 use Illuminate\Support\ServiceProvider;
 use Symfony\Component\Intl\Countries;
 
@@ -24,6 +23,10 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
+        // Lazy loading, unknown attributes and dropped mass assignments fail in development and tests; production stays lenient.
+        Model::shouldBeStrict(! $this->app->isProduction());
+        DB::prohibitDestructiveCommands($this->app->isProduction());
+
         $this->defineGates();
 
         // The member routes only find the members in the state that the route is for.
@@ -34,17 +37,14 @@ class AppServiceProvider extends ServiceProvider
 
         Paginator::useBootstrapFour();
 
-        // A queue worker runs many jobs in one process, so each job reads the settings afresh.
-        Queue::before(fn () => Once::flush());
-
         // Kosovo has no official ISO code yet, so it's only listed with the user-assigned XK.
         Countries::withUserAssigned(true);
 
         View::composer('components.menu', MenuComposer::class);
-        View::composer(['site.sign-up', 'components.member-fields', 'components.member-tabs'], fn ($view) => $view->with('countries', Countries::getNames()));
+        View::composer(['components.member-fields', 'components.member-tabs'], fn ($view) => $view->with('countries', Countries::getNames()));
         View::composer('includes.footer', fn ($view) => $view->with(
             'footerPhoneNumber',
-            Setting::valueOf(SettingKey::FooterPhoneNumber),
+            app(SiteSettings::class)->footer_phone_number,
         ));
     }
 

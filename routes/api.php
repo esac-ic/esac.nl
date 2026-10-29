@@ -11,7 +11,6 @@ Route::get('agendaCategories', [EventCategoryController::class, 'index'])->name(
 
 Route::middleware('auth')->controller(ZekeringController::class)->group(function () {
     Route::get('zekeringen', 'index')->name('zekeringen.index');
-    Route::post('zekeringen', 'store')->name('zekeringen.store');
     Route::post('subzekering', 'storeChild')->name('zekeringen.children.store');
     Route::delete('zekeringen/{zekering}', 'destroy')->name('zekeringen.destroy')->can('manage-zekeringen');
 });

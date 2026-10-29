@@ -3,7 +3,7 @@
 namespace Tests\Feature\Pages;
 
 use App\Enums\AdminRole;
-use App\Models\MenuItem;
+use App\Models\Page;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use PHPUnit\Framework\Attributes\DataProvider;
@@ -14,14 +14,14 @@ class CreatePageTest extends TestCase
 {
     use RefreshDatabase;
 
-    private MenuItem $parent;
+    private Page $parent;
 
     protected function setUp(): void
     {
         parent::setUp();
         $this->actingAs(User::factory()->withRole(AdminRole::ContentAdministrator)->create());
-        $this->parent = MenuItem::query()->forceCreate([
-            'name' => 'Parent', 'slug' => 'parent', 'content' => 'Parent', 'requires_login' => false,
+        $this->parent = Page::query()->forceCreate([
+            'name' => 'Parent', 'slug' => 'parent', 'body' => 'Parent', 'requires_login' => false,
             'show_in_menu' => true, 'deletable' => true, 'editable' => true,
         ]);
     }
@@ -32,7 +32,7 @@ class CreatePageTest extends TestCase
             'slug' => 'test',
             'parent_id' => $this->parent->id,
             'name' => 'Test title',
-            'content' => 'Very cool test content.',
+            'body' => 'Very cool test content.',
         ], $overrides);
     }
 
@@ -40,7 +40,7 @@ class CreatePageTest extends TestCase
     {
         return [
             'sub item' => [[], true],
-            'sub item with emoji' => [['name' => 'Test title 😀', 'content' => 'Hele leuke test inhoud. 😀'], true],
+            'sub item with emoji' => [['name' => 'Test title 😀', 'body' => 'Hele leuke test inhoud. 😀'], true],
             'top-level page' => [['parent_id' => null], false],
         ];
     }
@@ -55,11 +55,11 @@ class CreatePageTest extends TestCase
             ->assertSessionHasNoErrors()
             ->assertRedirect('admin/pages');
 
-        $this->assertDatabaseHas(MenuItem::class, [
+        $this->assertDatabaseHas(Page::class, [
             'parent_id' => $isSubItem ? $this->parent->id : null,
             'slug' => $body['slug'],
             'name' => $body['name'],
-            'content' => $body['content'],
+            'body' => $body['body'],
         ]);
     }
 
@@ -68,7 +68,7 @@ class CreatePageTest extends TestCase
     {
         $body = $this->body(['parent_id' => null]);
         $this->post('admin/pages', $body)->assertValid();
-        $page = MenuItem::query()->where('slug', 'test')->sole();
+        $page = Page::query()->where('slug', 'test')->sole();
 
         $this->patch(route('admin.pages.update', $page), [...$body, 'name' => ''])->assertInvalid('name');
         $this->patch(route('admin.pages.update', $page), [...$body, 'name' => 'New title'])->assertValid();
@@ -79,7 +79,7 @@ class CreatePageTest extends TestCase
     public function a_page_with_an_older_slug_can_be_saved_without_renaming_it()
     {
         $this->post('admin/pages', $this->body(['parent_id' => null]))->assertValid();
-        $page = MenuItem::query()->where('slug', 'test')->sole();
+        $page = Page::query()->where('slug', 'test')->sole();
         $page->forceFill(['slug' => 'Huisregels'])->save();
 
         $this->patch(route('admin.pages.update', $page), $this->body(['slug' => 'Huisregels', 'parent_id' => null]))->assertValid();
@@ -93,7 +93,7 @@ class CreatePageTest extends TestCase
 
         $this->post('admin/pages', $this->body())->assertForbidden();
 
-        $this->assertDatabaseCount(MenuItem::class, 1);
+        $this->assertDatabaseCount(Page::class, 1);
     }
 
     #[Test]
@@ -102,8 +102,8 @@ class CreatePageTest extends TestCase
         $this->post('admin/pages', $this->body())->assertSessionHasNoErrors();
         $this->post('admin/pages', $this->body(['slug' => 'test2', 'requires_login' => true]))->assertSessionHasNoErrors();
 
-        $this->assertDatabaseHas(MenuItem::class, ['slug' => 'test', 'requires_login' => false]);
-        $this->assertDatabaseHas(MenuItem::class, ['slug' => 'test2', 'requires_login' => true]);
+        $this->assertDatabaseHas(Page::class, ['slug' => 'test', 'requires_login' => false]);
+        $this->assertDatabaseHas(Page::class, ['slug' => 'test2', 'requires_login' => true]);
     }
 
     #[Test]
@@ -113,7 +113,7 @@ class CreatePageTest extends TestCase
         $this->post('admin/pages', $this->body(['slug' => 'second', 'name' => 'Second', 'parent_id' => null, 'show_in_menu' => true]));
         $this->get('second')->assertSeeInOrder(['navbar-nav', 'Parent', 'First', 'Second']);
 
-        $this->patch(route('admin.pages.move', MenuItem::query()->where('slug', 'second')->sole()), ['direction' => 'up']);
+        $this->patch(route('admin.pages.move', Page::query()->where('slug', 'second')->sole()), ['direction' => 'up']);
 
         $this->get('second')->assertSeeInOrder(['navbar-nav', 'Parent', 'Second', 'First']);
     }
@@ -123,9 +123,9 @@ class CreatePageTest extends TestCase
     {
         $this->post('admin/pages')
             ->assertRedirect()
-            ->assertInvalid(['slug', 'name', 'content']);
+            ->assertInvalid(['slug', 'name', 'body']);
 
-        $this->assertDatabaseCount(MenuItem::class, 1);
+        $this->assertDatabaseCount(Page::class, 1);
     }
 
     #[Test]
@@ -135,6 +135,6 @@ class CreatePageTest extends TestCase
             $this->post('admin/pages', $this->body(['slug' => $slug]))->assertInvalid('slug');
         }
 
-        $this->assertDatabaseCount(MenuItem::class, 1);
+        $this->assertDatabaseCount(Page::class, 1);
     }
 }

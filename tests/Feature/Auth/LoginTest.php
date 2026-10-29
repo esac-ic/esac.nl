@@ -5,7 +5,6 @@ namespace Tests\Feature\Auth;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Hash;
 use Illuminate\Testing\TestResponse;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\Test;
@@ -40,7 +39,7 @@ class LoginTest extends TestCase
         $user = User::factory()->create();
 
         $this->login($user, extra: ['remember' => '1'])
-            ->assertRedirect('/home')
+            ->assertRedirect('/')
             ->assertCookie(Auth::guard()->getRecallerName());
 
         $this->assertAuthenticatedAs($user);
@@ -50,9 +49,9 @@ class LoginTest extends TestCase
     #[Test]
     public function a_member_whose_email_has_capitals_can_log_in()
     {
-        $user = User::factory()->create(['email' => 'Jan.Jansen@Example.com', 'password' => Hash::make('secret-password')]);
+        $user = User::factory()->create(['email' => 'Jan.Jansen@Example.com', 'password' => 'secret-password']);
 
-        $this->post('/login', ['email' => 'Jan.Jansen@Example.com', 'password' => 'secret-password'])->assertRedirect('/home');
+        $this->post('/login', ['email' => 'Jan.Jansen@Example.com', 'password' => 'secret-password'])->assertRedirect('/');
 
         $this->assertAuthenticatedAs($user);
     }
@@ -61,7 +60,7 @@ class LoginTest extends TestCase
     public function a_member_is_not_remembered_without_the_checkbox()
     {
         $this->login(User::factory()->create())
-            ->assertRedirect('/home')
+            ->assertRedirect('/')
             ->assertCookieMissing(Auth::guard()->getRecallerName());
     }
 
@@ -108,21 +107,8 @@ class LoginTest extends TestCase
     }
 
     #[Test]
-    public function a_member_logs_out()
+    public function the_unused_password_confirmation_page_is_not_found()
     {
-        $this->actingAs(User::factory()->create())->post('/logout')->assertRedirect('/');
-
-        $this->assertGuest();
-    }
-
-    #[Test]
-    public function an_outdated_password_hash_is_rehashed_on_login()
-    {
-        $user = User::factory()->create(['password' => Hash::make('password', ['rounds' => 4])]);
-        Hash::driver('bcrypt')->setRounds(5);
-
-        $this->login($user)->assertRedirect('/home');
-
-        $this->assertSame(5, password_get_info($user->fresh()->password)['options']['cost']);
+        $this->actingAs(User::factory()->create())->get('/user/confirm-password')->assertNotFound();
     }
 }

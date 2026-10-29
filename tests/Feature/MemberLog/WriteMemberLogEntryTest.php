@@ -3,9 +3,11 @@
 namespace Tests\Feature\MemberLog;
 
 use App\Enums\MemberLogType;
+use App\Enums\MemberType;
 use App\Events\MembershipEnded;
 use App\Events\MembershipRestored;
 use App\Events\MemberSignedUp;
+use App\Events\MemberTypeChanged;
 use App\Events\SignUpApproved;
 use App\Events\SignUpRejected;
 use App\Listeners\WriteMemberLogEntry;
@@ -42,6 +44,18 @@ class WriteMemberLogEntryTest extends TestCase
         $this->assertTrue($user->is($logEntry->user));
         $this->assertSame(new $eventClass($user)->logType(), $logEntry->type);
         $this->assertSame(sprintf($details, $user->name), $logEntry->details);
+    }
+
+    #[Test]
+    public function a_member_type_change_is_logged_with_labels()
+    {
+        $user = User::factory()->create();
+
+        new WriteMemberLogEntry()->handle(new MemberTypeChanged($user, MemberType::Member, MemberType::ExtraordinaryParticipant));
+
+        $logEntry = MemberLogEntry::sole();
+        $this->assertSame(MemberLogType::MemberTypeChanged, $logEntry->type);
+        $this->assertSame($user->name.' changed from Member to Extraordinary participant', $logEntry->details);
     }
 
     #[Test]

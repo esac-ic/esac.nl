@@ -13,10 +13,10 @@ class AdminRegistrationRequest extends RegistrationRequest
     {
         // + keeps the numeric field id keys, which a spread would renumber.
         return parent::rules() + [
-            'user' => [
+            'user_id' => [
                 'required',
                 Rule::exists('users', 'id')->whereNull('membership_ended_on')->whereNull('pending_since'),
-                Rule::unique('registrations', 'user_id')->where('event_id', $this->event()->id)->withoutTrashed(),
+                Rule::unique('registrations', 'user_id')->where('event_id', $this->event()->id),
             ],
         ];
     }

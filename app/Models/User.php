@@ -121,9 +121,6 @@ class User extends Authenticatable
         return $user;
     }
 
-    /**
-     * Updates the user from the member form's data.
-     */
     public function updateFromForm(array $data): void
     {
         $previousType = $this->member_type;
@@ -194,9 +191,6 @@ class User extends Authenticatable
         return Attribute::get(fn (): string => implode(' ', array_filter([$this->first_name, $this->preposition, $this->last_name])));
     }
 
-    /**
-     * The street and house number.
-     */
     protected function address(): Attribute
     {
         return Attribute::get(fn (): string => "{$this->street} {$this->house_number}");
@@ -234,20 +228,18 @@ class User extends Authenticatable
 
     public function restoreMembership(): void
     {
-        DB::transaction(function () {
-            $this->membership_ended_on = null;
-            $this->save();
-            MembershipRestored::dispatch($this);
-        });
+        $this->membership_ended_on = null;
+        $this->save();
+
+        MembershipRestored::dispatch($this);
     }
 
     public function approveSignUp(): void
     {
-        DB::transaction(function () {
-            $this->pending_since = null;
-            $this->save();
-            SignUpApproved::dispatch($this);
-        });
+        $this->pending_since = null;
+        $this->save();
+
+        SignUpApproved::dispatch($this);
     }
 
     /**

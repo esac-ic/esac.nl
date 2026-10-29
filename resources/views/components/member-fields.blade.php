@@ -1,18 +1,25 @@
-@props(['user', 'memberTypes', 'locked' => false])
-{{-- A member's details form; locked, the name, member type and remarks can only be read. --}}
+@props(['user', 'memberTypes' => null, 'locked' => false, 'signUp' => false])
+{{-- A member's details form. Locked, it's the member's own form: the name, member type and remarks are the board's, and the email address and password have their own page. On the sign-up form, the member type and remarks are left out and the direct debit consent comes with its agreement. --}}
 <x-card title="Personal" class="mt-4">
-    <div class="form-row">
-        <x-field name="first_name" label="First name" :value="$user->first_name" col="5" required :disabled="$locked" />
-        <x-field name="preposition" label="Preposition" :value="$user->preposition" col="2" :disabled="$locked" />
-        <x-field name="last_name" label="Last name" :value="$user->last_name" col="5" required :disabled="$locked" />
-    </div>
-    <div class="form-row">
-        <x-field name="email" label="Email address" :value="$user->email" col="6" required />
-    </div>
-    <div class="form-row">
-        <x-field name="password" label="Password" type="password" col="6" :required="! $user->exists" :minlength="$user->exists ? null : 8" />
-        <x-field name="password_confirmation" label="Confirm password" type="password" col="6" :required="! $user->exists" />
-    </div>
+    @if($locked)
+        <p class="text-muted">
+            {{ $user->name }}, {{ $user->member_type?->label() ?? 'member' }}.
+            Contact the board to change your name or member type.
+        </p>
+    @else
+        <div class="form-row">
+            <x-field name="first_name" label="First name" :value="$user->first_name" col="5" required />
+            <x-field name="preposition" label="Preposition" :value="$user->preposition" col="2" />
+            <x-field name="last_name" label="Last name" :value="$user->last_name" col="5" required />
+        </div>
+        <div class="form-row">
+            <x-field name="email" label="Email address" type="email" :value="$user->email" col="6" required autocomplete="email" />
+        </div>
+        <div class="form-row">
+            <x-field name="password" :label="$user->exists ? 'New password' : 'Password'" type="password" col="6" :required="! $user->exists" :minlength="$user->exists ? null : 8" autocomplete="new-password" :placeholder="$user->exists ? 'Leave empty to keep the current password' : null" />
+            <x-field name="password_confirmation" :label="$user->exists ? 'Confirm new password' : 'Confirm password'" type="password" col="6" :required="! $user->exists" autocomplete="new-password" />
+        </div>
+    @endif
     <div class="form-row">
         <x-field name="street" label="Street" :value="$user->street" col="6" required />
         <x-field name="house_number" label="House number" :value="$user->house_number" col="6" required />
@@ -27,20 +34,26 @@
         <x-field name="phone_number_alt" label="Alternative phone number" :value="$user->phone_number_alt" col="6" />
     </div>
     <div class="form-row">
-        <x-field type="date" name="birthday" label="Birthdate" :value="$user->birthday?->toDateString()" col="6" required />
-        <x-field name="member_type" label="Member type" :options="$memberTypes" :value="$user->member_type" col="6" required :disabled="$locked" />
+        <x-field type="date" name="birthday" label="Date of birth" :value="$user->birthday?->toDateString()" col="6" required />
+        @unless($signUp || $locked)
+            <x-field name="member_type" label="Member type" :options="$memberTypes" :value="$user->member_type" col="6" required />
+        @endunless
     </div>
-    <x-field name="remark" label="Remarks" :value="$user->remark" :disabled="$locked" />
+    @unless($signUp || $locked)
+        <x-field name="remark" label="Remarks" :value="$user->remark" />
+    @endunless
 </x-card>
 <x-card title="Financial" class="mt-4">
     <div class="form-row">
         <x-field name="bic" label="BIC" :value="$user->bic" col="4" />
         <x-field name="iban" label="IBAN" :value="$user->iban" col="8" required />
     </div>
-    <div class="form-check">
-        {{ html()->checkbox('direct_debit', ! session()->hasOldInput() && $user->direct_debit)->class('form-check-input')->id('direct_debit') }}
-        {{ html()->label('Accept direct debit', 'direct_debit')->class('form-check-label') }}
-    </div>
+    @unless($signUp)
+        <div class="form-check">
+            {{ html()->checkbox('direct_debit', ! session()->hasOldInput() && $user->direct_debit)->class(['form-check-input', 'is-invalid' => $errors->has('direct_debit')])->id('direct_debit') }}
+            {{ html()->label('Accept direct debit', 'direct_debit')->class('form-check-label') }}
+        </div>
+    @endunless
 </x-card>
 <x-card title="Emergency info" class="mt-4">
     <div class="form-row">

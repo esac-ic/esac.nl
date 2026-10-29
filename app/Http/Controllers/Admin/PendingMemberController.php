@@ -9,9 +9,6 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Routing\Controllers\HasMiddleware;
 use Illuminate\Routing\Controllers\Middleware;
 
-/**
- * Approves or rejects the sign-ups of pending members.
- */
 class PendingMemberController extends Controller implements HasMiddleware
 {
     public static function middleware(): array

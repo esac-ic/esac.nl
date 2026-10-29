@@ -7,9 +7,6 @@ use Illuminate\Support\Collection;
 
 class BooksExport extends SpreadsheetExport
 {
-    /**
-     * The headings of the exported attributes, by attribute.
-     */
     private const array COLUMNS = [
         'id' => '#',
         'title' => 'Title',
