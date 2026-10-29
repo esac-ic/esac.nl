@@ -13,9 +13,9 @@ class RoutingTest extends TestCase
     use RefreshDatabase;
 
     #[Test]
-    public function the_root_redirects_to_home()
+    public function the_home_page_is_served_at_the_root()
     {
-        $this->get('/')->assertStatus(301)->assertRedirect('/home');
+        $this->get('/')->assertOk();
     }
 
     #[Test]
@@ -36,14 +36,14 @@ class RoutingTest extends TestCase
         $this->actingAs(User::factory()->create())
             ->get('/admin/members/create')
             ->assertForbidden()
-            ->assertSee('You do not have sufficient access to view this page')
+            ->assertSee('You do not have access to this page.')
             ->assertSee('<nav', false);
     }
 
     #[Test]
     public function a_member_who_is_logged_in_is_sent_home_from_the_login_page()
     {
-        $this->actingAs(User::factory()->create())->get('/login')->assertRedirect('/home');
+        $this->actingAs(User::factory()->create())->get('/login')->assertRedirect('/');
     }
 
     #[Test]
@@ -72,6 +72,6 @@ class RoutingTest extends TestCase
 
         $this->withSession(['_token' => 'page-token'])
             ->postJson('api/subzekering', ['text' => 'with token'], ['X-CSRF-TOKEN' => 'page-token'])
-            ->assertOk();
+            ->assertCreated();
     }
 }

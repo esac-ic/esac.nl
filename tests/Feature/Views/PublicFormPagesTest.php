@@ -4,8 +4,8 @@ namespace Tests\Feature\Views;
 
 use App\Enums\PageSlug;
 use App\Models\Event;
-use App\Models\MenuItem;
 use App\Models\NewsItem;
+use App\Models\Page;
 use App\Models\RegistrationForm;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -28,14 +28,14 @@ class PublicFormPagesTest extends TestCase
 
     private function createPage(PageSlug $slug, bool $requiresLogin = false): void
     {
-        MenuItem::forceCreate([
+        Page::forceCreate([
             'name' => $slug->value,
             'slug' => $slug->value,
             'requires_login' => $requiresLogin,
             'editable' => true,
             'deletable' => false,
             'show_in_menu' => true,
-            'content' => "$slug->value content",
+            'body' => "$slug->value content",
         ]);
     }
 
@@ -132,7 +132,7 @@ class PublicFormPagesTest extends TestCase
 
         $response = $this->get('zekeringen')->assertOk();
 
-        $this->assertForm($response, 'POST', 'api/zekeringen');
+        $this->assertForm($response, 'POST', 'zekeringen');
         $this->assertFieldValue($response, 'text', '');
     }
 
