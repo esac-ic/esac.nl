@@ -2,15 +2,13 @@
 
 @section('content')
 
-<section class="intro-container">
-    <div class="container intro-container">
-        <div class="card">
-            <div class="card-body">
-                {!! $content !!}
-            </div>
+<div class="container intro-container">
+    <div class="card">
+        <div class="card-body">
+            {!! $content !!}
         </div>
     </div>
-</section>
+</div>
 
 <section>
 <div class="container">
@@ -24,9 +22,9 @@
                 <a href="{{ route('news.index') }}" class="btn btn-outline-primary">See more</a>
             </div>
         </div>
-        <div class="row d-flex align-items-stretch align-items-center">
+        <div class="row">
             @foreach($newsItems as $newsItem)
-            <div class="col-sm-12 d-flex flex-wrap">
+            <div class="col-sm-12 d-flex">
                 <x-news-card :$newsItem class="w-100" />
             </div>
             @endforeach
@@ -41,12 +39,12 @@
                 <a href="{{ route('events.index') }}" class="btn btn-outline-primary">See more</a>
             </div>
         </div>
-        <div class="row d-flex align-items-stretch align-items-center">
+        <div class="row">
             @foreach($events as $event)
-            <div class="col-sm-12 d-flex flex-wrap">
+            <div class="col-sm-12 d-flex">
                 <div class="card w-100 position-relative">
                     <a href="{{ route('events.show', $event) }}">
-                        <img class="card-img-top " src="{{$event->image_url}}" alt="">
+                        <img class="card-img-top" src="{{$event->image_url}}" alt="">
                     </a>
                     <span class="card-date position-absolute bg-light py-1 px-3 rounded">{{ $event->start_date->format('d M') }}</span>
                     <div class="card-body">
@@ -57,10 +55,10 @@
                     </a>
                     </div>
                     @if($event->registration_form_id != null)
-                    <div class="card-footer bg-white p-3">
+                    <div class="card-footer">
                         <div class="row justify-content-between align-items-center">
                             <div class="col-auto text-muted">
-                                <span class="ion-person-stalker"></span> {{ $event->registrations_count }}
+                                <x-heroicon-o-user-group /> {{ $event->registrations_count }}
                             </div>
                             <div class="col-auto">
                                 @guest
@@ -69,7 +67,7 @@
                                         <a class="btn btn-outline-primary" href="{{ route('events.registration.create', $event) }}">Log in to register</a>
                                     @endif
                                 @else
-                                    @if($event->isRegistrationOpen())
+                                    @if($event->acceptsRegistrations())
                                         <a class="btn btn-outline-primary" href="{{ route('events.registration.create', $event) }}">Register now</a>
                                     @else
                                         Registration not possible

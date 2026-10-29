@@ -15,7 +15,7 @@ Registration forms
                 <td>
                     <x-actions-menu :label="$registrationForm->name">
                         <x-actions-menu.item :href="route('admin.registration-forms.show', $registrationForm)" icon="eye">View</x-actions-menu.item>
-                        <x-actions-menu.item :href="route('admin.registration-forms.edit', $registrationForm)" icon="edit">Edit</x-actions-menu.item>
+                        <x-actions-menu.item :href="route('admin.registration-forms.edit', $registrationForm)" icon="pencil-square">Edit</x-actions-menu.item>
                     </x-actions-menu>
                 </td>
             </tr>

@@ -1,27 +1,18 @@
 import { createApp } from 'vue';
-import { createPinia } from 'pinia';
 
-import agendaComponents from '../vue/agenda/agenda';
-import zekeringenComponents from '../vue/zekeringen/zekeringen';
-import applicationFormComponents from '../vue/applicationForm/applicationForm';
+import Agenda from '../vue/agenda/components/Agenda.vue';
+import ApplicationForm from '../vue/applicationForm/components/ApplicationForm.vue';
+import RegistrationForm from '../vue/applicationForm/components/registrationForm/RegistrationForm.vue';
+import Zekeringen from '../vue/zekeringen/components/Zekeringen.vue';
 
-if (document.getElementById('app') !== null) {
-    /**
-     * Create vue app
-     */
-    const app = createApp({});
+// The components a page can place, e.g. <div data-vue="agenda" data-props="{&quot;description&quot;: ...}"></div>
+const components = {
+    'agenda': Agenda,
+    'application-form': ApplicationForm,
+    'registration-form': RegistrationForm,
+    'zekeringen': Zekeringen,
+};
 
-    app.use(createPinia());
-
-    const components = {
-        ...agendaComponents,
-        ...zekeringenComponents,
-        ...applicationFormComponents,
-    };
-
-    for (const [name, component] of Object.entries(components)) {
-        app.component(name, component);
-    }
-
-    app.mount('#app');
-}
+document.querySelectorAll('[data-vue]').forEach(element => {
+    createApp(components[element.dataset.vue], JSON.parse(element.dataset.props ?? '{}')).mount(element);
+});

@@ -17,6 +17,7 @@ class ZekeringResource extends JsonResource
             'id' => $this->id,
             'text' => $this->text,
             'children' => self::collection($this->whenLoaded('children')),
+            'can_reply' => $this->whenLoaded('children', fn () => $this->children->count() < Zekering::MAX_CHILDREN),
         ];
     }
 }

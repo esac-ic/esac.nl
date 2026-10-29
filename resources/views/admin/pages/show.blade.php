@@ -6,7 +6,7 @@ Page
 
 @section('content')
     <x-page-header title="Page" :back="route('admin.pages.index')" back-label="Pages">
-        <x-button-link :href="route('admin.pages.edit', $page)" icon="edit">Edit</x-button-link>
+        <x-button-link :href="route('admin.pages.edit', $page)" icon="pencil-square">Edit</x-button-link>
         @if($page->deletable)
             <x-delete-button :action="route('admin.pages.destroy', $page)" title="Remove page" :confirm="'Remove the page '.$page->name.'?'.($page->children()->exists() ? ' Its sub pages become top-level pages.' : '')" />
         @endif

@@ -1,5 +1,5 @@
 @props(['heading', 'subheading'])
-<x-menu nav-class="bg-dark position-fixed" />
+<x-menu />
 
 <section>
     <div class="container">

@@ -1,0 +1,71 @@
+// ESAC's design choices. They load before Bootstrap's variables, so everything Bootstrap derives from them follows.
+
+$blue: #4582ec;
+$red: #d9534f;
+$yellow: #f0ad4e;
+$green: #02b875;
+
+$primary: $blue;
+$success: $green;
+$warning: $yellow;
+$danger: $red;
+$dark: #212529;
+
+// ESAC's yellow, for the calls to action and accents: btn-accent, text-accent, border-accent
+$theme-colors: ("accent": #f1c40f);
+
+$body-bg: #f8f9fa;
+$body-color: #495057;
+$headings-color: #343a40;
+$border-color: #e9ecef;
+$hr-border-color: $border-color;
+$link-hover-decoration: none;
+
+$font-family-sans-serif: 'Rubik', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+$font-weight-bold: 500;
+$headings-font-weight: 400;
+$small-font-size: .75rem;
+$enable-responsive-font-sizes: true;
+
+$spacer: 1.5rem;
+$headings-margin-bottom: $spacer;
+$grid-gutter-width: 24px;
+
+$input-btn-padding-y: .3125rem;
+$input-btn-padding-x: 1rem;
+$input-btn-padding-y-sm: .125rem;
+$input-btn-line-height-sm: 1.5rem;
+$input-btn-padding-y-lg: .6875rem;
+$input-btn-padding-x-lg: 1.5rem;
+$btn-font-weight: $font-weight-bold;
+$btn-font-size-sm: .75rem;
+$btn-font-size-lg: 1rem;
+$btn-border-radius-sm: .25rem;
+$btn-border-radius-lg: .25rem;
+$btn-disabled-opacity: .35;
+$input-font-size-lg: 1rem;
+$input-placeholder-color: #adb5bd;
+$caret-width: .25em;
+
+$card-spacer-y: $spacer * .75;
+$card-spacer-x: $spacer;
+$card-border-color: $border-color;
+$card-cap-bg: transparent;
+$dropdown-border-color: $border-color;
+$dropdown-link-color: $body-color;
+$dropdown-link-hover-color: $headings-color;
+$dropdown-item-padding-y: .375rem;
+$navbar-padding-y: $spacer * .5;
+// In line with the page's containers
+$navbar-padding-x: $grid-gutter-width * .5;
+$navbar-dark-color: #fff;
+$nav-tabs-border-width: 0;
+$nav-tabs-border-radius: 0;
+$nav-tabs-link-active-color: $primary;
+$nav-tabs-link-active-bg: transparent;
+$nav-tabs-link-hover-border-color: transparent;
+$pagination-padding-y: .325rem;
+$pagination-bg: transparent;
+$badge-font-weight: $font-weight-bold;
+// Modals fade in place instead of sliding down
+$modal-fade-transform: none;

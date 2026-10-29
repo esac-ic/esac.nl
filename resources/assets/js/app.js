@@ -1,36 +1,27 @@
-import './bootstrap';
-import './vue';
+import './vendor/jquery-bootstrap';
+import { confirmDialog } from './confirm-dialog';
 
-window.summernoteSettings = {
-    height: 300,
-    toolbar: [
-        ['style', ['style']],
-        ['font', ['bold', 'italic', 'underline', 'clear']],
-        ['color', ['color']],
-        ['para', ['ul', 'ol', 'paragraph']],
-        ['height', ['height']],
-        ['table', ['table']],
-        ['insert', ['link', 'picture', 'hr']],
-        ['view', ['fullscreen', 'codeview']],
-        ['help', ['help']],
-    ],
-    callbacks: {
-        onImageUpload: function (files) {
-            uploadFile(files[0], this);
-        }
-    }
-};
-
-function uploadFile (file, summernote) {
-    const data = new FormData();
-    data.append('image', file);
-
-    axios
-        .post($(summernote).data('images-url'), data)
-        .then(response => {
-            $(summernote).summernote('insertImage', response.data);
-        });
+// Heavier parts load only on the pages that use them
+if (document.querySelector('[data-vue]')) {
+    import('./vue');
 }
+if (document.querySelector('.js-datatable')) {
+    import('./vendor/datatables');
+}
+if (document.querySelector('textarea[data-images-url]')) {
+    import('./editor');
+}
+
+// On wide screens the menu with data-transparent-at-top shows the header through it until the page scrolls.
+// Bootstrap puts its breakpoints in CSS variables; the menu expands at lg.
+const wide = window.matchMedia(`(min-width: ${getComputedStyle(document.documentElement).getPropertyValue('--breakpoint-lg')})`);
+document.querySelectorAll('[data-transparent-at-top]').forEach(nav => {
+    const update = () => nav.classList.toggle('bg-dark', !wide.matches || window.scrollY > 15);
+
+    update();
+    window.addEventListener('scroll', update, { passive: true });
+    window.addEventListener('resize', update);
+});
 
 // Warn before leaving a form with unsaved changes.
 document.querySelectorAll('form[data-warn-unsaved]').forEach(form => {
@@ -45,30 +36,6 @@ document.querySelectorAll('form[data-warn-unsaved]').forEach(form => {
     });
 });
 
-/**
- * Asks for confirmation in the page's own dialog, resolving to whether the action was confirmed.
- * Cancel has the focus, so pressing Enter by accident does nothing.
- */
-window.confirmDialog = ({ title = 'Are you sure?', message = '', button = 'Confirm', danger = true }) => new Promise(resolve => {
-    const $dialog = window.jQuery('#confirm-dialog');
-    let confirmed = false;
-
-    $dialog.find('#confirm-dialog-title').text(title);
-    $dialog.find('#confirm-dialog-message').text(message);
-    $dialog.find('#confirm-dialog-confirm')
-        .text(button)
-        .toggleClass('btn-danger', danger)
-        .toggleClass('btn-primary', !danger)
-        .off('click')
-        .one('click', () => {
-            confirmed = true;
-            $dialog.modal('hide');
-        });
-    $dialog.off('shown.bs.modal').one('shown.bs.modal', () => $dialog.find('.modal-footer [data-dismiss=modal]').trigger('focus'));
-    $dialog.off('hidden.bs.modal').one('hidden.bs.modal', () => resolve(confirmed));
-    $dialog.modal('show');
-});
-
 // Forms with data-confirm ask first, e.g. <form data-confirm="Remove the book?" data-confirm-button="Remove">.
 document.addEventListener('submit', event => {
     const form = event.target;
@@ -77,7 +44,7 @@ document.addEventListener('submit', event => {
     }
 
     event.preventDefault();
-    window.confirmDialog({
+    confirmDialog({
         title: form.dataset.confirmTitle,
         message: form.dataset.confirm,
         button: form.dataset.confirmButton,

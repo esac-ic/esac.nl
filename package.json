@@ -8,12 +8,11 @@
   },
   "devDependencies": {
     "@vitejs/plugin-vue": "^6.0.10",
-    "axios": "^1.20.0",
     "bootstrap": "^4.4.1",
-    "datatables.net": "^1.12.1",
-    "datatables.net-bs4": "^1.12.1",
-    "datatables.net-responsive": "^2.3.0",
-    "datatables.net-responsive-bs4": "^2.3.0",
+    "datatables.net": "^3.1.4",
+    "datatables.net-bs4": "^3.1.4",
+    "datatables.net-responsive": "^4.1.1",
+    "datatables.net-responsive-bs4": "^4.1.1",
     "jquery": "^3.6.0",
     "laravel-vite-plugin": "^3.2.0",
     "popper.js": "^1.16.1",
@@ -22,8 +21,8 @@
     "vite": "^8.3.4"
   },
   "dependencies": {
-    "mitt": "^3.0.1",
-    "pinia": "^4.1.0",
+    "@fontsource/rubik": "^5.3.0",
+    "@heroicons/vue": "^2.2.0",
     "vue": "^3.5.44"
   }
 }

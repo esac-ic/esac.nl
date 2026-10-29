@@ -8,6 +8,7 @@
     "require": {
         "php": "^8.5",
         "ext-intl": "*",
+        "blade-ui-kit/blade-heroicons": "^2.7",
         "eluceo/ical": "^2.17",
         "intervention/image": "^4.4",
         "laravel/fortify": "^1.30",

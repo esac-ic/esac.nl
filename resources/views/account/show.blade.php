@@ -4,9 +4,9 @@
 <div class="container intro-container pb-3">
     <x-card :title="$user->name">
         <x-slot:actions>
-            <div class="page-actions d-flex flex-wrap mt-2 mt-md-0">
-                <x-button-link :href="route('account.edit')" icon="edit">Edit details</x-button-link>
-                <x-button-link :href="route('account.login.edit')" icon="locked" variant="outline-primary">Email and password</x-button-link>
+            <div class="page-actions mt-2 mt-md-0">
+                <x-button-link :href="route('account.edit')" icon="pencil-square">Edit details</x-button-link>
+                <x-button-link :href="route('account.login.edit')" icon="lock-closed" variant="outline-primary">Email and password</x-button-link>
             </div>
         </x-slot:actions>
         <x-member-tabs :$user>

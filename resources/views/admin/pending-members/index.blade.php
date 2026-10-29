@@ -15,7 +15,7 @@ Pending members
                 <td>
                     <x-actions-menu :label="$user->name">
                         <x-actions-menu.item :href="route('admin.members.show', $user)" icon="eye">View</x-actions-menu.item>
-                        <x-actions-menu.item :href="route('admin.members.edit', $user)" icon="edit">Edit</x-actions-menu.item>
+                        <x-actions-menu.item :href="route('admin.members.edit', $user)" icon="pencil-square">Edit</x-actions-menu.item>
                     </x-actions-menu>
                 </td>
             </tr>

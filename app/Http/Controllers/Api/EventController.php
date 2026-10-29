@@ -13,8 +13,7 @@ class EventController extends Controller
     public function index(Request $request): JsonResponse
     {
         $request->validate([
-            'startDate' => ['nullable', 'date_format:d-m-Y'],
-            'start' => ['nullable', 'integer', 'min:0'],
+            'from' => ['nullable', 'date_format:Y-m-d'],
             'category' => ['nullable', 'integer'],
         ]);
 
@@ -26,15 +25,9 @@ class EventController extends Controller
             ])
             ->withCount('registrations')
             ->when($request->integer('category'), fn ($query, $category) => $query->where('event_category_id', $category))
-            ->when($request->date('startDate', 'd-m-Y', config('app.display_timezone'))?->startOfDay()->utc(), fn ($query, $startDate) => $query->where('end_date', '>=', $startDate))
+            ->when($request->date('from', 'Y-m-d', config('app.display_timezone'))?->startOfDay()->utc(), fn ($query, $from) => $query->where('end_date', '>=', $from))
             ->oldest('start_date');
 
-        // The agenda's JavaScript reads these keys and shows nine events a page.
-        return response()->json([
-            'agendaItemCount' => $events->count(),
-            'agendaItems' => EventResource::collection(
-                $events->skip($request->integer('start'))->take(9)->get()
-            ),
-        ]);
+        return EventResource::collection($events->paginate(9))->response();
     }
 }

@@ -21,10 +21,11 @@ class EventResource extends JsonResource
             'thumbnail' => $this->image_url,
             'startDate' => $this->start_date->format('d M'),
             'text' => $this->short_description,
-            'formId' => $this->registrationForm,
-            'canRegister' => $this->isRegistrationOpen(),
+            'hasRegistration' => $this->registration_form_id !== null,
+            'registrationOpen' => $this->isRegistrationOpen(),
+            'canRegister' => $this->acceptsRegistrations(),
             // Counted and checked by the events API's query.
-            'amountOfPeopleRegisterd' => $this->registration_form_id ? $this->registrations_count : 0,
+            'registrationCount' => $this->registration_form_id ? $this->registrations_count : 0,
             'currentUserSignedUp' => $this->registration_form_id && $this->registrations->isNotEmpty(),
         ];
     }

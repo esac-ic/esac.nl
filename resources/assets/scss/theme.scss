@@ -1,7 +1,44 @@
+// The site's stylesheet: Bootstrap 4 with ESAC's choices on top
+
+@import "@fontsource/rubik/300";
+@import "@fontsource/rubik/400";
+@import "@fontsource/rubik/400-italic";
+@import "@fontsource/rubik/500";
+
 @import "bootstrap/scss/functions";
+@import "variables";
 @import "bootstrap/scss/variables";
-@import "custom/variables";
-@import "user-variables";
-@import "bootstrap/scss/bootstrap";
-@import "custom/components";
-@import "user";
+@import "bootstrap/scss/mixins";
+
+// The parts of Bootstrap the site uses; tooltips, popovers and button groups are for the editor's toolbar
+@import "bootstrap/scss/root";
+@import "bootstrap/scss/reboot";
+@import "bootstrap/scss/type";
+@import "bootstrap/scss/images";
+@import "bootstrap/scss/code";
+@import "bootstrap/scss/grid";
+@import "bootstrap/scss/tables";
+@import "bootstrap/scss/forms";
+@import "bootstrap/scss/buttons";
+@import "bootstrap/scss/transitions";
+@import "bootstrap/scss/dropdown";
+@import "bootstrap/scss/button-group";
+@import "bootstrap/scss/input-group";
+@import "bootstrap/scss/custom-forms";
+@import "bootstrap/scss/nav";
+@import "bootstrap/scss/navbar";
+@import "bootstrap/scss/card";
+@import "bootstrap/scss/pagination";
+@import "bootstrap/scss/badge";
+@import "bootstrap/scss/alert";
+@import "bootstrap/scss/list-group";
+@import "bootstrap/scss/close";
+@import "bootstrap/scss/modal";
+@import "bootstrap/scss/tooltip";
+@import "bootstrap/scss/popover";
+@import "bootstrap/scss/utilities";
+@import "bootstrap/scss/print";
+
+@import "base";
+@import "components";
+@import "layout";

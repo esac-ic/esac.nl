@@ -1,11 +1,11 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="container intro-container" id="app">
+<div class="container intro-container">
     <x-validation-errors />
     {{ html()->form('POST', $action)->open() }}
         <x-card :title="$registrationForm->name">
-            <registration-form rows="{{ json_encode($fields) }}"></registration-form>
+            <div data-vue="registration-form" data-props="{{ json_encode(['rows' => $fields, 'old' => (object) session()->getOldInput()]) }}"></div>
         </x-card>
 
         <div class="my-4">

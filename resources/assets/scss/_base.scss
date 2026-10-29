@@ -1,0 +1,58 @@
+body {
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+// Smaller text on phones and tablets, but form fields stay at 16px so iOS doesn't zoom in on them
+@include media-breakpoint-down(md) {
+    html {
+        font-size: .875rem;
+    }
+
+    .form-control, .custom-select {
+        font-size: 16px;
+    }
+}
+
+h1, .h1 {
+    font-weight: 300;
+}
+
+// The last element in a card, list or section doesn't add space below it
+h1, h2, h3, h4, h5, h6, .h1, .h2, .h3, .h4, .h5, .h6, p, ul, ol, dl {
+    &:last-child {
+        margin-bottom: 0;
+    }
+}
+
+// Headings on a dark background follow its text colour
+.text-white {
+    h1, h2, h3, h4, h5, h6, .h1, .h2, .h3, .h4, .h5, .h6, .display-3 {
+        color: inherit;
+    }
+}
+
+.text-small {
+    font-size: .875rem;
+}
+
+// Sections stack with even spacing and a line between them
+section {
+    position: relative;
+    padding: $spacer * 2 0;
+
+    @include media-breakpoint-up(sm) {
+        padding: $spacer * 3 0;
+    }
+}
+
+section:not([class*='bg-']) + section:not([class*='bg-']) {
+    border-top: $hr-border-width solid $hr-border-color;
+}
+
+@include media-breakpoint-up(lg) {
+    .container-fluid {
+        padding-left: $spacer * 2;
+        padding-right: $spacer * 2;
+    }
+}

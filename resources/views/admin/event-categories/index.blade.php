@@ -15,7 +15,7 @@ Event categories
                 <td>
                     <x-actions-menu :label="$category->name">
                         <x-actions-menu.item :href="route('admin.event-categories.show', $category)" icon="eye">View</x-actions-menu.item>
-                        <x-actions-menu.item :href="route('admin.event-categories.edit', $category)" icon="edit">Edit</x-actions-menu.item>
+                        <x-actions-menu.item :href="route('admin.event-categories.edit', $category)" icon="pencil-square">Edit</x-actions-menu.item>
                     </x-actions-menu>
                 </td>
             </tr>

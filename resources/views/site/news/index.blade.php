@@ -4,9 +4,9 @@
 
 <section class="py-3">
     <div class="container">
-        <div class="row d-flex align-items-stretch align-items-center">
+        <div class="row">
             @foreach($newsItems as $newsItem)
-            <div class="col-lg-4 col-md-6 d-flex flex-wrap">
+            <div class="col-lg-4 col-md-6 d-flex">
                 <div class="card w-100 position-relative">
                     @if($newsItem->thumbnail_path != "")
                     <a href="{{ route('news.show', $newsItem) }}">
@@ -20,10 +20,10 @@
                             <p class="card-text text-body">{{ str($newsItem->body)->stripTags()->pipe('html_entity_decode')->limit(150) }}</p>
                         </a>
                     </div>
-                    <div class="card-footer bg-white p-3">
+                    <div class="card-footer">
                         <div class="row justify-content-between align-items-center">
                             <div class="col-auto text-muted">
-                                <span class="ion-person"></span> {{$newsItem->author}}
+                                <x-heroicon-o-user /> {{$newsItem->author}}
                             </div>
                             <div class="col-auto">
                                 <a class="btn btn-outline-primary" href="{{ route('news.show', $newsItem) }}">Read more</a>

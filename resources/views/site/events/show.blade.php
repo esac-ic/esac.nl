@@ -2,15 +2,15 @@
 
 @section('content')
     <div class="container intro-container pb-3">
-        <div class="row d-flex align-items-stretch">
-            <div class="col-lg-4 d-flex flex-wrap">
+        <div class="row">
+            <div class="col-lg-4 d-flex">
                 <div class="card w-100">
                     <img class="card-img-top" src="{{$event->image_url}}" alt="">
                     <div class="card-body">
                         <h3 class="card-title">{{$event->title}}</h3>
                         @php($sameDay = $event->start_date->isSameDay($event->end_date))
                         <p class="card-text mb-2">
-                            <span class="ion-calendar text-muted mr-1" aria-hidden="true"></span>
+                            <x-heroicon-o-calendar class="text-muted mr-1" />
                             {{ $event->start_date->format('D j M Y, H:i') }} –
                             {{ $event->end_date->format($sameDay ? 'H:i' : 'D j M Y, H:i') }}
                         </p>
@@ -20,11 +20,11 @@
                             </p>
                         @endif
                     </div>
-                    <div class="card-footer bg-white p-3">
+                    <div class="card-footer">
                         <div class="row justify-content-between align-items-center">
                             <div class="col-auto text-muted">
                                 @if($event->registration_form_id != null)
-                                    <span class="ion-person-stalker"></span> {{ $event->registrations_count }}
+                                    <x-heroicon-o-user-group /> {{ $event->registrations_count }}
                                 @endif
                             </div>
                             <div class="col-auto">
@@ -42,7 +42,7 @@
                                                     @method('DELETE')
                                                     <button type="submit" class="btn btn-outline-danger">Unregister</button>
                                                 </form>
-                                            @else
+                                            @elseif($event->acceptsRegistrations())
                                                 <a class="btn btn-outline-primary" href="{{ route('events.registration.create', $event) }}">Register now</a>
                                             @endif
                                         @else
@@ -55,7 +55,7 @@
                     </div>
                 </div>
             </div>
-            <div class="col-lg-8 d-flex flex-wrap">
+            <div class="col-lg-8 d-flex">
                 <div class="card w-100">
                     <div class="card-body">
                         <h4 class="card-title">General information</h4>
@@ -75,8 +75,8 @@
                             </ol>
                         @endif
                     </div>
-                    <div class="card-footer bg-white p-3">
-                        <a class="btn btn-outline-primary" href="{{ route('events.index') }}"><span class="ion-android-arrow-back" aria-hidden="true"></span> Back to events</a>
+                    <div class="card-footer">
+                        <a class="btn btn-outline-primary" href="{{ route('events.index') }}"><x-heroicon-o-arrow-left /> Back to events</a>
                     </div>
                 </div>
             </div>

@@ -17,7 +17,7 @@ News items
                 <td>
                     <x-actions-menu :label="$newsItem->title">
                         <x-actions-menu.item :href="route('admin.news-items.show', $newsItem)" icon="eye">View</x-actions-menu.item>
-                        <x-actions-menu.item :href="route('admin.news-items.edit', $newsItem)" icon="edit">Edit</x-actions-menu.item>
+                        <x-actions-menu.item :href="route('admin.news-items.edit', $newsItem)" icon="pencil-square">Edit</x-actions-menu.item>
                     </x-actions-menu>
                 </td>
             </tr>

@@ -1,0 +1,232 @@
+// Heroicons, sized to the text around them
+.icon {
+    width: 1.25em;
+    height: 1.25em;
+    vertical-align: -.25em;
+}
+
+.logo {
+    height: $spacer * 1.5;
+    width: auto;
+    vertical-align: top;
+}
+
+// Menu, transparent over the header until the page scrolls (see app.js)
+[data-transparent-at-top] {
+    transition: background .2s;
+}
+
+.navbar .dropdown-menu.show {
+    animation: show-dropdown .35s ease forwards;
+}
+
+@keyframes show-dropdown {
+    from {
+        opacity: 0;
+        transform: translateY(5px);
+    }
+
+    to {
+        opacity: 1;
+        transform: none;
+    }
+}
+
+// Header photo under the menu; taller with a heading on the home page
+.site-header {
+    display: flex;
+    align-items: center;
+    min-height: 30vh;
+    overflow: hidden;
+
+    > .container {
+        position: relative;
+        z-index: 1;
+    }
+}
+
+.site-header-home {
+    min-height: 70vh;
+}
+
+.site-header-image {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+// Darker behind the text on the left, so it reads on any photo
+.site-header::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, rgba($dark, .75), rgba($dark, .3));
+}
+
+// Messages float under the menu, at the right
+.flash-messages {
+    position: absolute;
+    top: 100%;
+    right: $spacer;
+    margin-top: $spacer * .5;
+}
+
+// The first cards on a page overlap the bottom of the header
+.intro-container {
+    margin-top: -$spacer * 3;
+
+    .card {
+        border-bottom: 2px solid theme-color("accent");
+    }
+}
+
+.site-footer {
+    padding: $spacer * 2 0;
+    background: $gray-800;
+    color: $gray-400;
+    font-size: .875rem;
+
+    @include media-breakpoint-up(lg) {
+        padding: $spacer * 3 0;
+    }
+
+    .h5 {
+        color: $white;
+        margin-bottom: $spacer * 2;
+
+        // Under the contact column when the columns stack
+        @include media-breakpoint-down(sm) {
+            margin-top: $spacer * 2;
+        }
+    }
+
+    h6 {
+        color: $white;
+    }
+
+    a {
+        color: $gray-500;
+        transition: color .2s ease;
+
+        &:hover {
+            color: $white;
+        }
+    }
+}
+
+.social-links {
+    font-size: 180%;
+}
+
+// Sponsor logos share one box, whatever their shape
+.sponsor-logo {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    aspect-ratio: 2.75;
+
+    img {
+        max-width: 100%;
+        max-height: 100%;
+        object-fit: contain;
+    }
+}
+
+// Admin sidebar: fixed under the menu on wide screens, a collapsible bar on phones
+.admin-sidebar {
+    align-items: flex-start;
+    background: $white;
+    border-bottom: $border-width solid $border-color;
+
+    @include media-breakpoint-up(lg) {
+        position: fixed;
+        top: $spacer * 3;
+        bottom: 0;
+        left: 0;
+        z-index: $zindex-sticky - 1;
+        padding: $spacer 0;
+        overflow-y: auto;
+        border-bottom: 0;
+        border-right: $border-width solid $border-color;
+    }
+}
+
+.admin-nav {
+    width: 100%;
+    padding: $spacer * .5 0;
+
+    @include media-breakpoint-up(lg) {
+        padding: 0;
+    }
+}
+
+.admin-nav-group {
+    margin-top: $spacer;
+}
+
+.admin-nav-heading {
+    margin: 0 0 $spacer * .25;
+    padding: 0 $spacer * .75;
+    font-size: .7rem;
+    font-weight: $font-weight-bold;
+    letter-spacing: .08em;
+    text-transform: uppercase;
+    color: $gray-600;
+}
+
+.admin-nav-link {
+    display: block;
+    padding: $spacer * .25 $spacer * .75;
+    border-left: 3px solid transparent;
+    color: $body-color;
+    font-size: .9375rem;
+
+    &:hover {
+        color: $headings-color;
+        background: $gray-100;
+    }
+
+    &.active {
+        border-left-color: $primary;
+        background: rgba($primary, .08);
+        color: $primary;
+        font-weight: $font-weight-bold;
+    }
+}
+
+// Page header: the title, with its actions beside it on wide screens and under it on phones.
+// Destructive actions sit apart at the end.
+.page-header {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: center;
+    gap: $spacer * .5 $spacer;
+}
+
+.page-actions {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: .5rem;
+
+    @include media-breakpoint-up(md) {
+        > .page-actions-destructive {
+            margin-left: 1rem;
+        }
+    }
+}
+
+// A long list flows into three columns on wide screens, e.g. an event's registrations
+@include media-breakpoint-up(lg) {
+    .column-count-lg-3 {
+        column-count: 3;
+        column-gap: $spacer * 3;
+    }
+}

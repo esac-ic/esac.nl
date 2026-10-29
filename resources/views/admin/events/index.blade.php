@@ -24,13 +24,13 @@
                 <td>
                     <x-actions-menu :label="$event->title">
                         <x-actions-menu.item :href="route('admin.events.show', $event)" icon="eye">View</x-actions-menu.item>
-                        <x-actions-menu.item :href="route('admin.events.edit', $event)" icon="edit">Edit</x-actions-menu.item>
+                        <x-actions-menu.item :href="route('admin.events.edit', $event)" icon="pencil-square">Edit</x-actions-menu.item>
                         @if ($event->registration_form_id)
                             @can('manage-registrations')
-                                <x-actions-menu.item :href="route('admin.events.registrations.index', $event)" icon="android-list">Registrations</x-actions-menu.item>
+                                <x-actions-menu.item :href="route('admin.events.registrations.index', $event)" icon="list-bullet">Registrations</x-actions-menu.item>
                             @endcan
                         @endif
-                        <x-actions-menu.item :href="route('admin.events.create', ['copy' => $event])" icon="ios-copy">New event based on this</x-actions-menu.item>
+                        <x-actions-menu.item :href="route('admin.events.create', ['copy' => $event])" icon="document-duplicate">New event based on this</x-actions-menu.item>
                     </x-actions-menu>
                 </td>
             </tr>

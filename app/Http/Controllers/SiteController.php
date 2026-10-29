@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Enums\PageSlug;
 use App\Models\Book;
 use App\Models\Event;
+use App\Models\EventCategory;
 use App\Models\NewsItem;
 use App\Models\Page;
 use App\Models\User;
@@ -18,6 +19,7 @@ class SiteController extends Controller
         return view('site.events.index', [
             'pageTitle' => 'Events',
             'content' => Page::bodyFor(PageSlug::Events),
+            'categories' => EventCategory::query()->orderBy('name')->get(['id', 'name']),
         ]);
     }
 
@@ -80,7 +82,7 @@ class SiteController extends Controller
             'newsItems' => NewsItem::query()->latest('id')->take(3)->get(),
             'content' => Page::bodyFor(PageSlug::Home),
             'pageTitle' => 'Home',
-            'events' => Event::query()->upcoming()->withCount('registrations')->take(4)->get(),
+            'events' => Event::query()->upcoming()->with('registrationForm')->withCount('registrations')->take(4)->get(),
         ]);
     }
 

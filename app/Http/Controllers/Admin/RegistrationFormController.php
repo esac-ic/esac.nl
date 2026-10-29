@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Enums\FormFieldType;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\RegistrationFormRequest;
 use App\Http\Resources\RegistrationFormFieldResource;
@@ -77,7 +78,23 @@ class RegistrationFormController extends Controller implements HasMiddleware
     {
         return view('admin.registration-forms.form', [
             'registrationForm' => $registrationForm->load('fields.options'),
-            'fields' => RegistrationFormFieldResource::collection($registrationForm->fields),
+            // After a validation error, the posted rows rather than the saved ones
+            'fields' => old('rows') === null ? RegistrationFormFieldResource::collection($registrationForm->fields) : collect(old('rows'))->values()->map(fn (array $row) => [
+                ...(isset($row['id']) ? ['id' => (int) $row['id']] : []),
+                'name' => $row['name'] ?? '',
+                'type' => $row['type'] ?? null,
+                'required' => isset($row['required']),
+                'applicationFormRowOptions' => collect($row['options'] ?? [])->values()->map(fn (array $option) => [
+                    ...(isset($option['id']) ? ['id' => (int) $option['id']] : []),
+                    'name' => $option['name'] ?? '',
+                    'value' => $option['value'] ?? '',
+                ]),
+            ]),
+            'types' => array_map(fn (FormFieldType $type) => [
+                'value' => $type->value,
+                'label' => $type->label(),
+                'hasOptions' => $type->hasOptions(),
+            ], FormFieldType::cases()),
         ]);
     }
 }

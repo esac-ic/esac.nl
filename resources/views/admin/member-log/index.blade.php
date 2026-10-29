@@ -6,7 +6,7 @@ Member log
 
 @section('content')
     <x-page-header title="Member log">
-        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#export-member-log-modal"><span title="Export the member log" class="ion-android-download" aria-hidden="true"></span> Export</button>
+        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#export-member-log-modal"><x-heroicon-o-arrow-down-tray /> Export</button>
     </x-page-header>
     <x-validation-errors />
     <x-data-table datatable :data-order="json_encode([[1, 'desc']])" :columns="['Type', 'Time', 'Details']">

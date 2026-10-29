@@ -6,8 +6,8 @@ Registrations: {{ $event->title }}
 
 @section('content')
     <x-page-header :title="'Registrations: '.$event->title" :back="route('admin.events.index')" back-label="Events">
-        <x-button-link :href="route('admin.events.registrations.create', $event)" icon="person-add">New registration</x-button-link>
-        <x-button-link :href="route('admin.events.registrations.export', $event)" icon="android-download">Export</x-button-link>
+        <x-button-link :href="route('admin.events.registrations.create', $event)" icon="user-plus">New registration</x-button-link>
+        <x-button-link :href="route('admin.events.registrations.export', $event)" icon="arrow-down-tray">Export</x-button-link>
     </x-page-header>
     <x-data-table datatable :columns="['Name', 'Email address', 'Address', 'Actions']">
         @foreach ($registrations as $registration)
