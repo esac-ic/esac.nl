@@ -10,7 +10,6 @@ use App\Models\EventCategory;
 use App\Models\MenuItem;
 use App\Models\NewsItem;
 use App\Models\RegistrationForm;
-use App\Models\Role;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use PHPUnit\Framework\Attributes\Test;
@@ -61,18 +60,6 @@ class AdminFormPagesTest extends TestCase
         $this->assertForm($response, 'PATCH', "admin/certificates/$certificate->id");
         $this->assertFieldValue($response, 'name', 'Toprope');
         $this->assertFieldValue($response, 'abbreviation', 'TR');
-    }
-
-    #[Test]
-    public function the_role_forms_render()
-    {
-        $this->assertForm($this->get('admin/roles/create')->assertOk(), 'POST', 'admin/roles');
-
-        $role = Role::factory()->create(['name' => 'Penningmeester']);
-        $response = $this->get("admin/roles/$role->id/edit")->assertOk();
-
-        $this->assertForm($response, 'PATCH', "admin/roles/$role->id");
-        $this->assertFieldValue($response, 'name', 'Penningmeester');
     }
 
     #[Test]
@@ -171,13 +158,13 @@ class AdminFormPagesTest extends TestCase
     #[Test]
     public function a_member_can_edit_their_own_profile_but_not_their_member_type()
     {
-        $this->user->roles()->detach();
+        $this->user->update(['roles' => []]);
 
-        $response = $this->get("admin/members/{$this->user->id}/edit")->assertOk();
+        $response = $this->get('account/edit')->assertOk();
 
-        $this->assertForm($response, 'PATCH', "admin/members/{$this->user->id}");
+        $this->assertForm($response, 'PATCH', 'account');
         $this->assertTrue($this->field($response, 'member_type')->hasAttribute('disabled'));
-        $this->get('admin/members/'.User::factory()->create()->id.'/edit')->assertStatus(403);
+        $this->get("admin/members/{$this->user->id}/edit")->assertStatus(403);
     }
 
     #[Test]

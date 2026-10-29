@@ -43,9 +43,9 @@ class PublicFormPagesTest extends TestCase
     public function the_signup_form_renders()
     {
         $this->createPage(PageSlug::SignUp);
-        $response = $this->get('signup')->assertOk();
+        $response = $this->get('sign-up')->assertOk();
 
-        $this->assertForm($response, 'POST', 'signup');
+        $this->assertForm($response, 'POST', 'sign-up');
         $this->assertSelected($response, 'country', 'NL');
         $this->assertSelected($response, 'emergency_country', 'NL');
         $this->assertChecked($response, 'privacy_policy', false);
@@ -58,10 +58,10 @@ class PublicFormPagesTest extends TestCase
     {
         $this->createPage(PageSlug::SignUp);
 
-        $signup = $this->get('signup');
+        $signup = $this->get('sign-up');
         $checked = fn (string $name) => $this->field($signup, $name)->getAttribute('value');
 
-        $response = $this->from('signup')->followingRedirects()->post('signup', [
+        $response = $this->from('sign-up')->followingRedirects()->post('sign-up', [
             'email' => 'piet@example.com',
             'password' => 'geheim123',
             'country' => 'BE',
@@ -119,9 +119,9 @@ class PublicFormPagesTest extends TestCase
             'registration_deadline' => now()->addWeek(),
         ]);
 
-        $response = $this->get("forms/$event->id")->assertOk();
+        $response = $this->get(route('events.registration.create', $event))->assertOk();
 
-        $this->assertForm($response, 'POST', "forms/$event->id");
+        $this->assertForm($response, 'POST', "events/$event->id/registration");
     }
 
     #[Test]
