@@ -3,12 +3,14 @@
 use App\Http\Controllers\AccountController;
 use App\Http\Controllers\Admin\BookController;
 use App\Http\Controllers\Admin\CertificateController;
+use App\Http\Controllers\Admin\ContactDetailsController;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\EditorImageController;
 use App\Http\Controllers\Admin\EventCategoryController;
 use App\Http\Controllers\Admin\EventController;
 use App\Http\Controllers\Admin\EventRegistrationController;
 use App\Http\Controllers\Admin\FormerMemberController;
+use App\Http\Controllers\Admin\HeaderSlideController;
 use App\Http\Controllers\Admin\MailListController;
 use App\Http\Controllers\Admin\MailListMemberController;
 use App\Http\Controllers\Admin\MemberCertificateController;
@@ -21,6 +23,7 @@ use App\Http\Controllers\Admin\PendingMemberController;
 use App\Http\Controllers\Admin\PennoExportController;
 use App\Http\Controllers\Admin\RegistrationFormController;
 use App\Http\Controllers\Admin\SettingsController;
+use App\Http\Controllers\Admin\SponsorController;
 use App\Http\Controllers\EventFeedController;
 use App\Http\Controllers\RegistrationController;
 use App\Http\Controllers\SignUpController;
@@ -71,6 +74,10 @@ Route::prefix('admin')->name('admin.')->middleware(['auth', 'can:access-admin'])
 
     Route::get('member-log', [MemberLogController::class, 'index'])->name('member-log.index');
     Route::post('member-log/export', [MemberLogController::class, 'export'])->name('member-log.export');
+
+    Route::resource('header-slides', HeaderSlideController::class)->except('show');
+    Route::resource('sponsors', SponsorController::class)->except('show');
+    Route::singleton('contact-details', ContactDetailsController::class)->only(['edit', 'update']);
 
     Route::singleton('settings', SettingsController::class)->only(['edit', 'update']);
 });

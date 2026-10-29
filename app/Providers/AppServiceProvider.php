@@ -3,8 +3,10 @@
 namespace App\Providers;
 
 use App\Enums\AdminRole;
+use App\Models\HeaderSlide;
+use App\Models\Sponsor;
 use App\Models\User;
-use App\Settings\SiteSettings;
+use App\Settings\ContactSettings;
 use App\View\Composers\MenuComposer;
 use Illuminate\Auth\Access\Response;
 use Illuminate\Database\Eloquent\Model;
@@ -42,10 +44,11 @@ class AppServiceProvider extends ServiceProvider
 
         View::composer('components.menu', MenuComposer::class);
         View::composer(['components.member-fields', 'components.member-tabs'], fn ($view) => $view->with('countries', Countries::getNames()));
-        View::composer('includes.footer', fn ($view) => $view->with(
-            'footerPhoneNumber',
-            app(SiteSettings::class)->footer_phone_number,
-        ));
+        View::composer('includes.header', fn ($view) => $view->with('headerSlide', HeaderSlide::query()->with('media')->inRandomOrder()->first()));
+        View::composer('includes.footer', fn ($view) => $view->with([
+            'contact' => app(ContactSettings::class),
+            'sponsors' => Sponsor::query()->with('media')->get(),
+        ]));
     }
 
     /**

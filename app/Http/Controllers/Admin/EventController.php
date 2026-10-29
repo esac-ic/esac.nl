@@ -12,9 +12,6 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controllers\HasMiddleware;
 use Illuminate\Routing\Controllers\Middleware;
-use Illuminate\Support\Facades\Storage;
-use Intervention\Image\Drivers\Gd\Driver;
-use Intervention\Image\ImageManager;
 
 class EventController extends Controller implements HasMiddleware
 {
@@ -44,14 +41,13 @@ class EventController extends Controller implements HasMiddleware
     {
         $source = $request->filled('copy') ? Event::findOrFail($request->integer('copy')) : null;
 
-        return $this->form($source?->replicate(['created_by', 'image_path']) ?? new Event, $source);
+        return $this->form($source?->replicate(['created_by']) ?? new Event, $source);
     }
 
     public function store(EventRequest $request): RedirectResponse
     {
         $event = new Event($request->safe()->only(['title', 'body', 'short_description', 'event_category_id', 'start_date', 'end_date']))
             ->fillRegistrationSettings($request->validated());
-        $event->image_path = '';
         $event->created_by = $request->user()->id;
         $event->save();
 
@@ -88,10 +84,6 @@ class EventController extends Controller implements HasMiddleware
     {
         $event->delete();
 
-        if ($event->image_path != '') {
-            Storage::disk('public')->delete($event->image_path);
-        }
-
         return to_route('admin.events.index')->with('message', 'Event removed');
     }
 
@@ -105,18 +97,10 @@ class EventController extends Controller implements HasMiddleware
         ]);
     }
 
-    /**
-     * Stores the uploaded image, cropped to 400x300, under the event's id.
-     */
     private function storeImage(Request $request, Event $event): void
     {
         if ($request->hasFile('image')) {
-            $name = $event->id.'-thumbnail.'.$request->image->extension();
-            $request->file('image')->storeAs('agendaItem', $name, 'public');
-            $event->image_path = 'agendaItem/'.$name;
-            $event->save();
-            $imagePath = Storage::disk('public')->path($event->image_path);
-            ImageManager::usingDriver(Driver::class, decodeAnimation: false)->decodePath($imagePath)->cover(400, 300)->save($imagePath);
+            $event->addMediaFromRequest('image')->toMediaCollection('image');
         }
     }
 }

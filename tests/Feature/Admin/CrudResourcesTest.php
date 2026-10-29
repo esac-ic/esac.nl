@@ -60,14 +60,12 @@ class CrudResourcesTest extends TestCase
         $mailLists = array_fill_keys(array_keys(app(SiteSettings::class)->mail_lists), '');
         $this->put('admin/settings', [
             'killswitch' => '1',
-            'footer_phone_number' => '',
             'blocked_email_domains' => "student.tue.nl\r\n\r\nstudent.fontys.nl ",
             'mail_lists' => ['member' => "alle-leden.esac.nl\nnieuwsbrief.esac.nl"] + $mailLists,
         ])->assertRedirect('admin/settings/edit');
 
         $settings = app(SiteSettings::class)->refresh();
         $this->assertTrue($settings->killswitch);
-        $this->assertNull($settings->footer_phone_number);
         $this->assertSame(['student.tue.nl', 'student.fontys.nl'], $settings->blocked_email_domains);
         $this->assertSame(['alle-leden.esac.nl', 'nieuwsbrief.esac.nl'], $settings->mail_lists['member']);
         $this->assertSame([], $settings->mail_lists['reunist']);

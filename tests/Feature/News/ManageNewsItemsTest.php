@@ -49,8 +49,8 @@ class ManageNewsItemsTest extends TestCase
         ])->assertRedirect();
         $newsItem = NewsItem::sole();
 
-        $this->assertSame([1200, 500], array_slice(getimagesize(Storage::disk('public')->path($newsItem->image_path)), 0, 2));
-        $this->assertSame([400, 300], array_slice(getimagesize(Storage::disk('public')->path($newsItem->thumbnail_path)), 0, 2));
+        $this->assertSame([1200, 500], array_slice(getimagesize($newsItem->getFirstMediaPath('image', 'header')), 0, 2));
+        $this->assertSame([400, 300], array_slice(getimagesize($newsItem->getFirstMediaPath('image', 'thumbnail')), 0, 2));
     }
 
     #[Test]

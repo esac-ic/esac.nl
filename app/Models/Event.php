@@ -14,7 +14,10 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\UniqueConstraintViolationException;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Storage;
+use Spatie\Image\Enums\Fit;
+use Spatie\MediaLibrary\HasMedia;
+use Spatie\MediaLibrary\InteractsWithMedia;
+use Spatie\MediaLibrary\MediaCollections\Models\Media;
 
 #[Fillable([
     'title',
@@ -23,13 +26,12 @@ use Illuminate\Support\Facades\Storage;
     'registration_deadline',
     'start_date',
     'end_date',
-    'image_path',
     'event_category_id',
     'shows_certificates',
 ])]
-class Event extends Model
+class Event extends Model implements HasMedia
 {
-    use HasFactory;
+    use HasFactory, InteractsWithMedia;
 
     protected function casts(): array
     {
@@ -62,18 +64,22 @@ class Event extends Model
         return $this;
     }
 
+    public function registerMediaCollections(): void
+    {
+        $this->addMediaCollection('image')->singleFile();
+    }
+
+    public function registerMediaConversions(?Media $media = null): void
+    {
+        $this->addMediaConversion('card')->format('webp')->fit(Fit::Crop, 400, 300);
+    }
+
     /**
      * Gives the event its own copy of the other event's image, so each event has a file to replace or delete.
      */
     public function copyImageFrom(Event $source): void
     {
-        if ($source->image_path === '') {
-            return;
-        }
-
-        $this->image_path = 'agendaItem/'.$this->id.'-thumbnail.'.pathinfo($source->image_path, PATHINFO_EXTENSION);
-        Storage::disk('public')->copy($source->image_path, $this->image_path);
-        $this->save();
+        $source->getFirstMedia('image')?->copy($this, 'image');
     }
 
     /**
@@ -145,9 +151,7 @@ class Event extends Model
      */
     protected function imageUrl(): Attribute
     {
-        return Attribute::get(fn (): string => $this->image_path != ''
-            ? Storage::disk('public')->url($this->image_path)
-            : '/img/default-event-cover.jpg');
+        return Attribute::get(fn (): string => $this->hasMedia('image') ? $this->getFirstMediaUrl('image', 'card') : '/img/default-event-cover.jpg');
     }
 
     /**

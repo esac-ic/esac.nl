@@ -13,7 +13,6 @@ class SettingsRequest extends FormRequest
 
         return [
             'killswitch' => ['required', 'boolean'],
-            'footer_phone_number' => ['nullable', 'string', 'max:255'],
             'blocked_email_domains' => ['array'],
             'blocked_email_domains.*' => ['string', 'max:255'],
             'mail_lists' => ['required', 'array:'.$memberTypes, 'required_array_keys:'.$memberTypes],

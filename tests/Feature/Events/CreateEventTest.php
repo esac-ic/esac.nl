@@ -73,7 +73,7 @@ class CreateEventTest extends TestCase
             'image' => UploadedFile::fake()->image('photo.png', 1000, 1000),
         ]))->assertRedirect();
 
-        $this->assertSame([400, 300], array_slice(getimagesize(Storage::disk('public')->path(Event::sole()->image_path)), 0, 2));
+        $this->assertSame([400, 300], array_slice(getimagesize(Event::sole()->getFirstMediaPath('image', 'card')), 0, 2));
     }
 
     #[Test]

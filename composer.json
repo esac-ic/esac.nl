@@ -10,11 +10,11 @@
         "ext-intl": "*",
         "blade-ui-kit/blade-heroicons": "^2.7",
         "eluceo/ical": "^2.17",
-        "intervention/image": "^4.4",
         "laravel/fortify": "^1.30",
         "laravel/framework": "^13.38",
         "laravel/tinker": "^3.0",
         "spatie/laravel-html": "^3.13",
+        "spatie/laravel-medialibrary": "^11.23",
         "spatie/laravel-settings": "^3.10",
         "spatie/simple-excel": "^3.11",
         "symfony/intl": "^8.1"

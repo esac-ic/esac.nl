@@ -51,6 +51,13 @@
                             @endcan
                         </x-admin-nav.group>
                     @endcanany
+                    @can('manage-pages')
+                        <x-admin-nav.group label="Website">
+                            <x-admin-nav.link route="admin.header-slides.index" active="admin.header-slides.*">Header slides</x-admin-nav.link>
+                            <x-admin-nav.link route="admin.sponsors.index" active="admin.sponsors.*">Sponsors</x-admin-nav.link>
+                            <x-admin-nav.link route="admin.contact-details.edit" active="admin.contact-details.*">Contact details</x-admin-nav.link>
+                        </x-admin-nav.group>
+                    @endcan
                     @canany(['manage-mail-lists', 'view-member-log', 'manage-settings'])
                         <x-admin-nav.group label="Club">
                             @can('manage-mail-lists')

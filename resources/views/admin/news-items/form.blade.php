@@ -17,7 +17,7 @@
             <div class="form-group">
                 <label for="image">Image</label>
                 <input type="file" @class(['form-control-file', 'is-invalid' => $errors->has('image')]) id="image" name="image" accept="image/*">
-                @if ($newsItem->image_path)
+                @if ($newsItem->hasMedia('image'))
                     <small class="form-text text-muted">Leave empty to keep the current image.</small>
                 @endif
                 @error('image')

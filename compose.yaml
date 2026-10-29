@@ -56,8 +56,8 @@ services:
 
   worker:
     <<: *app
-    # Restarts hourly (compose brings it back) and gives up on a job after 3 tries
-    command: ["php", "artisan", "queue:work", "--tries=3", "--max-time=3600"]
+    # Restarts hourly (compose brings it back) and gives up on a job after 3 tries; image conversions need more memory than web requests
+    command: ["php", "-d", "memory_limit=256M", "artisan", "queue:work", "--tries=3", "--max-time=3600"]
     # The image's health check probes Caddy, which only runs in the app service; check the database connection instead
     healthcheck: &artisan-healthcheck
       test: ["CMD", "php", "artisan", "db:monitor"]
