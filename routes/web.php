@@ -63,6 +63,7 @@ Route::resource('agendaItems', 'AgendaItemController');
 Route::resource('agendaItemCategories', 'AgendaItemCategoryController');
 Route::resource('newsItems', 'NewsItemController');
 Route::resource('mailList', 'MailListController');
+Route::resource('reimbursements', 'ReimbursementController');
 Route::post('/signup', 'PendingUserController@storePendingUser')->name('user.signup');
 Route::resource('books', 'LibraryController');
 Route::post('images/upload', 'StorageController@uploadImage');

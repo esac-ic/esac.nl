@@ -28,6 +28,11 @@
                             {{ 'Account overview' }}
                         </a>
                     </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url('reimbursements') }}">
+                            {{ 'Reimbursements' }}
+                        </a>
+                    </li>
                     @if (Auth::guest())
                         <li class="nav-item">
                             <a href="{{ url('/login') }}" class="nav-link">
@@ -107,6 +112,11 @@
                             <li class="nav-item">
                                 <a href="{{ url('beheer/settings') }}" class="nav-link">
                                     {{'Setting'}}
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="{{ url('reimbursements') }}" class="nav-link">
+                                    {{'Reimbursement Overview'}}
                                 </a>
                             </li>
                         @endif
