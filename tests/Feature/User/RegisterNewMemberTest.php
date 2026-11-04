@@ -59,7 +59,7 @@ class RegisterNewMemberTest extends TestCase
             'emergencycountry' => 'NL',
             'emergencyfirstname' => 'nsac',
             'emergencylastname' => 'nsac last name',
-            'emergencyrelation' => 'umbrella association',
+            'emergencyrelation' => 'Parent',
             'birthDay' => Carbon::now()->subCenturies(2)->format('d-m-Y'),
             'IBAN' => "BLNDj838474784848",
             'incasso' => 1,

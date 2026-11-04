@@ -86,7 +86,11 @@ class PendingUserController extends Controller
             'emergencycountry' => 'required|max:255',
             'emergencyfirstname' => 'required|max:255',
             'emergencylastname' => 'required|max:255',
-            'emergencyrelation' => 'required|max:255',
+            'emergencyrelation' => [
+                'required',
+                'max:255',
+                Rule::enum(EmergencyRelation::class)
+            ],            
             'birthDay' => 'required|date',
             'IBAN' => 'required|max:255',
             'g-recaptcha-response' => 'required',
