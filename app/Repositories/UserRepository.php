@@ -8,6 +8,7 @@
 
 namespace App\Repositories;
 
+use App\Enums\EmergencyRelation;
 use App\Events\MemberKindChanged;
 use App\Events\PendingUserCreated;
 use App\Models\User;
