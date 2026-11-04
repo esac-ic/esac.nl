@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Enums\EmergencyRelation;
 use App\Events\MemberBecameOldMember;
 use App\Events\OldMemberBecameMember;
 use App\Events\PendingUserApproved;
@@ -85,6 +86,7 @@ class User extends Authenticatable
     
     protected $casts = [
         'birthDay' => 'date',
+        'emergencyrelation' => EmergencyRelation::class,
     ];
 
     public function roles(): BelongsToMany

@@ -162,7 +162,7 @@
                 </div>
                 <div class="form-group col-md-4">
                     {!! Form::label('emergencyrelation', 'Relation to emergency contact') !!}
-                    {!! Form::select('emergencyrelation', trans("relations"), '', ['class' => 'form-control','required' => 'required']) !!}
+                    {!! Form::select('emergencyrelation', \App\Enums\EmergencyRelation::labels(), '', ['class' => 'form-control', 'required' => 'required']) !!}
                 </div>
             </div>
         </div>

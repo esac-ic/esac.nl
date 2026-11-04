@@ -192,7 +192,7 @@
                 </div>
                 <div class="form-group col-md-4">
                     {!! Form::label('emergencyrelation', 'Relation to emergency contact') !!}
-                    {!! Form::select('emergencyrelation', trans("relations"), ($user != null) ? $user->emergencyrelation : "", ['class' => 'form-control']) !!}
+                    {!! Form::select('emergencyrelation', \App\Enums\EmergencyRelation::labels(), ($user != null) ? $user->emergencyrelation->value : "", ['class' => 'form-control']) !!}
                 </div>
             </div>
         </div>

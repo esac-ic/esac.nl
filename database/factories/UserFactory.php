@@ -3,6 +3,7 @@
 namespace Database\Factories;
 
 use App\Models\User;
+use App\Enums\EmergencyRelation;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Facades\Lang;
 
@@ -38,7 +39,7 @@ class UserFactory extends Factory
             'emergencycountry' => fake()->country(),
             'emergencyfirstname' => fake()->firstName(),
             'emergencylastname' => fake()->lastName(),
-            'emergencyrelation' => fake()->randomElement(["parent", "sibling", "partner", "friend", "other_family", "other"]),
+            'emergencyrelation' => fake()->randomElement(EmergencyRelation::labels()),
             'birthday' => fake()->date(),
             'kind_of_member' => fake()->randomElement(User::KINDS_OF_MEMBER),
             'IBAN' => fake()->iban(),
