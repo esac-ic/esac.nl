@@ -8,6 +8,7 @@ use App\Rules\EmailDomainValidator;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Session;
+use Illuminate\Validation\Rule;
 
 class PendingUserController extends Controller
 {
@@ -86,11 +87,7 @@ class PendingUserController extends Controller
             'emergencycountry' => 'required|max:255',
             'emergencyfirstname' => 'required|max:255',
             'emergencylastname' => 'required|max:255',
-            'emergencyrelation' => [
-                'required',
-                'max:255',
-                Rule::enum(EmergencyRelation::class)
-            ],            
+            'emergencyrelation' => 'required|max:255',        
             'birthDay' => 'required|date',
             'IBAN' => 'required|max:255',
             'g-recaptcha-response' => 'required',

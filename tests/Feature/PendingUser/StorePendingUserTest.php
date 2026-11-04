@@ -70,7 +70,7 @@ class StorePendingUserTest extends \TestCase
         $this->assertEquals('Initial', $user->emergencycountry);
         $this->assertEquals('Initial', $user->emergencyfirstname);
         $this->assertEquals('Initial', $user->emergencylastname);
-        $this->assertEquals('Parent', $user->emergencyrelation);
+        $this->assertEquals('Parent', $user->emergencyrelation->value);
         $this->assertEquals('123456789', $user->IBAN);
         
         $this->assertEquals(new Carbon('1990-01-01'), $user->birthDay);

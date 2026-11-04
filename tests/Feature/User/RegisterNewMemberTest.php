@@ -40,7 +40,6 @@ class RegisterNewMemberTest extends TestCase
     /** @test */
     public function a_guest_can_register_a_new_user()
     {
-        
         $body = [
             'email' => 'test@esac.nl',
             'firstname' => 'esac',
@@ -93,7 +92,7 @@ class RegisterNewMemberTest extends TestCase
         $this->assertEquals($body['emergencycountry'], $user->emergencycountry);
         $this->assertEquals($body['emergencyfirstname'], $user->emergencyfirstname);
         $this->assertEquals($body['emergencylastname'], $user->emergencylastname);
-        $this->assertEquals($body['emergencyrelation'], $user->emergencyrelation);
+        $this->assertEquals($body['emergencyrelation'], $user->emergencyrelation->value);
         $this->assertEquals($body['birthDay'], Carbon::parse($user->birthDay)->format('d-m-Y'));
         $this->assertEquals('member', $user->kind_of_member);
         $this->assertEquals($body['IBAN'], $user->IBAN);
