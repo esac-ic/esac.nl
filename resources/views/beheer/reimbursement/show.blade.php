@@ -21,7 +21,7 @@
                     </a>
                 @endif
                 <form method="post"
-                      action="{{ route("reimbursements.destroy", $reimbursemnt) }}"
+                      action="{{ route("reimbursement.destroy", $reimbursemnt) }}"
                       onsubmit="return confirm('Are you sure you want to delete this reimbursement?');"
                 >
                     @csrf

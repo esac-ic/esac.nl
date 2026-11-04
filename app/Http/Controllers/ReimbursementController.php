@@ -22,18 +22,18 @@ class ReimbursementController extends Controller
 
     public function index()
     {
-        return view('beheer.reimbursements.index');
+        return view('beheer.reimbursement.index');
     }
 
     public function create()
     {
-        $fields = $this->getFields('POST', '/reimbursements', 'Add a reimbursement');
+        $fields = $this->getFields('POST', '/reimbursement', 'Add a reimbursement');
         return $this->renderCreateEditView(null, $fields);
     }
 
     public function store(Request $request)
     {
-        return redirect('/reimbursements');
+        return redirect('/reimbursement');
     }
 
     public function show(Reimbursement $reimbursement)
@@ -43,7 +43,7 @@ class ReimbursementController extends Controller
 
     public function edit(Reimbursement $reimbursement)
     {
-        $fields = $this->getFields('PATCH', '/reimbursements/' . $reimbursement->id, 'Edit event');
+        $fields = $this->getFields('PATCH', '//' . $reimbursement->id, 'Edit event');
         return $this->renderCreateEditView($reimbursement, $fields);
     }
 
@@ -53,20 +53,20 @@ class ReimbursementController extends Controller
         $this->_reimbursementRepository->update($reimbursement->id, $request->all());
         $this->handleImage($request, $reimbursement);
         Session::flash("message", 'Event edited');
-        return redirect('/reimbursements');
+        return redirect('/reimbursement');
     }
 
     public function destroy($id)
     {
         $this->_reimbursementRepository->delete($id);
         Session::flash("message", 'Event removed');
-        return redirect('/reimbursements');
+        return redirect('/reimbursement');
     }
 
     public function copy(Reimbursement $reimbursement)
     {
         $newReimbursement = $this->_reimbursementRepository->copy($reimbursement);
-        return redirect('/reimbursements/' . $newReimbursement->id . '/edit');
+        return redirect('/reimbursement/' . $newReimbursement->id . '/edit');
     }
 
     private function validateInput(Request $request)
@@ -78,7 +78,7 @@ class ReimbursementController extends Controller
 
     private function renderCreateEditView($reimbursement, $fields)
     {
-        return view('beheer.reimbursements.create_edit', compact(['fields', 'reimbursement']));
+        return view('beheer.reimbursement.create_edit', compact(['fields', 'reimbursement']));
     }
 
     private function handleImage(Request $request, Reimbursement $reimbursement)

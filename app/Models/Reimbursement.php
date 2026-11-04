@@ -2,11 +2,20 @@
 
 namespace App\Models;
 
-class AgendaItem extends Model
+use Illuminate\Database\Eloquent\Model;
+
+class Reimbursement extends Model
 {
     protected $fillable = [
         'title',
         'text',
-        'amount',
+        'status',
+        'type',
+        'createdOn'
     ];
+
+    public function getReimbursementItems()
+    {
+        return $this->hasMany(ReimbursementItem::class, 'reimbursement_id');
+    }
 }

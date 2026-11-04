@@ -29,7 +29,7 @@
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="{{ url('reimbursements') }}">
+                        <a class="nav-link" href="{{ url('reimbursement') }}">
                             {{ 'Reimbursements' }}
                         </a>
                     </li>
@@ -115,7 +115,7 @@
                                 </a>
                             </li>
                             <li class="nav-item">
-                                <a href="{{ url('reimbursements') }}" class="nav-link">
+                                <a href="{{ url('reimbursement') }}" class="nav-link">
                                     {{'Reimbursement Overview'}}
                                 </a>
                             </li>

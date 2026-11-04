@@ -20,7 +20,7 @@
         </div>
         <div class="col-md-6">
             <div class="btn-group mt-2 float-md-right" role="group" aria-label="Actions">
-                <a href="{{url('reimbursements/create')}}" class="btn btn-primary">
+                <a href="{{url('reimbursement/create')}}" class="btn btn-primary">
                     <span title="{{'New user'}}" class="ion-plus" aria-hidden="true"></span>
                     {{'New reimbursement'}}
                 </a>

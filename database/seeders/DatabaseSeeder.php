@@ -26,5 +26,7 @@ class DatabaseSeeder extends Seeder
         $this->call(ApplicationResponseSeeder::class);
         $this->call(BooksTableSeeder::class);
         $this->call(UserEventLogEntrySeeder::class);
+        $this->call(ReimbursementSeeder::class);
+        $this->call(ReimbursementItemSeeder::class);
     }
 }
