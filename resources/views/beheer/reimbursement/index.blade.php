@@ -33,6 +33,7 @@
         <tr>
             <th>{{'Title'}}</th>
             <th>{{'Amount'}}</th>
+            <th>{{'Status'}}</th>
             <th>{{'Created On'}}</th>
             <th>{{'Management'}}</th>
         </tr>
@@ -54,20 +55,21 @@
     @vite(['resources/assets/js/vendor/datatables.js', 'resources/assets/js/vendor/moment.js', 'resources/assets/js/vendor/tempusdominus.js'])
     <script type="module">
 
-        let agendaTable = $('#reimbursement').DataTable({
-            "order": [[2, "asc"]],
+        let reimbursementTable = $('#reimbursement').DataTable({
+            "order": [[3, "desc"]],
             "ajax": {
                 'url': "{{url("api/reimbursement")}}?limit=100000",
                 "dataSrc": "reimbursements"
             },
             columnDefs: [
-                {width: '15%', targets: 1},
-                {width: '20%', targets: [2,3]},
+                {width: '10%', targets: 1},
+                {width: '16%', targets: [2,3,4]},
                 {type: 'de_datetime', targets: 2},
             ],
             "columns": [
                 {"data": "title"},
                 {"data": "amount"},
+                {"data": "status"},
                 {
                     "data": function (data) {
                         return formatDate(data.createdOn);

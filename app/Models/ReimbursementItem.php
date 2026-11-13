@@ -10,6 +10,7 @@ class ReimbursementItem extends Model
         'item',
         'amount',
         'esacpas',
+        'paidBy',
         'image_url'
     ];
 

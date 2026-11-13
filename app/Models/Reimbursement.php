@@ -3,6 +3,8 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use App\Enums\ReimbursementType;
+use App\Enums\ReimbursementStatus;
 
 class Reimbursement extends Model
 {
@@ -12,6 +14,11 @@ class Reimbursement extends Model
         'status',
         'type',
         'createdOn'
+    ];
+
+    protected $casts = [
+        'type' => ReimbursementType::class,
+        'status' => ReimbursementStatus::class,
     ];
 
     public function getReimbursementItems()

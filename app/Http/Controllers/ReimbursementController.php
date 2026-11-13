@@ -72,7 +72,17 @@ class ReimbursementController extends Controller
     private function validateInput(Request $request)
     {
         $this->validate($request, [
-            
+            'title' => 'required|max:255',
+            'text' => 'required',
+            'status' => [
+                'required|max:255',
+                Rule::enum(ReimbursementStatus::class)
+            ],
+            'type' => [
+                'required|max:255',
+                Rule::enum(ReimbursementType::class)
+            ],
+            'createdOn' => 'required|max:255'
         ]);
     }
 
@@ -91,17 +101,5 @@ class ReimbursementController extends Controller
             $img_path = "../storage/app/public/" . $reimbursement->image_url;
             Image::make($img_path)->fit(400, 300)->save($img_path);
         }
-    }
-
-    private function getFields($method, $url, $title)
-    {
-        return [
-            'title_info' => 'Event general information',
-            'title_content' => 'Event item content',
-            'title_image' => 'Event item thumbnail',
-            'title' => $title,
-            'method' => $method,
-            'url' => $url,
-        ];
     }
 }

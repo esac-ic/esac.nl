@@ -22,6 +22,7 @@ Route::get('/agenda', 'Api\AgendaController@getAgenda');
 Route::get('/agendaCategories', 'Api\AgendaController@getCategories');
 
 Route::get('/reimbursement', 'Api\ReimbursementApiController@getReimbursements');
+Route::get('/reimbursementItems', 'Api\ReimbursementApiController@getReimbursementItems');
 
 Route::get('/zekeringen', 'Api\ZekeringController@getZekeringen');
 Route::post('/zekeringen', 'Api\ZekeringController@storeZekering');

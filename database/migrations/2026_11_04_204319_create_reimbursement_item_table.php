@@ -18,6 +18,7 @@ return new class extends Migration
             $table->boolean('esacpas');
             $table->string('image_url');
             $table->unsignedInteger('reimbursement_id');
+            $table->unsignedInteger('paidBy');
             $table->timestamps();
         });
     }
