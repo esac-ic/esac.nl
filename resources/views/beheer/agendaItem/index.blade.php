@@ -98,7 +98,7 @@
                 {"data": "title"},
                 {
                     "data": function (data) {
-                        return formatDate(data.full_startDate);
+                        return formatDate(data.startDate);
                     }
                 },
                 {

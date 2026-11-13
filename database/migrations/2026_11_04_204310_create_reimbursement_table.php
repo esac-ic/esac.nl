@@ -18,6 +18,7 @@ return new class extends Migration
             $table->string('status');
             $table->string('type');
             $table->date('createdOn');
+            $table->unsignedInteger('createdBy');
             $table->timestamps();
         });
     }

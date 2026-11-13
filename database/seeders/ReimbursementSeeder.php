@@ -21,6 +21,7 @@ class ReimbursementSeeder extends Seeder
         $reimbursement->status = "In Progress";
         $reimbursement->type = "Activity";
         $reimbursement->createdOn = Carbon::now();
+        $reimbursement->createdBy = 1;
         $reimbursement->save();
     }
 }

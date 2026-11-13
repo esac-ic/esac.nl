@@ -18,4 +18,20 @@ class Reimbursement extends Model
     {
         return $this->hasMany(ReimbursementItem::class, 'reimbursement_id');
     }
+
+    public function getAmount()
+    {
+        $items = $this->hasMany(ReimbursementItem::class, 'reimbursement_id')->get();
+
+        $total = 0;
+        foreach ($items as $item) {
+            $total += $item->amount;
+        }
+        return $total;
+    }
+
+    public function getCreatedBy()
+    {
+        return $this->hasOne(User::class, 'id', 'createdBy');
+    }
 }

@@ -28,12 +28,12 @@
         </div>
     </div>  
 
-    <table id="agenda-items" class="table table-striped dt-responsive nowrap" style="width:100%">
+    <table id="reimbursement" class="table table-striped dt-responsive nowrap" style="width:100%">
         <thead>
         <tr>
-            <th>{{'Created On'}}</th>
             <th>{{'Title'}}</th>
             <th>{{'Amount'}}</th>
+            <th>{{'Created On'}}</th>
             <th>{{'Management'}}</th>
         </tr>
         </thead>
@@ -54,64 +54,43 @@
     @vite(['resources/assets/js/vendor/datatables.js', 'resources/assets/js/vendor/moment.js', 'resources/assets/js/vendor/tempusdominus.js'])
     <script type="module">
 
-        let agendaTable = $('#agenda-items').DataTable({
-            "order": [[1, "asc"]],
+        let agendaTable = $('#reimbursement').DataTable({
+            "order": [[2, "asc"]],
             "ajax": {
-                'url': getUrl(),
-                "dataSrc": "agendaItems"
+                'url': "{{url("api/reimbursement")}}?limit=100000",
+                "dataSrc": "reimbursements"
             },
             columnDefs: [
-                {type: 'de_datetime', targets: 1},
+                {width: '15%', targets: 1},
+                {width: '20%', targets: [2,3]},
                 {type: 'de_datetime', targets: 2},
             ],
             "columns": [
                 {"data": "title"},
+                {"data": "amount"},
                 {
                     "data": function (data) {
-                        return formatDate(data.full_startDate);
+                        return formatDate(data.createdOn);
                     }
                 },
                 {
                     "data": function (data) {
-                        return formatDate(data.endDate);
-                    }
-                },
-                {
-                    "data": function (data) {
-                        return getAgendaItemActions(data);
+                        return getReimbursementActions(data);
                     }
                 },
             ]
         });
 
-        $("#startDateBox").on("change.datetimepicker", function (e) {
-            agendaTable.ajax.url(getUrl()).load();
-        });
-
         function formatDate(date) {
             date = moment(date);
-            return date.format("DD-MM-YYYY HH:mm")
+            return date.format("DD-MM-YYYY")
         }
 
-        function getAgendaItemActions(data) {
+        function getReimbursementActions(data) {
             let actions = "";
-            actions += '<a class="mr-1 ml-1" href="{{url('agendaItems')}}/' + data.id + '/edit"><span title="{{'Edit event'}}" class="ion-edit font-size-120 icon" aria-hidden="true"></span></a>';
-            actions += '<a class="mr-1 ml-1" href="{{url('agendaItems')}}/' + data.id + '"><span title="{{'Show event'}}" class="ion-eye font-size-120 icon" aria-hidden="true"></span></a>';
-            if (data.application_form_id != null) {
-                actions += '<a class="mr-1 ml-1" href="{{url('/forms/users')}}/' + data.id + '"><span title="{{'Show sign ups'}}" class="ion-android-list font-size-120 icon" aria-hidden="true"></span></a>';
-            }
-            actions += '<a class="mr-1 ml-1" href="{{url('agendaItems')}}/' + data.id + '/copy"><span title="{{'Copy event'}}" class="ion-ios-copy font-size-120 icon" aria-hidden="true"></span></a>';
+            actions += '<a class="mr-1 ml-1" href="{{url('reimbursement')}}/' + data.id + '/edit"><span title="{{'Edit event'}}" class="ion-edit font-size-120 icon" aria-hidden="true"></span></a>';
+            actions += '<a class="mr-1 ml-1" href="{{url('reimbursement')}}/' + data.id + '"><span title="{{'Show event'}}" class="ion-eye font-size-120 icon" aria-hidden="true"></span></a>';
             return actions;
-        }
-
-        function getUrl() {
-            let params = "limit=10000000";
-            let datePicker = $('#startDate');
-            if (datePicker.val() != "") {
-                params += "&startDate=" + datePicker.val();
-            }
-
-            return "{{url("api/agenda")}}?" + params;
         }
     </script>
 @endpush
