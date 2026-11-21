@@ -13,6 +13,7 @@ return new class extends Migration
     {
         Schema::create('reimbursements', function (Blueprint $table) {
             $table->id();
+            $table->softDeletes();
             $table->string('title');
             $table->string('text');
             $table->string('status');
@@ -28,6 +29,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('reimbursement');
+        Schema::dropIfExists('reimbursements');
     }
 };

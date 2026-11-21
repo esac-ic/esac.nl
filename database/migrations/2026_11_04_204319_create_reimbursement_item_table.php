@@ -13,11 +13,11 @@ return new class extends Migration
     {
         Schema::create('reimbursement_items', function (Blueprint $table) {
             $table->id();
+            $table->softDeletes();
             $table->string('item');
             $table->float('amount');
             $table->boolean('esacpas');
-            $table->string('image_url');
-            $table->unsignedInteger('reimbursement_id');
+            $table->foreignId('reimbursement_id')->constrained()->cascadeOnDelete();
             $table->unsignedInteger('paidBy');
             $table->timestamps();
         });
@@ -28,6 +28,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('reimbursement_item');
+        Schema::dropIfExists('reimbursement_items');
     }
 };

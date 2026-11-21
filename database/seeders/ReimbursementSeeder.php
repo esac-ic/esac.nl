@@ -2,7 +2,7 @@
 
 namespace Database\Seeders;
 
-use App\Models\Reimbursement;
+use App\Models\Reimbursement\Reimbursement;
 use Carbon\Carbon;
 use Illuminate\Database\Seeder;
 

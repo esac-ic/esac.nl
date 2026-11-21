@@ -1,10 +1,11 @@
 <?php
 
-namespace App\Repositories;
+namespace App\Repositories\ReimbursementRepositories;
 
-use App\Models\Reimbursement;
+use App\Models\Reimbursement\Reimbursement;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
+use App\Repositories\IRepository;
 
 class ReimbursementRepository implements IRepository
 {
@@ -12,12 +13,22 @@ class ReimbursementRepository implements IRepository
     {
         $reimbursement = new Reimbursement($data);
 
+        $reimbursement->title = $data['title'];
+        $reimbursement->text = $data['text'];
+        $reimbursement->type = $data['type'];
+        $reimbursement->status = $data['status'];
+        $reimbursement->reimbursement_id = $data['reimbursement_id'];
+
+        $reimbursement->createdOn = Carbon::now();
+        $reimbursement->createdBy = Auth::user()->id;
+
         return $reimbursement;
     }
 
     public function update($id, array $data)
     {
         $reimbursement = $this->find($id);
+        $reimbursement->update($data);
 
         return $reimbursement;
     }
@@ -26,8 +37,6 @@ class ReimbursementRepository implements IRepository
     {
         $reimbursement = $this->find($id);
         $reimbursement->delete();
-
-        # TODO: Delete images
     }
 
     public function find($id, $columns = array('*'))
@@ -43,12 +52,5 @@ class ReimbursementRepository implements IRepository
     public function all($columns = array('*'))
     {
         return Reimbursement::all($columns);
-    }
-
-    public function copy(Reimbursement $reimbursement): Reimbursement
-    {
-        $newReimbursement = $reimbursement->replicate();
- 
-        return $newReimbursement;
     }
 }

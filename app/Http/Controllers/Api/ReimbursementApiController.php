@@ -4,8 +4,8 @@ namespace App\Http\Controllers\Api;
 
 use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\Controller;
-use App\Models\Reimbursement;
-use App\Models\ReimbursementItem; 
+use App\Models\Reimbursement\Reimbursement;
+use App\Models\Reimbursement\ReimbursementItem; 
 use App\Models\User; 
 use Carbon\Carbon;
 use Illuminate\Http\Request;

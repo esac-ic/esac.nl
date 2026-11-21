@@ -2,7 +2,7 @@
 
 namespace Database\Seeders;
 
-use App\Models\ReimbursementItem;
+use App\Models\Reimbursement\ReimbursementItem;
 use Illuminate\Database\Seeder;
 
 class ReimbursementItemSeeder extends Seeder
@@ -19,7 +19,6 @@ class ReimbursementItemSeeder extends Seeder
         $reimbursementItem->item = 'Cookies';
         $reimbursementItem->amount = 2.76;
         $reimbursementItem->esacpas = 0;
-        $reimbursementItem->image_url = "";
         $reimbursementItem->paidBy = 1;
         $reimbursementItem->save();
         
@@ -29,7 +28,6 @@ class ReimbursementItemSeeder extends Seeder
         $reimbursementItem->item = 'Milk';
         $reimbursementItem->amount = 1.34;
         $reimbursementItem->esacpas = 1;
-        $reimbursementItem->image_url = "";
         $reimbursementItem->paidBy = 1;
         $reimbursementItem->save();
         
@@ -38,7 +36,6 @@ class ReimbursementItemSeeder extends Seeder
         $reimbursementItem->item = 'Cookies';
         $reimbursementItem->amount = 1.53;
         $reimbursementItem->esacpas = 0;
-        $reimbursementItem->image_url = "";
         $reimbursementItem->paidBy = 1;
         $reimbursementItem->save();
         
@@ -47,7 +44,6 @@ class ReimbursementItemSeeder extends Seeder
         $reimbursementItem->item = 'Cookies';
         $reimbursementItem->amount = 1.78;
         $reimbursementItem->esacpas = 0;
-        $reimbursementItem->image_url = "";
         $reimbursementItem->paidBy = 2;
         $reimbursementItem->save();
     }

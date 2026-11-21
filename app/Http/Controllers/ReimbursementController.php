@@ -2,9 +2,9 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Reimbursement;
+use App\Models\Reimbursement\Reimbursement;
 use App\Repositories\ReimbursementCategoryRepository;
-use App\Repositories\ReimbursementRepository;
+use App\Repositories\ReimbursementRepositories\ReimbursementRepository;
 use App\Repositories\ApplicationFormRepositories\ApplicationFormRepository;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Session;
@@ -91,15 +91,15 @@ class ReimbursementController extends Controller
         return view('beheer.reimbursement.create_edit', compact(['fields', 'reimbursement']));
     }
 
-    private function handleImage(Request $request, Reimbursement $reimbursement)
+    private function handleImage(Request $request, ReimbursementReceipt $receipt)
     {
-        if ($request->hasFile('thumbnail')) {
-            $name = $reimbursement->id . '-thumbnail.' . $request->thumbnail->extension();
-            $request->file('thumbnail')->storeAs('reimbursement', $name, 'public');
-            $reimbursement->image_url = 'reimbursement/' . $name;
-            $reimbursement->save();
-            $img_path = "../storage/app/public/" . $reimbursement->image_url;
-            Image::make($img_path)->fit(400, 300)->save($img_path);
+        if ($request->hasFile('image')) {
+            $name = $receipt->reimbursement_id . '-receipt-' . $receipt->id . '.' . $request->image->extension();
+            $request->file('image')->storeAs('reimbursement_receipt', $name, 'public');
+            $receipt->image_url = 'reimbursement_receipt/' . $name;
+            $receipt->save();
+            $img_path = "../storage/app/public/" . $receipt->image_url;
+            Image::make($img_path)->contain(600, 600)->save($img_path);
         }
     }
 }

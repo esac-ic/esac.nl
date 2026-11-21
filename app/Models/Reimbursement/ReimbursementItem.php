@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Models;
+namespace App\Models\Reimbursement;
 
 use Illuminate\Database\Eloquent\Model;
 
@@ -11,7 +11,6 @@ class ReimbursementItem extends Model
         'amount',
         'esacpas',
         'paidBy',
-        'image_url'
     ];
 
     protected $casts = [

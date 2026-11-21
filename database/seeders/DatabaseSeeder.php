@@ -28,5 +28,6 @@ class DatabaseSeeder extends Seeder
         $this->call(UserEventLogEntrySeeder::class);
         $this->call(ReimbursementSeeder::class);
         $this->call(ReimbursementItemSeeder::class);
+        $this->call(ReimbursementReceiptSeeder::class);
     }
 }

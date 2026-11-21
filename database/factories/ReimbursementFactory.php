@@ -4,7 +4,7 @@ namespace Database\Factories;
 
 use App\Enums\ReimbursementType;
 use App\Enums\ReimbursementStatus;
-use App\Models\Reimbursement;
+use App\Models\Reimbursement\Reimbursement;
 use App\Models\User;
 use Faker\Generator as Faker;
 
