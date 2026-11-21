@@ -42,7 +42,7 @@ class UpdateAgendaItemTest extends TestCase
     /** @test */
     public function UpdateAgendaItemTest()
     {
-        $agendaItem = factory(AgendaItem::class)->create();
+        $agendaItem = AgendaItem::factory()->create();
         $agendaItemCategory = factory(AgendaItemCategory::class)->create();
 
         $body = [

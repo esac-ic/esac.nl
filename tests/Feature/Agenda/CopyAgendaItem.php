@@ -43,7 +43,7 @@ class CopyAgendaItem extends TestCase
 
     /** @test */
     public function agenda_item_can_be_copied(){
-        $agendaItem = factory(AgendaItem::class)->create(['image_url' => ""]);
+        $agendaItem = AgendaItem::factory()->not_hidden()->create(['image_url' => ""]);
 
         $response = $this->get($this->url . $agendaItem->id . '/copy');
 
@@ -58,6 +58,7 @@ class CopyAgendaItem extends TestCase
         $this->assertEquals($agendaItem->endDate, $newAgendaItem->endDate);
         $this->assertEquals($agendaItem->category, $newAgendaItem->category);
         $this->assertEquals($agendaItem->climbing_activity, $newAgendaItem->climbing_activity);
+        $this->assertEquals($agendaItem->hidden, $newAgendaItem->hidden);
 
         $this->assertEquals($agendaItem->title, $newAgendaItem->title);
         $this->assertEquals($agendaItem->text, $newAgendaItem->text);

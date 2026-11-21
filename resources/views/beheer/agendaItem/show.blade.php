@@ -66,6 +66,10 @@
                     <td>{{$agendaItem->climbing_activity ? 'Yes' : 'No'}}</td>
                 </tr>
                 <tr>
+                    <td>{{'Hide agenda item'}}</td>
+                    <td>{{trans("hide_agenda.".$agendaItem->hidden)}}</td>
+                </tr>
+                <tr>
                     <td>{{'Created by'}}</td>
                     <td>{{$agendaItem->getCreatedBy->getName()}}</td>
                 </tr>

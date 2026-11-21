@@ -10,7 +10,7 @@ use Faker\Generator as Faker;
 
 $factory->define(ApplicationResponse::class, function (Faker $faker) {
     $user = User::factory()->create();
-    $agendaItem = factory(AgendaItem::class)->create();
+    $agendaItem = AgendaItem::factory()->not_hidden()->create();
     $applicationForm = factory(ApplicationForm::class)->create();
     return [
         'user_id' => $user->id,

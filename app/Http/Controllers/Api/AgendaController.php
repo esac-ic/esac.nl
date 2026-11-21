@@ -8,6 +8,8 @@ use App\Models\AgendaItemCategory;
 use App\Services\AgendaApplicationFormService;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Config;
 
 class AgendaController extends Controller
 {
@@ -42,6 +44,28 @@ class AgendaController extends Controller
             $endDate = Carbon::createFromFormat('d-m-Y', $endDate)->endOfDay();
             $agendaItemQuery->where('startDate', '<=', $endDate);
         }
+        
+        # If user is not an activity administrator, or not on the beheer page, filter out the hidden agenda items
+        if (Auth::guest() 
+            || !Auth::user()->hasRole(Config::get('constants.Activity_administrator')) 
+            || $request->input('beheer') != true
+        ) {
+            $agendaItemQuery->where(function ($query) {
+                $query->where('hidden', 0)
+                ->orWhere(function ($query2) {
+                    $query2->where('hidden', 1)->where('startDate', '<=', Carbon::now('Europe/Amsterdam')->addWeeks(1));
+                })
+                ->orWhere(function ($query2) {
+                    $query2->where('hidden', 2)->where('startDate', '<=', Carbon::now('Europe/Amsterdam')->addWeeks(2));
+                })
+                ->orWhere(function ($query2) {
+                    $query2->where('hidden', 3)->where('startDate', '<=', Carbon::now('Europe/Amsterdam')->addWeeks(3));
+                })
+                ->orWhere(function ($query2) {
+                    $query2->where('hidden', 4)->where('startDate', '<=', Carbon::now('Europe/Amsterdam')->addWeeks(4));
+                });
+            });
+        }
 
         $agendaItemQuery->orderBy('startDate', 'asc');
 
@@ -73,6 +97,7 @@ class AgendaController extends Controller
                     'application_form_id' => $agendaItem->application_form_id,
                     'amountOfPeopleRegisterd' => count($registeredUserIds),
                     'currentUserSignedUp' => $currentUserSignedUp,
+                    'hidden' => $agendaItem->hidden,
                 ];
             });
 
