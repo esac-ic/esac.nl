@@ -10,10 +10,12 @@ use App\Models\Rol;
 use App\Models\User;
 use App\Repositories\UserRepository;
 use App\Rules\EmailDomainValidator;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Session;
+use Intervention\Validation\Rules\Iban;
 use Maatwebsite\Excel\Facades\Excel;
 
 class UserController extends Controller
@@ -34,6 +36,14 @@ class UserController extends Controller
         $this->middleware('authorize:' . Config::get('constants.Administrator') . ',' . Config::get('constants.Certificate_administrator'))->only(['index']);
 
         $this->_userRepository = $userRepository;
+    }
+
+    // Make sure the IBAN is correctly formatted:
+    protected function IBAN(): Attribute
+    {
+        return Attribute::make(
+            set: fn (string $value) => strtoupper(str_replace(' ', '', $value)),
+        );
     }
 
     //gives the user views
@@ -193,18 +203,21 @@ class UserController extends Controller
             'email' => [
                 'required',
                 'email',
-                'max:255',
+                'max:150',
                 'unique:users,email,' . $userId, // Exclude the user being edited's email
                 new EmailDomainValidator(),
             ],
-            'firstname' => 'required|max:255',
-            'lastname' => 'required|max:255',
-            'street' => 'required|max:255',
-            'houseNumber' => 'required|max:255',
-            'city' => 'required|max:255',
-            'zipcode' => 'required|max:255',
-            'country' => 'required|max:255',
-            'phonenumber' => 'required|max:255',
+            // firstname . ' ' .preposition . ' ' .  lastname must at maximum 100 characters long (for eboekhouden)
+            'firstname' => 'required|max:40',
+            'preposition' => 'max:18',
+            'lastname' => 'required|max:40',
+            // street . ' ' .houseNumber must at maximum 150 characters long (for eboekhouden)
+            'street' => 'required|max:100',
+            'houseNumber' => 'required|max:49',
+            'city' => 'required|max:50',
+            'zipcode' => 'required|max:50',
+            'country' => 'required|max:50',
+            'phonenumber' => 'required|max:50',
             'emergencyNumber' => 'required|max:255',
             'emergencyHouseNumber' => 'required|max:255',
             'emergencystreet' => 'required|max:255',
@@ -212,7 +225,7 @@ class UserController extends Controller
             'emergencyzipcode' => 'required|max:255',
             'emergencycountry' => 'required|max:255',
             'birthDay' => 'required|date',
-            'IBAN' => 'required|max:255',
+            'IBAN' => ['required', 'max:50', new Iban()],
         ]);
 
         // These fields are only required for administrators.

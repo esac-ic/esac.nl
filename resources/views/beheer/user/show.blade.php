@@ -187,10 +187,6 @@
                             <td>{{$user->IBAN}}</td>
                         </tr>
                         <tr>
-                            <td>{{'BIC'}}</td>
-                            <td>{{$user->BIC}}</td>
-                        </tr>
-                        <tr>
                             <td>{{'Accept Automatic Collection'}}</td>
                             <td>{{($user->incasso)? 'Yes' : 'No'}}</td>
                         </tr>

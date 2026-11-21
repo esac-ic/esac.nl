@@ -1,0 +1,103 @@
+<?php
+
+namespace App\CustomClasses\Eboekhouden;
+
+use Exception;
+use Illuminate\Http\Client\PendingRequest;
+use Illuminate\Http\Client\RequestException;
+use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Config;
+use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Log;
+
+class Eboekhouden
+{
+    private string $_baseUrl;
+
+    public function __construct()
+    {
+        $this->_baseUrl = Config::get('eboekhouden.url') ?? '';
+    }
+
+    protected function startSession(): ApiToken
+    {
+        // Request an access token
+        $response = Http::post($this->_baseUrl . '/v1/session', [
+            'accessToken' => Config::get('eboekhouden.api_token'),
+            'source' => Config::get('eboekhouden.source'),
+        ]);
+        
+        $response->throw();
+        
+        // Store the token in the database
+        if ($response->ok()) {
+            $response = $response->json();
+            // Subtract a couple of seconds of the expiry time to compensate for the RTT between us and eboekhouden
+            return new ApiToken($response['token'], $response['expiresIn'] - 5);
+        }
+        throw new Exception("Failed to retrieve an eboekhouden access token");
+    }
+
+    protected function getSession(): string
+    {
+        $token = Cache::get('eboekhouden-api-token');
+        if($token === null || $token->isExpired()) {
+            $token = null;
+            $token = $this->startSession();
+            Cache::set('eboekhouden-api-token', $token);
+        }
+        return $token->token;
+    }
+
+    protected function http(): PendingRequest
+    {
+        $sessionToken = $this->getSession();
+        return Http::baseUrl($this->_baseUrl)->withHeader("Authorization", $sessionToken);
+    }
+
+
+    /**
+     * @throws RequestException
+     */
+    public function get(string $url): Collection
+    {
+        return $this->http()->get($url)->throw()->collect();
+    }
+
+    /**
+     * @throws RequestException
+     */
+    public function post(string $url, array $body): Collection
+    {
+        if ($body){
+            return $this->http()->asJson()->post($url, $body)->throw()->collect();
+        } else {
+            return $this->http()->post($url)->throw()->collect();
+        }
+    }
+
+    /**
+     * @throws RequestException
+     */
+    public function patch(string $url, array $body): Collection
+    {
+        if ($body){
+            return $this->http()->asJson()->patch($url, $body)->throw()->collect();
+        } else {
+            return $this->http()->patch($url)->throw()->collect();
+        }
+    }
+
+    /**
+     * @throws RequestException
+     */
+    public function delete(string $url, array $body = []): Collection
+    {
+        if ($body){
+            return $this->http()->asJson()->delete($url, $body)->throw()->collect();
+        } else {
+            return $this->http()->delete($url, $body)->throw()->collect();
+        }
+    }
+}

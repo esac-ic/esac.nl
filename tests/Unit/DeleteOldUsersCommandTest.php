@@ -54,7 +54,6 @@ class DeleteOldUsersCommandTest extends TestCase
         $this->assertEquals(null, $user->birthDay);
         $this->assertEquals(null, $user->kind_of_member);
         $this->assertEquals(null, $user->IBAN);
-        $this->assertEquals(null, $user->BIC);
         $this->assertEquals(null, $user->remark);
         $this->assertEquals(0, $user->incasso);
     }

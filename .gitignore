@@ -11,6 +11,7 @@ public/storage
 /public/hot
 composer.phar
 .phpunit.result.cache
+.phpunit.cache
 .devbox
 devbox.d
 devbox.json

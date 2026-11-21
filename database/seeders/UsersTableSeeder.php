@@ -38,7 +38,6 @@ class UsersTableSeeder extends Seeder
         $user->birthDay = Carbon::now()->subYears(20);
         $user->kind_of_member = "member";
         $user->IBAN = "NL55 RABO 0107331020";
-        $user->BIC = "";
         $user->incasso = false;
         $user->remark = "Ik ben een test gebruiker";
         $user->save();
@@ -70,7 +69,6 @@ class UsersTableSeeder extends Seeder
         $user->birthDay = Carbon::now()->subYears(20);
         $user->kind_of_member = "member";
         $user->IBAN = "NL55 RABO 0107331020";
-        $user->BIC = "";
         $user->incasso = false;
         $user->remark = "Ik ben een test gebruiker";
         $user->save();
@@ -98,7 +96,6 @@ class UsersTableSeeder extends Seeder
         $user->birthDay = Carbon::now()->subYears(20);
         $user->kind_of_member = "member";
         $user->IBAN = "NL55 RABO 0107331020";
-        $user->BIC = "";
         $user->incasso = false;
         $user->remark = "Ik ben een test gebruiker";
         $user->pending_user = Carbon::now();

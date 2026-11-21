@@ -31,7 +31,7 @@ class StorePendingUserTest extends \TestCase
             'emergencyzipcode' =>  '1111AA',
             'emergencycountry' => 'Initial',
             'birthDay' => '1990-01-01',
-            'IBAN' =>  '123456789',
+            'IBAN' =>  'BE71096123456769',
             'g-recaptcha-response' => 'True',
             'incasso' => 'True',
             'privacy_policy' => 'True',
@@ -65,7 +65,7 @@ class StorePendingUserTest extends \TestCase
         $this->assertEquals('Initial', $user->emergencycity);
         $this->assertEquals('1111AA', $user->emergencyzipcode);
         $this->assertEquals('Initial', $user->emergencycountry);
-        $this->assertEquals('123456789', $user->IBAN);
+        $this->assertEquals('BE71096123456769', $user->IBAN);
         
         $this->assertEquals(new Carbon('1990-01-01'), $user->birthDay);
         $this->assertEquals(1, $user->incasso);
