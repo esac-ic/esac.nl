@@ -3,12 +3,15 @@
 namespace App\Http\Controllers;
 
 use App\Models\Reimbursement\Reimbursement;
+use App\Enums\ReimbursementStatus;
 use App\Repositories\ReimbursementCategoryRepository;
 use App\Repositories\ReimbursementRepositories\ReimbursementRepository;
 use App\Repositories\ApplicationFormRepositories\ApplicationFormRepository;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Session;
 use Intervention\Image\ImageManagerStatic as Image;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Config;
 
 class ReimbursementController extends Controller
 {
@@ -52,14 +55,19 @@ class ReimbursementController extends Controller
         $this->validateInput($request);
         $this->_reimbursementRepository->update($reimbursement->id, $request->all());
         $this->handleImage($request, $reimbursement);
-        Session::flash("message", 'Event edited');
+        Session::flash("message", 'Reimbursement edited');
         return redirect('/reimbursement');
     }
 
-    public function destroy($id)
+    public function destroy(Reimbursement $reimbursement)
     {
-        $this->_reimbursementRepository->delete($id);
-        Session::flash("message", 'Event removed');
+        if (Auth::user()->hasRole(Config::get('constants.Administrator')) 
+            || $reimbursement->status == ReimbursementStatus::DRAFT
+            || $reimbursement->status == ReimbursementStatus::REJECTED
+        ) {
+            $this->_reimbursementRepository->delete($reimbursement->id);
+            Session::flash("message", 'Reimbursement removed');
+        }
         return redirect('/reimbursement');
     }
 

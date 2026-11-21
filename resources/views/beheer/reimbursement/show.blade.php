@@ -20,6 +20,12 @@
                         <em class="ion-android-arrow-back"></em> {{'Back'}}
                     </a>
                 @endif
+                
+                <!-- Only allow users to delete reimbursements if it is a draft or rejected. -->
+                @if(($reimbursement->status == \App\Enums\ReimbursementStatus::DRAFT)
+                    or ($reimbursement->status == \App\Enums\ReimbursementStatus::REJECTED) 
+                    or (\Illuminate\Support\Facades\Auth::user()->hasRole(Config::get('constants.Administrator')))
+                )
                 <form method="post"
                       action="{{ route("reimbursement.destroy", $reimbursement) }}"
                       onsubmit="return confirm('Are you sure you want to delete this reimbursement?');"
@@ -28,6 +34,7 @@
                     @method('DELETE')
                     <button type="submit" class="btn btn-danger"><em class="ion-trash-a"></em> {{'Remove'}}</button>
                 </form>
+                @endif
             </div>
         </div>
     </div>
