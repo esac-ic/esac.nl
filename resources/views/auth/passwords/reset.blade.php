@@ -27,7 +27,7 @@
                             </div>
                             @endif
                             <form class="text-left col-lg-8" role="form" method="POST" action="{{ url('/password/reset') }}">
-                                {{ csrf_field() }}
+                                @csrf
                                 <input type="hidden" name="token" value="{{ $token }}">
                                 <div class="form-group {{ $errors->has('email') ? ' has-error' : '' }}">
                                     <label for="email">{{'Email adress'}}</label>

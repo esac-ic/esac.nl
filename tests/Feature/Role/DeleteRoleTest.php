@@ -43,7 +43,7 @@ class DeleteRoleTest extends TestCase
     /** @test */
     public function a_role_can_be_deleted_by_an_admin()
     {
-        $role = factory(Rol::class)->create();
+        $role = Rol::factory()->create();
 
         $response = $this->delete($this->url . '/' . $role->id, ['_token' => csrf_token()]);
 
@@ -55,7 +55,7 @@ class DeleteRoleTest extends TestCase
     /** @test */
     public function a_user_can_not_delete_a_role()
     {
-        $role = factory(Rol::class)->create();
+        $role = Rol::factory()->create();
         $this->user->roles()->detach();
 
         $response = $this->delete($this->url . '/' . $role->id, ['_token' => csrf_token()]);

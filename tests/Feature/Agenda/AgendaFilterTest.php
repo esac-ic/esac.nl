@@ -44,13 +44,13 @@ class AgendaFilterTest extends TestCase
     /** @test */
     public function api_returns_filtered_agenda_items()
     {
-        $agendaItemCategory = factory(AgendaItemCategory::class)->create();
-        $agendaItem = factory(AgendaItem::class)->create();
+        $agendaItemCategory = AgendaItemCategory::factory()->create();
+        $agendaItem = AgendaItem::factory()->create();
         $agendaItem->category = $agendaItemCategory->id;
         $agendaItem->save();
 
-        factory(AgendaItem::class)->create();
-        factory(AgendaItem::class)->create();
+        AgendaItem::factory()->create();
+        AgendaItem::factory()->create();
 
         $response = $this->get($this->url . "?category=" . $agendaItemCategory->id);
         $json = json_decode($response->getContent());

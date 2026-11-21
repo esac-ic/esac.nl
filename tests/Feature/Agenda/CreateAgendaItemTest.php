@@ -42,7 +42,7 @@ class CreateAgendaItemTest extends TestCase
         //Attach
         $this->user->roles()->attach(Config::get('constants.Activity_administrator'));
 
-        $agendaItemCategory = factory(AgendaItemCategory::class)->create();
+        $agendaItemCategory = AgendaItemCategory::factory()->create();
 
         $body = [
             '_token' => csrf_token(),
@@ -50,7 +50,7 @@ class CreateAgendaItemTest extends TestCase
             'text' => 'test agenda',
             'shortDescription' => 'test agenda',
             'category' => $agendaItemCategory->id,
-            'applicationForm' => factory(ApplicationForm::class)->create()->id,
+            'applicationForm' => ApplicationForm::factory()->create()->id,
             'subscription_endDate' => Carbon::now()->addDays(2),
             'endDate' => Carbon::now()->addDays(3),
             'startDate' => Carbon::now()->addDays(1),
@@ -69,14 +69,14 @@ class CreateAgendaItemTest extends TestCase
         //Login as User with incorrect role
         $this->user->roles()->detach();
 
-        $agendaItemCategory = factory(AgendaItemCategorie::class)->create();
+        $agendaItemCategory = AgendaItemCategory::factory()->create();
         $body = [
             '_token' => csrf_token(),
             'title' => 'test agenda',
             'text' => 'test agenda',
             'shortDescription' => 'test agenda',
             'category' => $agendaItemCategory->id,
-            'applicationForm' => factory(ApplicationForm::class)->create()->id,
+            'applicationForm' => ApplicationForm::factory()->create()->id,
             'subscription_endDate' => Carbon::now()->addDays(2),
             'endDate' => Carbon::now()->addDays(3),
             'startDate' => Carbon::now()->addDays(1),
@@ -90,14 +90,14 @@ class CreateAgendaItemTest extends TestCase
     {
         $this->user->roles()->attach(Config::get('constants.Activity_administrator'));
 
-        $agendaItemCategory = factory(AgendaItemCategory::class)->create();
+        $agendaItemCategory = AgendaItemCategory::factory()->create();
         $body = [
             '_token' => csrf_token(),
             'title' => '',
             'text' => 'test agenda',
             'shortDescription' => 'test agenda',
             'category' => $agendaItemCategory->id,
-            'applicationForm' => factory(ApplicationForm::class)->create()->id,
+            'applicationForm' => ApplicationForm::factory()->create()->id,
             'subscription_endDate' => Carbon::now()->addDays(2),
             'endDate' => Carbon::now()->addDays(3),
             'startDate' => Carbon::now()->addDays(1),
@@ -111,7 +111,7 @@ class CreateAgendaItemTest extends TestCase
         //Attach
         $this->user->roles()->attach(Config::get('constants.Activity_administrator'));
 
-        $agendaItemCategory = factory(AgendaItemCategory::class)->create();
+        $agendaItemCategory = AgendaItemCategory::factory()->create();
 
         $body = [
             '_token' => csrf_token(),
@@ -119,7 +119,7 @@ class CreateAgendaItemTest extends TestCase
             'text' => 'test agenda 😀',
             'shortDescription' => 'test agenda 😀',
             'category' => $agendaItemCategory->id,
-            'applicationForm' => factory(ApplicationForm::class)->create()->id,
+            'applicationForm' => ApplicationForm::factory()->create()->id,
             'subscription_endDate' => Carbon::now()->addDays(2),
             'endDate' => Carbon::now()->addDays(3),
             'startDate' => Carbon::now()->addDays(1),

@@ -24,7 +24,7 @@
                     <div class="card-body">
                         <a href="/news/{{ $newsItem->id }}">
                             <h4 class="card-title">{{$newsItem->title}}</h4>
-                            <p class="card-text text-body">{{ strip_tags(str_limit($newsItem->text, $limit = 150, $end = '...')) }}</p>
+                            <p class="card-text text-body">{{ strip_tags(\Illuminate\Support\Str::limit($newsItem->text, 150, '...')) }}</p>
                         </a>
                     </div>
                     <div class="card-footer bg-white p-3">

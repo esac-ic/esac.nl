@@ -48,7 +48,7 @@ class RegisterForAgendaItemTest extends TestCase
     /** @test */
     public function show_event_registration_form_for_agenda_item_without_registration_form()
     {
-        $agendaItem = factory(AgendaItem::class)->create();
+        $agendaItem = AgendaItem::factory()->create();
         $agendaItem->subscription_endDate = Carbon::now()->addWeek();
         $agendaItem->save();
         $response = $this->get($this->url . $agendaItem->id);
@@ -60,7 +60,7 @@ class RegisterForAgendaItemTest extends TestCase
     /** @test */
     public function show_event_registration_form_for_agenda_item_with_past_subscription_date()
     {
-        $agendaItem = factory(AgendaItem::class)->create();
+        $agendaItem = AgendaItem::factory()->create();
         $agendaItem->subscription_endDate = Carbon::now()->subWeek();
         $agendaItem->save();
         $response = $this->get($this->url . $agendaItem->id);
@@ -72,8 +72,8 @@ class RegisterForAgendaItemTest extends TestCase
     /** @test */
     public function show_event_registration_form_for_agenda_item_where_user_is_already_registered()
     {
-        $agendaItem = factory(AgendaItem::class)->create();
-        $applicationForm = factory(ApplicationForm::class)->create();
+        $agendaItem = AgendaItem::factory()->create();
+        $applicationForm = ApplicationForm::factory()->create();
 
         $agendaItem->application_form_id = $applicationForm->id;
         $agendaItem->subscription_endDate = Carbon::now()->addWeek();
@@ -94,22 +94,22 @@ class RegisterForAgendaItemTest extends TestCase
     /** @test */
     public function register_for_agenda_item(): void
     {
-        $agendaItem = factory(AgendaItem::class)->create();
-        $applicationForm = factory(ApplicationForm::class)->create();
+        $agendaItem = AgendaItem::factory()->create();
+        $applicationForm = ApplicationForm::factory()->create();
 
         $agendaItem->application_form_id = $applicationForm->id;
         $agendaItem->subscription_endDate = Carbon::now()->addWeek();
         $agendaItem->save();
 
-        $applicationFormRowNumber = factory(ApplicationFormRow::class)->create([
+        $applicationFormRowNumber = ApplicationFormRow::factory()->create([
             'application_form_id' => $applicationForm->id,
             'type' => ApplicationFormRow::FORM_TYPE_NUMBER,
         ]);
-        $applicationFormRowText = factory(ApplicationFormRow::class)->create([
+        $applicationFormRowText = ApplicationFormRow::factory()->create([
             'application_form_id' => $applicationForm->id,
             'type' => ApplicationFormRow::FORM_TYPE_TEXT,
         ]);
-        $applicationFormRowTextBox = factory(ApplicationFormRow::class)->create([
+        $applicationFormRowTextBox = ApplicationFormRow::factory()->create([
             'application_form_id' => $applicationForm->id,
             'type' => ApplicationFormRow::FORM_TYPE_TEXT_BOX,
         ]);
@@ -143,22 +143,22 @@ class RegisterForAgendaItemTest extends TestCase
     public function register_user_for_agenda_item_as_normale_member_should_not_be_allowed(): void
     {
         $userToRegister = User::factory()->create();
-        $agendaItem = factory(AgendaItem::class)->create();
-        $applicationForm = factory(ApplicationForm::class)->create();
+        $agendaItem = AgendaItem::factory()->create();
+        $applicationForm = ApplicationForm::factory()->create();
 
         $agendaItem->application_form_id = $applicationForm->id;
         $agendaItem->subscription_endDate = Carbon::now()->addWeek();
         $agendaItem->save();
 
-        $applicationFormRowNumber = factory(ApplicationFormRow::class)->create([
+        $applicationFormRowNumber = ApplicationFormRow::factory()->create([
             'application_form_id' => $applicationForm->id,
             'type' => ApplicationFormRow::FORM_TYPE_NUMBER,
         ]);
-        $applicationFormRowText = factory(ApplicationFormRow::class)->create([
+        $applicationFormRowText = ApplicationFormRow::factory()->create([
             'application_form_id' => $applicationForm->id,
             'type' => ApplicationFormRow::FORM_TYPE_TEXT,
         ]);
-        $applicationFormRowTextBox = factory(ApplicationFormRow::class)->create([
+        $applicationFormRowTextBox = ApplicationFormRow::factory()->create([
             'application_form_id' => $applicationForm->id,
             'type' => ApplicationFormRow::FORM_TYPE_TEXT_BOX,
         ]);
@@ -180,22 +180,22 @@ class RegisterForAgendaItemTest extends TestCase
     {
         $this->user->roles()->attach(Config::get('constants.Content_administrator'));
         $userToRegister = User::factory()->create();
-        $agendaItem = factory(AgendaItem::class)->create();
-        $applicationForm = factory(ApplicationForm::class)->create();
+        $agendaItem = AgendaItem::factory()->create();
+        $applicationForm = ApplicationForm::factory()->create();
 
         $agendaItem->application_form_id = $applicationForm->id;
         $agendaItem->subscription_endDate = Carbon::now()->addWeek();
         $agendaItem->save();
 
-        $applicationFormRowNumber = factory(ApplicationFormRow::class)->create([
+        $applicationFormRowNumber = ApplicationFormRow::factory()->create([
             'application_form_id' => $applicationForm->id,
             'type' => ApplicationFormRow::FORM_TYPE_NUMBER,
         ]);
-        $applicationFormRowText = factory(ApplicationFormRow::class)->create([
+        $applicationFormRowText = ApplicationFormRow::factory()->create([
             'application_form_id' => $applicationForm->id,
             'type' => ApplicationFormRow::FORM_TYPE_TEXT,
         ]);
-        $applicationFormRowTextBox = factory(ApplicationFormRow::class)->create([
+        $applicationFormRowTextBox = ApplicationFormRow::factory()->create([
             'application_form_id' => $applicationForm->id,
             'type' => ApplicationFormRow::FORM_TYPE_TEXT_BOX,
         ]);

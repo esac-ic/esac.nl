@@ -22,9 +22,10 @@
         <div class="col-md-6">
             <div class="btn-group mt-2 float-md-right" role="group" aria-label="Actions">
             @if($user->isPendingMember() and \Illuminate\Support\Facades\Auth::user()->hasRole(Config::get('constants.Administrator')))
-                {{ Form::open(array('url' => '/users/'.$user->id . '/approveAsPendingMember', 'method' => 'patch')) }}
+                {{ html()->form('POST', url('/users/'.$user->id . '/approveAsPendingMember'))->open() }}
+                @method('PATCH')
                 <button type="submit" class="btn btn-success"><em class="ion-checkmark"></em> {{'Approve as member'}}</button>
-                {{ Form::close() }}
+                {{ html()->form()->close() }}
                 
                 <form method="post"
                       action="{{ route("users.removeAsPendingMember", $user) }}"
@@ -36,9 +37,10 @@
                 </form>
             @else
                 @if($user->isOldMember() and \Illuminate\Support\Facades\Auth::user()->hasRole(Config::get('constants.Administrator')))
-                    {{ Form::open(array('url' => '/users/'.$user->id . '/makeActiveMember', 'method' => 'patch')) }}
+                    {{ html()->form('POST', url('/users/'.$user->id . '/makeActiveMember'))->open() }}
+                    @method('PATCH')
                         <button type="submit" class="btn btn-success"><em class="ion-plus"></em> {{'Make active member'}}</button>
-                    {{ Form::close() }}
+                    {{ html()->form()->close() }}
                 @endif
                 <a href="{{url('/users/'.$user->id . '/edit' )}}" class="btn btn-primary">
                     <span title="{{'Edit'}}" class="ion-edit" aria-hidden="true"></span>
@@ -58,9 +60,10 @@
                 @endif
                 @if(\Illuminate\Support\Facades\Auth::user()->hasRole(Config::get('constants.Administrator')))
                     @if($user->isActiveMember())
-                        {{ Form::open(array('url' => '/users/'.$user->id . '/removeAsActiveMember', 'method' => 'patch')) }}
+                        {{ html()->form('POST', url('/users/'.$user->id . '/removeAsActiveMember'))->open() }}
+                        @method('PATCH')
                         <button type="submit" class="btn btn-danger"><em class="ion-trash-a"></em> {{'Remove as active member'}}</button>
-                        {{ Form::close() }}
+                        {{ html()->form()->close() }}
                     @endif
                 @endif
             @endif
@@ -269,8 +272,9 @@
                                     <a href="{{url('/users/' . $user->id . '/addCertificate/' . $certificate->id)}}" onclick="event.preventDefault(); document.getElementById('delete-usercertificate-{{$certificate->id}}').submit();">
                                         <span title="Remove Certificate" class="ion-trash-a" aria-hidden="true"></span>
                                     </a>
-                                    {{ Form::open(array('url' => '/users/' . $user->id . '/addCertificate/' . $certificate->id, 'method' => 'delete', "id"   => "delete-usercertificate-$certificate->id")) }}
-                                    {{ Form::close() }}
+                                    {{ html()->form('POST', url('/users/' . $user->id . '/addCertificate/' . $certificate->id))->id("delete-usercertificate-$certificate->id")->open() }}
+                                    @method('DELETE')
+                                    {{ html()->form()->close() }}
                                 </td>
                             </tr>
                         @endforeach

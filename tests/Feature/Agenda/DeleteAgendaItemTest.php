@@ -39,7 +39,7 @@ class DeleteAgendaItemTest extends TestCase
     /** @test */
     public function DeleteAgendaItem()
     {
-        $agendaItem = factory(AgendaItem::class)->create();
+        $agendaItem = AgendaItem::factory()->create();
 
         $response = $this->delete($this->url . '/' . $agendaItem->id);
 

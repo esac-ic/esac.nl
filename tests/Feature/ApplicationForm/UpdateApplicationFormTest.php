@@ -36,7 +36,7 @@ class UpdateApplicationFormTest extends TestCase
     protected function setUp(): void
     {
         parent::setUp();
-        $this->applicationForm = factory(ApplicationForm::class)->create();
+        $this->applicationForm = ApplicationForm::factory()->create();
         $this->user = $user = User::factory()->create();
         $this->url .= "/" . $this->applicationForm->id;
 
@@ -58,13 +58,13 @@ class UpdateApplicationFormTest extends TestCase
     /** @test */
     public function update_application_form_as_content_administrator(): void
     {
-        $applicationFormRow = factory(ApplicationFormRow::class)->create([
+        $applicationFormRow = ApplicationFormRow::factory()->create([
             'application_form_id' => $this->applicationForm->id,
         ]);
-        $applicationFormRowOption = factory(ApplicationFormRowOption::class)->create([
+        $applicationFormRowOption = ApplicationFormRowOption::factory()->create([
             'application_form_row_id' => $applicationFormRow->id,
         ]);
-        factory(ApplicationFormRowOption::class)->create([
+        ApplicationFormRowOption::factory()->create([
             'application_form_row_id' => $applicationFormRow->id,
         ]);
 

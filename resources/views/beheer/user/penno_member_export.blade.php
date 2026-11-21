@@ -24,17 +24,17 @@
             <h3>Penno export</h3>
         </div>
         <div class="card-body">
-            {!! Form::open(['method' => 'GET', 'url' => route("users.pennoMemberExport")]) !!}
+            {{ html()->form('GET', route('users.pennoMemberExport'))->open() }}
             <div class="form-group">
-                {!! Form::label('days_ago', 'Amount of days in the past') !!}
-                {!! Form::number('days_ago', 7, ['class' => 'form-control','required' => 'required']) !!}
+                {{ html()->label('Amount of days in the past', 'days_ago') }}
+                {{ html()->number('days_ago', 7)->class('form-control')->required() }}
             </div>
         </div>
     </div>
 
     <div class="my-4">
-        {!! Form::submit('Download', ['class'=> 'btn btn-primary'] ) !!}
-        {!! Form::close() !!}
+        {{ html()->submit('Download')->class('btn btn-primary') }}
+        {{ html()->form()->close() }}
         <a class="btn btn-danger btn-close" href="{{ route("users.index") }}">{{'Back'}}</a>
     </div>
 @endsection

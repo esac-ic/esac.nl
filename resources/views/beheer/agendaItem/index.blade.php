@@ -30,7 +30,7 @@
     <div class="row mb-3">
         <div class="col-md-3">
             <div class="form-group">
-                {!! Form::label('startDate', 'Start date') !!}
+                {{ html()->label('Start date', 'startDate') }}
                 <div class="input-group date" id="startDateBox" data-target-input="nearest">
                     <input type='text' class="form-control datetimepicker-input" id="startDate" name="startDate"
                            data-target="#startDateBox" value="{{\Carbon\Carbon::now()->addHours(1)->format('d-m-Y')}}"

@@ -35,7 +35,7 @@ class UpdateNewsItemTest extends TestCase
     }
     /** @test */
     public function UpdateNewsItem(){
-        $newsItem = factory(NewsItem::class)->create();
+        $newsItem = NewsItem::factory()->create();
         $body = [
             '_token' => csrf_token(),
             'title' => 'test news',

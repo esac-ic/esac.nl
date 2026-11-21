@@ -10,7 +10,7 @@
 The following libaries and framework are used:
 - [Laravel](https://laravel.com)
 - [DataTables](https://datatables.net/)
-- [Laravel HTML Form](https://github.com/LaravelCollective/html)
+- [Laravel HTML](https://spatie.be/docs/laravel-html)
 - [Summernote](http://summernote.org/)
 - [Vite](https://vite.dev) (via [laravel-vite-plugin](https://github.com/laravel/vite-plugin))
 - [Bootstrap](https://getbootstrap.com/)

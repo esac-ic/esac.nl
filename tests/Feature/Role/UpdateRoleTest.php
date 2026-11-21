@@ -43,7 +43,7 @@ class UpdateRoleTest extends TestCase
     /** @test */
     public function an_admin_can_update_a_role()
     {
-        $role = factory(Rol::class)->create();
+        $role = Rol::factory()->create();
         $body = [
             'name' => 'test role',
             '_token' => csrf_token(),
@@ -61,7 +61,7 @@ class UpdateRoleTest extends TestCase
     /** @test */
     public function a_role_can_not_update_a_role()
     {
-        $role = factory(Rol::class)->create();
+        $role = Rol::factory()->create();
         $body = [
             'name' => 'test role',
             '_token' => csrf_token(),
@@ -77,7 +77,7 @@ class UpdateRoleTest extends TestCase
     /** @test */
     public function a_role_can_not_be_updated_without_required_fields()
     {
-        $role = factory(Rol::class)->create();
+        $role = Rol::factory()->create();
         $body = [
             '_token' => csrf_token(),
         ];
