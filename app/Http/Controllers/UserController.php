@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\CustomClasses\MailList\MailListFacade;
+use App\Enums\EmergencyRelation;
 use App\Exports\OldUsersExport;
 use App\Exports\PennoMemberExport;
 use App\Exports\UsersExport;
@@ -15,6 +16,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Session;
 use Maatwebsite\Excel\Facades\Excel;
+use Illuminate\Validation\Rule;
 
 class UserController extends Controller
 {
@@ -211,6 +213,14 @@ class UserController extends Controller
             'emergencycity' => 'required|max:255',
             'emergencyzipcode' => 'required|max:255',
             'emergencycountry' => 'required|max:255',
+            'emergencyfirstname' => 'nullable|required_with:emergencylastname,emergencyrelation|max:255',
+            'emergencylastname' => 'nullable|required_with:emergencyfirstname,emergencyrelation|max:255',
+            'emergencyrelation' => [
+                'nullable',
+                'required_with:emergencyfirstname,emergencylastname',
+                'max:255',
+                Rule::enum(EmergencyRelation::class)
+            ],
             'birthDay' => 'required|date',
             'IBAN' => 'required|max:255',
         ]);

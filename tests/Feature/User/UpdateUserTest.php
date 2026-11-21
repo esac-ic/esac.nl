@@ -10,6 +10,7 @@ use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Event;
 use Mockery\MockInterface;
+use App\Enums\EmergencyRelation;
 
 class UpdateUserTest extends \TestCase
 {
@@ -37,6 +38,9 @@ class UpdateUserTest extends \TestCase
             'emergencycity' => 'Initial',
             'emergencyzipcode' =>  '1111AA',
             'emergencycountry' => 'Initial',
+            'emergencyfirstname' => 'Initial',
+            'emergencylastname' => 'Initial',
+            'emergencyrelation' => 'Parent',
             'birthday' => '1990-01-01',
             'IBAN' =>  '123456789',
             'kind_of_member' => 'Initial'
@@ -68,6 +72,9 @@ class UpdateUserTest extends \TestCase
             'emergencycity' => 'Second',
             'emergencyzipcode' =>  '2222AA',
             'emergencycountry' => 'Second',
+            'emergencyfirstname' => 'Second',
+            'emergencylastname' => 'Second',
+            'emergencyrelation' => 'Sibling',
             'birthDay' => '1990-02-02',
             'IBAN' =>  '234567891',
             'kind_of_member' => $this->admin->kind_of_member,
@@ -105,6 +112,9 @@ class UpdateUserTest extends \TestCase
         $this->assertEquals($newAdmin->emergencycity, $updateData['emergencycity']);
         $this->assertEquals($newAdmin->emergencyzipcode, $updateData['emergencyzipcode']);
         $this->assertEquals($newAdmin->emergencycountry, $updateData['emergencycountry']);
+        $this->assertEquals($newAdmin->emergencyfirstname, $updateData['emergencyfirstname']);
+        $this->assertEquals($newAdmin->emergencylastname, $updateData['emergencylastname']);
+        $this->assertEquals($newAdmin->emergencyrelation->value, $updateData['emergencyrelation']);
         $this->assertEquals($newAdmin->birthDay, new Carbon($updateData['birthDay']));
         $this->assertEquals($newAdmin->IBAN, $updateData['IBAN']);
         $this->assertEquals($newAdmin->kind_of_member, $updateData['kind_of_member']);
@@ -129,6 +139,9 @@ class UpdateUserTest extends \TestCase
             'emergencycity' => 'Second',
             'emergencyzipcode' =>  '2222AA',
             'emergencycountry' => 'Second',
+            'emergencyfirstname' => 'Second',
+            'emergencylastname' => 'Second',
+            'emergencyrelation' => 'Sibling',
             'birthDay' => '1990-02-02',
             'IBAN' =>  '234567891',
             'kind_of_member' => $this->admin->kind_of_member,
@@ -163,6 +176,9 @@ class UpdateUserTest extends \TestCase
         $this->assertEquals($newAdmin->emergencycity, $updateData['emergencycity']);
         $this->assertEquals($newAdmin->emergencyzipcode, $updateData['emergencyzipcode']);
         $this->assertEquals($newAdmin->emergencycountry, $updateData['emergencycountry']);
+        $this->assertEquals($newAdmin->emergencyfirstname, $updateData['emergencyfirstname']);
+        $this->assertEquals($newAdmin->emergencylastname, $updateData['emergencylastname']);
+        $this->assertEquals($newAdmin->emergencyrelation->value, $updateData['emergencyrelation']);
         $this->assertEquals($newAdmin->birthDay, new Carbon($updateData['birthDay']));
         $this->assertEquals($newAdmin->IBAN, $updateData['IBAN']);
     }
@@ -186,6 +202,9 @@ class UpdateUserTest extends \TestCase
             'emergencycity' => 'Second',
             'emergencyzipcode' =>  '2222AA',
             'emergencycountry' => 'Second',
+            'emergencyfirstname' => 'Second',
+            'emergencylastname' => 'Second',
+            'emergencyrelation' => 'Sibling',
             'birthDay' => '1990-02-02',
             'IBAN' =>  '234567891',
             'kind_of_member' => 'reunist',
@@ -221,6 +240,9 @@ class UpdateUserTest extends \TestCase
         $this->assertEquals($newMember->emergencycity, $updateData['emergencycity']);
         $this->assertEquals($newMember->emergencyzipcode, $updateData['emergencyzipcode']);
         $this->assertEquals($newMember->emergencycountry, $updateData['emergencycountry']);
+        $this->assertEquals($newMember->emergencyfirstname, $updateData['emergencyfirstname']);
+        $this->assertEquals($newMember->emergencylastname, $updateData['emergencylastname']);
+        $this->assertEquals($newMember->emergencyrelation->value, $updateData['emergencyrelation']);
         $this->assertEquals($newMember->birthDay, new Carbon($updateData['birthDay']));
         $this->assertEquals($newMember->IBAN, $updateData['IBAN']);
     }
@@ -245,6 +267,9 @@ class UpdateUserTest extends \TestCase
             'emergencycity' => 'Second',
             'emergencyzipcode' =>  '2222AA',
             'emergencycountry' => 'Second',
+            'emergencyfirstname' => 'Second',
+            'emergencylastname' => 'Second',
+            'emergencyrelation' => 'Sibling',
             'birthDay' => '1990-02-02',
             'IBAN' =>  '234567891',
             'kind_of_member' => $this->member->kind_of_member,
@@ -281,6 +306,9 @@ class UpdateUserTest extends \TestCase
         $this->assertEquals($newMember->emergencycity, $updateData['emergencycity']);
         $this->assertEquals($newMember->emergencyzipcode, $updateData['emergencyzipcode']);
         $this->assertEquals($newMember->emergencycountry, $updateData['emergencycountry']);
+        $this->assertEquals($newMember->emergencyfirstname, $updateData['emergencyfirstname']);
+        $this->assertEquals($newMember->emergencylastname, $updateData['emergencylastname']);
+        $this->assertEquals($newMember->emergencyrelation->value, $updateData['emergencyrelation']);
         $this->assertEquals($newMember->birthDay, new Carbon($updateData['birthDay']));
         $this->assertEquals($newMember->IBAN, $updateData['IBAN']);
         $this->assertEquals($newMember->kind_of_member, $updateData['kind_of_member']);
@@ -307,6 +335,9 @@ class UpdateUserTest extends \TestCase
             'emergencycity' => 'Second',
             'emergencyzipcode' =>  '2222AA',
             'emergencycountry' => 'Second',
+            'emergencyfirstname' => 'Second',
+            'emergencylastname' => 'Second',
+            'emergencyrelation' => 'Sibling',
             'birthDay' => '1990-02-02',
             'IBAN' =>  '234567891',
             'kind_of_member' => 'Second',
@@ -352,6 +383,9 @@ class UpdateUserTest extends \TestCase
         $this->assertEquals($newMember->emergencycity, $updateData['emergencycity']);
         $this->assertEquals($newMember->emergencyzipcode, $updateData['emergencyzipcode']);
         $this->assertEquals($newMember->emergencycountry, $updateData['emergencycountry']);
+        $this->assertEquals($newMember->emergencyfirstname, $updateData['emergencyfirstname']);
+        $this->assertEquals($newMember->emergencylastname, $updateData['emergencylastname']);
+        $this->assertEquals($newMember->emergencyrelation->value, $updateData['emergencyrelation']);
         $this->assertEquals($newMember->birthDay, new Carbon($updateData['birthDay']));
         $this->assertEquals($newMember->IBAN, $updateData['IBAN']);
     }
@@ -376,6 +410,9 @@ class UpdateUserTest extends \TestCase
             'emergencycity' => 'Second',
             'emergencyzipcode' =>  '2222AA',
             'emergencycountry' => 'Second',
+            'emergencyfirstname' => 'Second',
+            'emergencylastname' => 'Second',
+            'emergencyrelation' => 'Sibling',
             'birthDay' => '1990-02-02',
             'IBAN' =>  '234567891',
             'kind_of_member' => $this->member->kind_of_member,
