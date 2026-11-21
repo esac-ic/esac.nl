@@ -3,7 +3,7 @@ coverage:
     project: # Applies to the entire project
       default:
         target: auto
-        threshold: 25%  # Allows coverage to drop by up to 30% without failing
+        threshold: 25%  # Allows coverage to drop by up to 25% without failing
 
     patch: # Applies to the contents of a single PR or commit only.
       default:

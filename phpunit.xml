@@ -12,7 +12,7 @@
     <env name="SESSION_DRIVER" value="array"/>
     <env name="QUEUE_DRIVER" value="sync"/>
     <env name="DB_CONNECTION" value="mysql"/>
-    <env name="DB_DATABASE" value="esac"/>
+    <env name="DB_DATABASE" value="esac_testing" force="true"/>
     <env name="QUEUE_DRIVER" value="sync"/>
     <env name="MAIL_MAN_DOMAIN" value="@esac.nl" />
   </php>

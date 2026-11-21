@@ -26,20 +26,30 @@ RUN apt-get update \
     && cp "$PHP_INI_DIR/php.ini-production" "$PHP_INI_DIR/php.ini" \
     && setcap CAP_NET_BIND_SERVICE=+eip /usr/local/bin/frankenphp
 
+COPY infra/php.ini "$PHP_INI_DIR/conf.d/zz-esac.ini"
+
 WORKDIR /app
 
 FROM base AS dev
-COPY infra/php.dev.ini "$PHP_INI_DIR/conf.d/zz-esac.ini"
-COPY --from=vendor /usr/bin/composer /usr/bin/composer
-RUN install-php-extensions xdebug
-
+COPY infra/php.dev.ini "$PHP_INI_DIR/conf.d/zzz-esac-dev.ini"
+COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
 COPY --from=node:24-trixie-slim /usr/local/bin/node /usr/local/bin/node
 COPY --from=node:24-trixie-slim /usr/local/lib/node_modules /usr/local/lib/node_modules
-RUN ln -s ../lib/node_modules/npm/bin/npm-cli.js /usr/local/bin/npm \
+COPY --chmod=755 infra/dev-entrypoint.sh /usr/local/bin/dev-entrypoint
+
+RUN install-php-extensions xdebug \
+    && ln -s ../lib/node_modules/npm/bin/npm-cli.js /usr/local/bin/npm \
     && ln -s ../lib/node_modules/npm/bin/npx-cli.js /usr/local/bin/npx
 
+# The container runs as your user id (compose.override.yaml), which has no home and doesn't own
+# /data and /config (used by Caddy, and by tinker through XDG_CONFIG_HOME) or the node_modules volume
+RUN mkdir -p /app/node_modules && chmod -R a+rwX /data /config /app/node_modules
+ENV HOME=/tmp
+
+ENTRYPOINT ["dev-entrypoint"]
+CMD ["frankenphp", "run", "--config", "/etc/frankenphp/Caddyfile", "--adapter", "caddyfile"]
+
 FROM base AS production
-COPY infra/php.ini "$PHP_INI_DIR/conf.d/zz-esac.ini"
 COPY . .
 COPY --from=vendor /app/vendor ./vendor
 COPY --from=assets /app/public ./public

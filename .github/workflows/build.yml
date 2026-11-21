@@ -11,68 +11,51 @@ permissions:
   contents: read
 
 env:
-  DB_HOST: 127.0.0.1
-  DB_DATABASE: esac
-  DB_USERNAME: mysql
-  DB_PASSWORD: mysql
   HAS_CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN != '' }}
+  # Runs a command in the dev app container without the dev entrypoint's setup
+  RUN: docker compose run --rm --no-deps --entrypoint docker-php-entrypoint app
 
 jobs:
+  # Runs in the same Docker setup as `./dev up`, whose image shares its base with the production image,
+  # so the PHP, Node and MySQL versions come from the Dockerfile and compose.yaml alone
   tests:
     name: Build front-end & run tests
     runs-on: ubuntu-latest
     environment: Build
-    services:
-      mysql:
-        image: mysql:8.4
-        env:
-          MYSQL_DATABASE: ${{ env.DB_DATABASE }}
-          MYSQL_USER: ${{ env.DB_USERNAME }}
-          MYSQL_PASSWORD: ${{ env.DB_PASSWORD }}
-          MYSQL_RANDOM_ROOT_PASSWORD: "yes"
-        ports:
-          - 3306:3306
-        options: >-
-          --health-cmd="mysqladmin ping -h 127.0.0.1"
-          --health-interval=5s
-          --health-retries=20
     steps:
     - name: Checkout code
       uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
       with:
         persist-credentials: false
 
-    - name: Setup PHP
-      uses: shivammathur/setup-php@eb7c497e18156a6bbabfef1d3a82760b9eda3962 # 2.40.0
-      with:
-        php-version: '8.3'
-
-    - name: Install PHP dependencies
-      run: composer install --prefer-dist --no-progress --no-interaction
-
-    - name: Setup Node.js
-      uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
-      with:
-        node-version: 24
-        cache: npm
-
-    - name: Install Node dependencies
-      run: npm ci
-
-    - name: Copy .env
-      run: php -r "file_exists('.env') || copy('.env.example', '.env');"
-
-    - name: PHP artisan setup
+    - name: Configure the dev setup
       run: |
-        php artisan key:generate
-        php artisan storage:link
-        php artisan migrate --seed
+        cp .env.example .env
+        printf 'UID=%s\nGID=%s\n' "$(id -u)" "$(id -g)" >> .env
 
-    - name: NPM build
-      run: npm run build
+    - name: Set up Docker Buildx
+      uses: docker/setup-buildx-action@f87e5991a6d7451dcb8d9637bfbc97413f497069 # v4.4.1
 
-    - name: Execute tests (Unit and Feature tests) via PHPUnit
-      run: vendor/bin/phpunit -c phpunit.xml --coverage-clover=coverage.xml
+    - name: Build the dev image
+      uses: docker/build-push-action@c3c9e263c25d99ce0380d002d59b67737d91b0dc # v7.4.0
+      with:
+        target: dev
+        load: true
+        tags: esac-app-dev
+        cache-from: type=gha,scope=dev
+        cache-to: ${{ github.event_name != 'pull_request' && 'type=gha,scope=dev,mode=max' || '' }}
+
+    - name: Start MySQL
+      run: docker compose up --detach --wait mysql
+
+    - name: Install the dependencies
+      run: |
+        $RUN composer install --no-interaction --no-progress
+        $RUN php artisan key:generate
+        docker compose run --rm --no-deps assets "npm ci --no-audit --no-fund && npm run build"
+
+    - name: Run the tests
+      run: $RUN env XDEBUG_MODE=coverage vendor/bin/phpunit --coverage-clover=coverage.xml
 
     - name: Upload to Codecov
       uses: codecov/codecov-action@303a32d7a59b442fa8d48b6a1cc6825c09c847a5 # v7.1.1
@@ -113,12 +96,13 @@ jobs:
     - name: Build and push Docker image
       uses: docker/build-push-action@c3c9e263c25d99ce0380d002d59b67737d91b0dc # v7.4.0
       with:
+        target: production
         push: ${{ github.event_name != 'pull_request' }}
         pull: true
         tags: ${{ steps.meta.outputs.tags }}
         labels: ${{ steps.meta.outputs.labels }}
-        cache-from: type=gha
-        cache-to: ${{ github.event_name != 'pull_request' && 'type=gha,mode=max' || '' }}
+        cache-from: type=gha,scope=production
+        cache-to: ${{ github.event_name != 'pull_request' && 'type=gha,scope=production,mode=max' || '' }}
 
   deploy:
     name: Deploy to production

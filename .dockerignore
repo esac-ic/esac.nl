@@ -6,6 +6,7 @@ node_modules
 vendor
 tests
 compose.yaml
+compose.override.yaml
 infra/cloud-init.yaml
 infra/backup.sh
 public/build
