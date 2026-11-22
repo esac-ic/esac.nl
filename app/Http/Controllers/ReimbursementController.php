@@ -75,7 +75,6 @@ class ReimbursementController extends Controller
     
     public function destroyReceipt(ReimbursementReceipt $receipt)
     {
-        \Log::info($receipt);
         $reimbursement = $receipt->getReimbursement;
         if (Auth::user()->hasRole(Config::get('constants.Administrator')) 
             || $reimbursement->status == ReimbursementStatus::DRAFT
@@ -85,6 +84,40 @@ class ReimbursementController extends Controller
             Session::flash("message", 'Receipt removed');
         }
         return redirect('/reimbursement/' . $reimbursement->id);
+    }
+    
+    public function createReceipt(Request $request, Reimbursement $reimbursement)
+    {
+        $this->validateReceipts($request);
+
+        if($request->hasFile('image_url')){
+            foreach ($request->file('image_url') as $image) {
+                \Log::info($request);
+                \Log::info($image);
+                
+                $receipt = new ReimbursementReceipt();
+                $receipt->image_url = "";
+                $receipt->reimbursement_id = $reimbursement->id;
+                $receipt->save();
+
+                $name = $reimbursement->id . '-receipt-' . $receipt->id . '.' . $image->extension();
+                $image->storeAs('reimbursement_receipt', $name, 'public');
+                $receipt->image_url = 'reimbursement_receipt/' . $name;
+                $receipt->save();
+
+                $img_path = "../storage/app/public/" . $receipt->image_url;
+
+                Image::make($img_path)->resize(600, 600, function ($constraint) {
+                    $constraint->aspectRatio();
+                    $constraint->upsize();
+                })->save($img_path);
+            }   
+            Session::flash("message", 'Receipts successfully uploaded');
+            return redirect('/reimbursement/' . $reimbursement->id)->with('success', 'Receipts added');
+        } else {
+            Session::flash("error", 'Receipt failed to upload');
+            return redirect('/reimbursement/' . $reimbursement->id)->with('success', 'Receipts not');
+        }
     }
 
     private function validateInput(Request $request)
@@ -101,6 +134,14 @@ class ReimbursementController extends Controller
                 Rule::enum(ReimbursementType::class)
             ],
             'createdOn' => 'required|max:255'
+        ]);
+    }
+
+    private function validateReceipts(Request $request)
+    {
+        $this->validate($request, [
+            'image_url' => ['required','array'],
+            'image.*' => 'required|mimes:jpeg,png,jpg',
         ]);
     }
 

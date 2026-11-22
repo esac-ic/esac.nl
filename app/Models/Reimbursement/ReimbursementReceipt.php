@@ -3,6 +3,7 @@
 namespace App\Models\Reimbursement;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Storage;
 
 class ReimbursementReceipt extends Model
 {

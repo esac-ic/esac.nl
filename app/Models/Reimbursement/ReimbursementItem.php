@@ -17,7 +17,7 @@ class ReimbursementItem extends Model
         'esacpas' => 'boolean',
     ];
 
-    public function getReimbursement(): HasOne
+    public function getReimbursement(): BelongsTo
     {
         return $this->belongsTo(Reimbursement::class, 'reimbursement_id', 'id');
     }

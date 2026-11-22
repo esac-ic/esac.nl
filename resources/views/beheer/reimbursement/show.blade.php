@@ -5,6 +5,24 @@
 @endsection
 
 @section('content')
+    @if(Session::has('message'))
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            {{Session::get('message')}}
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+    @endif
+    
+    @if(Session::has('error'))
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+            {{Session::get('error')}}
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+    @endif
+
     <div class="row mb-3">
         <div class="col-md-6">
             <h1>Reimbursement</h1>
@@ -98,49 +116,46 @@
     </div>
 
 <div class="card mt-4">
-        <div class="card-header row mb-3">
+    <div class="card-header row mb-3">
         <div class="col-md-6">
             <h3>{{'Receipts'}}</h3>
         </div>
         <div class="col-md-6">
-                        <div class="float-md-right">
-            <form method="post"
-                      action="{{ route("receipt.destroyReceipt", $reimbursement) }}"
-                      onsubmit="return confirm('Are you sure you want to delete this reimbursement?');"
-                >
-                    @csrf
-                    @method('DELETE')
-                    <button type="submit" class="btn btn-primary"><em class="ion-plus"></em> {{'Add receipt'}}</button>
-            </form>
-        </div>
-        </div>
-        </div>
-        <div class="col-12 col-md-9 mx-2">
-            <div class="row">
-            @foreach($reimbursement->getReimbursementReceipts()->get() as $receipt) 
-                <div class="col-6 col-lg-3 mb-2">
-                <a class="receipt-img"><img src="{{ $receipt->getImageUrl() }}" alt=" " class="img-responsive" /></a>
-                
-                <!-- Only allow users to delete receipts if it is a draft or rejected. -->
-                @if(($reimbursement->status == \App\Enums\ReimbursementStatus::DRAFT)
-                or ($reimbursement->status == \App\Enums\ReimbursementStatus::REJECTED) 
-                or (\Illuminate\Support\Facades\Auth::user()->hasRole(Config::get('constants.Administrator')))
-                )
-                <div class="sponsor-logo">
-                    <form method="post"
-                    action="{{ route("receipt.destroyReceipt", $receipt) }}"
-                    onsubmit="return confirm('Are you sure you want to delete this receipt?');">
-                    @csrf
-                    @method('DELETE')
-                    <button type="submit" class="btn btn-danger"><em class="ion-trash-a"></em> {{'Remove'}}</button>
+            <div class="float-md-right">
+                <form method="POST" action="{{ route("receipt.createReceipt", $reimbursement) }}" enctype="multipart/form-data">
+                @csrf
+                <input type=file id="image_url" name="image_url[]" accept=".jpg, .jpeg, .png" multiple hidden/>
+                <label for="image_url" class="btn btn-primary"><em class="ion-plus"></em> {{'Add receipts'}}</label>
                 </form>
-            </div>
-                </div>
-                @endif
-            @endforeach
             </div>
         </div>
     </div>
+    <div class="col-12 col-md-9 mx-2">
+        <div class="row">
+        @foreach($reimbursement->getReimbursementReceipts()->get() as $receipt) 
+            <div class="col-6 col-lg-3 mb-2">
+            <a class="receipt-img"><img src="{{ $receipt->getImageUrl() }}" alt=" " class="img-responsive" /></a>
+            
+            <!-- Only allow users to delete receipts if it is a draft or rejected. -->
+            @if(($reimbursement->status == \App\Enums\ReimbursementStatus::DRAFT)
+            or ($reimbursement->status == \App\Enums\ReimbursementStatus::REJECTED) 
+            or (\Illuminate\Support\Facades\Auth::user()->hasRole(Config::get('constants.Administrator')))
+            )
+            <div class="sponsor-logo">
+                <form method="post"
+                action="{{ route("receipt.destroyReceipt", $receipt) }}"
+                onsubmit="return confirm('Are you sure you want to delete this receipt?');">
+                @csrf
+                @method('DELETE')
+                <button type="submit" class="btn btn-danger"><em class="ion-trash-a"></em> {{'Remove'}}</button>
+                </form>
+            </div>
+            </div>
+            @endif
+        @endforeach
+        </div>
+    </div>
+</div>
 @endsection
 
 @push('styles')
@@ -185,5 +200,11 @@
             actions += '<a class="mr-1 ml-1" href="{{url('reimbursement')}}/' + data.id + '/edit"><span title="{{'Edit event'}}" class="ion-edit font-size-120 icon" aria-hidden="true"></span></a>';
             return actions;
         }
+    </script>
+
+    <script type="module">
+        document.getElementById('image_url').addEventListener('change', function() {
+            this.form.submit();
+        });
     </script>
 @endpush

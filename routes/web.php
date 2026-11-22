@@ -109,3 +109,4 @@ Route::get('/management/settings/edit', 'SettingsController@edit');
 
 //receipt routes
 Route::delete('/receipt/{receipt}', 'ReimbursementController@destroyReceipt')->name('receipt.destroyReceipt');
+Route::post('/receipt/{reimbursement}', 'ReimbursementController@createReceipt')->name('receipt.createReceipt');
