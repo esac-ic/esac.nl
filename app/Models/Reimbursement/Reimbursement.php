@@ -25,6 +25,11 @@ class Reimbursement extends Model
     {
         return $this->hasMany(ReimbursementItem::class, 'reimbursement_id');
     }
+    
+    public function getReimbursementReceipts()
+    {
+        return $this->hasMany(ReimbursementReceipt::class, 'reimbursement_id');
+    }
 
     public function getAmount()
     {

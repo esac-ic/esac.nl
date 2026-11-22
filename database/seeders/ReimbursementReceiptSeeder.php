@@ -18,12 +18,12 @@ class ReimbursementReceiptSeeder extends Seeder
         $receipt->reimbursement_id = 1;
         $receipt->image_url = "";
         $receipt->save();
-
+        
         $receipt = new ReimbursementReceipt();
         $receipt->reimbursement_id = 1;
         $receipt->image_url = "";
         $receipt->save();
-
+        
         $receipt = new ReimbursementReceipt();
         $receipt->reimbursement_id = 1;
         $receipt->image_url = "";

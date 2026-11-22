@@ -3,10 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Models\Reimbursement\Reimbursement;
+use App\Models\Reimbursement\ReimbursementReceipt;
 use App\Enums\ReimbursementStatus;
-use App\Repositories\ReimbursementCategoryRepository;
 use App\Repositories\ReimbursementRepositories\ReimbursementRepository;
-use App\Repositories\ApplicationFormRepositories\ApplicationFormRepository;
+use App\Repositories\ReimbursementRepositories\ReimbursementReceiptRepository;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Session;
 use Intervention\Image\ImageManagerStatic as Image;
@@ -16,11 +16,13 @@ use Illuminate\Support\Facades\Config;
 class ReimbursementController extends Controller
 {
     private ReimbursementRepository $_reimbursementRepository;
+    private ReimbursementReceiptRepository $_reimbursementReceiptRepository;
 
-    public function __construct(ReimbursementRepository $reimbursementRepository) {
+    public function __construct(ReimbursementRepository $reimbursementRepository, ReimbursementReceiptRepository $reimbursementReceiptRepository) {
         $this->middleware('auth');
 
         $this->_reimbursementRepository = $reimbursementRepository;
+        $this->_reimbursementReceiptRepository = $reimbursementReceiptRepository;
     }
 
     public function index()
@@ -70,11 +72,19 @@ class ReimbursementController extends Controller
         }
         return redirect('/reimbursement');
     }
-
-    public function copy(Reimbursement $reimbursement)
+    
+    public function destroyReceipt(ReimbursementReceipt $receipt)
     {
-        $newReimbursement = $this->_reimbursementRepository->copy($reimbursement);
-        return redirect('/reimbursement/' . $newReimbursement->id . '/edit');
+        \Log::info($receipt);
+        $reimbursement = $receipt->getReimbursement;
+        if (Auth::user()->hasRole(Config::get('constants.Administrator')) 
+            || $reimbursement->status == ReimbursementStatus::DRAFT
+            || $reimbursement->status == ReimbursementStatus::REJECTED
+        ) {
+            $this->_reimbursementReceiptRepository->delete($receipt->id);
+            Session::flash("message", 'Receipt removed');
+        }
+        return redirect('/reimbursement/' . $reimbursement->id);
     }
 
     private function validateInput(Request $request)

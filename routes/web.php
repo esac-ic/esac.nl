@@ -88,6 +88,7 @@ Route::delete('forms/{agenda_id}/remove/{applicationResponseId}', 'ApplicationFo
 Route::delete('/mailList/{mailistid}/member/{memberid}', 'MailListController@deleteMemberFromMailList');
 Route::post('/mailList/{mailistid}/member', 'MailListController@addMember');
 Route::post('/mailList/massSync', 'MailListController@massMemberMailListSync');
+
 //front-end routes
 Route::get('/zekeringen', 'FrontEndController@zekeringen')->name('front-end.zekeringen');
 Route::get('/library', 'FrontEndController@library')->name('front-end.library');
@@ -105,3 +106,6 @@ Route::get('/{menuItem}', 'FrontEndController@showPage');
 Route::get('/management/settings', 'SettingsController@index');
 Route::put('/management/settings', 'SettingsController@update');
 Route::get('/management/settings/edit', 'SettingsController@edit');
+
+//receipt routes
+Route::delete('/receipt/{receipt}', 'ReimbursementController@destroyReceipt')->name('receipt.destroyReceipt');

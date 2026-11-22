@@ -19,6 +19,6 @@ class ReimbursementItem extends Model
 
     public function getReimbursement(): HasOne
     {
-        return $this->hasOne(Reimbursement::class, 'id', "reimbursement_id");
+        return $this->belongsTo(Reimbursement::class, 'reimbursement_id', 'id');
     }
 }

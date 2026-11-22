@@ -1,7 +1,7 @@
 @extends('layouts.beheer')
 
 @section('title')
-{{'Event general information'}}
+{{'Reimbursement Details'}}
 @endsection
 
 @section('content')
@@ -94,6 +94,51 @@
         <tbody>
         </tbody>
     </table>
+        </div>
+    </div>
+
+<div class="card mt-4">
+        <div class="card-header row mb-3">
+        <div class="col-md-6">
+            <h3>{{'Receipts'}}</h3>
+        </div>
+        <div class="col-md-6">
+                        <div class="float-md-right">
+            <form method="post"
+                      action="{{ route("receipt.destroyReceipt", $reimbursement) }}"
+                      onsubmit="return confirm('Are you sure you want to delete this reimbursement?');"
+                >
+                    @csrf
+                    @method('DELETE')
+                    <button type="submit" class="btn btn-primary"><em class="ion-plus"></em> {{'Add receipt'}}</button>
+            </form>
+        </div>
+        </div>
+        </div>
+        <div class="col-12 col-md-9 mx-2">
+            <div class="row">
+            @foreach($reimbursement->getReimbursementReceipts()->get() as $receipt) 
+                <div class="col-6 col-lg-3 mb-2">
+                <a class="receipt-img"><img src="{{ $receipt->getImageUrl() }}" alt=" " class="img-responsive" /></a>
+                
+                <!-- Only allow users to delete receipts if it is a draft or rejected. -->
+                @if(($reimbursement->status == \App\Enums\ReimbursementStatus::DRAFT)
+                or ($reimbursement->status == \App\Enums\ReimbursementStatus::REJECTED) 
+                or (\Illuminate\Support\Facades\Auth::user()->hasRole(Config::get('constants.Administrator')))
+                )
+                <div class="sponsor-logo">
+                    <form method="post"
+                    action="{{ route("receipt.destroyReceipt", $receipt) }}"
+                    onsubmit="return confirm('Are you sure you want to delete this receipt?');">
+                    @csrf
+                    @method('DELETE')
+                    <button type="submit" class="btn btn-danger"><em class="ion-trash-a"></em> {{'Remove'}}</button>
+                </form>
+            </div>
+                </div>
+                @endif
+            @endforeach
+            </div>
         </div>
     </div>
 @endsection

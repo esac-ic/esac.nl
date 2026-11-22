@@ -12,7 +12,7 @@ class ReimbursementReceipt extends Model
 
     public function getReimbursement()
     {
-        return $this->hasOne(Reimbursement::class, 'id', 'reimbursement_id');
+        return $this->belongsTo(Reimbursement::class, 'reimbursement_id', 'id');
     }
 
     public function getImageUrl()

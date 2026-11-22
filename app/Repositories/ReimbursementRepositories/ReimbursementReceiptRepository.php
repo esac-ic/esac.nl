@@ -43,7 +43,7 @@ class ReimbursementReceiptRepository implements IRepository
 
     public function findBy($field, $value, $columns = array('*'))
     {
-        return ReimbursementReceipt::where($field, '=', $value)->get($columns);
+        return ReimbursementReceipt::where($field, '=', $value)->first($columns);
     }
 
     public function all($columns = array('*'))
